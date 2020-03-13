@@ -1,8 +1,8 @@
 {
-  "name": "Opal Auto Login",
+  "name": "TU Dresden Auto Login",
   "version": "0.1",
-  "description": "Save yourself 4 clicks by using Opal Auto Login",
-  "permissions": ["tabs", "<all_urls>", "activeTab", "storage"],
+  "description": "Save yourself clicks by using TU Dresden Auto Login",
+  "permissions": ["storage"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
