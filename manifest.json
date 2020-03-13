@@ -1,0 +1,70 @@
+{
+  "name": "Opal Auto Login",
+  "version": "0.1",
+  "description": "Save yourself 4 clicks by using Opal Auto Login",
+  "permissions": ["tabs", "<all_urls>", "activeTab", "storage"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_idp2_1.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://idp2.tu-dresden.de/idp/profile/SAML2/Redirect/SSO?execution=*"]
+    }, {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_opal.js"],
+      "run_at": "document_start",
+      "matches": [
+        "http://opal.de/*", "https://www.google.de/search?q=opal*"]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_selma.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://selma.tu-dresden.de/*"] 
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_hisqis.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?q=hisqis*"]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_selma.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?q=selma*"]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_qis.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://qis.dez.tu-dresden.de/qisserver/servlet*"]
+    },
+    {
+      "js": ["contentScripts/content_bildungsportal.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/resource?*"
+      ]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_bildungsportal_main.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/shiblogin?*",
+        "https://bildungsportal.sachsen.de/opal/login"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "images/autologin16.png",
+    "32": "images/autologin32.png",
+    "48": "images/autologin48.png",
+    "128": "images/autologin128.png"
+  },
+  "browser_action": {"default_popup": "popup.html"},
+  "manifest_version": 2
+}
