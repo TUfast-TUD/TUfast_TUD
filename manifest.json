@@ -29,7 +29,7 @@
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_hisqis.js"],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=hisqis*"]
+        "https://www.google.de/search?q=his*"]
     },
     {
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_selma.js"],
@@ -44,7 +44,7 @@
         "https://qis.dez.tu-dresden.de/qisserver/servlet*"]
     },
     {
-      "js": ["contentScripts/content_bildungsportal.js"],
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_bildungsportal.js"],
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource?*"

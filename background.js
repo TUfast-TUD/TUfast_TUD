@@ -1,5 +1,12 @@
 'use strict';
 
+chrome.runtime.onInstalled.addListener(function() {
+  //chrome.runtime.openOptionsPage(function() {
+  // console.log('opened options page') 
+  //})
+  chrome.tabs.create({url : "popup.html"});
+});
+
 //executes, when pages is called
 /*
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
