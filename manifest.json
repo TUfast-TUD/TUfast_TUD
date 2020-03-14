@@ -47,7 +47,8 @@
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_bildungsportal.js"],
       "run_at": "document_start",
       "matches": [
-        "https://bildungsportal.sachsen.de/opal/resource?*"
+        "https://bildungsportal.sachsen.de/opal/resource?*",
+        "https://bildungsportal.sachsen.de/opal/home?*"
       ]
     },
     {
