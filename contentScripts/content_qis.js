@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     if(document.getElementsByTagName('a')[4].innerText === "Ich habe die Nutzungsbedingungen gelesen, verstanden und akzeptiert. >>>"){
-        document.getElementsByTagName('a')[4].click()
+      chrome.runtime.sendMessage({cmd: "show_badge"});  
+      document.getElementsByTagName('a')[4].click()
     } else if (document.getElementById("asdf")){
       chrome.storage.local.get(['username', 'password'], function(result) {
         if(!(result.username === undefined || result.password === undefined)) {

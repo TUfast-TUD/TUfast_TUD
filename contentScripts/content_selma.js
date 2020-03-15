@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     if(document.getElementById('field_user')){
+        chrome.runtime.sendMessage({cmd: "show_badge"});
         chrome.storage.local.get(['username', 'password'], function(result) {
             if (!(result.username === undefined  || result.password === undefined)) { 
                 document.getElementById('field_user').value = result.username

@@ -7,6 +7,17 @@ chrome.runtime.onInstalled.addListener(function() {
   chrome.tabs.create({url : "popup.html"});
 });
 
+//show badge when extension is triggered
+chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+  if(request.cmd = 'show_badge'){
+    chrome.browserAction.setBadgeText({text: "Login"});
+    chrome.browserAction.setBadgeBackgroundColor({color: "#4cb749"});
+    setTimeout(function() {
+    	chrome.browserAction.setBadgeText({text: ""});
+    }, 2000);
+  }
+})
+
 //executes, when pages is called
 /*
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
