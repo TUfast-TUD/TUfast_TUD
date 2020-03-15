@@ -5,7 +5,7 @@ ToDo
  - obscure password and userdata
  - // show badge
 ```
- chrome.browserAction.setBadgeText({text: "OK"});
+chrome.browserAction.setBadgeText({text: "OK"});
 chrome.browserAction.setBadgeBackgroundColor({color: "#4cb749"});
 	setTimeout(function() {
 	chrome.browserAction.setBadgeText({text: ""});
