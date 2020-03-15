@@ -1,6 +1,9 @@
 //document.addEventListener('DOMContentLoaded', function() { 
   //when pop-up shows
   document.addEventListener("DOMNodeInserted", function(e) {
+    if(document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0]) {
+      document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0].value = "18"
+    }
     if(document.getElementsByName("content:container:login:shibAuthForm:shibLogin")[0]){
       chrome.runtime.sendMessage({cmd: "show_badge"});  
       document.getElementsByName("content:container:login:shibAuthForm:shibLogin")[0].click()
