@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.runtime.sendMessage({cmd: "show_badge"});  
       document.getElementsByTagName('a')[4].click()
     } else if (document.getElementById("asdf")){
-      chrome.storage.local.get(['username', 'password'], function(result) {
-        if(!(result.username === undefined || result.password === undefined)) {
-          document.getElementById('asdf').value = result.username
-          document.getElementById('fdsa').value = result.password
+      chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
+        if(!(result.asdf === undefined || result.fdsa === undefined)) {
+          document.getElementById('asdf').value = atob(result.asdf)
+          document.getElementById('fdsa').value = atob(result.fdsa)
           document.getElementsByName('submit')[0].click()
-        } else {(alert("Bitte gib deinen Nutzernamen und Password für die TU Dresden in der AutoPlugin Extension an!"))}
+        } else {(alert("Bitte gib deinen Nutzernamen und Passwort für die TU Dresden in der AutoPlugin Extension an!"))}
       });
     }
 })

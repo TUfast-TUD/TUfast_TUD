@@ -1,11 +1,11 @@
 //NOT SAVED ENCRYPTED
 function saveUserData() {
-    var username = document.getElementById('username_field').value
-    var password = document.getElementById('password_field').value
-    if (username === '' || password === '') {
+    var asdf = btoa(document.getElementById('username_field').value)
+    var fdsa = btoa(document.getElementById('password_field').value)
+    if (asdf === '' || fdsa === '') {
         document.getElementById('status_msg').innerHTML = "Die Felder duerfen nicht leer sein!"
     } else {
-        chrome.storage.local.set({'username': username, 'password': password}, function() {
+        chrome.storage.local.set({'asdf': asdf, 'fdsa': fdsa}, function() {
             document.getElementById('status_msg').innerHTML = "Speichern erfolgreich."
         });
     }
