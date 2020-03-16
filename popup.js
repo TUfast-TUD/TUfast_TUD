@@ -6,8 +6,11 @@ function saveUserData() {
         document.getElementById('status_msg').innerHTML = "Die Felder duerfen nicht leer sein!"
     } else {
         chrome.storage.local.set({'asdf': asdf, 'fdsa': fdsa}, function() {
-            document.getElementById('status_msg').innerHTML = "Speichern erfolgreich."
+            document.getElementById('status_msg').innerHTML = "<font color='green'>Speichern erfolgreich.</font>"
         });
+        setTimeout(()=>{
+            document.getElementById('status_msg').innerHTML = ""
+        }, 3000)
     }
 }
 

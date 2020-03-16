@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementsByName("_eventId_proceed")[0].click()
   }
 })
+console.log('Auto Login to TU Dresden Auth.')
 
 
 

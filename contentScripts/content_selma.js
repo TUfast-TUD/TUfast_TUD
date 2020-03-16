@@ -10,3 +10,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 })
+console.log('Auto Login to Selma.')

@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "1.0.0.0",
+  "version": "1.2.0.0",
   "description": "Save yourself clicks by using TU Dresden Auto Login",
   "permissions": ["storage"],
   "background": {
@@ -17,7 +17,7 @@
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_opal.js"],
       "run_at": "document_start",
       "matches": [
-        "http://opal.de/*", "https://www.google.de/search?q=opal*"]
+        "http://opal.de/*", "https://www.google.de/search?q=opal*", "https://www.google.com/search?q=opal*"]
     },
     {
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_selma.js"],
@@ -29,13 +29,13 @@
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_hisqis.js"],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=his*"]
+        "https://www.google.de/search?q=hisqis*", "https://www.google.com/search?q=hisqis*"]
     },
     {
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_selma.js"],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=selma*"]
+        "https://www.google.de/search?q=selma*", "https://www.google.com/search?q=selma*"]
     },
     {
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_qis.js"],
@@ -55,7 +55,7 @@
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_bildungsportal_main.js"],
       "run_at": "document_start",
       "matches": [
-        "https://bildungsportal.sachsen.de/opal/shiblogin?*",
+        "https://bildungsportal.sachsen.de/opal/shiblogin*",
         "https://bildungsportal.sachsen.de/opal/login"
       ]
     }
