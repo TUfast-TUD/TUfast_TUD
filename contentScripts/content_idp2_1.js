@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (document.getElementById("username")) {
     chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
       if (!(result.fdsa === undefined || result.asdf === undefined)) {
+        chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
         document.getElementById('username').value = atob(result.asdf)
         document.getElementById('password').value = atob(result.fdsa)
         document.getElementsByName("_eventId_proceed")[0].click()
@@ -10,7 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   } else {
-    document.getElementsByName("_eventId_proceed")[0].click()
+    if (document.getElementsByName("_eventId_proceed")[0]) {
+      document.getElementsByName("_eventId_proceed")[0].click()
+      chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
+  
+    }
   }
 })
 console.log('Auto Login to TU Dresden Auth.')

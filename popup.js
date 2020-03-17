@@ -20,5 +20,12 @@ function saveUserData() {
 
 //this need to be done here since manifest v2
 window.onload = function(){
+    //assign onclick function
     document.getElementById('save_data').onclick=saveUserData;
+
+    //update saved clicks
+    chrome.storage.local.get(['saved_click_counter'], (result) => {
+        if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
+        document.getElementById("saved_clicks").innerHTML = "<font color='green'>Du hast bisher <u>" + result.saved_click_counter + "</u> Klicks gespart!</font>"
+    })
 }

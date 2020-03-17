@@ -31,6 +31,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     case 'clear_badge':
       show_badge("", "#ffffff", 0)
       break
+    case 'save_clicks':
+      save_clicks(request.click_count)
+      break
     default:
       console.log('Cmd not found!')
       break
@@ -43,5 +46,16 @@ function show_badge(Text, Color, timeout) {
   setTimeout(function() {
     chrome.browserAction.setBadgeText({text: ""});
   }, timeout);
+}
+
+function save_clicks(counter){
+  //load number of saved clicks and add counter!
+  var saved_clicks = 0;
+  chrome.storage.local.get(['saved_click_counter'], (result) => {
+    saved_clicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter 
+    chrome.storage.local.set({saved_click_counter: saved_clicks + counter}, function() {
+      console.log('You just saved yourself ' + counter + " clicks!")
+    });
+  })
 }
 
