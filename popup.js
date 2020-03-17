@@ -3,14 +3,18 @@ function saveUserData() {
     var asdf = btoa(document.getElementById('username_field').value)
     var fdsa = btoa(document.getElementById('password_field').value)
     if (asdf === '' || fdsa === '') {
-        document.getElementById('status_msg').innerHTML = "Die Felder duerfen nicht leer sein!"
+        document.getElementById('status_msg').innerHTML = "<font color='red'>Die Felder duerfen nicht leer sein!</font>"
     } else {
+        chrome.runtime.sendMessage({cmd: "clear_badge"});
+        document.getElementById('status_msg').innerHTML = ""
         chrome.storage.local.set({'asdf': asdf, 'fdsa': fdsa}, function() {
-            document.getElementById('status_msg').innerHTML = "<font color='green'>Speichern erfolgreich.</font>"
+            document.getElementById("save_data").innerHTML='<font color="green">Gespeichert!</font>';
+            document.getElementById("save_data").disabled=true;
         });
         setTimeout(()=>{
-            document.getElementById('status_msg').innerHTML = ""
-        }, 3000)
+            document.getElementById("save_data").innerHTML='Speichern';
+            document.getElementById("save_data").disabled=false;
+        }, 2000)
     }
 }
 

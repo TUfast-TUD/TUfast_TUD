@@ -1,7 +1,7 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "1.2.0.0",
-  "description": "Save yourself clicks by using TU Dresden Auto Login",
+  "version": "1.3.0.0",
+  "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": ["storage"],
   "background": {
     "scripts": ["background.js"],
