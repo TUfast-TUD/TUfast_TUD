@@ -6,6 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 4000});
     chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
-    $('.btn-highlight').click()
+    document.getElementsByClassName("btn-highlight")[0].click()
 })
 console.log('Auto Login to Opal.')

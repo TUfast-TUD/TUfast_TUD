@@ -9,42 +9,42 @@
   },
   "content_scripts": [
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_idp2_1.js"],
+      "js": ["contentScripts/content_idp2_1.js"],
       "run_at": "document_start",
       "matches": [
         "https://idp2.tu-dresden.de/idp/profile/SAML2/Redirect/SSO?execution=*"]
     }, {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_opal.js"],
+      "js": ["contentScripts/content_fwd_opal.js"],
       "run_at": "document_start",
       "matches": [
         "http://opal.de/*", "https://www.google.de/search?q=opal*", "https://www.google.com/search?q=opal*"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_selma.js"],
+      "js": ["contentScripts/content_selma.js"],
       "run_at": "document_start",
       "matches": [
         "https://selma.tu-dresden.de/*"] 
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_hisqis.js"],
+      "js": ["contentScripts/content_fwd_hisqis.js"],
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?q=hisqis*", "https://www.google.com/search?q=hisqis*"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_selma.js"],
+      "js": ["contentScripts/content_fwd_selma.js"],
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?q=selma*", "https://www.google.com/search?q=selma*"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_qis.js"],
+      "js": ["contentScripts/content_qis.js"],
       "run_at": "document_start",
       "matches": [
         "https://qis.dez.tu-dresden.de/qisserver/servlet*"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_bildungsportal.js"],
+      "js": ["contentScripts/content_bildungsportal.js"],
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource?*",
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_matrix.js"],
+      "js": ["contentScripts/content_fwd_matrix.js"],
       "run_at": "document_start",
       "matches": [
         "https://matrix.tu-dresden.de/*"
@@ -61,7 +61,7 @@
       "include_globs":["*#/welcome"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_matrix.js"],
+      "js": ["contentScripts/content_matrix.js"],
       "run_at": "document_start",
       "matches": [
         "https://matrix.tu-dresden.de/*"
@@ -69,21 +69,21 @@
       "include_globs":["*#/login"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_owa.js"],
+      "js": ["contentScripts/content_owa.js"],
       "run_at": "document_start",
       "matches": [
         "https://msx.tu-dresden.de/owa/auth/logon*"
       ]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_cloudstore.js"],
+      "js": ["contentScripts/content_cloudstore.js"],
       "run_at": "document_start",
       "matches": [
         "https://cloudstore.zih.tu-dresden.de/index.php/login*"
       ]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_bildungsportal_main.js"],
+      "js": ["contentScripts/content_bildungsportal_main.js"],
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/shiblogin*",
