@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "1.5.0.0",
+  "version": "1.6.0.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": ["storage"],
   "background": {
@@ -48,8 +48,45 @@
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource?*",
-        "https://bildungsportal.sachsen.de/opal/home?*",
+        "https://bildungsportal.sachsen.de/opal/home*",
         "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/*"
+      ]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_matrix.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://matrix.tu-dresden.de/*"
+      ],
+      "include_globs":["*#/welcome"]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_matrix.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://matrix.tu-dresden.de/*"
+      ],
+      "include_globs":["*#/login"]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_matrix.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://matrix.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_owa.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://msx.tu-dresden.de/owa/auth/logon*"
+      ]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_cloudstore.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://cloudstore.zih.tu-dresden.de/index.php/login*"
       ]
     },
     {
