@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "1.6.0.0",
+  "version": "2.0.0.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": ["storage"],
   "background": {
@@ -69,13 +69,6 @@
       "include_globs":["*#/login"]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_matrix.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://matrix.tu-dresden.de/*"
-      ]
-    },
-    {
       "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_owa.js"],
       "run_at": "document_start",
       "matches": [
@@ -94,7 +87,7 @@
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/shiblogin*",
-        "https://bildungsportal.sachsen.de/opal/login"
+        "https://bildungsportal.sachsen.de/opal/login*"
       ]
     }
   ],
@@ -105,5 +98,6 @@
     "128": "images/autologin128.png"
   },
   "browser_action": {"default_popup": "popup.html"},
+  "options_page": "register_user.html",
   "manifest_version": 2
 }

@@ -7,10 +7,11 @@ chrome.runtime.onInstalled.addListener((details) => {
      case 'install':
         //Show page on install
         console.log('TU Dresden Auto Login installed.')
-        chrome.tabs.create({url : "popup.html"});
+        chrome.tabs.create({url : "register_user.html"});
         break;
      case 'update':
-        console.log('TU Dresden Auto Login updated.')
+        //Show page on update
+        chrome.tabs.create({ url: "update.html" });
         break;
      default:
         console.log('Other install events within the browser for TU Dresden Auto Login.')
