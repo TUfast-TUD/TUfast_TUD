@@ -1,11 +1,12 @@
-# opal_auto_login
-Performs auto-login for OPAL
+# TU Dresden Auto Login
+Performs auto-login for TU Dresden Services
 
 
-#ToDo
+# ToDo
 - show dummy screen while login
 - catch login-error (with web scraping)
 - Hisqis: Noten direkt anzeigen Button
 - Hisqis: Durchschnittnote berechnen
 - Hisqis: Statistiken anzeigen
-- Selma: Alles analog
+- Selma: analog
+- Support Matrix
