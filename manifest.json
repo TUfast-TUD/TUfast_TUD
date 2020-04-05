@@ -87,7 +87,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://www.google.com/search?q=tumatrix*"
+        "*://www.google.com/search?q=tumatrix*",
+        "*://www.google.de/search?q=tumatrix*"
       ]
     },
     {
