@@ -2,92 +2,134 @@
   "name": "TU Dresden Auto Login",
   "version": "2.0.0.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
   },
   "content_scripts": [
     {
-      "js": ["contentScripts/content_idp2_1.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://idp2.tu-dresden.de/idp/profile/SAML2/Redirect/SSO?execution=*"]
-    }, {
-      "js": ["contentScripts/content_fwd_opal.js"],
-      "run_at": "document_start",
-      "matches": [
-        "http://opal.de/*", "https://www.google.de/search?q=opal*", "https://www.google.com/search?q=opal*"]
-    },
-    {
-      "js": ["contentScripts/content_selma.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://selma.tu-dresden.de/*"] 
-    },
-    {
-      "js": ["contentScripts/content_fwd_hisqis.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://www.google.de/search?q=hisqis*", "https://www.google.com/search?q=hisqis*"]
-    },
-    {
-      "js": ["contentScripts/content_fwd_selma.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://www.google.de/search?q=selma*", "https://www.google.com/search?q=selma*"]
-    },
-    {
-      "js": ["contentScripts/content_qis.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://qis.dez.tu-dresden.de/qisserver/servlet*"]
-    },
-    {
-      "js": ["contentScripts/content_bildungsportal.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/resource?*",
-        "https://bildungsportal.sachsen.de/opal/home*",
-        "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/*"
-      ]
-    },
-    {
-      "js": ["contentScripts/content_fwd_matrix.js"],
-      "run_at": "document_start",
-      "matches": [
-        "https://matrix.tu-dresden.de/*"
+      "js": [
+        "contentScripts/content_idp2_1.js"
       ],
-      "include_globs":["*#/welcome"]
-    },
-    {
-      "js": ["contentScripts/content_matrix.js"],
       "run_at": "document_start",
       "matches": [
-        "https://matrix.tu-dresden.de/*"
+        "*://idp2.tu-dresden.de/idp/profile/SAML2/Redirect/SSO?execution=*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_opal.js"
       ],
-      "include_globs":["*#/login"]
-    },
-    {
-      "js": ["contentScripts/content_owa.js"],
       "run_at": "document_start",
       "matches": [
-        "https://msx.tu-dresden.de/owa/auth/logon*"
+        "*://opal.de/*",
+        "*://www.google.de/search?q=opal*",
+        "*://www.google.com/search?q=opal*"
       ]
     },
     {
-      "js": ["contentScripts/content_cloudstore.js"],
+      "js": [
+        "contentScripts/content_selma.js"
+      ],
       "run_at": "document_start",
       "matches": [
-        "https://cloudstore.zih.tu-dresden.de/index.php/login*"
+        "*://selma.tu-dresden.de/*"
       ]
     },
     {
-      "js": ["contentScripts/content_bildungsportal_main.js"],
+      "js": [
+        "contentScripts/content_fwd_hisqis.js"
+      ],
       "run_at": "document_start",
       "matches": [
-        "https://bildungsportal.sachsen.de/opal/shiblogin*",
-        "https://bildungsportal.sachsen.de/opal/login*"
+        "*://www.google.de/search?q=hisqis*",
+        "*://www.google.com/search?q=hisqis*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_selma.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://www.google.de/search?q=selma*",
+        "*://www.google.com/search?q=selma*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_qis.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://qis.dez.tu-dresden.de/qisserver/servlet*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_bildungsportal.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://bildungsportal.sachsen.de/opal/resource?*",
+        "*://bildungsportal.sachsen.de/opal/home*",
+        "*://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_matrix.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://www.google.com/search?q=tumatrix*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_matrix.js"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "*://matrix.tu-dresden.de/*"
+      ],
+      "include_globs": [
+        "*/welcome",
+        "*/login",
+        "*://matrix.tu-dresden.de/"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_owa.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://msx.tu-dresden.de/owa/auth/logon*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_cloudstore.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://cloudstore.zih.tu-dresden.de/index.php/login*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_bildungsportal_main.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://bildungsportal.sachsen.de/opal/shiblogin*",
+        "*://bildungsportal.sachsen.de/opal/login*"
       ]
     }
   ],
@@ -97,7 +139,9 @@
     "48": "images/autologin48.png",
     "128": "images/autologin128.png"
   },
-  "browser_action": {"default_popup": "popup.html"},
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
   "options_page": "register_user.html",
   "manifest_version": 2
 }
