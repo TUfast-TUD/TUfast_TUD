@@ -8,6 +8,9 @@ Unterstützt:
 - cloudstore
 - outlook web app
 
+WIP:
+- matrix
+
 Wenn die Services täglich genutzt werden, verbringst du viel Zeit mit nervigen Klicks.
 Diese Chrome-Erweiterung löst das Problem ein für allemal!
 
@@ -19,5 +22,4 @@ Diese Chrome-Erweiterung löst das Problem ein für allemal!
 - Hisqis: Durchschnittnote berechnen
 - Hisqis: Statistiken anzeigen
 - Selma: analog
-- Support Matrix
 - support jexam
