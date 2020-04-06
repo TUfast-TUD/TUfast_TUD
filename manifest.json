@@ -89,6 +89,13 @@
         "https://bildungsportal.sachsen.de/opal/shiblogin*",
         "https://bildungsportal.sachsen.de/opal/login*"
       ]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_magma.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/magma*"
+      ]
     }
   ],
   "icons": {
