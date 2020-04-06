@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "2.0.0.0",
+  "version": "2.1.0.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": ["storage"],
   "background": {
@@ -49,7 +49,7 @@
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource?*",
         "https://bildungsportal.sachsen.de/opal/home*",
-        "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/*"
+        "https://bildungsportal.sachsen.de/opal/auth/*"
       ]
     },
     {
