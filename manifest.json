@@ -134,10 +134,10 @@
       ]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_magma.js"],
+      "js": ["contentScripts/content_magma.js"],
       "run_at": "document_start",
       "matches": [
-        "https://bildungsportal.sachsen.de/magma*"
+        "*://bildungsportal.sachsen.de/magma*"
       ]
     }
   ],
