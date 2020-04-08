@@ -1,16 +1,16 @@
 # TU Dresden Auto Login
 Loggt dich automatisch in TU Dresden Services ein.
 
+Wenn die Services täglich genutzt werden, verbringst du viel Zeit mit nervigen Klicks.
+Diese Chrome-Erweiterung löst das Problem ein für allemal!
+
 Unterstützt:
 - opal
 - hisqis
 - selma
 - cloudstore
 - outlook web app
-
-Wenn die Services täglich genutzt werden, verbringst du viel Zeit mit nervigen Klicks.
-Diese Chrome-Erweiterung löst das Problem ein für allemal!
-
+- magma
 
 # Roadmap
 - show dummy screen while login
@@ -20,4 +20,5 @@ Diese Chrome-Erweiterung löst das Problem ein für allemal!
 - Hisqis: Statistiken anzeigen
 - Selma: analog
 - Support Matrix
-- support jexam
+- Support jexam
+- make login more efficient - maybe using observer or DOMNodeInserted Event
