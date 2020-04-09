@@ -10,12 +10,11 @@ chrome.runtime.onInstalled.addListener((details) => {
         chrome.tabs.create({url : "register_user.html"});
         chrome.storage.local.set({showed_50_clicks: "false"}, function() {});
         chrome.storage.local.set({showed_100_clicks: "false"}, function() {});
-        chrome.storage.local.set({saved_click_counter: 49}, function() {});
         chrome.storage.local.set({'submitted_review': "false"}, function() {})
         break;
      case 'update':
         //Show page on update
-        chrome.tabs.create({ url: "update.html" });
+        //chrome.tabs.create({ url: "update.html" });
         break;
      default:
         console.log('Other install events within the browser for TU Dresden Auto Login.')
