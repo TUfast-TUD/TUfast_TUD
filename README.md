@@ -1,5 +1,5 @@
 # TU Dresden Auto Login
-https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
+Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
 ## So funktionierts
 Loggt dich automatisch in TU Dresden Services ein.
