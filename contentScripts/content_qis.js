@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!(result.asdf === undefined || result.fdsa === undefined)) {
           chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})
           chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
+          chrome.runtime.sendMessage({cmd: "perform_login"})    
           document.getElementById('asdf').value = atob(result.asdf)
           document.getElementById('fdsa').value = atob(result.fdsa)
           document.getElementsByName('submit')[0].click()
