@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
             if (!(result.asdf === undefined  || result.fdsa === undefined)) { 
                 chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})
+                chrome.runtime.sendMessage({cmd: "perform_login"})    
                 chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
                 document.getElementById('user').value = atob(result.asdf)
                 document.getElementById('password').value = atob(result.fdsa)

@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "2.1.0.0",
+  "version": "2.3.1.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": [
     "storage"
@@ -138,6 +138,13 @@
       "run_at": "document_start",
       "matches": [
         "*://bildungsportal.sachsen.de/magma*"
+      ]
+    },
+    {
+      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_magma.js"],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.com/search?q=magma*", "https://www.google.de/search?q=magma*"
       ]
     }
   ],

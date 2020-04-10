@@ -3,13 +3,15 @@ function saveUserData() {
     var asdf = btoa(document.getElementById('username_field').value)
     var fdsa = btoa(document.getElementById('password_field').value)
     if (asdf === '' || fdsa === '') {
-        document.getElementById('status_msg').innerHTML = "<font color='red'>Die Felder duerfen nicht leer sein!</font>"
+        document.getElementById('status_msg').innerHTML = "<font color='red'>Die Felder d&uuml;rfen nicht leer sein!</font>"
     } else {
         chrome.runtime.sendMessage({cmd: "clear_badge"});
         document.getElementById('status_msg').innerHTML = ""
         chrome.storage.local.set({'asdf': asdf, 'fdsa': fdsa}, function() {
             document.getElementById("save_data").innerHTML='<font color="green">Gespeichert!</font>';
             document.getElementById("save_data").disabled=true;
+            document.getElementById("username_field").value = ""
+            document.getElementById("password_field").value = ""
         });
         setTimeout(()=>{
             document.getElementById("save_data").innerHTML='Speichern';

@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     if (document.getElementsByName("_eventId_proceed")[0]) {
       document.getElementsByName("_eventId_proceed")[0].click()
+      chrome.runtime.sendMessage({cmd: "perform_login"})    
       chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
   
     }
