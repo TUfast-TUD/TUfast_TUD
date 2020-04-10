@@ -92,7 +92,7 @@ function show_feedback_50_screen(){
 function show_feedback_100_screen(){
   chrome.storage.local.get(['submitted_review', 'showed_100_clicks'], (result) => {
     //console.log(!result.showed_100_clicks)
-    if(!result.showed_100_clicks || !result.submitted_review) {
+    if(!result.showed_100_clicks) {
       console.log('100 shown')
       chrome.tabs.create({ url: "reached_100_clicks.html" });
       chrome.storage.local.set({showed_100_clicks: true}, function() {});
