@@ -141,7 +141,7 @@
       ]
     },
     {
-      "js": ["thirdParty/jquery-3.4.1.min.js", "contentScripts/content_fwd_magma.js"],
+      "js": ["contentScripts/content_fwd_magma.js"],
       "run_at": "document_start",
       "matches": [
         "https://www.google.com/search?q=magma*", "https://www.google.de/search?q=magma*"
