@@ -8,9 +8,9 @@ chrome.runtime.onInstalled.addListener((details) => {
         //Show page on install
         console.log('TU Dresden Auto Login installed.')
         chrome.tabs.create({url : "register_user.html"});
-        chrome.storage.local.set({showed_50_clicks: "false"}, function() {});
-        chrome.storage.local.set({showed_100_clicks: "false"}, function() {});
-        chrome.storage.local.set({'submitted_review': "false"}, function() {})
+        chrome.storage.local.set({showed_50_clicks: false}, function() {});
+        chrome.storage.local.set({showed_100_clicks: false}, function() {});
+        chrome.storage.local.set({submitted_review: false}, function() {})
         break;
      case 'update':
         //Show page on update
@@ -79,9 +79,10 @@ function save_clicks(counter){
 
 function show_feedback_50_screen(){
   chrome.storage.local.get(['showed_50_clicks'], (result) => {
-    if(result.showed_50_clicks == "false") {
+    if(!result.showed_50_clicks) {
+      console.log('50 shown')
       chrome.tabs.create({ url: "reached_50_clicks.html" });
-      chrome.storage.local.set({showed_50_clicks: "true"}, function() {});
+      chrome.storage.local.set({showed_50_clicks: true}, function() {});
     }
   })
   
@@ -90,9 +91,11 @@ function show_feedback_50_screen(){
 
 function show_feedback_100_screen(){
   chrome.storage.local.get(['submitted_review', 'showed_100_clicks'], (result) => {
-    if(result.showed_100_clicks == "false" || result.submitted_review == "false") {
+    //console.log(!result.showed_100_clicks)
+    if(!result.showed_100_clicks || !result.submitted_review) {
+      console.log('100 shown')
       chrome.tabs.create({ url: "reached_100_clicks.html" });
-      chrome.storage.local.set({showed_100_clicks: "true"}, function() {});
+      chrome.storage.local.set({showed_100_clicks: true}, function() {});
 
     }
   })
