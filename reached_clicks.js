@@ -15,7 +15,7 @@ window.onload = function(){
   if (document.getElementById('nicht_mehr_anzeigen')) {
     chrome.storage.local.get(['showed_feedback_screen_counter'], (result) => {
       //show decline button
-      if (result.showed_feedback_screen_counter > 4) {
+      if (result.showed_feedback_screen_counter > 2) {
         document.getElementById("nicht_mehr_anzeigen").style.display = "block"
         document.getElementById("nicht_mehr_anzeigen").onclick = function(){
           chrome.storage.local.set({refused_review: true}, function() {})

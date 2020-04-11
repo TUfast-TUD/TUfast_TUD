@@ -62,7 +62,7 @@ function show_feedback_window(){
   chrome.storage.local.get(['saved_click_counter'], (result) => {
     saved_clicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter 
     if(saved_clicks > 100) {show_feedback_100_window()}
-    else if (saved_clicks > 50) {show_feedback_50_window()}
+    //else if (saved_clicks > 50) {show_feedback_50_window()}
   })
 
 }
