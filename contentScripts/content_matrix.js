@@ -1,8 +1,15 @@
 function loginMatrix(){
     chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
-        //if(localStorage.getItem("mx_access_token")) {
-        //    return;        
-        //}
+        //check if already loked in.
+        if(localStorage.getItem("mx_access_token")) {
+            var hash = window.location.hash.substr(1);
+            //forward to home page, if already logged in
+            if(hash === '/login') {
+                chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
+                window.location.replace("https://matrix.tu-dresden.de/")
+            }
+            return;        
+        }
 
         if (!(result.asdf === undefined  || result.fdsa === undefined)) {
             var url = 'https://matrix.tu-dresden.de/_matrix/client/r0/login';
@@ -33,6 +40,8 @@ function loginMatrix(){
                 }
             }
             http.send(params); 
+        } else {
+            chrome.runtime.sendMessage({cmd: "no_login_data"});
         }
     });
 }
