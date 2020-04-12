@@ -19,6 +19,9 @@ Unterstützt werden:
 Wenn die Services täglich genutzt werden, verbringst du viel Zeit mit nervigen Klicks.
 Diese Chrome-Erweiterung löst das Problem ein für allemal!
 
+## Contributors
+Daniel alias https://github.com/C0ntroller
+
 ## Roadmap
 - show dummy screen while login
 - use MutationObserver / DOMInsertedNode for better performance
