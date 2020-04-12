@@ -1,12 +1,17 @@
+//Mainly contributed by Daniel: https://github.com/C0ntroller
+
 function loginMatrix(){
     chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
         //check if already loked in.
         if(localStorage.getItem("mx_access_token")) {
-            var hash = window.location.hash.substr(1);
+            var hash = window.location.hash;
             //forward to home page, if already logged in
-            if(hash === '/login') {
+            if(hash === '#/login') {
+                console.log("Already logged into matrix. Fwd to home page")
                 chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
-                window.location.replace("https://matrix.tu-dresden.de/")
+                //window.location.replace("https://matrix.tu-dresden.de/")
+                window.location.hash = "#/home";
+                location.reload()
             }
             return;        
         }
