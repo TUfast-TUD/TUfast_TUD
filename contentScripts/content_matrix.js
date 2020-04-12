@@ -1,8 +1,8 @@
 function loginMatrix(){
     chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
-        if(localStorage.getItem("mx_access_token")) {
-            return;        
-        }
+        //if(localStorage.getItem("mx_access_token")) {
+        //    return;        
+        //}
 
         if (!(result.asdf === undefined  || result.fdsa === undefined)) {
             var url = 'https://matrix.tu-dresden.de/_matrix/client/r0/login';
@@ -20,7 +20,7 @@ function loginMatrix(){
                     chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})
                     chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
                     console.log('Auto Login to matrix')
-                    
+
                     response = JSON.parse(http.responseText);
                     localStorage.setItem("mx_hs_url", "https://matrix.tu-dresden.de/");
                     localStorage.setItem("mx_is_url", "https://matrix.tu-dresden.de/");
