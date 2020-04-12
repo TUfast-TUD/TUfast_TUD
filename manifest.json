@@ -101,8 +101,7 @@
       ],
       "include_globs": [
         "*/welcome",
-        "*/login",
-        "*://matrix.tu-dresden.de/"
+        "*/login"
       ]
     },
     {

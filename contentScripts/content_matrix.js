@@ -19,6 +19,7 @@ function loginMatrix(){
                 if(http.readyState == 4 && http.status == 200) {
                     chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})
                     chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
+                    console.log('Auto Login to matrix')
                     
                     response = JSON.parse(http.responseText);
                     localStorage.setItem("mx_hs_url", "https://matrix.tu-dresden.de/");
