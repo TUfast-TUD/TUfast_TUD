@@ -15,13 +15,13 @@ document.addEventListener("DOMNodeInserted", function(e) {
 }, false);
 
 //start login process
-$(document).ready(function() {
+window.onload = function() {
   if(document.getElementsByClassName('btn btn-sm')[1].innerText.includes('Login')){
     chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
     chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 4000})
     document.getElementsByClassName('btn btn-sm')[1].click()
   }
-})
+}
 
 console.log('Auto Login to Opal.')
 

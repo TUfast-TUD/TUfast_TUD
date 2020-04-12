@@ -14,6 +14,10 @@ Unterstützt werden:
 - cloudstore
 - outlook web app
 - magma
+- matrix
+
+Wenn die Services täglich genutzt werden, verbringst du viel Zeit mit nervigen Klicks.
+Diese Chrome-Erweiterung löst das Problem ein für allemal!
 
 ## Roadmap
 - show dummy screen while login
@@ -22,5 +26,4 @@ Unterstützt werden:
 - Hisqis / Selma: Noten direkt anzeigen Button
 - Hisqis / Selma: Durchschnittnote berechnen
 - Hisqis / Selma: Statistiken anzeigen
-- Support Matrix
 - Support jexam
