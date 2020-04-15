@@ -26,5 +26,5 @@ Daniel alias https://github.com/C0ntroller
 - catch login-error (with web scraping)
 - Hisqis / Selma: Noten direkt anzeigen Button
 - Hisqis / Selma: Durchschnittnote berechnen
-- Hisqis / Selma: Statistiken anzeigen
+- Hisqis / Selma: Noten-Statistiken anzeigen
 - Support jexam
