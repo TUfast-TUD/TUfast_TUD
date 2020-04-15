@@ -51,8 +51,11 @@ function loginMatrix(){
     });
 }
 
-var ctx = document.getElementById("matrixchat")
-ctx.addEventListener("DOMSubtreeModified", function(){
-    this.removeEventListener("DOMSubtreeModified", arguments.callee);
-    loginMatrix();
-});
+chrome.storage.local.get(['isEnabled'], function(result) {
+    if(result.isEnabled) {var ctx = document.getElementById("matrixchat")
+        ctx.addEventListener("DOMSubtreeModified", function(){
+            this.removeEventListener("DOMSubtreeModified", arguments.callee);
+            loginMatrix();
+        });
+    }
+})

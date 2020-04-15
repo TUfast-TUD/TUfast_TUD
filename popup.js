@@ -7,4 +7,26 @@ window.onload = function(){
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
         document.getElementById("saved_clicks").innerHTML = "<font color='green'>Du hast bisher <u>" + result.saved_click_counter + "</u> Klicks gespart!</font>"
     })
+    
+    //switch funciton
+    document.getElementById('switch').addEventListener('change', () => {
+        this.saveEnabled()
+    })
+
+    //set switch
+    displayEnabled()
+}
+
+//changeIsEnabledState
+function saveEnabled() {
+    chrome.storage.local.get(['isEnabled'], function(result) {
+        chrome.storage.local.set({isEnabled: !(result.isEnabled)}, function() {})
+    })
+}
+
+//set switch
+function displayEnabled() {
+    chrome.storage.local.get(['isEnabled'], function(result) {
+        this.document.getElementById('switch').checked = result.isEnabled
+    })
 }

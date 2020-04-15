@@ -12,10 +12,12 @@ chrome.runtime.onInstalled.addListener((details) => {
         chrome.storage.local.set({submitted_review: false}, function() {})
         chrome.storage.local.set({refused_review: false}, function() {})
         chrome.storage.local.set({showed_feedback_screen_counter: 0}, function() {})
+        chrome.storage.local.set({isEnabled: true}, function() {})
         break;
      case 'update':
         //Show page on update
         //chrome.tabs.create({ url: "update.html" });
+        chrome.storage.local.set({isEnabled: true}, function() {})
         break;
      default:
         console.log('Other install events within the browser for TU Dresden Auto Login.')

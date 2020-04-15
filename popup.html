@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="popup.js"></script>
+    <link rel="stylesheet" href="popup.css">
   </head>
   <body style="font-size: 17px;">
     <p><strong>Willkommen zur TU Dresden Auto Login Erweiterung!</strong></p> 
@@ -9,9 +10,19 @@
     <p>
       <a href="register_user.html" target="_blank">Login-Daten &auml;ndern</a>
     </p>
-    <br> 
+    <!-- Rounded switch -->
+   <p style="text-align: center;"> 
+    AUS
+    <label class="switch">
+      <input type="checkbox" id="switch">
+      <span class="slider round"></span>
+    </label>
+    EIN
+    </p> 
     <p style="display: inline;">Entwickler kontaktieren:</p>
     <a style="display: inline" href="mailto:ollidev97@gmail.com?Subject=AutoLoginChromeExtension" target="_blank">ollidev97@gmail.com</a>
-</p>
+      
+  </p>
   </body>
 </html>
+
