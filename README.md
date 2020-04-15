@@ -16,14 +16,15 @@ Unterstützt werden:
 - magma
 - matrix
 
-Wenn die Services täglich genutzt werden, verbringst du viel Zeit mit nervigen Klicks.
-Diese Chrome-Erweiterung löst das Problem ein für allemal!
+## Contributors
+Daniel alias https://github.com/C0ntroller
 
 ## Roadmap
+- Schalter zum schnell an- und ausschalten (Vorher testen, ob das performance signifikant verschlechtert!)
 - show dummy screen while login
 - use MutationObserver / DOMInsertedNode for better performance
 - catch login-error (with web scraping)
 - Hisqis / Selma: Noten direkt anzeigen Button
 - Hisqis / Selma: Durchschnittnote berechnen
-- Hisqis / Selma: Statistiken anzeigen
+- Hisqis / Selma: Noten-Statistiken anzeigen
 - Support jexam
