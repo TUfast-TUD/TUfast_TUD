@@ -27,3 +27,5 @@ Daniel alias https://github.com/C0ntroller
 - Hisqis / Selma: Durchschnittnote berechnen
 - Hisqis / Selma: Noten-Statistiken anzeigen
 - Support jexam
+- Support jitsi
+- Support gotomeeting organisator login
