@@ -20,7 +20,6 @@ Unterstützt werden:
 Daniel alias https://github.com/C0ntroller
 
 ## Roadmap
-- Schalter zum schnell an- und ausschalten (Vorher testen, ob das performance signifikant verschlechtert!)
 - show dummy screen while login
 - use MutationObserver / DOMInsertedNode for better performance
 - catch login-error (with web scraping)
