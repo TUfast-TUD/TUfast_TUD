@@ -8,11 +8,8 @@ chrome.storage.local.get(['isEnabled'], function(result) {
     if(result.isEnabled) {
         document.addEventListener("DOMContentLoaded", function() {
             let rawGrades = parseGrades()
-            console.log("Avarage Grade: " + getAvarage(rawGrades))
-            console.log("Grades Count: " + countGrades(rawGrades))
-            console.log("Number of exams: " + countExams(rawGrades))
             $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittsnote: ' + '1.9' + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + countExams(rawGrades) + '</p><p class="normal">von <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUDresdenAutoLogin</a></p>'
+                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittsnote: ' + getAvarage(rawGrades) + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + countExams(rawGrades) + '</p><p class="normal">von <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUDresdenAutoLogin</a></p>'
                 )
             var ctx = document.getElementById('myChart').getContext('2d');
             ctx.canvas.width = 500;
