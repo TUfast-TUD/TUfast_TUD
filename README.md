@@ -26,6 +26,6 @@ Daniel alias https://github.com/C0ntroller
 - show dummy screen while login
 - use MutationObserver / DOMInsertedNode for better performance
 - catch login-error (with web scraping)
-- Support jexam
 - Support jitsi
 - Support gotomeeting organisator login
+- add explanation image for disable-enable button on install page
