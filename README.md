@@ -4,6 +4,8 @@ Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dre
 ## So funktionierts
 Loggt dich automatisch in TU Dresden Services ein.
 
+NEU: Zeigt deine Notenstatistik im Hisqis an!
+
 Wenn du die Services täglich nutzt, verbringst du viel Zeit mit nervigen Klicks.
 Diese Chrome-Erweiterung löst das Problem ein für allemal!
 
@@ -24,9 +26,6 @@ Daniel alias https://github.com/C0ntroller
 - show dummy screen while login
 - use MutationObserver / DOMInsertedNode for better performance
 - catch login-error (with web scraping)
-- Hisqis / Selma: Noten direkt anzeigen Button
-- Hisqis / Selma: Durchschnittnote berechnen
-- Hisqis / Selma: Noten-Statistiken anzeigen
 - Support jexam
 - Support jitsi
 - Support gotomeeting organisator login
