@@ -15,6 +15,7 @@ Unterstützt werden:
 - outlook web app
 - magma
 - matrix
+- jExam
 
 ## Contributors
 Daniel alias https://github.com/C0ntroller

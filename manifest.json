@@ -23,6 +23,26 @@
     },
     {
       "js": [
+        "contentScripts/content_fwd_jexam.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://jexam.inf.tu-dresden.de/",
+        "*://www.google.de/search?q=jexam*",
+        "*://www.google.com/search?q=jexam*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_jexam.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://jexam.inf.tu-dresden.de/de.jexam.web.v4.5/spring/welcome*"
+      ]
+    },
+    {
+      "js": [
         "thirdParty/jquery-3.4.1.min.js", 
         "thirdParty/Chart.bundle.min.js",
         "contentScripts/pimpHISQIS.js"
