@@ -29,3 +29,4 @@ Daniel alias https://github.com/C0ntroller
 - Support jitsi
 - Support gotomeeting organisator login
 - add explanation image for disable-enable button on install page
+- add slub login
