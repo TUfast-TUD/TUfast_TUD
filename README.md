@@ -33,3 +33,4 @@ Daniel alias https://github.com/C0ntroller
 - optimize hisqis layout
 - optimize opal layout
 - remove ask for feedback screen
+- fix hisqis bug: wenn prüfung nicht bestanden wurde und dann bestanden wurde, wird es doppelt gezählt.
