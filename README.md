@@ -30,3 +30,6 @@ Daniel alias https://github.com/C0ntroller
 - Support gotomeeting organisator login
 - add explanation image for disable-enable button on install page
 - add slub login
+- optimize hisqis layout
+- optimize opal layout
+- remove ask for feedback screen
