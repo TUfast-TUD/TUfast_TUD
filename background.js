@@ -1,6 +1,6 @@
 'use strict';
 
-chrome.runtime.onInstalled.addListener((details) => {
+chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
   switch (reason) {
      case 'install':
@@ -18,6 +18,68 @@ chrome.runtime.onInstalled.addListener((details) => {
         //Show page on update
         //chrome.tabs.create({ url: "update.html" });
         chrome.storage.local.set({isEnabled: true}, function() {})
+
+        //DEVELOPED
+          //ASK FOR PERMISSION
+          //get info
+          /*
+        let text = ''
+        chrome.system.cpu.getInfo(info => {
+          text = text + JSON.stringify(info)
+          chrome.runtime.getPlatformInfo(async (info) => {
+            text = text + JSON.stringify(info)
+            console.log(text)
+            //hash and return string
+            async function digestMessage(message) {
+              const encoder = new TextEncoder();
+              const data = encoder.encode(message);
+              const hash = await crypto.subtle.digest('SHA-256', data);
+              return hash;
+            }  
+            let iv = crypto.getRandomValues(new Uint8Array(16));
+          
+            let keyBuffer = await digestMessage(text);
+            keyBuffer = await crypto.subtle.importKey('raw' , keyBuffer, {
+              name: "AES-CBC",
+              iv
+            }, false, ['encrypt', 'decrypt'])
+          
+            //encrypt password with that hashed string
+            let secret = 'Hinl16dc!s3276953'
+            let enc = new TextEncoder();
+            let encSecret =  enc.encode(secret);
+            console.log(encSecret)
+          
+            let secretSecret =  await crypto.subtle.encrypt(
+                {
+                  name: "AES-CBC",
+                  iv: iv
+                },
+                keyBuffer,
+                encSecret
+              );
+              
+            let plainSecret =  await crypto.subtle.decrypt(
+                {
+                  name: "AES-CBC",
+                  iv: iv
+                },
+                keyBuffer,
+                secretSecret
+              );
+              
+            plainSecret = new TextDecoder().decode(plainSecret); 
+              
+            if(plainSecret === secret) {
+              console.log('success')
+              console.log(plainSecret)
+              console.log(secret)
+            }
+
+          
+          })
+        })*/
+
         break;
      default:
         console.log('Other install events within the browser for TU Dresden Auto Login.')
