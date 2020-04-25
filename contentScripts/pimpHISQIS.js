@@ -107,8 +107,6 @@ function countExams(rawGrades){
     return count
 }
 
-function clearGrades(rawGrades)
-
 //return counted number of rounded grades for display
 function countGrades(rawGrades) {
     var gradesCount = [0, 0, 0, 0, 0]

@@ -3,7 +3,7 @@
   "version": "3.2.1.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": [
-    "storage", "system.cpu"
+    "storage", "system.cpu", "alarms"
   ],
   "optional_permissions": [],
   "background": {

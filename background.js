@@ -13,73 +13,20 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({refused_review: false}, function() {})
         chrome.storage.local.set({showed_feedback_screen_counter: 0}, function() {})
         chrome.storage.local.set({isEnabled: true}, function() {})
+        chrome.storage.local.set({encryption_level: 2}, function() {})
         break;
      case 'update':
         //Show page on update
         //chrome.tabs.create({ url: "update.html" });
         chrome.storage.local.set({isEnabled: true}, function() {})
-
-        //DEVELOPED
-          //ASK FOR PERMISSION
-          //get info
-          /*
-        let text = ''
-        chrome.system.cpu.getInfo(info => {
-          text = text + JSON.stringify(info)
-          chrome.runtime.getPlatformInfo(async (info) => {
-            text = text + JSON.stringify(info)
-            console.log(text)
-            //hash and return string
-            async function digestMessage(message) {
-              const encoder = new TextEncoder();
-              const data = encoder.encode(message);
-              const hash = await crypto.subtle.digest('SHA-256', data);
-              return hash;
-            }  
-            let iv = crypto.getRandomValues(new Uint8Array(16));
-          
-            let keyBuffer = await digestMessage(text);
-            keyBuffer = await crypto.subtle.importKey('raw' , keyBuffer, {
-              name: "AES-CBC",
-              iv
-            }, false, ['encrypt', 'decrypt'])
-          
-            //encrypt password with that hashed string
-            let secret = 'Hinl16dc!s3276953'
-            let enc = new TextEncoder();
-            let encSecret =  enc.encode(secret);
-            console.log(encSecret)
-          
-            let secretSecret =  await crypto.subtle.encrypt(
-                {
-                  name: "AES-CBC",
-                  iv: iv
-                },
-                keyBuffer,
-                encSecret
-              );
-              
-            let plainSecret =  await crypto.subtle.decrypt(
-                {
-                  name: "AES-CBC",
-                  iv: iv
-                },
-                keyBuffer,
-                secretSecret
-              );
-              
-            plainSecret = new TextDecoder().decode(plainSecret); 
-              
-            if(plainSecret === secret) {
-              console.log('success')
-              console.log(plainSecret)
-              console.log(secret)
-            }
-
-          
-          })
-        })*/
-
+        //check if encryption is already on level 2
+        chrome.storage.local.get(['encryption_level'], (resp) => {
+          if(!(resp.encryption_level === 2)){
+            chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
+              setUserData({asdf: atob(result.asdf), fdsa: atob(result.fdsa)})
+            })
+          }
+        })
         break;
      default:
         console.log('Other install events within the browser for TU Dresden Auto Login.')
@@ -106,10 +53,18 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     case 'save_clicks':
       save_clicks(request.click_count)
       break
+    case 'get_user_data':
+      getUserData().then((userData) => sendResponse(userData))
+      break
+    case 'set_user_data':
+      setUserData(request.userData)
+      break
     default:
       console.log('Cmd not found!')
       break
- }
+  }
+  return true //required for async sendResponse
+
 })
 
 function show_badge(Text, Color, timeout) {
@@ -174,3 +129,81 @@ function count_feedback_window_shown(){
   })
 }
 
+function hashDigest(string) {
+  return new Promise (async (resolve, reject) => {
+    const encoder = new TextEncoder()
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(string))
+    resolve(hashBuffer)
+  })
+} 
+
+function getKeyBuffer(){
+  return new Promise((resolve, reject) => {
+    let sysInfo = ""
+    chrome.system.cpu.getInfo(info => {
+      delete info['processors']
+      delete info['temperatures']
+      sysInfo = sysInfo + JSON.stringify(info)
+      chrome.runtime.getPlatformInfo(async (info) => {
+        sysInfo = sysInfo + JSON.stringify(info)
+        let keyBuffer = await crypto.subtle.importKey('raw' , await hashDigest(sysInfo), 
+                                                      {name: "AES-CBC",}, 
+                                                      false, 
+                                                      ['encrypt', 'decrypt']) 
+        resolve(keyBuffer)       
+      })
+    })
+  })
+}
+
+async function setUserData(userData) {
+  let userDataConcat = userData.asdf + '@@@@@' + userData.fdsa
+  let encoder = new TextEncoder()
+  let userDataEncoded =  encoder.encode(userDataConcat)
+  let keyBuffer = await getKeyBuffer()
+  let iv = crypto.getRandomValues(new Uint8Array(16))
+  let userDataEncrypted =  await crypto.subtle.encrypt(
+    {
+      name: "AES-CBC",
+      iv: iv
+    },
+    keyBuffer,
+    userDataEncoded
+  )
+  userDataEncrypted = Array.from(new Uint8Array(userDataEncrypted))                             
+  userDataEncrypted = userDataEncrypted.map(byte => String.fromCharCode(byte)).join('')           
+  userDataEncrypted = btoa(userDataEncrypted)
+  iv = Array.from(iv).map(b => ('00' + b.toString(16)).slice(-2)).join('')
+  chrome.storage.local.set({Data: iv + userDataEncrypted}, function() {})
+}
+
+//return {asdf: "", fdsa: ""}
+async function getUserData(){
+  return new Promise(async (resolve, reject) => {
+      let keyBuffer = await getKeyBuffer()
+      chrome.storage.local.get(['Data'], async (Data) => {
+        //check if Data exists, else return
+        if(Data.Data === undefined) {
+          resolve({asdf: undefined, fdsa: undefined})
+          return
+        }
+        let iv = await Data.Data.slice(0,32).match(/.{2}/g).map(byte => parseInt(byte, 16)) 
+        iv = new Uint8Array(iv)
+        let userDataEncrypted = atob(Data.Data.slice(32))                                       
+        userDataEncrypted = new Uint8Array(userDataEncrypted.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
+
+        let UserData =  await crypto.subtle.decrypt(
+          {
+            name: "AES-CBC",
+            iv: iv
+          },
+          keyBuffer,
+          userDataEncrypted
+        )
+
+        UserData = new TextDecoder().decode(UserData)
+        UserData = UserData.split("@@@@@")
+        resolve({asdf: UserData[0], fdsa: UserData[1]})
+      })  
+    })
+}

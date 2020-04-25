@@ -1,24 +1,23 @@
 //Mainly contributed by Daniel: https://github.com/C0ntroller
 
 function loginMatrix(){
-    chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
-        //check if already loked in.
-        if(localStorage.getItem("mx_access_token")) {
-            var hash = window.location.hash;
-            //forward to home page, if already logged in
-            if(hash === '#/login') {
-                console.log("Already logged into matrix. Fwd to home page")
-                chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
-                //window.location.replace("https://matrix.tu-dresden.de/")
-                window.location.hash = "#/home";
-                location.reload()
-            }
-            return;        
+    //check if already loked in.
+    if(localStorage.getItem("mx_access_token")) {
+        var hash = window.location.hash;
+        //forward to home page, if already logged in
+        if(hash === '#/login') {
+            console.log("Already logged into matrix. Fwd to home page")
+            chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
+            //window.location.replace("https://matrix.tu-dresden.de/")
+            window.location.hash = "#/home";
+            location.reload()
         }
-
+        return;        
+    }
+    chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
         if (!(result.asdf === undefined  || result.fdsa === undefined)) {
             var url = 'https://matrix.tu-dresden.de/_matrix/client/r0/login';
-            var params = '{"type":"m.login.password","password":"'+atob(result.fdsa)+'","identifier":{"type":"m.id.user","user":"'+atob(result.asdf)+'"},"initial_device_display_name":"Chrome Autologin"}';
+            var params = '{"type":"m.login.password","password":"'+(result.fdsa)+'","identifier":{"type":"m.id.user","user":"'+(result.asdf)+'"},"initial_device_display_name":"Chrome Autologin"}';
 
             var http = new XMLHttpRequest();
             http.open('POST', url, true);
