@@ -2,6 +2,7 @@
 
 ////////Code to run when extension is loaded
 console.log('Loaded TU Dresden Auto Login')
+chrome.storage.local.set({loggedOutSelma: false}, function() {});
 chrome.storage.local.set({loggedOutQis: false}, function() {});
 ////////
 
