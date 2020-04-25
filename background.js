@@ -22,8 +22,10 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         //check if encryption is already on level 2
         chrome.storage.local.get(['encryption_level'], (resp) => {
           if(!(resp.encryption_level === 2)){
+            console.log('Upgrading encryption standard to level 2...')
             chrome.storage.local.get(['asdf', 'fdsa'], function(result) {
               setUserData({asdf: atob(result.asdf), fdsa: atob(result.fdsa)})
+              chrome.storage.local.set({encryption_level: 2}, function() {})
             })
           }
         })
@@ -191,7 +193,6 @@ async function getUserData(){
         iv = new Uint8Array(iv)
         let userDataEncrypted = atob(Data.Data.slice(32))                                       
         userDataEncrypted = new Uint8Array(userDataEncrypted.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
-
         let UserData =  await crypto.subtle.decrypt(
           {
             name: "AES-CBC",
@@ -200,7 +201,6 @@ async function getUserData(){
           keyBuffer,
           userDataEncrypted
         )
-
         UserData = new TextDecoder().decode(UserData)
         UserData = UserData.split("@@@@@")
         resolve({asdf: UserData[0], fdsa: UserData[1]})
