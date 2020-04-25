@@ -1,5 +1,10 @@
 'use strict';
 
+////////Code to run when extension is loaded
+console.log('Loaded TU Dresden Auto Login')
+chrome.storage.local.set({loggedOutQis: false}, function() {});
+////////
+
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
   switch (reason) {
@@ -61,6 +66,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     case 'set_user_data':
       setUserData(request.userData)
       break
+    case 'logged_out':
+      loggedOut(request.portal)
+      break
     default:
       console.log('Cmd not found!')
       break
@@ -68,6 +76,16 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
   return true //required for async sendResponse
 
 })
+
+function loggedOut(portal) {
+  let loggedOutPortal = {}
+  loggedOutPortal[portal] = true
+  chrome.storage.local.set(loggedOutPortal, function() {});
+  setTimeout(function() {
+    loggedOutPortal[portal] = false
+    chrome.storage.local.set(loggedOutPortal, function() {});
+  }, 2000);
+}
 
 function show_badge(Text, Color, timeout) {
   chrome.browserAction.setBadgeText({text: Text});
@@ -143,6 +161,7 @@ function getKeyBuffer(){
   return new Promise((resolve, reject) => {
     let sysInfo = ""
     chrome.system.cpu.getInfo(info => {
+      //TROUBLE if api changes!
       delete info['processors']
       delete info['temperatures']
       sysInfo = sysInfo + JSON.stringify(info)
