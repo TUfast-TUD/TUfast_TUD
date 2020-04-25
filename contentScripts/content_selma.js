@@ -20,7 +20,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], function(result) {
             if(document.getElementById('logOut_btn')){
                 document.getElementById('logOut_btn').addEventListener('click', function() {
                     chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutSelma'})
-              })
+                })
             }
         })
         console.log('Auto Login to Selma.')

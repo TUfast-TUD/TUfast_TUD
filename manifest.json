@@ -39,7 +39,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://jexam.inf.tu-dresden.de/de.jexam.web.v4.5/spring/welcome*"
+        "*://jexam.inf.tu-dresden.de/*"
       ]
     },
     {

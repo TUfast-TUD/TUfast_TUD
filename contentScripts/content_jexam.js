@@ -1,5 +1,5 @@
-chrome.storage.local.get(['isEnabled'], function(result) {
-    if(result.isEnabled) {
+chrome.storage.local.get(['isEnabled', 'loggedOutJexam'], function(result) {
+    if(result.isEnabled && !result.loggedOutJexam) {
         document.addEventListener('DOMContentLoaded', function() {
             if(document.getElementById('username') && document.getElementById("password")){
                 chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
@@ -15,7 +15,14 @@ chrome.storage.local.get(['isEnabled'], function(result) {
                     }
                 });
             }
+            if(document.getElementsByClassName("logout nav-entry animate-fade-in")[0]){
+                document.getElementsByClassName("logout nav-entry animate-fade-in")[0].addEventListener('click', function() {
+                    chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutJexam'})
+                })
+            }
         })
         console.log('Auto Login to jexam.')
+    } else if(result.loggedOutJexam) {
+        chrome.storage.local.set({loggedOutJexam: false}, function() {})
     }
 })
