@@ -2,7 +2,7 @@
 Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
 ## So funktionierts
-Loggt dich automatisch in TU Dresden Services ein.
+Loggt dich automatisch in TU Dresden Services ein. Die Nutzerdaten werden nur lokal und verschlüsselt gespeichert.
 
 NEU: Zeigt deine Notenstatistik im Hisqis an!
 
@@ -27,7 +27,6 @@ Daniel alias https://github.com/C0ntroller
 - use MutationObserver / DOMInsertedNode for better performance
 - catch login-error (with web scraping)
 - Support jitsi
-- add explanation image for disable-enable button on install page
 - add slub login
 - optimize hisqis layout
 - optimize opal layout
