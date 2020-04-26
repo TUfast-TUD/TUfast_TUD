@@ -19,7 +19,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://idp2.tu-dresden.de/idp/profile/SAML2/Redirect/SSO?execution=*"
+        "*://idp2.tu-dresden.de/idp/profile/SAML2/*"
       ]
     },
     {
@@ -166,6 +166,15 @@
       "matches": [
         "*://bildungsportal.sachsen.de/opal/shiblogin*",
         "*://bildungsportal.sachsen.de/opal/login*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_bildungsportal_logout.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://bildungsportal.sachsen.de/opal*"
       ]
     },
     {

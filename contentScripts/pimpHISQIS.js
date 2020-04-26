@@ -108,6 +108,7 @@ function countExams(rawGrades){
 }
 
 //return counted number of rounded grades for display
+    //also showing failed exams which were passed later
 function countGrades(rawGrades) {
     var gradesCount = [0, 0, 0, 0, 0]
     rawGrades.forEach(function(info) {
@@ -138,12 +139,13 @@ function countGrades(rawGrades) {
 }
 
 //return arithmetic grade avarage
+    //not counting failed exams!
 function getAvarage(rawGrades) {
     let sum = 0
     let count = 0
     rawGrades.forEach(function(info) {
         let grade = parseFloat(info.grade.replace(',', '.'))
-        if (grade) {
+        if (grade && !(grade ===5)) {
             count = count + 1
             sum = sum + grade 
         }

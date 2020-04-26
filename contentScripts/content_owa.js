@@ -16,8 +16,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
                 });
             }
             //detecting logout
-            if(document.querySelectorAll('#nameDropDown_toolbar_UserName_DropDown > div:nth-child(3) > a')[0]) {
-                document.querySelectorAll('#nameDropDown_toolbar_UserName_DropDown > div:nth-child(3) > a')[0].addEventListener('click', function() {
+            if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+                document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
                     chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
                 })
             }
@@ -31,8 +31,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
 
 //detecting logout
 document.addEventListener("DOMNodeInserted", function(e) {
-    if(document.querySelectorAll('body > div:last-child > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0]) {
-        document.querySelectorAll('body > div:last-child > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0].addEventListener('click', function() {
+    if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+        document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
             chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
         })
     }

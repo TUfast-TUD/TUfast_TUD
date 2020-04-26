@@ -1,5 +1,5 @@
-chrome.storage.local.get(['isEnabled'], function(result) {
-  if(result.isEnabled) { 
+chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function(result) {
+  if(result.isEnabled && !(result.loggedOutOpal)) { 
     //when pop-up shows
     document.addEventListener("DOMNodeInserted", function(e) {
       //select TU Dresden from selector
@@ -23,7 +23,8 @@ chrome.storage.local.get(['isEnabled'], function(result) {
         document.getElementsByClassName('btn btn-sm')[1].click()
       }
     }
-
     console.log('Auto Login to Opal.')
+  } else if(result.loggedOutOpal) {
+    chrome.storage.local.set({loggedOutOpal: false}, function() {})
   }
 })

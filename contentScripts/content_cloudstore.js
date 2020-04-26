@@ -16,8 +16,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutCloudstore'], function(result) 
                     }
                 });
             }
-            if(document.querySelectorAll('#expanddiv > ul >li:nth-child(4) > a')[0]){
-                document.querySelectorAll('#expanddiv > ul >li:nth-child(4) > a')[0].addEventListener('click', function() {
+            if(document.querySelectorAll('[data-id="logout"] > a')[0]){
+                document.querySelectorAll('[data-id="logout"] > a')[0].addEventListener('click', function() {
                     chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutCloudstore'})
                 })
             }
