@@ -155,7 +155,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://cloudstore.zih.tu-dresden.de/index.php/login*"
+        "*://cloudstore.zih.tu-dresden.de/*"
       ]
     },
     {

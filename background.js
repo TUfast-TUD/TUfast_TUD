@@ -78,14 +78,17 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
 })
 
+//timeout is 2000 default
 function loggedOut(portal) {
+  let timeout = 2000
+  if(portal === "loggedOutCloudstore") {timeout = 7000}
   let loggedOutPortal = {}
   loggedOutPortal[portal] = true
   chrome.storage.local.set(loggedOutPortal, function() {});
   setTimeout(function() {
     loggedOutPortal[portal] = false
     chrome.storage.local.set(loggedOutPortal, function() {});
-  }, 2000);
+  }, timeout);
 }
 
 function show_badge(Text, Color, timeout) {

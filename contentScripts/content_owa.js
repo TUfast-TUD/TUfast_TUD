@@ -31,8 +31,6 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
 
 //detecting logout
 document.addEventListener("DOMNodeInserted", function(e) {
-    //select TU Dresden from selector
-    console.log('inserted')
     if(document.querySelectorAll('body > div:last-child > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0]) {
         document.querySelectorAll('body > div:last-child > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0].addEventListener('click', function() {
             chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
