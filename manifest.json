@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "3.3.2.0",
+  "version": "3.4.0.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": [
     "storage", "system.cpu"
@@ -31,6 +31,26 @@
         "*://jexam.inf.tu-dresden.de/",
         "*://www.google.de/search?q=jexam*",
         "*://www.google.com/search?q=jexam*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_cloudstore.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://www.google.de/search?q=tustore*",
+        "*://www.google.com/search?q=tustore*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_owa.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://www.google.de/search?q=tumail*",
+        "*://www.google.com/search?q=tumail*"
       ]
     },
     {
