@@ -146,7 +146,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://msx.tu-dresden.de/owa/auth/logon*"
+        "*://msx.tu-dresden.de/owa/*"
       ]
     },
     {

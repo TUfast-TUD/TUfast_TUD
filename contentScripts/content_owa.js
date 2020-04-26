@@ -1,5 +1,5 @@
-chrome.storage.local.get(['isEnabled'], function(result) {
-    if(result.isEnabled) {        
+chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
+    if(result.isEnabled && !result.loggedOutOwa) {        
         document.addEventListener('DOMContentLoaded', function() {
             if(document.getElementById('username') && document.getElementById('password')){
                 chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
@@ -17,5 +17,19 @@ chrome.storage.local.get(['isEnabled'], function(result) {
             }
         })
         console.log('Auto Login to OWA.')
-}
+    }
+    else if(result.loggedOutOwa) {
+        chrome.storage.local.set({loggedOutOwa: false}, function() {})
+    }
 })
+
+//detecting logout
+document.addEventListener("DOMNodeInserted", function(e) {
+    //select TU Dresden from selector
+    if(document.querySelectorAll('body > div:nth-child(14) > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0]) {
+        document.querySelectorAll('body > div:nth-child(14) > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0].addEventListener('click', function() {
+            chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+        })
+    }
+}, false);
+
