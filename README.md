@@ -36,6 +36,5 @@ Daniel alias https://github.com/C0ntroller
 - fix hisqis bug: wenn prüfung nicht bestanden wurde und dann bestanden wurde, wird es doppelt gezählt.
 - integrate https://bildungsportal.sachsen.de/magma/mediapreview/8a8172434b8440f7dc079495c611f02bacfced8c.2?null=
 - easy-logout für
-   - owa
    - magma
    - cloudstore

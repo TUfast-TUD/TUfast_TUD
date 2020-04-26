@@ -15,6 +15,12 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
                     }
                 });
             }
+            //detecting logout
+            if(document.querySelectorAll('#nameDropDown_toolbar_UserName_DropDown > div:nth-child(3) > a')[0]) {
+                document.querySelectorAll('#nameDropDown_toolbar_UserName_DropDown > div:nth-child(3) > a')[0].addEventListener('click', function() {
+                    chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+                })
+            }
         })
         console.log('Auto Login to OWA.')
     }
@@ -26,8 +32,9 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
 //detecting logout
 document.addEventListener("DOMNodeInserted", function(e) {
     //select TU Dresden from selector
-    if(document.querySelectorAll('body > div:nth-child(14) > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0]) {
-        document.querySelectorAll('body > div:nth-child(14) > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0].addEventListener('click', function() {
+    console.log('inserted')
+    if(document.querySelectorAll('body > div:last-child > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0]) {
+        document.querySelectorAll('body > div:last-child > div  > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(4) > div')[0].addEventListener('click', function() {
             chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
         })
     }
