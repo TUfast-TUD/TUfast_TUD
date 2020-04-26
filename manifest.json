@@ -1,9 +1,9 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "3.3.0.0",
+  "version": "3.3.2.0",
   "description": "Spare dir Klicks und nutze TU Dresden Auto Login!",
   "permissions": [
-    "storage", "system.cpu", "alarms"
+    "storage", "system.cpu"
   ],
   "optional_permissions": [],
   "background": {
@@ -19,7 +19,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://idp2.tu-dresden.de/idp/profile/SAML2/*"
+        "*://idp2.tu-dresden.de/idp/profile/*"
       ]
     },
     {

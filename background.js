@@ -2,8 +2,13 @@
 
 ////////Code to run when extension is loaded
 console.log('Loaded TU Dresden Auto Login')
-chrome.storage.local.set({loggedOutSelma: false}, function() {});
-chrome.storage.local.set({loggedOutQis: false}, function() {});
+chrome.storage.local.set({loggedOutSelma: false}, function() {})
+chrome.storage.local.set({loggedOutQis: false}, function() {})
+chrome.storage.local.set({loggedOutOpal: false}, function() {})
+chrome.storage.local.set({loggedOutOwa: false}, function() {})
+chrome.storage.local.set({loggedOutMagma: false}, function() {})
+chrome.storage.local.set({loggedOutJexam: false}, function() {})
+chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 ////////
 
 chrome.runtime.onInstalled.addListener(async(details) => {
