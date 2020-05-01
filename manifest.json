@@ -44,7 +44,11 @@
         "*://www.google.de/search?q=tustore*",
         "*://www.google.com/search?q=tustore*",
         "*://www.google.de/search*&q=tustore&oq=tustore*",
-        "*://www.google.com/search*&q=tustore&oq=tustore*"
+        "*://www.google.com/search*&q=tustore&oq=tustore*",
+        "*://www.google.de/search?q=tucloud*",
+        "*://www.google.com/search?q=tucloud*",
+        "*://www.google.de/search*&q=tustore&oq=tucloud*",
+        "*://www.google.com/search*&q=tustore&oq=tucloud*"
       ]
     },
     {
