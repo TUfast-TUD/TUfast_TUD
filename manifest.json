@@ -30,7 +30,9 @@
       "matches": [
         "*://jexam.inf.tu-dresden.de/",
         "*://www.google.de/search?q=jexam*",
-        "*://www.google.com/search?q=jexam*"
+        "*://www.google.com/search?q=jexam*",
+        "*://www.google.de/search*&q=jexam&oq=jexam*",
+        "*://www.google.com/search*&q=jexam&oq=jexam*"
       ]
     },
     {
@@ -40,7 +42,9 @@
       "run_at": "document_start",
       "matches": [
         "*://www.google.de/search?q=tustore*",
-        "*://www.google.com/search?q=tustore*"
+        "*://www.google.com/search?q=tustore*",
+        "*://www.google.de/search*&q=tustore&oq=tustore*",
+        "*://www.google.com/search*&q=tustore&oq=tustore*"
       ]
     },
     {
@@ -50,7 +54,13 @@
       "run_at": "document_start",
       "matches": [
         "*://www.google.de/search?q=tumail*",
-        "*://www.google.com/search?q=tumail*"
+        "*://www.google.de/search?q=tudmail*",
+        "*://www.google.com/search?q=tumail*",
+        "*://www.google.com/search?q=tudmail*",
+        "*://www.google.de/search*&q=tumail&oq=tumail*",
+        "*://www.google.com/search*&q=tumail&oq=tumail*",
+        "*://www.google.de/search*&q=tudmail&oq=tudmail*",
+        "*://www.google.com/search*&q=tudmail&oq=tudmail*"
       ]
     },
     {
@@ -84,7 +94,9 @@
       "matches": [
         "*://opal.de/*",
         "*://www.google.de/search?q=opal*",
-        "*://www.google.com/search?q=opal*"
+        "*://www.google.com/search?q=opal*",
+        "*://www.google.de/search*&q=opal&oq=opal*",
+        "*://www.google.com/search*&q=opal&oq=opal*"
       ]
     },
     {
@@ -103,7 +115,9 @@
       "run_at": "document_start",
       "matches": [
         "*://www.google.de/search?q=hisqis*",
-        "*://www.google.com/search?q=hisqis*"
+        "*://www.google.com/search?q=hisqis*",
+        "*://www.google.de/search*&q=hisqis&oq=hisqis*",
+        "*://www.google.com/search*&q=hisqis&oq=hisqis*"
       ]
     },
     {
@@ -113,7 +127,9 @@
       "run_at": "document_start",
       "matches": [
         "*://www.google.de/search?q=selma*",
-        "*://www.google.com/search?q=selma*"
+        "*://www.google.com/search?q=selma*",
+        "*://www.google.de/search*&q=selma&oq=selma*",
+        "*://www.google.com/search*&q=selma&oq=selma*"
       ]
     },
     {
@@ -143,7 +159,9 @@
       "run_at": "document_start",
       "matches": [
         "*://www.google.com/search?q=tumatrix*",
-        "*://www.google.de/search?q=tumatrix*"
+        "*://www.google.de/search?q=tumatrix*",
+        "*://www.google.de/search*&q=tumatrix&oq=tumatrix*",
+        "*://www.google.com/search*&q=tumatrix&oq=tumatrix*"
       ]
     },
     {
@@ -208,7 +226,11 @@
       "js": ["contentScripts/content_fwd_magma.js"],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=magma*", "https://www.google.de/search?q=magma*"
+        "https://www.google.com/search?q=magma*",
+        "https://www.google.de/search?q=magma*",
+        "*://www.google.de/search*&q=magma&oq=magma*",
+        "*://www.google.com/search*&q=magma&oq=magma*"
+        
       ]
     }
   ],

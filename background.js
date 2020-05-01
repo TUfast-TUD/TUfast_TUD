@@ -24,12 +24,14 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({refused_review: false}, function() {})
         chrome.storage.local.set({showed_feedback_screen_counter: 0}, function() {})
         chrome.storage.local.set({isEnabled: true}, function() {})
+        chrome.storage.local.set({fwdEnabled: true}, function() {})
         chrome.storage.local.set({encryption_level: 2}, function() {})
         break;
      case 'update':
         //Show page on update
         //chrome.tabs.create({ url: "update.html" });
         chrome.storage.local.set({isEnabled: true}, function() {})
+        chrome.storage.local.set({fwdEnabled: true}, function() {})
         //check if encryption is already on level 2
         chrome.storage.local.get(['encryption_level'], (resp) => {
           if(!(resp.encryption_level === 2)){
@@ -58,7 +60,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       show_badge("Error", '#ff0000', 10000)
       break
     case 'perform_login':
-      show_feedback_window()
+      //show_feedback_window()
       break
     case 'clear_badge':
       show_badge("", "#ffffff", 0)
@@ -109,7 +111,7 @@ function show_feedback_window(){
   var saved_clicks = 0
   chrome.storage.local.get(['saved_click_counter'], (result) => {
     saved_clicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter 
-    if(saved_clicks > 100) {show_feedback_100_window()}
+    //if(saved_clicks > 100) {show_feedback_100_window()}
     //else if (saved_clicks > 50) {show_feedback_50_window()}
   })
 

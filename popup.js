@@ -13,13 +13,16 @@ window.onload = function(){
         this.saveEnabled()
     })
 
+    //get checkbox clicks
+    document.getElementById('SearchCheckBox').onclick = fwdGoogleSearch
+
     //set switch
     displayEnabled()
 }
 
 //changeIsEnabledState
 function saveEnabled() {
-    chrome.storage.local.get(['isEnabled'], function(result) {
+    chrome.storage.local.get(['isEnabled', 'fwdEnabled'], function(result) {
         chrome.storage.local.set({isEnabled: !(result.isEnabled)}, function() {})
     })
 }
@@ -28,5 +31,14 @@ function saveEnabled() {
 function displayEnabled() {
     chrome.storage.local.get(['isEnabled'], function(result) {
         this.document.getElementById('switch').checked = result.isEnabled
+    })
+    chrome.storage.local.get(['fwdEnabled'], function(result) {
+        this.document.getElementById('SearchCheckBox').checked = result.fwdEnabled
+    })
+}
+
+function fwdGoogleSearch() {
+    chrome.storage.local.get(['fwdEnabled'], function(result) {
+        chrome.storage.local.set({fwdEnabled: !(result.fwdEnabled)}, function() {})
     })
 }
