@@ -32,3 +32,4 @@ Daniel alias https://github.com/C0ntroller
 - add slub login
 - optimize hisqis layout
 - optimize opal layout
+- selma notenstatisktik
