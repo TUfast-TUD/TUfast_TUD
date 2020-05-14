@@ -33,3 +33,4 @@ Daniel alias https://github.com/C0ntroller
 - optimize hisqis layout
 - optimize opal layout
 - selma notenstatisktik
+- durchschnitt gewichtet nach CP berechnen
