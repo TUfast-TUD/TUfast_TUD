@@ -5,7 +5,7 @@ chrome.storage.local.get(['isEnabled'], function (result) {
         document.addEventListener("DOMContentLoaded", function () {
             let rawGrades = parseGrades();
             $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote: ' + getWeightedAverage(rawGrades) + ' (nach CP gewichtet) </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">von <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUDresdenAutoLogin</a></p>'
+                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">von <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUDresdenAutoLogin</a></p>'
             );
             var ctx = document.getElementById('myChart').getContext('2d');
             ctx.canvas.width = 500;
