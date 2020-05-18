@@ -5,7 +5,7 @@ chrome.storage.local.get(['isEnabled'], function (result) {
         document.addEventListener("DOMContentLoaded", function () {
             let rawGrades = parseGrades();
             $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Gewichtete Durchschnittnote: ' + getWeightedAverage(rawGrades) + '</p><p class="Konto" style="margin:0 auto;">Arithmetische Durchschnittsnote: ' + getArithAverage(rawGrades) + '</p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">von <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUDresdenAutoLogin</a></p>'
+                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote: ' + getWeightedAverage(rawGrades) + ' (nach CP gewichtet) </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">von <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUDresdenAutoLogin</a></p>'
             );
             var ctx = document.getElementById('myChart').getContext('2d');
             ctx.canvas.width = 500;
@@ -121,7 +121,7 @@ function countGrades(rawGrades) {
 function getArithAverage(rawGrades) {
     //first get all grade-objects that aren't failed, then map it directly as number
     let grades = rawGrades.filter(x => x.grade !== 5.0 && !x.isModule).map(x => x.grade);
-    return grades.length ? (grades.reduce((acc,value) => acc + value, 0) / grades.length).toFixed(2) : 0;
+    return grades.length ? (grades.reduce((acc,value) => acc + value, 0) / grades.length).toFixed(1) : 0;
 }
 
 //return weighted grade average
@@ -129,5 +129,5 @@ function getArithAverage(rawGrades) {
 function getWeightedAverage(rawGrades) {
     let grades = rawGrades.filter(x => x.grade !== 5.0 && x.isModule);
     let totalWeight = grades.reduce((acc, value) => acc + value.weight, 0);
-    return totalWeight ? (grades.reduce((acc, value) => acc + value.grade * value.weight, 0) / totalWeight).toFixed(2) : 0;
+    return totalWeight ? (grades.reduce((acc, value) => acc + value.grade * value.weight, 0) / totalWeight).toFixed(1) : 0;
 }
