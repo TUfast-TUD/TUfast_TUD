@@ -1,4 +1,3 @@
-
 //this need to be done here since manifest v2
 window.onload = function(){
 
@@ -23,7 +22,7 @@ window.onload = function(){
 //changeIsEnabledState
 function saveEnabled() {
     chrome.storage.local.get(['isEnabled', 'fwdEnabled'], function(result) {
-        chrome.storage.local.set({isEnabled: !(result.isEnabled)}, function() {})
+      chrome.storage.local.set({isEnabled: !(result.isEnabled)}, function() {})
     })
 }
 

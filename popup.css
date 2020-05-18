@@ -61,3 +61,122 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+ 
+/* list */
+.list {
+  max-height: 350px;
+  overflow: auto;
+}
+
+.list-entry {
+  display: flex;
+  padding: 10px;
+  border: #303a44 solid 1px;
+  margin: 2px;
+  border-radius: 7px;
+}
+
+.list-entry-text {
+  flex: 9;
+  justify-self: center;
+  align-self: center;
+}
+
+.list-entry-img {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.list-img {
+  object-fit: contain;
+  width: 50px;
+  height: 20px;
+}
+
+/* grid */
+.grid-container {
+  display: grid;
+  justify-content: space-between;
+  align-content: start;
+  grid-template-columns: auto auto auto;
+  grid-gap: 30px;
+  margin: 15px;
+  max-height: 350px;
+  overflow: auto;
+}
+
+.grid-text {
+  text-align: center;
+  flex: 1;
+}
+
+.grid-item {
+  width: 180px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  border: solid #303a44 1px;
+}
+
+.grid-img {
+  border-radius: 10%;
+  flex: 10;
+  object-fit: cover;
+  background-color: #20262e;
+}
+
+body {
+  border: solid 2px #303a44;
+  background-color: #65737f;
+  border-radius: 7px;
+  max-width: 789px; /*limit by chrome: 789px*/
+  max-height: 460px; /*limit by chrome: 590px*/
+  margin: 0px;
+}
+
+html {
+  background-color: #303a44;
+}
+
+
+/* Footer */
+.settings-footer {
+  display: flex;
+  width: 100%;
+  height: 35px;
+  border-top: solid 2px #303a44;
+  /*border-radius: 3px;*/
+}
+
+.settings-section {
+   border-right: solid 2px #303a44;
+   display: flex;
+   align-items: center;
+   justify-content: space-evenly;/*start*/;
+   padding-left: 15px;
+   padding-right: 15px;
+}
+
+.settings-section-icon {
+   display: flex;
+   border: none;
+   align-items: center; /*space-between*/
+   justify-content: center;
+   width: 50px; /*should be dynamically changed to achieve aspect ratio 1:1- but how? */
+}
+
+.settings-text {
+  float: left
+}
+
+.settings-icon {
+  float: right;
+  margin-left: 15px;
+}
+
+/* headline */
+.headline {
+  display: none;
+}
