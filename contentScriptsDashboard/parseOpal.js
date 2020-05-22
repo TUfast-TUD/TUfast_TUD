@@ -1,14 +1,22 @@
 chrome.storage.local.get(['isEnabled',], function(result) {
     if(result.isEnabled) {
         //on first load
-        document.addEventListener("DOMContentLoaded", function(e) {
+        document.addEventListener("DOMContentLoaded", async function(e) {
             loadAllCourses()
         })
         //when navigation through page
-        document.addEventListener("click", function(){
-            //window needs to be reloaded. Not nice, but i didnt found another solution. This causes some bugs!
-            window.location.reload()
-            loadAllCourses()
+        document.addEventListener("click", async function(){
+            //window needs to be reloaded as soon as url changes. Not nice, but I didnt found another solution. This causes some bugs!
+            //For some reason the changes loaded by XML are not present in current DOM
+            let oldUrl = location.href
+            setInterval(function(){ 
+                if (oldUrl != location.href) {
+                    oldUrl = location.href
+                    console.log("on click"+location.href)
+                    location.reload()
+                    return
+                } 
+            }, 10);
         })
     }
 })
@@ -102,14 +110,14 @@ function loadAllCourses() {
             let xmlDoc = parser.parseFromString(doc,"text/xml")
             let id = xmlDoc.getElementsByTagName("component")[0].getAttribute('id')
             let list = xmlDoc.getElementsByTagName("component")[0].innerHTML
+            //this needs to be reworked in order to implement all courses corretly in DOM!
             document.getElementById(id).innerHTML = list
             return list
         })
         .then((list) => {
-            parseCoursesFromWebPage()
+            //parseCoursesFromWebPage()
             //parseCoursesFromXMLRequest(list) // NOT WORKING YET
         })
     }
 
 }
-
