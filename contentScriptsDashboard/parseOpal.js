@@ -1,18 +1,16 @@
 chrome.storage.local.get(['isEnabled',], function(result) {
     if(result.isEnabled) {
-        //on first load
         document.addEventListener("DOMContentLoaded", async function(e) {
             loadAllCourses()
         })
-        //when navigation through page
+        //DOMNoteInserted triggered to often --> So i used the click-event. This should be changed in the future.
         document.addEventListener("click", async function(){
-            //window needs to be reloaded as soon as url changes. Not nice, but I didnt found another solution. This causes some bugs!
-            //For some reason the changes loaded by XML are not present in current DOM
+            //window needs to be reloaded as soon as url changes. Not nice, but I didnt found another solution.
+            //For some reason the changes loaded by XML are not present in current DOM.
             let oldUrl = location.href
             setInterval(function(){ 
                 if (oldUrl != location.href) {
                     oldUrl = location.href
-                    console.log("on click"+location.href)
                     location.reload()
                     return
                 } 
@@ -21,7 +19,7 @@ chrome.storage.local.get(['isEnabled',], function(result) {
     }
 })
 
-//THIS FUNCTION DOES NOT WORK YET
+//Not working yet - but also not necessary
 function parseCoursesFromXMLRequest(XMLString){
     //Directly parse courses from xmlHttpRequest
     
@@ -77,13 +75,11 @@ function loadAllCourses() {
     if(document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen") {
         console.log('loading all courses...')
         let opalBaseLink = "https://bildungsportal.sachsen.de"
-        //get ajax xmlHTTPRequest Url
-        let head = document.getElementsByTagName('head')[0].innerHTML
-        //regex is used to keep the seperator
-        let pagerShowAllLink = head.split(/(?<=pager-showAllLink)/)[0].split('u":"').pop()
+        let head = document.getElementsByTagName('head')[0].innerHTML //get ajax xmlHTTPRequest Url
+        let pagerShowAllLink = head.split(/(?<=pager-showAllLink)/)[0].split('u":"').pop() //regex is used to keep the seperator
         let url = opalBaseLink + pagerShowAllLink;
 
-        //do xmlHttpRequest with fetch(). This request retrieves full course list
+        //do xmlHttpRequest with fetch(). This request retrieves the full course list.
         fetch(url, {
             "headers": {
               "accept": "application/xml, text/xml, */*; q=0.01",
@@ -104,19 +100,20 @@ function loadAllCourses() {
             "credentials": "include"
         })
         .then((resp) => resp.text())
-            //display full course list in DOM
+        //display full course list in DOM
+            //TODO: The xmlDoc is NOT properly inserted in the DOM. Maybe that is why the changes are not present in DOM and the page needs to be reloaded.
+            //Needs some thinking and fixing
         .then((doc) => {
             let parser = new DOMParser()
             let xmlDoc = parser.parseFromString(doc,"text/xml")
             let id = xmlDoc.getElementsByTagName("component")[0].getAttribute('id')
-            let list = xmlDoc.getElementsByTagName("component")[0].innerHTML
-            //this needs to be reworked in order to implement all courses corretly in DOM!
-            document.getElementById(id).innerHTML = list
+            let list = xmlDoc.getElementsByTagName("component")[0].innerHTML //this should be reworked. The DOM-Node should be extracted.
+            document.getElementById(id).innerHTML = list //this should be rewored. The DOM-Node should be inserted.
             return list
         })
         .then((list) => {
-            //parseCoursesFromWebPage()
-            //parseCoursesFromXMLRequest(list) // NOT WORKING YET
+            parseCoursesFromWebPage()
+            //parseCoursesFromXMLRequest(list) //Not working yet - but not necessary.
         })
     }
 
