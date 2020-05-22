@@ -13,9 +13,35 @@ chrome.storage.local.get(['isEnabled',], function(result) {
     }
 })
 
-function parseCoursesFromXMLRequest(){
-    //ToDo
+//THIS FUNCTION DOES NOT WORK YET
+function parseCoursesFromXMLRequest(XMLString){
     //Directly parse courses from xmlHttpRequest
+    
+    //Need to remove CDATA-Tag
+    XMLString = XMLString.replace("<![CDATA[", "")
+    XMLString = XMLString.replace("]]>", "")
+    let parser = new DOMParser()
+    let XML = parser.parseFromString(XMLString,"text/xml")
+
+    //for favorites: XML starts before <tbody> but after class="table-panel"
+    //for courses: XML starts at class="list-unstyled"
+    try {
+        //most likely for favorits
+        let tableEntries = XML.getElementsByTagName("tbody")[0].children
+        for (let item of tableEntries) {
+            let title = item.children[2].children[0].getAttribute("title")
+            let link = item.children[2].children[0].getAttribute("href")
+            console.log( title + " " + link)
+        }
+    } catch {
+        //most likely for courses
+        let tableEntries = XML.getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
+        for (let item of tableEntries) {
+            let title = item.getElementsByClassName("content-preview-title")[0].innerHTML
+            let link = item.children[3].getAttribute("href")
+            console.log(title + " " +link)
+        }
+    }
 }
 
 function parseCoursesFromWebPage(){
@@ -30,7 +56,7 @@ function parseCoursesFromWebPage(){
         }
     }catch {
         //most likely for courses
-        let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0]. getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
+        let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0].getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
         for (let item of tableEntries) {
             let title = item.getElementsByClassName("content-preview-title")[0].innerHTML
             let link = item.children[3].getAttribute("href")
@@ -77,10 +103,11 @@ function loadAllCourses() {
             let id = xmlDoc.getElementsByTagName("component")[0].getAttribute('id')
             let list = xmlDoc.getElementsByTagName("component")[0].innerHTML
             document.getElementById(id).innerHTML = list
+            return list
         })
-        .then(() => {
-            //TODO: parseCoursesFromXML()
+        .then((list) => {
             parseCoursesFromWebPage()
+            //parseCoursesFromXMLRequest(list) // NOT WORKING YET
         })
     }
 
