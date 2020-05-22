@@ -13,8 +13,30 @@ chrome.storage.local.get(['isEnabled',], function(result) {
     }
 })
 
-function parseCourses(){
-    //todo
+function parseCoursesFromXMLRequest(){
+    //ToDo
+    //Directly parse courses from xmlHttpRequest
+}
+
+function parseCoursesFromWebPage(){
+    //there are two options how the table can be build.
+    try {
+        //most likely for favorits
+        let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByTagName("tbody")[0].children
+        for (let item of tableEntries) {
+            let title = item.children[2].children[0].getAttribute("title")
+            let link = item.children[2].children[0].getAttribute("href")
+            console.log( title + " " + link)
+        }
+    }catch {
+        //most likely for courses
+        let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0]. getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
+        for (let item of tableEntries) {
+            let title = item.getElementsByClassName("content-preview-title")[0].innerHTML
+            let link = item.children[3].getAttribute("href")
+            console.log(title + " " +link)
+        }
+    }
 }
 
 function loadAllCourses() {
@@ -46,16 +68,20 @@ function loadAllCourses() {
             "method": "GET",
             "mode": "cors",
             "credentials": "include"
-          })
-          .then((resp) => resp.text())
-          //display full course list in DOM
-          .then((doc) => {
+        })
+        .then((resp) => resp.text())
+            //display full course list in DOM
+        .then((doc) => {
             let parser = new DOMParser()
             let xmlDoc = parser.parseFromString(doc,"text/xml")
             let id = xmlDoc.getElementsByTagName("component")[0].getAttribute('id')
             let list = xmlDoc.getElementsByTagName("component")[0].innerHTML
             document.getElementById(id).innerHTML = list
-            })
+        })
+        .then(() => {
+            //TODO: parseCoursesFromXML()
+            parseCoursesFromWebPage()
+        })
     }
 
 }
