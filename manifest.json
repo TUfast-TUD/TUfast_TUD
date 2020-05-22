@@ -220,6 +220,17 @@
       ]
     },
     {
+      "js": [
+        "thirdParty/jquery-3.4.1.min.js", 
+        "contentScriptsDashboard/parseOpal.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://bildungsportal.sachsen.de/opal/auth/resource/favorites*",
+        "*://bildungsportal.sachsen.de/opal/auth/resource/courses*"
+      ]
+    },
+    {
       "js": ["contentScripts/content_magma.js"],
       "run_at": "document_start",
       "matches": [
