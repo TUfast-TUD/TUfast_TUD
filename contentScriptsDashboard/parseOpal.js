@@ -1,21 +1,32 @@
 chrome.storage.local.get(['isEnabled',], function(result) {
     if(result.isEnabled) {
         document.addEventListener("DOMContentLoaded", async function(e) {
-            loadAllCourses()
+            //loadAllCourses()
+            document.getElementsByClassName("pager-showall")[0].click()
 
             let oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
-            let oldPath = location.pathname
+            //let oldPath = location.pathname
+            let parsedCourses = false
 
             //listen for new ID with mutation observer and urlPath-change --> course list was reloaded
-            const config = { attributes: true, childList: true, subtree: true };
+            const config = { attributes: true, childList: true, subtree: true }
             const callback = function(mutationsList, observer) {
-                if (oldPath != location.pathname) {
-                    oldPath = location.pathname
-                    location.pathname = oldPath
-                } 
-                if(document.getElementsByClassName("pager-showall")[0].getAttribute("id") != oldId) {
+                //if (oldPath != location.pathname) {
+                //    oldPath = location.pathname
+                //    location.pathname = oldPath
+                //} 
+                //load all courses
+                if(document.getElementsByClassName("pager-showall")[0].getAttribute("id") != oldId && document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen") {
                     oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
-                    loadAllCourses()
+                    document.getElementsByClassName("pager-showall")[0].click()
+                    parsedCourses = false
+                    //loadAllCourses()
+                }  
+                //parse courses
+                if(document.getElementsByClassName("pager-showall")[0].innerText === "Seiten" && !parsedCourses) {
+                    parseCoursesFromWebPage()
+                    parsedCourses = true
+                    //loadAllCourses()
                 }   
             }
             const observer = new MutationObserver(callback);
@@ -89,6 +100,7 @@ function parseCoursesFromWebPage(){
     }
 }
 
+/*
 function loadAllCourses() {
     if(document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen") {
         console.log('loading all courses...')
@@ -99,7 +111,7 @@ function loadAllCourses() {
         //do xmlHttpRequest with fetch(). This request retrieves the full course list.
         fetch(url, {
             "headers": {
-              "accept": "application/xml, text/xml, */*; q=0.01",
+              "accept": "application/xml, text/xml, *//**; q=0.01",
               "accept-language": "en-US,en;q=0.9,de;q=0.8",
               "sec-fetch-dest": "empty",
               "sec-fetch-mode": "cors",
@@ -132,5 +144,4 @@ function loadAllCourses() {
             //parseCoursesFromXMLRequest(list) //Not working yet - but not necessary.
         })
     }
-
-}
+}*/
