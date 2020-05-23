@@ -24,7 +24,8 @@ chrome.storage.local.get(['isEnabled',], function(result) {
                 }  
                 //parse courses
                 if(document.getElementsByClassName("pager-showall")[0].innerText === "Seiten" && !parsedCourses) {
-                    parseCoursesFromWebPage()
+                    let course_list = parseCoursesFromWebPage()
+                    chrome.runtime.sendMessage({cmd: "save_courses", course_list: course_list})
                     parsedCourses = true
                     //loadAllCourses()
                 }   
@@ -81,23 +82,27 @@ chrome.storage.local.get(['isEnabled',], function(result) {
 
 function parseCoursesFromWebPage(){
     //there are two options how the table can be build.
+    let course_list = {type:"", list:[]}
+    if (location.pathname ==="/opal/auth/resource/courses") {course_list.type = "meine_kurse"}
+    if (location.pathname ==="/opal/auth/resource/favorites") {course_list.type = "favoriten"}
     try {
         //most likely for favorits
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByTagName("tbody")[0].children
         for (let item of tableEntries) {
-            let title = item.children[2].children[0].getAttribute("title")
+            let name = item.children[2].children[0].getAttribute("title")
             let link = item.children[2].children[0].getAttribute("href")
-            console.log( title + " " + link)
+            course_list.list.push({name: name, link: link})
         }
-    }catch {
+    } catch {
         //most likely for courses
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0].getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
         for (let item of tableEntries) {
-            let title = item.getElementsByClassName("content-preview-title")[0].innerHTML
+            let name = item.getElementsByClassName("content-preview-title")[0].innerHTML
             let link = item.children[3].getAttribute("href")
-            console.log(title + " " +link)
+            course_list.list.push({name: name, link: link})
         }
     }
+    return course_list
 }
 
 /*

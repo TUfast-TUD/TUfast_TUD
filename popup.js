@@ -1,6 +1,8 @@
 //this need to be done here since manifest v2
 window.onload = function(){
 
+    this.loadCourses()
+
     //update saved clicks
     chrome.storage.local.get(['saved_click_counter'], (result) => {
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
@@ -40,4 +42,21 @@ function fwdGoogleSearch() {
     chrome.storage.local.get(['fwdEnabled'], function(result) {
         chrome.storage.local.set({fwdEnabled: !(result.fwdEnabled)}, function() {})
     })
+}
+
+function loadCourses(type) {
+    switch(type) {
+        case "favoriten":
+            chrome.storage.local.get(['favoriten'], function(result) {
+                alert(JSON.parse(result))
+            })
+            break
+        case "meine_kurse":
+            chrome.storage.local.get(['meine_kurse'], function(result) {
+                alert(JSON.parse(result))
+            })
+            break
+        default:
+            break
+    }
 }

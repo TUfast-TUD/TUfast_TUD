@@ -26,6 +26,8 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({isEnabled: true}, function() {})
         chrome.storage.local.set({fwdEnabled: true}, function() {})
         chrome.storage.local.set({encryption_level: 2}, function() {})
+        chrome.storage.local.set({meine_kurse: false}, function() {})
+        chrome.storage.local.set({favoriten: false}, function() {})
         break;
      case 'update':
         //Show page on update
@@ -76,6 +78,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case 'logged_out':
       loggedOut(request.portal)
+      break
+    case 'save_courses':
+      saveCourses(request.course_list)
       break
     default:
       console.log('Cmd not found!')
@@ -236,4 +241,38 @@ async function getUserData(){
         resolve({asdf: UserData[0], fdsa: UserData[1]})
       })  
     })
+}
+//course_list = {type:"", list:[{link:link, name: name}, ...]}
+function saveCourses(course_list) {
+  loadCourses('favoriten')
+  loadCourses('meine_kurse')
+  switch (course_list.type) {
+    case 'favoriten':
+      chrome.storage.local.set({favoriten: JSON.stringify(course_list.list)}, function() {})
+      console.log('saved Favoriten in TUDresdenAutoLogin')
+      break
+    case 'meine_kurse':
+      chrome.storage.local.set({meine_kurse: JSON.stringify(course_list.list)}, function() {})
+      console.log('saved Meine Kurse in TUDresdenAutoLogin')
+      break
+    default:
+      break
+  }
+}
+
+function loadCourses(type) {
+  switch(type) {
+      case "favoriten":
+          chrome.storage.local.get(['favoriten'], function(result) {
+              console.log(JSON.parse(result.favoriten))
+          })
+          break
+      case "meine_kurse":
+          chrome.storage.local.get(['meine_kurse'], function(result) {
+              console.log(JSON.parse(result.meine_kurse))
+          })
+          break
+      default:
+          break
+  }
 }
