@@ -2,11 +2,26 @@ chrome.storage.local.get(['isEnabled',], function(result) {
     if(result.isEnabled) {
         document.addEventListener("DOMContentLoaded", async function(e) {
             loadAllCourses()
+
+            //listen for new ID with mutation observer --> on new ID: page was reloaded
+            const config = { attributes: true, childList: true, subtree: true };
+            let oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
+            const callback = function(mutationsList, observer) {
+                if(document.getElementsByClassName("pager-showall")[0].getAttribute("id") != oldId) {
+                    console.log("NEW ID")
+                    oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
+                    loadAllCourses()
+                }   
+            }
+            const observer = new MutationObserver(callback);
+            observer.observe(document.body, config);
         })
+
         //DOMNoteInserted triggered to often --> So i used the click-event. This should be changed in the future.
         document.addEventListener("click", async function(){
             //Path needs to be updated - dont know why - but else it doesnt work
             let oldPath = location.pathname
+            //on new path --> page is reloaded
             setInterval(async function(){ 
                 if (oldPath != location.pathname) {
                     oldPath = location.pathname
@@ -106,12 +121,11 @@ function loadAllCourses() {
             let xmlDoc = parser.parseFromString(doc,"text/xml")
             let id = xmlDoc.getElementsByTagName("component")[0].getAttribute('id')
             let list = xmlDoc.getElementsByTagName("component")[0].innerHTML //this should be reworked. The DOM-Node should be extracted.
-            console.log(list)
             document.getElementById(id).innerHTML = list //this should be rewored. The DOM-Node should be inserted.
             return list
         })
         .then((list) => {
-            //parseCoursesFromWebPage()
+            parseCoursesFromWebPage()
             //parseCoursesFromXMLRequest(list) //Not working yet - but not necessary.
         })
     }
