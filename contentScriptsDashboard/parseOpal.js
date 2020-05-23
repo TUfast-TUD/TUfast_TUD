@@ -3,12 +3,17 @@ chrome.storage.local.get(['isEnabled',], function(result) {
         document.addEventListener("DOMContentLoaded", async function(e) {
             loadAllCourses()
 
-            //listen for new ID with mutation observer --> on new ID: page was reloaded
-            const config = { attributes: true, childList: true, subtree: true };
             let oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
+            let oldPath = location.pathname
+
+            //listen for new ID with mutation observer and urlPath-change --> course list was reloaded
+            const config = { attributes: true, childList: true, subtree: true };
             const callback = function(mutationsList, observer) {
+                if (oldPath != location.pathname) {
+                    oldPath = location.pathname
+                    location.pathname = oldPath
+                } 
                 if(document.getElementsByClassName("pager-showall")[0].getAttribute("id") != oldId) {
-                    console.log("NEW ID")
                     oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
                     loadAllCourses()
                 }   
@@ -16,12 +21,10 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             const observer = new MutationObserver(callback);
             observer.observe(document.body, config);
         })
-
-        //DOMNoteInserted triggered to often --> So i used the click-event. This should be changed in the future.
-        document.addEventListener("click", async function(){
+        /*document.addEventListener("click", async function(){
             //Path needs to be updated - dont know why - but else it doesnt work
-            let oldPath = location.pathname
             //on new path --> page is reloaded
+            let oldPath = location.pathname
             setInterval(async function(){ 
                 if (oldPath != location.pathname) {
                     oldPath = location.pathname
@@ -31,12 +34,12 @@ chrome.storage.local.get(['isEnabled',], function(result) {
                     return
                 } 
             }, 10);
-        })
+        })*/
     }
 })
 
 //Not working yet - but also not necessary
-function parseCoursesFromXMLRequest(XMLString){
+/*function parseCoursesFromXMLRequest(XMLString){
     //Directly parse courses from xmlHttpRequest
     
     //Need to remove CDATA-Tag
@@ -63,7 +66,7 @@ function parseCoursesFromXMLRequest(XMLString){
             console.log(title + " " +link)
         }
     }
-}
+}*/
 
 function parseCoursesFromWebPage(){
     //there are two options how the table can be build.
