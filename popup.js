@@ -1,5 +1,5 @@
 //this need to be done here since manifest v2
-window.onload = function(){
+window.onload = async function(){
 
     this.loadCourses()
 
@@ -15,11 +15,59 @@ window.onload = function(){
     })
 
     //get checkbox clicks
-    document.getElementById('SearchCheckBox').onclick = fwdGoogleSearch
+    //document.getElementById('SearchCheckBox').onclick = fwdGoogleSearch
 
     //set switch
     displayEnabled()
+
+    //get list
+    courseList = await loadCourses('favoriten')
+    htmlList = document.getElementsByClassName("list")[0]
+
+    displayCourseList(courseList, htmlList)
 }
+
+function displayCourseList(courseList, htmlList) {
+    courseList.forEach(element => {
+        let listEntry = document.createElement("a")
+        let listImg = document.createElement("div")
+        let listText = document.createElement("div")
+        let img = document.createElement("img")
+        listEntry.className = "list-entry"
+        listImg.className = "list-entry-img"
+        listEntry.href = element.link
+        listEntry.target = "_blank"
+        listText.className = "list-entry-text"
+        listText.innerHTML = element.name
+        img.className = "list-img"
+        img.src ="./images/CoursesOpalIcon.png"
+        
+        listImg.appendChild(img)
+        listEntry.appendChild(listImg)
+        listEntry.appendChild(listText)
+
+        htmlList.appendChild(listEntry)
+    })
+
+}
+
+//return course_list = [{link:link, name: name}, ...]
+function loadCourses(type) {
+    switch(type) {
+        case "favoriten":
+            chrome.storage.local.get(['favoriten'], function(result) {
+                return JSON.parse(result.favoriten)
+            })
+            break
+        case "meine_kurse":
+            chrome.storage.local.get(['meine_kurse'], function(result) {
+                return JSON.parse(result.meine_kurse)
+            })
+            break
+        default:
+            break
+    }
+  }
 
 //changeIsEnabledState
 function saveEnabled() {
@@ -45,18 +93,21 @@ function fwdGoogleSearch() {
 }
 
 function loadCourses(type) {
-    switch(type) {
-        case "favoriten":
-            chrome.storage.local.get(['favoriten'], function(result) {
-                alert(JSON.parse(result))
-            })
-            break
-        case "meine_kurse":
-            chrome.storage.local.get(['meine_kurse'], function(result) {
-                alert(JSON.parse(result))
-            })
-            break
-        default:
-            break
-    }
+    return new Promise((resolve, reject) => {
+        switch(type) {
+            case "favoriten":
+                chrome.storage.local.get(['favoriten'], function(result) {
+                    resolve(JSON.parse(result.favoriten))
+                })
+                break
+            case "meine_kurse":
+                chrome.storage.local.get(['meine_kurse'], function(result) {
+                    resolve(JSON.parse(result.meine_kurse))
+                })
+                break
+            default:
+                resolve(false)
+                break
+        }
+    })
 }

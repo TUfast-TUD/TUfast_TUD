@@ -257,6 +257,7 @@ function saveCourses(course_list) {
   }
 }
 
+//return course_list = [{link:link, name: name}, ...]
 function loadCourses(type) {
   switch(type) {
       case "favoriten":
