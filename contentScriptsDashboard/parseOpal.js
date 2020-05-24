@@ -1,9 +1,15 @@
 chrome.storage.local.get(['isEnabled',], function(result) {
     if(result.isEnabled) {
-        document.addEventListener("DOMContentLoaded", async function(e) {
+        //wait until full page is loaded
+        window.addEventListener("load", async function(e) {
             //loadAllCourses()
-            document.getElementsByClassName("pager-showall")[0].click()
 
+            //check if pager-showall exists
+            if (!document.getElementsByClassName("pager-showall")[0]){
+                return
+            }
+
+            document.getElementsByClassName("pager-showall")[0].click()
             let oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
             //let oldPath = location.pathname
             let parsedCourses = false
@@ -32,7 +38,7 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             }
             const observer = new MutationObserver(callback);
             observer.observe(document.body, config);
-        })
+        }, true)
         /*document.addEventListener("click", async function(){
             //Path needs to be updated - dont know why - but else it doesnt work
             //on new path --> page is reloaded
@@ -49,6 +55,22 @@ chrome.storage.local.get(['isEnabled',], function(result) {
         })*/
     }
 })
+
+/*
+function addLoadEvent(func) {
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+      window.onload = func;
+    } else {
+      window.onload = function() {
+        if (oldonload) {
+          oldonload();
+        }
+        func();
+      }
+    }
+}
+*/
 
 //Not working yet - but also not necessary
 /*function parseCoursesFromXMLRequest(XMLString){
@@ -86,7 +108,7 @@ function parseCoursesFromWebPage(){
     if (location.pathname ==="/opal/auth/resource/courses") {course_list.type = "meine_kurse"}
     if (location.pathname ==="/opal/auth/resource/favorites") {course_list.type = "favoriten"}
     try {
-        //most likely for favorits
+        //most likely for favoriten
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByTagName("tbody")[0].children
         for (let item of tableEntries) {
             let name = item.children[2].children[0].getAttribute("title")
@@ -94,7 +116,7 @@ function parseCoursesFromWebPage(){
             course_list.list.push({name: name, link: link})
         }
     } catch {
-        //most likely for courses
+        //most likely for meine kurse
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0].getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
         for (let item of tableEntries) {
             let name = item.getElementsByClassName("content-preview-title")[0].innerHTML

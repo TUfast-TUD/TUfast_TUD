@@ -1,33 +1,37 @@
 //this need to be done here since manifest v2
 window.onload = async function(){
 
-    this.loadCourses()
+    loadCourses()
 
     //update saved clicks
+    /*
     chrome.storage.local.get(['saved_click_counter'], (result) => {
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
         document.getElementById("saved_clicks").innerHTML = "<font color='green'>Du hast bisher <u>" + result.saved_click_counter + "</u> Klicks gespart!</font>"
     })
+    */
     
-    //switch funciton
+    //assign switch function
     document.getElementById('switch').addEventListener('change', () => {
-        this.saveEnabled()
+        saveEnabled()
     })
+    displayEnabled()
 
     //get checkbox clicks
     //document.getElementById('SearchCheckBox').onclick = fwdGoogleSearch
 
-    //set switch
-    displayEnabled()
-
-    //get list
-    courseList = await loadCourses('favoriten')
+    //get and display course list
+    courseList = await loadCourses('meine_kurse')
     htmlList = document.getElementsByClassName("list")[0]
-
     displayCourseList(courseList, htmlList)
 }
 
 function displayCourseList(courseList, htmlList) {
+    //if no courses yet
+    if(courseList.length === 0) {
+        courseList.push({"name":"Klicke, um alle deine Kurse hier zu sehen!", "link":"https://bildungsportal.sachsen.de/opal/auth/resource/favorites"})
+    }
+    
     courseList.forEach(element => {
         let listEntry = document.createElement("a")
         let listImg = document.createElement("div")
@@ -81,16 +85,16 @@ function displayEnabled() {
     chrome.storage.local.get(['isEnabled'], function(result) {
         this.document.getElementById('switch').checked = result.isEnabled
     })
-    chrome.storage.local.get(['fwdEnabled'], function(result) {
+    /*chrome.storage.local.get(['fwdEnabled'], function(result) {
         this.document.getElementById('SearchCheckBox').checked = result.fwdEnabled
-    })
+    })*/
 }
 
-function fwdGoogleSearch() {
+/*function fwdGoogleSearch() {
     chrome.storage.local.get(['fwdEnabled'], function(result) {
         chrome.storage.local.set({fwdEnabled: !(result.fwdEnabled)}, function() {})
     })
-}
+}*/
 
 function loadCourses(type) {
     return new Promise((resolve, reject) => {

@@ -151,7 +151,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://bildungsportal.sachsen.de/opal/resource?*",
+        "*://bildungsportal.sachsen.de/opal/resource*",
         "*://bildungsportal.sachsen.de/opal/home*",
         "*://bildungsportal.sachsen.de/opal/auth/*"
       ]

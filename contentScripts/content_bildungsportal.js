@@ -16,13 +16,13 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function(result) {
     }, false);
 
     //start login process
-    window.onload = function() {
+    window.addEventListener("load", function() {
       if(document.getElementsByClassName('btn btn-sm')[1].innerText.includes('Login')){
         chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
         chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 4000})
         document.getElementsByClassName('btn btn-sm')[1].click()
       }
-    }
+    }, true)
     console.log('Auto Login to Opal.')
   } else if(result.loggedOutOpal) {
     chrome.storage.local.set({loggedOutOpal: false}, function() {})

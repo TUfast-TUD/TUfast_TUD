@@ -82,6 +82,9 @@ input:checked + .slider:before {
   flex: 9;
   justify-self: center;
   align-self: center;
+  overflow: hidden; /* One-line text and crop */
+  white-space: nowrap; /* One-line text and crop */
+  text-overflow: ellipsis; /* One-line text and crop */
 }
 
 .list-entry-img {
@@ -181,4 +184,27 @@ html {
 /* headline */
 .headline {
   display: none;
+}
+
+/* scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #65737f;
+}
+
+.custom-scrollbar::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #65737f;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #303a44;
 }
