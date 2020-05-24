@@ -150,3 +150,12 @@ function loadAllCourses() {
         })
     }
 }*/
+
+
+//parsing home:
+/*
+    alle listen: class="sortable-portlet"
+    favoriten: class="sortable-portlet" data-portlet-order="Bookmarks"
+    meine kurse: class="sortable-portlet" data-portlet-order="RepositoryPortletStudent"
+    für favoriten und meine kurse: Anzahl gezeigt/alle: class="hidden-xs badge badge-highlight"
+*/

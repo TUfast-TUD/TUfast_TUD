@@ -9,7 +9,6 @@ chrome.storage.local.set({loggedOutOwa: false}, function() {})
 chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
-////////
 
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
@@ -244,8 +243,6 @@ async function getUserData(){
 }
 //course_list = {type:"", list:[{link:link, name: name}, ...]}
 function saveCourses(course_list) {
-  loadCourses('favoriten')
-  loadCourses('meine_kurse')
   switch (course_list.type) {
     case 'favoriten':
       chrome.storage.local.set({favoriten: JSON.stringify(course_list.list)}, function() {})
