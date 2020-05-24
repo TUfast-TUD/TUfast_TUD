@@ -74,6 +74,8 @@ input:checked + .slider:before {
   border: #303a44 solid 1px;
   margin: 2px;
   border-radius: 7px;
+  text-decoration: none;
+  color: black;
 }
 
 .list-entry-text {
