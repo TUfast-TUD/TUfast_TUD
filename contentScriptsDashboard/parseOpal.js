@@ -3,8 +3,7 @@ chrome.storage.local.get(['isEnabled',], function(result) {
         //wait until full page is loaded
         window.addEventListener("load", async function(e) {
 
-            //check if pager-showall exists
-            let oldId = ""
+            let oldLocationHref = location.href
             let parsedCourses = false
 
             //check if all courses are loaded already
@@ -12,26 +11,23 @@ chrome.storage.local.get(['isEnabled',], function(result) {
                 chrome.runtime.sendMessage({cmd: "save_courses", course_list: parseCoursesFromWebPage()})
             } else {
                 document.getElementsByClassName("pager-showall")[0].click()
-                oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
             }
 
-            //listen for new ID with mutation observer and urlPath-change --> course list was reloaded
+            //use mutation observer to detect page changes
             const config = { attributes: true, childList: true, subtree: true }
             const callback = function(mutationsList, observer) {
                
-                //if  all courses are loaded already and on new page
-                if(!document.getElementsByClassName("pager-showall")[0] && location.href != oldId){
+                //check if all courses are loaded and if on new page
+                if(!document.getElementsByClassName("pager-showall")[0] && location.href != oldLocationHref){
                     let course_list = parseCoursesFromWebPage()
                     chrome.runtime.sendMessage({cmd: "save_courses", course_list: course_list})
-                    oldId = location.href
-                }
-
-                //if not all courses are loaded already
-                if(document.getElementsByClassName("pager-showall")[0].getAttribute("id") != oldId && document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen") {
-                    oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
+                    oldLocationHref = location.href
+                } else if(location.href != oldLocationHref && document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen"){
+                    oldLocationHref = location.href
                     document.getElementsByClassName("pager-showall")[0].click()
                     parsedCourses = false
                 }  
+                
                 //parse courses
                 if(document.getElementsByClassName("pager-showall")[0].innerText === "Seiten" && !parsedCourses) {
                     chrome.runtime.sendMessage({cmd: "save_courses", course_list: parseCoursesFromWebPage()})
