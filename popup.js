@@ -21,7 +21,7 @@ window.onload = async function(){
     //document.getElementById('SearchCheckBox').onclick = fwdGoogleSearch
 
     //get and display course list
-    courseList = await loadCourses('meine_kurse')
+    courseList = await loadCourses('favoriten')
     htmlList = document.getElementsByClassName("list")[0]
     displayCourseList(courseList, htmlList)
 }
