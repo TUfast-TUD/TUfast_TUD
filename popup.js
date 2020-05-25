@@ -23,14 +23,31 @@ window.onload = async function(){
     //get and display course list
     courseList = await loadCourses('favoriten')
     htmlList = document.getElementsByClassName("list")[0]
-    displayCourseList(courseList, htmlList)
+    displayCourseList(courseList, htmlList, "favoriten")
 }
 
-function displayCourseList(courseList, htmlList) {
-    //if no courses yet
-    if(courseList.length === 0) {
-        courseList.push({"name":"Klicke, um alle deine Kurse hier zu sehen!", "link":"https://bildungsportal.sachsen.de/opal/auth/resource/favorites"})
+function displayCourseList(courseList, htmlList, type) {
+    let link = ""
+    let name = ""
+    let imgSrc =""
+    switch(type) {
+        case "favoriten":
+            link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
+            name = "Klicke, um alle deine Favoriten hier zu sehen!"
+            imgSrc = "./icons/star.png"
+            break
+        case "meine_kurse":
+            link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
+            name = "Klicke, um alle deine Kurse hier zu sehen!"
+            imgSrc = "./icons/CoursesOpalIcon.png"
+            break
+        default:
+            break
     }
+    if(courseList.length === 0) {
+        courseList.push({"name": name, "link": link})
+    }
+    courseList.push({"name": "Kliche hier, um manuell zu aktualisieren ...", "link": link, "img": false})
     
     courseList.forEach(element => {
         let listEntry = document.createElement("a")
@@ -44,7 +61,8 @@ function displayCourseList(courseList, htmlList) {
         listText.className = "list-entry-text"
         listText.innerHTML = element.name
         img.className = "list-img"
-        img.src ="./images/CoursesOpalIcon.png"
+        img.src = imgSrc
+        if((element.img === false)) {img.style="display:none" }
         
         listImg.appendChild(img)
         listEntry.appendChild(listImg)
@@ -55,23 +73,6 @@ function displayCourseList(courseList, htmlList) {
 
 }
 
-//return course_list = [{link:link, name: name}, ...]
-function loadCourses(type) {
-    switch(type) {
-        case "favoriten":
-            chrome.storage.local.get(['favoriten'], function(result) {
-                return JSON.parse(result.favoriten)
-            })
-            break
-        case "meine_kurse":
-            chrome.storage.local.get(['meine_kurse'], function(result) {
-                return JSON.parse(result.meine_kurse)
-            })
-            break
-        default:
-            break
-    }
-  }
 
 //changeIsEnabledState
 function saveEnabled() {
@@ -96,6 +97,7 @@ function displayEnabled() {
     })
 }*/
 
+//return course_list = [{link:link, name: name}, ...]
 function loadCourses(type) {
     return new Promise((resolve, reject) => {
         switch(type) {

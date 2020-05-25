@@ -64,7 +64,7 @@ input:checked + .slider:before {
  
 /* list */
 .list {
-  max-height: 350px;
+  max-height: 555px;
   overflow: auto;
 }
 
@@ -137,7 +137,7 @@ body {
   background-color: #65737f;
   border-radius: 7px;
   max-width: 789px; /*limit by chrome: 789px*/
-  max-height: 460px; /*limit by chrome: 590px*/
+  max-height: 590; /*limit by chrome: 590px*/
   margin: 0px;
 }
 

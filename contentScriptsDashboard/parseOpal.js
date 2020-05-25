@@ -6,33 +6,43 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             let oldLocationHref = location.href
             let parsedCourses = false
 
-            //check if all courses are loaded already
+            //if all courses loaded --> parse
             if(!document.getElementsByClassName("pager-showall")[0]){
                 chrome.runtime.sendMessage({cmd: "save_courses", course_list: parseCoursesFromWebPage()})
+                parsedCourses = true
+            //if not --> load all courses
             } else {
                 document.getElementsByClassName("pager-showall")[0].click()
+                parsedCourses = false
             }
 
             //use mutation observer to detect page changes
             const config = { attributes: true, childList: true, subtree: true }
             const callback = function(mutationsList, observer) {
-               
-                //check if all courses are loaded and if on new page
-                if(!document.getElementsByClassName("pager-showall")[0] && location.href != oldLocationHref){
-                    let course_list = parseCoursesFromWebPage()
-                    chrome.runtime.sendMessage({cmd: "save_courses", course_list: course_list})
+
+                //detect new page
+                if(location.href != oldLocationHref) {
                     oldLocationHref = location.href
-                } else if(location.href != oldLocationHref && document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen"){
-                    oldLocationHref = location.href
-                    document.getElementsByClassName("pager-showall")[0].click()
-                    parsedCourses = false
-                }  
+                    //all courses loaded already --> parse directly
+                    if(!document.getElementsByClassName("pager-showall")[0]){
+                        let course_list = parseCoursesFromWebPage()
+                        chrome.runtime.sendMessage({cmd: "save_courses", course_list: course_list})
+                        parsedCourses = true
+                    }
+                    //not all courses loaded already --> load all courses
+                    if(document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen"){
+                        document.getElementsByClassName("pager-showall")[0].click()
+                        parsedCourses = false
+                    }
+                }
                 
                 //parse courses
-                if(document.getElementsByClassName("pager-showall")[0].innerText === "Seiten" && !parsedCourses) {
-                    chrome.runtime.sendMessage({cmd: "save_courses", course_list: parseCoursesFromWebPage()})
-                    parsedCourses = true
-                }   
+                if(document.getElementsByClassName("pager-showall")[0]){
+                    if(document.getElementsByClassName("pager-showall")[0].innerText === "Seiten" && !parsedCourses) {
+                        chrome.runtime.sendMessage({cmd: "save_courses", course_list: parseCoursesFromWebPage()})
+                        parsedCourses = true
+                    }  
+                } 
             }
             const observer = new MutationObserver(callback);
             observer.observe(document.body, config);
