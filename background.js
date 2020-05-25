@@ -243,6 +243,7 @@ async function getUserData(){
 }
 //course_list = {type:"", list:[{link:link, name: name}, ...]}
 function saveCourses(course_list) {
+  course_list.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
   switch (course_list.type) {
     case 'favoriten':
       chrome.storage.local.set({favoriten: JSON.stringify(course_list.list)}, function() {})

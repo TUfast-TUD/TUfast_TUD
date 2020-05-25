@@ -5,9 +5,6 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             //loadAllCourses()
 
             //check if pager-showall exists
-            if (!document.getElementsByClassName("pager-showall")[0]){
-                return
-            }
 
             document.getElementsByClassName("pager-showall")[0].click()
             let oldId = document.getElementsByClassName("pager-showall")[0].getAttribute("id")
