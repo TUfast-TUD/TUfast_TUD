@@ -66,6 +66,5 @@ function parseCoursesFromWebPage(){
             course_list.list.push({name: name, link: link})
         }
     }
-    alert(course_list.list.length)
     return course_list
 }
