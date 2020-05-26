@@ -27,6 +27,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({encryption_level: 2}, function() {})
         chrome.storage.local.set({meine_kurse: false}, function() {})
         chrome.storage.local.set({favoriten: false}, function() {})
+        chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         break;
      case 'update':
         //Show page on update
@@ -43,6 +44,12 @@ chrome.runtime.onInstalled.addListener(async(details) => {
             })
           }
         })
+        //check if dashboard display is selected
+        chrome.storage.local.get(['dashboardDisplay'], (resp) => {
+          if(resp.dashboardDisplay === null || resp.dashboardDisplay === undefined || resp.dashboardDisplay === ""){
+            chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
+          }
+        })
         break;
      default:
         console.log('Other install events within the browser for TU Dresden Auto Login.')
@@ -57,8 +64,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       show_badge('Login', '#4cb749', request.timeout)
       break
     case 'no_login_data':
-      alert("Bitte gib deinen Nutzernamen und Passwort in der TU Dresden Auto Login Extension an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
-      show_badge("Error", '#ff0000', 10000)
+      //alert("Bitte gib deinen Nutzernamen und Passwort in der TU Dresden Auto Login Extension an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
+      //show_badge("Error", '#ff0000', 10000)
       break
     case 'perform_login':
       //show_feedback_window()

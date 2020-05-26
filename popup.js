@@ -3,22 +3,11 @@ window.onload = async function(){
 
     loadCourses()
 
-    //update saved clicks
-    /*
-    chrome.storage.local.get(['saved_click_counter'], (result) => {
-        if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-        document.getElementById("saved_clicks").innerHTML = "<font color='green'>Du hast bisher <u>" + result.saved_click_counter + "</u> Klicks gespart!</font>"
-    })
-    */
-    
     //assign switch function
     document.getElementById('switch').addEventListener('change', () => {
         saveEnabled()
     })
     displayEnabled()
-
-    //get checkbox clicks
-    //document.getElementById('SearchCheckBox').onclick = fwdGoogleSearch
 
     //get and display course list
     courseList = await loadCourses('favoriten')
@@ -86,16 +75,7 @@ function displayEnabled() {
     chrome.storage.local.get(['isEnabled'], function(result) {
         this.document.getElementById('switch').checked = result.isEnabled
     })
-    /*chrome.storage.local.get(['fwdEnabled'], function(result) {
-        this.document.getElementById('SearchCheckBox').checked = result.fwdEnabled
-    })*/
 }
-
-/*function fwdGoogleSearch() {
-    chrome.storage.local.get(['fwdEnabled'], function(result) {
-        chrome.storage.local.set({fwdEnabled: !(result.fwdEnabled)}, function() {})
-    })
-}*/
 
 //return course_list = [{link:link, name: name}, ...]
 function loadCourses(type) {
