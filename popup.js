@@ -1,18 +1,19 @@
 //this need to be done here since manifest v2
 window.onload = async function(){
 
-    loadCourses()
+    //get and display course list
+    chrome.storage.local.get(['dashboardDisplay'], async function(result) {
+        let dashboardDisplay = result.dashboardDisplay
+        let courseList = await loadCourses(dashboardDisplay)
+        let htmlList = document.getElementsByClassName("list")[0]
+        displayCourseList(courseList, htmlList, dashboardDisplay)
+    })
 
     //assign switch function
     document.getElementById('switch').addEventListener('change', () => {
         saveEnabled()
     })
     displayEnabled()
-
-    //get and display course list
-    courseList = await loadCourses('favoriten')
-    htmlList = document.getElementsByClassName("list")[0]
-    displayCourseList(courseList, htmlList, "favoriten")
 }
 
 function displayCourseList(courseList, htmlList, type) {

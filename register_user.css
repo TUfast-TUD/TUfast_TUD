@@ -8,7 +8,7 @@ body {
     line-height: 25px;
 } 
 
-html { overflow-y: hidden; }
+html { overflow-y: auto; }
 
 .heading {
     font-size: 22px;
@@ -35,7 +35,7 @@ input[type=text], input[type=password] {
 }
 
 input::-webkit-input-placeholder {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 button {
@@ -47,6 +47,7 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 15px;
 }
 
 button:hover {
@@ -58,6 +59,7 @@ button:hover {
   color: #444;
   cursor: pointer;
   padding: 18px;
+  padding-right: 35px; /* required because arrow-symbol is scaled */
   width: 100%;
   text-align: left;
   border: none;
@@ -81,15 +83,16 @@ button:hover {
 }
 
 .accordion:after {
-    content: '\02795'; /* Unicode character for "plus" sign (+) */
-    font-size: 13px;
+    content: '\2039'; /* Unicode character for "arrow" sign  */
+    -webkit-transform: rotate(-90deg) scale(2.5 , 2.5);
+    font-size: 14px;
     color: #777;
     float: right;
     margin-left: 5px;
   }
   
   .active:after {
-    content: "\2796"; /* Unicode character for "minus" sign (-) */
+    content: "\203A"; /* Unicode character for "arrow" sign  */
   }
 
 
