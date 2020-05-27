@@ -114,7 +114,7 @@ function openSettingsPage(params){
   if(params === "first_visit"){
     chrome.storage.local.set({openSettingsPageParam: "first_visit"}, function() {
       //maybe reload page if already opened, because click event is not executed
-      window.open("./register_user.html")
+      chrome.runtime.openOptionsPage()
       //chrome.runtime.openOptionsPage()
     })
   }

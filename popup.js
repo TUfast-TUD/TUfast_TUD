@@ -20,7 +20,13 @@ window.onload = async function(){
     //asign input search fct
     this.document.getElementById("searchListInput").onkeyup=listSearchFunction
 
+    this.document.getElementById("settings").onclick = openSettings
+
     displayEnabled()
+}
+
+function openSettings(){
+    chrome.runtime.openOptionsPage()
 }
 
 function listSearchFunction(){
@@ -50,12 +56,12 @@ function displayCourseList(courseList, htmlList, type) {
     switch(type) {
         case "favoriten":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
-            name = "Klicke, um deine Opal-Favoriten hier zu sehen."
+            name = "Klicken, um deine Opal-Kurse zu laden."
             imgSrc = "./icons/star.png"
             break
         case "meine_kurse":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
-            name = "Klicke, um deine Opal-Kurse hier zu sehen!"
+            name = "Klicken, um deine Opal-Kurse zu laden!"
             imgSrc = "./icons/CoursesOpalIcon.png"
             break
         default:
