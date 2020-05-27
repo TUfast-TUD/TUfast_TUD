@@ -7,31 +7,11 @@
   </head>
   <body>
     <p class="heading">Willkommen zu TUDresdenAutoLogin</p> 
-    <p id="saved_clicks"></p> 
-    <p>Hier kannst du Einstellungen vornehmen.</p> 
-    <!-- New Accordion section-->
-    <button class="accordion">Dashboard</button>
-    <div class="panel">
-      <p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffen.</p>
-      <p>Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
-        <form action="#">
-          <p>
-            <input type="radio" id="fav" name="radio-group">
-            <label for="fav">Favoriten</label>
-          </p>
-          <p>
-            <input type="radio" id="crs" name="radio-group">
-            <label for="crs">Meine Kurse</label>
-          </p>
-        </form>
-      </p>
-      <p class="grey-text">Hier kannst du die Kurse manuell aktualisieren:<br>
-      <text class="grey-text"></text>Favoriten <a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
-      <text class="grey-text"></text>Meine Kurse <a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
-      </p>
-    </div>
+    <p id="welcome"></p> 
+    <p id="saved_clicks"></p>  
+    <p id="settings_comment">Hier kannst du Einstellungen vornehmen.</p> 
     <!-- New Accordion section--> 
-    <button class="accordion" id="auto_login_settings">Auto Login TU Dresden Services</button>
+    <button class="accordion" id="auto_login_settings">AutoLogin in TU Dresden Services</button>
     <div class="panel">
       <p>Meldet dich automatisch in TU Dresden Services an. 
       <strong>Das ist wirklich ein sehr n&uuml;tzliches Feature!</strong></p> 
@@ -51,13 +31,13 @@
     <!-- New Accordion section--> 
     <button class="accordion">Abk&uuml;rzung der Google-Suche</button>
     <div class="panel">
-      <p>Aus 
-      <label class="switch">
-        <input type="checkbox" id="switch_fwd">
-        <span class="slider round"></span>
-      </label>
-       Ein</p>
       <p>Wenn diese Option aktiv ist, kannst du Abk&uuml;rzungen f&uuml;r die Google-Suche verwenden.</p>
+      <p>Aus 
+        <label class="switch">
+          <input type="checkbox" id="switch_fwd">
+          <span class="slider round"></span>
+        </label>
+         Ein</p>
       <p>Du brauchst zum Beispiel nur noch "tumail" eingeben, um zur Outlook-Web-App TU Dresden zu kommen.
         <ul style="margin:0;">
           <li class="grey-text">tumail &rarr; Outlook Web App</li>
@@ -71,6 +51,27 @@
         </ul>
     </p> 
   </div> 
+  <!-- New Accordion section-->
+  <button class="accordion">Dashboard</button>
+  <div class="panel">
+    <p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffen.</p>
+    <p>Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
+      <form action="#">
+        <p>
+          <input type="radio" id="fav" name="radio-group">
+          <label for="fav">Favoriten</label>
+        </p>
+        <p>
+          <input type="radio" id="crs" name="radio-group">
+          <label for="crs">Meine Kurse</label>
+        </p>
+      </form>
+    </p>
+    <p class="grey-text">Wenn du "Favoriten" oder "Meine Kurse" im Opal besuchst, wird das Dashboard automatisch aktualisiert.<br>
+    <text class="grey-text"></text>Favoriten <a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
+    <text class="grey-text"></text>Meine Kurse <a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
+    </p>
+  </div>
     <!-- New Accordion section--> 
     <button class="accordion">Kontakt & About</button>
     <div class="panel">

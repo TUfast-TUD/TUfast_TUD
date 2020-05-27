@@ -86,10 +86,16 @@ window.onload = function(){
       //update saved clicks  
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       document.getElementById("saved_clicks").innerHTML = "<text>Du hast bisher <font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart!</text>"
-
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
+      if(result.openSettingsPageParam === "first_visit"){
+        document.getElementById("welcome").innerHTML="Ich kann dir viele Klicks sparen, indem ich dich automatisch in Opal & Co. anmelde und deine Kurse im Dashboard speicher.<p><p>Entdecke hier alle Funktionen und nimm Einstellungen vor!</p>"
+        document.getElementById("settings_comment").innerHTML = ""
+      }
+
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+
+
     })
     
     //prep accordion

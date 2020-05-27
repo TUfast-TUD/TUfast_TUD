@@ -1,5 +1,5 @@
 chrome.storage.local.get(['isEnabled',], function(result) {
-    if(result.isEnabled) {
+    //if(result.isEnabled) {
         //wait until full page is loaded
         window.addEventListener("load", async function(e) {
 
@@ -47,7 +47,7 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             const observer = new MutationObserver(callback);
             observer.observe(document.body, config);
         }, true)
-    }
+    //}
 })
 
 function parseCoursesFromWebPage(){

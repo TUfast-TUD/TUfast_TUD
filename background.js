@@ -18,7 +18,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
      case 'install':
         //Show page on install
         console.log('TU Dresden Auto Login installed.')
-        chrome.tabs.create({url : "register_user.html"});
+        openSettingsPage("first_visit")
         chrome.storage.local.set({showed_50_clicks: false}, function() {});
         chrome.storage.local.set({showed_100_clicks: false}, function() {});
         chrome.storage.local.set({submitted_review: false}, function() {})
@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({encryption_level: 2}, function() {})
         chrome.storage.local.set({meine_kurse: false}, function() {})
         chrome.storage.local.set({favoriten: false}, function() {})
-        chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+        //chrome.storage.local.set({openSettingsPageParam: false}, function() {})
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         break;
      case 'update':
@@ -106,8 +106,16 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 function openSettingsPage(params){
   if(params === "auto_login_settings"){
     chrome.storage.local.set({openSettingsPageParam: "auto_login_settings"}, function() {
-      chrome.runtime.openOptionsPage()
       //maybe reload page if already opened, because click event is not executed
+      window.open("./register_user.html")
+      //chrome.runtime.openOptionsPage()
+    })
+  }
+  if(params === "first_visit"){
+    chrome.storage.local.set({openSettingsPageParam: "first_visit"}, function() {
+      //maybe reload page if already opened, because click event is not executed
+      window.open("./register_user.html")
+      //chrome.runtime.openOptionsPage()
     })
   }
   

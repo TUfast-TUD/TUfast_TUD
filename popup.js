@@ -50,18 +50,19 @@ function displayCourseList(courseList, htmlList, type) {
     switch(type) {
         case "favoriten":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
-            name = "Klicke, um alle deine Favoriten hier zu sehen!"
+            name = "Klicke, um deine Opal-Favoriten hier zu sehen."
             imgSrc = "./icons/star.png"
             break
         case "meine_kurse":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
-            name = "Klicke, um alle deine Kurse hier zu sehen!"
+            name = "Klicke, um deine Opal-Kurse hier zu sehen!"
             imgSrc = "./icons/CoursesOpalIcon.png"
             break
         default:
             break
     }
-    if(courseList.length === 0) {
+    if(courseList.length === 0 || courseList === undefined || courseList === false) {
+        courseList = []
         courseList.push({"name": name, "link": link})
     } else {
         courseList.push({"name": "Klicke hier, um die Kursliste manuell zu aktualisieren ...", "link": link, "img": false})
@@ -81,10 +82,10 @@ function displayCourseList(courseList, htmlList, type) {
         listText.innerHTML = element.name
         img.className = "list-img"
         img.src = imgSrc
-        if((element.img === false)) {img.style="display:none" }
+        
         
         listImg.appendChild(img)
-        listEntry.appendChild(listImg)
+        if(!(element.img === false)) {listEntry.appendChild(listImg)}
         listEntry.appendChild(listText)
 
         htmlList.appendChild(listEntry)

@@ -2,6 +2,7 @@
 .list {
   max-height: 555px;
   overflow: auto;
+  margin-bottom: 3px;
   /*overflow-x: hidden;*/
 }
 
@@ -20,7 +21,7 @@
   width: 90%;
   margin-left: 7px;
   margin-right: 7px;
-  margin-top: 3px;
+  margin-top: 4px;
   border-radius: 3px;
   font-size: 14px;
   border: #dddddd solid 2px;
@@ -151,13 +152,14 @@ html {
 	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
 	box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
 	border-radius: 10px;
-	background-color: #dbdbdb;
+  background-color: #dbdbdb;
 }
 
 .custom-scrollbar::-webkit-scrollbar
 {
 	width: 12px;
-	background-color: #dbdbdb;
+  background-color: #dbdbdb;
+  
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb
