@@ -92,6 +92,7 @@ html {
   height: 35px;
   border-top: solid 2px #909090;
   border-radius: 3px;
+  box-shadow: 0px -3px 3px rgba(20,20,20,0.2); /* offset-x | offset-y | blur-radius | spread-radius | color */
 }
 
 .settings-section {
