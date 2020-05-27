@@ -37,7 +37,7 @@ function displayCourseList(courseList, htmlList, type) {
     if(courseList.length === 0) {
         courseList.push({"name": name, "link": link})
     } else {
-        courseList.push({"name": "Kliche hier, um manuell zu aktualisieren ...", "link": link, "img": false})
+        courseList.push({"name": "Klicke hier, um die Kursliste manuell zu aktualisieren ...", "link": link, "img": false})
 
     }
     

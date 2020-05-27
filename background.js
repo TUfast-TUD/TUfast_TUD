@@ -107,6 +107,7 @@ function openSettingsPage(params){
   if(params === "auto_login_settings"){
     chrome.storage.local.set({openSettingsPageParam: "auto_login_settings"}, function() {
       chrome.runtime.openOptionsPage()
+      //maybe reload page if already opened, because click event is not executed
     })
   }
   

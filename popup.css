@@ -7,9 +7,10 @@
 .list-entry {
   display: flex;
   padding: 10px;
-  border: #303a44 solid 1px;
+  border-bottom: #dddddd solid 2px;
   margin: 2px;
-  border-radius: 7px;
+  margin-left: 7px;
+  margin-right: 7px;
   text-decoration: none;
   color: black;
 }
@@ -32,7 +33,7 @@
 
 .list-img {
   object-fit: contain;
-  width: 50px;
+  width: 37px;
   height: 20px;
 }
 
@@ -69,16 +70,18 @@
 }
 
 body {
-  border: solid 2px #303a44;
-  background-color: #65737f;
+  border: solid 2px #909090;
+  background-color: #ffffff;
   border-radius: 7px;
-  max-width: 789px; /*limit by chrome: 789px*/
+  max-width: 600px; /*limit by chrome: 789px*/
+  min-width: 560px; /*limit by chrome: 789px*/
   max-height: 590; /*limit by chrome: 590px*/
   margin: 0px;
+  font-size: 14px;
 }
 
 html {
-  background-color: #303a44;
+  background-color: #909090;
 }
 
 
@@ -87,12 +90,13 @@ html {
   display: flex;
   width: 100%;
   height: 35px;
-  border-top: solid 2px #303a44;
-  /*border-radius: 3px;*/
+  border-top: solid 2px #909090;
+  border-radius: 3px;
 }
 
 .settings-section {
-   border-right: solid 2px #303a44;
+   border-right: solid 2px #909090;
+   border-left: solid 2px #909090;
    display: flex;
    align-items: center;
    justify-content: space-evenly;/*start*/;
@@ -105,7 +109,9 @@ html {
    border: none;
    align-items: center; /*space-between*/
    justify-content: center;
-   width: 50px; /*should be dynamically changed to achieve aspect ratio 1:1- but how? */
+   padding-left: 6px;
+   padding-right: 6px;
+   border-radius: 3px;
 }
 
 .settings-text {
@@ -125,22 +131,28 @@ html {
 /* scrollbar */
 .custom-scrollbar::-webkit-scrollbar-track
 {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
+	box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
 	border-radius: 10px;
-	background-color: #65737f;
+	background-color: #dbdbdb;
 }
 
 .custom-scrollbar::-webkit-scrollbar
 {
 	width: 12px;
-	background-color: #65737f;
+	background-color: #dbdbdb;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb
 {
 	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #303a44;
+	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,.3);
+	box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+	background-color: #b1b1b1;
+}
+
+.list-entry:hover,
+.settings-section-icon:hover
+{
+  background-color: #e5e5e5;
 }
