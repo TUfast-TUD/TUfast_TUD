@@ -9,6 +9,8 @@ chrome.storage.local.set({loggedOutOwa: false}, function() {})
 chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
+chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+
 
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
@@ -22,18 +24,19 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({submitted_review: false}, function() {})
         chrome.storage.local.set({refused_review: false}, function() {})
         chrome.storage.local.set({showed_feedback_screen_counter: 0}, function() {})
-        chrome.storage.local.set({isEnabled: true}, function() {})
+        chrome.storage.local.set({isEnabled: false}, function() {})
         chrome.storage.local.set({fwdEnabled: true}, function() {})
         chrome.storage.local.set({encryption_level: 2}, function() {})
         chrome.storage.local.set({meine_kurse: false}, function() {})
         chrome.storage.local.set({favoriten: false}, function() {})
+        chrome.storage.local.set({openSettingsPageParam: false}, function() {})
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         break;
      case 'update':
         //Show page on update
         //chrome.tabs.create({ url: "update.html" });
-        chrome.storage.local.set({isEnabled: true}, function() {})
-        chrome.storage.local.set({fwdEnabled: true}, function() {})
+        //chrome.storage.local.set({isEnabled: true}, function() {})
+        //chrome.storage.local.set({fwdEnabled: true}, function() {})
         //check if encryption is already on level 2
         chrome.storage.local.get(['encryption_level'], (resp) => {
           if(!(resp.encryption_level === 2)){
@@ -88,6 +91,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     case 'save_courses':
       saveCourses(request.course_list)
       break
+    case 'open_settings_page':
+      openSettingsPage(request.params)
+      break
     default:
       console.log('Cmd not found!')
       break
@@ -95,6 +101,16 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
   return true //required for async sendResponse
 
 })
+
+//open settings (=options) page, if required set params
+function openSettingsPage(params){
+  if(params === "auto_login_settings"){
+    chrome.storage.local.set({openSettingsPageParam: "auto_login_settings"}, function() {
+      chrome.runtime.openOptionsPage()
+    })
+  }
+  
+}
 
 //timeout is 2000 default
 function loggedOut(portal) {
@@ -226,7 +242,7 @@ async function getUserData(){
       let keyBuffer = await getKeyBuffer()
       chrome.storage.local.get(['Data'], async (Data) => {
         //check if Data exists, else return
-        if(Data.Data === undefined) {
+        if(Data.Data === undefined || Data.Data === "undefined" || Data.Data === null) {
           resolve({asdf: undefined, fdsa: undefined})
           return
         }

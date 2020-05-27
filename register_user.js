@@ -4,6 +4,7 @@ function saveUserData() {
     if (asdf === '' || fdsa === '') {
         document.getElementById('status_msg').innerHTML = "<font color='red'>     Die Felder d&uuml;rfen nicht leer sein!</font>"
     } else {
+        chrome.storage.local.set({isEnabled: true}, function() {}) //need to activate auto login feature
         chrome.runtime.sendMessage({cmd: "clear_badge"});
         chrome.runtime.sendMessage({cmd: "set_user_data", userData: {asdf: asdf, fdsa: fdsa}})
         document.getElementById('status_msg').innerHTML = ""
@@ -24,6 +25,7 @@ function saveUserData() {
 function deleteUserData() {
       chrome.runtime.sendMessage({cmd: "clear_badge"});
       chrome.storage.local.set({Data: "undefined"}, function() {}) //this is how to delete user data!
+      chrome.storage.local.set({isEnabled: false}, function() {}) //need to deactivate auto login feature
       document.getElementById('status_msg').innerHTML = ""
       document.getElementById("delete_data").innerHTML='<font>Gel&ouml;scht!</font>'
       document.getElementById("delete_data").style.backgroundColor= "rgb(47, 143, 18)"
@@ -34,6 +36,8 @@ function deleteUserData() {
           document.getElementById("delete_data").innerHTML='Alle Daten l&ouml;schen';
           document.getElementById("delete_data").style.backgroundColor= "grey"
           document.getElementById("delete_data").disabled=false
+          chrome.storage.local.get(['Data'], function(result) {
+        })
       }, 2000)
   
 }
@@ -77,10 +81,15 @@ window.onload = function(){
     //set all switches and elements
     displayEnabled()
 
-    //update saved clicks
-    chrome.storage.local.get(['saved_click_counter'], (result) => {
-        if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-        document.getElementById("saved_clicks").innerHTML = "<text>Du hast bisher <font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart!</text>"
+    //get things from storage
+    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam"], (result) => {
+      //update saved clicks  
+      if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
+      document.getElementById("saved_clicks").innerHTML = "<text>Du hast bisher <font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart!</text>"
+
+      //see if any params are available
+      if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
+      chrome.storage.local.set({openSettingsPageParam: false}, function() {})
     })
     
     //prep accordion
