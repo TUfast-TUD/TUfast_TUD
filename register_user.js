@@ -78,6 +78,19 @@ window.onload = function(){
     document.getElementById('fav').onclick = dashboardCourseSelect
     document.getElementById('crs').onclick = dashboardCourseSelect
 
+    //add storage listener for autologin
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+      for (var key in changes) {
+        if(key === "openSettingsPageParam" && changes[key].newValue === "auto_login_settings") {
+          if(!this.document.getElementById("auto_login_settings").classList.contains("active")) {
+            this.document.getElementById("auto_login_settings").click()
+          }
+          chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+          document.getElementById("settings_comment").innerHTML = "<strong>F&uuml;r dieses Feature gib hier deine Zugangsdaten ein.</strong>"
+        }
+      }
+    });
+
     //set all switches and elements
     displayEnabled()
 
