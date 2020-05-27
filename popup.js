@@ -1,6 +1,9 @@
 //this need to be done here since manifest v2
 window.onload = async function(){
 
+    //TODO
+    //fix set width and high, so it does not get destoyed by search function
+
     //get and display course list
     chrome.storage.local.get(['dashboardDisplay'], async function(result) {
         let dashboardDisplay = result.dashboardDisplay
@@ -13,7 +16,31 @@ window.onload = async function(){
     document.getElementById('switch').addEventListener('change', () => {
         saveEnabled()
     })
+
+    //asign input search fct
+    this.document.getElementById("searchListInput").onkeyup=listSearchFunction
+
     displayEnabled()
+}
+
+function listSearchFunction(){
+    let input, filter, list, listEntries,i
+    
+    input = document.getElementById("searchListInput")
+    filter = input.value.toLowerCase()
+    list = document.getElementById("list")
+    listEntries = list.getElementsByClassName("list-entry")
+    
+    for(i = 0; i  < listEntries.length; i++){
+       let txtValue = listEntries[i].innerHTML.toLowerCase()
+       if(!txtValue.includes(filter)) {
+           listEntries[i].style.display = "none"
+       } else {
+        listEntries[i].style.display = ""
+       }
+       //always show "Klicke hier, um ..."
+       listEntries[listEntries.length - 1].style.display = ""
+    }
 }
 
 function displayCourseList(courseList, htmlList, type) {

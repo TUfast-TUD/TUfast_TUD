@@ -2,6 +2,7 @@
 .list {
   max-height: 555px;
   overflow: auto;
+  /*overflow-x: hidden;*/
 }
 
 .list-entry {
@@ -13,6 +14,21 @@
   margin-right: 7px;
   text-decoration: none;
   color: black;
+}
+
+.list-search {
+  width: 90%;
+  margin-left: 7px;
+  margin-right: 7px;
+  margin-top: 3px;
+  border-radius: 3px;
+  font-size: 14px;
+  border: #dddddd solid 2px;
+  background-image: url('./icons/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 11px; /* Position the search icon */
+  background-size: 19px;
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  padding: 10px 0px 10px 40px; /* Add some padding */
 }
 
 .list-entry-text {
@@ -74,7 +90,7 @@ body {
   background-color: #ffffff;
   border-radius: 7px;
   max-width: 600px; /*limit by chrome: 789px*/
-  min-width: 560px; /*limit by chrome: 789px*/
+  min-width: 600px; /*limit by chrome: 789px*/
   max-height: 590; /*limit by chrome: 590px*/
   margin: 0px;
   font-size: 14px;
