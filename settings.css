@@ -84,7 +84,7 @@ button:hover {
 
 .accordion:after {
     content: '\2039'; /* Unicode character for "arrow" sign  */
-    -webkit-transform: rotate(-90deg) scale(2.5 , 2.5);
+    transform: rotate(-90deg) scale(2.5 , 2.5);
     font-size: 14px;
     color: #777;
     float: right;
