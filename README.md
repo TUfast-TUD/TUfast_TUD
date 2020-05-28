@@ -11,6 +11,8 @@ Funktionen:
  - Automatisches Anmelden in Opal, Selma und Co.
  - Zeigt Opal-Kurse und Opal-Favoriten als Lesezeichen im Dashbaord
  - Abkürzungen in der Google-Suche
+ 
+Diese Anwendung ist <ins>*lokal*</ins> und *von Studenten entwickelt*.
 
 Diese Anwendung funktioniert ausschließlich lokal. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. Trotzdem sollte die Anwendung nur auf vertrauen Geräten verwendet werden.
 
