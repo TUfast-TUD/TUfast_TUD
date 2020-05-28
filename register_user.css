@@ -2,16 +2,16 @@ body {
     margin-left: 20%;
     margin-right: 20%;
     margin-bottom: 50px;
-    margin-top: 50px;
-    font-size: 16px;
+    margin-top: 30px;
+    font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 25px;
 } 
 
-html { overflow-y: auto; }
+html { overflow-y: scroll; }
 
 .heading {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -20,34 +20,34 @@ html { overflow-y: auto; }
 }
 
 .small-text {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 input[type=text], input[type=password] {
-  width: 220px;
+  width: 190px;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 14px;
   box-sizing: border-box;
 }
 
 input::-webkit-input-placeholder {
-    font-size: 15px;
+    font-size: 13px;
 }
 
 button {
-  width: 220px;
+  width: 190px;
   background-color: grey;
   color: white;
-  padding: 14px 20px;
+  padding: 12px 20px;
   margin: 8px 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 button:hover {
@@ -65,7 +65,7 @@ button:hover {
   border: none;
   outline: none;
   transition: 0.4s;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
