@@ -5,14 +5,14 @@ Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dre
 
 Opal, Selma, Hisqis und Co. wesentlich entspanner nutzen!
 
-Mit dieser Anwendung sparst du dir viele nervige Klicks.
+Mit dieser Anwendung <ins>sparst</ins> du dir viele nervige <ins>Klicks</ins>.
 
-Funktionen:
+<ins>Funktionen</ins>:
  - Automatisches Anmelden in Opal, Selma und Co.
  - Zeigt Opal-Kurse und Opal-Favoriten als Lesezeichen im Dashbaord
  - Abkürzungen in der Google-Suche
  
-Diese Anwendung ist <ins>*lokal*</ins> und *von Studenten entwickelt*.
+Diese Anwendung arbeitet <ins>lokal</ins> und ist <ins>von Studenten entwickelt</ins>.
 
 Diese Anwendung funktioniert ausschließlich lokal. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. Trotzdem sollte die Anwendung nur auf vertrauen Geräten verwendet werden.
 
