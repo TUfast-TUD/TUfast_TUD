@@ -1,35 +1,42 @@
 /* list */
 .list {
-  max-height: 555px;
+  max-height: 400px;
   overflow: auto;
   margin-bottom: 3px;
-  /*overflow-x: hidden;*/
+  overflow-x: hidden;
 }
 
 .list-entry {
   display: flex;
-  padding: 10px;
-  border-bottom: #dddddd solid 2px;
+  padding: 9px;
+  border-bottom: #dddddd solid 1.5px;
   margin: 2px;
-  margin-left: 7px;
-  margin-right: 7px;
+  margin-left: 5px;
+  margin-right: 5px;
   text-decoration: none;
   color: black;
+
 }
 
 .list-search {
-  width: 90%;
+  width: 89%;
   margin-left: 7px;
   margin-right: 7px;
   margin-top: 4px;
   border-radius: 3px;
-  font-size: 14px;
-  border: #dddddd solid 2px;
+  font-size: 12px;
+  border: #dddddd solid 1.5px;
   background-image: url('./icons/searchicon.png'); /* Add a search icon to input */
-  background-position: 10px 11px; /* Position the search icon */
+  background-position: 12px 7px; /* Position the search icon */
   background-size: 19px;
   background-repeat: no-repeat; /* Do not repeat the icon image */
-  padding: 10px 0px 10px 40px; /* Add some padding */
+  padding: 9px 0px 9px 40px; /* Add some padding */
+}
+
+input:focus,
+.list-search:focus {
+    outline: none !important;
+    border: #dddddd solid 2px;
 }
 
 .list-entry-text {
@@ -50,8 +57,8 @@
 
 .list-img {
   object-fit: contain;
-  width: 37px;
-  height: 20px;
+  width: 32px;
+  height: 16px;
 }
 
 /* grid */
@@ -76,25 +83,25 @@
   height: 200px;
   display: flex;
   flex-direction: column;
-  border: solid #303a44 1px;
+  border: solid #909090 1px;
 }
 
 .grid-img {
   border-radius: 10%;
   flex: 10;
   object-fit: cover;
-  background-color: #20262e;
+  background-color: #909090;
 }
 
 body {
   border: solid 2px #909090;
   background-color: #ffffff;
   border-radius: 7px;
-  max-width: 600px; /*limit by chrome: 789px*/
-  min-width: 600px; /*limit by chrome: 789px*/
-  max-height: 590; /*limit by chrome: 590px*/
+  max-width: 510px; /*limit by chrome: 789px*/
+  min-width: 510px; /*limit by chrome: 789px*/
+  max-height: 590px; /*limit by chrome: 590px*/
   margin: 0px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 html {
@@ -106,10 +113,10 @@ html {
 .settings-footer {
   display: flex;
   width: 100%;
-  height: 35px;
+  height: 30px;
   border-top: solid 2px #909090;
   border-radius: 3px;
-  box-shadow: 0px -3px 3px rgba(20,20,20,0.2); /* offset-x | offset-y | blur-radius | spread-radius | color */
+  box-shadow: 0px -3px 3px rgba(68, 68, 68, 0.3); /* offset-x | offset-y | blur-radius | spread-radius | color */
 }
 
 .settings-section {
@@ -133,7 +140,7 @@ html {
 }
 
 .settings-text {
-  float: left
+  float: left;
 }
 
 .settings-icon {
@@ -157,7 +164,7 @@ html {
 
 .custom-scrollbar::-webkit-scrollbar
 {
-	width: 12px;
+	width: 10px;
   background-color: #dbdbdb;
   
 }
@@ -167,7 +174,7 @@ html {
 	border-radius: 10px;
 	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,.3);
 	box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
-	background-color: #b1b1b1;
+	background-color: #9c9c9c;
 }
 
 .list-entry:hover,
