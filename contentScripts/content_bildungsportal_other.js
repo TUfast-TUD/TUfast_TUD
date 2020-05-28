@@ -8,10 +8,5 @@ chrome.storage.local.get(['isEnabled'], function(result) {
                 })
             }
         })
-        //scrape favorites - always update if possible
-            //on visiting favorites page: https://bildungsportal.sachsen.de/opal/auth/resource/favorites*
-                //save to storage: [{subject: subject1, link: link1}, ...]
-            //on visiting home page: https://bildungsportal.sachsen.de/opal/home*
-                //save to storage: [{subject: subject1, link: link1}, ...]
     }
 })

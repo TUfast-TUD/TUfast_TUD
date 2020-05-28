@@ -106,16 +106,13 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 function openSettingsPage(params){
   if(params === "auto_login_settings"){
     chrome.storage.local.set({openSettingsPageParam: "auto_login_settings"}, function() {
-      //maybe reload page if already opened, because click event is not executed
       //window.open("./register_user.html")
       chrome.runtime.openOptionsPage()
     })
   }
   if(params === "first_visit"){
     chrome.storage.local.set({openSettingsPageParam: "first_visit"}, function() {
-      //maybe reload page if already opened, because click event is not executed
       chrome.runtime.openOptionsPage()
-      //chrome.runtime.openOptionsPage()
     })
   }
   

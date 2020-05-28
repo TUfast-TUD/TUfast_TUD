@@ -10,8 +10,8 @@ Anmeldeprozesse können automatisch durchgeführt werden. So sparst du dir viele
 Funktionen:
  - Automatisches Anmelden in die IT-Services der TU-Dresden (Opal, Selma ...)
  - Zeigt Opal-Kurse und Opal-Favoriten als Lesezeichen im Dashbaord
- - Abkürzung in der Google-Suche
- - Notenstatistik in Hisqis
+ - Abkürzungen in der Google-Suche
+ - Notenstatistik im Hisqis
 
 Diese Anwendung funktioniert ausschließlich lokal. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. Trotzdem sollte die Anwendung nur auf vertrauen Geräten verwendet werden.
 
@@ -34,3 +34,7 @@ Tim alias tortletim
 - support login auf TU Dresden Website
 - support slub login
 - notenstatistik in Selma
+
+## Kontakt
+Fragen, Meinung, Einsprüche, Zusprüche, Muster, Beispiele oder ähnliches?
+ollidev97@gmail.com
