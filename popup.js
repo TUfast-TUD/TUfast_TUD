@@ -44,9 +44,10 @@ function listSearchFunction(){
        } else {
         listEntries[i].style.display = ""
        }
-       //always show "Klicke hier, um ..."
-       listEntries[listEntries.length - 1].style.display = ""
     }
+
+    //always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
+    if(listEntries[listEntries.length - 1].innerHTML.includes("Klicke hier, um die Kursliste manuell zu aktualisieren")){listEntries[listEntries.length - 1].style.display = ""}
 }
 
 function displayCourseList(courseList, htmlList, type) {
@@ -56,12 +57,12 @@ function displayCourseList(courseList, htmlList, type) {
     switch(type) {
         case "favoriten":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
-            name = "Klicken, um deine Opal-Kurse zu laden."
+            name = "Klicke hier, um deine Opal-Kurse zu laden."
             imgSrc = "./icons/star.png"
             break
         case "meine_kurse":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
-            name = "Klicken, um deine Opal-Kurse zu laden!"
+            name = "Klicke hier, um deine Opal-Kurse zu laden!"
             imgSrc = "./icons/CoursesOpalIcon.png"
             break
         default:
