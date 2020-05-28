@@ -102,8 +102,7 @@ window.onload = function(){
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
       if(result.openSettingsPageParam === "first_visit"){
-        document.getElementById("welcome").innerHTML="Spare viele Klicks und Entdecke die Funktionen von TUDresdenAutoLogin!</p><p>Mit dieser Extension, wird das Arbeiten mit den TU Dresden IT-Services deutlich angenehmer.</p>"
-        document.getElementById("settings_comment").innerHTML = ""
+        document.getElementById("welcome").innerHTML="Spare viele Klicks mit den Funktionen von TUDresdenAutoLogin!</p>"
       }
 
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
