@@ -4,6 +4,7 @@ Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dre
 ## So funktionierts
 
 Diese Chrome-Browser Erweiterung macht die Nutzung von Opal, Selma, Hisqis und Co. deutlich entspanner.
+
 Anmeldeprozesse können automatisch durchgeführt werden. So sparst du dir viele nervige Klicks!
 
 
