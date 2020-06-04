@@ -67,7 +67,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       show_badge('Login', '#4cb749', request.timeout)
       break
     case 'no_login_data':
-      //alert("Bitte gib deinen Nutzernamen und Passwort in der TU Dresden Auto Login Extension an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
+      //alert("Bitte gib deinen Nutzernamen und Passwort in der TU Dresden Auto Login Erweiterung an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
       //show_badge("Error", '#ff0000', 10000)
       break
     case 'perform_login':
