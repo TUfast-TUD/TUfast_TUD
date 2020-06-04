@@ -104,22 +104,14 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
 //open settings (=options) page, if required set params
 function openSettingsPage(params){
-  if(params === "auto_login_settings"){
-    chrome.storage.local.set({openSettingsPageParam: "auto_login_settings"}, function() {
-      //window.open("./register_user.html")
+  if(params){
+    chrome.storage.local.set({openSettingsPageParam: params}, function() {
       chrome.runtime.openOptionsPage()
-      return
     })
-  }
-  if(params === "first_visit"){
-    chrome.storage.local.set({openSettingsPageParam: "first_visit"}, function() {
-      chrome.runtime.openOptionsPage()
-      return
-    })
-  }
-  chrome.runtime.openOptionsPage()
+  } else {
+    chrome.runtime.openOptionsPage()
+  } 
   return
-  
 }
 
 //timeout is 2000 default
