@@ -19,7 +19,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://idp2.tu-dresden.de/idp/profile/*"
+        "https://idp2.tu-dresden.de/idp/profile/*"
       ]
     },
     {
@@ -28,11 +28,11 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://jexam.inf.tu-dresden.de/",
-        "*://www.google.de/search?q=jexam*",
-        "*://www.google.com/search?q=jexam*",
-        "*://www.google.de/search*&q=jexam&oq=jexam*",
-        "*://www.google.com/search*&q=jexam&oq=jexam*"
+        "https://jexam.inf.tu-dresden.de/",
+        "https://www.google.de/search?q=jexam*",
+        "https://www.google.com/search?q=jexam*",
+        "https://www.google.de/search*&q=jexam&oq=jexam*",
+        "https://www.google.com/search*&q=jexam&oq=jexam*"
       ]
     },
     {
@@ -41,14 +41,14 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://www.google.de/search?q=tustore*",
-        "*://www.google.com/search?q=tustore*",
-        "*://www.google.de/search*&q=tustore&oq=tustore*",
-        "*://www.google.com/search*&q=tustore&oq=tustore*",
-        "*://www.google.de/search?q=tucloud*",
-        "*://www.google.com/search?q=tucloud*",
-        "*://www.google.de/search*&q=tustore&oq=tucloud*",
-        "*://www.google.com/search*&q=tustore&oq=tucloud*"
+        "https://www.google.de/search?q=tustore*",
+        "https://www.google.com/search?q=tustore*",
+        "https://www.google.de/search*&q=tustore&oq=tustore*",
+        "https://www.google.com/search*&q=tustore&oq=tustore*",
+        "https://www.google.de/search?q=tucloud*",
+        "https://www.google.com/search?q=tucloud*",
+        "https://www.google.de/search*&q=tustore&oq=tucloud*",
+        "https://www.google.com/search*&q=tustore&oq=tucloud*"
       ]
     },
     {
@@ -57,14 +57,14 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://www.google.de/search?q=tumail*",
-        "*://www.google.de/search?q=tudmail*",
-        "*://www.google.com/search?q=tumail*",
-        "*://www.google.com/search?q=tudmail*",
-        "*://www.google.de/search*&q=tumail&oq=tumail*",
-        "*://www.google.com/search*&q=tumail&oq=tumail*",
-        "*://www.google.de/search*&q=tudmail&oq=tudmail*",
-        "*://www.google.com/search*&q=tudmail&oq=tudmail*"
+        "https://www.google.de/search?q=tumail*",
+        "https://www.google.de/search?q=tudmail*",
+        "https://www.google.com/search?q=tumail*",
+        "https://www.google.com/search?q=tudmail*",
+        "https://www.google.de/search*&q=tumail&oq=tumail*",
+        "https://www.google.com/search*&q=tumail&oq=tumail*",
+        "https://www.google.de/search*&q=tudmail&oq=tudmail*",
+        "https://www.google.com/search*&q=tudmail&oq=tudmail*"
       ]
     },
     {
@@ -73,7 +73,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://jexam.inf.tu-dresden.de/*"
+        "https://jexam.inf.tu-dresden.de/*"
       ]
     },
     {
@@ -96,11 +96,11 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://opal.de/*",
-        "*://www.google.de/search?q=opal*",
-        "*://www.google.com/search?q=opal*",
-        "*://www.google.de/search*&q=opal&oq=opal*",
-        "*://www.google.com/search*&q=opal&oq=opal*"
+        "https://opal.de/*",
+        "https://www.google.de/search?q=opal*",
+        "https://www.google.com/search?q=opal*",
+        "https://www.google.de/search*&q=opal&oq=opal*",
+        "https://www.google.com/search*&q=opal&oq=opal*"
       ]
     },
     {
@@ -109,7 +109,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://selma.tu-dresden.de/*"
+        "https://selma.tu-dresden.de/*"
       ]
     },
     {
@@ -118,10 +118,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://www.google.de/search?q=hisqis*",
-        "*://www.google.com/search?q=hisqis*",
-        "*://www.google.de/search*&q=hisqis&oq=hisqis*",
-        "*://www.google.com/search*&q=hisqis&oq=hisqis*"
+        "https://www.google.de/search?q=hisqis*",
+        "https://www.google.com/search?q=hisqis*",
+        "https://www.google.de/search*&q=hisqis&oq=hisqis*",
+        "https://www.google.com/search*&q=hisqis&oq=hisqis*"
       ]
     },
     {
@@ -130,10 +130,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://www.google.de/search?q=selma*",
-        "*://www.google.com/search?q=selma*",
-        "*://www.google.de/search*&q=selma&oq=selma*",
-        "*://www.google.com/search*&q=selma&oq=selma*"
+        "https://www.google.de/search?q=selma*",
+        "https://www.google.com/search?q=selma*",
+        "https://www.google.de/search*&q=selma&oq=selma*",
+        "https://www.google.com/search*&q=selma&oq=selma*"
       ]
     },
     {
@@ -142,7 +142,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://qis.dez.tu-dresden.de/qisserver/servlet*"
+        "https://qis.dez.tu-dresden.de/qisserver/servlet*"
       ]
     },
     {
@@ -151,9 +151,9 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://bildungsportal.sachsen.de/opal/resource*",
-        "*://bildungsportal.sachsen.de/opal/home*",
-        "*://bildungsportal.sachsen.de/opal/auth/*"
+        "https://bildungsportal.sachsen.de/opal/resource*",
+        "https://bildungsportal.sachsen.de/opal/home*",
+        "https://bildungsportal.sachsen.de/opal/auth/*"
       ]
     },
     {
@@ -162,10 +162,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://www.google.com/search?q=tumatrix*",
-        "*://www.google.de/search?q=tumatrix*",
-        "*://www.google.de/search*&q=tumatrix&oq=tumatrix*",
-        "*://www.google.com/search*&q=tumatrix&oq=tumatrix*"
+        "https://www.google.com/search?q=tumatrix*",
+        "https://www.google.de/search?q=tumatrix*",
+        "https://www.google.de/search*&q=tumatrix&oq=tumatrix*",
+        "https://www.google.com/search*&q=tumatrix&oq=tumatrix*"
       ]
     },
     {
@@ -174,7 +174,7 @@
       ],
       "run_at": "document_end",
       "matches": [
-        "*://matrix.tu-dresden.de/*"
+        "https://matrix.tu-dresden.de/*"
       ],
       "include_globs": [
         "*/welcome",
@@ -188,7 +188,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://msx.tu-dresden.de/*"
+        "https://msx.tu-dresden.de/*"
       ]
     },
     {
@@ -197,7 +197,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://cloudstore.zih.tu-dresden.de/*"
+        "https://cloudstore.zih.tu-dresden.de/*"
       ]
     },
     {
@@ -206,8 +206,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://bildungsportal.sachsen.de/opal/shiblogin*",
-        "*://bildungsportal.sachsen.de/opal/login*"
+        "https://bildungsportal.sachsen.de/opal/shiblogin*",
+        "https://bildungsportal.sachsen.de/opal/login*"
       ]
     },
     {
@@ -216,7 +216,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://bildungsportal.sachsen.de/opal*"
+        "https://bildungsportal.sachsen.de/opal*"
       ]
     },
     {
@@ -226,16 +226,16 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "*://bildungsportal.sachsen.de/opal/auth/resource/favorites*",
-        "*://bildungsportal.sachsen.de/opal/auth/resource/courses*",
-        "*://bildungsportal.sachsen.de/opal/auth/resource/groups*"
+        "https://bildungsportal.sachsen.de/opal/auth/resource/favorites*",
+        "https://bildungsportal.sachsen.de/opal/auth/resource/courses*",
+        "https://bildungsportal.sachsen.de/opal/auth/resource/groups*"
       ]
     },
     {
       "js": ["contentScripts/content_magma.js"],
       "run_at": "document_start",
       "matches": [
-        "*://bildungsportal.sachsen.de/magma*"
+        "https://bildungsportal.sachsen.de/magma*"
       ]
     },
     {
@@ -244,8 +244,8 @@
       "matches": [
         "https://www.google.com/search?q=magma*",
         "https://www.google.de/search?q=magma*",
-        "*://www.google.de/search*&q=magma&oq=magma*",
-        "*://www.google.com/search*&q=magma&oq=magma*"
+        "https://www.google.de/search*&q=magma&oq=magma*",
+        "https://www.google.com/search*&q=magma&oq=magma*"
         
       ]
     }
