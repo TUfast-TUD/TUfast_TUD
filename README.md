@@ -34,6 +34,8 @@ Tim alias tortletim
 - support login auf TU Dresden Website
 - support slub login
 - notenstatistik in Selma
+- google.com Berechtigung optional
+- Opal-Kurse im Dashbaord deaktivierbar
 
 ## Kontakt
 Fragen, Meinung, Einsprüche, Zusprüche, Muster, Beispiele oder ähnliches?

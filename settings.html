@@ -7,6 +7,7 @@
   </head>
   <body>
     <p class="heading">Willkommen zu TUDresdenAutoLogin</p> 
+    <img  style="max-width: 27%; width: 230px; position: fixed; top: 0px; right:12px;" src="./images/DashboardTutorialSmall.png">
     <p id="welcome"></p> 
     <p id="saved_clicks"></p>  
     <p id="settings_comment">Hier kannst du Einstellungen vornehmen.</p> 
@@ -32,9 +33,9 @@
   <!-- New Accordion section-->
   <button class="accordion">Meine Opal-Kurse im Dashboard</button>
   <div class="panel">
-    <p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p>
-    <p>Im Dashboard k&ouml;nnen deine Opal-Kurse als Lesezeichen angezeigt werden.</p><p>Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
-      <form action="#">
+    <!--p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p-->
+    <p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
+      <form action="#" style="line-height: 0px;">
         <p>
           <input type="radio" id="fav" name="radio-group">
           <label for="fav">Favoriten</label>
@@ -45,9 +46,13 @@
         </p>
       </form>
     </p>
-    <p class="grey-text">Wenn du "Favoriten" oder "Meine Kurse" im Opal besuchst, wird das Dashboard automatisch aktualisiert.<br>
-    <text class="grey-text"></text>Favoriten <a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
-    <text class="grey-text"></text>Meine Kurse <a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
+    <p class="grey-text">Deine Opal-Kurse werden automatisch importiert, wenn du "Favoriten" oder "Meine Kurse" im Opal besuchst.<br>    
+    <p>
+      So sieht das Dashboard aus:<br>
+      <img  style="max-width: 100%; width: 500px; border: 2px solid #eee; padding: 5px; border-radius: 2px;" src="./images/DashboardTutorialBig.png">
+    </p>
+    <text class="grey-text">Favoriten </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
+    <text class="grey-text">Meine Kurse </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
     </p>
   </div>
   <button class="accordion">Abk&uuml;rzung der Google-Suche</button>

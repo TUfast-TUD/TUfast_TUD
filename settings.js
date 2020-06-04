@@ -27,13 +27,17 @@ function deleteUserData() {
       chrome.runtime.sendMessage({cmd: "clear_badge"});
       chrome.storage.local.set({Data: "undefined"}, function() {}) //this is how to delete user data!
       chrome.storage.local.set({isEnabled: false}, function() {}) //need to deactivate auto login feature
+      // -- also delete courses in dashboard
+      chrome.storage.local.set({meine_kurse: false}, function() {})
+      chrome.storage.local.set({favoriten: false}, function() {})
+      // --
       document.getElementById('status_msg').innerHTML = ""
       document.getElementById("delete_data").innerHTML='<font>Gel&ouml;scht!</font>'
       document.getElementById("delete_data").style.backgroundColor= "rgb(47, 143, 18)"
       document.getElementById("delete_data").disabled=true
       document.getElementById("username_field").value = ""
       document.getElementById("password_field").value = ""
-      document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht mehr angemeldet.</font>"
+      document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
       setTimeout(()=>{
           document.getElementById("delete_data").innerHTML='Alle Daten l&ouml;schen';
           document.getElementById("delete_data").style.backgroundColor= "grey"
@@ -101,9 +105,10 @@ window.onload = function(){
       //set text on isEnabled
       if(result.isEnabled) {
         document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
-      } else {
-        document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
-      }
+      } 
+      //else {
+      //  document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+      //}
       //update saved clicks  
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       document.getElementById("saved_clicks").innerHTML = "<text>Du hast bisher <font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart!</text>"
