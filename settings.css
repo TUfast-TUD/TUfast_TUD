@@ -38,6 +38,10 @@ input::-webkit-input-placeholder {
     font-size: 13px;
 }
 
+input:focus {
+  outline: none !important;
+}
+
 button {
   width: 190px;
   background-color: grey;
