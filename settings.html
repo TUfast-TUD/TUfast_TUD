@@ -14,7 +14,7 @@
     <button class="accordion" id="auto_login_settings">AutoLogin zu Opal, Selma & Co.</button>
     <div class="panel">
       <p>Diese Erweiterung kann dich automatisch in Opal, Selma, Hisqis und Co. anmelden.
-      <br><strong>Wirklich ein sehr n&uuml;tzliches Feature!</strong></p> 
+      <br><strong>Ein wirklich sehr n&uuml;tzliches Feature!</strong></p> 
       <p class="grey-text">Unterst&uuml;tzt werden fast alle TU-Dresden IT-Services: Opal, Hisqis, Selma, jExam, Outlook ...<br>
       Deine Daten werden nur lokal und verschl&uuml;sselt gespeichert. Trotzdem sollte diese Funktion nur auf vertrauten Ger&auml;ten verwendet werden.</p>
       <form>
@@ -29,7 +29,28 @@
       <p id="status_msg2"></p> 
     </div>
     <!-- New Accordion section--> 
-    <button class="accordion">Abk&uuml;rzung der Google-Suche</button>
+  <!-- New Accordion section-->
+  <button class="accordion">Opal-Kurse im Dashboard</button>
+  <div class="panel">
+    <p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p>
+    <p>Im Dashboard k&ouml;nnen deine Opal-Kurse als Lesezeichen angezeigt werden.</p><p>Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
+      <form action="#">
+        <p>
+          <input type="radio" id="fav" name="radio-group">
+          <label for="fav">Favoriten</label>
+        </p>
+        <p>
+          <input type="radio" id="crs" name="radio-group">
+          <label for="crs">Meine Kurse</label>
+        </p>
+      </form>
+    </p>
+    <p class="grey-text">Wenn du "Favoriten" oder "Meine Kurse" im Opal besuchst, wird das Dashboard automatisch aktualisiert.<br>
+    <text class="grey-text"></text>Favoriten <a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
+    <text class="grey-text"></text>Meine Kurse <a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
+    </p>
+  </div>
+  <button class="accordion">Abk&uuml;rzung der Google-Suche</button>
     <div class="panel">
       <p>Wenn diese Option aktiv ist, kannst du Abk&uuml;rzungen f&uuml;r die Google-Suche verwenden um Opal, Selma, Outlook & Co. schneller zu erreichen.</p>
       <p>Aus 
@@ -51,27 +72,6 @@
         </ul>
     </p> 
   </div> 
-  <!-- New Accordion section-->
-  <button class="accordion">Dashboard-Einstellungen</button>
-  <div class="panel">
-    <p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p>
-    <p>Im Dashboard k&ouml;nnen deine Opal-Kurse als Lesezeichen angezeigt werden.</p><p>Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
-      <form action="#">
-        <p>
-          <input type="radio" id="fav" name="radio-group">
-          <label for="fav">Favoriten</label>
-        </p>
-        <p>
-          <input type="radio" id="crs" name="radio-group">
-          <label for="crs">Meine Kurse</label>
-        </p>
-      </form>
-    </p>
-    <p class="grey-text">Wenn du "Favoriten" oder "Meine Kurse" im Opal besuchst, wird das Dashboard automatisch aktualisiert.<br>
-    <text class="grey-text"></text>Favoriten <a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
-    <text class="grey-text"></text>Meine Kurse <a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
-    </p>
-  </div>
     <!-- New Accordion section--> 
     <button class="accordion">Kontakt & About</button>
     <div class="panel">

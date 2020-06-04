@@ -96,7 +96,7 @@ input:focus,
 body {
   border: solid 2px #909090;
   background-color: #ffffff;
-  border-radius: 7px;
+  border-radius: 4px;
   max-width: 510px; /*limit by chrome: 789px*/
   min-width: 510px; /*limit by chrome: 789px*/
   max-height: 590px; /*limit by chrome: 590px*/

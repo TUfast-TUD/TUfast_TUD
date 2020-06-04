@@ -108,13 +108,17 @@ function openSettingsPage(params){
     chrome.storage.local.set({openSettingsPageParam: "auto_login_settings"}, function() {
       //window.open("./register_user.html")
       chrome.runtime.openOptionsPage()
+      return
     })
   }
   if(params === "first_visit"){
     chrome.storage.local.set({openSettingsPageParam: "first_visit"}, function() {
       chrome.runtime.openOptionsPage()
+      return
     })
   }
+  chrome.runtime.openOptionsPage()
+  return
   
 }
 
