@@ -2,7 +2,7 @@ function saveUserData() {
     var asdf = document.getElementById('username_field').value
     var fdsa = document.getElementById('password_field').value
     if (asdf === '' || fdsa === '') {
-        document.getElementById('status_msg').innerHTML = "<font color='red'>     Die Felder d&uuml;rfen nicht leer sein!</font>"
+        document.getElementById('status_msg').innerHTML = "<font color='red'>Die Felder d&uuml;rfen nicht leer sein!</font>"
     } else {
         chrome.storage.local.set({isEnabled: true}, function() {}) //need to activate auto login feature
         chrome.runtime.sendMessage({cmd: "clear_badge"});
@@ -13,6 +13,7 @@ function saveUserData() {
         document.getElementById("save_data").style.backgroundColor= "rgb(47, 143, 18)"
         document.getElementById("username_field").value = ""
         document.getElementById("password_field").value = ""
+        document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
         setTimeout(()=>{
           document.getElementById("save_data").style.backgroundColor= "grey"
           document.getElementById("save_data").innerHTML='Speichern'
@@ -32,6 +33,7 @@ function deleteUserData() {
       document.getElementById("delete_data").disabled=true
       document.getElementById("username_field").value = ""
       document.getElementById("password_field").value = ""
+      document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht mehr angemeldet.</font>"
       setTimeout(()=>{
           document.getElementById("delete_data").innerHTML='Alle Daten l&ouml;schen';
           document.getElementById("delete_data").style.backgroundColor= "grey"
@@ -95,7 +97,13 @@ window.onload = function(){
     displayEnabled()
 
     //get things from storage
-    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam"], (result) => {
+    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled"], (result) => {
+      //set text on isEnabled
+      if(result.isEnabled) {
+        document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
+      } else {
+        document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+      }
       //update saved clicks  
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       document.getElementById("saved_clicks").innerHTML = "<text>Du hast bisher <font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart!</text>"
