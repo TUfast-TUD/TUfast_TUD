@@ -3,15 +3,16 @@ Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dre
 
 ## So funktionierts
 
-Diese Chrome-Browser Erweiterung macht die Nutzung der IT-Services der TU Dresden deutlich entspanner.
-Anmeldeprozesse können automatisch durchgeführt werden. So sparst du dir viele nervige Klicks!
+Opal, Selma, Hisqis und Co. wesentlich entspanner nutzen!
 
+Mit dieser Anwendung <ins>sparst</ins> du dir viele nervige <ins>Klicks</ins>.
 
-Funktionen:
- - Automatisches Anmelden in die IT-Services der TU-Dresden (Opal, Selma ...)
+<ins>Funktionen</ins>:
+ - Automatisches Anmelden in Opal, Selma und Co.
  - Zeigt Opal-Kurse und Opal-Favoriten als Lesezeichen im Dashbaord
  - Abkürzungen in der Google-Suche
- - Notenstatistik im Hisqis
+ 
+Diese Anwendung arbeitet <ins>lokal</ins> und ist <ins>von Studenten entwickelt</ins>.
 
 Diese Anwendung funktioniert ausschließlich lokal. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. Trotzdem sollte die Anwendung nur auf vertrauen Geräten verwendet werden.
 
@@ -24,10 +25,11 @@ Unterstützt werden:
 - magma
 - matrix
 - jExam
-- und weitere
+- und weitere IT-Services der TU Dresden
 
 ## Contributors
 Daniel alias https://github.com/C0ntroller
+
 Tim alias tortletim
 
 ## Roadmap
