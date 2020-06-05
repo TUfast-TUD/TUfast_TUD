@@ -15,8 +15,8 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], functi
             if(showDashboardBanner) {
                 let banner = this.document.createElement("div")
                 let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
-                banner.style.height="45px"
-                banner.innerHTML = '<img src='+imgUrl+' style="height: 42px; float: right; margin-right: 30px;">'
+                banner.style.height="42px"
+                banner.innerHTML = '<img src='+imgUrl+' style="height: 39px; float: right; margin-right: 30px;">'
                 this.document.body.insertBefore(banner, document.body.childNodes[0])
             }
             // --
