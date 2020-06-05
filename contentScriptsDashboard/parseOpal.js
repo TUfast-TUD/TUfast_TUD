@@ -2,7 +2,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], functi
     //if(result.isEnabled) {
         
         let showDashboardBanner = false
-        if(result.seenInOpalAfterDashbaordUpdate < 5) {showDashboardBanner = true}
+        if(result.seenInOpalAfterDashbaordUpdate < 4) {showDashboardBanner = true}
         chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1}, function() {})
         
         //wait until full page is loaded
