@@ -1,5 +1,4 @@
 chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
-    console.log("GOT" + result.loggedOutOwa)
     if(result.isEnabled && !result.loggedOutOwa) {        
         document.addEventListener('DOMContentLoaded', function() {
             if(document.getElementById('username') && document.getElementById('password') && !result.loggedOutOwa){
@@ -16,13 +15,19 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
                     }
                 });
             }
-            //detecting logout
-            if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-                document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
-                    chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
-                    console.log("detected")
-                })
+
+            //use mutation-observer to detect logout
+            const config = { attributes: true, childList: true, subtree: true }
+            const callback = function(mutationsList, observer) {
+                //detecting logout
+                if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+                    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
+                        chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+                    })
+                }
             }
+            const observer = new MutationObserver(callback);
+            observer.observe(document.body, config);
         })
         console.log('Auto Login to OWA.')
     }
