@@ -96,7 +96,7 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://opal.de/*",
+        "*://opal.de/*",
         "https://www.google.de/search?q=opal*",
         "https://www.google.com/search?q=opal*",
         "https://www.google.de/search*&q=opal&oq=opal*",
@@ -260,5 +260,6 @@
     "default_popup": "popup.html"
   },
   "options_page": "settings.html",
+  "web_accessible_resources": ["images/OpalBanner3.png"],
   "manifest_version": 2
 }

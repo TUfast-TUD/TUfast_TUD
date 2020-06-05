@@ -6,6 +6,14 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             let oldLocationHref = location.href
             let parsedCourses = false
 
+            // -- show banner
+            let banner = this.document.createElement("div")
+            let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
+            banner.style.height="45px"
+            banner.innerHTML = '<img src='+imgUrl+' style="height: 42px; float: right; margin-right: 30px;">'
+            this.document.body.insertBefore(banner, document.body.childNodes[0])
+            // --
+
             //if all courses loaded --> parse
             if(!document.getElementsByClassName("pager-showall")[0]){
                 chrome.runtime.sendMessage({cmd: "save_courses", course_list: parseCoursesFromWebPage()})
