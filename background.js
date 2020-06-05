@@ -56,9 +56,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         //check if seenInOpalAfterDashbaordUpdate exists
         chrome.storage.local.get(['seenInOpalAfterDashbaordUpdate'], (resp) => {
           if(resp.seenInOpalAfterDashbaordUpdate === null || resp.seenInOpalAfterDashbaordUpdate === undefined || resp.seenInOpalAfterDashbaordUpdate === ""){
-            console.log(resp.seenInOpalAfterDashbaordUpdate)
             chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
-            console.log(resp.seenInOpalAfterDashbaordUpdate)
           }
         })
         break;

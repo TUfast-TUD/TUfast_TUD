@@ -68,12 +68,12 @@ function displayCourseList(courseList, htmlList, type) {
         default:
             break
     }
+
     if(courseList.length === 0 || courseList === undefined || courseList === false) {
         courseList = []
         courseList.push({"name": name, "link": link})
     } else {
         courseList.push({"name": "Klicke hier, um die Kursliste manuell zu aktualisieren ...", "link": link, "img": false})
-
     }
     
     courseList.forEach(element => {
@@ -129,12 +129,20 @@ function loadCourses(type) {
         switch(type) {
             case "favoriten":
                 chrome.storage.local.get(['favoriten'], function(result) {
-                    resolve(JSON.parse(result.favoriten))
+                    try {
+                        resolve(JSON.parse(result.favoriten))
+                    } catch {
+                        resolve(false)
+                    }
                 })
                 break
             case "meine_kurse":
                 chrome.storage.local.get(['meine_kurse'], function(result) {
-                    resolve(JSON.parse(result.meine_kurse))
+                    try {
+                        resolve(JSON.parse(result.meine_kurse))
+                    } catch {
+                        resolve(false)
+                    }
                 })
                 break
             default:
