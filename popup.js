@@ -104,10 +104,10 @@ function displayCourseList(courseList, htmlList, type) {
 //changeIsEnabledState
 function saveEnabled() {
     //only save, if user data is available. Else forward to settings page
-    chrome.storage.local.get(['isEnabled'], function(result) {
+    chrome.storage.local.get(['isEnabled'], function(resp) {
         chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
             if(!(result.asdf === undefined || result.fdsa === undefined)) {
-                chrome.storage.local.set({isEnabled: !(result.isEnabled)}, function() {})
+                chrome.storage.local.set({isEnabled: !(resp.isEnabled)}, function() {})
             } else {
                 chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'auto_login_settings'}, function(result) {})
             }
