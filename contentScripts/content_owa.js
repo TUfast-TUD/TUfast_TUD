@@ -1,7 +1,8 @@
 chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
+    console.log("GOT" + result.loggedOutOwa)
     if(result.isEnabled && !result.loggedOutOwa) {        
         document.addEventListener('DOMContentLoaded', function() {
-            if(document.getElementById('username') && document.getElementById('password')){
+            if(document.getElementById('username') && document.getElementById('password') && !result.loggedOutOwa){
                 chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
                     if (!(result.asdf === undefined  || result.fdsa === undefined)) { 
                         chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})
@@ -19,6 +20,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
             if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
                 document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
                     chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+                    console.log("detected")
                 })
             }
         })
