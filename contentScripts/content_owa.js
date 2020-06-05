@@ -19,10 +19,13 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
             //use mutation-observer to detect logout
             const config = { attributes: true, childList: true, subtree: true }
             const callback = function(mutationsList, observer) {
+                console.log("MUTATAION")
                 //detecting logout
                 if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+                    console.log("FOUND")
                     document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
                         chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+                        console.log("CLICKED")
                     })
                 }
             }
