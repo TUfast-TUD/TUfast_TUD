@@ -16,25 +16,23 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
                 });
             }
 
-            //use mutation-observer to detect logout
-            const config = { attributes: true, childList: true, subtree: true }
-            const callback = function(mutationsList, observer) {
-                console.log("MUTATAION")
-                //detecting logout
-                if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-                    console.log("FOUND")
-                    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
-                        chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
-                        console.log("CLICKED")
-                    })
-                }
+            //detecting logout
+            if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+                console.log("FOUND")
+                document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
+                    chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+                    console.log("CLICKED")
+                })
             }
-            const observer = new MutationObserver(callback);
-            observer.observe(document.body, config);
+
         })
         console.log('Auto Login to OWA.')
     }
+    //sometimes it reloades the page, sometimes it doesnt...
     else if(result.loggedOutOwa) {
+        chrome.storage.local.set({loggedOutOwa: undefined}, function() {})
+        setTimeout(() => {  chrome.storage.local.set({loggedOutOwa: false}, function() {}) }, 500);
+    } else if(result.loggedOutOwa === undefined) {
         chrome.storage.local.set({loggedOutOwa: false}, function() {})
     }
 })
