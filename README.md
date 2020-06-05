@@ -4,7 +4,7 @@ Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dre
 ## So funktionierts
 
 Diese Chrome-Erweiterung macht die IT-Dienste der TU Dresden deutlich entspanner nutzerbar und <ins>spart viele viele nervige Klicks</ins>!
-Von Studenten - für Studenten.
+<br>Von Studenten - für Studenten.
 
 Funktionen:
  - Automatisches Anmelden in Opal, Selma und Co.
@@ -25,15 +25,14 @@ Unterstützt werden:
 - und weitere...
 
 ## Contributors
-Daniel alias https://github.com/C0ntroller
-
-Tim alias tortletim
+- Daniel alias https://github.com/C0ntroller
+- Tim alias tortletim
 
 ## Roadmap
 - support login auf TU Dresden Website
 - support slub login
 - notenstatistik in Selma
-- google.com Berechtigung optional
+- google.com als optionale Berechtigung (nur für Weiterleitung benötigt)
 - Opal-Kurse im Dashbaord deaktivierbar
 
 ## Kontakt
