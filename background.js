@@ -11,7 +11,6 @@ chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
-
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
   switch (reason) {
@@ -30,6 +29,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({meine_kurse: false}, function() {})
         chrome.storage.local.set({favoriten: false}, function() {})
         //chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+        chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         break;
      case 'update':
@@ -51,6 +51,14 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.get(['dashboardDisplay'], (resp) => {
           if(resp.dashboardDisplay === null || resp.dashboardDisplay === undefined || resp.dashboardDisplay === ""){
             chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
+          }
+        })
+        //check if seenInOpalAfterDashbaordUpdate exists
+        chrome.storage.local.get(['seenInOpalAfterDashbaordUpdate'], (resp) => {
+          if(resp.seenInOpalAfterDashbaordUpdate === null || resp.seenInOpalAfterDashbaordUpdate === undefined || resp.seenInOpalAfterDashbaordUpdate === ""){
+            console.log(resp.seenInOpalAfterDashbaordUpdate)
+            chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
+            console.log(resp.seenInOpalAfterDashbaordUpdate)
           }
         })
         break;

@@ -1,5 +1,10 @@
-chrome.storage.local.get(['isEnabled',], function(result) {
+chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], function(result) {
     //if(result.isEnabled) {
+        
+        let showDashboardBanner = false
+        if(result.seenInOpalAfterDashbaordUpdate < 5) {showDashboardBanner = true}
+        chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1}, function() {})
+        
         //wait until full page is loaded
         window.addEventListener("load", async function(e) {
 
@@ -7,11 +12,13 @@ chrome.storage.local.get(['isEnabled',], function(result) {
             let parsedCourses = false
 
             // -- show banner
-            let banner = this.document.createElement("div")
-            let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
-            banner.style.height="45px"
-            banner.innerHTML = '<img src='+imgUrl+' style="height: 42px; float: right; margin-right: 30px;">'
-            this.document.body.insertBefore(banner, document.body.childNodes[0])
+            if(showDashboardBanner) {
+                let banner = this.document.createElement("div")
+                let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
+                banner.style.height="45px"
+                banner.innerHTML = '<img src='+imgUrl+' style="height: 42px; float: right; margin-right: 30px;">'
+                this.document.body.insertBefore(banner, document.body.childNodes[0])
+            }
             // --
 
             //if all courses loaded --> parse
