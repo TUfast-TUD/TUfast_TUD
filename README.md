@@ -9,6 +9,7 @@ Funktionen:
  - Automatisches Anmelden in Opal, Selma und Co.
  - Deine Opal-Kurse und Opal-Favoriten als Lesezeichen im Dashbaord
  - Abkürzungen in der Google-Suche
+ - Notenstatistik im Hisqis
  
 Diese Anwendung funktioniert ausschließlich lokal. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. Trotzdem sollte die Anwendung nur auf vertrauen Geräten verwendet werden.
 
