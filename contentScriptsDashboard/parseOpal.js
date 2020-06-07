@@ -1,8 +1,10 @@
-chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], function(result) {
+chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "removedOpalBanner"], function(result) {
     //if(result.isEnabled) {
         
         let showDashboardBanner = false
-        if(result.seenInOpalAfterDashbaordUpdate < 4) {showDashboardBanner = true}
+        let showRemoveBanner = false
+        if(result.seenInOpalAfterDashbaordUpdate < 5 && !result.removedOpalBanner) {showDashboardBanner = true}
+        if(result.seenInOpalAfterDashbaordUpdate > 0 && !result.removedOpalBanner) {showRemoveBanner = true}
         chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1}, function() {})
         
         //wait until full page is loaded
@@ -15,8 +17,13 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], functi
             if(showDashboardBanner) {
                 let banner = this.document.createElement("div")
                 let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
-               banner.style.height="50px"
+                banner.id ="opalBanner"
+                banner.style.height="50px"
                 banner.innerHTML = '<img src='+imgUrl+' style=" -webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa); height: 55px; right: 30px; z-index: 999; position:fixed;">'
+                //add remove button from second visit on -->
+                if(showRemoveBanner) {
+                    banner.innerHTML = '<img src='+imgUrl+' style=" -webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa); height: 55px; right: 30px; z-index: 999; position:fixed;"> <span id="closeOpalBanner" style="-webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa);font-size: 18px; z-index: 999; cursor: pointer; position: fixed; top: 14.1px; right: 13px; padding: 5.8px 7px; background-color: #ddd">x</span>'
+                }
                 this.document.body.insertBefore(banner, document.body.childNodes[0])
             }
             // --
@@ -29,6 +36,11 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], functi
             } else {
                 document.getElementsByClassName("pager-showall")[0].click()
                 parsedCourses = false
+            }
+
+            //closeOpalBanner Button funciton
+            if (this.document.getElementById("closeOpalBanner")){
+                this.document.getElementById("closeOpalBanner").onclick = closeOpalBanner
             }
 
             //use mutation observer to detect page changes
@@ -64,6 +76,14 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate'], functi
         }, true)
     //}
 })
+
+function closeOpalBanner(){
+    if(document.getElementById("opalBanner")){
+        document.getElementById("opalBanner").remove()
+        chrome.storage.local.set({removedOpalBanner: true}, function() {})
+
+    }
+}
 
 function parseCoursesFromWebPage(){
     //there are two options how the table can be build.
