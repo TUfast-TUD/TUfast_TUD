@@ -35,6 +35,11 @@ Von Studenten - für Studenten.
 - Notenstatistik in Selma
 - Google.com als optionale Berechtigung (nur für Weiterleitung benötigt)
 - Opal-Kurse im Dashbaord deaktivierbar machen
+- Popup verlängern und zusätzliche Funktionen:
+   - Switch Kurse - Favoriten
+   - Switch Weiterleitung
+   - Gesparte-Klicks-Zähler
+   - + evtl. "Karma-Feature"?
 
 ## Kontakt
 Fragen, Meinung, Einsprüche, Zusprüche, Muster, Beispiele oder ähnliches?
