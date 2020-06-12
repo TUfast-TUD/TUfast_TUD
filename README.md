@@ -22,7 +22,6 @@ Unterstützt werden:
 - magma
 - matrix
 - jExam
-- und weitere...
 
 Von Studenten - für Studenten.
 
