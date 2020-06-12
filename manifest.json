@@ -1,7 +1,7 @@
 {
   "name": "TU Dresden Auto Login",
   "version": "5.0.2.2",
-  "description": "Spare Zeit 🚀 und viele nervige Klicks 🖱️ beim Nutzen von TUDresdenAutoLogin!",
+  "description": "Spare dir Zeit 🕔 und viele nervige Klicks 🖱️ mit TUDresdenAutoLogin 🚀!",
   "permissions": [
     "storage", "system.cpu"
   ],
