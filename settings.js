@@ -111,6 +111,7 @@ window.onload = function(){
       //update saved clicks  
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
+      if(result.openSettingsPageParam === "boost_settings"){ this.document.getElementById("boost_settings").click()}
       if(result.openSettingsPageParam === "first_visit"){
         document.getElementById("welcome").innerHTML="Spare viele Klicks mit den Funktionen von TUDresdenAutoLogin!</p>"
       }
