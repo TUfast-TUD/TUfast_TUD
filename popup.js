@@ -5,7 +5,7 @@ window.onload = async function(){
     //fix set width and high, so it does not get destoyed by search function
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter"], async function(result) {
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "boost_counter"], async function(result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
@@ -14,8 +14,10 @@ window.onload = async function(){
 
         //display saved clicks
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, <font color='purple'>0 Karma</font> gesammelt.</text>"
-        
+        if (result.boost_counter === undefined) {result.boost_counter = 0}
+        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, <a href='#' id='boost' target='_blank' style='color: purple;'>"  + result.boost_counter + " Boost</a> gesammelt.</text>"
+        this.document.getElementById('boost').onclick = openSettingsBoostSection
+ 
     })
 
     //assign switch function
@@ -28,11 +30,16 @@ window.onload = async function(){
 
     this.document.getElementById("settings").onclick = openSettings
 
+
     displayEnabled()
 }
 
 function openSettings(){
     chrome.runtime.openOptionsPage()
+}
+
+function openSettingsBoostSection(){
+    chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'boost_settings'}, function(result) {})
 }
 
 function listSearchFunction(){
@@ -91,6 +98,7 @@ function displayCourseList(courseList, htmlList, type) {
         listImg.className = "list-entry-img"
         listEntry.href = element.link
         listEntry.target = "_blank"
+        listEntry.onclick = save__two_clicks
         listText.className = "list-entry-text"
         listText.innerHTML = element.name
         img.className = "list-img"
@@ -105,6 +113,9 @@ function displayCourseList(courseList, htmlList, type) {
     })
 }
 
+function save__two_clicks() {
+    chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 2})
+}
 
 //changeIsEnabledState
 function saveEnabled() {
