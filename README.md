@@ -1,6 +1,8 @@
 # TU Dresden Auto Login
 Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
+Ich versuche den Repo-Master immer mit der aktuell veröffentlichten Version aktuell zu halten.
+
 ## So funktionierts
 
 Diese Chrome-Erweiterung macht die IT-Dienste der TU Dresden deutlich entspanner nutzerbar und <ins>spart viele viele nervige Klicks</ins>!
