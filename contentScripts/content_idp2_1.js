@@ -1,18 +1,18 @@
 chrome.storage.local.get(['isEnabled'], function(result) {
-  //if(result.isEnabled) {  
+  if(result.isEnabled) {  
     if (document.readyState !== 'loading') {
-      logInQis(result.isEnabled)
+      logInQis()
     } else {
       document.addEventListener('DOMContentLoaded', function() {  
-      logInQis(result.isEnabled)
+      logInQis()
       })
     }
     console.log('Auto Login to TU Dresden Auth.')
-  //}
+  }
 })
 
-function logInQis(enabled) {
-  if (document.getElementById("username") && enabled) {
+function logInQis() {
+  if (document.getElementById("username")) {
     chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
       if (!(result.fdsa === undefined || result.asdf === undefined)) {
         chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
