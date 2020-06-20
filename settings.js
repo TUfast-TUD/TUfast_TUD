@@ -3,6 +3,7 @@ function saveUserData() {
     var fdsa = document.getElementById('password_field').value
     if (asdf === '' || fdsa === '') {
         document.getElementById('status_msg').innerHTML = "<font color='red'>Die Felder d&uuml;rfen nicht leer sein!</font>"
+        return false
     } else {
         chrome.storage.local.set({isEnabled: true}, function() {}) //need to activate auto login feature
         chrome.runtime.sendMessage({cmd: "clear_badge"});
@@ -108,8 +109,6 @@ window.onload = function(){
       //  document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
       //}
       //update saved clicks  
-      if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-      document.getElementById("saved_clicks").innerHTML = "<text>Du hast bisher <font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart!</text>"
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
       if(result.openSettingsPageParam === "first_visit"){

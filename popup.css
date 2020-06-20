@@ -1,6 +1,6 @@
 /* list */
 .list {
-  max-height: 400px;
+  max-height: 450px;
   overflow: auto;
   margin-bottom: 3px;
   overflow-x: hidden;
@@ -105,6 +105,7 @@ html {
 .settings-section-icon {
    display: flex;
    border: none;
+   height: 100%;
    align-items: center; /*space-between*/
    justify-content: center;
    padding-left: 6px;
@@ -119,6 +120,12 @@ html {
 .settings-icon {
   float: right;
   margin-left: 15px;
+}
+
+.settings-img {
+  object-fit: contain;
+  width: 32px;
+  height: 17px;
 }
 
 /* headline */

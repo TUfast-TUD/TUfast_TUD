@@ -103,7 +103,6 @@ function displayCourseList(courseList, htmlList, type) {
 
         htmlList.appendChild(listEntry)
     })
-
 }
 
 
