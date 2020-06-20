@@ -15,7 +15,7 @@ window.onload = async function(){
         //display saved clicks
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
         if (result.boost_counter === undefined) {result.boost_counter = 0}
-        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, <a href='#' id='boost' target='_blank' style='color: purple;'>"  + result.boost_counter + " Boost</a> gesammelt.</text>"
+        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, <a href='javascript:void(0)' id='boost' target='_blank' style='color: purple;'>"  + result.boost_counter + " Boost</a> gesammelt.</text>"
         this.document.getElementById('boost').onclick = openSettingsBoostSection
  
     })
