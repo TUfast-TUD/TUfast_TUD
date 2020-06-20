@@ -8,75 +8,60 @@
     </head>
   <body>
     <div class="headline">TU Dresden Dashboard</div>
-    <!--div class="grid-container">
-       <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text"><span>underlin text</span></div>
-      </div><div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div> <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div> <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div> <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div> <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div> <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div> <div class="grid-item">
-        <img class="grid-img" src="./images/autologin32.png">
-        <div class="grid-text">underlin text</div>
-      </div>
-    </div-->
     <div class="list custom-scrollbar" id="list">
       <input class="list-search" type="text" id="searchListInput" placeholder="Kurs suchen..." autofocus>
     </div>
     <div class="settings-footer">
-      <!--div class="settings-section" style="flex: 7.5">
+      <div class="settings-footer-bar" style="border:none">
+        <!--div class="settings-section" style="flex: 7.5">
         <div class="settings-text">Weiterleitung der Google-Suche</div>
         <label class="switch settings-icon">
           <input type="checkbox" id="switch">
           <span class="slider round"></span>
         </label> 
-      </div-->
-      <a href="https://selma.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/selma.png">
-      </a>
-      <a href="https://bildungsportal.sachsen.de/opal/" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/OPAL.png">
-      </a>
-      <a href="https://qis.dez.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/his.png">
-      </a>
-      <a href="https://matrix.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/riot_matrix.png">
-      </a>
-      <a href="https://msx.tu-dresden.de/owa/#path=/mail" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/owa.png">
-      </a>
-      <a href="https://cloudstore.zih.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/cloud.png">
-      </a>
-      <a href="https://jexam.inf.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
-        <img class="list-img" src="./icons/jE.png">
-      </a>
-      <div class="settings-section" style="flex: 4">
-        <div class="settings-text" style="font-size: 13px;padding-bottom: 2px;">AutoLogin</div>
-        <label class="switch settings-icon">
-          <input type="checkbox" id="switch">
-          <span class="slider round"></span>
-        </label> 
+        </div-->
+        <a href="https://selma.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/selma.png">
+        </a>
+        <a href="https://bildungsportal.sachsen.de/opal/" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/OPAL.png">
+        </a>
+        <a href="https://qis.dez.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/his.png">
+        </a>
+        <a href="https://matrix.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/riot_matrix.png">
+        </a>
+        <a href="https://msx.tu-dresden.de/owa/#path=/mail" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/owa.png">
+        </a>
+        <a href="https://cloudstore.zih.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/cloud.png">
+        </a>
+        <a href="https://jexam.inf.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1">
+          <img class="list-img" src="./icons/jE.png">
+        </a>
+        
       </div>
-      <a class="settings-section-icon" href="#" id="settings" target="_blank" style="flex: 1; margin: 0px">
-        <img class="list-img" style="height: 20px;" src="./icons/cog.png">
-      </a>
+      <div class="settings-footer-bar">
+        <div class="settings-section" style="flex: 10; border-right: none; justify-content: start; border: none; padding-left: 27px">
+          <div id="saved_clicks" class="settings-text" style="font-size: 13px;padding-bottom: 2px"></div>
+        </div>
+        <div class="settings-section" style="flex: 4; border-right: none; padding-left: 15px; padding-right: 15px;">
+          <div class="settings-text" style="font-size: 13px;padding-bottom: 2px;">AutoLogin</div>
+          <label class="switch settings-icon">
+            <input type="checkbox" id="switch">
+            <span class="slider round"></span>
+          </label> 
+        </div>
+        <div class="settings-section" style="flex: 1; border-right: none">
+          <a class="settings-section-icon" href="#" id="settings" target="_blank" style="flex: 1; margin: 0px">
+            <img class="list-img" style="height: 20px;" src="./icons/cog.png">
+          </a>
+        </div>
+      </div>
+        
+      </div>
     </div>
   </body>
 </html>

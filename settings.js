@@ -73,8 +73,6 @@ function dashboardCourseSelect () {
   }
 }
 
-
-
 //this need to be done here since manifest v2
 window.onload = function(){
     //assign functions

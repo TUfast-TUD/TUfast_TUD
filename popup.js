@@ -4,12 +4,18 @@ window.onload = async function(){
     //TODO
     //fix set width and high, so it does not get destoyed by search function
 
-    //get and display course list
-    chrome.storage.local.get(['dashboardDisplay'], async function(result) {
+    //get things from storage
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter"], async function(result) {
+        //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
         let htmlList = document.getElementsByClassName("list")[0]
         displayCourseList(courseList, htmlList, dashboardDisplay)
+
+        //display saved clicks
+        if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
+        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, <font color='purple'>0 Karma</font> gesammelt.</text>"
+        
     })
 
     //assign switch function
