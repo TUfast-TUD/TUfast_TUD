@@ -1,10 +1,10 @@
 chrome.storage.local.get(['isEnabled', 'loggedOutQis'], function(result) {
-  if(result.isEnabled && !result.loggedOutQis) {
+  if(/*result.isEnabled && */!result.loggedOutQis) {
     document.addEventListener('DOMContentLoaded', function() {
       if(document.getElementsByTagName('a')[4].innerText === "Ich habe die Nutzungsbedingungen gelesen, verstanden und akzeptiert. >>>"){ 
         document.getElementsByTagName('a')[4].click()
         chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
-      } else if (document.getElementById("asdf")){
+      } else if (document.getElementById("asdf") && result.isEnabled){
         chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
           if(!(result.asdf === undefined || result.fdsa === undefined)) {
               chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})

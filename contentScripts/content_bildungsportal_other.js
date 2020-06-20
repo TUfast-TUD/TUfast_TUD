@@ -1,5 +1,5 @@
 chrome.storage.local.get(['isEnabled'], function(result) {
-    if(result.isEnabled) {
+    //if(result.isEnabled) {
         //detect logout
         document.addEventListener('DOMContentLoaded', function() {
             if(document.querySelectorAll('.btn.btn-sm[title="Abmelden"]')[0]) {
@@ -8,5 +8,5 @@ chrome.storage.local.get(['isEnabled'], function(result) {
                 })
             }
         })
-    }
+    //}
 })
