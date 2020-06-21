@@ -113,7 +113,7 @@ window.onload = function(){
       if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
       if(result.openSettingsPageParam === "boost_settings"){ this.document.getElementById("boost_settings").click()}
       if(result.openSettingsPageParam === "first_visit"){
-        document.getElementById("welcome").innerHTML="Spare viele Klicks mit den Funktionen von TUDresdenAutoLogin!</p>"
+        document.getElementById("welcome").innerHTML="Spare dir viel Zeit ⚡ und nervige Klicks 🖱️!</p>"
       }
 
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
