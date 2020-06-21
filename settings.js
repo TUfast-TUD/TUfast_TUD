@@ -118,8 +118,8 @@ window.onload = function(){
       //}
       //update saved clicks  
       //see if any params are available
-      if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
-      if(result.openSettingsPageParam === "time_settings"){ this.document.getElementById("time_settings").click()}
+      if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
+      if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
       document.getElementById("welcome").innerHTML="Spare dir viel Zeit &#9889; und nervige Klicks &#128433;</p>"
       
       this.document.getElementById("saved_time").innerHTML = clicksToTime(result.saved_click_counter)
