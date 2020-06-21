@@ -122,6 +122,7 @@ window.onload = function(){
       if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
       document.getElementById("welcome").innerHTML="Spare dir viel Zeit &#9889; und nervige Klicks &#128433;</p>"
       
+      if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       this.document.getElementById("saved_time").innerHTML = clicksToTime(result.saved_click_counter)
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
