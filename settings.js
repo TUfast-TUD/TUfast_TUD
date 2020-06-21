@@ -74,6 +74,14 @@ function dashboardCourseSelect () {
   }
 }
 
+
+function clicksToTime(clicks) {
+  clicks = clicks*3
+  let secs = clicks % 60
+  let mins = Math.floor(clicks / 60)
+  return "Du hast bisher <font style='color:green'>" + mins + "min " + secs + "s </font>gespart!"
+}
+
 //this need to be done here since manifest v2
 window.onload = function(){
     //assign functions
@@ -111,11 +119,10 @@ window.onload = function(){
       //update saved clicks  
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ this.document.getElementById("auto_login_settings").click()}
-      if(result.openSettingsPageParam === "boost_settings"){ this.document.getElementById("boost_settings").click()}
-      if(result.openSettingsPageParam === "first_visit"){
-        document.getElementById("welcome").innerHTML="Spare viele Klicks mit den Funktionen von TUDresdenAutoLogin!</p>"
-      }
-
+      if(result.openSettingsPageParam === "time_settings"){ this.document.getElementById("time_settings").click()}
+      document.getElementById("welcome").innerHTML="Spare dir viel Zeit &#9889; und nervige Klicks &#128433;</p>"
+      
+      this.document.getElementById("saved_time").innerHTML = clicksToTime(result.saved_click_counter)
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
 
@@ -149,3 +156,4 @@ window.onload = function(){
       });
     }
 }
+

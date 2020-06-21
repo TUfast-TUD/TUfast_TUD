@@ -5,7 +5,7 @@ window.onload = async function(){
     //fix set width and high, so it does not get destoyed by search function
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "boost_counter"], async function(result) {
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter"], async function(result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
@@ -14,9 +14,9 @@ window.onload = async function(){
 
         //display saved clicks
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-        if (result.boost_counter === undefined) {result.boost_counter = 0}
-        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, <a href='javascript:void(0)' id='boost' target='_blank' style='color: purple;'>"  + result.boost_counter + " Boost</a> gesammelt.</text>"
-        this.document.getElementById('boost').onclick = openSettingsBoostSection
+        let time = clicksToTime(result.saved_click_counter)
+        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, das sind <a href='javascript:void(0)' id='time' target='_blank' style='color: purple;'>"  + time + "</a></text>"
+        this.document.getElementById('time').onclick = openSettingsTimeSection
  
     })
 
@@ -34,12 +34,19 @@ window.onload = async function(){
     displayEnabled()
 }
 
+function clicksToTime(clicks) {
+    clicks = clicks*3
+    let secs = clicks % 60
+    let mins = Math.floor(clicks / 60)
+    return mins+"min " + secs + "s"
+}
+
 function openSettings(){
     chrome.runtime.openOptionsPage()
 }
 
-function openSettingsBoostSection(){
-    chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'boost_settings'}, function(result) {})
+function openSettingsTimeSection(){
+    chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'time_settings'}, function(result) {})
 }
 
 function listSearchFunction(){
