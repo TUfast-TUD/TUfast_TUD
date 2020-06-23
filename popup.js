@@ -93,7 +93,7 @@ function displayCourseList(courseList, htmlList, type) {
         courseList = []
         courseList.push({"name": name, "link": link})
     } else {
-        courseList.push({"name": "&emsp;&emsp;&emsp;&emsp;Klicke hier, um die Kursliste manuell zu aktualisieren ...", "link": link, "img": false})
+        courseList.push({"name": "&emsp;&emsp;&emsp;&emsp;Diese Kursliste jetzt aktualisieren ...", "link": link, "img": false})
     }
     
     courseList.forEach(element => {
@@ -111,12 +111,34 @@ function displayCourseList(courseList, htmlList, type) {
         img.className = "list-img"
         img.src = imgSrc
         
-        
         listImg.appendChild(img)
         if(!(element.img === false)) {listEntry.appendChild(listImg)}
         listEntry.appendChild(listText)
 
         htmlList.appendChild(listEntry)
+    })
+
+    //Create button so switch courses <> favorites
+    let listEntry = document.createElement("a")
+    let listText = document.createElement("div")
+    listEntry.className = "list-entry"
+    listEntry.href = "javascript:void(0)"
+    listEntry.onclick = switch_courses_to_show
+    listText.className = "list-entry-text"
+    if(type === "favoriten") listText.innerHTML = "&emsp;&emsp;&emsp;&emsp;Zeige alle Meine Kurse ..."
+    if(type === "meine_kurse") listText.innerHTML = "&emsp;&emsp;&emsp;&emsp;Zeige nur Meine Favoriten ..."
+   
+
+    listEntry.appendChild(listText)
+    htmlList.appendChild(listEntry)
+
+}
+
+function switch_courses_to_show(){
+    chrome.storage.local.get(['dashboardDisplay'], async function(result) {
+        if(result.dashboardDisplay === "meine_kurse") chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
+        if(result.dashboardDisplay === "favoriten") chrome.storage.local.set({dashboardDisplay: "meine_kurse"}, function() {})
+        location.reload()
     })
 }
 
