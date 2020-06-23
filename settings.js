@@ -76,10 +76,10 @@ function dashboardCourseSelect () {
 
 
 function clicksToTime(clicks) {
-  clicks = clicks*3
-  let secs = clicks % 60
-  let mins = Math.floor(clicks / 60)
-  return "Du hast bisher <font style='color:green'>" + mins + "min " + secs + "s </font>gespart!"
+  let clicks_calc = clicks*3
+  let secs = clicks_calc % 60
+  let mins = Math.floor(clicks_calc / 60)
+  return "Du hast bisher <font style='color:green'>" + clicks + " Klicks</font> und <font style='color:green'>" + mins + "min " + secs + "s </font>gespart!"
 }
 
 //this need to be done here since manifest v2

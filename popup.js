@@ -15,7 +15,7 @@ window.onload = async function(){
         //display saved clicks
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
         let time = clicksToTime(result.saved_click_counter)
-        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font>  gespart, das sind <a href='javascript:void(0)' id='time' target='_blank' style='color: purple;'>"  + time + "</a></text>"
+        document.getElementById("saved_clicks").innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank' style='color: purple;'>"  + time + "</a></text>"
         this.document.getElementById('time').onclick = openSettingsTimeSection
  
     })
@@ -93,7 +93,7 @@ function displayCourseList(courseList, htmlList, type) {
         courseList = []
         courseList.push({"name": name, "link": link})
     } else {
-        courseList.push({"name": "Klicke hier, um die Kursliste manuell zu aktualisieren ...", "link": link, "img": false})
+        courseList.push({"name": "&emsp;&emsp;&emsp;&emsp;Klicke hier, um die Kursliste manuell zu aktualisieren ...", "link": link, "img": false})
     }
     
     courseList.forEach(element => {
