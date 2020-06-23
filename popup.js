@@ -67,7 +67,7 @@ function listSearchFunction(){
     }
 
     //always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
-    if(listEntries[listEntries.length - 1].innerHTML.includes("Klicke hier, um die Kursliste manuell zu aktualisieren")){listEntries[listEntries.length - 1].style.display = ""}
+    if(listEntries[listEntries.length - 1].innerHTML.includes("aktualisieren")){listEntries[listEntries.length - 1].style.display = ""}
 }
 
 function displayCourseList(courseList, htmlList, type) {
@@ -77,12 +77,12 @@ function displayCourseList(courseList, htmlList, type) {
     switch(type) {
         case "favoriten":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
-            name = "Klicke hier, um deine Opal-Kurse zu laden."
+            name = "Klicke hier, um deine Opal-Kurse zu laden"
             imgSrc = "./icons/star.png"
             break
         case "meine_kurse":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
-            name = "Klicke hier, um deine Opal-Kurse zu laden!"
+            name = "Klicke hier, um deine Opal-Kurse zu laden"
             imgSrc = "./icons/CoursesOpalIcon.png"
             break
         default:
@@ -91,9 +91,9 @@ function displayCourseList(courseList, htmlList, type) {
 
     if(courseList.length === 0 || courseList === undefined || courseList === false) {
         courseList = []
-        courseList.push({"name": name, "link": link})
+        courseList.push({"name": name, "link": link, "img" : "./icons/reload.png"   })
     } else {
-        courseList.push({"name": "&emsp;&emsp;&emsp;&emsp;Diese Kursliste jetzt aktualisieren ...", "link": link, "img": false})
+        courseList.push({"name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "./icons/reload.png"})
     }
     
     courseList.forEach(element => {
@@ -110,7 +110,7 @@ function displayCourseList(courseList, htmlList, type) {
         listText.innerHTML = element.name
         img.className = "list-img"
         img.src = imgSrc
-        
+        if(element.img === "./icons/reload.png") img.src = "./icons/reload.png"
         listImg.appendChild(img)
         if(!(element.img === false)) {listEntry.appendChild(listImg)}
         listEntry.appendChild(listText)
@@ -118,18 +118,29 @@ function displayCourseList(courseList, htmlList, type) {
         htmlList.appendChild(listEntry)
     })
 
-    //Create button so switch courses <> favorites
+    //Create button so switch courses <> favorites, only if 
     let listEntry = document.createElement("a")
+    let listImg = document.createElement("div")
     let listText = document.createElement("div")
+    let img = document.createElement("img")
+    listImg.className = "list-entry-img"
     listEntry.className = "list-entry"
     listEntry.href = "javascript:void(0)"
     listEntry.onclick = switch_courses_to_show
     listText.className = "list-entry-text"
-    if(type === "favoriten") listText.innerHTML = "&emsp;&emsp;&emsp;&emsp;Zeige alle Meine Kurse ..."
-    if(type === "meine_kurse") listText.innerHTML = "&emsp;&emsp;&emsp;&emsp;Zeige nur Meine Favoriten ..."
+    //listText.style.flex = "none"    //Required
+    img.className = "list-img"
+    //listImg.style.flex = "none"     //Required
+    if(type === "favoriten") img.src = "./icons/CoursesOpalIcon.png"
+    if(type === "meine_kurse") img.src = "./icons/star.png"
+    
+    listImg.appendChild(img)
+    listEntry.appendChild(listImg)
+    if(type === "favoriten") listText.innerHTML = "Zeige alle Meine Kurse ... "
+    if(type === "meine_kurse") listText.innerHTML = "Zeige nur Meine Favoriten ..."
    
-
     listEntry.appendChild(listText)
+   
     htmlList.appendChild(listEntry)
 
 }
