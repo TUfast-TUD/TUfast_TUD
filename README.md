@@ -49,4 +49,5 @@ Fragen, Meinung, Einsprüche, Zusprüche, Muster, Beispiele oder ähnliches?
 ollidev97@gmail.com
 
 ToDo
-wenn nur ein elemnt in suche --> das selecten
+wenn nur ein elemnt in suche --> das selecten 
+ODER bei Enter-Click: generell das erste element auswählen
