@@ -77,12 +77,12 @@ function displayCourseList(courseList, htmlList, type) {
     switch(type) {
         case "favoriten":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
-            name = "Klicke hier, um deine Opal-Kurse zu laden"
+            name = "Klicke, um deine Opal-Kurse zu importieren"
             imgSrc = "./icons/star.png"
             break
         case "meine_kurse":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
-            name = "Klicke hier, um deine Opal-Kurse zu laden"
+            name = "Klicke, um deine Opal-Kurse zu importieren"
             imgSrc = "./icons/CoursesOpalIcon.png"
             break
         default:
@@ -136,8 +136,8 @@ function displayCourseList(courseList, htmlList, type) {
     
     listImg.appendChild(img)
     listEntry.appendChild(listImg)
-    if(type === "favoriten") listText.innerHTML = "Zeige alle Meine Kurse ... "
-    if(type === "meine_kurse") listText.innerHTML = "Zeige nur Meine Favoriten ..."
+    if(type === "favoriten") listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
+    if(type === "meine_kurse") listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
    
     listEntry.appendChild(listText)
    

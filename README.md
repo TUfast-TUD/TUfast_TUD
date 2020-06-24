@@ -46,10 +46,3 @@ Von Studenten - für Studenten.
 ## Kontakt
 Fragen, Meinung, Einsprüche, Zusprüche, Muster, Beispiele oder ähnliches?
 ollidev97@gmail.com
-
-ToDO
-Einheitliches Einstellung (Abschnitte)
-Umschalten der Opal-Kurse aus Einstellungen nehmen
-"Wechsle zu XXX" in Dashboard
-Hier kannst du Einstellungen vornehmen + Cog-Wheel!
-

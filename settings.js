@@ -59,20 +59,20 @@ function displayEnabled() {
   chrome.storage.local.get(['fwdEnabled'], function(result) {
       this.document.getElementById('switch_fwd').checked = result.fwdEnabled
   })
-  chrome.storage.local.get(['dashboardDisplay'], function(result) {
+  /*chrome.storage.local.get(['dashboardDisplay'], function(result) {
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
     if(result.dashboardDisplay === "meine_kurse") {document.getElementById('crs').checked = true}
-  })
+  })*/
 }
 
 //handle dashboard course select customization
-function dashboardCourseSelect () {
+/*function dashboardCourseSelect () {
   if(document.getElementById('fav').checked) {
     chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
   }else if(document.getElementById('crs').checked) {
     chrome.storage.local.set({dashboardDisplay: "meine_kurse"}, function() {})
   }
-}
+}*/
 
 
 function clicksToTime(clicks) {
@@ -88,8 +88,8 @@ window.onload = function(){
     document.getElementById('save_data').onclick= saveUserData
     document.getElementById('delete_data').onclick= deleteUserData
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
-    document.getElementById('fav').onclick = dashboardCourseSelect
-    document.getElementById('crs').onclick = dashboardCourseSelect
+    //document.getElementById('fav').onclick = dashboardCourseSelect
+    //document.getElementById('crs').onclick = dashboardCourseSelect
 
     //add storage listener for autologin
     chrome.storage.onChanged.addListener(function(changes, namespace) {

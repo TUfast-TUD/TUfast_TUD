@@ -9,11 +9,11 @@
     <p class="heading">Willkommen zu TUDresdenAutoLogin</p> 
     <img  style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px;" src="./images/DashboardTutorialSmall.png">
     <p id="welcome"></p> 
-    <p id="settings_comment">Hier kannst du Einstellungen vornehmen.</p> 
+    <p id="settings_comment">Hier kannst du Einstellungen vornehmen<img style="vertical-align: text-bottom;height: 18px;object-fit: contain;" src='./icons/cog.png'/></p> 
     <!-- New Accordion section--> 
     <button class="accordion" id="auto_login_settings">AutoLogin in Opal, Selma & Co.</button>
     <div class="panel">
-      <p>Wenn du deine Login-Daten speicherst, kannst du automatisch in TU Dresden IT-Dienste angemeldet werden.
+      <p>Automatisches Anmelden in alle TU-Dresden Dienste! Daf&uuml;r musst du hier deine Login Daten speichern.
       <br><font class="grey-text">Unterst&uuml;tzt wird fast alles: Opal, Hisqis, Selma, jExam, Outlook ...</font></p>
       <p>Deine Daten werden ausschlie&szlig;lich auf deinem PC (lokal) gespeichert. Nichts wird &uuml;ber das Internet versendet.<br>Wenn du die Erweiterung deinstallierst, werden alle Daten gel&ouml;scht.</p>
       <form>
@@ -22,17 +22,21 @@
         <button type="submit" id="save_data">Speichern</button>
         <p id="status_msg" style="display: inline;"></p> 
       </form>
-      <p>Falls du es dir anders &uuml;berlegst, kannst du deine Daten jederzeit l&ouml;schen:<br>
+      <p>Hier kannst du alle Daten l&ouml;schen:<br>
       <button id="delete_data">Alle Daten l&ouml;schen</button>
       </p>
       <p id="status_msg2"></p> 
     </div>
   <!-- New Accordion section-->
-  <button class="accordion">Meine Opal-Kurse im Dashboard</button>
+  <button class="accordion">Deine Opal-Kurse im Dashboard</button>
   <div class="panel">
     <!--p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p-->
-    <p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br>
-      <form action="#" style="line-height: 0px;">
+    <!--p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br-->
+    <p>Navigiere schnell und einfach zu deinen OPAL-Kursen!<br>
+      <font class="grey-text">Deine Opal-Kurse werden automatisch importiert.  </font> 
+    </p> 
+      
+      <!--form action="#" style="line-height: 0px;">
         <p>
           <input type="radio" id="fav" name="radio-group">
           <label for="fav">Favoriten</label>
@@ -41,11 +45,10 @@
           <input type="radio" id="crs" name="radio-group">
           <label for="crs">Meine Kurse</label>
         </p>
-      </form>
-    </p>
-    <p class="grey-text">Deine Opal-Kurse werden automatisch importiert, wenn du "Favoriten" oder "Meine Kurse" im Opal besuchst.<br>    
+      </form-->
+    
     <p>
-      So funktioniert dein Dashboard:<br>
+      So funktioniert das Dashboard:<br>
       <img  style="max-width: 100%; width: 430px; border: 2px solid #eee; padding: 5px; border-radius: 2px;" src="./images/DashboardTutorialBig.png">
     </p>
     <text class="grey-text">Favoriten </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
@@ -75,7 +78,7 @@
     </p> 
   </div> 
   <!-- New Accordion section--> 
-  <button class="accordion" id="time_settings">Meine gesparte Zeit  &#9202;</button>
+  <button class="accordion" id="time_settings">Deine gesparte Zeit  &#9202;</button>
   <div class="panel">
     <p id='saved_time'></p> 
     <p>Ein Klick = 2 Sekunden.<br> Eine Weiterleitung = 4 Sekunden.<br>Kurs &uuml;ber Dashbaord aufrufen = 5 Sekunden.</p> 
