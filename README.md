@@ -40,8 +40,3 @@ Von Studenten - für Studenten.
 ## Kontakt
 Fragen, Meinung, Einsprüche, Zusprüche, Muster, Beispiele oder ähnliches?
 ollidev97@gmail.com
-
-### immediate ToDo
-
-wenn nur ein elemnt in suche --> das selecten 
-ODER bei Enter-Click: generell das erste element auswählen
