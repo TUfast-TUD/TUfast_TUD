@@ -32,6 +32,23 @@ window.onload = async function(){
 
 
     displayEnabled()
+    
+    //bind enter key --> when enter key is pressed the first course in list is clicked
+    document.getElementById("list").addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            //Cancel the default action, if needed
+            //event.preventDefault();
+            //Click the first element which is visible
+            let list_entries = document.getElementsByClassName("list-entry")
+            for (let i=0; i<list_entries.length;i++){
+                if(!(list_entries[i].style.display === "none")){
+                    list_entries[i].click()
+                    break
+                }
+            }
+        }
+    });
 }
 
 function clicksToTime(clicks) {
