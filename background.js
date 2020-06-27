@@ -24,6 +24,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({fwdEnabled: true}, function() {})
         chrome.storage.local.set({mostLiklySubmittedReview: false}, function() {})
         chrome.storage.local.set({removedReviewBanner: false}, function() {})
+        chrome.storage.local.set({neverShowedReviewBanner: true}, function() {})
         chrome.storage.local.set({encryption_level: 2}, function() {})
         chrome.storage.local.set({meine_kurse: false}, function() {})
         chrome.storage.local.set({favoriten: false}, function() {})
@@ -55,14 +56,20 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         })
         //check if mostLiklySubmittedReview
         chrome.storage.local.get(['mostLiklySubmittedReview'], (resp) => {
-          if(resp.dashboardDisplay === null || resp.dashboardDisplay === undefined || resp.dashboardDisplay === ""){
+          if(resp.mostLiklySubmittedReview === null || resp.mostLiklySubmittedReview === undefined || resp.mostLiklySubmittedReview === ""){
             chrome.storage.local.set({mostLiklySubmittedReview: false}, function() {})
           }
         })
         //check if removedReviewBanner
-        chrome.storage.local.get(['mostLiklySubmittedReview'], (resp) => {
-          if(resp.dashboardDisplay === null || resp.dashboardDisplay === undefined || resp.dashboardDisplay === ""){
+        chrome.storage.local.get(['removedReviewBanner'], (resp) => {
+          if(resp.removedReviewBanner === null || resp.removedReviewBanner === undefined || resp.removedReviewBanner === ""){
             chrome.storage.local.set({removedReviewBanner: false}, function() {})
+          }
+        })
+        //check if neverShowedReviewBanner
+        chrome.storage.local.get(['neverShowedReviewBanner'], (resp) => {
+          if(resp.neverShowedReviewBanner === null || resp.neverShowedReviewBanner === undefined || resp.neverShowedReviewBanner === ""){
+            chrome.storage.local.set({neverShowedReviewBanner: true}, function() {})
           }
         })
         //check if seenInOpalAfterDashbaordUpdate exists

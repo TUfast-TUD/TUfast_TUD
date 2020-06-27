@@ -1,4 +1,4 @@
-chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "removedOpalBanner", "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner"], function(result) {
+chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "removedOpalBanner", "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowReviewBanner"], function(result) {
         
         //decide whether to show dashbaord banner
         let showDashboardBanner = false
@@ -13,6 +13,9 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "remove
         }
         if(mod200Clicks > 20){
             chrome.storage.local.set({removedReviewBanner: false}, function() {})
+        }
+        if(result.neverShowReviewBanner){
+            showReviewBanner = true
         }
         
         //wait until full page is loaded
@@ -103,6 +106,7 @@ function removeReviewBanner() {
     if(document.getElementById("reviewBanner")){
         document.getElementById("reviewBanner").remove()
         chrome.storage.local.set({removedReviewBanner: true}, function() {})
+        chrome.storage.local.set({neverShowReviewBanner: false}, function() {})
     }
 }
 
@@ -110,6 +114,7 @@ function clickedWebstoreLink() {
     if(document.getElementById("reviewBanner")){
         document.getElementById("reviewBanner").remove()
         chrome.storage.local.set({mostLiklySubmittedReview: true}, function() {})
+        chrome.storage.local.set({neverShowReviewBanner: false}, function() {})
     }
 }
 
