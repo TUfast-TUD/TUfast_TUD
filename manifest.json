@@ -260,6 +260,6 @@
     "default_popup": "popup.html"
   },
   "options_page": "settings.html",
-  "web_accessible_resources": ["images/OpalBanner3.png"],
+  "web_accessible_resources": ["images/OpalBanner3.png", "images/autologin32.png"],
   "manifest_version": 2
 }

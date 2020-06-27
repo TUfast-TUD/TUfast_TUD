@@ -1,11 +1,19 @@
-chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "removedOpalBanner"], function(result) {
-    //if(result.isEnabled) {
+chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "removedOpalBanner", "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner"], function(result) {
         
+        //decide whether to show dashbaord banner
         let showDashboardBanner = false
-        let showRemoveBanner = false
         if(result.seenInOpalAfterDashbaordUpdate < 5 && !result.removedOpalBanner) {showDashboardBanner = true}
-        if(result.seenInOpalAfterDashbaordUpdate > 0 && !result.removedOpalBanner) {showRemoveBanner = true}
         chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1}, function() {})
+
+        //decide whether to show review banner
+        let showReviewBanner = false
+        let mod200Clicks = result.saved_click_counter%200
+        if(!result.mostLiklySubmittedReview && mod200Clicks<20 && !result.removedReviewBanner){
+            showReviewBanner = true
+        }
+        if(mod200Clicks > 20){
+            chrome.storage.local.set({removedReviewBanner: false}, function() {})
+        }
         
         //wait until full page is loaded
         window.addEventListener("load", async function(e) {
@@ -13,20 +21,10 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "remove
             let oldLocationHref = location.href
             let parsedCourses = false
 
-            // -- show banner
-            if(showDashboardBanner) {
-                let banner = this.document.createElement("div")
-                let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
-                banner.id ="opalBanner"
-                banner.style.height="50px"
-                banner.innerHTML = '<img src='+imgUrl+' style=" -webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa); height: 55px; right: 30px; z-index: 999; position:fixed;">'
-                //add remove button from second visit on -->
-                if(showRemoveBanner) {
-                    banner.innerHTML = '<img src='+imgUrl+' style=" -webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa); height: 55px; right: 30px; z-index: 999; position:fixed;"> <span id="closeOpalBanner" style="-webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa);font-size: 18px; z-index: 999; cursor: pointer; position: fixed; top: 14.1px; right: 13px; padding: 5.8px 7px; background-color: #ddd">x</span>'
-                }
-                this.document.body.insertBefore(banner, document.body.childNodes[0])
-            }
-            // --
+            // show banner
+            if(showDashboardBanner) {showDashboardBannerFunc()}
+            if(showReviewBanner) {showLeaveReviewBanner()}
+            // 
 
             //if all courses loaded --> parse
             if(!document.getElementsByClassName("pager-showall")[0]){
@@ -35,12 +33,19 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "remove
             //if not --> load all courses
             } else {
                 document.getElementsByClassName("pager-showall")[0].click()
+                chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
                 parsedCourses = false
             }
 
-            //closeOpalBanner Button funciton
+            //close banner buttons
             if (this.document.getElementById("closeOpalBanner")){
                 this.document.getElementById("closeOpalBanner").onclick = closeOpalBanner
+            }
+            if (this.document.getElementById("removeReviewBanner")){
+                this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
+            }
+            if (this.document.getElementById("webstoreLink")){
+                this.document.getElementById("webstoreLink").onclick = clickedWebstoreLink
             }
 
             //use mutation observer to detect page changes
@@ -59,6 +64,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "remove
                     //not all courses loaded already --> load all courses
                     if(document.getElementsByClassName("pager-showall")[0].innerText === "alle anzeigen"){
                         document.getElementsByClassName("pager-showall")[0].click()
+                        chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
                         parsedCourses = false
                     }
                 }
@@ -74,15 +80,46 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "remove
             const observer = new MutationObserver(callback);
             observer.observe(document.body, config);
         }, true)
-    //}
 })
 
 function closeOpalBanner(){
     if(document.getElementById("opalBanner")){
         document.getElementById("opalBanner").remove()
         chrome.storage.local.set({removedOpalBanner: true}, function() {})
-
     }
+}
+
+function showDashboardBannerFunc(){
+    let banner = this.document.createElement("div")
+    banner.id ="opalBanner"
+    banner.style.height="50px"
+    banner.style.margin="auto"
+    //add remove button -->
+    banner.innerHTML = '<img src='+imgUrl+' style=" -webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa); height: 55px; right: 30px; z-index: 999; position:fixed;"> <span id="closeOpalBanner" style="-webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa);font-size: 18px; z-index: 999; cursor: pointer; position: fixed; top: 14.1px; right: 13px; padding: 5.8px 7px; background-color: #ddd">x</span>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
+}
+
+function removeReviewBanner() {
+    if(document.getElementById("reviewBanner")){
+        document.getElementById("reviewBanner").remove()
+        chrome.storage.local.set({removedReviewBanner: true}, function() {})
+    }
+}
+
+function clickedWebstoreLink() {
+    if(document.getElementById("reviewBanner")){
+        document.getElementById("reviewBanner").remove()
+        chrome.storage.local.set({mostLiklySubmittedReview: true}, function() {})
+    }
+}
+
+function showLeaveReviewBanner(){
+    let imgUrl = chrome.runtime.getURL("../images/autologin32.png")
+    let banner = this.document.createElement("div")
+    banner.id ="reviewBanner"
+    banner.style = "font-size:25px; height:75px; line-height:75px;text-align:center"
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; bottom: 3px;height: 35px;"> Dir gefällt TUDresdenAutoLogin &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:20px; font-size:30px; color: #c5c5c5">x</span>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
 function parseCoursesFromWebPage(){
