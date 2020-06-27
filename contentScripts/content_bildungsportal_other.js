@@ -51,6 +51,6 @@ function showLeaveReviewBanner(){
     let banner = this.document.createElement("div")
     banner.id ="reviewBanner"
     banner.style = "font-size:25px; height:75px; line-height:75px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; bottom: 3px;height: 35px;">&nbsp;&nbsp;Dir gefällt TUDresdenAutoLogin? Hinterlasse eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a><span style="font-size: 20px;position:  relative;bottom: 3px;">⭐⭐⭐⭐⭐</span><a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:20px; font-size:30px; color: #c5c5c5">x</span>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; bottom: 3px;height: 35px;">&nbsp;&nbsp;Dir gefällt TUDresdenAutoLogin? Hinterlasse eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a><span style="font-size: 20px;position:  relative;bottom: 3px;">⭐⭐⭐⭐⭐ </span><a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:20px; font-size:30px; color: #c5c5c5">x</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
