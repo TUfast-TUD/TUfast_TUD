@@ -10,10 +10,10 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
     //decide whether to show review banner
     let showReviewBanner = false
     let mod200Clicks = result.saved_click_counter%200
-    if(!result.mostLiklySubmittedReview && mod200Clicks<20 && !result.removedReviewBanner && result.saved_click_counter > 200){
+    if(!result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
         showReviewBanner = true
     }
-    if(mod200Clicks > 20){
+    if(mod200Clicks > 15){
         chrome.storage.local.set({removedReviewBanner: false}, function() {})
     }
     if(result.neverShowReviewBanner && result.saved_click_counter > 200){
@@ -47,10 +47,10 @@ function clickedWebstoreLink() {
 }
 
 function showLeaveReviewBanner(){
-    let imgUrl = chrome.runtime.getURL("../images/autologin32.png")
+    let imgUrl = chrome.runtime.getURL("../images/autologin48.png")
     let banner = this.document.createElement("div")
     banner.id ="reviewBanner"
-    banner.style = "font-size:25px; height:75px; line-height:75px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; bottom: 3px;height: 35px;"> Dir gefällt TUDresdenAutoLogin &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir bitte eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:35px; font-size:25; color: #888">Nein, danke :(</span>'
+    banner.style = "font-size:25px; height:65px; line-height:65px;text-align:center"
+    banner.innerHTML = '<img src='+imgUrl+' style="position:absolute; top:12px;left: 25px;height: 42px;"> Dir gefällt TUDresdenAutoLogin &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:25; color: #888">Nein, danke :(</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
