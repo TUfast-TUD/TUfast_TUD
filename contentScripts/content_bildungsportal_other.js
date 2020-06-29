@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowReviewBanner"], function(result) {
+chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner"], function(result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let mod200Clicks = result.saved_click_counter%200
@@ -16,7 +16,7 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
     if(mod200Clicks > 15){
         chrome.storage.local.set({removedReviewBanner: false}, function() {})
     }
-    if(result.neverShowReviewBanner && result.saved_click_counter > 200){
+    if(result.neverShowedReviewBanner && result.saved_click_counter > 200){
         showReviewBanner = true
     }
     window.addEventListener("load", async function(e) {
@@ -34,7 +34,7 @@ function removeReviewBanner() {
     if(document.getElementById("reviewBanner")){
         document.getElementById("reviewBanner").remove()
         chrome.storage.local.set({removedReviewBanner: true}, function() {})
-        chrome.storage.local.set({neverShowReviewBanner: false}, function() {})
+        chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
 }
 
@@ -42,7 +42,7 @@ function clickedWebstoreLink() {
     if(document.getElementById("reviewBanner")){
         document.getElementById("reviewBanner").remove()
         chrome.storage.local.set({mostLiklySubmittedReview: true}, function() {})
-        chrome.storage.local.set({neverShowReviewBanner: false}, function() {})
+        chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
 }
 
