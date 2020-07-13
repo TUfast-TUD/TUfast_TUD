@@ -35,8 +35,8 @@
 
 input:focus,
 .list-search:focus {
-    outline: none !important;
-    border: #dddddd solid 2px;
+    /*outline: none !important;
+    border: #dddddd solid 2px;*/
 }
 
 .list-entry-text {
