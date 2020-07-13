@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "5.0.3.3",
+  "version": "5.0.3.4",
   "description": "Das Produktivität-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage", "system.cpu"
