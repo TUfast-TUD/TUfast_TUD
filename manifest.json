@@ -1,7 +1,7 @@
 {
   "name": "TU Dresden Auto Login",
   "version": "5.0.3.3",
-  "description": "Spare Zeit ⚡ und viele nervige Klicks 🖱️ beim Nutzen der TU Dresden IT-Dienste 🚀",
+  "description": "Das Produktivität-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage", "system.cpu"
   ],
