@@ -79,7 +79,7 @@ function clicksToTime(clicks) {
   let clicks_calc = clicks*3
   let secs = clicks_calc % 60
   let mins = Math.floor(clicks_calc / 60)
-  return "<b>Du hast bisher <font style='color:green'>" + clicks + " Klicks</font> und <font style='color:green'>" + mins + "min " + secs + "s </font>gespart!</b>"
+  return "<b>Du hast bisher <font style='color:green'>" + clicks + " Klicks</font> gespart. Das sind <font style='color:green'>" + mins + "min " + secs + "s</font>!</b>"
 }
 
 //this need to be done here since manifest v2
