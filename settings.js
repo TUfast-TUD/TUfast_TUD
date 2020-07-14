@@ -120,7 +120,7 @@ window.onload = function(){
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
       if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
-      document.getElementById("welcome").innerHTML="Jetzt kannst du viel Zeit &#9889; und nervige Klicks &#128433; sparen</p>"
+      document.getElementById("welcome").innerHTML="<b>Das Produktivit&auml;ts-Tool f&uuml;r TU Dresden Studierende &#x1F680;</b></p>"
       
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       this.document.getElementById("saved_time").innerHTML = clicksToTime(result.saved_click_counter)

@@ -9,68 +9,18 @@
     <p class="heading">Willkommen zu TUDresdenAutoLogin</p> 
     <img  style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px;" src="./images/DashboardTutorialSmall.png">
     <p id="welcome"></p> 
-    <p id="settings_comment">Hier kannst du Einstellungen vornehmen<img style="vertical-align: text-bottom;height: 18px;object-fit: contain;" src='./icons/cog.png'/></p> 
-    <!-- New Accordion section--> 
-    <button class="accordion" id="auto_login_settings">AutoLogin in Opal, Selma & Co.</button>
+    <p id="settings_comment">Hier findest du alle Funktionen und kannst Einstellungen vornehmen<img style="vertical-align: text-bottom;height: 18px;object-fit: contain;" src='./icons/cog.png'/></p> 
+    <!-- New Accordion section-->
+    <button class="accordion">IT-Dienste schneller finden</button>
     <div class="panel">
-      <p><b>Automatisches Anmelden in alle TU-Dresden Dienste! Daf&uuml;r musst du hier deine Login Daten speichern.</b>
-      <br><font class="grey-text">F&uuml;r Opal, Hisqis, Selma, jExam, Outlook, Matrix-Chat, Magma ...</font></p>
-      <p>Deine Daten werden ausschlie&szlig;lich lokal auf deinem PC gespeichert. Nichts wird &uuml;ber das Internet versendet.<br>Wenn du die Erweiterung deinstallierst, werden alle Daten gel&ouml;scht.</p>
-      <form>
-        <input placeholder="Nutzername (s-Nummer)" type="text" id="username_field"><br>
-        <input placeholder="Passwort" type="password" id="password_field" ><br>
-        <button type="submit" id="save_data">Speichern</button>
-        <p id="status_msg" style="display: inline;"></p> 
-      </form>
-      <p>Hier kannst du alle Daten l&ouml;schen:<br>
-      <button id="delete_data">Alle Daten l&ouml;schen</button>
-      </p>
-      <p id="status_msg2"></p> 
-    </div>
-  <!-- New Accordion section-->
-  <button class="accordion">Deine Opal-Kurse im Dashboard</button>
-  <div class="panel">
-    <!--p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p-->
-    <!--p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br-->
-    <p><b>Navigiere schnell und einfach zu deinen OPAL-Kursen!</b><br>
-      <font class="grey-text">Deine Opal-Kurse werden automatisch importiert. Um einen Kurs im Dashboard zu sehen, musst du im Opal eingeschrieben sein oder ihn als Favorit hinzuf&uuml;gen.</font> 
-    </p> 
-      
-      <!--form action="#" style="line-height: 0px;">
-        <p>
-          <input type="radio" id="fav" name="radio-group">
-          <label for="fav">Favoriten</label>
-        </p>
-        <p>
-          <input type="radio" id="crs" name="radio-group">
-          <label for="crs">Meine Kurse</label>
-        </p>
-      </form-->
-    
-    <p>
-      So funktioniert das Dashboard:<br>
-      <img  style="max-width: 100%; width: 430px; border: 2px solid #eee; padding: 5px; border-radius: 2px;" src="./images/DashboardTutorialBig.png">
-    </p>
-    <p><b>F&uuml;r Power-User</b><br>
-      <font class="">&Ouml;ffne dein Dashboard und beginne direkt zu tippen. Wenn du dann Enter dr&uuml;ckst, wird der erste Kurs aus der Liste ge&ouml;ffnet &#9889&#9889&#9889</font> 
-    </p>
-    <p>
-      <text class="grey-text">Hier kannst du deine Kurse manuell aktualisieren:</text><br>
-      <text class="grey-text">Favoriten </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
-      <text class="grey-text">Meine Kurse </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
-    </p>
-    <p></p>
-  </div>
-  <button class="accordion">Abk&uuml;rzung der Google-Suche</button>
-    <div class="panel">
-      <p><b>Erreiche die Seiten TU-Dresden IT-Dienste schneller!</b></p>
+      <p><b>Abk&uuml;rzungen in der Google-Suche</b><br>
+      Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen.</p>
       <p>Aus 
         <label class="switch">
           <input type="checkbox" id="switch_fwd">
           <span class="slider round"></span>
         </label>
          Ein</p>
-      <p>Du brauchst zum Beispiel nur noch "tumail" in der Google-Suche eingeben, um zur Outlook-Web-App TU Dresden zu kommen.
         <ul style="margin:0;">
           <li class="grey-text">tumail &rarr; Outlook Web App</li>
           <li class="grey-text">opal &rarr; Opal</li>
@@ -83,11 +33,64 @@
         </ul>
     </p> 
   </div> 
+   <!-- New Accordion section-->
+   <button class="accordion">Schneller Zugriff auf Opal-Kurse uvm.</button>
+   <div class="panel">
+     <!--p>Klicke auf das TUDresdenAutoLogin Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/autologin32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p-->
+     <!--p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br-->
+     <p><b>Das Dashbaord</b><br>
+        Greife schneller auf deine Opal-Kurse und IT-Dienste zu.<br>
+       <!--font class="grey-text">Um einen Kurs im Dashboard zu sehen, musst du im Opal eingeschrieben sein oder ihn als Favorit hinzuf&uuml;gen.</font--> 
+     </p> 
+       
+       <!--form action="#" style="line-height: 0px;">
+         <p>
+           <input type="radio" id="fav" name="radio-group">
+           <label for="fav">Favoriten</label>
+         </p>
+         <p>
+           <input type="radio" id="crs" name="radio-group">
+           <label for="crs">Meine Kurse</label>
+         </p>
+       </form-->
+     
+     <p>
+       <img  style="max-width: 100%; width: 550px; border: 2px solid #eee; padding: 5px; border-radius: 2px;" src="./images/DashboardTutorialBig.png">
+     </p>
+     <p><b>F&uuml;r Power-User</b><br>
+       <font class="">&Ouml;ffne dein Dashboard und beginne direkt zu tippen. Wenn du dann Enter dr&uuml;ckst, wird der erste Kurs aus der Liste ge&ouml;ffnet &#9889&#9889&#9889</font> 
+     </p>
+     <!--p>
+       <text class="grey-text">Hier kannst du deine Kurse manuell aktualisieren:</text><br>
+       <text class="grey-text">Favoriten </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
+       <text class="grey-text">Meine Kurse </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
+     </p-->
+     <p></p>
+   </div>
+    <!-- New Accordion section--> 
+    <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co.</button>
+    <div class="panel">
+      <p><b>Automatisches Anmelden f&uuml;r Opal, Selma, Hisqis, jExam, Outlook, Matrix-Chat, Magma uvm.</b></p>
+      <p>Hier kannst du deine Daten sicher lokal speichern, um automatisch angemeldet zu werden.<br>
+        Die Erweiterung kann dir alle Klicks und Anmeldevorg&auml;nge abnehmen.
+      </p>
+      <form>
+        <input placeholder="Nutzername (s-Nummer)" type="text" id="username_field"><br>
+        <input placeholder="Passwort" type="password" id="password_field" ><br>
+        <button type="submit" id="save_data">Lokal Speichern</button>
+        <p id="status_msg" style="display: inline;"></p> 
+      </form>
+      <p>Hier kannst du alle Daten l&ouml;schen:<br>
+      <button id="delete_data">Alle Daten l&ouml;schen</button>
+      </p>
+      <p id="status_msg2"></p> 
+    </div>
+ 
   <!-- New Accordion section--> 
-  <button class="accordion" id="time_settings">Deine gesparte Zeit  &#9202;</button>
+  <button class="accordion" id="time_settings">Deine gesparte Zeit &#9202;</button>
   <div class="panel">
     <p id='saved_time'></p> 
-    <p>Ein Klick = 2 Sekunden.<br> Eine Weiterleitung = 4 Sekunden.<br>Kurs &uuml;ber Dashbaord aufrufen = 5 Sekunden.</p> 
+    <p>Ein Klick = 2 Sekunden.<br> Eine Weiterleitung der Google-Suche = 4 Sekunden.<br>Einen Kurs &uuml;ber Dashbaord aufrufen = 5 Sekunden.</p> 
     <p style='margin-bottom:5px'><b>Dir gef&auml;llt TUDresdenAutoLogin?</b> </p> 
     <ul style="margin:0;">
       <li>Empfehle die Erweiterung einen Freund <font class="grey-text">(+100 Karma f&uuml;r den Tag)</font></li>
