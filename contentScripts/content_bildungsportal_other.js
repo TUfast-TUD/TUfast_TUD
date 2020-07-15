@@ -67,7 +67,7 @@ function showKeyboardShortcutUpdate(){
     let banner = this.document.createElement("div")
     banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Strg+Q</strong>.<a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Okay!</span>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Alt+Q</strong>.<a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Okay!</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 

@@ -265,16 +265,16 @@
   "commands":{
     "_execute_page_action": {
       "suggested_key": {
-        "default": "Ctrl+Q",
-        "windows": "Ctrl+Q",
-        "mac": "Ctrl+Q"
+        "default": "Alt+Q",
+        "windows": "Alt+Q",
+        "mac": "Command+Q"
       }
     },
     "_execute_browser_action": {
       "suggested_key": {
-        "default": "Ctrl+Q",
-        "windows": "Ctrl+Q",
-        "mac": "Ctrl+Q"
+        "default": "Alt+Q",
+        "windows": "Alt+Q",
+        "mac": "Command+Q"
       }
     } 
   }
