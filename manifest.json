@@ -1,6 +1,6 @@
 {
   "name": "TU Dresden Auto Login",
-  "version": "5.0.3.6",
+  "version": "5.0.3.8",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage", "system.cpu"
@@ -261,5 +261,21 @@
   },
   "options_page": "settings.html",
   "web_accessible_resources": ["images/OpalBanner3.png", "images/autologin48.png"],
-  "manifest_version": 2
+  "manifest_version": 2,
+  "commands":{
+    "_execute_page_action": {
+      "suggested_key": {
+        "default": "Ctrl+D",
+        "windows": "Ctrl+D",
+        "mac": "Ctrl+D"
+      }
+    },
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+D",
+        "windows": "Ctrl+D",
+        "mac": "Ctrl+D"
+      }
+    } 
+  }
 }
