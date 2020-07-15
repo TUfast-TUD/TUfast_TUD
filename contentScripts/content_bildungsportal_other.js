@@ -21,7 +21,7 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
         showReviewBanner = true
     }
 
-    if(result.saved_click_counter > 100 && (result.showedKeyboardBanner === false || result.showedKeyboardBanner === undefined || result.showedKeyboardBanner === null || result.showedKeyboardBanner === "")){
+    if(result.saved_click_counter > 100 && !showReviewBanner && (result.showedKeyboardBanner === false || result.showedKeyboardBanner === undefined || result.showedKeyboardBanner === null || result.showedKeyboardBanner === "")){
         showKeyboardUpdate = true
         chrome.storage.local.set({showedKeyboardBanner: true}, function() {})
     }
@@ -49,14 +49,14 @@ function removeReviewBanner() {
     }
 }
 function removeKeyboardShortcutBanner() {
-    if(document.getElementById("removeKeyboardShortcutBanner")){
-        document.getElementById("removeKeyboardShortcutBanner").remove()
+    if(document.getElementById("keyboardBanner")){
+        document.getElementById("keyboardBanner").remove()
     }
 }
 
 function clickedWebstoreLink() {
-    if(document.getElementById("reviewBanner")){
-        document.getElementById("reviewBanner").remove()
+    if(document.getElementById("keyboardBanner")){
+        document.getElementById("keyboardBanner").remove()
         chrome.storage.local.set({mostLiklySubmittedReview: true}, function() {})
         chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
@@ -65,9 +65,9 @@ function clickedWebstoreLink() {
 function showKeyboardShortcutUpdate(){
     let imgUrl = chrome.runtime.getURL("../images/autologin48.png")
     let banner = this.document.createElement("div")
-    banner.id ="reviewBanner"
+    banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Strg+D</strong><a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Okay!</span>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Strg+D</strong>.<a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Okay!</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
