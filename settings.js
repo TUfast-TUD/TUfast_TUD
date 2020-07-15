@@ -79,7 +79,7 @@ function clicksToTime(clicks) {
   let clicks_calc = clicks*3
   let secs = clicks_calc % 60
   let mins = Math.floor(clicks_calc / 60)
-  return "<b>Du hast bisher <font style='color:green'>" + clicks + " Klicks</font> gespart. Das sind <font style='color:green'>" + mins + "min " + secs + "s</font>!</b>"
+  return "<strong>" + clicks + " Klicks &#x1F5B1</strong> und <strong>" + mins + "min " + secs + "s</strong> &#9202; gespart!"
 }
 
 //this need to be done here since manifest v2
@@ -123,7 +123,7 @@ window.onload = function(){
       document.getElementById("welcome").innerHTML="<b>Das Produktivit&auml;ts-Tool f&uuml;r TU Dresden Studierende &#x1F680;</b></p>"
       
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-      this.document.getElementById("saved_time").innerHTML = clicksToTime(result.saved_click_counter)
+      this.document.getElementById("time_settings").innerHTML = clicksToTime(result.saved_click_counter)
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
 
