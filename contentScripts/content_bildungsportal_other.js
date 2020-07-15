@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner"], function(result) {
+chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner"], function(result) {
     //decide whether to show review banner
     let showReviewBanner = false
+    let showKeyboardUpdate = false
     let mod200Clicks = result.saved_click_counter%200
     if(!result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
         showReviewBanner = true
@@ -19,13 +20,23 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
     if(result.neverShowedReviewBanner && result.saved_click_counter > 200){
         showReviewBanner = true
     }
+
+    if(result.saved_click_counter > 100 && (result.showedKeyboardBanner === false || result.showedKeyboardBanner === undefined || result.showedKeyboardBanner === null || result.showedKeyboardBanner === "")){
+        showKeyboardUpdate = true
+        chrome.storage.local.set({showedKeyboardBanner: true}, function() {})
+    }
+
     window.addEventListener("load", async function(e) {
         if(showReviewBanner) {showLeaveReviewBanner()}
+        if(showKeyboardUpdate) {showKeyboardShortcutUpdate()}
         if (this.document.getElementById("removeReviewBanner")){
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
         }
         if (this.document.getElementById("webstoreLink")){
             this.document.getElementById("webstoreLink").onclick = clickedWebstoreLink
+        }
+        if(this.document.getElementById("removeKeyboardShortcutBanner")){
+            this.document.getElementById("removeKeyboardShortcutBanner").onclick = removeKeyboardShortcutBanner
         }
     })
 })
@@ -37,6 +48,11 @@ function removeReviewBanner() {
         chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
 }
+function removeKeyboardShortcutBanner() {
+    if(document.getElementById("removeKeyboardShortcutBanner")){
+        document.getElementById("removeKeyboardShortcutBanner").remove()
+    }
+}
 
 function clickedWebstoreLink() {
     if(document.getElementById("reviewBanner")){
@@ -44,6 +60,15 @@ function clickedWebstoreLink() {
         chrome.storage.local.set({mostLiklySubmittedReview: true}, function() {})
         chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
+}
+
+function showKeyboardShortcutUpdate(){
+    let imgUrl = chrome.runtime.getURL("../images/autologin48.png")
+    let banner = this.document.createElement("div")
+    banner.id ="reviewBanner"
+    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Strg+D</strong><a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Okay!</span>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
 function showLeaveReviewBanner(){
