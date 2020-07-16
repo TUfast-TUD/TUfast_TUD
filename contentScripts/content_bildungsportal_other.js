@@ -50,13 +50,13 @@ function removeReviewBanner() {
 }
 function removeKeyboardShortcutBanner() {
     if(document.getElementById("keyboardBanner")){
-        document.getElementById("keyboardBanner").remove()
+        chrome.runtime.sendMessage({cmd: 'open_shortcut_settings'}, function(result) {})
     }
 }
 
 function clickedWebstoreLink() {
-    if(document.getElementById("keyboardBanner")){
-        document.getElementById("keyboardBanner").remove()
+    if(document.getElementById("reviewBanner")){
+        document.getElementById("reviewBanner").remove()
         chrome.storage.local.set({mostLiklySubmittedReview: true}, function() {})
         chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
@@ -67,7 +67,7 @@ function showKeyboardShortcutUpdate(){
     let banner = this.document.createElement("div")
     banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Alt+Q</strong>.<a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Okay!</span>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu</b> von TUDresdenAutoLogin: Öffne das Dashboard mit <strong>Alt+Q</strong>.<a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Geht nicht? Tastenkombination ändern</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 

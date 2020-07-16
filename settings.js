@@ -82,12 +82,17 @@ function clicksToTime(clicks) {
   return "<strong>" + clicks + " Klicks &#x1F5B1</strong> und <strong>" + mins + "min " + secs + "s</strong> &#9202; gespart!"
 }
 
+function openKeyboardSettings(){
+  chrome.runtime.sendMessage({cmd: 'open_shortcut_settings'}, function(result) {})
+}
+
 //this need to be done here since manifest v2
 window.onload = function(){
     //assign functions
     document.getElementById('save_data').onclick= saveUserData
     document.getElementById('delete_data').onclick= deleteUserData
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
+    document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
     //document.getElementById('fav').onclick = dashboardCourseSelect
     //document.getElementById('crs').onclick = dashboardCourseSelect
 

@@ -35,7 +35,6 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         break;
      case 'update':
         //Show page on update
-        //chrome.tabs.create({ url: "update.html" });
         //chrome.storage.local.set({isEnabled: true}, function() {})
         //chrome.storage.local.set({fwdEnabled: true}, function() {})
         //check if encryption is already on level 2
@@ -118,6 +117,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     case 'open_settings_page':
       openSettingsPage(request.params)
       break
+    case 'open_shortcut_settings':
+      chrome.tabs.create({ url: "chrome://extensions/shortcuts" })
     default:
       console.log('Cmd not found!')
       break
