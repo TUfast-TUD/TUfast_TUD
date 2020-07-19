@@ -127,6 +127,23 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
 })
 
+chrome.commands.onCommand.addListener(function(command) {
+  console.log('Detected command: ' + command )
+  switch(command) {
+    case 'open_opal_hotkey':
+      chrome.tabs.create({ url: "https://bildungsportal.sachsen.de/opal/home/" })
+      break
+    case 'open_owa_hotkey':
+      chrome.tabs.create({ url: "https://msx.tu-dresden.de/owa/" })
+      break
+    case 'open_jexam_hotkey':
+      chrome.tabs.create({url: "https://jexam.inf.tu-dresden.de/"})
+    default:
+      break
+
+  }
+})
+
 //open settings (=options) page, if required set params
 function openSettingsPage(params){
   if(params){

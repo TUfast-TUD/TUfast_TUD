@@ -263,12 +263,37 @@
   "web_accessible_resources": ["images/OpalBanner3.png", "images/autologin48.png"],
   "manifest_version": 2,
   "commands":{
-    "_execute_page_action": {
+    "_execute_browser_action": {
       "suggested_key": {
-        "default": "Ctrl+Y",
-        "windows": "Ctrl+Y",
-        "mac": "Command+Y"
-      }
+        "default": "Alt+Q",
+        "windows": "Alt+Q",
+        "mac": "Command+Q"
+      },
+      "description": "Dashboard öffnen"
+    },
+    "open_opal_hotkey": {
+      "suggested_key": {
+        "default": "Alt+O",
+        "windows":"Alt+O",
+        "mac": "Command+O"
+      },
+      "description": "Opal Öffnen"
+    },
+    "open_owa_hotkey": {
+      "suggested_key": {
+        "default": "Alt+M",
+        "windows":"Alt+M",
+        "mac": "Command+M"
+      },
+      "description": "Outlook Web App öffnen"
+    },
+    "open_jexam_hotkey": {
+      "suggested_key": {
+        "default": "Alt+J",
+        "windows":"Alt+J",
+        "mac": "Command+J"
+      },
+      "description": "jExam öffnen"
     }
   }
 }
