@@ -131,13 +131,13 @@ chrome.commands.onCommand.addListener(function(command) {
   console.log('Detected command: ' + command )
   switch(command) {
     case 'open_opal_hotkey':
-      chrome.tabs.create({ url: "https://bildungsportal.sachsen.de/opal/home/" })
+      chrome.tabs.update({ url: "https://bildungsportal.sachsen.de/opal/home/" })
       break
     case 'open_owa_hotkey':
-      chrome.tabs.create({ url: "https://msx.tu-dresden.de/owa/" })
+      chrome.tabs.update({ url: "https://msx.tu-dresden.de/owa/" })
       break
     case 'open_jexam_hotkey':
-      chrome.tabs.create({url: "https://jexam.inf.tu-dresden.de/"})
+      chrome.tabs.update({url: "https://jexam.inf.tu-dresden.de/"})
     default:
       break
 
