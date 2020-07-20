@@ -93,6 +93,7 @@ window.onload = function(){
     document.getElementById('delete_data').onclick= deleteUserData
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
     document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
+    document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
     //document.getElementById('fav').onclick = dashboardCourseSelect
     //document.getElementById('crs').onclick = dashboardCourseSelect
 
@@ -124,7 +125,8 @@ window.onload = function(){
       //update saved clicks  
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
-      if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
+      else if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
+      else {document.getElementsByTagName("button")[0].click()}
       document.getElementById("welcome").innerHTML="<b>Das Produktivit&auml;ts-Tool f&uuml;r TU Dresden Studierende &#x1F680;</b></p>"
       
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
