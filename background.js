@@ -127,11 +127,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
 })
 
+//register hotkeys
 chrome.commands.onCommand.addListener(function(command) {
   console.log('Detected command: ' + command )
-  chrome.commands.getAll(function(cmds){
-    console.log(JSON.stringify(cmds[1]))
-  })
   switch(command) {
     case 'open_opal_hotkey':
       chrome.tabs.update({ url: "https://bildungsportal.sachsen.de/opal/home/" })
