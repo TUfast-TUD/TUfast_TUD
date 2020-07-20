@@ -133,12 +133,15 @@ chrome.commands.onCommand.addListener(function(command) {
   switch(command) {
     case 'open_opal_hotkey':
       chrome.tabs.update({ url: "https://bildungsportal.sachsen.de/opal/home/" })
+      save_clicks(2)
       break
     case 'open_owa_hotkey':
+      save_clicks(2)
       chrome.tabs.update({ url: "https://msx.tu-dresden.de/owa/" })
       break
     case 'open_jexam_hotkey':
       chrome.tabs.update({url: "https://jexam.inf.tu-dresden.de/"})
+      save_clicks(2)
     default:
       break
   }
