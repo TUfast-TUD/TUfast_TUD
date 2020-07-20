@@ -268,29 +268,28 @@
         "default": "Alt+Q",
         "windows": "Alt+Q",
         "mac": "Command+Q"
-      },
-      "description": "Dashboard öffnen"
+      }
     },
     "open_opal_hotkey": {
       "suggested_key": {
         "default": "Alt+O",
-        "windows":"Alt+O",
+        "windows": "Alt+O",
         "mac": "Command+O"
       },
-      "description": "Opal Öffnen"
+      "description": "Opal öffnen"
     },
     "open_owa_hotkey": {
       "suggested_key": {
         "default": "Alt+M",
-        "windows":"Alt+M",
+        "windows": "Alt+M",
         "mac": "Command+M"
       },
-      "description": "Outlook Web App öffnen"
+      "description": "Mail (OWA) öffnen"
     },
     "open_jexam_hotkey": {
       "suggested_key": {
         "default": "Alt+J",
-        "windows":"Alt+J",
+        "windows": "Alt+J",
         "mac": "Command+J"
       },
       "description": "jExam öffnen"
