@@ -23,7 +23,6 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
 
     if(result.saved_click_counter > 100 && !showReviewBanner && (result.showedKeyboardBanner === false || result.showedKeyboardBanner === undefined || result.showedKeyboardBanner === null || result.showedKeyboardBanner === "")){
         showKeyboardUpdate = true
-        chrome.storage.local.set({showedKeyboardBanner: true}, function() {})
     }
 
     window.addEventListener("load", async function(e) {
@@ -35,8 +34,11 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
         if (this.document.getElementById("webstoreLink")){
             this.document.getElementById("webstoreLink").onclick = clickedWebstoreLink
         }
-        if(this.document.getElementById("removeKeyboardShortcutBanner")){
-            this.document.getElementById("removeKeyboardShortcutBanner").onclick = removeKeyboardShortcutBanner
+        if(this.document.getElementById("openKeyboardShortcutSettings")){
+            this.document.getElementById("openKeyboardShortcutSettings").onclick = openKeyboardShortcutSettings
+        }
+        if(this.document.getElementById("removeKeyboardShortcutSettings")){
+            this.document.getElementById("removeKeyboardShortcutSettings").onclick = removeKeyboardShortcutSettings
         }
     })
 })
@@ -48,9 +50,17 @@ function removeReviewBanner() {
         chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
     }
 }
-function removeKeyboardShortcutBanner() {
+
+function openKeyboardShortcutSettings() {
     if(document.getElementById("keyboardBanner")){
         chrome.runtime.sendMessage({cmd: 'open_shortcut_settings'}, function(result) {})
+    }
+}
+
+function removeKeyboardShortcutSettings() {
+    chrome.storage.local.set({showedKeyboardBanner: true}, function() {})
+    if(document.getElementById("keyboardBanner")){
+        document.getElementById("keyboardBanner").remove()
     }
 }
 
@@ -67,7 +77,7 @@ function showKeyboardShortcutUpdate(){
     let banner = this.document.createElement("div")
     banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu von TUDresdenAutoLogin: Shortcuts.</b> Öffne das Dashboard mit <strong>Alt+Q</strong><a id="removeKeyboardShortcutBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Alle Shortcuts ansehen</span>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu von TUDresdenAutoLogin: Shortcuts.</b> Öffne das Dashboard mit <strong>Alt+Q</strong><a id="openKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #FF5252">Hier Shortcuts aktivieren</a><a id="removeKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">X</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
