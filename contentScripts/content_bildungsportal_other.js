@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner"], function(result) {
+chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2"], function(result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
@@ -21,7 +21,7 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
         showReviewBanner = true
     }
 
-    if(result.saved_click_counter > 100 && !showReviewBanner && (result.showedKeyboardBanner === false || result.showedKeyboardBanner === undefined || result.showedKeyboardBanner === null || result.showedKeyboardBanner === "")){
+    if(result.saved_click_counter > 100 && !showReviewBanner && (result.showedKeyboardBanner2 === false || result.showedKeyboardBanner2 === undefined || result.showedKeyboardBanner2 === null || result.showedKeyboardBanner2 === "")){
         showKeyboardUpdate = true
     }
 
@@ -58,7 +58,7 @@ function openKeyboardShortcutSettings() {
 }
 
 function removeKeyboardShortcutSettings() {
-    chrome.storage.local.set({showedKeyboardBanner: true}, function() {})
+    chrome.storage.local.set({showedKeyboardBanner2: true}, function() {})
     if(document.getElementById("keyboardBanner")){
         document.getElementById("keyboardBanner").remove()
     }

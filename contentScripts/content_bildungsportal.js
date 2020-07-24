@@ -1,5 +1,5 @@
 chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function(result) {
-  if(/*result.isEnabled && */!(result.loggedOutOpal)) { 
+  if(/*result.isEnabled &&*/ !(result.loggedOutOpal)) { 
     //when pop-up shows
     document.addEventListener("DOMNodeInserted", function(e) {
       //select TU Dresden from selector
