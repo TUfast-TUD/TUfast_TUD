@@ -31,6 +31,7 @@ Von Studenten - für Studenten.
 - Google.com als optionale Berechtigung (nur für Weiterleitung benötigt)
 - Opal-Kurse im Dashbaord deaktivierbar machen
 - Reminder für Campus Sachsen ablauf
+- make it available for htw
 
 ## Kontakt
 ollidev97@gmail.com
