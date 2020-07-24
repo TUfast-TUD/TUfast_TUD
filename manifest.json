@@ -251,16 +251,16 @@
     }
   ],
   "icons": {
-    "16": "images/autologin16.png",
-    "32": "images/autologin32.png",
-    "48": "images/autologin48.png",
-    "128": "images/autologin128.png"
+    "16": "images/tufast16.png",
+    "32": "images/tufast32.png",
+    "48": "images/tufast48.png",
+    "128": "images/tufast128.png"
   },
   "browser_action": {
     "default_popup": "popup.html"
   },
   "options_page": "settings.html",
-  "web_accessible_resources": ["images/OpalBanner3.png", "images/autologin48.png"],
+  "web_accessible_resources": ["images/OpalBanner3.png", "images/tufast48.png"],
   "manifest_version": 2,
   "commands":{
     "_execute_browser_action": {

@@ -73,7 +73,7 @@ function clickedWebstoreLink() {
 }
 
 function showKeyboardShortcutUpdate(){
-    let imgUrl = chrome.runtime.getURL("../images/autologin48.png")
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -82,7 +82,7 @@ function showKeyboardShortcutUpdate(){
 }
 
 function showLeaveReviewBanner(){
-    let imgUrl = chrome.runtime.getURL("../images/autologin48.png")
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id ="reviewBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
