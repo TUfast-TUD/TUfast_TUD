@@ -77,7 +77,7 @@ function showKeyboardShortcutUpdate(){
     let banner = this.document.createElement("div")
     banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu von TUDresdenAutoLogin: Shortcuts.</b> Öffne das Dashboard mit <strong>Alt+Q</strong><a id="openKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #FF5252">Hier Shortcuts aktivieren</a><a id="removeKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">X</a>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu von TUfast: Shortcuts.</b> Öffne das Dashboard mit <strong>Alt+Q</strong><a id="openKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #FF5252">Hier Shortcuts aktivieren</a><a id="removeKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">X</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
@@ -86,6 +86,6 @@ function showLeaveReviewBanner(){
     let banner = this.document.createElement("div")
     banner.id ="reviewBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:absolute; top:8px;left: 25px;height: 40px;"> Dir gefällt TUDresdenAutoLogin &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Nein, danke :(</span>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:absolute; top:8px;left: 25px;height: 40px;"> Dir gefällt TUfast &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Nein, danke :(</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }

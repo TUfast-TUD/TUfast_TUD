@@ -1,7 +1,7 @@
 'use strict';
 
 ////////Code to run when extension is loaded
-console.log('Loaded TU Dresden Auto Login')
+console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
 chrome.storage.local.set({loggedOutQis: false}, function() {})
 chrome.storage.local.set({loggedOutOpal: false}, function() {})
@@ -16,7 +16,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
   switch (reason) {
      case 'install':
         //Show page on install
-        console.log('TU Dresden Auto Login installed.')
+        console.log('TUfast installed.')
         openSettingsPage("first_visit")
         chrome.storage.local.set({showed_50_clicks: false}, function() {});
         chrome.storage.local.set({showed_100_clicks: false}, function() {});
@@ -79,7 +79,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         })
         break;
      default:
-        console.log('Other install events within the browser for TU Dresden Auto Login.')
+        console.log('Other install events within the browser for TUfast.')
         break;
   }
 })
@@ -91,7 +91,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       show_badge('Login', '#4cb749', request.timeout)
       break
     case 'no_login_data':
-      //alert("Bitte gib deinen Nutzernamen und Passwort in der TU Dresden Auto Login Erweiterung an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
+      //alert("Bitte gib deinen Nutzernamen und Passwort in der TUfast Erweiterung an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
       //show_badge("Error", '#ff0000', 10000)
       break
     case 'perform_login':
@@ -274,11 +274,11 @@ function saveCourses(course_list) {
   switch (course_list.type) {
     case 'favoriten':
       chrome.storage.local.set({favoriten: JSON.stringify(course_list.list)}, function() {})
-      console.log('saved Favoriten in TUDresdenAutoLogin')
+      console.log('saved Favoriten in TUfast')
       break
     case 'meine_kurse':
       chrome.storage.local.set({meine_kurse: JSON.stringify(course_list.list)}, function() {})
-      console.log('saved Meine Kurse in TUDresdenAutoLogin')
+      console.log('saved Meine Kurse in TUfast')
       break
     default:
       break

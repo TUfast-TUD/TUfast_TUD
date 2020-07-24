@@ -1,4 +1,4 @@
-# TU Dresden Auto Login
+# TUfast
 Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
 Datenschutzerklärung: https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing
@@ -30,6 +30,7 @@ Von Studenten - für Studenten.
 - Notenstatistik in Selma
 - Google.com als optionale Berechtigung (nur für Weiterleitung benötigt)
 - Opal-Kurse im Dashbaord deaktivierbar machen
+- Reminder für Campus Sachsen ablauf
 
 ## Kontakt
 ollidev97@gmail.com
