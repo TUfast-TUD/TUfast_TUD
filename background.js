@@ -32,6 +32,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         chrome.storage.local.set({removedOpalBanner: false}, function() {})
+        chrome.storage.local.set({nameIsTUfast: true}, function() {})
         break;
      case 'update':
         //Show page on update
