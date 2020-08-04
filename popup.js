@@ -12,6 +12,9 @@ window.onload = async function(){
         let htmlList = document.getElementsByClassName("list")[0]
         displayCourseList(courseList, htmlList, dashboardDisplay)
 
+        //execute to filter list immediately
+        listSearchFunction()
+
         //display saved clicks
         if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
         let time = clicksToTime(result.saved_click_counter)
@@ -26,6 +29,7 @@ window.onload = async function(){
     })
 
     //asign input search fct
+        //onkeydown?
     this.document.getElementById("searchListInput").onkeyup=listSearchFunction
 
     this.document.getElementById("settings").onclick = openSettings
@@ -75,7 +79,7 @@ function listSearchFunction(){
     listEntries = list.getElementsByClassName("list-entry")
     
     for(i = 0; i  < listEntries.length; i++){
-       let txtValue = listEntries[i].innerHTML.toLowerCase()
+       let txtValue = listEntries[i].text.toLowerCase()
        if(!txtValue.includes(filter)) {
            listEntries[i].style.display = "none"
        } else {
