@@ -15,6 +15,15 @@
   "content_scripts": [
     {
       "js": [
+        "contentScripts/content_fwd_opalError.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/cgi-bin/forward.cgi"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/content_idp2_1.js"
       ],
       "run_at": "document_start",
