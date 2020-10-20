@@ -32,6 +32,7 @@ Von Studenten - für Studenten.
 - Opal-Kurse im Dashbaord deaktivierbar machen
 - Reminder für Campus Sachsen ablauf
 - make it available for htw
+- show logo in dashboard
 
 ## Kontakt
 ollidev97@gmail.com
