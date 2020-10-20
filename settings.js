@@ -82,6 +82,13 @@ function clicksToTime(clicks) {
   return "<strong>" + clicks + " Klicks &#x1F5B1</strong> und <strong>" + mins + "min " + secs + "s</strong> &#9202; gespart!"
 }
 
+function clicksToTimeNoIcon(clicks) {
+  let clicks_calc = clicks*3
+  let secs = clicks_calc % 60
+  let mins = Math.floor(clicks_calc / 60)
+  return "<strong>" + clicks + " Klicks </strong> und <strong>" + mins + "min " + secs + "s</strong> gespart!"
+}
+
 function openKeyboardSettings(){
   chrome.runtime.sendMessage({cmd: 'open_shortcut_settings'}, function(result) {})
 }
@@ -126,8 +133,8 @@ window.onload = function(){
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
       else if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
-      else {document.getElementsByTagName("button")[0].click()}
-      document.getElementById("welcome").innerHTML="<b>Das Produktivit&auml;ts-Tool f&uuml;r TU Dresden Studierende &#x1F680;</b></p>"
+      /*else {document.getElementsByTagName("button")[0].click()}*/
+      document.getElementById("settings_comment").innerHTML="Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
       
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       this.document.getElementById("time_settings").innerHTML = clicksToTime(result.saved_click_counter)
