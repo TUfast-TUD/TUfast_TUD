@@ -32,6 +32,7 @@ Danke außerdem an alle, die Beratend mitwirken und Feedback geben!
 - Für HTW verfügbar machen
 - Outlook Web App Mail Notifications
 - Entwicklung einer App für Android
+- Logo in Dashboard und Websiten implementieren!
 
 ## Kontakt
 frage@tu-fast.de
