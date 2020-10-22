@@ -19,6 +19,8 @@ Entwickelt von Studenten, für Studenten.
 Contributor:
 - Daniel alias https://github.com/C0ntroller
 - Tim alias tortletim
+- Ali Behbudov alias https://github.com/libhh
+
 
 Danke außerdem an alle, die Beratend mitwirken und Feedback geben!
 
