@@ -403,3 +403,15 @@ function fetchOWA(username, password) {
   })
 
 }
+
+function returnUnreadMessages() {
+  var counter = 0;
+  for(var i = 0; json.findConversation.Body.Conversations.length; i++) {
+    if(typeof json.findConversation.Body.Conversations[i].UnreadCount !== 'undefined') {
+      if(json.findConversation.Body.Conversations[i].UnreadCount == 1) {
+         counter++;
+      }
+    }
+  }
+  return counter;
+}
