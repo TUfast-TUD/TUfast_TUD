@@ -78,6 +78,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
             chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
           }
         })
+        fetchOWA("username", "password")
         break;
      default:
         console.log('Other install events within the browser for TUfast.')
@@ -302,4 +303,103 @@ function loadCourses(type) {
       default:
           break
   }
+}
+
+//function to log msx.tu-dresden.de/owa/ and retrieve the .json containing information about EMails
+function fetchOWA(username, password) {
+  
+  //TODO Decode username, password
+  username=""
+  password=encodeURI("")
+
+  //login
+  fetch("https://msx.tu-dresden.de/owa/auth.owa", {
+    "headers": {
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+      "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
+      "cache-control": "max-age=0",
+      "content-type": "application/x-www-form-urlencoded",
+      "sec-fetch-dest": "document",
+      "sec-fetch-mode": "navigate",
+      "sec-fetch-site": "same-origin",
+      "sec-fetch-user": "?1",
+      "upgrade-insecure-requests": "1"
+    },
+    "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa%2f%23authRedirect%3dtrue",
+    "referrerPolicy": "strict-origin-when-cross-origin",
+    "body": "destination=https%3A%2F%2Fmsx.tu-dresden.de%2Fowa%2F%23authRedirect%3Dtrue&flags=4&forcedownlevel=0&username="+username+"%40msx.tu-dresden.de&password="+password+"&passwordText=&isUtf8=1",
+    "method": "POST",
+    "mode": "no-cors",
+    "credentials": "include"
+  })
+  .then(()=>{
+    //get clientID and correlationID
+    fetch("https://msx.tu-dresden.de/owa/", {
+      "headers": {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
+        "cache-control": "max-age=0",
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "same-origin",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": "1"
+      },
+      "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa",
+      "referrerPolicy": "strict-origin-when-cross-origin",
+      "body": null,
+      "method": "GET",
+      "mode": "cors",
+      "credentials": "include"
+    })
+    //extract x-owa-correlationid. correlation id is
+    .then(resp => resp.text()).then(respText => {
+      let temp = respText.split("window.clientId = '")[1]
+      let clientId = temp.split("'")[0]
+      let corrId = clientId + "_" + (new Date()).getTime()
+      console.log("corrID: " + corrId)
+    })
+    //getConversations
+    .then(corrId => {
+      fetch("https://msx.tu-dresden.de/owa/sessiondata.ashx?appcacheclient=0", {
+        "headers": {
+          "accept": "*/*",
+          "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "same-origin",
+          "x-owa-correlationid": corrId,
+          "x-owa-smimeinstalled": "1"
+        },
+        "referrer": "https://msx.tu-dresden.de/owa/",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "POST",
+        "mode": "cors",
+        "credentials": "include"
+      })
+      .then(r => r.text()).then(z => console.log(z))
+      //logout
+      .then(()=>{
+        fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
+          "headers": {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "same-origin",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1"
+          },
+          "referrer": "https://msx.tu-dresden.de/owa/",
+          "referrerPolicy": "strict-origin-when-cross-origin",
+          "body": null,
+          "method": "GET",
+          "mode": "cors",
+          "credentials": "include"
+        })
+      })
+    }) 
+  })
+
 }
