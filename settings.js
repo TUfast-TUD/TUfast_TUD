@@ -134,9 +134,9 @@ window.onload = function(){
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
       else if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
       /*else {document.getElementsByTagName("button")[0].click()}*/
-      document.getElementById("settings_comment").innerHTML="Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
-      
+    
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
+      this.document.getElementById("settings_comment").innerHTML="Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
       this.document.getElementById("time_settings").innerHTML = clicksToTime(result.saved_click_counter)
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
