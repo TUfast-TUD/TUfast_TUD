@@ -309,7 +309,7 @@ function loadCourses(type) {
 function fetchOWA(username, password) {
   
   //TODO Decode username, password
-  username=""
+  username=encodeURI("")
   password=encodeURI("")
 
   //login
@@ -378,7 +378,9 @@ function fetchOWA(username, password) {
         "mode": "cors",
         "credentials": "include"
       })
-      .then(r => r.text()).then(z => console.log(z))
+      .then(resp => resp.json()).then(respText => {
+        console.log(countUnreadMsg(respText))
+      })
       //logout
       .then(()=>{
         fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
@@ -404,14 +406,16 @@ function fetchOWA(username, password) {
 
 }
 
-function returnUnreadMessages() {
-  var counter = 0;
-  for(var i = 0; json.findConversation.Body.Conversations.length; i++) {
-    if(typeof json.findConversation.Body.Conversations[i].UnreadCount !== 'undefined') {
-      if(json.findConversation.Body.Conversations[i].UnreadCount == 1) {
-         counter++;
+function countUnreadMsg(json) {
+  let conversations = json.findConversation.Body.Conversations
+  let counterUnreadMsg = 0;
+  for(var i = 0; i < conversations.length; i++) {
+    var conv = conversations[i]
+    if(conv.hasOwnProperty('UnreadCount')) {
+      if(conv.UnreadCount == 1) {
+        counterUnreadMsg++;
       }
     }
   }
-  return counter;
+  return counterUnreadMsg;
 }
