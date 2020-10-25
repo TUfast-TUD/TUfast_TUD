@@ -33,6 +33,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         chrome.storage.local.set({removedOpalBanner: false}, function() {})
         chrome.storage.local.set({nameIsTUfast: true}, function() {})
+        chrome.storage.local.set({enabledOWAFetch: false}, function() {})
         break;
      case 'update':
         //Show page on update
@@ -78,13 +79,47 @@ chrome.runtime.onInstalled.addListener(async(details) => {
             chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
           }
         })
-        fetchOWA("username", "password")
+        //check if enabledOWAFetch exists
+        chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
+          if(resp.enabledOWAFetch === null || resp.enabledOWAFetch === undefined || resp.enabledOWAFetch === ""){
+            chrome.storage.local.set({enabledOWAFetch: false}, function() {})
+          }
+        })
         break;
      default:
         console.log('Other install events within the browser for TUfast.')
         break;
   }
 })
+
+//set Interval to fetch mails from owa, if enabled
+chrome.storage.local.get(["enabledOWAFetch"], (resp) => {
+ if(resp.enabledOWAFetch === true){
+   enableOWAFetch()
+  }
+})
+
+//check if user stored login data
+async function loginDataExists(){
+  getUserData().then((userData) => {
+    if(userData.asdf === undefined || userData.fdsa === undefined){
+      return false
+    } else {
+      return true
+    }
+  })
+}
+
+//set alaram and function to be executed to fetch from owa
+  //TODO: implement optional permissions for that mail thing!
+function enableOWAFetch() {
+  chrome.alarms.create("fetchOWAAlarm", {delayInMinutes: 0.1, periodInMinutes: 0.1})
+  chrome.alarms.onAlarm.addListener((alarm) => {
+    getUserData().then((userData) => {
+      fetchOWA(userData.asdf, userData.fdsa)
+    })
+  })
+}
 
 //show badge when extension is triggered
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
@@ -309,8 +344,8 @@ function loadCourses(type) {
 function fetchOWA(username, password) {
   
   //TODO Decode username, password
-  username=encodeURI("")
-  password=encodeURI("")
+  username=encodeURI(username)
+  password=encodeURI(password)
 
   //login
   fetch("https://msx.tu-dresden.de/owa/auth.owa", {
