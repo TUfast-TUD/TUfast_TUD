@@ -1,5 +1,12 @@
 'use strict';
 
+//modify headers test
+chrome.webRequest.onHeadersReceived.addListener(details => {
+  let header = details.responseHeaders.find(e => e.name.toLowerCase() === 'content-disposition');
+  header.value = 'inline; filename="filename.pdf';
+  return { responseHeaders: details.responseHeaders };
+}, { urls: ['https://bildungsportal.sachsen.de/opal/*'] }, ['blocking', 'responseHeaders']);
+
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})

@@ -3,14 +3,16 @@
   "version": "5.1.0.3",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
-    "storage", "system.cpu"
+    "storage", "system.cpu", "https://bildungsportal.sachsen.de/opal/*",
+    "webRequest",
+    "webRequestBlocking"
   ],
   "optional_permissions": [],
   "background": {
     "scripts": [
       "background.js"
     ],
-    "persistent": false
+    "persistent": true
   },
   "content_scripts": [
     {
