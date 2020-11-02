@@ -1,13 +1,15 @@
-chrome.storage.local.get(['isEnabled' ,'fwdEnabled'], function (result) {
+chrome.storage.local.get(['isEnabled', 'fwdEnabled', "saved_click_counter"], function (result) {
     if (result.isEnabled || result.fwdEnabled) {
-        //on load
-        document.addEventListener("DOMNodeInserted", function(e) {
-            if(!document.getElementById("TUFastLogo")) {insertLogo()} 
-        })
-        //on document changes
-            window.addEventListener("load", function() {
-            if(!document.getElementById("TUFastLogo")) {insertLogo()}
-        }, true) 
+        //if(result.saved_click_counter > 25) {
+            //on load
+            document.addEventListener("DOMNodeInserted", function(e) {
+                if(!document.getElementById("TUFastLogo")) {insertLogo()} 
+            })
+            //on document changes
+                window.addEventListener("load", function() {
+                if(!document.getElementById("TUFastLogo")) {insertLogo()}
+            }, true) 
+        //}
     }
 })
 
@@ -23,7 +25,7 @@ function insertLogo() {
         logo_link.href = "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de"
         logo_link.title = "powered by TUFast. You're welcome."
         logo_img.style.display = "inline-block"
-        logo_img.style.width = "37px"
+        logo_img.style.width = "35px"
         logo_img.src = imgUrl
         logo_node.id ="TUFastLogo"
 
