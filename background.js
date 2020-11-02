@@ -1,11 +1,13 @@
 'use strict';
 
-//modify headers test
+//modify http header from opal, to view pdf in browser without the need to download it
 chrome.webRequest.onHeadersReceived.addListener(details => {
   let header = details.responseHeaders.find(e => e.name.toLowerCase() === 'content-disposition');
+  if(header.value.includes(".zip")) return //ignore .zip
+  console.log(header)
   header.value = 'inline; filename="filename.pdf';
   return { responseHeaders: details.responseHeaders };
-}, { urls: ['https://bildungsportal.sachsen.de/opal/*'] }, ['blocking', 'responseHeaders']);
+}, { urls: ['https://bildungsportal.sachsen.de/opal/downloadering*'] }, ['blocking', 'responseHeaders']);
 
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')

@@ -223,7 +223,8 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal_insertLogo.js"
+        "contentScripts/content_bildungsportal_insertLogo.js",
+        "contentScripts/content_bildungsportal_viewPDFinBrowser.js"
       ],
       "run_at": "document_start",
       "matches": [
