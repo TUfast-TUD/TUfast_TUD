@@ -3,6 +3,8 @@ Chrome-Erweiterung, um die IT-Dienste der TU Dresden besser nutzerbar zu machen 
 
 Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
+**Notice on license and copyright**: Information will be included shortly in this repo. If you need more information now, please contact me @olli.dev97@mail.com
+
 ## So funktionierts
 Funktionen:
  - Shortcuts, z.B. Alt+O für Opal öffnen
