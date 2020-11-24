@@ -192,6 +192,7 @@ function save_clicks(counter){
   })
 }
 
+//provide hash in the right format
 function hashDigest(string) {
   return new Promise (async (resolve, reject) => {
     const encoder = new TextEncoder()
