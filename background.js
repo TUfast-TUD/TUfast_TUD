@@ -220,6 +220,9 @@ function getKeyBuffer(){
   })
 }
 
+//this functions saved user login-data locally. 
+//user data is encrypted using the crpyto-js library (aes-cbc). The encryption key is created from pc-information with system.cpu
+//a lot of encoding and transforming needs to be done, in order to provide all values in the right format.
 async function setUserData(userData) {
   let userDataConcat = userData.asdf + '@@@@@' + userData.fdsa
   let encoder = new TextEncoder()
@@ -242,6 +245,8 @@ async function setUserData(userData) {
 }
 
 //return {asdf: "", fdsa: ""}
+//decrypt and return user data
+//a lot of encoding and transforming needs to be done, in order to provide all values in the right format
 async function getUserData(){
   return new Promise(async (resolve, reject) => {
       let keyBuffer = await getKeyBuffer()
@@ -269,6 +274,7 @@ async function getUserData(){
       })  
     })
 }
+
 //course_list = {type:"", list:[{link:link, name: name}, ...]}
 function saveCourses(course_list) {
   course_list.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
