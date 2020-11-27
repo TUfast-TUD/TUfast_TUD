@@ -195,6 +195,8 @@ function save_clicks(counter){
   })
 }
 
+//create hash from input-string (can also be json ofcourse)
+//output hash is always of same length and is of type buffer
 function hashDigest(string) {
   return new Promise (async (resolve, reject) => {
     const encoder = new TextEncoder()
@@ -203,16 +205,19 @@ function hashDigest(string) {
   })
 } 
 
+//get key for encryption (format: buffer)
 function getKeyBuffer(){
   return new Promise((resolve, reject) => {
     let sysInfo = ""
     chrome.system.cpu.getInfo(info => {
-      //TROUBLE if api changes!
+      //TROUBLE if api changes: Encrypted data can not be uncrypted
+      //delete temporary information
       delete info['processors']
       delete info['temperatures']
       sysInfo = sysInfo + JSON.stringify(info)
       chrome.runtime.getPlatformInfo(async (info) => {
         sysInfo = sysInfo + JSON.stringify(info)
+        //create key
         let keyBuffer = await crypto.subtle.importKey('raw' , await hashDigest(sysInfo), 
                                                       {name: "AES-CBC",}, 
                                                       false, 
@@ -223,12 +228,18 @@ function getKeyBuffer(){
   })
 }
 
+//this functions saved user login-data locally. 
+//user data is encrypted using the crpyto-js library (aes-cbc). The encryption key is created from pc-information with system.cpu
+//a lot of encoding and transforming needs to be done, in order to provide all values in the right format.
 async function setUserData(userData) {
+  //collect all required information for encryption in the right format
   let userDataConcat = userData.asdf + '@@@@@' + userData.fdsa
   let encoder = new TextEncoder()
   let userDataEncoded =  encoder.encode(userDataConcat)
   let keyBuffer = await getKeyBuffer()
   let iv = crypto.getRandomValues(new Uint8Array(16))
+  
+  //encrypt
   let userDataEncrypted =  await crypto.subtle.encrypt(
     {
       name: "AES-CBC",
@@ -237,6 +248,8 @@ async function setUserData(userData) {
     keyBuffer,
     userDataEncoded
   )
+  
+  //adjust format to save encrypted data in lokal storage
   userDataEncrypted = Array.from(new Uint8Array(userDataEncrypted))                             
   userDataEncrypted = userDataEncrypted.map(byte => String.fromCharCode(byte)).join('')           
   userDataEncrypted = btoa(userDataEncrypted)
@@ -245,8 +258,11 @@ async function setUserData(userData) {
 }
 
 //return {asdf: "", fdsa: ""}
+//decrypt and return user data
+//a lot of encoding and transforming needs to be done, in order to provide all values in the right format
 async function getUserData(){
   return new Promise(async (resolve, reject) => {
+      //get required data for decryption
       let keyBuffer = await getKeyBuffer()
       chrome.storage.local.get(['Data'], async (Data) => {
         //check if Data exists, else return
@@ -258,6 +274,8 @@ async function getUserData(){
         iv = new Uint8Array(iv)
         let userDataEncrypted = atob(Data.Data.slice(32))                                       
         userDataEncrypted = new Uint8Array(userDataEncrypted.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
+        
+        //decrypt
         let UserData =  await crypto.subtle.decrypt(
           {
             name: "AES-CBC",
@@ -266,12 +284,15 @@ async function getUserData(){
           keyBuffer,
           userDataEncrypted
         )
+        
+        //adjust to useable format
         UserData = new TextDecoder().decode(UserData)
         UserData = UserData.split("@@@@@")
         resolve({asdf: UserData[0], fdsa: UserData[1]})
       })  
     })
 }
+
 //course_list = {type:"", list:[{link:link, name: name}, ...]}
 function saveCourses(course_list) {
   course_list.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
