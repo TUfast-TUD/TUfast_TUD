@@ -1,12 +1,12 @@
-chrome.storage.local.get(['isEnabled' ,'fwdEnabled'], function (result) {
+chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket'], function (result) {
     if (result.isEnabled || result.fwdEnabled) {
         //on load
         document.addEventListener("DOMNodeInserted", function(e) {
-            if(!document.getElementById("TUFastLogo")) {insertLogo()} 
+            if(!document.getElementById("TUFastLogo")) {insertLogo(result.Rocket)} 
         })
         //on document changes
         window.addEventListener("load", function() {
-            if(!document.getElementById("TUFastLogo")) {insertLogo()}
+            if (!document.getElementById("TUFastLogo")) { insertLogo(result.Rocket)}
         }, true) 
     }
 })
@@ -24,8 +24,17 @@ function logoOnClick(){
     if(blocker && !timeUp) return
 
     GLOBAL_counter++
+    if (GLOBAL_counter === 100) {
+        document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
+        chrome.storage.local.set({ Rocket: "colorful" }, function () {})
+        insertLogo("colorful")
+    }
+    if (GLOBAL_counter === 500) {
+        document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
+        chrome.storage.local.set({ Rocket: "colorfulPRO" }, function () { })
+        insertLogo("colorfulPRO")
+    }
     
-    //create node if not existend
     if (!document.getElementById('counter')) {
         let body = document.getElementsByTagName("body")[0]
         let counter = document.createElement("div")
@@ -50,39 +59,35 @@ function logoOnClick(){
     }
 
     counter = document.getElementById('counter')
-    counter.style.color = funnyColor(counter.style.color, 2)
+    counter.style.color = funnyColor(counter.style.color, 6)
 
     switch (GLOBAL_counter) {
-        case 2:
+        case 20:
             display_value = "You like numbers?"
             typeOfMsg = "text"
             break
-        case 10:
-            display_value = "Keep going! :)"
-            typeOfMsg = "text"
-            break
-        case 30:
-            display_value = "Just numbers..."
-            typeOfMsg = "text"
-            break
-        case 60:
-            display_value = "Maybe there is more?!"
+        case 50:
+            display_value = "Thats good!"
             typeOfMsg = "text"
             break
         case 100:
+            display_value = "&#x1F680; &#x1F680; &#x1F680;"
+            typeOfMsg = "text"
+            break
+        case 150:
             display_value = "No, there isn't."
             typeOfMsg = "text"
             break
-        case 150:
+        case 250:
             display_value = "You can stop now!"
             typeOfMsg = "text"
             break
-        case 200:
+        case 400:
             display_value = "Your are ambitious."
             typeOfMsg = "text"
             break
-        case 150:
-            display_value = "Okay well done."
+        case 500:
+            display_value = "PRO PRO PRO"
             typeOfMsg = "text"
             break
         default:
@@ -126,26 +131,49 @@ function funnyColor(color, step) {
     return color;
 };
 
-function insertLogo() {
+function insertLogo(rocketType) {
+    let imgUrl, header, logo_node, logo_link, logo_img, badge
     try {
         if(document.getElementsByClassName("page-header")[0] != undefined){
-            let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
-            let header = document.getElementsByClassName("page-header")[0]
-            let logo_node = document.createElement("h1")
-            let logo_link = document.createElement("a")
-            let logo_img= document.createElement("img")
-
+            header = document.getElementsByClassName("page-header")[0]
+            logo_node = document.createElement("h1")
+            logo_link = document.createElement("a")
+            logo_img = document.createElement("img")
             logo_link.href = "javascript:void(0)"
+            logo_node.id = "TUFastLogo"
             logo_link.title = "powered by TUFast. You're welcome."
-            logo_img.style.display = "inline-block"
-            logo_img.style.width = "37px"
-            logo_img.src = imgUrl
-            logo_node.id ="TUFastLogo"
             logo_node.onclick = logoOnClick
 
-            logo_link.appendChild(logo_img)
-            logo_node.appendChild(logo_link)
+            switch (rocketType) {
+                case "colorfulPRO":
+                    logo_node.style.fontSize = "30px"
+                    logo_node.style.paddingTop = "5px"
+                    logo_link.style.position = "relative"
+                    logo_link.innerHTML = "&#x1F680;"
+                    badge = document.createElement("span")
+                    badge.classList.add("badge")
+                    badge.innerHTML = "PRO"
+                    badge.style.fontSize = "0.3em"
+                    badge.style.position = "absolute"
+                    badge.style.bottom ="0px"
+                    badge.style.left = "20px"
+                    logo_link.appendChild(badge)
+                    break
+                case "colorful":
+                    logo_node.style.fontSize = "30px"
+                    logo_node.style.paddingTop = "5px"
+                    logo_link.innerHTML = "&#x1F680;"
+                    break
+                default:
+                    imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+                    logo_img.style.display = "inline-block"
+                    logo_img.style.width = "37px"
+                    logo_img.src = imgUrl
 
+                    logo_link.appendChild(logo_img)
+                    break
+            }
+            logo_node.appendChild(logo_link)
             header.append(logo_node)
         }
     }
