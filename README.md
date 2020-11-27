@@ -7,11 +7,13 @@ Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dre
 
 ## So funktionierts
 Funktionen:
- - Shortcuts, z.B. Alt+O für Opal öffnen
  - Automatisches Anmelden in Opal, Selma und Co.
- - Opal-Kurse und Opal-Favoriten als Lesezeichen im Dashbaord
- - Abkürzungen in der Google-Suche, z.B. "tumail" --> Mail OWA
+ - Opal-Kurse und Opal-Favoriten über Lesezeichen im Dashbaord öffnen
+ - Abkürzungen in der Google-Suche, z.B. "tumail" --> OWA Mail TU Dresden
+ - Shortcuts für TU Dresden IT-Services, z.B. Alt+O für Opal öffnen
  - Notenstatistik im Hisqis
+ - Sammlung aller TU Dresden IT-Services
+ - responsive, fast und user-centered design
  
 Die Anwendung funktioniert ausschließlich lokal und kommuniziert nicht mit dem Internet. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. Unterstützt werden opal, hisqis, selma, cloudstore. outlook web app, magma, matrix, jExam
 
