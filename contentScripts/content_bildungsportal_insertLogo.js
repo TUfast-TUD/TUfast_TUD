@@ -1,40 +1,48 @@
-chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket'], function (result) {
+chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket', 'PRObadge'], function (result) {
     if (result.isEnabled || result.fwdEnabled) {
         //on load
         document.addEventListener("DOMNodeInserted", function(e) {
-            if(!document.getElementById("TUFastLogo")) {insertLogo(result.Rocket)} 
+            if(!document.getElementById("TUFastLogo")) {insertLogo(result.Rocket, result.PRObadge)} 
         })
         //on document changes
         window.addEventListener("load", function() {
-            if (!document.getElementById("TUFastLogo")) { insertLogo(result.Rocket)}
+            if (!document.getElementById("TUFastLogo")) { insertLogo(result.Rocket, result.PRObadge)}
         }, true) 
     }
 })
 
-var GLOBAL_counter = 0
-var counterTimeoutRemove
-var timeout = 1000
-var blocker = false
-var timeUp = false
-var display_value
-var typeOfMsg = ""
+var GLOBAL_counter = 0  //count clicks on icon
+var counterTimeoutRemove    //timer
+var timeout = 1000  //timeout for timer
+var blocker = false //block icon click
+var timeUp = false  //true, when time is up
+var display_value   //number of text, which shows on screen
+var typeOfMsg = ""  //type of message which is displayed
 
 function logoOnClick(){
 
+    //block counting up when text is promted
     if(blocker && !timeUp) return
 
     GLOBAL_counter++
+
+    //switch logo to colorful
     if (GLOBAL_counter === 100) {
         document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
         chrome.storage.local.set({ Rocket: "colorful" }, function () {})
-        insertLogo("colorful")
+        insertLogo("colorful", false)
     }
+    //add pro badge
     if (GLOBAL_counter === 500) {
         document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
-        chrome.storage.local.set({ Rocket: "colorfulPRO" }, function () { })
-        insertLogo("colorfulPRO")
+        chrome.storage.local.set({ PRObadge: "PRO" }, function () { })
+        insertLogo("colorful", "PRO")
     }
+
+    //keep adding logos
+    if (GLOBAL_counter > 1000) insertLogo("colorful", false)
     
+    //show screen overlay
     if (!document.getElementById('counter')) {
         let body = document.getElementsByTagName("body")[0]
         let counter = document.createElement("div")
@@ -62,33 +70,45 @@ function logoOnClick(){
     counter.style.color = funnyColor(counter.style.color, 6)
 
     switch (GLOBAL_counter) {
-        case 20:
-            display_value = "You like numbers?"
+        case 10:
+            display_value = "You like numbers ❓"
             typeOfMsg = "text"
             break
         case 50:
-            display_value = "Thats good!"
-            typeOfMsg = "text"
+            display_value = "Maybe there's more 🕵️‍♂️"
+            typeOfMsg = "text_middle"
             break
         case 100:
             display_value = "&#x1F680; &#x1F680; &#x1F680;"
             typeOfMsg = "text"
             break
         case 150:
-            display_value = "No, there isn't."
+            display_value = "That's all!"
             typeOfMsg = "text"
             break
         case 250:
             display_value = "You can stop now!"
             typeOfMsg = "text"
             break
-        case 400:
-            display_value = "Your are ambitious."
+        case 350:
+            display_value = "Your are ambitious..."
             typeOfMsg = "text"
             break
         case 500:
             display_value = "PRO PRO PRO"
             typeOfMsg = "text"
+            break
+        case 750:
+            display_value = 'Join TUFast on OPAL<br><a location="_blank" href="https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/27979546624?8</a>'
+            typeOfMsg = "text_long"
+            break
+        case 1000:
+            display_value = 'You saw 1000 numbers now'
+            typeOfMsg = "text_long"
+            break
+        case 1010:
+            display_value = 'There are infinite more ...'
+            typeOfMsg = "text_long"
             break
         default:
             typeOfMsg="number"
@@ -103,11 +123,20 @@ function logoOnClick(){
         counter.style.fontSize = "100px"
         timeout = 2000
         blocker = true
+    } else if (typeOfMsg==="text_long"){
+        counter.style.fontSize = "80px"
+        timeout = 7000
+        blocker = true
+    } else if (typeOfMsg === "text_middle") {
+        counter.style.fontSize = "80px"
+        timeout = 4000
+        blocker = true
     }
 
     counter.innerHTML = display_value
 
     timeUp = false
+
     counterTimeoutRemove = setTimeout(function () {
         counter = document.getElementById('counter')
         counter.parentNode.removeChild(counter)
@@ -131,7 +160,7 @@ function funnyColor(color, step) {
     return color;
 };
 
-function insertLogo(rocketType) {
+function insertLogo(rocketType, PRObadge = false) {
     let imgUrl, header, logo_node, logo_link, logo_img, badge
     try {
         if(document.getElementsByClassName("page-header")[0] != undefined){
@@ -144,35 +173,41 @@ function insertLogo(rocketType) {
             logo_link.title = "powered by TUFast. You're welcome."
             logo_node.onclick = logoOnClick
 
+            //Create rocket icon
             switch (rocketType) {
-                case "colorfulPRO":
-                    logo_node.style.fontSize = "30px"
-                    logo_node.style.paddingTop = "5px"
-                    logo_link.style.position = "relative"
-                    logo_link.innerHTML = "&#x1F680;"
-                    badge = document.createElement("span")
-                    badge.classList.add("badge")
-                    badge.innerHTML = "PRO"
-                    badge.style.fontSize = "0.3em"
-                    badge.style.position = "absolute"
-                    badge.style.bottom ="0px"
-                    badge.style.left = "20px"
-                    logo_link.appendChild(badge)
-                    break
                 case "colorful":
                     logo_node.style.fontSize = "30px"
                     logo_node.style.paddingTop = "5px"
                     logo_link.innerHTML = "&#x1F680;"
                     break
+                //default is black
                 default:
                     imgUrl = chrome.runtime.getURL("../images/tufast48.png")
                     logo_img.style.display = "inline-block"
                     logo_img.style.width = "37px"
                     logo_img.src = imgUrl
-
                     logo_link.appendChild(logo_img)
                     break
             }
+
+            //add badge
+            switch (PRObadge) {
+                case "PRO":
+                    logo_link.style.position = "relative"
+                    badge = document.createElement("span")
+                    badge.classList.add("badge")
+                    badge.innerHTML = "PRO"
+                    badge.style.fontSize = "0.3em"
+                    badge.style.position = "absolute"
+                    badge.style.bottom = "0px"
+                    badge.style.left = "20px"
+                    logo_link.appendChild(badge)
+                    break
+                default:
+                    break
+            }
+
+            //append to header
             logo_node.appendChild(logo_link)
             header.append(logo_node)
         }

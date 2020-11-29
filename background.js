@@ -1,7 +1,5 @@
 'use strict';
 
-chrome.storage.local.set({ Rocket: "black" }, function () { })
-
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
@@ -35,7 +33,8 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
         chrome.storage.local.set({removedOpalBanner: false}, function() {})
         chrome.storage.local.set({nameIsTUfast: true}, function() {})
-        chrome.storage.local.set({colorfulRocket: "black"}, function() {})
+        chrome.storage.local.set({ colorfulRocket: "black" }, function () { })
+        chrome.storage.local.set({PRObadge: false}, function() {})
         break;
      case 'update':
         //Show page on update
