@@ -11,7 +11,6 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
     let showReviewBanner = false
     let showKeyboardUpdate = false
     let mod200Clicks = result.saved_click_counter%200
-    let showRenameBanner = false
     if(!result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
         showReviewBanner = true
     }
@@ -26,14 +25,9 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
         showKeyboardUpdate = true
     }
 
-    //if(!showKeyboardUpdate && !showReviewBanner && (result.nameIsTUfast === false || result.nameIsTUfast === undefined || result.nameIsTUfast === null || result.nameIsTUfast === "")){
-    //    showRenameBanner = true
-    //}
-
     window.addEventListener("load", async function(e) {
         if(showReviewBanner) {showLeaveReviewBanner()}
         if(showKeyboardUpdate) {showKeyboardShortcutUpdate()}
-        //if(showRenameBanner) {showNameIsTUfastBanner()}
 
         if (this.document.getElementById("removeReviewBanner")){
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -105,14 +99,5 @@ function showLeaveReviewBanner(){
     banner.id ="reviewBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
     banner.innerHTML = '<img src='+imgUrl+' style="position:absolute; top:8px;left: 25px;height: 40px;"> Dir gefällt <b>TUfast</b> &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Nein, danke :(</span>'
-    this.document.body.insertBefore(banner, document.body.childNodes[0])
-}
-
-function showNameIsTUfastBanner() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
-    let banner = this.document.createElement("div")
-    banner.id ="nameBanner"
-    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center;"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:absolute; top:8px;left: 25px;height: 40px;">TUDresdenAutoLogin heißt jetzt: &#160&#160<img src='+imgUrl+' style="position:relative; height: 30px;"> <span style="font-size: 28px"><b>TUfast</b></span><a id="removeNameBanner" href="javascript:void(0)" style="position:absolute; right:70px; font-size:22; color: #444">Okay! X</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }

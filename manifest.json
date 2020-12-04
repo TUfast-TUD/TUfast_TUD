@@ -1,6 +1,6 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "5.1.0.3",
+  "version": "5.1.0.4",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage", "system.cpu"
@@ -221,7 +221,8 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal_insertLogo.js"
+        "contentScripts/content_bildungsportal_insertLogo.js",
+        "contentScripts/content_bildungsportal_snowFlake.js"
       ],
       "run_at": "document_start",
       "matches": [
