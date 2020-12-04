@@ -221,8 +221,7 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal_insertLogo.js",
-        "contentScripts/content_bildungsportal_snowFlake.js"
+        "contentScripts/content_bildungsportal_insertLogo.js"
       ],
       "run_at": "document_start",
       "matches": [

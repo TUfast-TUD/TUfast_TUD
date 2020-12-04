@@ -35,7 +35,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({nameIsTUfast: true}, function() {})
         chrome.storage.local.set({ colorfulRocket: "black" }, function () { })
         chrome.storage.local.set({ PRObadge: false }, function () { })
-        chrome.storage.local.set({flakeState: true}, function() {})
+        chrome.storage.local.set({flakeState: false}, function() {})
         break;
      case 'update':
         //Show page on update
@@ -84,7 +84,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         //flakeState
         chrome.storage.local.get(['flakeState'], function (result) {
           if (result.flakeState === undefined || result.flakeState === null) { //set to true, so that state will be false!
-            chrome.storage.local.set({ flakeState: true }, function () { })
+            chrome.storage.local.set({ flakeState: false }, function () { })
           }
         })
         break;
