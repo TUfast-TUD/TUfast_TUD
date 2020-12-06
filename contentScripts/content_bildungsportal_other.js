@@ -98,6 +98,6 @@ function showLeaveReviewBanner(){
     let banner = this.document.createElement("div")
     banner.id ="reviewBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:absolute; top:8px;left: 25px;height: 40px;"> Dir gefällt <b>TUfast</b> &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Nein, danke :(</span>'
+    banner.innerHTML = '<img src=' + imgUrl +' style="position:absolute; top:8px;left: 25px;height: 40px;"> Dir gefällt <b>TUfast</b> &#11088;&#11088;&#11088;&#11088;&#11088; ? Hinterlasse mir eine Bewertung im <a id="webstoreLink" style="text-decoration-line:underline" target="_blank" href="https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de">Webstore</a>!<a id="removeReviewBanner" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #888">Nein, danke :(</span>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
