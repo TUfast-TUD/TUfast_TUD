@@ -2,7 +2,7 @@ chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket', 'PRObadge', 'flak
     if (result.isEnabled || result.fwdEnabled) {
         
         //decide which overlay to show
-        let christmasTime = true
+        let christmasTime = false
         let d = new Date()
         let month = d.getMonth() + 1 //starts at 0
         let day = d.getDate()
@@ -19,7 +19,7 @@ chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket', 'PRObadge', 'flak
             //on document changes
             window.addEventListener("load", function () {
                 if (!document.getElementById("flake")) insertFlakeSwitch(result.flakeState)
-                if (!document.getElementById("snowflakes")) insertFlakes()
+                if (!document.getElementById("snowflakes") && result.flakeState) insertFlakes()
             }, true) 
         //standard rocket logo
         } else {
@@ -313,7 +313,7 @@ function insertFlakeSwitch(currentlyActivated) {
             flake_link.style.textDecoration = "none"
             flake_link.href = "javascript:void(0)"
             flake.id = "flake"
-            flake_link.title = "Switch flakes on/off."
+            flake_link.title = "Click me. Winter powered by TUfast."
             flake.onclick = flakesSwitchOnClick
             flake.style.paddingTop = "2px"
             flake.style.paddingLeft = "3px"
