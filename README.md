@@ -1,7 +1,7 @@
 # TUfast 🚀
 Chrome-Erweiterung, um die IT-Dienste der TU Dresden besser nutzerbar zu machen und Zeit zu sparen!
 
-Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
+Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
 **Notice on license and copyright**: Information will be included shortly in this repo. If you need more information now, please contact me @olli.dev97@mail.com
 
