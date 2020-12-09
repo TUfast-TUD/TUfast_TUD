@@ -26,6 +26,9 @@ Contributor:
 
 Danke außerdem an alle, die Beratend mitwirken und Feedback geben!
 
+## Changelog
+https://github.com/OliEfr/TUDresdenAutoLogin/blob/master/CHANGELOG.md
+
 ## Roadmap
 - Support login auf TU Dresden Website
 - Support slub login
