@@ -18,7 +18,7 @@ Unterstützt werden opal, hisqis, selma, cloudstore. outlook web app, magma, mat
 Die Anwendung funktioniert ausschließlich lokal auf dem PC. Nutzerdaten werden mit Systeminformationen (chrome.system API) verschlüsselt gespeichert. 
 
 ## Feature-Bounties 🤩
-Feature implementieren -> neuen Code einschicken -> Feature wird in das offizielle TUfast übernommen --> Bounty kassieren!
+Feature implementieren -> neuen Code einschicken -> Feature wird in das offizielle TUfast übernommen -> Bounty kassieren!
 
 Am besten Forks du dieses Repo und stellst nach der Implementierung einen Pull-Request.
 Alternativ kannst du dieses Repo als .zip runterladen und mir nach der Implementierung eine .zip schicken.
@@ -37,8 +37,7 @@ Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementieru
 
 ### 15€ 💸
 - 🙄
-
---> du kannst auch gerne Vorschläge für eigene Ideen machen.
+- --> du kannst auch gerne Vorschläge für eigene Ideen machen.
 
 ## Entwickler
 Entwickelt von Studenten, für Studenten:
@@ -48,14 +47,8 @@ Entwickelt von Studenten, für Studenten:
 
 ... und alle anderen freundlichen Supporter :)
 
-## Roadmap
-- Support login auf TU Dresden Website
-- Für HTW verfügbar machen
-- Outlook Web App Mail Notifications
-- Logo in Dashboard und Websiten implementieren!
-
 ## Kontakt
 frage@tu-fast.de
 ollidev97@gmail.com
 
-Datenschutzerklärung: https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing
+[Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing)
