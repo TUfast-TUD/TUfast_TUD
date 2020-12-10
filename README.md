@@ -28,15 +28,15 @@ Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementieru
 TUfast Telegram: [t.me/TUfast_TUD](https://t.me/TUfast_TUD)
 
 ### 45€ 💸💸💸
-- **pdfs im OPAL in neuer Browser-Seite anzeigen und nicht direkt runtergeladen**: Kommt schon, dass ist wirklich ziemlich nervig. Man will nur kurz was nachschauen und muss den scheiß gleich runterladen. Mit diesem Feature habe ich in [dieser Branche](https://github.com/OliEfr/TUDresdenAutoLogin/tree/ModifyHeaders) schon begonnen; es technisch allerdings nicht ganz hinbekommen. Wirde mich wirklich sehr freuen, wenn das jemand schafft.
+- **pdfs im OPAL in neuer Browser-Seite anzeigen und nicht direkt runtergeladen**: Kommt schon, dass ist wirklich ziemlich nervig. Man will nur kurz was nachschauen und muss den scheiß gleich runterladen. Mit diesem Feature habe ich in [dieser Branche](https://github.com/OliEfr/TUfast_TUD/tree/ModifyHeaders) schon begonnen; es technisch allerdings nicht ganz hinbekommen. Wirde mich wirklich sehr freuen, wenn das jemand schafft.
 - **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js. Aktuell gibts dieses Feature nur für Hisqis.
 - **Support Slub-Login**: automatisches Anmelden in Slub-Account. Die Nutzerdaten dafür sollte man in den Einstellungen speichern können.
 - **Design-Rework von der Einstellungsseite in TUfast**: Hauptsache Nutzerfreundlicher als es jetzt ist. Am besten sprechen wir uns hier vorher kurz ab.
 
 ### 35€ 💸💸
 - **Reminder für Ablauf der Campus Sachsen Lizenz (Word & Co)**: Ist im Prinzip einfach zu machen: das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. Die Berechtigung für die Campussachsen-Website sollte optional sein.
-- **Benachrichtigungen für neue Mails im OWA**: Damit habe ich in [dieser Branche](https://github.com/OliEfr/TUDresdenAutoLogin/tree/OWAHackFetch) schon begonnen. Das Abrufen der Mails funktioniert. Die ganze Logik drumrum und ein Eintrag auf der Einstellungsseite muss noch implementiert werden.
-- **Portierung für Firefox**: Viele Fragen nach, wann es die Erweiterung für Firefox gibt. Der entstehende Code muss für Chrome und Firefox nutzbar sein. Siehe auch [dieses Issue](https://github.com/OliEfr/TUDresdenAutoLogin/issues/2)
+- **Benachrichtigungen für neue Mails im OWA**: Damit habe ich in [dieser Branche](https://github.com/OliEfr/TUfast_TUD/tree/OWAHackFetch) schon begonnen. Das Abrufen der Mails funktioniert. Die ganze Logik drumrum und ein Eintrag auf der Einstellungsseite muss noch implementiert werden.
+- **Portierung für Firefox**: Viele Fragen nach, wann es die Erweiterung für Firefox gibt. Der entstehende Code muss für Chrome und Firefox nutzbar sein. Siehe auch [dieses Issue](https://github.com/OliEfr/TUfast_TUD/issues/2)
 
 ### 15€ 💸
 - 🙄
