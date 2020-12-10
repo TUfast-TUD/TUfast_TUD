@@ -34,6 +34,7 @@ Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementieru
 ### 35€ 💸💸
 - **Reminder für Ablauf der Campus Sachsen Lizenz (Word & Co)**: Ist im Prinzip einfach zu machen: das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. Die Berechtigung für die Campussachsen-Website sollte optional sein.
 - **Benachrichtigungen für neue Mails im OWA**: Damit habe ich in [dieser Branche](https://github.com/OliEfr/TUDresdenAutoLogin/tree/OWAHackFetch) schon begonnen. Das Abrufen der Mails funktioniert. Die ganze Logik drumrum und ein Eintrag auf der Einstellungsseite muss noch implementiert werden.
+- **Portierung für Firefox**: Viele Fragen nach, wann es die Erweiterung für Firefox gibt. Der entstehende Code muss für Chrome und Firefox nutzbar sein. Siehe auch [dieses Issue](https://github.com/OliEfr/TUDresdenAutoLogin/issues/2)
 
 ### 15€ 💸
 - 🙄
