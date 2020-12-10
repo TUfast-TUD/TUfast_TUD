@@ -36,7 +36,7 @@ Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementieru
 - **Benachrichtigungen für neue Mails im OWA**: Damit habe ich in [dieser Branche](https://github.com/OliEfr/TUDresdenAutoLogin/tree/OWAHackFetch) schon begonnen. Das Abrufen der Mails funktioniert. Die ganze Logik drumrum und ein Eintrag auf der Einstellungsseite muss noch implementiert werden.
 
 ### 15€ 💸
-🙄
+- 🙄
 
 --> du kannst auch gerne Vorschläge für eigene Ideen machen.
 
