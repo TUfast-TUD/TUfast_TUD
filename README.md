@@ -25,7 +25,7 @@ Alternativ kannst du dieses Repo als .zip runterladen und mir nach der Implement
 
 Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementierung beginnst. Das spart am Ende vielleicht Nerven und sichert dir den Bounty :)
 
-TUfast Telegram: [t.me.TUfast_TUD](t.me.TUfast_TUD)
+TUfast Telegram: [t.me/TUfast_TUD](t.me/TUfast_TUD)
 
 ### 45€ 💸💸💸
 - **pdfs im OPAL in neuer Browser-Seite anzeigen und nicht direkt runtergeladen**: Kommt schon, dass ist wirklich ziemlich nervig. Man will nur kurz was nachschauen und muss den scheiß gleich runterladen. Mit diesem Feature habe ich in [dieser Branche](https://github.com/OliEfr/TUDresdenAutoLogin/tree/ModifyHeaders) schon begonnen; es technisch allerdings nicht ganz hinbekommen. Wirde mich wirklich sehr freuen, wenn das jemand schafft.
