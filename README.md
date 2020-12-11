@@ -28,7 +28,7 @@ Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementieru
 TUfast Telegram: [t.me/TUfast_TUD](https://t.me/TUfast_TUD)
 
 ### 45€ 💸💸💸
-- **High-Prio: Portierung für Firefox**: Viele Fragen nach, wann es die Erweiterung für Firefox gibt. Der entstehende Code muss für Chrome und Firefox nutzbar sein. Siehe auch [dieses Issue](https://github.com/OliEfr/TUfast_TUD/issues/2)
+- **High-Prio - Portierung für Firefox**: Viele Fragen nach, wann es die Erweiterung für Firefox gibt. Der entstehende Code muss für Chrome und Firefox nutzbar sein. Siehe auch [dieses Issue](https://github.com/OliEfr/TUfast_TUD/issues/2). Außerdem muss die Erweiterung über nicht offi
 - **pdfs im OPAL in neuer Browser-Seite anzeigen und nicht direkt runtergeladen**: Kommt schon, dass ist wirklich ziemlich nervig. Man will nur kurz was nachschauen und muss den scheiß gleich runterladen. Mit diesem Feature habe ich in [dieser Branche](https://github.com/OliEfr/TUfast_TUD/tree/ModifyHeaders) schon begonnen; es technisch allerdings nicht ganz hinbekommen. Wirde mich wirklich sehr freuen, wenn das jemand schafft.
 - **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js. Aktuell gibts dieses Feature nur für Hisqis.
 - **Support Slub-Login**: automatisches Anmelden in Slub-Account. Die Nutzerdaten dafür sollte man in den Einstellungen speichern können.
