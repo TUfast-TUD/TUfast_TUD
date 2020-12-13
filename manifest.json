@@ -135,6 +135,18 @@
     },
     {
       "js": [
+        "contentScripts/content_fwd_tumed.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?q=tumed*",
+        "https://www.google.com/search?q=tumed*",
+        "https://www.google.de/search*&q=tumed&oq=tumed*",
+        "https://www.google.com/search*&q=tumed&oq=tumed*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/content_fwd_selma.js"
       ],
       "run_at": "document_start",
