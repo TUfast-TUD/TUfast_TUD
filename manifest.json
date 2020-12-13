@@ -285,14 +285,14 @@
       "suggested_key": {
         "default": "Alt+Q",
         "windows": "Alt+Q",
-        "mac": "Command+Q"
+        "mac": "Alt+Q"
       }
     },
     "open_opal_hotkey": {
       "suggested_key": {
         "default": "Alt+O",
         "windows": "Alt+O",
-        "mac": "Command+O"
+        "mac": "Alt+O"
       },
       "description": "Opal öffnen"
     },
@@ -300,7 +300,7 @@
       "suggested_key": {
         "default": "Alt+M",
         "windows": "Alt+M",
-        "mac": "Command+M"
+        "mac": "Alt+M"
       },
       "description": "Mail (OWA) öffnen"
     },
@@ -308,7 +308,7 @@
       "suggested_key": {
         "default": "Alt+J",
         "windows": "Alt+J",
-        "mac": "Command+J"
+        "mac": "Alt+J"
       },
       "description": "jExam öffnen"
     }
