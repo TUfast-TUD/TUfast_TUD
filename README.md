@@ -20,10 +20,7 @@ Die Anwendung funktioniert ausschließlich lokal auf dem PC. Nutzerdaten werden 
 ## Feature-Bounties 🤩
 Feature implementieren -> neuen Code einschicken -> Feature wird in das offizielle TUfast übernommen -> Bounty kassieren!
 
-Am besten Forks du dieses Repo und stellst nach der Implementierung einen Pull-Request.
-Alternativ kannst du dieses Repo als .zip runterladen und mir nach der Implementierung eine .zip schicken.
-
-Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementierung beginnst. Das spart am Ende vielleicht Nerven und sichert dir den Bounty :)
+Gerne können wir ein Feature genauer Besprechen, bevor du mit der Implementierung beginnst. Das spart am Ende vielleicht Zeit und sichert dir den Bounty :)
 
 TUfast Telegram: [t.me/TUfast_TUD](https://t.me/TUfast_TUD)
 
