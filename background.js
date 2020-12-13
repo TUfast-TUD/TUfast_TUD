@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+TODO
+  review link ändern
+*/
+
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
@@ -14,6 +19,7 @@ chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
 /*
 //additional content script injection
+//
 chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
   // create rule
   var ruleTUMED = {
@@ -114,7 +120,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
 })
 
 //show badge when extension is triggered
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'show_ok_badge':
       show_badge('Login', '#4cb749', request.timeout)
@@ -147,7 +153,11 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       openSettingsPage(request.params)
       break
     case 'open_shortcut_settings':
-      chrome.tabs.create({ url: "chrome://extensions/shortcuts" })
+      let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
+      let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+      if (isFirefox) {chrome.tabs.create({ url: "https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten" })}
+      else {chrome.tabs.create({ url: "chrome://extensions/shortcuts" })} //for chrome and everything else
+      
     default:
       console.log('Cmd not found!')
       break
@@ -234,12 +244,12 @@ function hashDigest(string) {
 function getKeyBuffer(){
   return new Promise((resolve, reject) => {
     let sysInfo = ""
-    chrome.system.cpu.getInfo(info => {
-      //TROUBLE if api changes: Encrypted data can not be uncrypted
-      //delete temporary information
-      delete info['processors']
-      delete info['temperatures']
-      sysInfo = sysInfo + JSON.stringify(info)
+    let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    
+    //key differs between browsers, because different APIs
+    if (isFirefox) {
+      sysInfo = sysInfo + window.navigator.hardwareConcurrency
       chrome.runtime.getPlatformInfo(async (info) => {
         sysInfo = sysInfo + JSON.stringify(info)
         //create key
@@ -249,7 +259,23 @@ function getKeyBuffer(){
                                                       ['encrypt', 'decrypt']) 
         resolve(keyBuffer)       
       })
-    })
+    //chrome, edge and everything else
+    } else {
+      chrome.system.cpu.getInfo(info => {
+        delete info['processors']
+        delete info['temperatures']
+        sysInfo = sysInfo + JSON.stringify(info)
+        chrome.runtime.getPlatformInfo(async (info) => {
+          sysInfo = sysInfo + JSON.stringify(info)
+          //create key
+          let keyBuffer = await crypto.subtle.importKey('raw' , await hashDigest(sysInfo), 
+                                                        {name: "AES-CBC",}, 
+                                                        false, 
+                                                        ['encrypt', 'decrypt']) 
+          resolve(keyBuffer)       
+        })
+      })
+    }
   })
 }
 

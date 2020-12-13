@@ -10,7 +10,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutCloudstore'], function(result) 
                         chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
                         document.getElementById('user').value = (result.asdf)
                         document.getElementById('password').value = (result.fdsa)
-                        document.getElementById('submit').click()
+                        document.getElementById('submit-form').click()
                     } else {
                         chrome.runtime.sendMessage({cmd: "no_login_data"});
                     }
