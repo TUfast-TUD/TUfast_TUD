@@ -42,6 +42,8 @@ TUfast Telegram: [t.me/TUfast_TUD](https://t.me/TUfast_TUD)
 - Login im [Medizinerportal](https://eportal.med.tu-dresden.de/login) mit ZIH-Login; also Username s1111111 und Password password
 - --> du kannst auch gerne Vorschläge für eigene Ideen machen.
 
+- Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
+
 ## Entwickler
 Entwickelt von Studenten, für Studenten:
 
