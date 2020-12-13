@@ -3,6 +3,7 @@
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
+chrome.storage.local.set({loggedOutTumed: false}, function() {})
 chrome.storage.local.set({loggedOutQis: false}, function() {})
 chrome.storage.local.set({loggedOutOpal: false}, function() {})
 chrome.storage.local.set({loggedOutOwa: false}, function() {})
@@ -10,6 +11,24 @@ chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+
+/*
+//additional content script injection
+chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
+  // create rule
+  var ruleTUMED = {
+    conditions: [
+      new chrome.declarativeContent.PageStateMatcher({
+        pageUrl: { hostEquals: 'eportal.med.tu-dresden.de', schemes: ['https', 'http'] }
+      })
+    ],
+    actions: [ new chrome.declarativeContent.RequestContentScript({js: ["contentScripts/content_tumed.js" ]}) ]
+  }
+    // register rule
+    chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
+})
+*/
+
 
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
