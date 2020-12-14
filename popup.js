@@ -32,7 +32,7 @@ window.onload = async function(){
         //onkeydown?
     this.document.getElementById("searchListInput").onkeyup=listSearchFunction
 
-    this.document.getElementById("settings").onclick = openSettings
+    this.document.getElementById("settings").onclick = openSettingsTimeSection
 
 
     displayEnabled()
@@ -63,7 +63,8 @@ function clicksToTime(clicks) {
 }
 
 function openSettings(){
-    chrome.runtime.openOptionsPage()
+    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {})
+
 }
 
 function openSettingsTimeSection(){
