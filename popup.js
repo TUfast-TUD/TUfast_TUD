@@ -62,6 +62,7 @@ function clicksToTime(clicks) {
     return mins+"min " + secs + "s"
 }
 
+
 function openSettings(){
     chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {})
 
