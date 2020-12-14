@@ -6,7 +6,7 @@ chrome.storage.local.get(['isEnabled'], function (result) {
             let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
             let rawGrades = parseGrades();
             $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">powered by <img src=' + imgUrl +' style="position:relative; right: 2px;height: 15px;"><a href="https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de">TUfast</a></p>'
+                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">powered by <img src=' + imgUrl +' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p>'
             );
             var ctx = document.getElementById('myChart').getContext('2d');
             ctx.canvas.width = 500;
