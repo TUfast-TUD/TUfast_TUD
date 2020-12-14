@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function(result) {
     //decide whether to show review banner
-    let showReviewBanner = true
+    let showReviewBanner = false
     let showKeyboardUpdate = false
 
     let mod200Clicks = result.saved_click_counter%200
