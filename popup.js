@@ -32,7 +32,7 @@ window.onload = async function(){
         //onkeydown?
     this.document.getElementById("searchListInput").onkeyup=listSearchFunction
 
-    this.document.getElementById("settings").onclick = openSettingsTimeSection
+    this.document.getElementById("settings").onclick = this.openSettings
 
 
     displayEnabled()
@@ -64,12 +64,15 @@ function clicksToTime(clicks) {
 
 
 function openSettings(){
-    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {})
-
+    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {}) //for some reason i need to pass empty param - else it wont work in ff
+    window.close()
+    return false //Required for ff
 }
 
 function openSettingsTimeSection(){
     chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'time_settings'}, function(result) {})
+    window.close()
+    return false //Required for ff
 }
 
 function listSearchFunction(){
@@ -189,6 +192,8 @@ function saveEnabled() {
                 chrome.storage.local.set({isEnabled: !(resp.isEnabled)}, function() {})
             } else {
                 chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'auto_login_settings'}, function(result) {})
+                window.close()
+                
             }
         })
     })
