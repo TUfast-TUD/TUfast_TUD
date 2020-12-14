@@ -1,8 +1,8 @@
 # TUfast 🚀
-Chrome-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen.
+Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen.
 Spart Zeit und Nerven.
 
-Verfügbar im [Chrome Web Store](https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de)
+Verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-fast.de)
 
 Lizenz und Copyright: Informationen werden in Kürze hinzugefügt. Melde dich einfach bei akuten Fragen.
 

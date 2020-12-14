@@ -3,7 +3,7 @@
   "version": "5.1.0.7",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
-    "storage", "system.cpu", "declarativeContent"
+    "storage", "system.cpu"
   ],
   "optional_permissions":[],
   "background": {
@@ -38,10 +38,8 @@
       "run_at": "document_start",
       "matches": [
         "https://jexam.inf.tu-dresden.de/",
-        "https://www.google.de/search?q=jexam*",
-        "https://www.google.com/search?q=jexam*",
-        "https://www.google.de/search*&q=jexam&oq=jexam*",
-        "https://www.google.com/search*&q=jexam&oq=jexam*"
+        "https://www.google.de/search?*q=jexam*",
+        "https://www.google.com/search?*q=jexam*"
       ]
     },
     {
@@ -50,14 +48,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tustore*",
-        "https://www.google.com/search?q=tustore*",
-        "https://www.google.de/search*&q=tustore&oq=tustore*",
-        "https://www.google.com/search*&q=tustore&oq=tustore*",
+        "https://www.google.de/search?*q=tustore*",
+        "https://www.google.com/search?*q=tustore*",
         "https://www.google.de/search?q=tucloud*",
-        "https://www.google.com/search?q=tucloud*",
-        "https://www.google.de/search*&q=tustore&oq=tucloud*",
-        "https://www.google.com/search*&q=tustore&oq=tucloud*"
+        "https://www.google.com/search?q=tucloud*"
       ]
     },
     {
@@ -66,14 +60,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tumail*",
-        "https://www.google.de/search?q=tudmail*",
-        "https://www.google.com/search?q=tumail*",
-        "https://www.google.com/search?q=tudmail*",
-        "https://www.google.de/search*&q=tumail&oq=tumail*",
-        "https://www.google.com/search*&q=tumail&oq=tumail*",
-        "https://www.google.de/search*&q=tudmail&oq=tudmail*",
-        "https://www.google.com/search*&q=tudmail&oq=tudmail*"
+        "https://www.google.de/search?*q=tumail*",
+        "https://www.google.de/search?*q=tudmail*",
+        "https://www.google.com/search?*q=tumail*",
+        "https://www.google.com/search?*q=tudmail*"
       ]
     },
     {
@@ -106,10 +96,8 @@
       "run_at": "document_start",
       "matches": [
         "*://opal.de/*",
-        "https://www.google.de/search?q=opal*",
-        "https://www.google.com/search?q=opal*",
-        "https://www.google.de/search*&q=opal&oq=opal*",
-        "https://www.google.com/search*&q=opal&oq=opal*"
+        "https://www.google.de/search?*q=opal*",
+        "https://www.google.com/search?*q=opal*"
       ]
     },
     {
@@ -127,10 +115,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=hisqis*",
-        "https://www.google.com/search?q=hisqis*",
-        "https://www.google.de/search*&q=hisqis&oq=hisqis*",
-        "https://www.google.com/search*&q=hisqis&oq=hisqis*"
+        "https://www.google.de/search?*q=hisqis*",
+        "https://www.google.com/search?*q=hisqis*"
       ]
     },
     {
@@ -139,10 +125,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tumed*",
-        "https://www.google.com/search?q=tumed*",
-        "https://www.google.de/search*&q=tumed&oq=tumed*",
-        "https://www.google.com/search*&q=tumed&oq=tumed*"
+        "https://www.google.de/search?*q=tumed*",
+        "https://www.google.com/search?*q=tumed*"
       ]
     },
     {
@@ -151,10 +135,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=selma*",
-        "https://www.google.com/search?q=selma*",
-        "https://www.google.de/search*&q=selma&oq=selma*",
-        "https://www.google.com/search*&q=selma&oq=selma*"
+        "https://www.google.de/search?q=*selma*",
+        "https://www.google.com/search?q=*selma*"
       ]
     },
     {
@@ -183,10 +165,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=tumatrix*",
-        "https://www.google.de/search?q=tumatrix*",
-        "https://www.google.de/search*&q=tumatrix&oq=tumatrix*",
-        "https://www.google.com/search*&q=tumatrix&oq=tumatrix*"
+        "https://www.google.com/search?q=*tumatrix*",
+        "https://www.google.de/search?q=*tumatrix*"
       ]
     },
     {
@@ -272,10 +252,8 @@
       "js": ["contentScripts/content_fwd_magma.js"],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=magma*",
-        "https://www.google.de/search?q=magma*",
-        "https://www.google.de/search*&q=magma&oq=magma*",
-        "https://www.google.com/search*&q=magma&oq=magma*"
+        "https://www.google.com/search?*q=magma*",
+        "https://www.google.de/search?*q=magma*"
         
       ]
     }
@@ -289,7 +267,10 @@
   "browser_action": {
     "default_popup": "popup.html"
   },
-  "options_page": "settings.html",
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
   "web_accessible_resources": ["images/OpalBanner3.png", "images/tufast48.png"],
   "manifest_version": 2,
   "commands":{
