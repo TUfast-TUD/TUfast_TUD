@@ -36,7 +36,6 @@ TUfast Telegram: [t.me/TUfast_TUD](https://t.me/TUfast_TUD)
 - **Benachrichtigungen für neue Mails im OWA**: Damit habe ich in [dieser Branche](https://github.com/OliEfr/TUfast_TUD/tree/OWAHackFetch) schon begonnen. Das Abrufen der Mails funktioniert. Die ganze Logik drumrum und ein Eintrag auf der Einstellungsseite muss noch implementiert werden.
 
 ### 15€ 💸
-- Login im [Medizinerportal](https://eportal.med.tu-dresden.de/login) mit ZIH-Login; also Username s1111111 und Password password
 - Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
 
 ## Entwickler
