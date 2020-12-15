@@ -30,6 +30,12 @@ chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
 })
 */
 
+//check whether to ask for additional host permission
+chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1'], function (result) {
+  if (!result.gotInteractionOnHostPermissionExtension1) {
+    window.open("updatePermissions.html")
+  }
+})
 
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
@@ -56,6 +62,20 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({ colorfulRocket: "black" }, function () { })
         chrome.storage.local.set({ PRObadge: false }, function () { })
         chrome.storage.local.set({flakeState: false}, function() {})
+        //request additional host permission
+        chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
+        chrome.permissions.request({
+          origins: ['https://campussachsen.tu-dresden.de/*', "https://www.slub-dresden.de/*", "https://eportal.med.tu-dresden.de/*", "http://cmdb.zih.tu-dresden.de/*", "https://tu-dresden.de/*"]
+        }, function (granted) {
+          if (granted) {
+            alert("Perfekt! Du kannst TUfast nun für alle Online-Portale der TU Dresden verwenden. Viel Spass :)")
+            browser.runtime.reload()
+          } else {
+            alert("Okay! Viel Spass beim Verwenden von TUfast :) ")
+            browser.runtime.reload()
+          }
+        })
+
         break;
      case 'update':
         //Show page on update
@@ -146,6 +166,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case 'logged_out':
       loggedOut(request.portal)
+      break
+    case 'reload_extension':
+      chrome.runtime.reload()
       break
     case 'save_courses':
       saveCourses(request.course_list)
