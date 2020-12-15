@@ -65,7 +65,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         //request additional host permission
         chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
         chrome.permissions.request({
-          origins: ['https://campussachsen.tu-dresden.de/*', "https://www.slub-dresden.de/*", "https://eportal.med.tu-dresden.de/*", "http://cmdb.zih.tu-dresden.de/*", "https://tu-dresden.de/*"]
+          origins: ['https://campussachsenY.tu-dresden.de/*', "https://www.slub-dresden.de/*", "https://eportal.med.tu-dresden.de/*", "http://cmdb.zih.tu-dresden.de/*", "https://tu-dresden.de/*"]
         }, function (granted) {
           if (granted) {
             alert("Perfekt! Du kannst TUfast nun für alle Online-Portale der TU Dresden verwenden. Viel Spass :)")

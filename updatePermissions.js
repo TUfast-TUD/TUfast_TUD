@@ -6,7 +6,7 @@ function denyHostPermission(){
 function requestHostPermission(){
     chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
     chrome.permissions.request({
-        origins: ['https://campussachsenXxxx.tu-dresden.de/*', "https://www.slub-dresden.de/*", "https://eportal.med.tu-dresden.de/*", "http://cmdb.zih.tu-dresden.de/*", "https://tu-dresden.de/*"]
+        origins: ['https://campussachsen.tu-dresden.de/*', "https://www.slub-dresden.de/*", "https://eportal.med.tu-dresden.de/*", "http://cmdb.zih.tu-dresden.de/*", "https://tu-dresden.de/*"]
     }, function (granted) {
         if (granted) {
             alert("Perfekt! Bald gibts die neuen Funktionen! Diese Seite schliesst sich jetzt.")
