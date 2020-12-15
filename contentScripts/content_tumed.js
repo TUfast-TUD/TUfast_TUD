@@ -1,7 +1,6 @@
 chrome.storage.local.get(['isEnabled', 'loggedOutTumed'], function(result) {
     if(result.isEnabled && !result.loggedOutTumed) {
       document.addEventListener('DOMContentLoaded', function() {
-          console.log("asd")
         if(document.querySelectorAll(`label[for=__ac_name]`)[0].textContent === "Benutzername" && document.querySelectorAll(`label[for=__ac_password]`)[0].textContent === "Passwort" && document.getElementById("__ac_name") && document.getElementById("__ac_password")) 
           chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
                 if(!(result.asdf === undefined || result.fdsa === undefined)) {

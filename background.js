@@ -12,27 +12,36 @@ chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
-/*
-//additional content script injection
-//
-chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-  // create rule
-  var ruleTUMED = {
-    conditions: [
-      new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: { hostEquals: 'eportal.med.tu-dresden.de', schemes: ['https', 'http'] }
-      })
-    ],
-    actions: [ new chrome.declarativeContent.RequestContentScript({js: ["contentScripts/content_tumed.js" ]}) ]
-  }
+
+//additional content script injection CHROME
+try {
+  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+    // create rule
+    var ruleTUMED = {
+      conditions: [
+        new chrome.declarativeContent.PageStateMatcher({
+          pageUrl: { hostEquals: 'eportal.med.tu-dresden.de', schemes: ['https'] }
+        })
+      ],
+      actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_tumed.js"] })]
+    }
     // register rule
     chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
-})
-*/
+  })
+} catch(e) {console.log("Error requesting additional content script for Chrome: " + e)}
+
+//additional content script injection FF
+try {
+  browser.contentScripts.register({
+    "js": [{file: "contentScripts/content_tumed.js"}],
+    "matches": ["https://eportal.med.tu-dresden.de/*"],
+    "runAt": "document_start"
+  })
+} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
 
 //check whether to ask for additional host permission
-chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1'], function (result) {
-  if (!result.gotInteractionOnHostPermissionExtension1) {
+chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1', "installed"], function (result) {
+  if (!result.gotInteractionOnHostPermissionExtension1 && result.installed) {
     chrome.tabs.create(({ url: "updatePermissions.html" }))
   }
 })
@@ -44,6 +53,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         //Show page on install
         console.log('TUfast installed.')
         openSettingsPage("first_visit")
+        chrome.storage.local.set({installed: true }, function () { });
         chrome.storage.local.set({showed_50_clicks: false}, function() {});
         chrome.storage.local.set({showed_100_clicks: false}, function() {});
         chrome.storage.local.set({isEnabled: false}, function() {})
