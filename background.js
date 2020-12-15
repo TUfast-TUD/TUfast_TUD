@@ -1,10 +1,5 @@
 'use strict';
 
-/*
-TODO
-  review link ändern
-*/
-
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
@@ -110,6 +105,12 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.get(['flakeState'], function (result) {
           if (result.flakeState === undefined || result.flakeState === null) { //set to true, so that state will be false!
             chrome.storage.local.set({ flakeState: false }, function () { })
+          }
+        })
+        //firefox banner
+        chrome.storage.local.get(['showedFirefoxBanner'], function (result) {
+          if (result.showedFirefoxBanner === undefined || result.showedFirefoxBanner === null) {
+            chrome.storage.local.set({ showedFirefoxBanner: false }, function () { })
           }
         })
         break;

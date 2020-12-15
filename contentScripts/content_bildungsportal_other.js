@@ -6,10 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function(result) {
+chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedFirefoxBanner","mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function(result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
+    let showImplementationForFirefox = false
 
     let mod200Clicks = result.saved_click_counter%200
     if(!result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
@@ -26,9 +27,14 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
         showKeyboardUpdate = true
     }
 
+    if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) { 
+        showImplementationForFirefox = true
+    }
+
     window.addEventListener("load", async function(e) {
         if(showReviewBanner) {showLeaveReviewBanner()}
         if(showKeyboardUpdate) {showKeyboardShortcutUpdate()}
+        if(showImplementationForFirefox) {showImplementationForFirefoxBanner()}
 
         if (this.document.getElementById("removeReviewBanner")){
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -45,6 +51,12 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "mostLiklySubmitte
         if(this.document.getElementById("removeNameBanner")){
             this.document.getElementById("removeNameBanner").onclick = removeNameBanner
         }
+        if (this.document.getElementById("RemoveShowImplementationForFirefoxBanner")) {
+            this.document.getElementById("RemoveShowImplementationForFirefoxBanner").onclick = RemoveShowImplementationForFirefoxBanner
+            this.document.getElementById("LinkShowImplementationForFirefoxBanner").onclick = RemoveShowImplementationForFirefoxBanner
+        }
+
+        
     })
 })
 
@@ -53,6 +65,13 @@ function removeReviewBanner() {
         document.getElementById("reviewBanner").remove()
         chrome.storage.local.set({removedReviewBanner: true}, function() {})
         chrome.storage.local.set({neverShowedReviewBanner: false}, function() {})
+    }
+}
+
+function RemoveShowImplementationForFirefoxBanner(){
+    chrome.storage.local.set({showedFirefoxBanner: true }, function () {})
+    if (document.getElementById("showImplementationForFirefoxBanner")) {
+        document.getElementById("showImplementationForFirefoxBanner").remove()
     }
 }
 
@@ -90,7 +109,16 @@ function showKeyboardShortcutUpdate(){
     let banner = this.document.createElement("div")
     banner.id ="keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Neu von TUfast: Shortcuts.</b> Öffne das Dashboard mit <strong>Alt+Q</strong><a id="openKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #FF5252">Hier Shortcuts aktivieren</a><a id="removeKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">X</a>'
+    banner.innerHTML = '<img src='+imgUrl+' style="position:relative; right: 15px;height: 35px;"> <b>Supergeil: TUfast Shortcuts!</b> Öffne z.B. das Dashboard mit <strong>Alt+Q</strong><a id="openKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #FF5252">Alle Shortcuts ansehen</a><a id="removeKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">X</a>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
+}
+
+function showImplementationForFirefoxBanner(){
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let banner = this.document.createElement("div")
+    banner.id = "showImplementationForFirefoxBanner"
+    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
+    banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="RemoveShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Close X</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
