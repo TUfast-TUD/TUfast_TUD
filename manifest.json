@@ -5,7 +5,7 @@
   "permissions": [
     "storage", "system.cpu", "declarativeContent"
   ],
-  "optional_permissions":["https://*/", "http://*/"],
+  "optional_permissions":["*://*/"],
   "background": {
     "scripts": [
       "background.js"
