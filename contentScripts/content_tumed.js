@@ -17,11 +17,11 @@ chrome.storage.local.get(['isEnabled', 'loggedOutTumed'], function(result) {
             })
 
         //abmelden button
-        if(document.querySelectorAll('#visual-footer-wrapper :nth-child(5)')[0]){
+        /*if(document.querySelectorAll('#visual-footer-wrapper :nth-child(5)')[0]){
           document.querySelectorAll('#visual-footer-wrapper :nth-child(5)')[0].addEventListener('click', function() {
             chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutTumed'})
           })
-        }
+        }*/
       })
       console.log('Auto Login to eportal med.')
     } else if(result.loggedOutTumed) {

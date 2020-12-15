@@ -1,6 +1,7 @@
 function denyHostPermission(){
     chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
     alert("Okay, das ist schade. Trotzdem wird TUfast bei dir weiter Funktionieren. Gib uns doch einmal Feedback unter frage@tu-fast.de! ")
+    chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
     window.close()
 }
 function requestHostPermission(){
