@@ -143,7 +143,7 @@ window.onload = async function(){
     displayEnabled()
 
     //get things from storage
-    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled"], (result) => {
+    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1"], (result) => {
       //set text on isEnabled
       if(result.isEnabled) {
         document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
@@ -155,7 +155,7 @@ window.onload = async function(){
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
       else if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
-      else {document.getElementsByTagName("button")[0].click()}
+      else if(result.gotInteractionOnHostPermissionExtension1){document.getElementsByTagName("button")[0].click()}
     
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
       this.document.getElementById("settings_comment").innerHTML="Bereits " + clicksToTimeNoIcon(result.saved_click_counter)

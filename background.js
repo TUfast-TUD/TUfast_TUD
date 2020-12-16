@@ -30,10 +30,9 @@ function regAddContentScripts() {
       }
       // register rule
       chrome.declarativeContent.onPageChanged.addRules([ruleTUMED])
-      console.log("Successfully registered additional content scripts for Chrome")
     })
   } catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
-
+  
   //additional content script injection FF
   try {
     browser.contentScripts.register({
