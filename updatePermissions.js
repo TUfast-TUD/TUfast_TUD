@@ -21,7 +21,6 @@ function requestHostPermission(){
     });
 }
 
-//this need to be done here since manifest v2
 window.onload = function () {
     document.getElementById("refuseDomains").onclick = denyHostPermission
     document.getElementById("acceptDomains").onclick = requestHostPermission

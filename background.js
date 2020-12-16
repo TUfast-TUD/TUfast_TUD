@@ -1,6 +1,5 @@
 'use strict';
 
-////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
 chrome.storage.local.set({loggedOutTumed: false}, function() {})
@@ -10,9 +9,10 @@ chrome.storage.local.set({loggedOutOwa: false}, function() {})
 chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
+chrome.storage.local.set({loggedOutTumed: false }, function () { })
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
-//register additional contenct scripts
+//register additional content scripts
 regAddContentScripts()
 
 function regAddContentScripts() {
@@ -54,9 +54,8 @@ chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
   switch (reason) {
      case 'install':
-        //Show page on install
         console.log('TUfast installed.')
-        openSettingsPage("first_visit")
+        openSettingsPage("first_visit") //open settings page
         chrome.storage.local.set({installed: true }, function () { });
         chrome.storage.local.set({showed_50_clicks: false}, function() {});
         chrome.storage.local.set({showed_100_clicks: false}, function() {});
@@ -78,10 +77,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({flakeState: false}, function() {})
       break;
      case 'update':
-        //Show page on update
-        //chrome.storage.local.set({isEnabled: true}, function() {})
-        //chrome.storage.local.set({fwdEnabled: true}, function() {})
-        //check if encryption is already on level 2
+        //check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
         chrome.storage.local.get(['encryption_level'], (resp) => {
           if(!(resp.encryption_level === 2)){
             console.log('Upgrading encryption standard to level 2...')
@@ -91,7 +87,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
             })
           }
         })
-        //check if dashboard display is selected
+        //check if the type of courses is selected which should be display in the dasbhaord. If not, set to default
         chrome.storage.local.get(['dashboardDisplay'], (resp) => {
           if(resp.dashboardDisplay === null || resp.dashboardDisplay === undefined || resp.dashboardDisplay === ""){
             chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
@@ -121,13 +117,13 @@ chrome.runtime.onInstalled.addListener(async(details) => {
             chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
           }
         })
-        //flakeState
+        //check, whether flake state exists. If not, initialize with false.
         chrome.storage.local.get(['flakeState'], function (result) {
           if (result.flakeState === undefined || result.flakeState === null) { //set to true, so that state will be false!
             chrome.storage.local.set({ flakeState: false }, function () { })
           }
         })
-        //firefox banner
+        //check if ShowedFirefoxBanner
         chrome.storage.local.get(['showedFirefoxBanner'], function (result) {
           if (result.showedFirefoxBanner === undefined || result.showedFirefoxBanner === null) {
             chrome.storage.local.set({ showedFirefoxBanner: false }, function () { })
@@ -140,7 +136,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
   }
 })
 
-//show badge when extension is triggered
+//receive messages from content script and trigger actions accordingly
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'show_ok_badge':
@@ -184,7 +180,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
       if (isFirefox) {chrome.tabs.create({ url: "https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten" })}
       else {chrome.tabs.create({ url: "chrome://extensions/shortcuts" })} //for chrome and everything else
-      
+      break
     default:
       console.log('Cmd not found!')
       break
@@ -213,7 +209,7 @@ chrome.commands.onCommand.addListener(function(command) {
   }
 })
 
-//open settings (=options) page, if required set params
+//open settings (=options) page. If provided: set param
 function openSettingsPage(params){
   if(params){
     chrome.storage.local.set({openSettingsPageParam: params}, function() {
@@ -238,6 +234,7 @@ function loggedOut(portal) {
   }, timeout);
 }
 
+//show badge
 function show_badge(Text, Color, timeout) {
   chrome.browserAction.setBadgeText({text: Text});
   chrome.browserAction.setBadgeBackgroundColor({color: Color});
@@ -246,6 +243,7 @@ function show_badge(Text, Color, timeout) {
   }, timeout);
 }
 
+//save_click_counter
 function save_clicks(counter){
   //load number of saved clicks and add counter!
   var saved_clicks = 0;
@@ -257,7 +255,10 @@ function save_clicks(counter){
   })
 }
 
-//create hash from input-string (can also be json ofcourse)
+//////////////// FUNCTIONS FOR ENCRYPTION AND USERDATA HANDLING ////////////////
+// info: asdf = username | fdsa = password
+
+//create hash from input-string (can also be json of course)
 //output hash is always of same length and is of type buffer
 function hashDigest(string) {
   return new Promise (async (resolve, reject) => {
@@ -371,6 +372,9 @@ async function getUserData(){
     })
 }
 
+//////////////// END FUNCTIONS FOR ENCRYPTION AND USERDATA HANDLING ////////////////
+
+//save parsed courses
 //course_list = {type:"", list:[{link:link, name: name}, ...]}
 function saveCourses(course_list) {
   course_list.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
@@ -388,6 +392,7 @@ function saveCourses(course_list) {
   }
 }
 
+//get parsed courses
 //return course_list = [{link:link, name: name}, ...]
 function loadCourses(type) {
   switch(type) {

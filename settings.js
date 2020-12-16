@@ -98,6 +98,7 @@ function denyHostPermissionS() {
   alert("Okay, das ist schade. Trotzdem wird TUfast bei dir auf den wichtigsten Seiten Funktionieren. Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
   document.getElementById("addition_host_permissions").remove()
 }
+
 function requestHostPermissionS() {
   chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
   chrome.permissions.request({

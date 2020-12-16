@@ -1,8 +1,4 @@
-//this need to be done here since manifest v2
 window.onload = async function(){
-
-    //TODO
-    //fix set width and high, so it does not get destoyed by search function
 
     //get things from storage
     chrome.storage.local.get(['dashboardDisplay', "saved_click_counter"], async function(result) {
@@ -12,7 +8,7 @@ window.onload = async function(){
         let htmlList = document.getElementsByClassName("list")[0]
         displayCourseList(courseList, htmlList, dashboardDisplay)
 
-        //execute to filter list immediately
+        //filter list
         listSearchFunction()
 
         //display saved clicks
@@ -33,7 +29,6 @@ window.onload = async function(){
     this.document.getElementById("searchListInput").onkeyup=listSearchFunction
 
     this.document.getElementById("settings").onclick = this.openSettings
-
 
     displayEnabled()
     
