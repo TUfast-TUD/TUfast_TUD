@@ -29,7 +29,8 @@ function regAddContentScripts() {
         actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_tumed.js"] })]
       }
       // register rule
-      chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
+      chrome.declarativeContent.onPageChanged.addRules([ruleTUMED])
+      console.log("Successfully registered additional content scripts for Chrome")
     })
   } catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
 
@@ -39,7 +40,7 @@ function regAddContentScripts() {
       "js": [{ file: "contentScripts/content_tumed.js" }],
       "matches": ["https://eportal.med.tu-dresden.de/*"],
       "runAt": "document_start"
-    })
+    }).then(() => console.log("Successfully registered additional content scripts for FF"))
   } catch (e) { console.log("Error requesting additional content script for FF: " + e) }
 }
 
