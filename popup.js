@@ -1,8 +1,4 @@
-//this need to be done here since manifest v2
 window.onload = async function(){
-
-    //TODO
-    //fix set width and high, so it does not get destoyed by search function
 
     //get things from storage
     chrome.storage.local.get(['dashboardDisplay', "saved_click_counter"], async function(result) {
@@ -12,7 +8,7 @@ window.onload = async function(){
         let htmlList = document.getElementsByClassName("list")[0]
         displayCourseList(courseList, htmlList, dashboardDisplay)
 
-        //execute to filter list immediately
+        //filter list
         listSearchFunction()
 
         //display saved clicks
@@ -33,7 +29,6 @@ window.onload = async function(){
     this.document.getElementById("searchListInput").onkeyup=listSearchFunction
 
     this.document.getElementById("settings").onclick = this.openSettings
-
 
     displayEnabled()
     
@@ -64,14 +59,16 @@ function clicksToTime(clicks) {
 
 
 function openSettings(){
-    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {}) //for some reason i need to pass empty param - else it wont work in ff
-    window.close()
+    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {}) //for some reason I need to pass empty param - else it wont work in ff
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    if (isFirefox) window.close()
     return false //Required for ff
 }
 
 function openSettingsTimeSection(){
     chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'time_settings'}, function(result) {})
-    window.close()
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    if (isFirefox) window.close()
     return false //Required for ff
 }
 
