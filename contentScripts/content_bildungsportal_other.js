@@ -28,7 +28,8 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedFirefoxBann
     }
 
     if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) { 
-        showImplementationForFirefox = true
+        let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
+        if(isChrome) showImplementationForFirefox = true
     }
 
     window.addEventListener("load", async function(e) {
