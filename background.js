@@ -46,7 +46,7 @@ function regAddContentScripts() {
 
 //check whether to ask for additional host permission
 chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1', "installed", "saved_click_counter"], function (result) {
-  if (!result.gotInteractionOnHostPermissionExtension1 && result.installed && result.saved_click_counter > 10) {
+  if (!result.gotInteractionOnHostPermissionExtension1 && result.saved_click_counter > 10) {
     chrome.tabs.create(({ url: "updatePermissions.html" }))
   }
 })
