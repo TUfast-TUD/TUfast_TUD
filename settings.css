@@ -162,4 +162,37 @@ button:hover {
 }
 
 
+.button-accept {
+  width: 190px;
+  background-color:rgb(47, 143, 18);
+  color: white;
+  padding: 12px 19px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button-accept:hover {
+  background-color: rgb(44, 190, 0);
+}
+
+.button-deny {
+  width: 190px;
+  background-color:darkgrey;
+  color: white;
+  padding: 12px 19px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button-deny:hover {
+  background-color: grey;
+}
+
+
   

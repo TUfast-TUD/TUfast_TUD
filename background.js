@@ -12,32 +12,36 @@ chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
+//register additional contenct scripts
+regAddContentScripts()
 
-//additional content script injection CHROME
-try {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-    // create rule
-    var ruleTUMED = {
-      conditions: [
-        new chrome.declarativeContent.PageStateMatcher({
-          pageUrl: { hostEquals: 'eportal.med.tu-dresden.de', schemes: ['https'] }
-        })
-      ],
-      actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_tumed.js"] })]
-    }
-    // register rule
-    chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
-  })
-} catch(e) {console.log("Error requesting additional content script for Chrome: " + e)}
+function regAddContentScripts() {
+  //additional content script injection CHROME
+  try {
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+      // create rule
+      var ruleTUMED = {
+        conditions: [
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { hostEquals: 'eportal.med.tu-dresden.de', schemes: ['https'] }
+          })
+        ],
+        actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_tumed.js"] })]
+      }
+      // register rule
+      chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
+    })
+  } catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
 
-//additional content script injection FF
-try {
-  browser.contentScripts.register({
-    "js": [{file: "contentScripts/content_tumed.js"}],
-    "matches": ["https://eportal.med.tu-dresden.de/*"],
-    "runAt": "document_start"
-  })
-} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
+  //additional content script injection FF
+  try {
+    browser.contentScripts.register({
+      "js": [{ file: "contentScripts/content_tumed.js" }],
+      "matches": ["https://eportal.med.tu-dresden.de/*"],
+      "runAt": "document_start"
+    })
+  } catch (e) { console.log("Error requesting additional content script for FF: " + e) }
+}
 
 //check whether to ask for additional host permission
 chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1', "installed", "saved_click_counter"], function (result) {
@@ -171,6 +175,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case 'open_settings_page':
       openSettingsPage(request.params)
+      break
+    case 'register_addition_content_scripts':
+      regAddContentScripts()
       break
     case 'open_shortcut_settings':
       let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!

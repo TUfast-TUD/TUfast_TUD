@@ -10,6 +10,7 @@
     <img  style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px;" src="./images/DashboardTutorialSmall.png">
     <p id="welcome"></p> 
     <p id="settings_comment"></p> 
+    <p id="addition_host_permissions"></p> 
     <!-- New Accordion section-->
     <button class="accordion">Abk&uuml;rzungen in der Google-Suche</button>
     <div class="panel">
@@ -90,11 +91,11 @@
       <form>
         <input placeholder="Nutzername" type="text" id="username_field"><br>
         <input placeholder="Passwort" type="password" id="password_field" ><br>
-        <button type="submit" id="save_data">Lokal Speichern</button>
+        <button type="submit" class="button-accept" id="save_data">Lokal Speichern</button>
         <p id="status_msg" style="display: inline;"></p> 
       </form>
       <p>Hier kannst du alle Daten l&ouml;schen:<br>
-      <button id="delete_data">Alle Daten l&ouml;schen</button>
+      <button id="delete_data" class="button-deny">Alle Daten l&ouml;schen</button>
       </p>
       <p id="status_msg2"></p> 
     </div>
