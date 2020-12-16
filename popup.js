@@ -64,14 +64,16 @@ function clicksToTime(clicks) {
 
 
 function openSettings(){
-    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {}) //for some reason i need to pass empty param - else it wont work in ff
-    window.close()
+    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {}) //for some reason I need to pass empty param - else it wont work in ff
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    if (isFirefox) window.close()
     return false //Required for ff
 }
 
 function openSettingsTimeSection(){
     chrome.runtime.sendMessage({cmd: 'open_settings_page', params: 'time_settings'}, function(result) {})
-    window.close()
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    if (isFirefox) window.close()
     return false //Required for ff
 }
 
