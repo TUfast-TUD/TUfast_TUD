@@ -13,7 +13,7 @@ chrome.storage.local.set({loggedOutTumed: false }, function () { })
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
 //register additional content scripts
-regAddContentScripts()
+regAddContentScripts()           
 
 function regAddContentScripts() {
   //additional content script injection CHROME
