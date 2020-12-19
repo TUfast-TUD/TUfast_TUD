@@ -1,3 +1,5 @@
+@import url("root.css");
+
 /* list */
 .list {
   max-height: 450px;
@@ -14,7 +16,7 @@
   margin-left: 5px;
   margin-right: 5px;
   text-decoration: none;
-  color: black;
+  color: var(--text-color);
 
 }
 
@@ -63,7 +65,7 @@ input:focus,
 
 body {
   border: solid 2px #909090;
-  background-color: #ffffff;
+  background-color: var(--content-background-color);
   border-radius: 4px;
   max-width: 510px; /*limit by chrome: 789px*/
   min-width: 510px; /*limit by chrome: 789px*/
@@ -73,7 +75,7 @@ body {
 }
 
 html {
-  background-color: #909090;
+  background-color: var(--content-background-color);
 }
 
 
