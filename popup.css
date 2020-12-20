@@ -17,7 +17,6 @@
   margin-right: 5px;
   text-decoration: none;
   color: var(--text-color);
-
 }
 
 .list-search {
@@ -28,7 +27,7 @@
   border-radius: 3px;
   font-size: 12px;
   border: #dddddd solid 1.5px;
-  background-image: url('./icons/searchicon.png'); /* Add a search icon to input */
+  background-image: url("./icons/searchicon.png"); /* Add a search icon to input */
   background-position: 12px 7px; /* Position the search icon */
   background-size: 19px;
   background-repeat: no-repeat; /* Do not repeat the icon image */
@@ -37,7 +36,7 @@
 
 input:focus,
 .list-search:focus {
-    /*outline: none !important;
+  /*outline: none !important;
     border: #dddddd solid 2px;*/
 }
 
@@ -78,7 +77,6 @@ html {
   background-color: var(--content-background-color);
 }
 
-
 /* Footer */
 .settings-footer {
   border-top: solid 2px #909090;
@@ -95,24 +93,24 @@ html {
 }
 
 .settings-section {
-   border-right: solid 2px #dddddd;
-   border-left: solid 2px #dddddd;
-   display: flex;
-   align-items: center;
-   justify-content: space-evenly;/*start*/;
-   padding-left: 4px;
-   padding-right: 4px;
+  border-right: solid 2px #dddddd;
+  border-left: solid 2px #dddddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly; /*start*/
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .settings-section-icon {
-   display: flex;
-   border: none;
-   height: 100%;
-   align-items: center; /*space-between*/
-   justify-content: center;
-   padding-left: 6px;
-   padding-right: 6px;
-   border-radius: 3px;
+  display: flex;
+  border: none;
+  height: 100%;
+  align-items: center; /*space-between*/
+  justify-content: center;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-radius: 3px;
 }
 
 .settings-text {
@@ -136,31 +134,26 @@ html {
 }
 
 /* scrollbar */
-.custom-scrollbar::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
-	box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
-	border-radius: 10px;
+.custom-scrollbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  border-radius: 10px;
   background-color: #dbdbdb;
 }
 
-.custom-scrollbar::-webkit-scrollbar
-{
-	width: 10px;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
   background-color: #dbdbdb;
-  
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,.3);
-	box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
-	background-color: #9c9c9c;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  background-color: #9c9c9c;
 }
 
 .list-entry:hover,
-.settings-section-icon:hover
-{
+.settings-section-icon:hover {
   background-color: #e5e5e5;
 }
