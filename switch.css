@@ -1,3 +1,5 @@
+@import url("root.css");
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;
