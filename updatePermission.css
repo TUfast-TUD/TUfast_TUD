@@ -1,12 +1,11 @@
 @import url("root.css");
 
 body {
-    margin-left: 35%;
-    margin-top: 5%;
-    font-size: 15px;
-    /* font-family: var(--text-font-family); */
-    line-height: 25px;
-} 
+  margin-left: 35%;
+  margin-top: 5%;
+  font-size: 15px;
+  line-height: 25px;
+}
 @media (max-width: 799px) {
   body {
     margin-left: 5%;
@@ -23,11 +22,13 @@ body {
   }
 }
 
-html { overflow-y: scroll; }
+html {
+  overflow-y: scroll;
+}
 
 .heading {
-    font-size: 21px;
-    font-weight: bold;
+  font-size: 21px;
+  font-weight: bold;
 }
 
 .grey-text {
@@ -35,16 +36,15 @@ html { overflow-y: scroll; }
 }
 
 .the-bottom {
-    padding:0px;
-    bottom: 0%;
-    position: absolute;
-    margin-left: 5%;
+  padding: 0px;
+  bottom: 0%;
+  position: absolute;
+  margin-left: 5%;
 }
-
 
 .button-accept {
   width: 190px;
-  background-color:rgb(47, 143, 18);
+  background-color: rgb(47, 143, 18);
   color: white;
   padding: 12px 19px;
   margin: 8px 0;
@@ -60,7 +60,7 @@ html { overflow-y: scroll; }
 
 .button-deny {
   width: 190px;
-  background-color:darkgrey;
+  background-color: darkgrey;
   color: white;
   padding: 12px 19px;
   margin: 8px 0;
@@ -73,4 +73,3 @@ html { overflow-y: scroll; }
 .button-deny:hover {
   background-color: grey;
 }
-  
