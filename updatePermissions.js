@@ -7,7 +7,7 @@ function denyHostPermission(){
 function requestHostPermission(){
     chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
     chrome.permissions.request({
-        origins: ["*://*.tu-dresden.de/*" , "*://*.slub-dresden.de/*"]
+        origins: ["*://*.slub-dresden.de/*", "*://*.tu-dresden.de/*" ]
     }, function (granted) {
         if (granted) {
             alert("Perfekt! Bald gibts die neuen Funktionen! Diese Seite schliesst sich jetzt.")
