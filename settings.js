@@ -138,10 +138,32 @@ async function toggleOWAfetch(){
     })
     }
   })
+  
+function denyHostPermissionS() {
+  chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
+  alert("Okay, das ist schade. Trotzdem wird TUfast bei dir auf den wichtigsten Seiten Funktionieren. Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
+  document.getElementById("addition_host_permissions").remove()
+}
+
+function requestHostPermissionS() {
+  chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
+  chrome.permissions.request({
+    origins: ["*://*.tu-dresden.de/*", "*://*.slub-dresden.de/*"]
+  }, function (granted) {
+    if (granted) {
+      alert("Perfekt! TUfast funktioniert jetzt auf allen Seiten! Entdecke auf jetzt alle Funktionen von TUfast!")
+      chrome.runtime.sendMessage({ cmd: 'register_addition_content_scripts' }, function (result) {})
+      document.getElementById("addition_host_permissions").remove()
+
+    } else {
+      alert("Okay, das ist schade. Trotzdem wird TUfast bei dir weiterhin Funktionieren. Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
+      document.getElementById("addition_host_permissions").remove()
+    }
+  });
 }
 
 //this need to be done here since manifest v2
-window.onload = function(){
+window.onload = async function(){
     //assign functions
     document.getElementById('save_data').onclick= saveUserData
     document.getElementById('delete_data').onclick= deleteUserData
@@ -169,7 +191,7 @@ window.onload = function(){
     displayEnabled()
 
     //get things from storage
-    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled"], (result) => {
+    chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1"], (result) => {
       //set text on isEnabled
       if(result.isEnabled) {
         document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
@@ -181,10 +203,9 @@ window.onload = function(){
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
       else if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
-      /*else {document.getElementsByTagName("button")[0].click()}*/
-        
+      else if(result.gotInteractionOnHostPermissionExtension1){document.getElementsByTagName("button")[0].click()}
+    
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}
-        
       this.document.getElementById("settings_comment").innerHTML="Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
       this.document.getElementById("time_settings").innerHTML = clicksToTime(result.saved_click_counter)
       chrome.storage.local.set({openSettingsPageParam: false}, function() {})
@@ -219,5 +240,17 @@ window.onload = function(){
         }
       });
     }
-}
 
+
+  //additional host permissions
+  //check whether to ask for additional host permission
+  chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1'], async function (result) {
+    if (!result.gotInteractionOnHostPermissionExtension1) {
+      let hpDiv = document.getElementById("addition_host_permissions")
+      hpDiv.innerHTML = '<p>Wichtig: Damit TUfast f&uuml;r alle Online-Portale der TU Dresden funktioniert, dr&uuml;cke jetzt "Akzeptieren":</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button>'
+      await new Promise(r => setTimeout(r, 500));
+      document.getElementById("refuseDomains").addEventListener('click', denyHostPermissionS) //innerHTML is not async. However, it takes time to render, so lets wait 500ms
+      document.getElementById("acceptDomains").addEventListener('click', requestHostPermissionS) 
+    }
+  })
+}

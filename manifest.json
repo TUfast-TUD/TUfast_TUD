@@ -1,11 +1,11 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "5.1.0.0",
+  "version": "5.2.0.2",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
-    "storage", "system.cpu", "alarms"
+    "storage", "system.cpu", "alarms", "declarativeContent"
   ],
-  "optional_permissions": ["tabs"],
+  "optional_permissions": ["tabs", "*://*/"],
   "background": {
     "scripts": [
       "background.js"
@@ -38,10 +38,8 @@
       "run_at": "document_start",
       "matches": [
         "https://jexam.inf.tu-dresden.de/",
-        "https://www.google.de/search?q=jexam*",
-        "https://www.google.com/search?q=jexam*",
-        "https://www.google.de/search*&q=jexam&oq=jexam*",
-        "https://www.google.com/search*&q=jexam&oq=jexam*"
+        "https://www.google.de/search?*q=jexam*",
+        "https://www.google.com/search?*q=jexam*"
       ]
     },
     {
@@ -50,14 +48,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tustore*",
-        "https://www.google.com/search?q=tustore*",
-        "https://www.google.de/search*&q=tustore&oq=tustore*",
-        "https://www.google.com/search*&q=tustore&oq=tustore*",
+        "https://www.google.de/search?*q=tustore*",
+        "https://www.google.com/search?*q=tustore*",
         "https://www.google.de/search?q=tucloud*",
-        "https://www.google.com/search?q=tucloud*",
-        "https://www.google.de/search*&q=tustore&oq=tucloud*",
-        "https://www.google.com/search*&q=tustore&oq=tucloud*"
+        "https://www.google.com/search?q=tucloud*"
       ]
     },
     {
@@ -66,14 +60,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tumail*",
-        "https://www.google.de/search?q=tudmail*",
-        "https://www.google.com/search?q=tumail*",
-        "https://www.google.com/search?q=tudmail*",
-        "https://www.google.de/search*&q=tumail&oq=tumail*",
-        "https://www.google.com/search*&q=tumail&oq=tumail*",
-        "https://www.google.de/search*&q=tudmail&oq=tudmail*",
-        "https://www.google.com/search*&q=tudmail&oq=tudmail*"
+        "https://www.google.de/search?*q=tumail*",
+        "https://www.google.de/search?*q=tudmail*",
+        "https://www.google.com/search?*q=tumail*",
+        "https://www.google.com/search?*q=tudmail*"
       ]
     },
     {
@@ -106,10 +96,8 @@
       "run_at": "document_start",
       "matches": [
         "*://opal.de/*",
-        "https://www.google.de/search?q=opal*",
-        "https://www.google.com/search?q=opal*",
-        "https://www.google.de/search*&q=opal&oq=opal*",
-        "https://www.google.com/search*&q=opal&oq=opal*"
+        "https://www.google.de/search?*q=opal*",
+        "https://www.google.com/search?*q=opal*"
       ]
     },
     {
@@ -127,10 +115,18 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=hisqis*",
-        "https://www.google.com/search?q=hisqis*",
-        "https://www.google.de/search*&q=hisqis&oq=hisqis*",
-        "https://www.google.com/search*&q=hisqis&oq=hisqis*"
+        "https://www.google.de/search?*q=hisqis*",
+        "https://www.google.com/search?*q=hisqis*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_tumed.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=tumed*",
+        "https://www.google.com/search?*q=tumed*"
       ]
     },
     {
@@ -139,10 +135,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=selma*",
-        "https://www.google.com/search?q=selma*",
-        "https://www.google.de/search*&q=selma&oq=selma*",
-        "https://www.google.com/search*&q=selma&oq=selma*"
+        "https://www.google.de/search?q=*selma*",
+        "https://www.google.com/search?q=*selma*"
       ]
     },
     {
@@ -171,10 +165,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=tumatrix*",
-        "https://www.google.de/search?q=tumatrix*",
-        "https://www.google.de/search*&q=tumatrix&oq=tumatrix*",
-        "https://www.google.com/search*&q=tumatrix&oq=tumatrix*"
+        "https://www.google.com/search?q=*tumatrix*",
+        "https://www.google.de/search?q=*tumatrix*"
       ]
     },
     {
@@ -221,6 +213,15 @@
     },
     {
       "js": [
+        "contentScripts/content_bildungsportal_insertLogo.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/content_bildungsportal_other.js"
       ],
       "run_at": "document_start",
@@ -251,10 +252,8 @@
       "js": ["contentScripts/content_fwd_magma.js"],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=magma*",
-        "https://www.google.de/search?q=magma*",
-        "https://www.google.de/search*&q=magma&oq=magma*",
-        "https://www.google.com/search*&q=magma&oq=magma*"
+        "https://www.google.com/search?*q=magma*",
+        "https://www.google.de/search?*q=magma*"
         
       ]
     }
@@ -268,7 +267,10 @@
   "browser_action": {
     "default_popup": "popup.html"
   },
-  "options_page": "settings.html",
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
   "web_accessible_resources": ["images/OpalBanner3.png", "images/tufast48.png"],
   "manifest_version": 2,
   "commands":{
@@ -276,14 +278,14 @@
       "suggested_key": {
         "default": "Alt+Q",
         "windows": "Alt+Q",
-        "mac": "Command+Q"
+        "mac": "Alt+Q"
       }
     },
     "open_opal_hotkey": {
       "suggested_key": {
         "default": "Alt+O",
         "windows": "Alt+O",
-        "mac": "Command+O"
+        "mac": "Alt+O"
       },
       "description": "Opal öffnen"
     },
@@ -291,7 +293,7 @@
       "suggested_key": {
         "default": "Alt+M",
         "windows": "Alt+M",
-        "mac": "Command+M"
+        "mac": "Alt+M"
       },
       "description": "Mail (OWA) öffnen"
     },
@@ -299,7 +301,7 @@
       "suggested_key": {
         "default": "Alt+J",
         "windows": "Alt+J",
-        "mac": "Command+J"
+        "mac": "Alt+J"
       },
       "description": "jExam öffnen"
     }

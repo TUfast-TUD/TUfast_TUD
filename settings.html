@@ -6,10 +6,11 @@
     <link rel="stylesheet" href="settings.css">
   </head>
   <body>
-    <p class="heading">Willkommen bei TUfast&#x1F680; </p> 
+    <p class="heading">Willkommen bei TUfast &#x1F680; </p> 
     <img  style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px;" src="./images/DashboardTutorialSmall.png">
     <p id="welcome"></p> 
     <p id="settings_comment"></p> 
+    <p id="addition_host_permissions"></p> 
     <!-- New Accordion section-->
     <button class="accordion">Abk&uuml;rzungen in der Google-Suche</button>
     <div class="panel">
@@ -29,6 +30,7 @@
           <li class="grey-text">jexam &rarr; jExam</li>
           <li class="grey-text">tumatrix &rarr; Matrix-Chat TU Dresden</li>
           <li class="grey-text">magma &rarr; Magma TU Dresden</li>
+          <li class="grey-text">tumed &rarr; eportal.med.tu-dresden</li>
         </ul>
     </p> 
   </div> 
@@ -69,7 +71,6 @@
   <button class="accordion">Shortcuts f&uuml;r Opal & Co.</button>
   <div class="panel">
     <p><a href="javascript:void(0)" id="open_shortcut_settings1">Hier</a> kannst du alle Shortcuts sehen und &auml;ndern.</p>
-    <p class="grey-text">Standardkonfiguration:
     <ul style="margin:0;">
       <li class="grey-text">Alt+Q &rarr; Dashboard &ouml;ffnen</li>
       <li class="grey-text">Alt+O &rarr; Opal &ouml;ffnen</li>
@@ -83,18 +84,18 @@
     <!-- New Accordion section--> 
     <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co.</button>
     <div class="panel">
-      <p>Speichere deine Login-Daten f&uuml;r Opal & Co, um automatisch angemeldet zu werden.<br>
-      Die Daten werden nur lokal gespeichert und du kannst sie jederzeit l&ouml;schen.<br>
-        TUfast nimmt dir alle Klicks beim Anmelden ab!
+      <p>Speicher deine Login-Daten sicher auf diesem PC um in allen Online-Portalen automatisch angemeldet zu werden.<br>
+      Die Daten werden nur lokal und verschl&uuml;sselt gespeichert. Du kannst sie jederzeit l&ouml;schen.<br>
+      <font class="grey-text">TUfast nimmt dir alle Klicks beim Anmelden ab!</font>
       </p>
       <form>
         <input placeholder="Nutzername" type="text" id="username_field"><br>
         <input placeholder="Passwort" type="password" id="password_field" ><br>
-        <button type="submit" id="save_data">Lokal Speichern</button>
+        <button type="submit" class="button-accept" id="save_data">Lokal Speichern</button>
         <p id="status_msg" style="display: inline;"></p> 
       </form>
       <p>Hier kannst du alle Daten l&ouml;schen:<br>
-      <button id="delete_data">Alle Daten l&ouml;schen</button>
+      <button id="delete_data" class="button-deny">Alle Daten l&ouml;schen</button>
       </p>
       <p id="status_msg2"></p> 
     </div>
@@ -124,16 +125,17 @@
     <p style='margin-bottom:5px'><b>Dir gef&auml;llt TUfast?</b> </p> 
     <ul style="margin:0;">
       <li>Weiterempfehlen <font class="grey-text">(+100 Karma f&uuml;r den Tag)</font></li>
-      <li>Bewertung im <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de" target="_blank">Webstore</a> &#11088; &#11088; &#11088; &#11088; &#11088; <font class="grey-text">(+50 Karma f&uuml;r den Tag)</font></li>
+      <li>Bewertung im Webstore: <a href="https://www.tu-fast.de" target="_blank">www.tu-fast.de</a> &#11088; &#11088; &#11088; &#11088; &#11088; <font class="grey-text">(+50 Karma f&uuml;r den Tag)</font></li>
     </ul>
     <b>Danke!</b> &#128578
     <p></p>
   </div>
     <!-- New Accordion section--> 
-    <button class="accordion">Weiteres</button>
+    <button class="accordion">Infos & Kontakt</button>
     <div class="panel">
-      <p>TUfast im <a href="https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de" target="_blank" class="" >Webstore</a>.</p>
-      <p>Der Quelltext ist Open Source auf <a href="https://github.com/OliEfr/TUDresdenAutoLogin" target="_blank" class="" >GitHub</a>.</p>
+      <p>TUfast <a href="https://www.tu-fast.de" target="_blank" class="" >Website</a>.</p>
+      <p>Der Quelltext ist Open Source auf <a href="https://github.com/OliEfr/TUfast_TUD" target="_blank" class="" >GitHub</a>.</p>
+      <p>TUfast Telegram: <a href="https://t.me/TUfast_TUD" target="_blank" class="">t.me/TUfast_TUD</a>.</p>
       <p>Ich bin verpflichtet eine <a href="https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing" target="_blank" class="" >Datenschutzerkl&auml;rung</a> zu ver&ouml;ffentlichen.</p>
       <p>Fragen und Feedback gern an <a id="" href="mailto:frage@tu-fast.de?Subject=Feedback TUfast">frage@tu-fast.de</a> &#128578</p>
   </div> 
