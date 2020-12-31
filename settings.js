@@ -107,11 +107,12 @@ async function toggleOWAfetch(){
     permissions: ['tabs'],
   }, function(result) {
     if (!result) {
+      alert("Fuer diese Funktion braucht TUfast eine zusaetzliche Berechtigung, um ungelesene Mails im Hintergrund abzurufen. Druecke im folgenden Fenster auf 'Erlauben'")
       chrome.permissions.request({
         permissions: ['tabs']
       }, function(granted) {
         if (!granted) {
-          alert("Chrome braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte drücke auf 'Erlauben'.")
+          alert("TUfast braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
           return
         } 
       });
