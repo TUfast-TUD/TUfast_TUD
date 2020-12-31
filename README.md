@@ -3,6 +3,9 @@ Chrome-Erweiterung, um die IT-Dienste der TU Dresden besser nutzerbar zu machen 
 
 Verfügbar im Chrome Web Store: https://chrome.google.com/webstore/detail/tu-dresden-auto-login/aheogihliekaafikeepfjngfegbnimbk?hl=de
 
+## ToDo This Branch
+- test owafetch in firefox
+
 ## So funktionierts
 Funktionen:
  - Shortcuts, z.B. Alt+O für Opal öffnen
