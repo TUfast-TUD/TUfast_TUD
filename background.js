@@ -593,6 +593,7 @@ function fetchOWA(username, password, logout) {
           "cache-control": "max-age=0",
           "sec-fetch-dest": "document",
           "sec-fetch-mode": "navigate",
+          "Access-Control-Allow-Origin": "*",
           "sec-fetch-site": "same-origin",
           "sec-fetch-user": "?1",
           "upgrade-insecure-requests": "1"
@@ -601,6 +602,7 @@ function fetchOWA(username, password, logout) {
         "referrerPolicy": "strict-origin-when-cross-origin",
         "body": null,
         "method": "GET",
+        "Access-Control-Allow-Origin": "*",
         "mode": "cors",
         "credentials": "include"
       })
@@ -619,12 +621,14 @@ function fetchOWA(username, password, logout) {
             "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
+            "Access-Control-Allow-Origin": "*",
             "sec-fetch-site": "same-origin",
             "x-owa-correlationid": corrId,
             "x-owa-smimeinstalled": "1"
           },
           "referrer": "https://msx.tu-dresden.de/owa/",
           "referrerPolicy": "strict-origin-when-cross-origin",
+          "Access-Control-Allow-Origin": "*",
           "body": null,
           "method": "POST",
           "mode": "cors",
@@ -643,6 +647,7 @@ function fetchOWA(username, password, logout) {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
                 "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
                 "sec-fetch-dest": "document",
+                "Access-Control-Allow-Origin": "*",
                 "sec-fetch-mode": "navigate",
                 "sec-fetch-site": "same-origin",
                 "sec-fetch-user": "?1",
@@ -650,6 +655,7 @@ function fetchOWA(username, password, logout) {
               },
               "referrer": "https://msx.tu-dresden.de/owa/",
               "referrerPolicy": "strict-origin-when-cross-origin",
+              "Access-Control-Allow-Origin": "*",
               "body": null,
               "method": "GET",
               "mode": "cors",

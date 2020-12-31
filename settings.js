@@ -16,7 +16,6 @@ function saveUserData() {
         document.getElementById("password_field").value = ""
         document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
         setTimeout(()=>{
-          document.getElementById("save_data").style.backgroundColor= "grey"
           document.getElementById("save_data").innerHTML='Speichern'
           document.getElementById("save_data").disabled=false;
         }, 2000)
