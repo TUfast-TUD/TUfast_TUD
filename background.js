@@ -1,5 +1,15 @@
 'use strict';
 
+//start fetchOWA if activated and user data exists
+chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
+  userDataExists().then((userDataExists) => {
+    if (userDataExists && resp.enabledOWAFetch) {
+        enableOWAFetch()
+        console.log("Activated OWA fetch.")
+    } else {console.log("No OWAfetch registered")}
+  })
+})
+
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
@@ -92,12 +102,28 @@ chrome.runtime.onInstalled.addListener(async(details) => {
   }
 })
 
-//set Interval to fetch mails from owa, if enabled
-chrome.storage.local.get(["enabledOWAFetch"], (resp) => {
- if(resp.enabledOWAFetch === true){
-   enableOWAFetch()
-  }
-})
+
+function owaIsOpened(){
+  return new Promise(async (resolve, reject) => {
+      let uri = "msx.tu-dresden.de"
+      let tabs = await getAllChromeTabs()
+      tabs.forEach(function (tab) {
+          if ((tab.url).includes(uri)) {
+              console.log("currentyl opened owa")
+              resolve(true)
+          }
+      })
+      resolve(false)
+  })
+}
+
+function getAllChromeTabs() {
+  return new Promise(async (res, rej) => {
+      await chrome.tabs.query({}, function (tabs) {
+          res(tabs)
+      })
+  })
+}
 
 //check if user stored login data
 async function loginDataExists(){
@@ -110,13 +136,50 @@ async function loginDataExists(){
   })
 }
 
-//set alaram and function to be executed to fetch from owa
+
+//start OWA fetch funtion interval based
 function enableOWAFetch() {
-  chrome.alarms.create("fetchOWAAlarm", {delayInMinutes: 0.1, periodInMinutes: 0.1})
-  chrome.alarms.onAlarm.addListener((alarm) => {
-    getUserData().then((userData) => {
-      fetchOWA(userData.asdf, userData.fdsa)
-    })
+  //first, clear all alarms
+  console.log("starting to fetch from owa...")
+  chrome.alarms.clearAll(() => {
+      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 0, periodInMinutes: 1 })
+      chrome.alarms.onAlarm.addListener(async (alarm) => {
+          //only execute if owa not opened!
+          if(await owaIsOpened()) {
+              console.log("aborting fetch ..")
+              return
+          }
+
+          console.log("executing fetch ...")
+          
+          //get user data
+          let asdf = ""
+          let fdsa = ""
+          await getUserData().then((userData) => {
+              asdf = userData.asdf
+              fdsa = userData.fdsa
+          })
+
+          //call fetch
+          let mailInfoJson = await fetchOWA(asdf, fdsa)
+
+          //check # of unread mails
+          let numberUnreadMails = await countUnreadMsg(mailInfoJson)
+          console.log("Unread mails in OWA: " + numberUnreadMails)
+
+
+          //set badge
+          if (numberUnreadMails == 0) {
+              show_badge("", '#4cb749')
+          }
+          else if (numberUnreadMails > 99) {
+              show_badge("99+", '#4cb749')
+          }
+          else {
+              show_badge(numberUnreadMails.toString(), '#4cb749')
+          }
+
+      })
   })
 }
 
@@ -124,7 +187,7 @@ function enableOWAFetch() {
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'show_ok_badge':
-      show_badge('Login', '#4cb749', request.timeout)
+      //show_badge('Login', '#4cb749', request.timeout)
       break
     case 'no_login_data':
       //alert("Bitte gib deinen Nutzernamen und Passwort in der TUfast Erweiterung an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
@@ -133,7 +196,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     case 'perform_login':
       break
     case 'clear_badge':
-      show_badge("", "#ffffff", 0)
+      //show_badge("", "#ffffff", 0)
       break
     case 'save_clicks':
       save_clicks(request.click_count)
@@ -146,6 +209,12 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case 'logged_out':
       loggedOut(request.portal)
+      break
+    case "enable_owa_fetch":
+        enableOWAFetch()
+        break
+    case "disable_owa_fetch":
+      disableOwaFetch()
       break
     case 'save_courses':
       saveCourses(request.course_list)
@@ -208,12 +277,17 @@ function loggedOut(portal) {
   }, timeout);
 }
 
+function disableOwaFetch() {
+  console.log("stoped owa connection")
+  chrome.alarms.clearAll(() => {})
+}
+
 function show_badge(Text, Color, timeout) {
   chrome.browserAction.setBadgeText({text: Text});
   chrome.browserAction.setBadgeBackgroundColor({color: Color});
-  setTimeout(function() {
-    chrome.browserAction.setBadgeText({text: ""});
-  }, timeout);
+  //setTimeout(function() {
+  //  chrome.browserAction.setBadgeText({text: ""});
+  //}, timeout);
 }
 
 function save_clicks(counter){
@@ -274,6 +348,19 @@ async function setUserData(userData) {
   userDataEncrypted = btoa(userDataEncrypted)
   iv = Array.from(iv).map(b => ('00' + b.toString(16)).slice(-2)).join('')
   chrome.storage.local.set({Data: iv + userDataEncrypted}, function() {})
+}
+
+//check if username, password exist
+function userDataExists(){
+  return new Promise(async (resolve, reject) => {
+      let userData = await getUserData()
+      if (userData.asdf === undefined || userData.fdsa === undefined){
+          resolve(false)
+          return
+      }
+      resolve(true)
+      return
+  })
 }
 
 //return {asdf: "", fdsa: ""}

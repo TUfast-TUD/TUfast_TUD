@@ -59,6 +59,9 @@ function displayEnabled() {
   chrome.storage.local.get(['fwdEnabled'], function(result) {
       this.document.getElementById('switch_fwd').checked = result.fwdEnabled
   })
+  chrome.storage.local.get(['enabledOWAFetch'], function(result) {
+    this.document.getElementById('owa_mail_fetch').checked = result.enabledOWAFetch
+  })
   /*chrome.storage.local.get(['dashboardDisplay'], function(result) {
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
     if(result.dashboardDisplay === "meine_kurse") {document.getElementById('crs').checked = true}
@@ -93,6 +96,40 @@ function openKeyboardSettings(){
   chrome.runtime.sendMessage({cmd: 'open_shortcut_settings'}, function(result) {})
 }
 
+async function toggleOWAfetch(){
+  //check for optional tabs permission
+  await chrome.permissions.contains({
+    permissions: ['tabs'],
+  }, function(result) {
+    if (!result) {
+      chrome.permissions.request({
+        permissions: ['tabs']
+      }, function(granted) {
+        if (!granted) {
+          alert("Chrome braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte drücke 'Erlauben'")
+          return
+        } 
+      });
+    } 
+  });
+  //
+  chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
+    if(resp.enabledOWAFetch) {
+      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
+      chrome.storage.local.set({"enabledOWAFetch": false})
+    } else {
+      chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
+        if(!(result.asdf === undefined || result.fdsa === undefined)) {
+          chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) {})
+          chrome.storage.local.set({"enabledOWAFetch": true})
+        } else {
+          this.document.getElementById('owa_mail_fetch').checked = false
+        }
+    })
+    }
+  })
+}
+
 //this need to be done here since manifest v2
 window.onload = function(){
     //assign functions
@@ -101,6 +138,7 @@ window.onload = function(){
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
     document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
     document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
+    this.document.getElementById('owa_mail_fetch').onclick = toggleOWAfetch
     //document.getElementById('fav').onclick = dashboardCourseSelect
     //document.getElementById('crs').onclick = dashboardCourseSelect
 

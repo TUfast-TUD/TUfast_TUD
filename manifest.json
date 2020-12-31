@@ -5,7 +5,7 @@
   "permissions": [
     "storage", "system.cpu", "alarms"
   ],
-  "optional_permissions": [],
+  "optional_permissions": ["tabs"],
   "background": {
     "scripts": [
       "background.js"
