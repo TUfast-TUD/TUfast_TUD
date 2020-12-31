@@ -33,8 +33,9 @@ function deleteUserData() {
       chrome.storage.local.set({favoriten: false}, function() {})
       // --
       // -- also deactivate owa fetch
-      this.document.getElementById('owa_mail_fetch').checked = false
+      document.getElementById('owa_mail_fetch').checked = false
       chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
+      chrome.storage.local.set({"enabledOWAFetch": false})
       // --
       document.getElementById('status_msg').innerHTML = ""
       document.getElementById("delete_data").innerHTML='<font>Gel&ouml;scht!</font>'
@@ -123,6 +124,7 @@ async function toggleOWAfetch(){
       chrome.storage.local.set({"enabledOWAFetch": false})
     } else {
       chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
+        console.log(result.asdf  + result.fdsa)
         if(!(result.asdf === undefined || result.fdsa === undefined)) {
           document.getElementById("owa_fetch_msg").innerHTML = ""
           chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) {})
