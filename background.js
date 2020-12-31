@@ -144,7 +144,7 @@ function enableOWAFetch() {
   //first, clear all alarms
   console.log("starting to fetch from owa...")
   chrome.alarms.clearAll(() => {
-      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 0, periodInMinutes: 0.1 })
+      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 1, periodInMinutes: 5 })
       chrome.alarms.onAlarm.addListener(async (alarm) => {
           //dont logout if user is currently using owa in browser
           let logout = true
@@ -286,6 +286,8 @@ function loggedOut(portal) {
 
 function disableOwaFetch() {
   console.log("stoped owa connection")
+  setBadgeUnreadMails(0)
+  chrome.storage.local.set({"NumberOfUnreadMails": 0})
   chrome.alarms.clearAll(() => {})
 }
 
