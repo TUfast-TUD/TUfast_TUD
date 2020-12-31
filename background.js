@@ -249,7 +249,7 @@ function setBadgeUnreadMails(numberUnreadMails){
 }
 
 //show badge when extension is triggered
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'show_ok_badge':
       //show_badge('Login', '#4cb749', request.timeout)

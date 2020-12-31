@@ -107,12 +107,14 @@ async function toggleOWAfetch(){
     permissions: ['tabs'],
   }, function(result) {
     if (!result) {
-      alert("Fuer diese Funktion braucht TUfast eine zusaetzliche Berechtigung, um ungelesene Mails im Hintergrund abzurufen. Druecke im folgenden Fenster auf 'Erlauben'")
+     // alert("Fuer diese Funktion braucht TUfast eine zusaetzliche Berechtigung, um ungelesene Mails im Hintergrund abzurufen. Druecke im folgenden Fenster auf 'Erlauben'")
       chrome.permissions.request({
         permissions: ['tabs']
       }, function(granted) {
         if (!granted) {
-          alert("TUfast braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
+          chrome.storage.local.set({ "enabledOWAFetch": false })
+          this.document.getElementById('owa_mail_fetch').checked = false
+          alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
           return
         } 
       });
@@ -149,6 +151,7 @@ function denyHostPermissionS() {
 function requestHostPermissionS() {
   chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
   chrome.permissions.request({
+    permissions:["tabs"],
     origins: ["*://*.tu-dresden.de/*", "*://*.slub-dresden.de/*"]
   }, function (granted) {
     if (granted) {
