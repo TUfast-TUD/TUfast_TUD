@@ -34,7 +34,7 @@ function deleteUserData() {
       // --
       // -- also deactivate owa fetch
       document.getElementById('owa_mail_fetch').checked = false
-      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
+      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
       chrome.storage.local.set({"enabledOWAFetch": false})
       // --
       document.getElementById('status_msg').innerHTML = ""
@@ -105,39 +105,48 @@ async function toggleOWAfetch(){
   //check for optional tabs permission
   await chrome.permissions.contains({
     permissions: ['tabs'],
-  }, function(result) {
-    if (!result) {
-     // alert("Fuer diese Funktion braucht TUfast eine zusaetzliche Berechtigung, um ungelesene Mails im Hintergrund abzurufen. Druecke im folgenden Fenster auf 'Erlauben'")
-      chrome.permissions.request({
-        permissions: ['tabs']
-      }, function(granted) {
-        if (!granted) {
-          chrome.storage.local.set({ "enabledOWAFetch": false })
-          this.document.getElementById('owa_mail_fetch').checked = false
-          alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
-          return
-        } 
-      });
+  }, async function(gotPermission) {
+      if (gotPermission) {
+        enableOWAFetch()
+      }
+      else {
+        //request permission
+        await chrome.permissions.request({
+          permissions: ['tabs']
+        }, function (granted) {
+          if (granted) {
+            enableOWAFetch()
+          }
+          else {
+            chrome.storage.local.set({ "enabledOWAFetch": false })
+            this.document.getElementById('owa_mail_fetch').checked = false
+            alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
+            return
+          }
+        });
+      }
     } 
-  });
-  //
+  );
+}
+
+function enableOWAFetch(){
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-    if(resp.enabledOWAFetch) {
+    if (resp.enabledOWAFetch) {
       //disable
-      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
-      chrome.storage.local.set({"enabledOWAFetch": false})
+      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
+      chrome.storage.local.set({ "enabledOWAFetch": false })
     } else {
-      chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
+      chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
         //check if user data is saved
-        if(!(result.asdf === undefined || result.fdsa === undefined)) {
+        if (!(result.asdf === undefined || result.fdsa === undefined)) {
           document.getElementById("owa_fetch_msg").innerHTML = ""
-          chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) {})
-          chrome.storage.local.set({"enabledOWAFetch": true})
+          chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) { })
+          chrome.storage.local.set({ "enabledOWAFetch": true })
         } else {
           document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>Speichere deine Login-Daten im Punkt 'Automatisches Anmelden in Opal, Selma & Co.' um diese Funktion zu nutzen!<font>"
           this.document.getElementById('owa_mail_fetch').checked = false
         }
-    })
+      })
     }
   })
 }

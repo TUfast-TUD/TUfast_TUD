@@ -229,7 +229,7 @@ function enableOWAFetch() {
 }
 
 function disableOwaFetch() {
-  console.log("stoped owa connection")
+  console.log("stopped owa connection")
   setBadgeUnreadMails(0)
   chrome.storage.local.set({"NumberOfUnreadMails": 0})
   chrome.alarms.clearAll(() => {})
@@ -280,6 +280,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case "disable_owa_fetch":
       disableOwaFetch()
+      break
     case 'reload_extension':
       chrome.runtime.reload()
       break
