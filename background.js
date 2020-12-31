@@ -194,38 +194,43 @@ async function loginDataExists(){
 function enableOWAFetch() {
   //first, clear all alarms
   console.log("starting to fetch from owa...")
+  owaFetch()
   chrome.alarms.clearAll(() => {
       chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 1, periodInMinutes: 5 })
       chrome.alarms.onAlarm.addListener(async (alarm) => {
-          //dont logout if user is currently using owa in browser
-          let logout = true
-          if(await owaIsOpened()) {
-              logout = false
-          }
-
-          console.log("executing fetch ...")
-          
-          //get user data
-          let asdf = ""
-          let fdsa = ""
-          await getUserData().then((userData) => {
-              asdf = userData.asdf
-              fdsa = userData.fdsa
-          })
-
-          //call fetch
-          let mailInfoJson = await fetchOWA(asdf, fdsa, logout)
-
-          //check # of unread mails
-          let numberUnreadMails = await countUnreadMsg(mailInfoJson)
-          console.log("Unread mails in OWA: " + numberUnreadMails)
-          
-          //set badge and local storage
-          chrome.storage.local.set({"NumberOfUnreadMails": numberUnreadMails})
-          setBadgeUnreadMails(numberUnreadMails)
-
+        owaFetch()
       })
   })
+}
+
+async function owaFetch(){
+  //dont logout if user is currently using owa in browser
+  let logout = true
+  if (await owaIsOpened()) {
+    logout = false
+  }
+
+  console.log("executing fetch ...")
+
+  //get user data
+  let asdf = ""
+  let fdsa = ""
+
+  await getUserData().then((userData) => {
+    asdf = userData.asdf
+    fdsa = userData.fdsa
+  })
+
+  //call fetch
+  let mailInfoJson = await fetchOWA(asdf, fdsa, logout)
+
+  //check # of unread mails
+  let numberUnreadMails = await countUnreadMsg(mailInfoJson)
+  console.log("Unread mails in OWA: " + numberUnreadMails)
+
+  //set badge and local storage
+  chrome.storage.local.set({ "NumberOfUnreadMails": numberUnreadMails })
+  setBadgeUnreadMails(numberUnreadMails)
 }
 
 function disableOwaFetch() {
@@ -604,7 +609,7 @@ function fetchOWA(username, password, logout) {
         let temp = respText.split("window.clientId = '")[1]
         let clientId = temp.split("'")[0]
         let corrId = clientId + "_" + (new Date()).getTime()
-        //console.log("corrID: " + corrId)
+        console.log("corrID: " + corrId)
       })
       //getConversations
       .then(corrId => {

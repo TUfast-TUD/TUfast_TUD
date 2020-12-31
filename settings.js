@@ -102,16 +102,17 @@ function openKeyboardSettings(){
 }
 
 async function toggleOWAfetch(){
+  //NOTE: not required to check for permission. Browser will only ask for permission, if not given yet!
   //check for optional tabs permission
-  await chrome.permissions.contains({
-    permissions: ['tabs'],
-  }, async function(gotPermission) {
-      if (gotPermission) {
-        enableOWAFetch()
-      }
-      else {
+  //await chrome.permissions.contains({
+  //  permissions: ['tabs'],
+  //}, async function(gotPermission) {
+  //    if (gotPermission) {
+  //      enableOWAFetch()
+  //    }
+  //    else {
         //request permission
-        await chrome.permissions.request({
+        chrome.permissions.request({
           permissions: ['tabs']
         }, function (granted) {
           if (granted) {
@@ -124,9 +125,9 @@ async function toggleOWAfetch(){
             return
           }
         });
-      }
-    } 
-  );
+  //    }
+  //  } 
+  //);
 }
 
 function enableOWAFetch(){
@@ -183,7 +184,8 @@ window.onload = async function(){
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
     document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
     document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
-    this.document.getElementById('owa_mail_fetch').onclick = toggleOWAfetch
+    document.getElementById("owa_mail_fetch").addEventListener('click', toggleOWAfetch) 
+
     //document.getElementById('fav').onclick = dashboardCourseSelect
     //document.getElementById('crs').onclick = dashboardCourseSelect
 
@@ -191,8 +193,8 @@ window.onload = async function(){
     chrome.storage.onChanged.addListener(function(changes, namespace) {
       for (var key in changes) {
         if(key === "openSettingsPageParam" && changes[key].newValue === "auto_login_settings") {
-          if(!this.document.getElementById("auto_login_settings").classList.contains("active")) {
-            this.document.getElementById("auto_login_settings").click()
+          if(!document.getElementById("auto_login_settings").classList.contains("active")) {
+            document.getElementById("auto_login_settings").click()
           }
           chrome.storage.local.set({openSettingsPageParam: false}, function() {})
           document.getElementById("settings_comment").innerHTML = "<strong>F&uuml;r dieses Feature gib hier deine Zugangsdaten ein.</strong>"
