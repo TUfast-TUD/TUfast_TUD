@@ -111,7 +111,6 @@ async function loginDataExists(){
 }
 
 //set alaram and function to be executed to fetch from owa
-  //TODO: implement optional permissions for that mail thing!
 function enableOWAFetch() {
   chrome.alarms.create("fetchOWAAlarm", {delayInMinutes: 0.1, periodInMinutes: 0.1})
   chrome.alarms.onAlarm.addListener((alarm) => {
@@ -340,117 +339,128 @@ function loadCourses(type) {
   }
 }
 
+function customURIEncoding(string){
+  string = encodeURIComponent(string)
+  string = string.replace("!", "%21").replace("'", "%27").replace("(", "%28").replace(")", "%29").replace("~", "%7E")
+  return string
+}
+
 //function to log msx.tu-dresden.de/owa/ and retrieve the .json containing information about EMails
 function fetchOWA(username, password) {
-  
-  //TODO Decode username, password
-  username=encodeURI(username)
-  password=encodeURI(password)
+  return new Promise((resolve, reject) => {
+    
+    //encodeURIComponent and encodeURI are not working for all chars. See documentation. Thats why I add custom encoding.
+    username=customURIEncoding(username)
+    password=customURIEncoding(password)
 
-  //login
-  fetch("https://msx.tu-dresden.de/owa/auth.owa", {
-    "headers": {
-      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-      "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
-      "cache-control": "max-age=0",
-      "content-type": "application/x-www-form-urlencoded",
-      "sec-fetch-dest": "document",
-      "sec-fetch-mode": "navigate",
-      "sec-fetch-site": "same-origin",
-      "sec-fetch-user": "?1",
-      "upgrade-insecure-requests": "1"
-    },
-    "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa%2f%23authRedirect%3dtrue",
-    "referrerPolicy": "strict-origin-when-cross-origin",
-    "body": "destination=https%3A%2F%2Fmsx.tu-dresden.de%2Fowa%2F%23authRedirect%3Dtrue&flags=4&forcedownlevel=0&username="+username+"%40msx.tu-dresden.de&password="+password+"&passwordText=&isUtf8=1",
-    "method": "POST",
-    "mode": "no-cors",
-    "credentials": "include"
-  })
-  .then(()=>{
-    //get clientID and correlationID
-    fetch("https://msx.tu-dresden.de/owa/", {
+    var mailInfoJson = new Object()
+
+    //login
+    fetch("https://msx.tu-dresden.de/owa/auth.owa", {
       "headers": {
         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
         "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
         "cache-control": "max-age=0",
+        "content-type": "application/x-www-form-urlencoded",
         "sec-fetch-dest": "document",
         "sec-fetch-mode": "navigate",
         "sec-fetch-site": "same-origin",
         "sec-fetch-user": "?1",
         "upgrade-insecure-requests": "1"
       },
-      "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa",
+      "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa%2f%23authRedirect%3dtrue",
       "referrerPolicy": "strict-origin-when-cross-origin",
-      "body": null,
-      "method": "GET",
-      "mode": "cors",
+      "body": "destination=https%3A%2F%2Fmsx.tu-dresden.de%2Fowa%2F%23authRedirect%3Dtrue&flags=4&forcedownlevel=0&username="+username+"%40msx.tu-dresden.de&password="+password+"&passwordText=&isUtf8=1",
+      "method": "POST",
+      "mode": "no-cors",
       "credentials": "include"
     })
-    //extract x-owa-correlationid. correlation id is
-    .then(resp => resp.text()).then(respText => {
-      let temp = respText.split("window.clientId = '")[1]
-      let clientId = temp.split("'")[0]
-      let corrId = clientId + "_" + (new Date()).getTime()
-      console.log("corrID: " + corrId)
-    })
-    //getConversations
-    .then(corrId => {
-      fetch("https://msx.tu-dresden.de/owa/sessiondata.ashx?appcacheclient=0", {
+    .then(()=>{
+      //get clientID and correlationID
+      fetch("https://msx.tu-dresden.de/owa/", {
         "headers": {
-          "accept": "*/*",
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
           "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
-          "sec-fetch-dest": "empty",
-          "sec-fetch-mode": "cors",
+          "cache-control": "max-age=0",
+          "sec-fetch-dest": "document",
+          "sec-fetch-mode": "navigate",
           "sec-fetch-site": "same-origin",
-          "x-owa-correlationid": corrId,
-          "x-owa-smimeinstalled": "1"
+          "sec-fetch-user": "?1",
+          "upgrade-insecure-requests": "1"
         },
-        "referrer": "https://msx.tu-dresden.de/owa/",
+        "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa",
         "referrerPolicy": "strict-origin-when-cross-origin",
         "body": null,
-        "method": "POST",
+        "method": "GET",
         "mode": "cors",
         "credentials": "include"
       })
-      .then(resp => resp.json()).then(respText => {
-        console.log(countUnreadMsg(respText))
+      //extract x-owa-correlationid. correlation id is
+      .then(resp => resp.text()).then(respText => {
+        let temp = respText.split("window.clientId = '")[1]
+        let clientId = temp.split("'")[0]
+        let corrId = clientId + "_" + (new Date()).getTime()
+        console.log("corrID: " + corrId)
       })
-      //logout
-      .then(()=>{
-        fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
+      //getConversations
+      .then(corrId => {
+        fetch("https://msx.tu-dresden.de/owa/sessiondata.ashx?appcacheclient=0", {
           "headers": {
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "accept": "*/*",
             "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
             "sec-fetch-site": "same-origin",
-            "sec-fetch-user": "?1",
-            "upgrade-insecure-requests": "1"
+            "x-owa-correlationid": corrId,
+            "x-owa-smimeinstalled": "1"
           },
           "referrer": "https://msx.tu-dresden.de/owa/",
           "referrerPolicy": "strict-origin-when-cross-origin",
           "body": null,
-          "method": "GET",
+          "method": "POST",
           "mode": "cors",
           "credentials": "include"
         })
-      })
-    }) 
+        .then(resp => resp.json()).then(respJson => {
+          mailInfoJson = respJson
+        })
+        //logout
+        .then(()=>{
+          fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
+            "headers": {
+              "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+              "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
+              "sec-fetch-dest": "document",
+              "sec-fetch-mode": "navigate",
+              "sec-fetch-site": "same-origin",
+              "sec-fetch-user": "?1",
+              "upgrade-insecure-requests": "1"
+            },
+            "referrer": "https://msx.tu-dresden.de/owa/",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": null,
+            "method": "GET",
+            "mode": "cors",
+            "credentials": "include"
+          })
+        }).then(() => resolve(mailInfoJson))
+      }) 
+    })
   })
-
 }
 
 function countUnreadMsg(json) {
-  let conversations = json.findConversation.Body.Conversations
-  let counterUnreadMsg = 0;
-  for(var i = 0; i < conversations.length; i++) {
-    var conv = conversations[i]
-    if(conv.hasOwnProperty('UnreadCount')) {
-      if(conv.UnreadCount == 1) {
-        counterUnreadMsg++;
-      }
+  return new Promise((resolve, reject) => {
+    let conversations = json.findConversation.Body.Conversations
+    let counterUnreadMsg = 0;
+    for (var i = 0; i < conversations.length; i++) {
+        var conv = conversations[i]
+        if (conv.hasOwnProperty('UnreadCount')) {
+            if (conv.UnreadCount == 1) {
+                counterUnreadMsg++;
+            }
+        }
     }
-  }
-  return counterUnreadMsg;
+    resolve(counterUnreadMsg)
+  })
 }
