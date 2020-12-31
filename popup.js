@@ -59,7 +59,7 @@ function clicksToTime(clicks) {
 
 
 function openSettings(){
-    chrome.runtime.sendMessage({cmd: 'open_settings_page'}, function(result) {}) //for some reason I need to pass empty param - else it wont work in ff
+    chrome.runtime.sendMessage({cmd: 'open_settings_page', param: ""}, function(result) {}) //for some reason I need to pass empty param - else it wont work in ff
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
     if (isFirefox) window.close()
     return false //Required for ff

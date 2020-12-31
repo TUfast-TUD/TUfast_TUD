@@ -16,7 +16,6 @@ function saveUserData() {
         document.getElementById("password_field").value = ""
         document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
         setTimeout(()=>{
-          document.getElementById("save_data").style.backgroundColor= "grey"
           document.getElementById("save_data").innerHTML='Speichern'
           document.getElementById("save_data").disabled=false;
         }, 2000)
@@ -34,7 +33,7 @@ function deleteUserData() {
       // --
       // -- also deactivate owa fetch
       document.getElementById('owa_mail_fetch').checked = false
-      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
+      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
       chrome.storage.local.set({"enabledOWAFetch": false})
       // --
       document.getElementById('status_msg').innerHTML = ""
@@ -102,41 +101,52 @@ function openKeyboardSettings(){
 }
 
 async function toggleOWAfetch(){
+  //NOTE: not required to check for permission. Browser will only ask for permission, if not given yet!
   //check for optional tabs permission
-  await chrome.permissions.contains({
-    permissions: ['tabs']
-  }, async function(result) {
-    if (!result) {
-      await chrome.permissions.request({
-        permissions: ['tabs']
-      }, function(granted) {
-        if (!granted) {
-          alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
-          return
-        } else { enableOWAFetch()}
-      });
-    } else {enableOWAFetch()}
-  });  
+  //await chrome.permissions.contains({
+  //  permissions: ['tabs'],
+  //}, async function(gotPermission) {
+  //    if (gotPermission) {
+  //      enableOWAFetch()
+  //    }
+  //    else {
+        //request permission
+        chrome.permissions.request({
+          permissions: ['tabs']
+        }, function (granted) {
+          if (granted) {
+            enableOWAFetch()
+          }
+          else {
+            chrome.storage.local.set({ "enabledOWAFetch": false })
+            this.document.getElementById('owa_mail_fetch').checked = false
+            alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
+            return
+          }
+        });
+  //    }
+  //  } 
+  //);
 }
 
 function enableOWAFetch(){
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-    if(resp.enabledOWAFetch) {
+    if (resp.enabledOWAFetch) {
       //disable
-      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
-      chrome.storage.local.set({"enabledOWAFetch": false})
+      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
+      chrome.storage.local.set({ "enabledOWAFetch": false })
     } else {
-      chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
+      chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
         //check if user data is saved
-        if(!(result.asdf === undefined || result.fdsa === undefined)) {
+        if (!(result.asdf === undefined || result.fdsa === undefined)) {
           document.getElementById("owa_fetch_msg").innerHTML = ""
-          chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) {})
-          chrome.storage.local.set({"enabledOWAFetch": true})
+          chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) { })
+          chrome.storage.local.set({ "enabledOWAFetch": true })
         } else {
           document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>Speichere deine Login-Daten im Punkt 'Automatisches Anmelden in Opal, Selma & Co.' um diese Funktion zu nutzen!<font>"
           this.document.getElementById('owa_mail_fetch').checked = false
         }
-    })
+      })
     }
   })
 }
@@ -150,6 +160,7 @@ function denyHostPermissionS() {
 function requestHostPermissionS() {
   chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
   chrome.permissions.request({
+    permissions:["tabs"],
     origins: ["*://*.tu-dresden.de/*", "*://*.slub-dresden.de/*"]
   }, function (granted) {
     if (granted) {
@@ -172,7 +183,8 @@ window.onload = async function(){
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
     document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
     document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
-    this.document.getElementById('owa_mail_fetch').onclick = toggleOWAfetch
+    document.getElementById("owa_mail_fetch").addEventListener('click', toggleOWAfetch) 
+
     //document.getElementById('fav').onclick = dashboardCourseSelect
     //document.getElementById('crs').onclick = dashboardCourseSelect
 
@@ -180,8 +192,8 @@ window.onload = async function(){
     chrome.storage.onChanged.addListener(function(changes, namespace) {
       for (var key in changes) {
         if(key === "openSettingsPageParam" && changes[key].newValue === "auto_login_settings") {
-          if(!this.document.getElementById("auto_login_settings").classList.contains("active")) {
-            this.document.getElementById("auto_login_settings").click()
+          if(!document.getElementById("auto_login_settings").classList.contains("active")) {
+            document.getElementById("auto_login_settings").click()
           }
           chrome.storage.local.set({openSettingsPageParam: false}, function() {})
           document.getElementById("settings_comment").innerHTML = "<strong>F&uuml;r dieses Feature gib hier deine Zugangsdaten ein.</strong>"

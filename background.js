@@ -195,42 +195,47 @@ async function loginDataExists(){
 function enableOWAFetch() {
   //first, clear all alarms
   console.log("starting to fetch from owa...")
+  owaFetch()
   chrome.alarms.clearAll(() => {
       chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 1, periodInMinutes: 5 })
       chrome.alarms.onAlarm.addListener(async (alarm) => {
-          //dont logout if user is currently using owa in browser
-          let logout = true
-          if(await owaIsOpened()) {
-              logout = false
-          }
-
-          console.log("executing fetch ...")
-          
-          //get user data
-          let asdf = ""
-          let fdsa = ""
-          await getUserData().then((userData) => {
-              asdf = userData.asdf
-              fdsa = userData.fdsa
-          })
-
-          //call fetch
-          let mailInfoJson = await fetchOWA(asdf, fdsa, logout)
-
-          //check # of unread mails
-          let numberUnreadMails = await countUnreadMsg(mailInfoJson)
-          console.log("Unread mails in OWA: " + numberUnreadMails)
-          
-          //set badge and local storage
-          chrome.storage.local.set({"NumberOfUnreadMails": numberUnreadMails})
-          setBadgeUnreadMails(numberUnreadMails)
-
+        owaFetch()
       })
   })
 }
 
+async function owaFetch(){
+  //dont logout if user is currently using owa in browser
+  let logout = true
+  if (await owaIsOpened()) {
+    logout = false
+  }
+
+  console.log("executing fetch ...")
+
+  //get user data
+  let asdf = ""
+  let fdsa = ""
+
+  await getUserData().then((userData) => {
+    asdf = userData.asdf
+    fdsa = userData.fdsa
+  })
+
+  //call fetch
+  let mailInfoJson = await fetchOWA(asdf, fdsa, logout)
+
+  //check # of unread mails
+  let numberUnreadMails = await countUnreadMsg(mailInfoJson)
+  console.log("Unread mails in OWA: " + numberUnreadMails)
+
+  //set badge and local storage
+  chrome.storage.local.set({ "NumberOfUnreadMails": numberUnreadMails })
+  setBadgeUnreadMails(numberUnreadMails)
+}
+
 function disableOwaFetch() {
-  console.log("stoped owa connection")
+  console.log("stopped owa connection")
   setBadgeUnreadMails(0)
   chrome.storage.local.set({"NumberOfUnreadMails": 0})
   chrome.alarms.clearAll(() => {})
@@ -281,6 +286,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case "disable_owa_fetch":
       disableOwaFetch()
+      break
     case 'reload_extension':
       chrome.runtime.reload()
       break
@@ -566,6 +572,7 @@ function fetchOWA(username, password, logout) {
         "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
         "cache-control": "max-age=0",
         "content-type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
         "sec-fetch-dest": "document",
         "sec-fetch-mode": "navigate",
         "sec-fetch-site": "same-origin",
@@ -574,6 +581,7 @@ function fetchOWA(username, password, logout) {
       },
       "referrer": "https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa%2f%23authRedirect%3dtrue",
       "referrerPolicy": "strict-origin-when-cross-origin",
+      "Access-Control-Allow-Origin": "*",
       "body": "destination=https%3A%2F%2Fmsx.tu-dresden.de%2Fowa%2F%23authRedirect%3Dtrue&flags=4&forcedownlevel=0&username="+username+"%40msx.tu-dresden.de&password="+password+"&passwordText=&isUtf8=1",
       "method": "POST",
       "mode": "no-cors",
@@ -588,6 +596,7 @@ function fetchOWA(username, password, logout) {
           "cache-control": "max-age=0",
           "sec-fetch-dest": "document",
           "sec-fetch-mode": "navigate",
+          "Access-Control-Allow-Origin": "*",
           "sec-fetch-site": "same-origin",
           "sec-fetch-user": "?1",
           "upgrade-insecure-requests": "1"
@@ -596,6 +605,7 @@ function fetchOWA(username, password, logout) {
         "referrerPolicy": "strict-origin-when-cross-origin",
         "body": null,
         "method": "GET",
+        "Access-Control-Allow-Origin": "*",
         "mode": "cors",
         "credentials": "include"
       })
@@ -604,7 +614,7 @@ function fetchOWA(username, password, logout) {
         let temp = respText.split("window.clientId = '")[1]
         let clientId = temp.split("'")[0]
         let corrId = clientId + "_" + (new Date()).getTime()
-        //console.log("corrID: " + corrId)
+        console.log("corrID: " + corrId)
       })
       //getConversations
       .then(corrId => {
@@ -614,12 +624,14 @@ function fetchOWA(username, password, logout) {
             "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
+            "Access-Control-Allow-Origin": "*",
             "sec-fetch-site": "same-origin",
             "x-owa-correlationid": corrId,
             "x-owa-smimeinstalled": "1"
           },
           "referrer": "https://msx.tu-dresden.de/owa/",
           "referrerPolicy": "strict-origin-when-cross-origin",
+          "Access-Control-Allow-Origin": "*",
           "body": null,
           "method": "POST",
           "mode": "cors",
@@ -638,6 +650,7 @@ function fetchOWA(username, password, logout) {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
                 "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
                 "sec-fetch-dest": "document",
+                "Access-Control-Allow-Origin": "*",
                 "sec-fetch-mode": "navigate",
                 "sec-fetch-site": "same-origin",
                 "sec-fetch-user": "?1",
@@ -645,6 +658,7 @@ function fetchOWA(username, password, logout) {
               },
               "referrer": "https://msx.tu-dresden.de/owa/",
               "referrerPolicy": "strict-origin-when-cross-origin",
+              "Access-Control-Allow-Origin": "*",
               "body": null,
               "method": "GET",
               "mode": "cors",
