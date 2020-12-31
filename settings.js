@@ -104,21 +104,22 @@ function openKeyboardSettings(){
 async function toggleOWAfetch(){
   //check for optional tabs permission
   await chrome.permissions.contains({
-    permissions: ['tabs'],
-  }, function(result) {
+    permissions: ['tabs']
+  }, async function(result) {
     if (!result) {
-      alert("Fuer diese Funktion braucht TUfast eine zusaetzliche Berechtigung, um ungelesene Mails im Hintergrund abzurufen. Druecke im folgenden Fenster auf 'Erlauben'")
-      chrome.permissions.request({
+      await chrome.permissions.request({
         permissions: ['tabs']
       }, function(granted) {
         if (!granted) {
-          alert("TUfast braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
+          alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
           return
-        } 
+        } else { enableOWAFetch()}
       });
-    } 
-  });
-  //
+    } else {enableOWAFetch()}
+  });  
+}
+
+function enableOWAFetch(){
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
     if(resp.enabledOWAFetch) {
       //disable

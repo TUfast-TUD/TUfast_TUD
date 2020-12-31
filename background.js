@@ -41,6 +41,7 @@ function regAddContentScripts() {
       }
       // register rule
       chrome.declarativeContent.onPageChanged.addRules([ruleTUMED])
+      console.log("Tried to register addtional content scripts. Success unconfirmed.")
     })
   } catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
   
@@ -249,7 +250,7 @@ function setBadgeUnreadMails(numberUnreadMails){
 }
 
 //show badge when extension is triggered
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'show_ok_badge':
       //show_badge('Login', '#4cb749', request.timeout)
