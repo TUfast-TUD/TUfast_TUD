@@ -13,6 +13,7 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
 
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
+chrome.storage.local.set({loggedOutElearningMED: false}, function() {})
 chrome.storage.local.set({loggedOutTumed: false}, function() {})
 chrome.storage.local.set({loggedOutQis: false}, function() {})
 chrome.storage.local.set({loggedOutOpal: false}, function() {})

@@ -14,6 +14,11 @@
   },
   "content_scripts": [
     {
+      "js": ["contentScripts/content_elearningMED.js"],
+      "run_at": "document_start",
+      "matches": ["https://elearning.med.tu-dresden.de/*"]
+    },
+    {
       "js": [
         "contentScripts/content_fwd_opalError.js"
       ],
