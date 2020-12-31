@@ -4,8 +4,8 @@
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
   userDataExists().then((userDataExists) => {
     if (userDataExists && resp.enabledOWAFetch) {
-        enableOWAFetch()
-        setBadgeUnreadMails(resp.NumberOfUnreadMails)
+        enableOWAFetch() //start owa fetch
+        setBadgeUnreadMails(resp.NumberOfUnreadMails) //read number of unread mails from storage and display badge
         console.log("Activated OWA fetch.")
     } else {console.log("No OWAfetch registered")}
   })
@@ -104,7 +104,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
   }
 })
 
-
+//checks, if user currently uses owa in browser
 function owaIsOpened(){
   return new Promise(async (resolve, reject) => {
       let uri = "msx.tu-dresden.de"
@@ -139,7 +139,7 @@ async function loginDataExists(){
 }
 
 
-//start OWA fetch funtion interval based
+//start OWA fetch funtion based on interval
 function enableOWAFetch() {
   //first, clear all alarms
   console.log("starting to fetch from owa...")
@@ -169,11 +169,19 @@ function enableOWAFetch() {
           let numberUnreadMails = await countUnreadMsg(mailInfoJson)
           console.log("Unread mails in OWA: " + numberUnreadMails)
           
+          //set badge and local storage
           chrome.storage.local.set({"NumberOfUnreadMails": numberUnreadMails})
           setBadgeUnreadMails(numberUnreadMails)
 
       })
   })
+}
+
+function disableOwaFetch() {
+  console.log("stoped owa connection")
+  setBadgeUnreadMails(0)
+  chrome.storage.local.set({"NumberOfUnreadMails": 0})
+  chrome.alarms.clearAll(() => {})
 }
 
 function setBadgeUnreadMails(numberUnreadMails){
@@ -187,7 +195,6 @@ function setBadgeUnreadMails(numberUnreadMails){
   else {
       show_badge(numberUnreadMails.toString(), '#4cb749')
   }
-
 }
 
 //show badge when extension is triggered
@@ -218,8 +225,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       loggedOut(request.portal)
       break
     case "enable_owa_fetch":
-        enableOWAFetch()
-        break
+      enableOWAFetch()
+      break
     case "disable_owa_fetch":
       disableOwaFetch()
       break
@@ -284,12 +291,7 @@ function loggedOut(portal) {
   }, timeout);
 }
 
-function disableOwaFetch() {
-  console.log("stoped owa connection")
-  setBadgeUnreadMails(0)
-  chrome.storage.local.set({"NumberOfUnreadMails": 0})
-  chrome.alarms.clearAll(() => {})
-}
+
 
 function show_badge(Text, Color, timeout) {
   chrome.browserAction.setBadgeText({text: Text});
@@ -435,6 +437,7 @@ function loadCourses(type) {
   }
 }
 
+//function for custom URIEncoding
 function customURIEncoding(string){
   string = encodeURIComponent(string)
   string = string.replace("!", "%21").replace("'", "%27").replace("(", "%28").replace(")", "%29").replace("~", "%7E")
@@ -445,11 +448,11 @@ function customURIEncoding(string){
 function fetchOWA(username, password, logout) {
   return new Promise((resolve, reject) => {
     
-    //encodeURIComponent and encodeURI are not working for all chars. See documentation. Thats why I add custom encoding.
+    //encodeURIComponent and encodeURI are not working for all chars. See documentation. Thats why I implemented custom encoding.
     username=customURIEncoding(username)
     password=customURIEncoding(password)
 
-    var mailInfoJson = new Object()
+    var mailInfoJson = new Object() //contains all required info
 
     //login
     fetch("https://msx.tu-dresden.de/owa/auth.owa", {
@@ -496,7 +499,7 @@ function fetchOWA(username, password, logout) {
         let temp = respText.split("window.clientId = '")[1]
         let clientId = temp.split("'")[0]
         let corrId = clientId + "_" + (new Date()).getTime()
-        console.log("corrID: " + corrId)
+        //console.log("corrID: " + corrId)
       })
       //getConversations
       .then(corrId => {
@@ -522,6 +525,7 @@ function fetchOWA(username, password, logout) {
         })
         //logout
         .then(()=>{
+          //only logout, if user is not using owa in browser session
           if(logout) {
             console.log("Logging out from owa..")
             fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
@@ -549,6 +553,7 @@ function fetchOWA(username, password, logout) {
   })
 }
 
+//extract number of unread messages in owa
 function countUnreadMsg(json) {
   return new Promise((resolve, reject) => {
     let conversations = json.findConversation.Body.Conversations

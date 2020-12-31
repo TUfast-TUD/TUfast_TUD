@@ -121,11 +121,12 @@ async function toggleOWAfetch(){
   //
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
     if(resp.enabledOWAFetch) {
+      //disable
       chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
       chrome.storage.local.set({"enabledOWAFetch": false})
     } else {
       chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
-        console.log(result.asdf  + result.fdsa)
+        //check if user data is saved
         if(!(result.asdf === undefined || result.fdsa === undefined)) {
           document.getElementById("owa_fetch_msg").innerHTML = ""
           chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) {})
