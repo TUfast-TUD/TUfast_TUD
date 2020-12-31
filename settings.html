@@ -13,7 +13,7 @@
     <!-- New Accordion section-->
     <button class="accordion">Abk&uuml;rzungen in der Google-Suche</button>
     <div class="panel">
-      Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen.</p>
+      <p>Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen.</p>
       <p>Aus 
         <label class="switch">
           <input type="checkbox" id="switch_fwd">
@@ -101,10 +101,15 @@
     <!-- New Accordion section--> 
     <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r TU Outlook-Mails</button>
     <div class="panel">
-      <label class="switch">
+      <p>TUfast zeigt dir die Anzahl deiner ungelesenen Mails im TU Dresden Mail Postfach an.<br>
+        <text class="grey-text">Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern.
+          <br>Weil TUfast daf&uuml;r eine spezielle Berechtigung braucht, dr&uuml;cke bitte auf "Erlauben" im folgenden Pop-Up.
+        </text> </p>
+      <p>Aus <label class="switch">
         <input type="checkbox" id="owa_mail_fetch">
         <span class="slider round"></span>
-      </label>
+      </label> Ein <text id="owa_fetch_msg"></text></p>
+      <p class="red-text">F&uuml;r diese Funktion kommuniziert TUfast mit dem Mail-Server der TU Dresden und &uuml;bermittelt verschl&uuml;sselt deine Login-Daten. Es funktioniert genauso, als w&uuml;rdest du deine Mails &uuml;ber den Browser abrufen.</p> 
     </div>
  
   <!-- New Accordion section--> 

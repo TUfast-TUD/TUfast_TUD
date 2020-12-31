@@ -19,6 +19,11 @@ html { overflow-y: scroll; }
   color: grey;
 }
 
+.red-text {
+  color: darkred;
+}
+
+
 .small-text {
   font-size: 12px;
 }

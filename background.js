@@ -1,10 +1,11 @@
 'use strict';
 
 //start fetchOWA if activated and user data exists
-chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
+chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
   userDataExists().then((userDataExists) => {
     if (userDataExists && resp.enabledOWAFetch) {
         enableOWAFetch()
+        setBadgeUnreadMails(resp.NumberOfUnreadMails)
         console.log("Activated OWA fetch.")
     } else {console.log("No OWAfetch registered")}
   })
@@ -93,6 +94,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
           if(resp.enabledOWAFetch === null || resp.enabledOWAFetch === undefined || resp.enabledOWAFetch === ""){
             chrome.storage.local.set({enabledOWAFetch: false}, function() {})
+            chrome.storage.local.set({"NumberOfUnreadMails": 0})
           }
         })
         break;
@@ -142,12 +144,12 @@ function enableOWAFetch() {
   //first, clear all alarms
   console.log("starting to fetch from owa...")
   chrome.alarms.clearAll(() => {
-      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 0, periodInMinutes: 1 })
+      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 0, periodInMinutes: 0.1 })
       chrome.alarms.onAlarm.addListener(async (alarm) => {
-          //only execute if owa not opened!
+          //dont logout if user is currently using owa in browser
+          let logout = true
           if(await owaIsOpened()) {
-              console.log("aborting fetch ..")
-              return
+              logout = false
           }
 
           console.log("executing fetch ...")
@@ -161,26 +163,31 @@ function enableOWAFetch() {
           })
 
           //call fetch
-          let mailInfoJson = await fetchOWA(asdf, fdsa)
+          let mailInfoJson = await fetchOWA(asdf, fdsa, logout)
 
           //check # of unread mails
           let numberUnreadMails = await countUnreadMsg(mailInfoJson)
           console.log("Unread mails in OWA: " + numberUnreadMails)
-
-
-          //set badge
-          if (numberUnreadMails == 0) {
-              show_badge("", '#4cb749')
-          }
-          else if (numberUnreadMails > 99) {
-              show_badge("99+", '#4cb749')
-          }
-          else {
-              show_badge(numberUnreadMails.toString(), '#4cb749')
-          }
+          
+          chrome.storage.local.set({"NumberOfUnreadMails": numberUnreadMails})
+          setBadgeUnreadMails(numberUnreadMails)
 
       })
   })
+}
+
+function setBadgeUnreadMails(numberUnreadMails){
+  //set badge
+  if (numberUnreadMails == 0) {
+    show_badge("", '#4cb749')
+  }
+  else if (numberUnreadMails > 99) {
+      show_badge("99+", '#4cb749')
+  }
+  else {
+      show_badge(numberUnreadMails.toString(), '#4cb749')
+  }
+
 }
 
 //show badge when extension is triggered
@@ -433,7 +440,7 @@ function customURIEncoding(string){
 }
 
 //function to log msx.tu-dresden.de/owa/ and retrieve the .json containing information about EMails
-function fetchOWA(username, password) {
+function fetchOWA(username, password, logout) {
   return new Promise((resolve, reject) => {
     
     //encodeURIComponent and encodeURI are not working for all chars. See documentation. Thats why I add custom encoding.
@@ -513,24 +520,28 @@ function fetchOWA(username, password) {
         })
         //logout
         .then(()=>{
-          fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
-            "headers": {
-              "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-              "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
-              "sec-fetch-dest": "document",
-              "sec-fetch-mode": "navigate",
-              "sec-fetch-site": "same-origin",
-              "sec-fetch-user": "?1",
-              "upgrade-insecure-requests": "1"
-            },
-            "referrer": "https://msx.tu-dresden.de/owa/",
-            "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": null,
-            "method": "GET",
-            "mode": "cors",
-            "credentials": "include"
-          })
-        }).then(() => resolve(mailInfoJson))
+          if(logout) {
+            console.log("Logging out from owa..")
+            fetch("https://msx.tu-dresden.de/owa/logoff.owa", {
+              "headers": {
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "accept-language": "de-DE,de;q=0.9,en-DE;q=0.8,en-GB;q=0.7,en-US;q=0.6,en;q=0.5",
+                "sec-fetch-dest": "document",
+                "sec-fetch-mode": "navigate",
+                "sec-fetch-site": "same-origin",
+                "sec-fetch-user": "?1",
+                "upgrade-insecure-requests": "1"
+              },
+              "referrer": "https://msx.tu-dresden.de/owa/",
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "body": null,
+              "method": "GET",
+              "mode": "cors",
+              "credentials": "include"
+            })
+          }
+        })
+        .then(() => resolve(mailInfoJson))
       }) 
     })
   })

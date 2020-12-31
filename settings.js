@@ -32,6 +32,10 @@ function deleteUserData() {
       chrome.storage.local.set({meine_kurse: false}, function() {})
       chrome.storage.local.set({favoriten: false}, function() {})
       // --
+      // -- also deactivate owa fetch
+      this.document.getElementById('owa_mail_fetch').checked = false
+      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, function (result) {})
+      // --
       document.getElementById('status_msg').innerHTML = ""
       document.getElementById("delete_data").innerHTML='<font>Gel&ouml;scht!</font>'
       document.getElementById("delete_data").style.backgroundColor= "rgb(47, 143, 18)"
@@ -106,7 +110,7 @@ async function toggleOWAfetch(){
         permissions: ['tabs']
       }, function(granted) {
         if (!granted) {
-          alert("Chrome braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte drücke 'Erlauben'")
+          alert("Chrome braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte drücke auf 'Erlauben'.")
           return
         } 
       });
@@ -120,9 +124,11 @@ async function toggleOWAfetch(){
     } else {
       chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
         if(!(result.asdf === undefined || result.fdsa === undefined)) {
+          document.getElementById("owa_fetch_msg").innerHTML = ""
           chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) {})
           chrome.storage.local.set({"enabledOWAFetch": true})
         } else {
+          document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>Speichere deine Login-Daten im Punkt 'Automatisches Anmelden in Opal, Selma & Co.' um diese Funktion zu nutzen!<font>"
           this.document.getElementById('owa_mail_fetch').checked = false
         }
     })
