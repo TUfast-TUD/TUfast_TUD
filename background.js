@@ -134,6 +134,8 @@ chrome.runtime.onInstalled.addListener(async(details) => {
           if(resp.enabledOWAFetch === null || resp.enabledOWAFetch === undefined || resp.enabledOWAFetch === ""){
             chrome.storage.local.set({enabledOWAFetch: false}, function() {})
             chrome.storage.local.set({"NumberOfUnreadMails": 0})
+          }
+        })
         //check, whether flake state exists. If not, initialize with false.
         chrome.storage.local.get(['flakeState'], function (result) {
           if (result.flakeState === undefined || result.flakeState === null) { //set to true, so that state will be false!
@@ -147,7 +149,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
           }
         })
         break;
-     default:
+      default:
         console.log('Other install events within the browser for TUfast.')
         break;
   }

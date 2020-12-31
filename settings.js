@@ -138,6 +138,7 @@ async function toggleOWAfetch(){
     })
     }
   })
+}
   
 function denyHostPermissionS() {
   chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
@@ -151,7 +152,7 @@ function requestHostPermissionS() {
     origins: ["*://*.tu-dresden.de/*", "*://*.slub-dresden.de/*"]
   }, function (granted) {
     if (granted) {
-      alert("Perfekt! TUfast funktioniert jetzt auf allen Seiten! Entdecke auf jetzt alle Funktionen von TUfast!")
+      alert("Perfekt! TUfast funktioniert jetzt auf allen Seiten! Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
       chrome.runtime.sendMessage({ cmd: 'register_addition_content_scripts' }, function (result) {})
       document.getElementById("addition_host_permissions").remove()
 
@@ -254,3 +255,4 @@ window.onload = async function(){
     }
   })
 }
+
