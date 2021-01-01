@@ -207,7 +207,7 @@ function enableOWAFetch() {
   console.log("starting to fetch from owa...")
   owaFetch()
   chrome.alarms.clearAll(() => {
-      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 0.1, periodInMinutes: 0.1 })
+      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 1, periodInMinutes: 5 })
       chrome.alarms.onAlarm.addListener(async (alarm) => {
         owaFetch()
       })
