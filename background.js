@@ -83,6 +83,8 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         //chrome.storage.local.set({openSettingsPageParam: false}, function() {})
         chrome.storage.local.set({seenInOpalAfterDashbaordUpdate: 0}, function() {})
         chrome.storage.local.set({dashboardDisplay: "favoriten"}, function() {})
+        chrome.storage.local.set({additionalNotificationOnNewMail: false })
+        chrome.storage.local.set({NumberOfUnreadMails: "undefined" })
         chrome.storage.local.set({removedOpalBanner: false}, function() {})
         chrome.storage.local.set({nameIsTUfast: true}, function() {})
         chrome.storage.local.set({enabledOWAFetch: false}, function() {})
@@ -135,8 +137,9 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
           if(resp.enabledOWAFetch === null || resp.enabledOWAFetch === undefined || resp.enabledOWAFetch === ""){
             chrome.storage.local.set({enabledOWAFetch: false}, function() {})
-            chrome.storage.local.set({"NumberOfUnreadMails": 0})
-          }
+            chrome.storage.local.set({NumberOfUnreadMails: "undefined"})
+            chrome.storage.local.set({additionalNotificationOnNewMail: false })
+           }
         })
         //check, whether flake state exists. If not, initialize with false.
         chrome.storage.local.get(['flakeState'], function (result) {
@@ -204,7 +207,7 @@ function enableOWAFetch() {
   console.log("starting to fetch from owa...")
   owaFetch()
   chrome.alarms.clearAll(() => {
-      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 1, periodInMinutes: 5 })
+      chrome.alarms.create("fetchOWAAlarm", { delayInMinutes: 0.1, periodInMinutes: 0.1 })
       chrome.alarms.onAlarm.addListener(async (alarm) => {
         owaFetch()
       })
@@ -236,15 +239,27 @@ async function owaFetch(){
   let numberUnreadMails = await countUnreadMsg(mailInfoJson)
   console.log("Unread mails in OWA: " + numberUnreadMails)
 
+  //alert on new Mail
+  await chrome.storage.local.get(['NumberOfUnreadMails', "additionalNotificationOnNewMail"], (result) => {
+    if(!(result.NumberOfUnreadMails === undefined || result.NumberOfUnreadMails === "undefined") && result.additionalNotificationOnNewMail){
+      if(result.NumberOfUnreadMails<numberUnreadMails) {
+        if(confirm("Neue Mail in deinem TU Dresden Postfach!\nDruecke 'Ok' um OWA zu oeffnen.")){
+          let URL = "https://msx.tu-dresden.de/owa/auth/logon.aspx?url=https%3a%2f%2fmsx.tu-dresden.de%2fowa&reason=0";
+          chrome.tabs.create({ url: URL });
+        }
+      }
+    }
+  })
+
   //set badge and local storage
-  chrome.storage.local.set({ "NumberOfUnreadMails": numberUnreadMails })
+  await chrome.storage.local.set({ NumberOfUnreadMails: numberUnreadMails })
   setBadgeUnreadMails(numberUnreadMails)
 }
 
 function disableOwaFetch() {
   console.log("stopped owa connection")
   setBadgeUnreadMails(0)
-  chrome.storage.local.set({"NumberOfUnreadMails": 0})
+  chrome.storage.local.set({ NumberOfUnreadMails: "undefined" })
   chrome.alarms.clearAll(() => {})
 }
 

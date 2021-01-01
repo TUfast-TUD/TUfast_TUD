@@ -135,6 +135,8 @@ function enableOWAFetch(){
       //disable
       chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
       chrome.storage.local.set({ "enabledOWAFetch": false })
+      chrome.storage.local.set({additionalNotificationOnNewMail: false })
+      document.getElementById("additionalNotification").checked = false
     } else {
       chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
         //check if user data is saved
@@ -188,6 +190,20 @@ window.onload = async function(){
 
     //document.getElementById('fav').onclick = dashboardCourseSelect
     //document.getElementById('crs').onclick = dashboardCourseSelect
+
+    //only display additionNotificationSection in chrome, because it doesnt work in ff
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    if (isFirefox) {document.getElementById("additionNotificationSection").style.display = "none"}
+
+    //add checkbox listener
+    var checkbox = document.getElementById("additionalNotification");
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        chrome.storage.local.set({additionalNotificationOnNewMail: true })
+      } else {
+        chrome.storage.local.set({additionalNotificationOnNewMail: false })
+      }
+    });
 
     //add storage listener for autologin
     chrome.storage.onChanged.addListener(function(changes, namespace) {
