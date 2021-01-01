@@ -263,6 +263,12 @@ function disableOwaFetch() {
   chrome.alarms.clearAll(() => {})
 }
 
+function readMailOWA(NrUnreadMails) {
+  //set badge and local storage
+  chrome.storage.local.set({ NumberOfUnreadMails: NrUnreadMails })
+  setBadgeUnreadMails(NrUnreadMails)
+}
+
 function setBadgeUnreadMails(numberUnreadMails){
   //set badge
   if (numberUnreadMails == 0) {
@@ -299,6 +305,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case 'set_user_data':
       setUserData(request.userData)
+      break
+    case 'read_mail_owa':
+      readMailOWA(request.NrUnreadMails)
       break
     case 'logged_out':
       loggedOut(request.portal)

@@ -40,6 +40,7 @@ TUfast Telegram: [t.me/TUfast_TUD](https://t.me/TUfast_TUD)
 
 ### 15€ 💸
 - Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
+- Benachrichtigungen für neue Noten im HISQIS
 
 ## Entwickler
 Entwickelt von Studenten, für Studenten:

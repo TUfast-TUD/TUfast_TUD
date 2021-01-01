@@ -66,6 +66,9 @@ function displayEnabled() {
   chrome.storage.local.get(['enabledOWAFetch'], function(result) {
     this.document.getElementById('owa_mail_fetch').checked = result.enabledOWAFetch
   })
+  chrome.storage.local.get(['additionalNotificationOnNewMail'], function(result) {
+    document.getElementById("additionalNotification").checked = result.additionalNotificationOnNewMail
+  })
   /*chrome.storage.local.get(['dashboardDisplay'], function(result) {
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
     if(result.dashboardDisplay === "meine_kurse") {document.getElementById('crs').checked = true}
@@ -180,6 +183,7 @@ function requestHostPermissionS() {
 
 //this need to be done here since manifest v2
 window.onload = async function(){
+
     //assign functions
     document.getElementById('save_data').onclick= saveUserData
     document.getElementById('delete_data').onclick= deleteUserData
@@ -195,11 +199,19 @@ window.onload = async function(){
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
     if (isFirefox) {document.getElementById("additionNotificationSection").style.display = "none"}
 
-    //add checkbox listener
+    //add additional notification checkbox listener
     var checkbox = document.getElementById("additionalNotification");
     checkbox.addEventListener('change', function() {
       if (this.checked) {
-        chrome.storage.local.set({additionalNotificationOnNewMail: true })
+        //only if owa fetch enables
+        chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
+          if (resp.enabledOWAFetch) {
+            chrome.storage.local.set({additionalNotificationOnNewMail: true })
+          } else {
+            document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>F&uuml;r dieses Feature musst der Button auf 'Ein' stehen.<font color='red'>"
+            document.getElementById('additionalNotification').checked = false
+          }
+        })
       } else {
         chrome.storage.local.set({additionalNotificationOnNewMail: false })
       }
