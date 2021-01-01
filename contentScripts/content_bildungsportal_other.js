@@ -28,10 +28,10 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailC
         showKeyboardUpdate = true
     }
 
-    if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) { 
-        let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
-        if(isChrome) showImplementationForFirefox = true
-    }
+    //if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) { 
+    //    let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
+    //    if(isChrome) showImplementationForFirefox = true
+    //}
 
     if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) { 
         showUnreadMailCounter = true
