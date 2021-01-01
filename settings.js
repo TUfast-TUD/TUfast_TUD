@@ -35,6 +35,8 @@ function deleteUserData() {
       document.getElementById('owa_mail_fetch').checked = false
       chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
       chrome.storage.local.set({"enabledOWAFetch": false})
+      chrome.storage.local.set({additionalNotificationOnNewMail: false })
+      document.getElementById("additionalNotification").checked = false
       // --
       document.getElementById('status_msg').innerHTML = ""
       document.getElementById("delete_data").innerHTML='<font>Gel&ouml;scht!</font>'
