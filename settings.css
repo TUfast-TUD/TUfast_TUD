@@ -19,6 +19,13 @@ html { overflow-y: scroll; }
   color: grey;
 }
 
+.the-bottom {
+  padding:0px;
+  bottom: 0%;
+  margin-left: 5%;
+}
+
+
 .red-text {
   color: darkred;
 }

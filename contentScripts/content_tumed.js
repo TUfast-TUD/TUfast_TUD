@@ -5,7 +5,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutTumed'], function(result) {
         chrome.runtime.sendMessage({cmd: 'get_user_data'}, function(result) {
               if(!(result.asdf === undefined || result.fdsa === undefined)) {
                   chrome.runtime.sendMessage({cmd: "show_ok_badge", timeout: 2000})
-                  chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 1})
+                  chrome.runtime.sendMessage({cmd: "save_clicks", click_count: 2})
                   chrome.runtime.sendMessage({cmd: "perform_login"})    
                   document.getElementById("__ac_name").value = result.asdf
                   document.getElementById("__ac_password").value = result.fdsa

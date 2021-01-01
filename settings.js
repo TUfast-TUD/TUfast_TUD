@@ -142,6 +142,8 @@ function enableOWAFetch(){
           document.getElementById("owa_fetch_msg").innerHTML = ""
           chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) { })
           chrome.storage.local.set({ "enabledOWAFetch": true })
+          let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+          if (isFirefox) {alert("Der Firefox-Browser muss eventuell neu gestarted werden, bevor diese Funktion aktiviert wird!")}
         } else {
           document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>Speichere deine Login-Daten im Punkt 'Automatisches Anmelden in Opal, Selma & Co.' um diese Funktion zu nutzen!<font>"
           this.document.getElementById('owa_mail_fetch').checked = false
@@ -160,7 +162,6 @@ function denyHostPermissionS() {
 function requestHostPermissionS() {
   chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
   chrome.permissions.request({
-    permissions:["tabs"],
     origins: ["*://*.tu-dresden.de/*", "*://*.slub-dresden.de/*"]
   }, function (granted) {
     if (granted) {
@@ -217,6 +218,7 @@ window.onload = async function(){
       //see if any params are available
       if(result.openSettingsPageParam === "auto_login_settings"){ setTimeout(function(){ this.document.getElementById("auto_login_settings").click(); }, 200);}
       else if(result.openSettingsPageParam === "time_settings"){ setTimeout(function(){ this.document.getElementById("time_settings").click(); }, 200);}
+      else if(result.openSettingsPageParam === "mailFetchSettings"){setTimeout(function(){this.document.getElementById("owa_mail_settings").click(); }, 200); }
       else if(result.gotInteractionOnHostPermissionExtension1){document.getElementsByTagName("button")[0].click()}
     
       if (result.saved_click_counter === undefined) {result.saved_click_counter = 0}

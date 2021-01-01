@@ -6,11 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedFirefoxBanner","mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function(result) {
+chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailCounterBanner","showedFirefoxBanner","mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function(result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
     let showImplementationForFirefox = false
+    let showUnreadMailCounter = true
 
     let mod200Clicks = result.saved_click_counter%200
     if(!result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
@@ -32,10 +33,15 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedFirefoxBann
         if(isChrome) showImplementationForFirefox = true
     }
 
+    if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) { 
+        showUnreadMailCounter = true
+    }
+
     window.addEventListener("load", async function(e) {
         if(showReviewBanner) {showLeaveReviewBanner()}
         if(showKeyboardUpdate) {showKeyboardShortcutUpdate()}
         if(showImplementationForFirefox) {showImplementationForFirefoxBanner()}
+        if(showUnreadMailCounter) {showUnreadMailCounterBanner()}
 
         if (this.document.getElementById("removeReviewBanner")){
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -56,10 +62,29 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedFirefoxBann
             this.document.getElementById("RemoveShowImplementationForFirefoxBanner").onclick = RemoveShowImplementationForFirefoxBanner
             this.document.getElementById("LinkShowImplementationForFirefoxBanner").onclick = RemoveShowImplementationForFirefoxBanner
         }
+        if(this.document.getElementById("showUnreadMailCounterBanner")) {
+            this.document.getElementById("OpenUnreadMailCounterSettings").onclick = openSettingsUnreadMail
+            this.document.getElementById("RemoveShowUnreadMailCounterBanner").onclick = RemoveShowUnreadMailCounterBanner
+        }
 
         
     })
 })
+
+function RemoveShowUnreadMailCounterBanner(){
+    if(document.getElementById("showUnreadMailCounterBanner")){
+        document.getElementById("showUnreadMailCounterBanner").remove()
+        chrome.storage.local.set({showedUnreadMailCounterBanner: true}, function() {})
+    }
+}
+
+function openSettingsUnreadMail(){
+    chrome.runtime.sendMessage({cmd: 'open_settings_page', params: "mailFetchSettings"}, function(result) {})
+    if(document.getElementById("showUnreadMailCounterBanner")){
+        document.getElementById("showUnreadMailCounterBanner").remove()
+        chrome.storage.local.set({showedUnreadMailCounterBanner: true}, function() {})
+    }
+}
 
 function removeReviewBanner() {
     if(document.getElementById("reviewBanner")){
@@ -120,6 +145,15 @@ function showImplementationForFirefoxBanner(){
     banner.id = "showImplementationForFirefoxBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
     banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="RemoveShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Close X</a>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
+}
+
+function showUnreadMailCounterBanner(){
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let banner = this.document.createElement("div")
+    banner.id = "showUnreadMailCounterBanner"
+    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
+    banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Neu: mit TUfast verpasst du keine Mails aus deinem TU Dresden Postfach. <a id="OpenUnreadMailCounterSettings" href="javascript:void(0)">Jetzt probieren.<a id="RemoveShowUnreadMailCounterBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Später</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 

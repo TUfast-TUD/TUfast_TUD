@@ -150,6 +150,12 @@ chrome.runtime.onInstalled.addListener(async(details) => {
             chrome.storage.local.set({ showedFirefoxBanner: false }, function () { })
           }
         })
+        //check if showedUnreadMailCounterBanner
+        chrome.storage.local.get(['showedUnreadMailCounterBanner'], function (result) {
+          if (result.showedUnreadMailCounterBanner === undefined || result.showedUnreadMailCounterBanner === null) {
+            chrome.storage.local.set({ showedUnreadMailCounterBanner: false }, function () { })
+          }
+        })
         break;
       default:
         console.log('Other install events within the browser for TUfast.')
