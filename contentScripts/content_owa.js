@@ -57,7 +57,7 @@ window.onload = function(){
              //check if all mails are loaded
             let checkForNode = setInterval(() => {
                 this.console.log("checking")
-                if (document.querySelectorAll("[tempid='id=emailslistviewpanel;path=/Views/ConversationListView.Mouse.htm']").length != 0) {
+                if (document.querySelectorAll("[autoid='_n_x1']")[1] && document.querySelectorAll("[autoid='_n_x1']")[1].textContent != "") {
                     readMailObserver()
                     clearInterval(checkForNode)
                 }
@@ -71,28 +71,24 @@ function readMailObserver(){
     const config = { attributes: true, childList: true, subtree: true }
     const callback = function(mutationsList, observer) {
 
-    //check again, if enabled
-    chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-        if(resp.enabledOWAFetch) {
-            let NrUnreadMails = 0
+        //check again, if enabled
+        chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
+            if(resp.enabledOWAFetch) {
 
-            //get number of unread messages. Unread messages have the _lv_t class
-            let mailList = document.querySelectorAll("[tempid='id=emailslistviewpanel;path=/Views/ConversationListView.Mouse.htm']")[0].children
-            for (let mail of mailList) {
-                if (!mail.firstChild.classList.contains("_lv_t") && !mail.hasAttribute("role")) NrUnreadMails++
+                //get number of unread messages.
+                let NrUnreadMails = parseInt(document.querySelectorAll("[autoid='_n_x1']")[1].textContent)
+
+                console.log("Number of unread mails: " + NrUnreadMails)
+
+                chrome.runtime.sendMessage({cmd: "read_mail_owa", NrUnreadMails: NrUnreadMails})
             }
-
-            console.log("Number of unread mails: " + NrUnreadMails)
-
-            chrome.runtime.sendMessage({cmd: "read_mail_owa", NrUnreadMails: NrUnreadMails})
-        }
-    })
+        })
 
     }
 
-    //node containing all mails
-    let mailListNode = document.querySelectorAll("[tempid='id=emailslistviewpanel;path=/Views/ConversationListView.Mouse.htm']")[0]
+    //node containing unreadCounr
+    let unreadCountNode = document.querySelectorAll("[autoid='_n_t1']")[0]
     
     const observer = new MutationObserver(callback);
-    observer.observe(mailListNode, config);
+    observer.observe(unreadCountNode, config);
 }

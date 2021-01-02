@@ -647,7 +647,7 @@ function fetchOWA(username, password, logout) {
         let corrId = clientId + "_" + (new Date()).getTime()
         console.log("corrID: " + corrId)
       })
-      //getConversations
+      //getAllInfo
       .then(corrId => {
         fetch("https://msx.tu-dresden.de/owa/sessiondata.ashx?appcacheclient=0", {
           "headers": {
@@ -706,16 +706,7 @@ function fetchOWA(username, password, logout) {
 //extract number of unread messages in owa
 function countUnreadMsg(json) {
   return new Promise((resolve, reject) => {
-    let conversations = json.findConversation.Body.Conversations
-    let counterUnreadMsg = 0;
-    for (var i = 0; i < conversations.length; i++) {
-        var conv = conversations[i]
-        if (conv.hasOwnProperty('UnreadCount')) {
-            if (conv.UnreadCount == 1) {
-                counterUnreadMsg++;
-            }
-        }
-    }
+    let counterUnreadMsg = json.findFolders.Body.ResponseMessages.Items[0].RootFolder.Folders[16].UnreadCount
     resolve(counterUnreadMsg)
   })
 }
