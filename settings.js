@@ -293,7 +293,7 @@ window.onload = async function(){
   chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1'], async function (result) {
     if (!result.gotInteractionOnHostPermissionExtension1) {
       let hpDiv = document.getElementById("addition_host_permissions")
-      hpDiv.innerHTML = '<p>Wichtig: Damit TUfast f&uuml;r alle Online-Portale der TU Dresden funktioniert, dr&uuml;cke jetzt "Akzeptieren":</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button>'
+      hpDiv.innerHTML = '<p>Wichtig: TUfast braucht eine zus&auml;tzliche Berechtigung, damit alle Online-Portale der TU Dresden unterst&uuml;tz werden.<br>Dr&uuml;cke jetzt "Akzeptieren" um TUfast f&uuml;r alle Online-Portale zu verwenden.</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button>'
       await new Promise(r => setTimeout(r, 500));
       document.getElementById("refuseDomains").addEventListener('click', denyHostPermissionS) //innerHTML is not async. However, it takes time to render, so lets wait 500ms
       document.getElementById("acceptDomains").addEventListener('click', requestHostPermissionS) 
