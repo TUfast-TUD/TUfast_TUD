@@ -11,10 +11,13 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailC
     let showReviewBanner = false
     let showKeyboardUpdate = false
     let showImplementationForFirefox = false
-    let showUnreadMailCounter = true
+    let showUnreadMailCounter = false
 
     let mod200Clicks = result.saved_click_counter%200
-    if(!result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+
+    //reviews only required in FF
+    if(isFirefox && !result.mostLiklySubmittedReview && mod200Clicks<15 && !result.removedReviewBanner && result.saved_click_counter > 200){
         showReviewBanner = true
     }
     if(mod200Clicks > 15){
