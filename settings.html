@@ -13,6 +13,106 @@
     <p id="settings_comment"></p> 
     <p id="addition_host_permissions"></p> 
     <!-- New Accordion section-->
+    <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co.</button>
+    <div class="panel">
+      <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine Selma
+        Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschl&uuml;sselt
+        gespeichert.<br>
+        Du kannst sie jederzeit l&ouml;schen.<br>
+        <font class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</font>
+      </p>
+      <form>
+        <input placeholder="Nutzername (Selma-Login)" type="text" id="username_field"><br>
+        <input placeholder="Passwort (Selma-Login)" type="password" id="password_field"><br>
+        <button type="button" class="button-accept" id="save_data">Lokal Speichern</button>
+        <p id="status_msg" style="display: inline;"></p>
+      </form>
+      <p>Hier kannst du alle Daten l&ouml;schen:<br>
+        <button id="delete_data" class="button-deny">Alle Daten l&ouml;schen</button>
+      </p>
+      <p id="status_msg2"></p>
+    </div>
+        <!-- New Accordion section-->
+        <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r E-Mails im TU Dresden Postfach</button>
+        <div class="panel">
+          <p>TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben
+            der Rakete an.<br>
+            &nbsp;&nbsp;<img style="vertical-align:middle; height: 17px;" src="./images/tufast32.png">&nbsp;keine neuen
+            Mails<br>
+            <img style="vertical-align:middle; height: 32px;" src="./images/UnreadMails.png">5 neue Mails<br>
+            <img style="vertical-align:middle; height: 32px;" src="./images/UnreadMails16.PNG">16 neue Mails
+          </p>
+          <p> <text class="grey-text">Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern.
+              <br>Weil TUfast daf&uuml;r eine spezielle Berechtigung braucht, dr&uuml;cke bitte auf "Erlauben" im folgenden
+              Pop-Up.
+            </text> </p>
+          <p>Aus <label class="switch">
+              <input type="checkbox" id="owa_mail_fetch">
+              <span class="slider round"></span>
+            </label> Ein <text id="owa_fetch_msg"></text></p>
+          <p style="position:relative; left:-4px" id="additionNotificationSection">
+            <input type="checkbox" id="additionalNotification" name="additionalNotification" checked>
+            <label for="additionalNotification">Zus&auml;tzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail
+              erhalten.</label>
+          </p>
+          <p class="red-text">F&uuml;r diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU
+            Dresden ab. Zum Anmelden werden deine Login-Daten verschl&uuml;sselt &uuml;bertragen. Diese Verbindung ist sicher.
+            Es funktioniert genauso, als w&uuml;rdest du deine Mails &uuml;ber den Browser abrufen.</p>
+        </div>
+        <!-- New Accordion section-->
+        <button class="accordion">Opal-Kurse im Dashboard</button>
+        <div class="panel">
+          <!--p>Klicke auf das TUfast Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/tufast32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p-->
+          <!--p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br-->
+          <p>Finde alle deine Opal-Kurse direkt im Dashbaord.<br>
+            &Ouml;ffne das Dashbaord oben rechts oder mit<b> Alt+Q</b> (<a href="javascript:void(0)"
+              id="open_shortcut_settings">&auml;ndern</a>)<br>
+            <!--font class="grey-text">Um einen Kurs im Dashboard zu sehen, musst du im Opal eingeschrieben sein oder ihn als Favorit hinzuf&uuml;gen.</font-->
+          </p>
+        
+          <!--form action="#" style="line-height: 0px;">
+                 <p>
+                   <input type="radio" id="fav" name="radio-group">
+                   <label for="fav">Favoriten</label>
+                 </p>
+                 <p>
+                   <input type="radio" id="crs" name="radio-group">
+                   <label for="crs">Meine Kurse</label>
+                 </p>
+               </form-->
+        
+          <p>
+            <img style="max-width: 100%; width: 550px; border: 2px solid #eee; padding: 5px; border-radius: 2px;"
+              src="./images/DashboardTutorialBig.png">
+          </p>
+          <p><b>F&uuml;r Power-User &#9889&#9889&#9889</b><br>
+            <font class="">&Ouml;ffne dein Dashboard mit Alt+Q und beginne direkt zu tippen. Wenn du dann Enter dr&uuml;ckst,
+              wird der erste Kurs aus der Liste ge&ouml;ffnet.</font> <br>
+          </p>
+          <!--p>
+               <text class="grey-text">Hier kannst du deine Kurse manuell aktualisieren:</text><br>
+               <text class="grey-text">Favoriten </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
+               <text class="grey-text">Meine Kurse </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
+             </p-->
+          <p></p>
+        </div>
+        <!-- New Accordion section-->
+        <button class="accordion">Shortcuts f&uuml;r Opal & Co.</button>
+        <div class="panel">
+          <p>&Ouml;ffne Opal & Co. einfach mit Tastenkombinationen.<br>
+            <a href="javascript:void(0)" id="open_shortcut_settings1">Hier</a> kannst du alle Shortcuts sehen und &auml;ndern.
+          </p>
+          <ul style="margin:0;">
+            <li class="grey-text">Alt+Q &rarr; Dashboard &ouml;ffnen</li>
+            <li class="grey-text">Alt+O &rarr; Opal &ouml;ffnen</li>
+            <li class="grey-text">Alt+M &rarr; Mail (Outlook-Web-App) &ouml;ffnen</li>
+            <li class="grey-text">Alt+J &rarr; jExam &ouml;ffnen</li>
+          </ul>
+          </p>
+          <p>
+          </p>
+        </div>
+    <!-- New Accordion section-->
     <button class="accordion">Abk&uuml;rzungen in der Google-Suche</button>
     <div class="panel">
       <p>Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen.</p>
@@ -35,94 +135,6 @@
         </ul>
     </p> 
   </div> 
-   <!-- New Accordion section-->
-   <button class="accordion">Opal-Kurse im Dashboard</button>
-   <div class="panel">
-     <!--p>Klicke auf das TUfast Symbol <img  style="vertical-align:middle; height: 25px;" src="./images/tufast32.png"> oben rechts, um das Dashboard zu &ouml;ffnen.</p-->
-     <!--p style="line-height: 18px;">Welche deiner Opal-Kurse m&ouml;chtest du im Dashboard sehen?<br-->
-     <p>Finde alle deine Opal-Kurse direkt im Dashbaord.<br>
-     &Ouml;ffne das Dashbaord oben rechts oder mit<b> Alt+Q</b> (<a href="javascript:void(0)" id="open_shortcut_settings" >&auml;ndern</a>)<br>
-       <!--font class="grey-text">Um einen Kurs im Dashboard zu sehen, musst du im Opal eingeschrieben sein oder ihn als Favorit hinzuf&uuml;gen.</font--> 
-     </p> 
-       
-       <!--form action="#" style="line-height: 0px;">
-         <p>
-           <input type="radio" id="fav" name="radio-group">
-           <label for="fav">Favoriten</label>
-         </p>
-         <p>
-           <input type="radio" id="crs" name="radio-group">
-           <label for="crs">Meine Kurse</label>
-         </p>
-       </form-->
-     
-     <p>
-       <img  style="max-width: 100%; width: 550px; border: 2px solid #eee; padding: 5px; border-radius: 2px;" src="./images/DashboardTutorialBig.png">
-     </p>
-     <p><b>F&uuml;r Power-User &#9889&#9889&#9889</b><br>
-       <font class="">&Ouml;ffne dein Dashboard mit Alt+Q und beginne direkt zu tippen. Wenn du dann Enter dr&uuml;ckst, wird der erste Kurs aus der Liste ge&ouml;ffnet.</font> <br>
-     </p>
-     <!--p>
-       <text class="grey-text">Hier kannst du deine Kurse manuell aktualisieren:</text><br>
-       <text class="grey-text">Favoriten </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/favorites" target="_blank" class="grey-text" >jetzt aktualisieren</a><br>
-       <text class="grey-text">Meine Kurse </text><a href="https://bildungsportal.sachsen.de/opal/auth/resource/courses" target="_blank" class="grey-text" >jetzt aktualisieren</a>
-     </p-->
-     <p></p>
-   </div>
-    <!-- New Accordion section-->
-  <button class="accordion">Shortcuts f&uuml;r Opal & Co.</button>
-  <div class="panel">
-    <p>&Ouml;ffne Opal & Co. einfach mit Tastenkombinationen.<br>
-      <a href="javascript:void(0)" id="open_shortcut_settings1">Hier</a> kannst du alle Shortcuts sehen und &auml;ndern.</p>
-    <ul style="margin:0;">
-      <li class="grey-text">Alt+Q &rarr; Dashboard &ouml;ffnen</li>
-      <li class="grey-text">Alt+O &rarr; Opal &ouml;ffnen</li>
-      <li class="grey-text">Alt+M &rarr; Mail (Outlook-Web-App) &ouml;ffnen</li>
-      <li class="grey-text">Alt+J  &rarr; jExam &ouml;ffnen</li>
-    </ul>
-    </p> 
-    <p>
-    </p> 
-</div> 
-    <!-- New Accordion section--> 
-    <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co.</button>
-    <div class="panel">
-      <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschl&uuml;sselt gespeichert.<br>
-      Du kannst sie jederzeit l&ouml;schen.<br>
-      <font class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</font>
-      </p>
-      <form>
-        <input placeholder="Nutzername" type="text" id="username_field"><br>
-        <input placeholder="Passwort" type="password" id="password_field" ><br>
-        <button type="button" class="button-accept" id="save_data">Lokal Speichern</button>
-        <p id="status_msg" style="display: inline;"></p> 
-      </form>
-      <p>Hier kannst du alle Daten l&ouml;schen:<br>
-      <button id="delete_data" class="button-deny">Alle Daten l&ouml;schen</button>
-      </p>
-      <p id="status_msg2"></p> 
-    </div>
-    <!-- New Accordion section--> 
-    <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r E-Mails im TU Dresden Postfach</button>
-    <div class="panel">
-      <p>TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben der Rakete an.<br>
-    &nbsp;&nbsp;<img style="vertical-align:middle; height: 17px;" src="./images/tufast32.png">&nbsp;keine neuen Mails<br>
-    <img  style="vertical-align:middle; height: 32px;" src="./images/UnreadMails.png">5 neue Mails<br>
-    <img style="vertical-align:middle; height: 32px;" src="./images/UnreadMails16.PNG">16 neue Mails</p>
-      <p>  <text class="grey-text">Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern.
-          <br>Weil TUfast daf&uuml;r eine spezielle Berechtigung braucht, dr&uuml;cke bitte auf "Erlauben" im folgenden Pop-Up.
-        </text> </p>
-      <p>Aus <label class="switch">
-        <input type="checkbox" id="owa_mail_fetch">
-        <span class="slider round"></span>
-      </label> Ein <text id="owa_fetch_msg"></text></p>
-      <p style="position:relative; left:-4px" id="additionNotificationSection">
-        <input type="checkbox" id="additionalNotification" name="additionalNotification"
-               checked>
-        <label for="additionalNotification">Zus&auml;tzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail erhalten.</label>
-      </p>
-      <p class="red-text">F&uuml;r diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab. Zum Anmelden werden deine Login-Daten verschl&uuml;sselt &uuml;bertragen. Diese Verbindung ist sicher. Es funktioniert genauso, als w&uuml;rdest du deine Mails &uuml;ber den Browser abrufen.</p> 
-    </div>
  
   <!-- New Accordion section--> 
   <button class="accordion" id="time_settings"></button>

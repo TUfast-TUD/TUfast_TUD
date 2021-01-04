@@ -36,7 +36,7 @@ html { overflow-y: scroll; }
 }
 
 input[type=text], input[type=password] {
-  width: 190px;
+  width: 200px;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -55,7 +55,7 @@ input:focus {
 }
 
 button {
-  width: 190px;
+  width: 200px;
   background-color: grey;
   color: white;
   padding: 12px 20px;
@@ -175,7 +175,7 @@ button:hover {
 
 
 .button-accept {
-  width: 190px;
+  width: 200px;
   background-color:rgb(47, 143, 18);
   color: white;
   padding: 12px 19px;
@@ -191,7 +191,7 @@ button:hover {
 }
 
 .button-deny {
-  width: 190px;
+  width: 200px;
   background-color:darkgrey;
   color: white;
   padding: 12px 19px;
