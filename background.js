@@ -706,7 +706,8 @@ function fetchOWA(username, password, logout) {
 //extract number of unread messages in owa
 function countUnreadMsg(json) {
   return new Promise((resolve, reject) => {
-    let counterUnreadMsg = json.findFolders.Body.ResponseMessages.Items[0].RootFolder.Folders[16].UnreadCount
-    resolve(counterUnreadMsg)
+    json.findFolders.Body.ResponseMessages.Items[0].RootFolder.Folders.forEach(obj => {
+      if (obj.DisplayName === "Inbox" || obj.DisplayName === "Posteingang")  resolve(obj.UnreadCount)
+    })
   })
 }
