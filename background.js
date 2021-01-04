@@ -11,6 +11,11 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
   })
 })
 
+chrome.storage.local.get(['openSettingsOnReload'], (resp) => {
+  if (resp.openSettingsOnReload) openSettingsPage()
+  chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
+})
+
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
 chrome.storage.local.set({loggedOutElearningMED: false}, function() {})
@@ -22,7 +27,7 @@ chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({loggedOutTumed: false }, function () { })
-chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+//chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
 //register additional content scripts
 regAddContentScripts()           
@@ -91,6 +96,7 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({colorfulRocket: "black" }, function () { })
         chrome.storage.local.set({PRObadge: false }, function () { })
         chrome.storage.local.set({flakeState: false}, function() {})
+        chrome.storage.local.set({openSettingsOnReload: false }, function () { })
         break;
      case 'update':
         //check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
@@ -157,6 +163,12 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.get(['showedUnreadMailCounterBanner'], function (result) {
           if (result.showedUnreadMailCounterBanner === undefined || result.showedUnreadMailCounterBanner === null) {
             chrome.storage.local.set({ showedUnreadMailCounterBanner: false }, function () { })
+          }
+        })
+        //check if openSettingsOnReload
+        chrome.storage.local.get(['openSettingsOnReload'], function (result) {
+          if (result.openSettingsOnReload === undefined || result.openSettingsOnReload === null) {
+            chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
           }
         })
         break;

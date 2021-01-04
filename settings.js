@@ -149,8 +149,10 @@ function enableOWAFetch(){
           document.getElementById("owa_fetch_msg").innerHTML = ""
           chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) { })
           chrome.storage.local.set({ "enabledOWAFetch": true })
-          let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
-          if (isFirefox) {alert("Der Firefox-Browser muss eventuell neu gestarted werden, bevor diese Funktion aktiviert wird!")}
+          //reload chrome extension is necessary
+          chrome.storage.local.set({openSettingsPageParam: "mailFetchSettings", openSettingsOnReload: true}, function () {})
+          alert("Perfekt! TUfast wird jetzt neu geladen, damit die Einstellungen uebernommen werden.")
+          chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) {})
         } else {
           document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>Speichere deine Login-Daten im Punkt 'Automatisches Anmelden in Opal, Selma & Co.' um diese Funktion zu nutzen!<font>"
           this.document.getElementById('owa_mail_fetch').checked = false
