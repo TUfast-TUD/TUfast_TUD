@@ -27,7 +27,6 @@ chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({loggedOutTumed: false }, function () { })
-//chrome.storage.local.set({openSettingsPageParam: false}, function() {})
 
 //register additional content scripts
 regAddContentScripts()           
