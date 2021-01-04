@@ -1,12 +1,12 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
-    if(result.isEnabled && !result.loggedOutOwa) {       
+chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function (result) {
+    if (result.isEnabled && !result.loggedOutOwa) {
         if (document.readyState !== 'loading') {
             loginOWA(result.loggedOutOwa)
         } else {
             document.addEventListener('DOMContentLoaded', function () {
                 loginOWA(result.loggedOutOwa)
             })
-        } 
+        }
         console.log('Auto Login to OWA.')
     }
     //sometimes it reloades the page, sometimes it doesnt...
@@ -19,15 +19,15 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function(result) {
 })
 
 //detecting logout
-document.addEventListener("DOMNodeInserted", function(e) {
-    if(document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-        document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function() {
-            chrome.runtime.sendMessage({cmd:'logged_out', portal: 'loggedOutOwa'})
+document.addEventListener("DOMNodeInserted", function (e) {
+    if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+        document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+            chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
         })
     }
 }, false);
 
-function loginOWA(loggedOutOwa){
+function loginOWA(loggedOutOwa) {
     if (document.getElementById('username') && document.getElementById('password') && !loggedOutOwa) {
         chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
             if (!(result.asdf === undefined || result.fdsa === undefined)) {
@@ -51,10 +51,10 @@ function loginOWA(loggedOutOwa){
     }
 }
 
-window.onload = function(){
+window.onload = function () {
     chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-        if(resp.enabledOWAFetch) {
-             //check if all mails are loaded
+        if (resp.enabledOWAFetch) {
+            //check if all mails are loaded
             let checkForNode = setInterval(() => {
                 this.console.log("checking")
                 if (document.querySelectorAll("[autoid='_n_x1']")[1] && document.querySelectorAll("[autoid='_n_x1']")[1].textContent != "") {
@@ -66,21 +66,21 @@ window.onload = function(){
     })
 }
 
-function readMailObserver(){
+function readMailObserver() {
     //use mutation observer to detect page changes
     const config = { attributes: true, childList: true, subtree: true }
-    const callback = function(mutationsList, observer) {
+    const callback = function (mutationsList, observer) {
 
         //check again, if enabled
         chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-            if(resp.enabledOWAFetch) {
+            if (resp.enabledOWAFetch) {
 
                 //get number of unread messages.
                 let NrUnreadMails = parseInt(document.querySelectorAll("[autoid='_n_x1']")[1].textContent)
 
                 console.log("Number of unread mails: " + NrUnreadMails)
 
-                chrome.runtime.sendMessage({cmd: "read_mail_owa", NrUnreadMails: NrUnreadMails})
+                chrome.runtime.sendMessage({ cmd: "read_mail_owa", NrUnreadMails: NrUnreadMails })
             }
         })
 
@@ -88,7 +88,7 @@ function readMailObserver(){
 
     //node containing unreadCounr
     let unreadCountNode = document.querySelectorAll("[autoid='_n_t1']")[0]
-    
+
     const observer = new MutationObserver(callback);
     observer.observe(unreadCountNode, config);
 }

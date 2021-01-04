@@ -1,16 +1,16 @@
-chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket', 'PRObadge', 'flakeState'], function (result) {
+chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'Rocket', 'PRObadge', 'flakeState'], function (result) {
     if (result.isEnabled || result.fwdEnabled) {
-        
+
         //decide which overlay to show
         let christmasTime = false
         let d = new Date()
         let month = d.getMonth() + 1 //starts at 0
         let day = d.getDate()
         if (month === 12 && day > 15 && day < 27) christmasTime = true
-        
+
         //switch flakeState to false in november
         if (month === 11) chrome.storage.local.set({ flakeState: false }, function () { })
-        
+
         if (christmasTime) {
             //on load
             document.addEventListener("DOMNodeInserted", function (e) {
@@ -20,17 +20,17 @@ chrome.storage.local.get(['isEnabled' ,'fwdEnabled', 'Rocket', 'PRObadge', 'flak
             window.addEventListener("load", function () {
                 if (!document.getElementById("flake")) insertFlakeSwitch(result.flakeState)
                 if (!document.getElementById("snowflakes") && result.flakeState) insertFlakes()
-            }, true) 
-        //standard rocket logo
+            }, true)
+            //standard rocket logo
         } else {
             //on load
-            document.addEventListener("DOMNodeInserted", function(e) {
-                if(!document.getElementById("TUFastLogo")) {insertRocket(result.Rocket, result.PRObadge)} 
+            document.addEventListener("DOMNodeInserted", function (e) {
+                if (!document.getElementById("TUFastLogo")) { insertRocket(result.Rocket, result.PRObadge) }
             })
             //on document changes
-            window.addEventListener("load", function() {
-                if (!document.getElementById("TUFastLogo")) { insertRocket(result.Rocket, result.PRObadge)}
-            }, true) 
+            window.addEventListener("load", function () {
+                if (!document.getElementById("TUFastLogo")) { insertRocket(result.Rocket, result.PRObadge) }
+            }, true)
         }
     }
 })
@@ -44,20 +44,20 @@ var timeUp = false  //true, when time is up
 var display_value   //number of text, which shows on screen
 var typeOfMsg = ""  //type of message which is displayed
 
-function setLogoColorful(){
+function setLogoColorful() {
     document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
     chrome.storage.local.set({ Rocket: "colorful" }, function () { })
     insertRocket("colorful", false)
 }
 
-function setProBadge(){
+function setProBadge() {
     document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
     chrome.storage.local.set({ PRObadge: "PRO" }, function () { })
     insertRocket("colorful", "PRO")
 }
 
-function insertScreenOverlay(){
-    try{
+function insertScreenOverlay() {
+    try {
         if (!document.getElementById('counter')) {
             let body = document.getElementsByTagName("body")[0]
             let counter = document.createElement("div")
@@ -77,19 +77,19 @@ function insertScreenOverlay(){
             container.appendChild(counter)
             body.prepend(counter)
         }
-    }catch(e){console.log("cannot insert overlay:" + e)}
+    } catch (e) { console.log("cannot insert overlay:" + e) }
 }
 
-function logoOnClick(){
+function logoOnClick() {
 
     //block counting up when text is promted
-    if(blocker && !timeUp) return
+    if (blocker && !timeUp) return
 
     GLOBAL_counter++
 
     //keep adding logos
     if (GLOBAL_counter > 1010) insertRocket("colorful", false)
-    
+
     //show screen overlay
     if (!document.getElementById('counter')) {
         //insert overlay
@@ -131,12 +131,12 @@ function logoOnClick(){
             typeOfMsg = "text_long"
             break
         default:
-            typeOfMsg="number"
+            typeOfMsg = "number"
             display_value = GLOBAL_counter
     }
 
     //decide how to show text
-    switch(typeOfMsg){
+    switch (typeOfMsg) {
         case "number":
             timeout = 1000
             blocker = false
@@ -183,19 +183,19 @@ function funnyColor(color, step) {
     rgb[2] = parseInt(rgb[2])
     rgb[3] = parseInt(rgb[3])
     if (rgb[1] < 255 - step && rgb[2] < 255 - step && rgb[3] < 150 - step) rgb[1] += step
-    else if (rgb[2] < 255 - step && rgb[3] < 150 - step) rgb[2]+=step
-    else if (rgb[3] < 150-step) rgb[3]+= step
+    else if (rgb[2] < 255 - step && rgb[3] < 150 - step) rgb[2] += step
+    else if (rgb[3] < 150 - step) rgb[3] += step
     else if (rgb[1] > 0 + step) rgb[1] -= step
     else if (rgb[2] > 0 + step) rgb[2] -= step
     else if (rgb[3] > 0 + step) rgb[3] -= step
-    color = "rgb(" + rgb[1] + "," + rgb[2] + "," + rgb[3] +")"
+    color = "rgb(" + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")"
     return color;
 };
 
 function insertRocket(rocketType, PRObadge = false) {
     let imgUrl, header, logo_node, logo_link, logo_img, badge
     try {
-        if(document.getElementsByClassName("page-header")[0] != undefined){
+        if (document.getElementsByClassName("page-header")[0] != undefined) {
             header = document.getElementsByClassName("page-header")[0]
             logo_node = document.createElement("h1")
             logo_link = document.createElement("a")
@@ -299,7 +299,7 @@ function insertFlakes() {
             //add snowflake div to website body
             document.getElementsByTagName("Body")[0].prepend(snowflakes)
         }
-    } catch(e) {console.log("cannot insert snowFlakes: " + e)}
+    } catch (e) { console.log("cannot insert snowFlakes: " + e) }
 }
 
 function insertFlakeSwitch(currentlyActivated) {

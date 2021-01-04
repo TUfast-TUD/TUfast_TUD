@@ -6,7 +6,7 @@ chrome.storage.local.get(['isEnabled'], function (result) {
             let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
             let rawGrades = parseGrades();
             $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">powered by <img src=' + imgUrl +' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p>'
+                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal">powered by <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p>'
             );
             var ctx = document.getElementById('myChart').getContext('2d');
             ctx.canvas.width = 500;
@@ -75,15 +75,15 @@ function parseGrades() {
         let grade = $(this).children().eq(3).text().trim();
         let isModule = $(this).children().eq(1).attr('bgcolor') == '#DDDDDD';
         let exam = $(this).children().eq(1).text().trim();
-        let weight = isModule ? parseInt($(this).children().eq(7).text().trim()) : 0;        
+        let weight = isModule ? parseInt($(this).children().eq(7).text().trim()) : 0;
 
         //Skip more stuff
         if (exam === '') { return true; }
         if (exam === 'Gesamtnote Zwischenprüfung') { return; }
         if (grade === "") { return; }
-        else { grade = parseFloat(grade.replace(",",".")); }
+        else { grade = parseFloat(grade.replace(",", ".")); }
 
-        grades.push({ 'grade': grade, 'isModule': isModule, 'weight': weight});
+        grades.push({ 'grade': grade, 'isModule': isModule, 'weight': weight });
     });
     return grades
 }
@@ -92,7 +92,7 @@ function parseGrades() {
 //also showing failed exams which were passed later
 function countGrades(rawGrades) {
     var gradesCount = [0, 0, 0, 0, 0]
-    rawGrades.forEach(function(info) {
+    rawGrades.forEach(function (info) {
         let grade = Math.round(info.grade);
         switch (grade) {
             case 1:
@@ -122,7 +122,7 @@ function countGrades(rawGrades) {
 function getArithAverage(rawGrades) {
     //first get all grade-objects that aren't failed, then map it directly as number
     let grades = rawGrades.filter(x => x.grade !== 5.0 && !x.isModule).map(x => x.grade);
-    return grades.length ? (grades.reduce((acc,value) => acc + value, 0) / grades.length).toFixed(1) : 0;
+    return grades.length ? (grades.reduce((acc, value) => acc + value, 0) / grades.length).toFixed(1) : 0;
 }
 
 //return weighted grade average

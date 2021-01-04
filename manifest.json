@@ -3,9 +3,15 @@
   "version": "5.3.0.0",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
-    "storage", "system.cpu", "alarms", "declarativeContent"
+    "storage",
+    "system.cpu",
+    "alarms",
+    "declarativeContent"
   ],
-  "optional_permissions": ["tabs", "*://*/"],
+  "optional_permissions": [
+    "tabs",
+    "*://*/"
+  ],
   "background": {
     "scripts": [
       "background.js"
@@ -14,9 +20,13 @@
   },
   "content_scripts": [
     {
-      "js": ["contentScripts/content_elearningMED.js"],
+      "js": [
+        "contentScripts/content_elearningMED.js"
+      ],
       "run_at": "document_start",
-      "matches": ["https://elearning.med.tu-dresden.de/*"]
+      "matches": [
+        "https://elearning.med.tu-dresden.de/*"
+      ]
     },
     {
       "js": [
@@ -82,7 +92,7 @@
     },
     {
       "js": [
-        "thirdParty/jquery-3.4.1.min.js", 
+        "thirdParty/jquery-3.4.1.min.js",
         "thirdParty/Chart.bundle.min.js",
         "contentScripts/pimpHISQIS.js"
       ],
@@ -90,7 +100,7 @@
       "matches": [
         "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
       ],
-      "include_globs":[
+      "include_globs": [
         "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*auswahlBaum*"
       ]
     },
@@ -236,7 +246,7 @@
     },
     {
       "js": [
-        "thirdParty/jquery-3.4.1.min.js", 
+        "thirdParty/jquery-3.4.1.min.js",
         "contentScriptsDashboard/parseOpal.js"
       ],
       "run_at": "document_start",
@@ -247,19 +257,22 @@
       ]
     },
     {
-      "js": ["contentScripts/content_magma.js"],
+      "js": [
+        "contentScripts/content_magma.js"
+      ],
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/magma*"
       ]
     },
     {
-      "js": ["contentScripts/content_fwd_magma.js"],
+      "js": [
+        "contentScripts/content_fwd_magma.js"
+      ],
       "run_at": "document_start",
       "matches": [
         "https://www.google.com/search?*q=magma*",
         "https://www.google.de/search?*q=magma*"
-        
       ]
     }
   ],
@@ -276,9 +289,12 @@
     "page": "settings.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": ["images/OpalBanner3.png", "images/tufast48.png"],
+  "web_accessible_resources": [
+    "images/OpalBanner3.png",
+    "images/tufast48.png"
+  ],
   "manifest_version": 2,
-  "commands":{
+  "commands": {
     "_execute_browser_action": {
       "suggested_key": {
         "default": "Alt+Q",
