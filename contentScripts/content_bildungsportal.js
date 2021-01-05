@@ -5,7 +5,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function (result) {
       //select TU Dresden from selector
       if (document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0]) {
         chrome.runtime.sendMessage({ cmd: "save_clicks", click_count: 1 })
-        document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0].value = "18"
+        document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0].value = "19"
       }
       //submit selected
       if (document.getElementsByName("content:container:login:shibAuthForm:shibLogin")[0]) {

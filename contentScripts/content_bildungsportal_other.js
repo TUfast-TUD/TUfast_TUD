@@ -23,7 +23,7 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailC
     if (mod200Clicks > 15) {
         chrome.storage.local.set({ removedReviewBanner: false }, function () { })
     }
-    if (result.neverShowedReviewBanner && result.saved_click_counter > 200) {
+    if ( isFirefox &&result.neverShowedReviewBanner && result.saved_click_counter > 200) {
         showReviewBanner = true
     }
 

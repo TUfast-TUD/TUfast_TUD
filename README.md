@@ -38,6 +38,7 @@ Bitte lass uns ein Feature genauer Besprechen, bevor du mit der Implementierung 
 ### 15€ 💸
 - Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
 - Benachrichtigungen für neue Noten im HISQIS
+- Support https://videocampus.sachsen.de
 
 ## Entwickler
 Entwickelt von Studenten, für Studenten:
