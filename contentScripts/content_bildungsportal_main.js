@@ -4,7 +4,12 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function (result) {
             //select TU Dresden from selector
             if (document.getElementsByName("wayfselection")[0]) {
                 chrome.runtime.sendMessage({ cmd: "save_clicks", click_count: 1 })
-                document.getElementsByName("wayfselection")[0].value = "19"
+                let selectionList = document.getElementsByName("wayfselection")[0]
+                for (let el of selectionList) {
+                    if (el.textContent === "TU Dresden" || el.textContent === "Technsiche Universität Dresden") { 
+                        document.getElementsByName("wayfselection")[0].value = el.value
+                    }
+                }
             }
             chrome.runtime.sendMessage({ cmd: "show_ok_badge", timeout: 4000 });
             chrome.runtime.sendMessage({ cmd: "save_clicks", click_count: 1 })

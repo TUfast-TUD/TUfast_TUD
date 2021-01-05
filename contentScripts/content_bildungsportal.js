@@ -5,7 +5,12 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function (result) {
       //select TU Dresden from selector
       if (document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0]) {
         chrome.runtime.sendMessage({ cmd: "save_clicks", click_count: 1 })
-        document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0].value = "19"
+        let selectionList = document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0]
+        for (let el of selectionList) {
+          if (el.textContent === "TU Dresden" || el.textContent === "Technsiche Universität Dresden") {
+            document.getElementsByName("content:container:login:shibAuthForm:wayfselection")[0].value = el.value
+          }
+        }
       }
       //submit selected
       if (document.getElementsByName("content:container:login:shibAuthForm:shibLogin")[0]) {
