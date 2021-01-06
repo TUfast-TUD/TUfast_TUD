@@ -150,8 +150,8 @@ function enableOWAFetch() {
           chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) { })
           chrome.storage.local.set({ "enabledOWAFetch": true })
           //reload chrome extension is necessary
-          alert("Perfekt! TUfast wird jetzt neu geladen, damit die Einstellungen uebernommen werden.")
-          chrome.tabs.create({ url: "about:blank" }); //create placeholder page
+          alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
+          //chrome.tabs.create({ url: "about:blank" }); //create placeholder page
           chrome.storage.local.set({ openSettingsPageParam: "mailFetchSettings", openSettingsOnReload: true }, function () { })
           chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
         } else {

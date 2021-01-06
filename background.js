@@ -11,6 +11,7 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
 	})
 })
 
+//DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], (resp) => {
 	if (resp.openSettingsOnReload) openSettingsPage()
 	chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
