@@ -77,6 +77,7 @@ function readMailObserver() {
 
                 //get number of unread messages.
                 let NrUnreadMails = parseInt(document.querySelectorAll("[autoid='_n_x1']")[1].textContent)
+                if (isNaN(NrUnreadMails)) NrUnreadMails = 0
 
                 console.log("Number of unread mails: " + NrUnreadMails)
 
