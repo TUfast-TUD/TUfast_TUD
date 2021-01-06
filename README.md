@@ -6,6 +6,8 @@ Verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-f
 
 Lizenz und Copyright: Informationen werden in Kürze hinzugefügt. Melde dich einfach bei akuten Fragen.
 
+Achtung: OWAHackFetch ist die aktuelle Branche!
+
 ## Funktionen
  - Automatisches Anmelden in Opal, Selma und Co.
  - Opal-Kurse und Opal-Favoriten über das Dashbaord öffnen
