@@ -54,10 +54,32 @@ function fwdGoogleSearch() {
   })
 }
 
+function pdfInInline() {
+  chrome.storage.local.get(['pdfInInline'], function(result) {
+    chrome.storage.local.set({pdfInInline: !(result.pdfInInline)}, function() {})
+    chrome.runtime.sendMessage({cmd: 'toggle_pdf_inline_setting', enabled: !(result.pdfInInline)});
+  })
+}
+
+function pdfInNewTab() {
+  chrome.storage.local.get(['pdfInNewTab'], function(result) {
+    chrome.storage.local.set({pdfInNewTab: !(result.pdfInNewTab)}, function() {})
+  })
+}
+
+
 //set switches and other elements
 function displayEnabled() {
   chrome.storage.local.get(['fwdEnabled'], function(result) {
       this.document.getElementById('switch_fwd').checked = result.fwdEnabled
+  })
+
+  chrome.storage.local.get(['pdfInInline'], function(result) {
+    this.document.getElementById('switch_pdf_inline').checked = result.pdfInInline
+  })
+
+  chrome.storage.local.get(['pdfInNewTab'], function(result) {
+    this.document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
   })
   /*chrome.storage.local.get(['dashboardDisplay'], function(result) {
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
@@ -99,6 +121,8 @@ window.onload = function(){
     document.getElementById('save_data').onclick= saveUserData
     document.getElementById('delete_data').onclick= deleteUserData
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
+    document.getElementById('switch_pdf_inline').onclick = pdfInInline;
+    document.getElementById('switch_pdf_newtab').onclick = pdfInNewTab;
     document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
     document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
     //document.getElementById('fav').onclick = dashboardCourseSelect

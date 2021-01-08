@@ -1,14 +1,5 @@
 'use strict';
 
-//modify http header from opal, to view pdf in browser without the need to download it
-chrome.webRequest.onHeadersReceived.addListener(details => {
-  let header = details.responseHeaders.find(e => e.name.toLowerCase() === 'content-disposition');
-  if(header.value.includes(".zip")) return //ignore .zip
-  console.log(header)
-  header.value = 'inline; filename="filename.pdf';
-  return { responseHeaders: details.responseHeaders };
-}, { urls: ['https://bildungsportal.sachsen.de/opal/downloadering*'] }, ['blocking', 'responseHeaders']);
-
 ////////Code to run when extension is loaded
 console.log('Loaded TUfast')
 chrome.storage.local.set({loggedOutSelma: false}, function() {})
@@ -19,6 +10,11 @@ chrome.storage.local.set({loggedOutMagma: false}, function() {})
 chrome.storage.local.set({loggedOutJexam: false}, function() {})
 chrome.storage.local.set({loggedOutCloudstore: false}, function() {})
 chrome.storage.local.set({openSettingsPageParam: false}, function() {})
+chrome.storage.local.get(["pdfInNewTab"], function (result) {
+  if(result.pdfInNewTab) {
+    enableHeaderListener(true);
+  }
+})
 
 chrome.runtime.onInstalled.addListener(async(details) => {
   const reason = details.reason
@@ -31,6 +27,8 @@ chrome.runtime.onInstalled.addListener(async(details) => {
         chrome.storage.local.set({showed_100_clicks: false}, function() {});
         chrome.storage.local.set({isEnabled: false}, function() {})
         chrome.storage.local.set({fwdEnabled: true}, function() {})
+        chrome.storage.local.set({pdfInInline: false}, function() {})
+        chrome.storage.local.set({pdfInNewTab: false}, function() {})
         chrome.storage.local.set({mostLiklySubmittedReview: false}, function() {})
         chrome.storage.local.set({removedReviewBanner: false}, function() {})
         chrome.storage.local.set({neverShowedReviewBanner: true}, function() {})
@@ -129,6 +127,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       break
     case 'open_shortcut_settings':
       chrome.tabs.create({ url: "chrome://extensions/shortcuts" })
+    case 'toggle_pdf_inline_setting':
+      enableHeaderListener(request.enabled);
+      break;
     default:
       console.log('Cmd not found!')
       break
@@ -156,6 +157,37 @@ chrome.commands.onCommand.addListener(function(command) {
       break
   }
 })
+
+/**
+ * enable or disable the header listener
+ * modify http header from opal, to view pdf in browser without the need to download it
+ * @param {true} enabled flag to enable/ disable listener
+ */
+function enableHeaderListener(enabled) {
+    if (enabled) {
+      chrome.webRequest.onHeadersReceived.addListener(
+          headerListenerFunc,
+          {
+              urls: [
+                  "https://bildungsportal.sachsen.de/opal/downloadering*",
+                  "https://bildungsportal.sachsen.de/opal/*.pdf",
+              ],
+          },
+          ["blocking", "responseHeaders"]
+      );
+    } else {
+      chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc);
+    }
+}
+
+function headerListenerFunc(details) {
+  let header = details.responseHeaders.find(
+    e => e.name.toLowerCase() === "content-disposition"
+  );
+  if (header.value.includes(".zip")) return; //ignore .zip TODO should we only check for zips?
+  header.value = "inline";
+  return { responseHeaders: details.responseHeaders };
+}
 
 //open settings (=options) page, if required set params
 function openSettingsPage(params){
