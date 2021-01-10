@@ -123,6 +123,7 @@ button:hover {
 
 /* radio select */
 /* Customize the label (the container) */
+
 [type="radio"]:checked,
 [type="radio"]:not(:checked) {
     position: absolute;
@@ -173,7 +174,6 @@ button:hover {
     -webkit-transform: scale(1);
     transform: scale(1);
 }
-
 
 .helper {
     display: inline-block;

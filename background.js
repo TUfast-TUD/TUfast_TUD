@@ -96,7 +96,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ colorfulRocket: "black" }, function () { })
 			chrome.storage.local.set({ PRObadge: false }, function () { })
 			chrome.storage.local.set({ flakeState: false }, function () { })
+			chrome.storage.local.set({ availableRockets: [] }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
+			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
 			break;
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
@@ -169,6 +171,18 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.get(['openSettingsOnReload'], function (result) {
 				if (result.openSettingsOnReload === undefined || result.openSettingsOnReload === null) {
 					chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
+				}
+			})
+			//check if availableRockets
+			chrome.storage.local.get(['availableRockets'], function (result) {
+				if (result.availableRockets === undefined || result.availableRockets === null) {
+					chrome.storage.local.set({ availableRockets: ["R1", "R2", "R3"] }, function () { })
+				}
+			})
+			//check if selectedRocketIcon
+			chrome.storage.local.get(['selectedRocketIcon'], function (result) {
+				if (result.selectedRocketIcon === undefined || result.selectedRocketIcon === null) {
+					chrome.storage.local.set({ selectedRocketIcon:'{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
 				}
 			})
 			break;

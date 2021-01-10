@@ -60,6 +60,13 @@ function fwdGoogleSearch() {
   })
 }
 
+function checkSelectedRocket(){
+  chrome.storage.local.get(['selectedRocketIcon'], (res) => {
+    let icon = JSON.parse(res.selectedRocketIcon)
+    document.getElementById(icon.id).checked = true
+  })
+}
+
 //set switches and other elements
 function displayEnabled() {
   chrome.storage.local.get(['fwdEnabled'], function (result) {
@@ -186,31 +193,40 @@ function requestHostPermissionS() {
   });
 }
 
+async function getAvailableRockets(){
+  return new Promise((res, rej) => {
+    chrome.storage.local.get(["availableRockets"], (resp) => {
+      res(resp.availableRockets)
+    })
+  })
+}
 //save to storage:
   //which one is activated?
   //which ones are enabled
 
-function insertAllRocketIcons(){
+async function insertAllRocketIcons(){
   let rocketIcons = [
     {
-      IconPathDisables: "RocketIcons/1_128px.png",
       IconPathEnabled: "RocketIcons/1_128px.png",
-      innerHTMLToEnable: "Do this, to activate :)",
+      IconPathDisabled: "RocketIcons/1_grey_128px.png",
+      innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
       id: "RI1"
     },
     {
-      IconPathDisables: "RocketIcons/1_128px.png",
-      IconPathEnabled: "RocketIcons/1_128px.png",
-      innerHTMLToEnable: "Do this, to activate :)",
+      IconPathEnabled: "RocketIcons/2_128px.png",
+      IconPathDisabled: "RocketIcons/2_grey_128px.png",
+      innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
       id: "RI2"
     },
     {
-      IconPathDisables: "RocketIcons/1_128px.png",
-      IconPathEnabled: "RocketIcons/1_128px.png",
-      innerHTMLToEnable: "Do this, to activate :)",
+      IconPathEnabled: "RocketIcons/3_120px.png",
+      IconPathDisabled: "RocketIcons/3_grey_120px.png",
+      innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
       id: "RI3"
     },
   ]
+
+  var availableRockets = await getAvailableRockets() 
 
   rocketIcons.forEach((rocketIcon) => {
     let p = document.createElement("p")
@@ -222,12 +238,19 @@ function insertAllRocketIcons(){
 
     input.type = "radio"
     input.id = rocketIcon.id
-    input.name = "Zahlmethode"
+    input.name = "Rockets"
     input.value = rocketIcon.id
-    image.src = rocketIcon.IconPathEnabled
     span.className = "helper"
     label.htmlFor = rocketIcon.id
     text.innerHTML = rocketIcon.innerHTMLToEnable
+    image.style = "height: 50px;"
+
+    if (availableRockets.includes(rocketIcon.id)) {
+      image.src = rocketIcon.IconPathEnabled
+    } else {
+      image.src = rocketIcon.IconPathDisabled
+      input.disabled = "true"
+    }
 
     span.appendChild(image)
     span.appendChild(text)
@@ -236,10 +259,9 @@ function insertAllRocketIcons(){
     p.appendChild(span)
 
     document.getElementById("RocketForm").appendChild(p)
-    console.log(p)
   })
 
-  
+  checkSelectedRocket()
 
 }
 
@@ -311,7 +333,7 @@ window.onload = async function () {
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "time_settings") { setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "mailFetchSettings") { setTimeout(function () { this.document.getElementById("owa_mail_settings").click(); }, 200); }
-    else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
+    //else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
 
     if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
     this.document.getElementById("settings_comment").innerHTML = "Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
