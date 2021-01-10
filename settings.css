@@ -135,8 +135,9 @@ button:hover {
     padding-left: 28px;
     cursor: pointer;
     line-height: 20px;
-    display: inline-block;
+    /*display: inline-block;*/
 }
+
 [type="radio"]:checked + label:before,
 [type="radio"]:not(:checked) + label:before {
     content: '';
@@ -173,6 +174,15 @@ button:hover {
     transform: scale(1);
 }
 
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.helper img {
+    vertical-align: middle;
+}
 
 .button-accept {
   width: 200px;

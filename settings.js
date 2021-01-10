@@ -186,8 +186,67 @@ function requestHostPermissionS() {
   });
 }
 
+//save to storage:
+  //which one is activated?
+  //which ones are enabled
+
+function insertAllRocketIcons(){
+  let rocketIcons = [
+    {
+      IconPathDisables: "RocketIcons/1_128px.png",
+      IconPathEnabled: "RocketIcons/1_128px.png",
+      innerHTMLToEnable: "Do this, to activate :)",
+      id: "RI1"
+    },
+    {
+      IconPathDisables: "RocketIcons/1_128px.png",
+      IconPathEnabled: "RocketIcons/1_128px.png",
+      innerHTMLToEnable: "Do this, to activate :)",
+      id: "RI2"
+    },
+    {
+      IconPathDisables: "RocketIcons/1_128px.png",
+      IconPathEnabled: "RocketIcons/1_128px.png",
+      innerHTMLToEnable: "Do this, to activate :)",
+      id: "RI3"
+    },
+  ]
+
+  rocketIcons.forEach((rocketIcon) => {
+    let p = document.createElement("p")
+    let input = document.createElement("input")
+    let span = document.createElement("span")
+    let image = document.createElement("img")
+    let label = document.createElement("label")
+    let text = document.createElement("text")
+
+    input.type = "radio"
+    input.id = rocketIcon.id
+    input.name = "Zahlmethode"
+    input.value = rocketIcon.id
+    image.src = rocketIcon.IconPathEnabled
+    span.className = "helper"
+    label.htmlFor = rocketIcon.id
+    text.innerHTML = rocketIcon.innerHTMLToEnable
+
+    span.appendChild(image)
+    span.appendChild(text)
+    p.appendChild(input)
+    p.appendChild(label)
+    p.appendChild(span)
+
+    document.getElementById("RocketForm").appendChild(p)
+    console.log(p)
+  })
+
+  
+
+}
+
 //this need to be done here since manifest v2
 window.onload = async function () {
+
+  insertAllRocketIcons()
 
   //assign functions
   document.getElementById('save_data').onclick = saveUserData
