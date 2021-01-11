@@ -54,20 +54,6 @@ function fwdGoogleSearch() {
   })
 }
 
-function pdfInInline() {
-  chrome.storage.local.get(['pdfInInline'], function(result) {
-    chrome.storage.local.set({pdfInInline: !(result.pdfInInline)}, function() {})
-    chrome.runtime.sendMessage({cmd: 'toggle_pdf_inline_setting', enabled: !(result.pdfInInline)});
-  })
-}
-
-function pdfInNewTab() {
-  chrome.storage.local.get(['pdfInNewTab'], function(result) {
-    chrome.storage.local.set({pdfInNewTab: !(result.pdfInNewTab)}, function() {})
-  })
-}
-
-
 //set switches and other elements
 function displayEnabled() {
   chrome.storage.local.get(['fwdEnabled'], function(result) {
@@ -76,6 +62,9 @@ function displayEnabled() {
 
   chrome.storage.local.get(['pdfInInline'], function(result) {
     this.document.getElementById('switch_pdf_inline').checked = result.pdfInInline
+    if(!result.pdfInInline){
+      document.getElementById("switch_pdf_newtab_block").style.visibility = "hidden";
+    }
   })
 
   chrome.storage.local.get(['pdfInNewTab'], function(result) {
@@ -121,8 +110,6 @@ window.onload = function(){
     document.getElementById('save_data').onclick= saveUserData
     document.getElementById('delete_data').onclick= deleteUserData
     document.getElementById('switch_fwd').onclick = fwdGoogleSearch
-    document.getElementById('switch_pdf_inline').onclick = pdfInInline;
-    document.getElementById('switch_pdf_newtab').onclick = pdfInNewTab;
     document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
     document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
     //document.getElementById('fav').onclick = dashboardCourseSelect
@@ -140,6 +127,24 @@ window.onload = function(){
         }
       }
     });
+
+    document.getElementById("switch_pdf_inline").addEventListener("click", function () {
+            chrome.storage.local.set({ pdfInInline: this.checked }, function () {});
+            chrome.runtime.sendMessage({
+                cmd: "toggle_pdf_inline_setting",
+                enabled: this.checked,
+            });
+
+            document.getElementById("switch_pdf_newtab_block").style.visibility = this.checked ? "visible":"hidden";
+            if (!this.checked) {
+                //disable "pdf in new tab" setting since it doesn't make any sense without inline pdf
+                chrome.storage.local.set({ pdfInNewTab: false });
+            }
+        });
+
+    document.getElementById("switch_pdf_newtab").addEventListener("click", function () {
+            chrome.storage.local.set({ pdfInNewTab: this.checked }, function () {});
+        });
 
     //set all switches and elements
     displayEnabled()
