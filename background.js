@@ -1,5 +1,8 @@
 'use strict';
 
+chrome.storage.local.set({ availableRockets: [] }, function () { })
+
+
 //start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
 	userDataExists().then((userDataExists) => {
