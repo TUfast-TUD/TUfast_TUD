@@ -1,7 +1,5 @@
 'use strict';
-
-chrome.storage.local.set({ availableRockets: [] }, function () { })
-
+chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
 
 //start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
@@ -99,7 +97,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ colorfulRocket: "black" }, function () { })
 			chrome.storage.local.set({ PRObadge: false }, function () { })
 			chrome.storage.local.set({ flakeState: false }, function () { })
-			chrome.storage.local.set({ availableRockets: [] }, function () { })
+			chrome.storage.local.set({ availableRockets: ["RI_default"] }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
 			break;
@@ -179,7 +177,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			//check if availableRockets
 			chrome.storage.local.get(['availableRockets'], function (result) {
 				if (result.availableRockets === undefined || result.availableRockets === null) {
-					chrome.storage.local.set({ availableRockets: ["R1", "R2", "R3"] }, function () { })
+					chrome.storage.local.set({ availableRockets: ["RI_default"] }, function () { })
 				}
 			})
 			//check if selectedRocketIcon

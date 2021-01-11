@@ -270,6 +270,18 @@ async function insertAllRocketIcons() {
     el.onclick = enableRocketIcon
   })
 
+  //attach form change handler
+  document.querySelectorAll("input[name=Rockets]").forEach((el) => {
+    el.onclick = rocketIconSelectionChange
+  })
+
+}
+
+function rocketIconSelectionChange() {
+  let rocketNode = this.parentElement
+  let rocketID = this.id
+  let imgSrc = "RocketIcons" + rocketNode.querySelectorAll("img")[0].src.split("RocketIcons")[1]
+  chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc+ '"}' }, function () { })
 }
 
 async function enableRocketIcon() {
@@ -285,7 +297,7 @@ async function enableRocketIcon() {
     chrome.storage.local.set({ "availableRockets": avRockets })
   })
 
-  //change picture and enable radio button
+  //change picture and text and enable radio button
   let timestamp = new Date().getTime();
   let rocketNode = document.querySelectorAll("#" + rocketID)[0]
   let rocketImage = rocketNode.parentElement.querySelectorAll("img")[0]
