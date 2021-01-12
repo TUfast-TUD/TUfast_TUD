@@ -185,6 +185,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 					chrome.storage.local.set({ selectedRocketIcon:'{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 				}
 			})
+			//if easteregg was discovered in an earlier version: enable and select specific rocket!
+				//TODO
 			break;
 		default:
 			console.log('Other install events within the browser for TUfast.')

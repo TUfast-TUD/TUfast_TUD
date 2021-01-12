@@ -206,21 +206,21 @@ let rocketIconsConfig = {
     IconPathEnabled: "RocketIcons/1_128px.png",
     IconPathDisabled: "RocketIcons/1_grey_128px.png",
     innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
-    innerHTMLEnabled: "Done",
+    innerHTMLEnabled: "<a target='_blank' href='http://www.google.com'>klick</a>",
     id: "RI1"
   },
   "RI2": {
     IconPathEnabled: "RocketIcons/2_128px.png",
     IconPathDisabled: "RocketIcons/2_grey_128px.png",
     innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
-    innerHTMLEnabled: "Done",
+    innerHTMLEnabled: "<a target='_blank' href='http://www.google.com'>klick</a>",
     id: "RI2"
   },
   "RI3": {
     IconPathEnabled: "RocketIcons/3_120px.png",
     IconPathDisabled: "RocketIcons/3_grey_120px.png",
     innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
-    innerHTMLEnabled: "Done",
+    innerHTMLEnabled: "<a target='_blank' href='http://www.google.com'>klick</a>",
     id: "RI3"
   },
 }
@@ -281,21 +281,24 @@ function rocketIconSelectionChange() {
   let rocketNode = this.parentElement
   let rocketID = this.id
   let imgSrc = "RocketIcons" + rocketNode.querySelectorAll("img")[0].src.split("RocketIcons")[1]
-  chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc+ '"}' }, function () { })
+  chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc + '"}' }, function () { })
 }
 
 async function enableRocketIcon() {
   let el = this.parentElement.parentElement.parentElement
   let rocketID = el.querySelectorAll("input")[0].id
 
-  await new Promise(r => setTimeout(r, 2000))
-
   //save in storage
   chrome.storage.local.get(["availableRockets"], (resp) => {
     let avRockets = resp.availableRockets
-    avRockets.push(rocketID)
-    chrome.storage.local.set({ "availableRockets": avRockets })
+    //only add rocketID, if is not in there already
+    if (!resp.availableRockets.includes(rocketID)) {
+      avRockets.push(rocketID)
+      chrome.storage.local.set({ "availableRockets": avRockets })
+    }
   })
+
+  await new Promise(r => setTimeout(r, 7000))
 
   //change picture and text and enable radio button
   let timestamp = new Date().getTime();
@@ -306,7 +309,6 @@ async function enableRocketIcon() {
   rocketImage.src = rocketIconsConfig[rocketID]["IconPathEnabled"] + "?t =" + timestamp;
   rocketText.innerHTML = rocketIconsConfig[rocketID]["innerHTMLEnabled"]
   rocketInput.removeAttribute("disabled");
-
 
 }
 
