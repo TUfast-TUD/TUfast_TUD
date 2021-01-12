@@ -291,7 +291,23 @@
   },
   "web_accessible_resources": [
     "images/OpalBanner3.png",
-    "images/tufast48.png"
+    "images/tufast48.png",
+    "RocketIcons/1_128px.png",
+    "RocketIcons/2_128px.png",
+    "RocketIcons/3_120px.png",
+    "RocketIcons/4_103px.png",
+    "RocketIcons/5_116px.png",
+    "RocketIcons/6_128px.png",
+    "RocketIcons/7_128px.png",
+    "RocketIcons/8_128px.png",
+    "RocketIcons/9_108px.png",
+    "RocketIcons/10_128px.png",
+    "RocketIcons/11_128px.png",
+    "RocketIcons/12_128px.png",
+    "RocketIcons/13_128px.png",
+    "RocketIcons/14_128px.png",
+    "RocketIcons/15_128px.png",
+    "RocketIcons/default_128px.png"
   ],
   "manifest_version": 2,
   "commands": {

@@ -1,5 +1,4 @@
 'use strict';
-chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
 
 //start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
@@ -99,7 +98,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ flakeState: false }, function () { })
 			chrome.storage.local.set({ availableRockets: ["RI_default"] }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
-			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
+			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 			break;
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
@@ -183,7 +182,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			//check if selectedRocketIcon
 			chrome.storage.local.get(['selectedRocketIcon'], function (result) {
 				if (result.selectedRocketIcon === undefined || result.selectedRocketIcon === null) {
-					chrome.storage.local.set({ selectedRocketIcon:'{"id": "RI_default", "link": "RocketIcons/default_128px"}' }, function () { })
+					chrome.storage.local.set({ selectedRocketIcon:'{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 				}
 			})
 			break;

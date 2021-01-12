@@ -1,5 +1,11 @@
-chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'Rocket', 'PRObadge', 'flakeState'], function (result) {
+
+/*
+   { selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }
+*/
+chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', "selectedRocketIcon"], function (result) {
     if (result.isEnabled || result.fwdEnabled) {
+        //parse selectedRocketIcon
+        let selectedRocketIcon = JSON.parse(result.selectedRocketIcon)
 
         //decide which overlay to show
         let christmasTime = false
@@ -25,11 +31,11 @@ chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'Rocket', 'PRObadge', 'flak
         } else {
             //on load
             document.addEventListener("DOMNodeInserted", function (e) {
-                if (!document.getElementById("TUFastLogo")) { insertRocket(result.Rocket, result.PRObadge) }
+                if (!document.getElementById("TUFastLogo")) { insertRocket(selectedRocketIcon, result.PRObadge) }
             })
             //on document changes
             window.addEventListener("load", function () {
-                if (!document.getElementById("TUFastLogo")) { insertRocket(result.Rocket, result.PRObadge) }
+                if (!document.getElementById("TUFastLogo")) { insertRocket(selectedRocketIcon, result.PRObadge) }
             }, true)
         }
     }
@@ -192,7 +198,7 @@ function funnyColor(color, step) {
     return color;
 };
 
-function insertRocket(rocketType, PRObadge = false) {
+function insertRocket(selectedRocketIcon, PRObadge = false) {
     let imgUrl, header, logo_node, logo_link, logo_img, badge
     try {
         if (document.getElementsByClassName("page-header")[0] != undefined) {
@@ -202,25 +208,15 @@ function insertRocket(rocketType, PRObadge = false) {
             logo_img = document.createElement("img")
             logo_link.href = "javascript:void(0)"
             logo_node.id = "TUFastLogo"
-            logo_link.title = "powered by TUFast. You're welcome."
+            logo_link.title = "powered by TUFast. Enjoy :)"
             logo_node.onclick = logoOnClick
 
-            //Create rocket icon
-            switch (rocketType) {
-                case "colorful":
-                    logo_node.style.fontSize = "30px"
-                    logo_node.style.paddingTop = "5px"
-                    logo_link.innerHTML = "&#x1F680;"
-                    break
-                //default is black
-                default:
-                    imgUrl = chrome.runtime.getURL("../images/tufast48.png")
-                    logo_img.style.display = "inline-block"
-                    logo_img.style.width = "37px"
-                    logo_img.src = imgUrl
-                    logo_link.appendChild(logo_img)
-                    break
-            }
+            //create rocket icon
+            imgUrl = chrome.runtime.getURL("../" + selectedRocketIcon.link)
+            logo_img.style.display = "inline-block"
+            logo_img.style.width = "37px"
+            logo_img.src = imgUrl
+            logo_link.appendChild(logo_img)
 
             //add badge
             switch (PRObadge) {
