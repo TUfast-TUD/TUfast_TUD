@@ -205,23 +205,37 @@ let rocketIconsConfig = {
   "RI1": {
     IconPathEnabled: "RocketIcons/1_128px.png",
     IconPathDisabled: "RocketIcons/1_grey_128px.png",
-    innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
-    innerHTMLEnabled: "<a target='_blank' href='http://www.google.com'>klick</a>",
+    innerHTMLToEnable: "&nbsp;&nbsp;TUfast ist cool? Teile es mit zwei Freunden auf <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0AEine%20richtig%20n%C3%BCtzliche%20Erweiterung%20f%C3%BCr%20den%20Browser.%20Probiers%20jetzt%20gleich%20mal%20aus%3A%20www.tu-fast.de!' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> und bekomme diese Rakete!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Danke f&uuml;r deine Unterst&uuml;tzung! TUfast auf <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0AEine%20richtig%20n%C3%BCtzliche%20Erweiterung%20f%C3%BCr%20den%20Browser.%20Probiers%20jetzt%20gleich%20mal%20aus%3A%20www.tu-fast.de!' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> empfohlen.",
     id: "RI1"
   },
   "RI2": {
     IconPathEnabled: "RocketIcons/2_128px.png",
     IconPathDisabled: "RocketIcons/2_grey_128px.png",
-    innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
-    innerHTMLEnabled: "<a target='_blank' href='http://www.google.com'>klick</a>",
+    innerHTMLToEnable: "&nbsp;&nbsp;Um diese Rakete freizuschalten, erz&auml;hl zwei Leuten per <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> wie n&uuml;tzlich TUfast ist!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Super, danke! Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> empfohlen.</a>",
     id: "RI2"
   },
   "RI3": {
-    IconPathEnabled: "RocketIcons/3_120px.png",
-    IconPathDisabled: "RocketIcons/3_grey_120px.png",
-    innerHTMLToEnable: "Finde das Easteregg!",
-    innerHTMLEnabled: "Du hast das Easteregg gefunden!",
+    IconPathEnabled: "RocketIcons/7_128px.png",
+    IconPathDisabled: "RocketIcons/7_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Finde das Easteregg!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Easteregg gefunden :)",
     id: "RI3"
+  },
+  "RI4": {
+    IconPathEnabled: "RocketIcons/4_103px.png",
+    IconPathDisabled: "RocketIcons/4_grey_103px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 100 Klicks!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 100 Klicks gespart! TUfast scheint n&uuml;tzlich :)",
+    id: "RI4"
+  },
+  "RI5": {
+    IconPathEnabled: "RocketIcons/13_128px.png",
+    IconPathDisabled: "RocketIcons/13_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 1000 Klicks!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 1000 Klicks gespart! TUfast ist n&uuml;tzlich :)",
+    id: "RI5"
   },
 }
 
@@ -426,7 +440,7 @@ window.onload = async function () {
   chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1'], async function (result) {
     if (!result.gotInteractionOnHostPermissionExtension1) {
       let hpDiv = document.getElementById("addition_host_permissions")
-      hpDiv.innerHTML = '<p>Wichtig: TUfast braucht eine zus&auml;tzliche Berechtigung, damit alle Online-Portale der TU Dresden unterst&uuml;tz werden.<br>Dr&uuml;cke jetzt "Akzeptieren" um TUfast f&uuml;r alle Online-Portale zu verwenden.</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button>'
+      hpDiv.innerHTML = '<p>TUfast braucht eine zus&auml;tzliche Berechtigung, damit alle Online-Portale der TU Dresden unterst&uuml;tz werden.<br>Dr&uuml;cke jetzt "Akzeptieren" um TUfast f&uuml;r alle Online-Portale zu verwenden.</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button>'
       await new Promise(r => setTimeout(r, 500));
       document.getElementById("refuseDomains").addEventListener('click', denyHostPermissionS) //innerHTML is not async. However, it takes time to render, so lets wait 500ms
       document.getElementById("acceptDomains").addEventListener('click', requestHostPermissionS)

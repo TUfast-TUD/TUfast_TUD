@@ -85,7 +85,7 @@ function insertScreenOverlay() {
     } catch (e) { console.log("cannot insert overlay:" + e) }
 }
 
-function logoOnClickEasteregg() {
+async function logoOnClickEasteregg() {
 
     //block counting up when text is promted
     if (blocker && !timeUp) return
@@ -112,14 +112,14 @@ function logoOnClickEasteregg() {
             typeOfMsg = "text"
             //enable rocketIcon, set selected rocketIcon (RI3)
             chrome.storage.local.set({ foundEasteregg: true }, function () { })
-            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/3_120px.png"}' }, function () { })
+            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/7_128px.png"}' }, function () { })
             chrome.storage.local.get(["availableRockets"], (resp) => {
                 let avRockets = resp.availableRockets
                 avRockets.push("RI3")
                 chrome.storage.local.set({ "availableRockets": avRockets })
             })
             //live-update the logo
-            updateRocketLogo("RocketIcons/3_120px.png")
+            updateRocketLogo("RocketIcons/7_128px.png")
             //change the onclick function
             document.getElementById("TUFastLogo").onclick = logoOnClick
             break
@@ -137,7 +137,7 @@ function logoOnClickEasteregg() {
             break
         case "text":
             counter.style.fontSize = "100px"
-            timeout = 2000
+            timeout = 3000
             blocker = true
             break
         default:
@@ -160,7 +160,7 @@ function logoOnClickEasteregg() {
 }
 
 function logoOnClick() {
-    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
+    if (timeUp) chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
 }
 
 function funnyColor(color, step) {
