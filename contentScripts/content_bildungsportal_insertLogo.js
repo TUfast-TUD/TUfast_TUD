@@ -2,7 +2,7 @@
 /*
    { selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }
 */
-chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', "selectedRocketIcon"], function (result) {
+chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', "selectedRocketIcon", "foundEasteregg"], function (result) {
     if (result.isEnabled || result.fwdEnabled) {
         //parse selectedRocketIcon
         let selectedRocketIcon = JSON.parse(result.selectedRocketIcon)
@@ -31,11 +31,11 @@ chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', "
         } else {
             //on load
             document.addEventListener("DOMNodeInserted", function (e) {
-                if (!document.getElementById("TUFastLogo")) { insertRocket(selectedRocketIcon, result.PRObadge) }
+                if (!document.getElementById("TUFastLogo")) { insertRocket(selectedRocketIcon, result.PRObadge, result.foundEasteregg) }
             })
             //on document changes
             window.addEventListener("load", function () {
-                if (!document.getElementById("TUFastLogo")) { insertRocket(selectedRocketIcon, result.PRObadge) }
+                if (!document.getElementById("TUFastLogo")) { insertRocket(selectedRocketIcon, result.PRObadge, result.foundEasteregg) }
             }, true)
         }
     }
@@ -50,10 +50,9 @@ var timeUp = false  //true, when time is up
 var display_value   //number of text, which shows on screen
 var typeOfMsg = ""  //type of message which is displayed
 
-function setLogoColorful() {
-    document.getElementById("TUFastLogo").parentNode.removeChild(document.getElementById("TUFastLogo"))
-    chrome.storage.local.set({ Rocket: "colorful" }, function () { })
-    insertRocket("colorful", false)
+function updateRocketLogo(iconPath) {
+    let timestamp = new Date().getTime();
+    document.querySelectorAll("#TUFastLogo img")[0].src = chrome.runtime.getURL("../" + iconPath) + "?t =" + timestamp;
 }
 
 function setProBadge() {
@@ -86,15 +85,12 @@ function insertScreenOverlay() {
     } catch (e) { console.log("cannot insert overlay:" + e) }
 }
 
-function logoOnClick() {
+function logoOnClickEasteregg() {
 
     //block counting up when text is promted
     if (blocker && !timeUp) return
 
     GLOBAL_counter++
-
-    //keep adding logos
-    if (GLOBAL_counter > 1010) insertRocket("colorful", false)
 
     //show screen overlay
     if (!document.getElementById('counter')) {
@@ -106,35 +102,26 @@ function logoOnClick() {
     }
 
     counter = document.getElementById('counter')
-    counter.style.color = funnyColor(counter.style.color, 6)
+    counter.style.color = funnyColor(counter.style.color, 80)
 
     //trigger actions based on counter
     switch (GLOBAL_counter) {
-        case 100:
+        case 10:
+            //easteregg finished
             display_value = "&#x1F680; &#x1F680; &#x1F680;"
             typeOfMsg = "text"
-            setLogoColorful()
-            break
-        case 250:
-            display_value = "You can stop now!"
-            typeOfMsg = "text"
-            break
-        case 300:
-            display_value = "Your are ambitious..."
-            typeOfMsg = "text"
-            break
-        case 500:
-            display_value = "PRO PRO PRO"
-            typeOfMsg = "text"
-            setProBadge()
-            break
-        case 1000:
-            display_value = 'You saw 1000 numbers now'
-            typeOfMsg = "text_long"
-            break
-        case 1010:
-            display_value = 'There are infinite more ...'
-            typeOfMsg = "text_long"
+            //enable rocketIcon, set selected rocketIcon (RI3)
+            chrome.storage.local.set({ foundEasteregg: true }, function () { })
+            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/3_120px.png"}' }, function () { })
+            chrome.storage.local.get(["availableRockets"], (resp) => {
+                let avRockets = resp.availableRockets
+                avRockets.push("RI3")
+                chrome.storage.local.set({ "availableRockets": avRockets })
+            })
+            //live-update the logo
+            updateRocketLogo("RocketIcons/3_120px.png")
+            //change the onclick function
+            document.getElementById("TUFastLogo").onclick = logoOnClick
             break
         default:
             typeOfMsg = "number"
@@ -151,16 +138,6 @@ function logoOnClick() {
         case "text":
             counter.style.fontSize = "100px"
             timeout = 2000
-            blocker = true
-            break
-        case "text_long":
-            counter.style.fontSize = "80px"
-            timeout = 7000
-            blocker = true
-            break
-        case "text_middle":
-            counter.style.fontSize = "80px"
-            timeout = 4000
             blocker = true
             break
         default:
@@ -180,7 +157,10 @@ function logoOnClick() {
         counter.parentNode.removeChild(counter)
         timeUp = true
     }, timeout)
+}
 
+function logoOnClick() {
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
 }
 
 function funnyColor(color, step) {
@@ -198,7 +178,7 @@ function funnyColor(color, step) {
     return color;
 };
 
-function insertRocket(selectedRocketIcon, PRObadge = false) {
+function insertRocket(selectedRocketIcon, PRObadge = false, foundEasteregg) {
     let imgUrl, header, logo_node, logo_link, logo_img, badge
     try {
         if (document.getElementsByClassName("page-header")[0] != undefined) {
@@ -209,7 +189,13 @@ function insertRocket(selectedRocketIcon, PRObadge = false) {
             logo_link.href = "javascript:void(0)"
             logo_node.id = "TUFastLogo"
             logo_link.title = "powered by TUFast. Enjoy :)"
-            logo_node.onclick = logoOnClick
+
+            //onclick function depends on whether easteregg was already found!
+            if (foundEasteregg) {
+                logo_node.onclick = logoOnClick
+            } else {
+                logo_node.onclick = logoOnClickEasteregg
+            }
 
             //create rocket icon
             imgUrl = chrome.runtime.getURL("../" + selectedRocketIcon.link)

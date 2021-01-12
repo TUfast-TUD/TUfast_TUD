@@ -97,6 +97,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ PRObadge: false }, function () { })
 			chrome.storage.local.set({ flakeState: false }, function () { })
 			chrome.storage.local.set({ availableRockets: ["RI_default"] }, function () { })
+			chrome.storage.local.set({ foundEasteregg: false }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 			break;
@@ -182,11 +183,21 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			//check if selectedRocketIcon
 			chrome.storage.local.get(['selectedRocketIcon'], function (result) {
 				if (result.selectedRocketIcon === undefined || result.selectedRocketIcon === null) {
-					chrome.storage.local.set({ selectedRocketIcon:'{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
+					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 				}
 			})
 			//if easteregg was discovered in an earlier version: enable and select specific rocket!
-				//TODO
+			chrome.storage.local.get(['Rocket', "foundEasteregg"], function (result) {
+				if (result.Rocket === "colorful" && result.foundEasteregg === undefined) {
+					chrome.storage.local.set({ foundEasteregg: true }, function () { })
+					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/3_120px.png"}' }, function () { })
+					chrome.storage.local.get(["availableRockets"], (resp) => {
+						let avRockets = resp.availableRockets
+						avRockets.push("RI3")
+						chrome.storage.local.set({ "availableRockets": avRockets })
+					})
+				}
+			})
 			break;
 		default:
 			console.log('Other install events within the browser for TUfast.')

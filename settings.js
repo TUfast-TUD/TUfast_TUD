@@ -219,8 +219,8 @@ let rocketIconsConfig = {
   "RI3": {
     IconPathEnabled: "RocketIcons/3_120px.png",
     IconPathDisabled: "RocketIcons/3_grey_120px.png",
-    innerHTMLToEnable: "<a target='_blank' href='http://www.google.com'>klick</a>",
-    innerHTMLEnabled: "<a target='_blank' href='http://www.google.com'>klick</a>",
+    innerHTMLToEnable: "Finde das Easteregg!",
+    innerHTMLEnabled: "Du hast das Easteregg gefunden!",
     id: "RI3"
   },
 }
@@ -380,7 +380,9 @@ window.onload = async function () {
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "time_settings") { setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "mailFetchSettings") { setTimeout(function () { this.document.getElementById("owa_mail_settings").click(); }, 200); }
+    else if (result.openSettingsPageParam === "rocket_icons_settings") { setTimeout(function () { this.document.getElementById("rocket_icons").click(); }, 200); }
     //else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
+
 
     if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
     this.document.getElementById("settings_comment").innerHTML = "Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
