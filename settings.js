@@ -130,20 +130,32 @@ window.onload = function(){
 
     document.getElementById("switch_pdf_inline").addEventListener("click", function () {
             chrome.storage.local.set({ pdfInInline: this.checked }, function () {});
-            chrome.runtime.sendMessage({
-                cmd: "toggle_pdf_inline_setting",
-                enabled: this.checked,
-            });
+            document.getElementById("switch_pdf_newtab_block").style.visibility = this.checked ? "visible" : "hidden";
 
-            document.getElementById("switch_pdf_newtab_block").style.visibility = this.checked ? "visible":"hidden";
-            if (!this.checked) {
-                //disable "pdf in new tab" setting since it doesn't make any sense without inline pdf
-                chrome.storage.local.set({ pdfInNewTab: false });
+            if (this.checked) {
+              //request necessary permissions
+              chrome.permissions.request( { permissions: [ "webRequest", "webRequestBlocking" ], origins: [ "https://bildungsportal.sachsen.de/opal/*" ] },
+                function (granted) {
+                  if (granted) {
+                    chrome.runtime.sendMessage({ cmd: "toggle_pdf_inline_setting", enabled: true });
+                  } else {
+                    //permission granting failed :( -> revert checkbox settings
+                    chrome.storage.local.set({ pdfInInline: false });
+                    this.document.getElementById("switch_pdf_inline").checked = false;
+                    alert("TUfast braucht diese Berechtigung, um die PDFs im Browser anzeigen zu koennen");
+                  }
+                }
+              );
+            } else {
+              //disable "pdf in new tab" setting since it doesn't make any sense without inline pdf
+              chrome.storage.local.set({ pdfInNewTab: false });
+              document.getElementById("switch_pdf_newtab").checked = false;
+              chrome.runtime.sendMessage({ cmd: "toggle_pdf_inline_setting", enabled: false });
             }
         });
 
     document.getElementById("switch_pdf_newtab").addEventListener("click", function () {
-            chrome.storage.local.set({ pdfInNewTab: this.checked }, function () {});
+          chrome.storage.local.set({ pdfInNewTab: this.checked }, function () {});
         });
 
     //set all switches and elements
