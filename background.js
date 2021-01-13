@@ -137,6 +137,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
   return true //required for async sendResponse
 
 })
+ 
 
 //register hotkeys
 chrome.commands.onCommand.addListener(function(command) {
