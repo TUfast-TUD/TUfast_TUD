@@ -296,6 +296,9 @@ function rocketIconSelectionChange() {
   let rocketID = this.id
   let imgSrc = "RocketIcons" + rocketNode.querySelectorAll("img")[0].src.split("RocketIcons")[1]
   chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc + '"}' }, function () { })
+  chrome.browserAction.setIcon({
+    path: imgSrc
+  });
 }
 
 async function enableRocketIcon() {

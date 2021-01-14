@@ -17,6 +17,16 @@ chrome.storage.local.get(['openSettingsOnReload'], (resp) => {
 	chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 })
 
+//set browserIcon
+chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
+	if (!resp.selectedRocketIcon === undefined) {
+		let r = JSON.parse(resp.selectedRocketIcon)
+		chrome.browserAction.setIcon({
+			path: r.link
+		});
+	}
+})
+
 console.log('Loaded TUfast')
 chrome.storage.local.set({ loggedOutSelma: false }, function () { })
 chrome.storage.local.set({ loggedOutElearningMED: false }, function () { })
