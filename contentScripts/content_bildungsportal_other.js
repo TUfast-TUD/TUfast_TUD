@@ -41,10 +41,11 @@ chrome.storage.local.get(["showedOpalCustomizeBanner", 'isEnabled', "saved_click
         showUnreadMailCounter = true
     }
 
-
+    /*
     if (!result.showedOpalCustomizeBanner && !showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 75) {
         showOpalCustomize = true
     }
+    */
 
     window.addEventListener("load", async function (e) {
         if (showReviewBanner) { showLeaveReviewBanner() }
