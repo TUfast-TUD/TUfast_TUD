@@ -1,13 +1,16 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "5.1.0.3",
+  "version": "5.3.0.1",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage", 
-    "system.cpu"    
+    "system.cpu",
+    "alarms",
+    "declarativeContent"   
   ],
   "optional_permissions": [
     "*://*/",
+    "tabs",
     "webRequest",
     "webRequestBlocking"
   ],
@@ -18,6 +21,15 @@
     "persistent": true
   },
   "content_scripts": [
+    {
+      "js": [
+        "contentScripts/content_elearningMED.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://elearning.med.tu-dresden.de/*"
+      ]
+    },
     {
       "js": [
         "contentScripts/content_fwd_opalError.js"
@@ -43,10 +55,8 @@
       "run_at": "document_start",
       "matches": [
         "https://jexam.inf.tu-dresden.de/",
-        "https://www.google.de/search?q=jexam*",
-        "https://www.google.com/search?q=jexam*",
-        "https://www.google.de/search*&q=jexam&oq=jexam*",
-        "https://www.google.com/search*&q=jexam&oq=jexam*"
+        "https://www.google.de/search?*q=jexam*",
+        "https://www.google.com/search?*q=jexam*"
       ]
     },
     {
@@ -55,14 +65,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tustore*",
-        "https://www.google.com/search?q=tustore*",
-        "https://www.google.de/search*&q=tustore&oq=tustore*",
-        "https://www.google.com/search*&q=tustore&oq=tustore*",
+        "https://www.google.de/search?*q=tustore*",
+        "https://www.google.com/search?*q=tustore*",
         "https://www.google.de/search?q=tucloud*",
-        "https://www.google.com/search?q=tucloud*",
-        "https://www.google.de/search*&q=tustore&oq=tucloud*",
-        "https://www.google.com/search*&q=tustore&oq=tucloud*"
+        "https://www.google.com/search?q=tucloud*"
       ]
     },
     {
@@ -71,14 +77,10 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=tumail*",
-        "https://www.google.de/search?q=tudmail*",
-        "https://www.google.com/search?q=tumail*",
-        "https://www.google.com/search?q=tudmail*",
-        "https://www.google.de/search*&q=tumail&oq=tumail*",
-        "https://www.google.com/search*&q=tumail&oq=tumail*",
-        "https://www.google.de/search*&q=tudmail&oq=tudmail*",
-        "https://www.google.com/search*&q=tudmail&oq=tudmail*"
+        "https://www.google.de/search?*q=tumail*",
+        "https://www.google.de/search?*q=tudmail*",
+        "https://www.google.com/search?*q=tumail*",
+        "https://www.google.com/search?*q=tudmail*"
       ]
     },
     {
@@ -92,7 +94,7 @@
     },
     {
       "js": [
-        "thirdParty/jquery-3.4.1.min.js", 
+        "thirdParty/jquery-3.4.1.min.js",
         "thirdParty/Chart.bundle.min.js",
         "contentScripts/pimpHISQIS.js"
       ],
@@ -100,7 +102,7 @@
       "matches": [
         "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
       ],
-      "include_globs":[
+      "include_globs": [
         "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*auswahlBaum*"
       ]
     },
@@ -111,10 +113,8 @@
       "run_at": "document_start",
       "matches": [
         "*://opal.de/*",
-        "https://www.google.de/search?q=opal*",
-        "https://www.google.com/search?q=opal*",
-        "https://www.google.de/search*&q=opal&oq=opal*",
-        "https://www.google.com/search*&q=opal&oq=opal*"
+        "https://www.google.de/search?*q=opal*",
+        "https://www.google.com/search?*q=opal*"
       ]
     },
     {
@@ -132,10 +132,18 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=hisqis*",
-        "https://www.google.com/search?q=hisqis*",
-        "https://www.google.de/search*&q=hisqis&oq=hisqis*",
-        "https://www.google.com/search*&q=hisqis&oq=hisqis*"
+        "https://www.google.de/search?*q=hisqis*",
+        "https://www.google.com/search?*q=hisqis*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_tumed.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=tumed*",
+        "https://www.google.com/search?*q=tumed*"
       ]
     },
     {
@@ -144,10 +152,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.de/search?q=selma*",
-        "https://www.google.com/search?q=selma*",
-        "https://www.google.de/search*&q=selma&oq=selma*",
-        "https://www.google.com/search*&q=selma&oq=selma*"
+        "https://www.google.de/search?q=*selma*",
+        "https://www.google.com/search?q=*selma*"
       ]
     },
     {
@@ -176,10 +182,8 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=tumatrix*",
-        "https://www.google.de/search?q=tumatrix*",
-        "https://www.google.de/search*&q=tumatrix&oq=tumatrix*",
-        "https://www.google.com/search*&q=tumatrix&oq=tumatrix*"
+        "https://www.google.com/search?q=*tumatrix*",
+        "https://www.google.de/search?q=*tumatrix*"
       ]
     },
     {
@@ -245,7 +249,7 @@
     },
     {
       "js": [
-        "thirdParty/jquery-3.4.1.min.js", 
+        "thirdParty/jquery-3.4.1.min.js",
         "contentScriptsDashboard/parseOpal.js"
       ],
       "run_at": "document_start",
@@ -256,21 +260,22 @@
       ]
     },
     {
-      "js": ["contentScripts/content_magma.js"],
+      "js": [
+        "contentScripts/content_magma.js"
+      ],
       "run_at": "document_start",
       "matches": [
         "https://bildungsportal.sachsen.de/magma*"
       ]
     },
     {
-      "js": ["contentScripts/content_fwd_magma.js"],
+      "js": [
+        "contentScripts/content_fwd_magma.js"
+      ],
       "run_at": "document_start",
       "matches": [
-        "https://www.google.com/search?q=magma*",
-        "https://www.google.de/search?q=magma*",
-        "https://www.google.de/search*&q=magma&oq=magma*",
-        "https://www.google.com/search*&q=magma&oq=magma*"
-        
+        "https://www.google.com/search?*q=magma*",
+        "https://www.google.de/search?*q=magma*"
       ]
     }
   ],
@@ -283,22 +288,28 @@
   "browser_action": {
     "default_popup": "popup.html"
   },
-  "options_page": "settings.html",
-  "web_accessible_resources": ["images/OpalBanner3.png", "images/tufast48.png"],
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
+  "web_accessible_resources": [
+    "images/OpalBanner3.png",
+    "images/tufast48.png"
+  ],
   "manifest_version": 2,
-  "commands":{
+  "commands": {
     "_execute_browser_action": {
       "suggested_key": {
         "default": "Alt+Q",
         "windows": "Alt+Q",
-        "mac": "Command+Q"
+        "mac": "Alt+Q"
       }
     },
     "open_opal_hotkey": {
       "suggested_key": {
         "default": "Alt+O",
         "windows": "Alt+O",
-        "mac": "Command+O"
+        "mac": "Alt+O"
       },
       "description": "Opal öffnen"
     },
@@ -306,7 +317,7 @@
       "suggested_key": {
         "default": "Alt+M",
         "windows": "Alt+M",
-        "mac": "Command+M"
+        "mac": "Alt+M"
       },
       "description": "Mail (OWA) öffnen"
     },
@@ -314,7 +325,7 @@
       "suggested_key": {
         "default": "Alt+J",
         "windows": "Alt+J",
-        "mac": "Command+J"
+        "mac": "Alt+J"
       },
       "description": "jExam öffnen"
     }
