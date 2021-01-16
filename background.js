@@ -206,6 +206,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 						avRockets.push("RI3")
 						chrome.storage.local.set({ "availableRockets": avRockets })
 					})
+					chrome.browserAction.setIcon({
+						path: "RocketIcons/3_120px.png"
+					});
 				}
 			})
 			break;
@@ -459,8 +462,8 @@ function save_clicks(counter) {
 		//make rocketIcons available if appropriate
 		chrome.storage.local.get(["availableRockets"], (resp) => {
 			let avRockets = resp.availableRockets
-			if (result.saved_click_counter > 100 && !avRockets.includes("RI4")) avRockets.push("RI4")
-			if (result.saved_click_counter > 1000 && !avRockets.includes("RI5")) avRockets.push("RI5")
+			if (result.saved_click_counter > 500 && !avRockets.includes("RI4")) avRockets.push("RI4")
+			if (result.saved_click_counter > 3500 && !avRockets.includes("RI5")) avRockets.push("RI5")
 			chrome.storage.local.set({ "availableRockets": avRockets })
 		})
 	})

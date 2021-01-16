@@ -227,14 +227,14 @@ let rocketIconsConfig = {
     IconPathEnabled: "RocketIcons/4_103px.png",
     IconPathDisabled: "RocketIcons/4_grey_103px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 100 Klicks!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 100 Klicks gespart. TUfast scheint n&uuml;tzlich!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 500 Klicks gespart. TUfast scheint n&uuml;tzlich!",
     id: "RI4"
   },
   "RI5": {
     IconPathEnabled: "RocketIcons/13_128px.png",
     IconPathDisabled: "RocketIcons/13_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 1000 Klicks!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 1000 Klicks gespart. TUfast ist n&uuml;tzlich!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 3500 Klicks gespart. TUfast ist n&uuml;tzlich!",
     id: "RI5"
   },
 }
