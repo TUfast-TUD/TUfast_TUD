@@ -298,7 +298,6 @@ window.onload = async function () {
 
     if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
     this.document.getElementById("settings_comment").innerHTML = "Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
-    this.document.getElementById("time_settings").innerHTML = clicksToTime(result.saved_click_counter)
     chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
 
 
