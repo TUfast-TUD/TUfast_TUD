@@ -162,7 +162,6 @@ function enableOWAFetch() {
           chrome.storage.local.set({ "enabledOWAFetch": true })
           //reload chrome extension is necessary
           alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
-          //chrome.tabs.create({ url: "about:blank" }); //create placeholder page
           chrome.storage.local.set({ openSettingsPageParam: "mailFetchSettings", openSettingsOnReload: true }, function () { })
           chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
         } else {
@@ -256,11 +255,17 @@ window.onload = async function () {
         function (granted) {
           if (granted) {
             chrome.runtime.sendMessage({ cmd: "toggle_pdf_inline_setting", enabled: true });
+            if(isFirefox){
+              alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
+              chrome.storage.local.set({ openSettingsPageParam: "opalCustomize", openSettingsOnReload: true }, function () { })
+              chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
+            }
           } else {
             //permission granting failed :( -> revert checkbox settings
             chrome.storage.local.set({ pdfInInline: false });
             this.document.getElementById("switch_pdf_inline").checked = false;
             alert("TUfast braucht diese Berechtigung, um die PDFs im Browser anzeigen zu koennen. Versuche es erneut.");
+            document.getElementById("switch_pdf_newtab_block").style.visibility = "hidden";
           }
         }
       );
@@ -294,13 +299,11 @@ window.onload = async function () {
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "time_settings") { setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "mailFetchSettings") { setTimeout(function () { this.document.getElementById("owa_mail_settings").click(); }, 200); }
+    else if (result.openSettingsPageParam === "opalCustomize") { setTimeout(function () { this.document.getElementById("opal_modifications").click(); }, 200); }
     else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
-
     if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
     this.document.getElementById("settings_comment").innerHTML = "Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
     chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
-
-
   })
 
   //prep accordion
