@@ -6,12 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
+chrome.storage.local.get(['isEnabled', "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
     let showImplementationForFirefox = false
     let showUnreadMailCounter = false
+    let showUnlockRocketsFirstPrompt = false
 
     let mod200Clicks = result.saved_click_counter % 200
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
@@ -40,11 +41,17 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailC
         showUnreadMailCounter = true
     }
 
+    //TODO ADD OPAL PDF PROMP    
+    if (showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt) {
+        showUnlockRocketsFirstPrompt = true
+    }
+
     window.addEventListener("load", async function (e) {
         if (showReviewBanner) { showLeaveReviewBanner() }
         if (showKeyboardUpdate) { showKeyboardShortcutUpdate() }
         if (showImplementationForFirefox) { showImplementationForFirefoxBanner() }
         if (showUnreadMailCounter) { showUnreadMailCounterBanner() }
+        if (showUnlockRocketsFirstPrompt) { showUnlockRocketsFirstBanner() }
 
         if (this.document.getElementById("removeReviewBanner")) {
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -68,6 +75,10 @@ chrome.storage.local.get(['isEnabled', "saved_click_counter", "showedUnreadMailC
         if (this.document.getElementById("showUnreadMailCounterBanner")) {
             this.document.getElementById("OpenUnreadMailCounterSettings").onclick = openSettingsUnreadMail
             this.document.getElementById("RemoveShowUnreadMailCounterBanner").onclick = RemoveShowUnreadMailCounterBanner
+        }
+        if (this.document.getElementById("unlockRocketsFirstPrompt")) {
+            this.document.getElementById("openMoreRocketIcons").onclick = openMoreRocketIconsSettings
+            //this.document.getElementById("RemoveShowUnreadMailCounterBanner").onclick = RemoveShowUnreadMailCounterBanner
         }
 
 
@@ -110,6 +121,14 @@ function openKeyboardShortcutSettings() {
     }
 }
 
+function openMoreRocketIconsSettings() {
+    if (document.getElementById("unlockRocketsFirstPrompt")) {
+        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: "rocket_icons_settings" }, function (result) { })
+        chrome.storage.local.set({ unlockRocketsFirstPrompt: true }, function () { })
+        document.getElementById("unlockRocketsFirstPrompt").remove()
+    }
+}
+
 function removeKeyboardShortcutSettings() {
     chrome.storage.local.set({ showedKeyboardBanner2: true }, function () { })
     if (document.getElementById("keyboardBanner")) {
@@ -139,6 +158,15 @@ function showKeyboardShortcutUpdate() {
     banner.id = "keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
     banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;"> <b>Supergeil: TUfast Shortcuts!</b> Öffne z.B. das Dashboard mit <strong>Alt+Q</strong><a id="openKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:45px; font-size:22; color: #FF5252">Alle Shortcuts ansehen</a><a id="removeKeyboardShortcutSettings" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">X</a>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
+}
+
+function showUnlockRocketsFirstBanner() {
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let banner = this.document.createElement("div")
+    banner.id = "unlockRocketsFirstPrompt"
+    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
+    banner.innerHTML = '<b>Du findest <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast cool?</b> Nimm dir kurz 1 Minute Zeit, unterstütze das TUfast-Projekt und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 

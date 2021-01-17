@@ -398,7 +398,14 @@ window.onload = async function () {
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "time_settings") { setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "mailFetchSettings") { setTimeout(function () { this.document.getElementById("owa_mail_settings").click(); }, 200); }
-    else if (result.openSettingsPageParam === "rocket_icons_settings") { setTimeout(function () { this.document.getElementById("rocket_icons").click(); }, 200); }
+    else if (result.openSettingsPageParam === "rocket_icons_settings") {
+      setTimeout(function () {
+        this.document.getElementById("rocket_icons").click();
+      }, 200);
+      setTimeout(function () {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      }, 500);
+    }
     //else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
 
 
