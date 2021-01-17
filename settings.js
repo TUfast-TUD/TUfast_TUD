@@ -202,27 +202,7 @@ async function getAvailableRockets() {
 }
 
 let rocketIconsConfig = {
-  "RI1": {
-    IconPathEnabled: "RocketIcons/1_128px.png",
-    IconPathDisabled: "RocketIcons/1_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;TUfast ist cool? Teile es mit zwei Freunden auf <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0AEine%20richtig%20n%C3%BCtzliche%20Erweiterung%20f%C3%BCr%20den%20Browser.%20Probiers%20jetzt%20gleich%20mal%20aus%3A%20www.tu-fast.de!' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> und sammle diese Rakete!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Danke f&uuml;r deine Unterst&uuml;tzung! Mit <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0AEine%20richtig%20n%C3%BCtzliche%20Erweiterung%20f%C3%BCr%20den%20Browser.%20Probiers%20jetzt%20gleich%20mal%20aus%3A%20www.tu-fast.de!' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> empfohlen.",
-    id: "RI1"
-  },
-  "RI2": {
-    IconPathEnabled: "RocketIcons/2_128px.png",
-    IconPathDisabled: "RocketIcons/2_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Um diese Rakete freizuschalten, erz&auml;hle zwei Leuten per <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> wie n&uuml;tzlich TUfast ist!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Super! Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> empfohlen.</a>",
-    id: "RI2"
-  },
-  "RI3": {
-    IconPathEnabled: "RocketIcons/7_128px.png",
-    IconPathDisabled: "RocketIcons/7_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Finde das Easteregg!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Easteregg gefunden :)",
-    id: "RI3"
-  },
+
   "RI4": {
     IconPathEnabled: "RocketIcons/4_103px.png",
     IconPathDisabled: "RocketIcons/4_grey_103px.png",
@@ -237,6 +217,27 @@ let rocketIconsConfig = {
     innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 3500 Klicks gespart. TUfast ist n&uuml;tzlich!",
     id: "RI5"
   },
+  "RI3": {
+    IconPathEnabled: "RocketIcons/7_128px.png",
+    IconPathDisabled: "RocketIcons/7_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Finde das Easteregg!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Easteregg gefunden :)",
+    id: "RI3"
+  },
+  "RI1": {
+    IconPathEnabled: "RocketIcons/1_128px.png",
+    IconPathDisabled: "RocketIcons/1_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;TUfast ist cool? Teile es mit zwei Freunden auf <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0AEine%20richtig%20n%C3%BCtzliche%20Erweiterung%20f%C3%BCr%20den%20Browser.%20Probiers%20jetzt%20gleich%20mal%20aus%3A%20www.tu-fast.de!' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> und sammle diese Rakete!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Danke f&uuml;r deine Unterst&uuml;tzung! Mit <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0AEine%20richtig%20n%C3%BCtzliche%20Erweiterung%20f%C3%BCr%20den%20Browser.%20Probiers%20jetzt%20gleich%20mal%20aus%3A%20www.tu-fast.de!' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> empfohlen.",
+    id: "RI1"
+  },
+  "RI2": {
+    IconPathEnabled: "RocketIcons/2_128px.png",
+    IconPathDisabled: "RocketIcons/2_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Um diese Rakete freizuschalten, erz&auml;hle zwei Leuten per <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> wie n&uuml;tzlich TUfast ist!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Super! Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> empfohlen.</a>",
+    id: "RI2"
+  }
 }
 
 async function insertAllRocketIcons() {
