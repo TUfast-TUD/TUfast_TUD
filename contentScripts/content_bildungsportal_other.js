@@ -12,7 +12,7 @@ chrome.storage.local.get(["showedOpalCustomizeBanner", 'isEnabled', "saved_click
     let showKeyboardUpdate = false
     let showImplementationForFirefox = false
     let showUnreadMailCounter = false
-    let showOpalCustomize = false
+    let showOpalCustomize = true
 
     let mod200Clicks = result.saved_click_counter % 200
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
@@ -37,15 +37,13 @@ chrome.storage.local.get(["showedOpalCustomizeBanner", 'isEnabled', "saved_click
     //    if(isChrome) showImplementationForFirefox = true
     //}
 
-    if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
+    if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
         showUnreadMailCounter = true
     }
 
-    /*
-    if (!result.showedOpalCustomizeBanner && !showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 75) {
+    if (!result.showedOpalCustomizeBanner && !showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 75) {
         showOpalCustomize = true
     }
-    */
 
     window.addEventListener("load", async function (e) {
         if (showReviewBanner) { showLeaveReviewBanner() }
