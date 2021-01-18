@@ -12,7 +12,7 @@ chrome.storage.local.get(["showedOpalCustomizeBanner", 'isEnabled', "saved_click
     let showKeyboardUpdate = false
     let showImplementationForFirefox = false
     let showUnreadMailCounter = false
-    let showOpalCustomize = true
+    let showOpalCustomize = false
 
     let mod200Clicks = result.saved_click_counter % 200
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
