@@ -24,7 +24,7 @@ chrome.storage.local.get(['isEnabled', "unlockRocketsFirstPrompt", "saved_click_
     if (mod200Clicks > 15) {
         chrome.storage.local.set({ removedReviewBanner: false }, function () { })
     }
-    if ( isFirefox &&result.neverShowedReviewBanner && result.saved_click_counter > 200) {
+    if ( isFirefox && result.neverShowedReviewBanner && result.saved_click_counter > 300) {
         showReviewBanner = true
     }
 

@@ -462,8 +462,8 @@ function save_clicks(counter) {
 		//make rocketIcons available if appropriate
 		chrome.storage.local.get(["availableRockets"], (resp) => {
 			let avRockets = resp.availableRockets
-			if (result.saved_click_counter > 500 && !avRockets.includes("RI4")) avRockets.push("RI4")
-			if (result.saved_click_counter > 3500 && !avRockets.includes("RI5")) avRockets.push("RI5")
+			if (result.saved_click_counter > 250 && !avRockets.includes("RI4")) avRockets.push("RI4")
+			if (result.saved_click_counter > 2500 && !avRockets.includes("RI5")) avRockets.push("RI5")
 			chrome.storage.local.set({ "availableRockets": avRockets })
 		})
 	})
