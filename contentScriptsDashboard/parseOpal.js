@@ -106,7 +106,8 @@ function parseCoursesFromWebPage() {
                 let link = item.children[3].getAttribute("href")
                 course_list.list.push({ name: name, link: link })
             }
-            catch (e) {console.log(e) }
+            catch (e) {console.log("Error in parsing course list:" + e) }
         }
-        return course_list
     }
+    return course_list
+}
