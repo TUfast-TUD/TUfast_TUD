@@ -443,7 +443,12 @@ window.onload = async function () {
     //update saved clicks  
     //see if any params are available
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click(); }, 200); }
-    else if (result.openSettingsPageParam === "time_settings") { setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200); }
+    else if (result.openSettingsPageParam === "time_settings") { 
+      setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200);
+      setTimeout(function () {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      }, 500); 
+    }
     else if (result.openSettingsPageParam === "mailFetchSettings") { setTimeout(function () { this.document.getElementById("owa_mail_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "opalCustomize") { setTimeout(function () { this.document.getElementById("opal_modifications").click(); }, 200); }    
     else if (result.openSettingsPageParam === "rocket_icons_settings") {
