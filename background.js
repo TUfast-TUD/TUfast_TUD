@@ -206,6 +206,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 						avRockets.push("RI3")
 						chrome.storage.local.set({ "availableRockets": avRockets })
 					})
+					chrome.browserAction.setIcon({
+						path: "RocketIcons/3_120px.png"
+					});
 				}
 			})
 			break;

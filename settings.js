@@ -202,6 +202,28 @@ async function getAvailableRockets() {
 }
 
 let rocketIconsConfig = {
+
+  "RI4": {
+    IconPathEnabled: "RocketIcons/4_103px.png",
+    IconPathDisabled: "RocketIcons/4_grey_103px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 250 Klicks!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 500 Klicks gespart. TUfast scheint n&uuml;tzlich!",
+    id: "RI4"
+  },
+  "RI5": {
+    IconPathEnabled: "RocketIcons/13_128px.png",
+    IconPathDisabled: "RocketIcons/13_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 2500 Klicks!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 3500 Klicks gespart. TUfast ist n&uuml;tzlich!",
+    id: "RI5"
+  },
+  "RI3": {
+    IconPathEnabled: "RocketIcons/7_128px.png",
+    IconPathDisabled: "RocketIcons/7_grey_128px.png",
+    innerHTMLToEnable: "&nbsp;&nbsp;Finde das Easteregg!",
+    innerHTMLEnabled: "&nbsp;&nbsp;Easteregg gefunden :)",
+    id: "RI3"
+  },
   "RI1": {
     IconPathEnabled: "RocketIcons/1_128px.png",
     IconPathDisabled: "RocketIcons/1_grey_128px.png",
@@ -215,28 +237,7 @@ let rocketIconsConfig = {
     innerHTMLToEnable: "&nbsp;&nbsp;Um diese Rakete freizuschalten, erz&auml;hle zwei Leuten per <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> wie n&uuml;tzlich TUfast ist!",
     innerHTMLEnabled: "&nbsp;&nbsp;Super! Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0ATUfast%20ist%20eine%20super%20n%C3%BCtzliche%20Browser-Erweiterung.%20Damit%20arbeitet%20man%20in%20Opal%20und%20allen%20anderen%20Online-Portalen%20der%20TU%20Dresden%20deutlich%20produktiver%20%F0%9F%9A%80%0A%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20%0A%0ALiebe%20Gr%C3%BC%C3%9Fe'>E-Mail</a> empfohlen.</a>",
     id: "RI2"
-  },
-  "RI3": {
-    IconPathEnabled: "RocketIcons/7_128px.png",
-    IconPathDisabled: "RocketIcons/7_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Finde das Easteregg!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Easteregg gefunden :)",
-    id: "RI3"
-  },
-  "RI4": {
-    IconPathEnabled: "RocketIcons/4_103px.png",
-    IconPathDisabled: "RocketIcons/4_grey_103px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 100 Klicks!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 100 Klicks gespart. TUfast scheint n&uuml;tzlich!",
-    id: "RI4"
-  },
-  "RI5": {
-    IconPathEnabled: "RocketIcons/13_128px.png",
-    IconPathDisabled: "RocketIcons/13_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 1000 Klicks!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 1000 Klicks gespart. TUfast ist n&uuml;tzlich!",
-    id: "RI5"
-  },
+  }
 }
 
 async function insertAllRocketIcons() {
@@ -397,7 +398,14 @@ window.onload = async function () {
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "time_settings") { setTimeout(function () { this.document.getElementById("time_settings").click(); }, 200); }
     else if (result.openSettingsPageParam === "mailFetchSettings") { setTimeout(function () { this.document.getElementById("owa_mail_settings").click(); }, 200); }
-    else if (result.openSettingsPageParam === "rocket_icons_settings") { setTimeout(function () { this.document.getElementById("rocket_icons").click(); }, 200); }
+    else if (result.openSettingsPageParam === "rocket_icons_settings") {
+      setTimeout(function () {
+        this.document.getElementById("rocket_icons").click();
+      }, 200);
+      setTimeout(function () {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      }, 500);
+    }
     //else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
 
 
