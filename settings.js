@@ -93,7 +93,7 @@ function deleteUserData(slubData = false) {
 
 function deleteSlubData() {
   chrome.permissions.contains({origins: ["*://*.slub-dresden.de/*"]}, (result) => {
-    if (result) {chrome.permissions.remove({origins: ["*://*.slub-dresden.de/*"]}, (removed) => {console.error(removed)});} // This seems broken
+    if (result) {chrome.permissions.remove({origins: ["*://*.slub-dresden.de/*"]}, () => {});}
   });
   deleteUserData(true)
 }
