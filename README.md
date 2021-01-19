@@ -6,6 +6,8 @@ Verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-f
 
 Lizenz und Copyright: Informationen werden in Kürze hinzugefügt. Melde dich einfach bei akuten Fragen.
 
+Achtung: OWAHackFetch ist die aktuelle Branche!
+
 ## Funktionen
  - Automatisches Anmelden in Opal, Selma und Co.
  - Opal-Kurse und Opal-Favoriten über das Dashbaord öffnen
@@ -39,6 +41,8 @@ Bitte lass uns ein Feature genauer Besprechen, bevor du mit der Implementierung 
 - Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
 - Benachrichtigungen für neue Noten im HISQIS
 - Support https://videocampus.sachsen.de
+- add eportal.tumed to Portal-Icons
+- Protection against wrong login-data
 
 ## Entwickler
 Entwickelt von Studenten, für Studenten:

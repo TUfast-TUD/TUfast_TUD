@@ -38,6 +38,12 @@ chrome.storage.local.set({ loggedOutMagma: false }, function () { })
 chrome.storage.local.set({ loggedOutJexam: false }, function () { })
 chrome.storage.local.set({ loggedOutCloudstore: false }, function () { })
 chrome.storage.local.set({ loggedOutTumed: false }, function () { })
+chrome.storage.local.get(["pdfInNewTab"], function (result) {
+	if (result.pdfInNewTab) {
+		enableHeaderListener(true);
+	}
+})
+
 
 //register additional content scripts
 regAddContentScripts()
@@ -110,6 +116,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ foundEasteregg: false }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
+			chrome.storage.local.set({ pdfInInline: false }, function () { })
+			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
 			break;
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
@@ -388,6 +396,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			if (isFirefox) { chrome.tabs.create({ url: "https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten" }) }
 			else { chrome.tabs.create({ url: "chrome://extensions/shortcuts" }) } //for chrome and everything else
 			break
+		case 'toggle_pdf_inline_setting':
+			enableHeaderListener(request.enabled);
+			break
 		default:
 			console.log('Cmd not found!')
 			break
@@ -395,6 +406,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	return true //required for async sendResponse
 
 })
+
 
 //register hotkeys
 chrome.commands.onCommand.addListener(function (command) {
@@ -416,7 +428,38 @@ chrome.commands.onCommand.addListener(function (command) {
 	}
 })
 
-//open settings (=options) page. If provided: set param
+/**
+ * enable or disable the header listener
+ * modify http header from opal, to view pdf in browser without the need to download it
+ * @param {true} enabled flag to enable/ disable listener
+ */
+function enableHeaderListener(enabled) {
+	if (enabled) {
+		chrome.webRequest.onHeadersReceived.addListener(
+			headerListenerFunc,
+			{
+				urls: [
+					"https://bildungsportal.sachsen.de/opal/downloadering*",
+					"https://bildungsportal.sachsen.de/opal/*.pdf",
+				],
+			},
+			["blocking", "responseHeaders"]
+		);
+	} else {
+		chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc);
+	}
+}
+
+function headerListenerFunc(details) {
+	let header = details.responseHeaders.find(
+		e => e.name.toLowerCase() === "content-disposition"
+	);
+	if (header.value.includes(".zip")) return; //ignore .zip TODO should we only check for zips?
+	header.value = "inline";
+	return { responseHeaders: details.responseHeaders };
+}
+
+//open settings (=options) page, if required set params
 function openSettingsPage(params) {
 	if (params) {
 		chrome.storage.local.set({ openSettingsPageParam: params }, function () {

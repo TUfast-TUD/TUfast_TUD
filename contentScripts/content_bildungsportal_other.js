@@ -6,13 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
+chrome.storage.local.get(['isEnabled', "showedOpalCustomizeBanner", "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
     let showImplementationForFirefox = false
     let showUnreadMailCounter = false
     let showUnlockRocketsFirstPrompt = false
+    let showOpalCustomize = false
 
     let mod200Clicks = result.saved_click_counter % 200
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
@@ -37,12 +38,15 @@ chrome.storage.local.get(['isEnabled', "unlockRocketsFirstPrompt", "saved_click_
     //    if(isChrome) showImplementationForFirefox = true
     //}
 
-    if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
+    if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
         showUnreadMailCounter = true
     }
 
-    //TODO ADD OPAL PDF PROMP    
-    if (showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt) {
+    if (!result.showedOpalCustomizeBanner && !showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 75) {
+        showOpalCustomize = true
+    }
+
+    if (!showOpalCustomize && showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt) {
         showUnlockRocketsFirstPrompt = true
     }
 
@@ -52,6 +56,7 @@ chrome.storage.local.get(['isEnabled', "unlockRocketsFirstPrompt", "saved_click_
         if (showImplementationForFirefox) { showImplementationForFirefoxBanner() }
         if (showUnreadMailCounter) { showUnreadMailCounterBanner() }
         if (showUnlockRocketsFirstPrompt) { showUnlockRocketsFirstBanner() }
+        if (showOpalCustomize) {showOpalCustomizeBanner()}
 
         if (this.document.getElementById("removeReviewBanner")) {
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -62,8 +67,14 @@ chrome.storage.local.get(['isEnabled', "unlockRocketsFirstPrompt", "saved_click_
         if (this.document.getElementById("openKeyboardShortcutSettings")) {
             this.document.getElementById("openKeyboardShortcutSettings").onclick = openKeyboardShortcutSettings
         }
+        if (this.document.getElementById("OpenOpalCustomizeSettings")) {
+            this.document.getElementById("OpenOpalCustomizeSettings").onclick = openOpalCustomizeSettings
+        }
         if (this.document.getElementById("removeKeyboardShortcutSettings")) {
             this.document.getElementById("removeKeyboardShortcutSettings").onclick = removeKeyboardShortcutSettings
+        }
+        if (this.document.getElementById("RemoveShowOpalCustomizeBanner")) {
+            this.document.getElementById("RemoveShowOpalCustomizeBanner").onclick = removeOpenOpalCustomizeSettings
         }
         if (this.document.getElementById("removeNameBanner")) {
             this.document.getElementById("removeNameBanner").onclick = removeNameBanner
@@ -129,10 +140,25 @@ function openMoreRocketIconsSettings() {
     }
 }
 
+function openOpalCustomizeSettings() {
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: "opalCustomize" }, function (result) { })
+    if (document.getElementById("showOpalCustomizeBanner")) {
+        document.getElementById("showOpalCustomizeBanner").remove()
+        chrome.storage.local.set({ showedOpalCustomizeBanner: true }, function () { })
+    }
+}
+
 function removeKeyboardShortcutSettings() {
     chrome.storage.local.set({ showedKeyboardBanner2: true }, function () { })
     if (document.getElementById("keyboardBanner")) {
         document.getElementById("keyboardBanner").remove()
+    }
+}
+
+function removeOpenOpalCustomizeSettings(){
+    chrome.storage.local.set({ showedOpalCustomizeBanner: true }, function () { })
+    if (document.getElementById("showOpalCustomizeBanner")) {
+        document.getElementById("showOpalCustomizeBanner").remove()
     }
 }
 
@@ -176,6 +202,15 @@ function showImplementationForFirefoxBanner() {
     banner.id = "showImplementationForFirefoxBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
     banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="RemoveShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Close X</a>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
+}
+
+function showOpalCustomizeBanner(){
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let banner = this.document.createElement("div")
+    banner.id = "showOpalCustomizeBanner"
+    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
+    banner.innerHTML = 'Mit <img src=' + imgUrl + ' style="position:relative; right: 4px;height: 33px;"><b>TUfast</b> kannst du jetzt OPAL <a id="OpenOpalCustomizeSettings" href="javascript:void(0)">Personalisieren und Verbessern.</a> Gleich ausprobieren! 🔥🔥🔥<a id="RemoveShowOpalCustomizeBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen X</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 

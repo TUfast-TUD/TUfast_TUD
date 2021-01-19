@@ -101,9 +101,12 @@ function parseCoursesFromWebPage() {
         //most likely for meine kurse
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0].getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
         for (let item of tableEntries) {
-            let name = item.getElementsByClassName("content-preview-title")[0].innerHTML
-            let link = item.children[3].getAttribute("href")
-            course_list.list.push({ name: name, link: link })
+            try {
+                let name = item.getElementsByClassName("content-preview-title")[0].innerHTML
+                let link = item.children[3].getAttribute("href")
+                course_list.list.push({ name: name, link: link })
+            }
+            catch (e) {console.log("Error in parsing course list:" + e) }
         }
     }
     return course_list
