@@ -7,7 +7,7 @@ function saveUserData(slubData = false) {
     return false
   } else {
     if (slubData) {
-      chrome.storage.local.set({ isSlubEnabled: true }, function () { })
+      chrome.storage.local.set({ slubLoginSet: true }, function () { })
     } else {
       chrome.storage.local.set({ isEnabled: true }, function () { }) //need to activate auto login feature
       chrome.runtime.sendMessage({ cmd: "clear_badge" });
@@ -39,7 +39,7 @@ function deleteUserData(slubData = false) {
   id_prefix = slubData ? 'slub_' : ''
   if (slubData) {
     chrome.storage.local.set({ SData: "undefined" }, function () { }) //this is how to delete user data!
-    chrome.storage.local.set({ isSlubEnabled: false }, function () { }) //need to deactivate auto login feature
+    chrome.storage.local.set({ slubLoginSet: false }, function () { }) //need to deactivate auto login feature
   } else {
     chrome.runtime.sendMessage({ cmd: "clear_badge" });
     chrome.storage.local.set({ Data: "undefined" }, function () { }) //this is how to delete user data!

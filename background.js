@@ -118,7 +118,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
-			chrome.storage.local.set({ isSlubEnabled: false }, function () { })
+			chrome.storage.local.set({ slubLoginSet: false }, function () { })
 			break;
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway

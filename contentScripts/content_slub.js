@@ -1,6 +1,5 @@
-chrome.storage.local.get(['isSlubEnabled'], function(result) {
-    console.log('GOT: '+ result.loggedOutSlub)
-    if(result.isSlubEnabled && !result.loggedOutSlub) {
+chrome.storage.local.get(['isEnabled', 'slubLoginSet'], function(result) {
+    if(result.isEnabled && result.slubLoginSet) {
         document.addEventListener('DOMContentLoaded', function() {
             if(document.getElementById('username')){
                 chrome.runtime.sendMessage({cmd: 'get_user_data', slubData: true}, function(response) {
