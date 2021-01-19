@@ -42,6 +42,7 @@ Bitte lass uns ein Feature genauer Besprechen, bevor du mit der Implementierung 
 - Benachrichtigungen für neue Noten im HISQIS
 - Support https://videocampus.sachsen.de
 - add eportal.tumed to Portal-Icons
+- Protection against wrong login-data
 
 ## Entwickler
 Entwickelt von Studenten, für Studenten:
