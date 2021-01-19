@@ -46,12 +46,13 @@ var GLOBAL_counter = 0              //count clicks on icon
 var coutdownRemoveScreenOverlay    //timer
 var timeout = 1000  //timeout for timer
 var blocker = false //block icon click
-var timeUp = false  //true, when time is up
+var timeUp = true  //true, when time is up
 var display_value   //number of text, which shows on screen
 var typeOfMsg = ""  //type of message which is displayed
 
 function updateRocketLogo(iconPath) {
     let timestamp = new Date().getTime();
+    chrome.runtime.sendMessage({ cmd: 'update_rocket_logo_easteregg'}, function (result) { })
     document.querySelectorAll("#TUFastLogo img")[0].src = chrome.runtime.getURL("../" + iconPath) + "?t =" + timestamp;
 }
 
@@ -160,6 +161,7 @@ async function logoOnClickEasteregg() {
 }
 
 function logoOnClick() {
+    console.log("here")
     if (timeUp) chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
 }
 

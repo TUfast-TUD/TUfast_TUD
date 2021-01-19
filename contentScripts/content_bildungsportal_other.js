@@ -6,57 +6,66 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "showedOpalCustomizeBanner", "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
+chrome.storage.local.get(['isEnabled', "removedUnlockRocketsBanner", "showedOpalCustomizeBanner", "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
-    let showImplementationForFirefox = false
+    //let showImplementationForFirefox = false
     let showUnreadMailCounter = false
     let showUnlockRocketsFirstPrompt = false
     let showOpalCustomize = false
+    let showUnlockRockets = false
 
     let mod200Clicks = result.saved_click_counter % 200
+    let mod100Clicks = result.saved_click_counter % 100
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
 
+    //not shown right now
     //reviews only required in FF
-    if (isFirefox && !result.mostLiklySubmittedReview && mod200Clicks < 15 && !result.removedReviewBanner && result.saved_click_counter > 200) {
-        showReviewBanner = true
-    }
-    if (mod200Clicks > 15) {
-        chrome.storage.local.set({ removedReviewBanner: false }, function () { })
-    }
-    if ( isFirefox && result.neverShowedReviewBanner && result.saved_click_counter > 300) {
-        showReviewBanner = true
-    }
+    //if (isFirefox && !result.mostLiklySubmittedReview && mod200Clicks < 15 && !result.removedReviewBanner && result.saved_click_counter > 200) {
+    //    showReviewBanner = true
+    //}
+    //if (mod200Clicks > 15) {
+    //    chrome.storage.local.set({ removedReviewBanner: false }, function () { })
+    //}
+    //if (isFirefox && result.neverShowedReviewBanner && result.saved_click_counter > 300) {
+    //    showReviewBanner = true
+    //}
 
-    if (result.saved_click_counter > 100 && !showReviewBanner && (result.showedKeyboardBanner2 === false || result.showedKeyboardBanner2 === undefined || result.showedKeyboardBanner2 === null || result.showedKeyboardBanner2 === "")) {
-        showKeyboardUpdate = true
-    }
 
+    //show implementationForFirefox not longer required
     //if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) { 
     //    let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
     //    if(isChrome) showImplementationForFirefox = true
     //}
 
-    if (!showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
+    if (result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
         showUnreadMailCounter = true
     }
-
-    if (!result.showedOpalCustomizeBanner && !showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 75) {
+    else if (result.saved_click_counter > 100 && !result.showedKeyboardBanner2 ) {
+        showKeyboardUpdate = true
+    }
+    else if (result.saved_click_counter > 150 && !result.showedOpalCustomizeBanner){
         showOpalCustomize = true
     }
-
-    if (!showOpalCustomize && showUnreadMailCounter && !showImplementationForFirefox && !showKeyboardUpdate && !showReviewBanner && result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt) {
+    else if (result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt){
         showUnlockRocketsFirstPrompt = true
     }
+    else if (result.saved_click_counter > 300 && result.unlockRocketsFirstPrompt && mod100Clicks < 7 && !result.removedUnlockRocketsBanner) {
+        showUnlockRockets = true
+    }
+
+    //reset unlock rockets banner
+    if (mod100Clicks > 7) {chrome.storage.local.set({ removedUnlockRocketsBanner: false }, function () { })}
 
     window.addEventListener("load", async function (e) {
         if (showReviewBanner) { showLeaveReviewBanner() }
         if (showKeyboardUpdate) { showKeyboardShortcutUpdate() }
-        if (showImplementationForFirefox) { showImplementationForFirefoxBanner() }
+        //if (showImplementationForFirefox) { showImplementationForFirefoxBanner() }
         if (showUnreadMailCounter) { showUnreadMailCounterBanner() }
         if (showUnlockRocketsFirstPrompt) { showUnlockRocketsFirstBanner() }
         if (showOpalCustomize) {showOpalCustomizeBanner()}
+        if (showUnlockRockets) {showUnlockRocketsBanner()}
 
         if (this.document.getElementById("removeReviewBanner")) {
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -88,13 +97,32 @@ chrome.storage.local.get(['isEnabled', "showedOpalCustomizeBanner", "unlockRocke
             this.document.getElementById("RemoveShowUnreadMailCounterBanner").onclick = RemoveShowUnreadMailCounterBanner
         }
         if (this.document.getElementById("unlockRocketsFirstPrompt")) {
+            this.document.getElementById("openMoreRocketIcons").onclick = openMoreRocketIconsSettingsFirstPrompt
+        }
+        if (this.document.getElementById("unlockRocketsPrompt")) {
             this.document.getElementById("openMoreRocketIcons").onclick = openMoreRocketIconsSettings
-            //this.document.getElementById("RemoveShowUnreadMailCounterBanner").onclick = RemoveShowUnreadMailCounterBanner
+            this.document.getElementById("removeMoreRocketIcons").onclick = RemoveMoreRocketIcons
         }
 
 
     })
 })
+
+function RemoveMoreRocketIcons() {
+    if (document.getElementById("unlockRocketsPrompt")) {
+        document.getElementById("unlockRocketsPrompt").remove()
+        chrome.storage.local.set({ removedUnlockRocketsBanner: true }, function () { })
+    }
+}
+
+function showUnlockRocketsBanner(){
+    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let banner = this.document.createElement("div")
+    banner.id = "unlockRocketsPrompt"
+    banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
+    banner.innerHTML = '<b>Empfehle <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast</b> deinen Freunden und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥 <a id="removeMoreRocketIcons" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Später</a>'
+    this.document.body.insertBefore(banner, document.body.childNodes[0])
+}
 
 function RemoveShowUnreadMailCounterBanner() {
     if (document.getElementById("showUnreadMailCounterBanner")) {
@@ -132,11 +160,19 @@ function openKeyboardShortcutSettings() {
     }
 }
 
-function openMoreRocketIconsSettings() {
+function openMoreRocketIconsSettingsFirstPrompt() {
     if (document.getElementById("unlockRocketsFirstPrompt")) {
         chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: "rocket_icons_settings" }, function (result) { })
-        chrome.storage.local.set({ unlockRocketsFirstPrompt: true }, function () { })
         document.getElementById("unlockRocketsFirstPrompt").remove()
+        chrome.storage.local.set({ unlockRocketsFirstPrompt: true }, function () { })
+    }
+}
+
+function openMoreRocketIconsSettings() {
+    if (document.getElementById("unlockRocketsPrompt")) {
+        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: "rocket_icons_settings" }, function (result) { })
+        document.getElementById("unlockRocketsPrompt").remove()
+        chrome.storage.local.set({ removedUnlockRocketsBanner: true }, function () { })
     }
 }
 
@@ -210,7 +246,7 @@ function showOpalCustomizeBanner(){
     let banner = this.document.createElement("div")
     banner.id = "showOpalCustomizeBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = 'Mit <img src=' + imgUrl + ' style="position:relative; right: 4px;height: 33px;"><b>TUfast</b> kannst du jetzt OPAL <a id="OpenOpalCustomizeSettings" href="javascript:void(0)">Personalisieren und Verbessern.</a> Gleich ausprobieren! 🔥🔥🔥<a id="RemoveShowOpalCustomizeBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen X</a>'
+    banner.innerHTML = 'Mit <img src=' + imgUrl + ' style="position:relative; right: 4px;height: 33px;"><b>TUfast</b> kannst du OPAL <a id="OpenOpalCustomizeSettings" href="javascript:void(0)">Personalisieren und Verbessern.</a> Gleich ausprobieren! 🔥🔥🔥<a id="RemoveShowOpalCustomizeBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen X</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 

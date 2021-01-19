@@ -399,6 +399,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		case 'toggle_pdf_inline_setting':
 			enableHeaderListener(request.enabled);
 			break
+		case "update_rocket_logo_easteregg":
+			chrome.browserAction.setIcon({
+				path: "RocketIcons/3_120px.png"
+			});
+			break
 		default:
 			console.log('Cmd not found!')
 			break
