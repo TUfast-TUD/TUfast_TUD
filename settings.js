@@ -35,6 +35,27 @@ function saveUserData(slubData = false) {
   }
 }
 
+function saveSlubData(isFirefox = false) {
+  chrome.permissions.contains({origins: ["*://*.slub-dresden.de/*"]}, (result) => {
+    if (result) {
+      saveUserData(true)
+    } else {
+      chrome.permissions.request({origins: ["*://*.slub-dresden.de/*"]}, (granted) => {
+        if (granted) {
+          saveUserData(true)
+          if(isFirefox){
+            alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
+            chrome.storage.local.set({ openSettingsPageParam: "opalCustomize", openSettingsOnReload: true }, function () { })
+            chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
+          }
+        } else {
+          alert("TUfast braucht diese Berechtigung, um dich bei der SLUB anzumelden. Versuche es erneut.");
+        }
+      });
+    }
+  });
+}
+
 function deleteUserData(slubData = false) {
   id_prefix = slubData ? 'slub_' : ''
   if (slubData) {
@@ -68,6 +89,13 @@ function deleteUserData(slubData = false) {
     document.getElementById(id_prefix + "delete_data").style.backgroundColor = "grey"
     document.getElementById(id_prefix + "delete_data").disabled = false
   }, 2000)
+}
+
+function deleteSlubData() {
+  chrome.permissions.contains({origins: ["*://*.slub-dresden.de/*"]}, (result) => {
+    if (result) {chrome.permissions.remove({origins: ["*://*.slub-dresden.de/*"]}, (removed) => {console.error(removed)});} // This seems broken
+  });
+  deleteUserData(true)
 }
 
 function fwdGoogleSearch() {
@@ -214,12 +242,15 @@ function requestHostPermissionS() {
 
 //this need to be done here since manifest v2
 window.onload = async function () {
+  //only display additionNotificationSection in chrome, because it doesnt work in ff
+  let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+  if (isFirefox) { document.getElementById("additionNotificationSection").style.display = "none" }
 
   //assign functions
   document.getElementById('save_data').onclick = () => {saveUserData(false)} // use unnamed function because otherwise first argument always would be the event
-  document.getElementById('slub_save_data').onclick = () => {saveUserData(true)}
+  document.getElementById('slub_save_data').onclick = () => {saveSlubData(isFirefox)}
   document.getElementById('delete_data').onclick = () => {deleteUserData(false)}
-  document.getElementById('slub_delete_data').onclick = () => {deleteUserData(true)}
+  document.getElementById('slub_delete_data').onclick = deleteSlubData
   document.getElementById('switch_fwd').onclick = fwdGoogleSearch
   document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
   document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
@@ -227,10 +258,6 @@ window.onload = async function () {
 
   //document.getElementById('fav').onclick = dashboardCourseSelect
   //document.getElementById('crs').onclick = dashboardCourseSelect
-
-  //only display additionNotificationSection in chrome, because it doesnt work in ff
-  let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
-  if (isFirefox) { document.getElementById("additionNotificationSection").style.display = "none" }
 
   //add additional notification checkbox listener
   var checkbox = document.getElementById("additionalNotification");
@@ -299,6 +326,8 @@ window.onload = async function () {
     chrome.storage.local.set({ pdfInNewTab: this.checked }, function () { });
   });
 
+  
+
   //set all switches and elements
   displayEnabled()
 
@@ -315,7 +344,7 @@ window.onload = async function () {
     if (result.slubLoginSet) {
       document.getElementById('slub_status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch bei der SLUB eingeloggt.</font>"
     } else {
-      document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+      document.getElementById('slub_status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
     }
     //update saved clicks  
     //see if any params are available
