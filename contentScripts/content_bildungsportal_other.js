@@ -229,7 +229,7 @@ function showUnlockRocketsFirstBanner() {
     let banner = this.document.createElement("div")
     banner.id = "unlockRocketsFirstPrompt"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<b>Du findest <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast cool?</b> Nimm dir kurz 1 Minute Zeit, unterstütze das TUfast-Projekt und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥'
+    banner.innerHTML = '<b>Du findest <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast cool?</b> Unterstütze das TUfast-Projekt und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
