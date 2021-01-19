@@ -42,7 +42,7 @@ function regAddContentScripts() {
 	//additional content script injection CHROME
 	try {
 		chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-			// create rule
+			// rule tumed
 			var ruleTUMED = {
 				conditions: [
 					new chrome.declarativeContent.PageStateMatcher({
@@ -51,8 +51,16 @@ function regAddContentScripts() {
 				],
 				actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_tumed.js"] })]
 			}
+			var ruleSLUB = {
+				conditions: [
+					new chrome.declarativeContent.PageStateMatcher({
+						pageUrl: { hostEquals: 'login.slub-dresden.de', schemes: ['https'] }
+					})
+				],
+				actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_slub.js"] })]
+			}
 			// register rule
-			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED])
+			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED, ruleSLUB])
 			console.log("Tried to register addtional content scripts. Success unconfirmed.")
 		})
 	} catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
@@ -62,6 +70,11 @@ function regAddContentScripts() {
 		browser.contentScripts.register({
 			"js": [{ file: "contentScripts/content_tumed.js" }],
 			"matches": ["https://eportal.med.tu-dresden.de/*"],
+			"runAt": "document_start"
+		},
+		{
+			"js": [{ file: "contentScripts/content_slub.js" }],
+			"matches": ["https://login.slub-dresden.de/*"],
 			"runAt": "document_start"
 		}).then(() => console.log("Successfully registered additional content scripts for FF"))
 	} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
@@ -105,6 +118,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
+			chrome.storage.local.set({ isSlubEnabled: false }, function () { })
 			break;
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
@@ -210,8 +224,8 @@ function getAllChromeTabs() {
 }
 
 //check if user stored login data
-async function loginDataExists() {
-	getUserData().then((userData) => {
+async function loginDataExists(slubData = false) {
+	getUserData(slubData).then((userData) => {
 		if (userData.asdf === undefined || userData.fdsa === undefined) {
 			return false
 		} else {
@@ -219,7 +233,6 @@ async function loginDataExists() {
 		}
 	})
 }
-
 
 //start OWA fetch funtion based on interval
 function enableOWAFetch() {
@@ -321,10 +334,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			save_clicks(request.click_count)
 			break
 		case 'get_user_data':
-			getUserData().then((userData) => sendResponse(userData))
+			getUserData(request.slubData).then((userData) => sendResponse(userData))
 			break
 		case 'set_user_data':
-			setUserData(request.userData)
+			setUserData(request.userData, request.slubData)
 			break
 		case 'read_mail_owa':
 			readMailOWA(request.NrUnreadMails)
@@ -520,7 +533,7 @@ function getKeyBuffer() {
 //this functions saved user login-data locally. 
 //user data is encrypted using the crpyto-js library (aes-cbc). The encryption key is created from pc-information with system.cpu
 //a lot of encoding and transforming needs to be done, in order to provide all values in the right format.
-async function setUserData(userData) {
+async function setUserData(userData, slubData = false) {
 	//collect all required information for encryption in the right format
 	let userDataConcat = userData.asdf + '@@@@@' + userData.fdsa
 	let encoder = new TextEncoder()
@@ -543,13 +556,17 @@ async function setUserData(userData) {
 	userDataEncrypted = userDataEncrypted.map(byte => String.fromCharCode(byte)).join('')
 	userDataEncrypted = btoa(userDataEncrypted)
 	iv = Array.from(iv).map(b => ('00' + b.toString(16)).slice(-2)).join('')
-	chrome.storage.local.set({ Data: iv + userDataEncrypted }, function () { })
+	if (slubData) {
+		chrome.storage.local.set({ SData: iv + userDataEncrypted }, function () { })
+	} else {
+		chrome.storage.local.set({ Data: iv + userDataEncrypted }, function () { })
+	}
 }
 
 //check if username, password exist
-function userDataExists() {
+function userDataExists(slubData = false) {
 	return new Promise(async (resolve, reject) => {
-		let userData = await getUserData()
+		let userData = await getUserData(slubData)
 		if (userData.asdf === undefined || userData.fdsa === undefined) {
 			resolve(false)
 			return
@@ -562,19 +579,20 @@ function userDataExists() {
 //return {asdf: "", fdsa: ""}
 //decrypt and return user data
 //a lot of encoding and transforming needs to be done, in order to provide all values in the right format
-async function getUserData() {
+async function getUserData(slubData = false) {
 	return new Promise(async (resolve, reject) => {
 		//get required data for decryption
 		let keyBuffer = await getKeyBuffer()
-		chrome.storage.local.get(['Data'], async (Data) => {
+		let data_field = slubData ? 'SData' : 'Data'
+		chrome.storage.local.get([data_field], async (Data) => {
 			//check if Data exists, else return
-			if (Data.Data === undefined || Data.Data === "undefined" || Data.Data === null) {
+			if (Data[data_field] === undefined || Data[data_field] === "undefined" || Data[data_field] === null) {
 				resolve({ asdf: undefined, fdsa: undefined })
 				return
 			}
-			let iv = await Data.Data.slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
+			let iv = await Data[data_field].slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
 			iv = new Uint8Array(iv)
-			let userDataEncrypted = atob(Data.Data.slice(32))
+			let userDataEncrypted = atob(Data[data_field].slice(32))
 			userDataEncrypted = new Uint8Array(userDataEncrypted.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
 
 			//decrypt

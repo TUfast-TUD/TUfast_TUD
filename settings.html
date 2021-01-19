@@ -40,6 +40,26 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
+  <button class="accordion" id="auto_slub_login_settings">Automatisches Anmelden bei der SLUB</button>
+  <div class="panel">
+    <p><b>Werde auf der Website der SLUB automatisch angemeldet!</b><br>Daf&uuml;r m&uuml;ssen deine SLUB-Login-Daten sicher auf diesem PC gespeichert werden.<br>
+      Die Daten werden nur lokal und verschl&uuml;sselt gespeichert.<br>
+      Du kannst sie jederzeit l&ouml;schen.
+    </p>
+    <form>
+      <input placeholder="Nutzername (SLUB-Login)" type="text" id="slub_username_field"><br>
+      <input placeholder="Passwort (SLUB-Login)" type="password" id="slub_password_field"><br>
+      <button type="button" class="button-accept" id="slub_save_data">Lokal Speichern</button>
+      <p id="slub_status_msg" style="display: inline;"></p>
+    </form>
+    <p>Hier kannst du alle Daten l&ouml;schen:<br>
+      <button id="slub_delete_data" class="button-deny">SLUB-Daten l&ouml;schen</button>
+    </p>
+    <p id="slub_status_msg2"></p>
+  </div>
+  <!-- endregion -->
+  <!-- New Accordion section-->
+  <!-- #region -->
   <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r E-Mails im TU Dresden Postfach</button>
   <div class="panel">
     <p>TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben
