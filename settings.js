@@ -216,7 +216,7 @@ function requestHostPermissionS() {
 window.onload = async function () {
 
   //assign functions
-  document.getElementById('save_data').onclick = () => {saveUserData(false)}
+  document.getElementById('save_data').onclick = () => {saveUserData(false)} // use unnamed function because otherwise first argument always would be the event
   document.getElementById('slub_save_data').onclick = () => {saveUserData(true)}
   document.getElementById('delete_data').onclick = () => {deleteUserData(false)}
   document.getElementById('slub_delete_data').onclick = () => {deleteUserData(true)}
@@ -304,12 +304,17 @@ window.onload = async function () {
 
 
   //get things from storage
-  chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1"], (result) => {
+  chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1", "slubLoginSet"], (result) => {
     //set text on isEnabled
     if (result.isEnabled) {
       document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
     }
     else {
+      document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+    }
+    if (result.slubLoginSet) {
+      document.getElementById('slub_status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch bei der SLUB eingeloggt.</font>"
+    } else {
       document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
     }
     //update saved clicks  
