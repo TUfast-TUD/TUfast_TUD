@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-chrome.storage.local.get(['isEnabled', "removedUnlockRocketsBanner", "showedOpalCustomizeBanner", "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
+chrome.storage.local.get(['isEnabled', "availableRockets", "removedUnlockRocketsBanner", "showedOpalCustomizeBanner", "unlockRocketsFirstPrompt", "saved_click_counter", "showedUnreadMailCounterBanner", "showedFirefoxBanner", "mostLiklySubmittedReview", "removedReviewBanner", "neverShowedReviewBanner", "showedKeyboardBanner2", "nameIsTUfast"], function (result) {
     //decide whether to show review banner
     let showReviewBanner = false
     let showKeyboardUpdate = false
@@ -52,7 +52,10 @@ chrome.storage.local.get(['isEnabled', "removedUnlockRocketsBanner", "showedOpal
         showUnlockRocketsFirstPrompt = true
     }
     else if (result.saved_click_counter > 300 && result.unlockRocketsFirstPrompt && mod100Clicks < 7 && !result.removedUnlockRocketsBanner) {
-        showUnlockRockets = true
+        //dont show banner, if all rockets are already unlocked
+        if(!result.availableRockets.includes("RI1") || !result.availableRockets.includes("RI2")) {
+            showUnlockRockets = true
+        }
     }
 
     //reset unlock rockets banner
@@ -103,8 +106,6 @@ chrome.storage.local.get(['isEnabled', "removedUnlockRocketsBanner", "showedOpal
             this.document.getElementById("openMoreRocketIcons").onclick = openMoreRocketIconsSettings
             this.document.getElementById("removeMoreRocketIcons").onclick = RemoveMoreRocketIcons
         }
-
-
     })
 })
 
