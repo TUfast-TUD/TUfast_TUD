@@ -45,7 +45,6 @@ function saveSlubData(isFirefox = false) {
           saveUserData(true)
           if(isFirefox){
             alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
-            chrome.storage.local.set({ openSettingsPageParam: "opalCustomize", openSettingsOnReload: true }, function () { })
             chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
           }
         } else {
