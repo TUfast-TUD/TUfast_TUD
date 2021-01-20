@@ -6,10 +6,8 @@ function saveUserData(slubData = false) {
     document.getElementById(id_prefix + 'status_msg').innerHTML = "<font color='red'>Die Felder d&uuml;rfen nicht leer sein!</font>"
     return false
   } else {
-    if (slubData) {
-      chrome.storage.local.set({ slubLoginSet: true }, function () { })
-    } else {
-      chrome.storage.local.set({ isEnabled: true }, function () { }) //need to activate auto login feature
+    chrome.storage.local.set({ isEnabled: true }, function () { }) //need to activate auto login feature
+    if (!slubData) {
       chrome.runtime.sendMessage({ cmd: "clear_badge" });
     }
     chrome.runtime.sendMessage({ cmd: "set_user_data", userData: { asdf: asdf, fdsa: fdsa }, slubData: slubData})
@@ -57,13 +55,15 @@ function saveSlubData(isFirefox = false) {
 
 function deleteUserData(slubData = false) {
   id_prefix = slubData ? 'slub_' : ''
+
+  chrome.runtime.sendMessage({ cmd: 'is_user_data_available' }, (result) => {
+    chrome.storage.local.set({ isEnabled: (result.selma || result.slub) }, () => { })
+  })
   if (slubData) {
     chrome.storage.local.set({ SData: "undefined" }, function () { }) //this is how to delete user data!
-    chrome.storage.local.set({ slubLoginSet: false }, function () { }) //need to deactivate auto login feature
   } else {
     chrome.runtime.sendMessage({ cmd: "clear_badge" });
     chrome.storage.local.set({ Data: "undefined" }, function () { }) //this is how to delete user data!
-    chrome.storage.local.set({ isEnabled: false }, function () { }) //need to deactivate auto login feature
     // -- also delete courses in dashboard
     chrome.storage.local.set({ meine_kurse: false }, function () { })
     chrome.storage.local.set({ favoriten: false }, function () { })
@@ -332,18 +332,13 @@ window.onload = async function () {
 
 
   //get things from storage
-  chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1", "slubLoginSet"], (result) => {
+  chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1"], (result) => {
     //set text on isEnabled
     if (result.isEnabled) {
       document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
     }
     else {
       document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
-    }
-    if (result.slubLoginSet) {
-      document.getElementById('slub_status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch bei der SLUB eingeloggt.</font>"
-    } else {
-      document.getElementById('slub_status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
     }
     //update saved clicks  
     //see if any params are available
@@ -356,6 +351,14 @@ window.onload = async function () {
     this.document.getElementById("settings_comment").innerHTML = "Bereits " + clicksToTimeNoIcon(result.saved_click_counter)
     chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
   })
+
+  chrome.runtime.sendMessage({ cmd: "get_user_data", slubData: true }, (response) => {
+    if (!(response.asdf === undefined  || response.fdsa === undefined)) { 
+      document.getElementById('slub_status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch bei der SLUB eingeloggt.</font>"
+    } else {
+      document.getElementById('slub_status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+    }
+  });
 
   //prep accordion
   let acc = document.getElementsByClassName("accordion");

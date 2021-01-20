@@ -1,5 +1,5 @@
-chrome.storage.local.get(['isEnabled', 'slubLoginSet'], function(result) {
-    if(result.isEnabled && result.slubLoginSet) {
+chrome.storage.local.get(['isEnabled'], function(result) {
+    if(result.isEnabled) {
         document.addEventListener('DOMContentLoaded', function() {
             if(document.getElementById('username')){
                 chrome.runtime.sendMessage({cmd: 'get_user_data', slubData: true}, function(response) {
