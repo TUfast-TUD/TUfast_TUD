@@ -14,7 +14,7 @@ chrome.storage.local.get(['isEnabled'], function (result) {
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['1', '2', '3', '4', 'nicht bestanten'],
+                    labels: ['1', '2', '3', '4', 'nicht bestanden'],
                     datasets: [{
                         data: countGrades(rawGrades.filter(x => !x.isModule)),
                         backgroundColor: [
