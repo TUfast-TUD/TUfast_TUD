@@ -1,5 +1,6 @@
-function saveUserData(slubData = false) {
-  id_prefix = slubData ? 'slub_': ''
+function saveUserData() {
+  let slubData = document.getElementById('portal_field').value == 'slub'
+  let id_prefix = slubData ? 'slub_': ''
   var asdf = document.getElementById('username_field').value
   var fdsa = document.getElementById('password_field').value
   if (asdf === '' || fdsa === '') {
@@ -12,9 +13,9 @@ function saveUserData(slubData = false) {
     }
     chrome.runtime.sendMessage({ cmd: "set_user_data", userData: { asdf: asdf, fdsa: fdsa }, slubData: slubData})
     document.getElementById(id_prefix + 'status_msg').innerHTML = ""
-    document.getElementById(id_prefix + "save_data").innerHTML = '<font>Gespeichert!</font>'
-    document.getElementById(id_prefix + "save_data").disabled = true;
-    document.getElementById(id_prefix + "save_data").style.backgroundColor = "rgb(47, 143, 18)"
+    document.getElementById("save_data").innerHTML = '<font>Gespeichert!</font>'
+    document.getElementById("save_data").disabled = true;
+    document.getElementById("save_data").style.backgroundColor = "rgb(47, 143, 18)"
     document.getElementById("username_field").value = ""
     document.getElementById("password_field").value = ""
     if (slubData && !asdf.match(/\d{7}/)) {
@@ -27,34 +28,42 @@ function saveUserData(slubData = false) {
       }
     }
     setTimeout(() => {
-      document.getElementById(id_prefix + "save_data").innerHTML = 'Speichern'
-      document.getElementById(id_prefix + "save_data").disabled = false;
+      document.getElementById("save_data").innerHTML = 'Speichern'
+      document.getElementById("save_data").disabled = false;
     }, 2000)
   }
 }
 
-function saveSlubData(isFirefox = false) {
-  chrome.permissions.contains({origins: ["*://*.slub-dresden.de/*"]}, (result) => {
-    if (result) {
-      saveUserData(true)
-    } else {
-      chrome.permissions.request({origins: ["*://*.slub-dresden.de/*"]}, (granted) => {
-        if (granted) {
-          saveUserData(true)
-          if(isFirefox){
-            alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
-            chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
+function reqSlubPermissions(isFirefox = false) {
+  return new Promise(async (resolve, reject) => {
+    chrome.permissions.contains({origins: ["*://*.slub-dresden.de/*"]}, (result) => {
+      if (result) {
+        resolve(true)
+      } else {
+        chrome.permissions.request({origins: ["*://*.slub-dresden.de/*"]}, (granted) => {
+          if (granted) {
+            if(isFirefox){
+              alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!")
+              chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
+            }
+            resolve(true)
+          } else {
+            alert("TUfast braucht diese Berechtigung, um dich bei der SLUB anzumelden. Versuche es erneut.");
+            resolve(false)
           }
-        } else {
-          alert("TUfast braucht diese Berechtigung, um dich bei der SLUB anzumelden. Versuche es erneut.");
-        }
-      });
-    }
+        });
+      }
+    });
   });
 }
 
-function deleteUserData(slubData = false) {
-  id_prefix = slubData ? 'slub_' : ''
+function deleteUserData() {
+  let slubData = document.getElementById('portal_field').value == 'slub'
+  let id_prefix = slubData ? 'slub_' : ''
+
+  if(slubData) {
+    delSlubPermissions()
+  }
 
   chrome.runtime.sendMessage({ cmd: 'is_user_data_available' }, (result) => {
     chrome.storage.local.set({ isEnabled: (result.selma || result.slub) }, () => { })
@@ -77,9 +86,9 @@ function deleteUserData(slubData = false) {
   }
   // --
   document.getElementById(id_prefix + 'status_msg').innerHTML = ""
-  document.getElementById(id_prefix + "delete_data").innerHTML = '<font>Gel&ouml;scht!</font>'
-  document.getElementById(id_prefix + "delete_data").style.backgroundColor = "rgb(47, 143, 18)"
-  document.getElementById(id_prefix + "delete_data").disabled = true
+  document.getElementById("delete_data").innerHTML = '<font>Gel&ouml;scht!</font>'
+  document.getElementById("delete_data").style.backgroundColor = "rgb(47, 143, 18)"
+  document.getElementById("delete_data").disabled = true
   document.getElementById("username_field").value = ""
   document.getElementById("password_field").value = ""
   document.getElementById(id_prefix + 'status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
@@ -90,11 +99,10 @@ function deleteUserData(slubData = false) {
   }, 2000)
 }
 
-function deleteSlubData() {
+function delSlubPermissions() {
   chrome.permissions.contains({origins: ["*://*.slub-dresden.de/*"]}, (result) => {
     if (result) {chrome.permissions.remove({origins: ["*://*.slub-dresden.de/*"]}, () => {});}
   });
-  deleteUserData(true)
 }
 
 function fwdGoogleSearch() {
@@ -246,31 +254,29 @@ window.onload = async function () {
   if (isFirefox) { document.getElementById("additionNotificationSection").style.display = "none" }
 
   //assign functions
-  document.getElementById('save_data').onclick = () => {saveUserData(false)} // use unnamed function because otherwise first argument always would be the event
-  document.getElementById('slub_save_data').onclick = () => {saveSlubData(isFirefox)}
-  document.getElementById('delete_data').onclick = () => {deleteUserData(false)}
-  document.getElementById('slub_delete_data').onclick = deleteSlubData
+  document.getElementById('save_data').onclick = saveUserData // use unnamed function because otherwise first argument always would be the event
+  document.getElementById('delete_data').onclick = deleteUserData
   let portal_field = document.getElementById('portal_field')
   portal_field.addEventListener('change', () => {
     switch (portal_field.value) {
-      case "slub": document.getElementById('username_field').placeholder = "Nutzername (SLUB-Login)"
-        document.getElementById('password_field').placeholder = "Passwort (SLUB-Login)"
-        document.getElementById('save_data').style.display = "none"
-        document.getElementById('slub_save_data').style.display = ""
-        document.getElementById('delete_data').style.display = "none"
-        document.getElementById('slub_delete_data').style.display = ""
-        document.getElementById('status_msg').style.display = "none"
-        document.getElementById('slub_status_msg').style.display = "inline"
-        document.getElementById('status_msg2').style.display = "none"
-        document.getElementById('slub_status_msg2').style.display = ""
-        break;
+      case "slub": reqSlubPermissions(isFirefox).then((granted) => {
+        if(granted) {
+          document.getElementById('username_field').placeholder = "Nutzername (SLUB-Login)"
+          document.getElementById('password_field').placeholder = "Passwort (SLUB-Login)"
+          document.getElementById('delete_data').innerHTML = "SLUB Daten l&ouml;schen"
+          document.getElementById('status_msg').style.display = "none"
+          document.getElementById('slub_status_msg').style.display = "inline"
+          document.getElementById('status_msg2').style.display = "none"
+          document.getElementById('slub_status_msg2').style.display = ""
+        } else {
+          portal_field.value="selma"
+        }
+      });
+      break;
       default:
         document.getElementById('username_field').placeholder = "Nutzername (Selma-Login)"
         document.getElementById('password_field').placeholder = "Passwort (Selma-Login)"
-        document.getElementById('save_data').style.display = ""
-        document.getElementById('slub_save_data').style.display = "none"
-        document.getElementById('delete_data').style.display = ""
-        document.getElementById('slub_delete_data').style.display = "none"
+        document.getElementById('delete_data').innerHTML = "Selma Daten l&ouml;schen"
         document.getElementById('status_msg').style.display = "inline"
         document.getElementById('slub_status_msg').style.display = "none"
         document.getElementById('status_msg2').style.display = ""
