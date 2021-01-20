@@ -183,14 +183,13 @@ function save__two_clicks() {
 //changeIsEnabledState
 function saveEnabled() {
     //only save, if user data is available. Else forward to settings page
-    chrome.storage.local.get(['isEnabled'], function (resp) {
-        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
-            if (!(result.asdf === undefined || result.fdsa === undefined)) {
-                chrome.storage.local.set({ isEnabled: !(resp.isEnabled) }, function () { })
+    chrome.storage.local.get(['isEnabled'], (resp) => {
+        chrome.runtime.sendMessage({ cmd: 'is_user_data_available' }, (result) => {
+            if (result.selma || result.slub) {
+                chrome.storage.local.set({ isEnabled: !(resp.isEnabled) }, () => { })
             } else {
-                chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'auto_login_settings' }, function (result) { })
+                chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'auto_login_settings' }, () => { })
                 window.close()
-
             }
         })
     })
@@ -201,7 +200,12 @@ function saveEnabled() {
 function displayEnabled() {
     chrome.storage.local.get(['isEnabled'], function (result) {
         this.document.getElementById('switch').checked = result.isEnabled
-    })
+    });
+    chrome.runtime.sendMessage({ cmd: 'is_user_data_available' }, (result) => {
+        if(!result.selma && result.slub) {
+            document.getElementById("settings-al-label").innerHTML += " <small>(SLUB only)</small>"
+        }
+    });
 }
 
 //return course_list = [{link:link, name: name}, ...]
