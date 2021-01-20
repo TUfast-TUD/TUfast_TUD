@@ -1,7 +1,7 @@
 function saveUserData(slubData = false) {
   id_prefix = slubData ? 'slub_': ''
-  var asdf = document.getElementById(id_prefix + 'username_field').value
-  var fdsa = document.getElementById(id_prefix + 'password_field').value
+  var asdf = document.getElementById('username_field').value
+  var fdsa = document.getElementById('password_field').value
   if (asdf === '' || fdsa === '') {
     document.getElementById(id_prefix + 'status_msg').innerHTML = "<font color='red'>Die Felder d&uuml;rfen nicht leer sein!</font>"
     return false
@@ -15,8 +15,8 @@ function saveUserData(slubData = false) {
     document.getElementById(id_prefix + "save_data").innerHTML = '<font>Gespeichert!</font>'
     document.getElementById(id_prefix + "save_data").disabled = true;
     document.getElementById(id_prefix + "save_data").style.backgroundColor = "rgb(47, 143, 18)"
-    document.getElementById(id_prefix + "username_field").value = ""
-    document.getElementById(id_prefix + "password_field").value = ""
+    document.getElementById("username_field").value = ""
+    document.getElementById("password_field").value = ""
     if (slubData && !asdf.match(/\d{7}/)) {
       document.getElementById('slub_status_msg').innerHTML = "<font color='orange'>Stelle sicher, dass der Benutzername stimmt! Normalerweise sind es sieben Zahlen! Der automatische Login wird trotzdem versucht!</font>"
     } else {
@@ -80,8 +80,8 @@ function deleteUserData(slubData = false) {
   document.getElementById(id_prefix + "delete_data").innerHTML = '<font>Gel&ouml;scht!</font>'
   document.getElementById(id_prefix + "delete_data").style.backgroundColor = "rgb(47, 143, 18)"
   document.getElementById(id_prefix + "delete_data").disabled = true
-  document.getElementById(id_prefix + "username_field").value = ""
-  document.getElementById(id_prefix + "password_field").value = ""
+  document.getElementById("username_field").value = ""
+  document.getElementById("password_field").value = ""
   document.getElementById(id_prefix + 'status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
   setTimeout(() => {
     document.getElementById(id_prefix + "delete_data").innerHTML = 'Alle Daten l&ouml;schen';
@@ -250,6 +250,33 @@ window.onload = async function () {
   document.getElementById('slub_save_data').onclick = () => {saveSlubData(isFirefox)}
   document.getElementById('delete_data').onclick = () => {deleteUserData(false)}
   document.getElementById('slub_delete_data').onclick = deleteSlubData
+  let portal_field = document.getElementById('portal_field')
+  portal_field.addEventListener('change', () => {
+    switch (portal_field.value) {
+      case "slub": document.getElementById('username_field').placeholder = "Nutzername (SLUB-Login)"
+        document.getElementById('password_field').placeholder = "Passwort (SLUB-Login)"
+        document.getElementById('save_data').style.display = "none"
+        document.getElementById('slub_save_data').style.display = ""
+        document.getElementById('delete_data').style.display = "none"
+        document.getElementById('slub_delete_data').style.display = ""
+        document.getElementById('status_msg').style.display = "none"
+        document.getElementById('slub_status_msg').style.display = "inline"
+        document.getElementById('status_msg2').style.display = "none"
+        document.getElementById('slub_status_msg2').style.display = ""
+        break;
+      default:
+        document.getElementById('username_field').placeholder = "Nutzername (Selma-Login)"
+        document.getElementById('password_field').placeholder = "Passwort (Selma-Login)"
+        document.getElementById('save_data').style.display = ""
+        document.getElementById('slub_save_data').style.display = "none"
+        document.getElementById('delete_data').style.display = ""
+        document.getElementById('slub_delete_data').style.display = "none"
+        document.getElementById('status_msg').style.display = "inline"
+        document.getElementById('slub_status_msg').style.display = "none"
+        document.getElementById('status_msg2').style.display = ""
+        document.getElementById('slub_status_msg2').style.display = "none"
+    } 
+  });
   document.getElementById('switch_fwd').onclick = fwdGoogleSearch
   document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
   document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings

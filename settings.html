@@ -18,28 +18,36 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co.</button>
+  <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co. und SLUB</button>
   <div class="panel">
-    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine Selma
+    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine Selma oder SLUB
       Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschl&uuml;sselt
       gespeichert.<br>
       Du kannst sie jederzeit l&ouml;schen.<br>
       <font class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</font>
     </p>
     <form>
+      <select id="portal_field">
+        <option value="selma">Opal, Selma & Co.</option>
+        <option value="slub">SLUB</option>
+      </select><br>
       <input placeholder="Nutzername (Selma-Login)" type="text" id="username_field"><br>
       <input placeholder="Passwort (Selma-Login)" type="password" id="password_field"><br>
-      <button type="button" class="button-accept" id="save_data">Lokal Speichern</button>
+      <button type="button" class="button-accept" id="save_data">Lokal Speichern</button> 
+      <button type="button" class="button-accept" id="slub_save_data">Lokal Speichern</button>
       <p id="status_msg" style="display: inline;"></p>
+      <p id="slub_status_msg" style="display: none;"></p>
     </form>
     <p>Hier kannst du alle Daten l&ouml;schen:<br>
       <button id="delete_data" class="button-deny">Alle Daten l&ouml;schen</button>
+      <button id="slub_delete_data" class="button-deny" style="display: none;">SLUB-Daten l&ouml;schen</button>
     </p>
     <p id="status_msg2"></p>
+    <p id="slub_status_msg2" style="display: none;"></p>
   </div>
   <!-- endregion -->
   <!-- New Accordion section-->
-  <!-- #region -->
+  <!-- #region 
   <button class="accordion" id="auto_slub_login_settings">Zus&auml;tzliche Anmeldedaten bei der SLUB</button>
   <div class="panel">
     <p><b>Werde auf der Website der SLUB automatisch angemeldet!</b><br>
