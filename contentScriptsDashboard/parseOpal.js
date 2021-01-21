@@ -102,7 +102,7 @@ function parseCoursesFromWebPage() {
         let getAllNullEntries = course_list.list.filter(el => !el.link && !el.name) //this contains all entries, where link and name is false (i.e. null)
         if (getAllNullEntries.length > 2) { //when more than two null-entries: most likely unwanted case
             course_list = { type: "", list: [] } //reset course list
-            throw //throw error
+            throw 'most likely parsing error'; //throw error
         }
     } catch {
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0].getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
@@ -112,7 +112,7 @@ function parseCoursesFromWebPage() {
                 let link = item.children[3].getAttribute("href")
                 course_list.list.push({ name: name, link: link })
             }
-            catch (e) {console.log("Error in parsing course list:" + e) }
+            catch (e) {console.log("Error in parsing course list. Could not parse course list: " + e) }
         }
     }
     return course_list
