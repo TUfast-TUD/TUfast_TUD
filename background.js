@@ -414,7 +414,7 @@ function headerListenerFunc(details) {
 	let header = details.responseHeaders.find(
 		e => e.name.toLowerCase() === "content-disposition"
 	);
-	if (!header.value.includes(".pdf")) return; //ignore .zip TODO should we only check for zips?
+	if (!header.value.includes(".pdf")) return; //only for pdf
 	header.value = "inline";
 	return { responseHeaders: details.responseHeaders };
 }
