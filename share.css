@@ -9,26 +9,13 @@
     display: "inline-block";
 }
 
-#content {
-	border: 5px solid red;
+#download-section{
+    position: relative;
+    top: 1.3em;
 }
 
 html {
-	
-	font-family: 'Roboto', sans-serif;
-}
-
-#download-section{
-    position: relative;
-    top: 2em;
-}
-
-.the-top {
-    padding:5px;
-    top: 1%;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    overflow: hidden;
 }
 
 .tufast_text {
@@ -40,8 +27,8 @@ html {
 }
 
 .huge{
-    font-size: 1.8em;
-    font-weight: 1000;
+    font-size: 1.5em;
+    font-weight: 800;
     display: inline;
     vertical-align: middle;
     line-height: 1.4em;
@@ -49,11 +36,11 @@ html {
 
 .the-middle {
     padding:5px;
-    top: 25%;
+    top: 3%;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 2.4em;
+    font-size: 1.9em;
     line-height: 2em;
     text-align: center;
 }
@@ -85,20 +72,7 @@ a {
        font-size: 1.35em;
 	   top: 30%;
    }
-   .github_small
-   {
-       visibility: hidden;
-       display: none;
-   }
-}
-@media (min-width: 500px) 
-{
-   .github_big
-   {
-       visibility: hidden;
-       display: none;
-   }
-}
+
 
 @media (max-height: 780px)
 {
