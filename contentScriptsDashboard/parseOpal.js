@@ -85,20 +85,26 @@ function showDashboardBannerFunc() {
 }
 
 function parseCoursesFromWebPage() {
-    //there are two options how the table can be build.
     let course_list = { type: "", list: [] }
     if (location.pathname === "/opal/auth/resource/courses") { course_list.type = "meine_kurse" }
     if (location.pathname === "/opal/auth/resource/favorites") { course_list.type = "favoriten" }
+    //there are two options, how the coursse-overview table can be build.
+    //They are simply tried out
     try {
-        //most likely for favoriten
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByTagName("tbody")[0].children
         for (let item of tableEntries) {
             let name = item.children[2].children[0].getAttribute("title")
             let link = item.children[2].children[0].getAttribute("href")
             course_list.list.push({ name: name, link: link })
         }
+        //There is a reported case, where no error is thrown and course_list has entries, but all of them are empty
+        //Of course this is not wanted. So in this case, also throw an error
+        let getAllNullEntries = course_list.list.filter(el => !el.link && !el.name) //this contains all entries, where link and name is false (i.e. null)
+        if (getAllNullEntries.length > 2) { //when more than two null-entries: most likely unwanted case
+            course_list = { type: "", list: [] } //reset course list
+            throw 'most likely parsing error'; //throw error
+        }
     } catch {
-        //most likely for meine kurse
         let tableEntries = document.getElementsByClassName("table-panel")[0].getElementsByClassName("content-preview-container")[0].getElementsByClassName("list-unstyled")[0].getElementsByClassName("content-preview content-preview-horizontal")
         for (let item of tableEntries) {
             try {
@@ -106,7 +112,7 @@ function parseCoursesFromWebPage() {
                 let link = item.children[3].getAttribute("href")
                 course_list.list.push({ name: name, link: link })
             }
-            catch (e) {console.log("Error in parsing course list:" + e) }
+            catch (e) {console.log("Error in parsing course list. Could not parse course list: " + e) }
         }
     }
     return course_list

@@ -29,6 +29,7 @@ window.onload = async function () {
     this.document.getElementById("searchListInput").onkeyup = listSearchFunction
 
     this.document.getElementById("settings").onclick = this.openSettings
+    this.document.getElementById("share").onclick = this.openShare
 
     displayEnabled()
 
@@ -63,6 +64,17 @@ function openSettings() {
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
     if (isFirefox) window.close()
     return false //Required for ff
+}
+
+function openShare() {
+    /*
+    chrome.runtime.sendMessage({ cmd: 'open_share_page', param: "" }, function (result) { }) //for some reason I need to pass empty param - else it wont work in ff
+    let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+    if (isFirefox) window.close()
+    return false //Required for ff
+    */
+    document.getElementById("list").innerHTML = '<object type="text/html" style="height: 450px; width: 510px; overflow: hidden;" data="share.html" ></object>'
+
 }
 
 function openSettingsTimeSection() {

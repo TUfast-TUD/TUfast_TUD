@@ -387,6 +387,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		case 'open_settings_page':
 			openSettingsPage(request.params)
 			break
+		case 'open_share_page':
+			openSharePage()
+			break
 		case 'register_addition_content_scripts':
 			regAddContentScripts()
 			break
@@ -459,7 +462,7 @@ function headerListenerFunc(details) {
 	let header = details.responseHeaders.find(
 		e => e.name.toLowerCase() === "content-disposition"
 	);
-	if (header.value.includes(".zip")) return; //ignore .zip TODO should we only check for zips?
+	if (!header.value.includes(".pdf")) return; //only for pdf
 	header.value = "inline";
 	return { responseHeaders: details.responseHeaders };
 }
@@ -474,6 +477,11 @@ function openSettingsPage(params) {
 		chrome.runtime.openOptionsPage()
 	}
 	return
+}
+
+function openSharePage(){
+	chrome.tabs.create(({ url: "share.html" }))
+
 }
 
 //timeout is 2000 default
