@@ -74,7 +74,6 @@ function openShare() {
     return false //Required for ff
     */
     document.getElementById("list").innerHTML = '<object type="text/html" style="height: 450px; width: 510px; overflow: hidden;" data="share.html" ></object>'
-
 }
 
 function openSettingsTimeSection() {

@@ -47,7 +47,8 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 1.7em;
+            font-size: 25px;
+            /*cannot use em here because it breaks in ff*/
             line-height: 2em;
             text-align: center;
         }
@@ -67,6 +68,19 @@
         a {
             text-decoration: none;
         }
+
+        .small_grey_txt {
+            font-size: 15px;
+            color: grey;
+            line-height: 15px;
+            position: relative;
+            top: 0px;
+        }
+
+        .small_grey_a {
+            color: grey;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -82,6 +96,9 @@
         <div class="tufast_text">
             <span class="tufasst_name">mit deinen Freunden!</span>
         </div>
+        <!--div class="tufast_text small_grey_txt">
+            <span class="">und sammle dabei <a id="cool_rockets" class="small_grey_a" href="javascript:void(0)" target="_blank">coole Raketen</a>!</span>
+        </div-->
         <div id="download-section">
             <div class="download-link">
                 <img src="icons/gmail.png" class="imgicon"><span class="browser_name"> <a target="_blank"
