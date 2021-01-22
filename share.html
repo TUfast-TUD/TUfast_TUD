@@ -4,11 +4,70 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TUfast</title>
-    <meta name="author" content="Oliver Hausdörfer">
-    <meta name="description" content="share TUfast">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="share.css" rel="stylesheet">
+    <style>
+        .the-bottom {
+            padding: 0px;
+            bottom: 0%;
+            font-size: 1.3em;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            display: "inline-block";
+        }
+
+        #download-section {
+            position: relative;
+            top: 1.3em;
+        }
+
+        html {
+            overflow: hidden;
+        }
+
+        .tufast_text {
+            text-align: center;
+        }
+
+        .download-link {
+            font-size: 1em;
+        }
+
+        .huge {
+            font-size: 1.5em;
+            font-weight: 800;
+            display: inline;
+            vertical-align: middle;
+            line-height: 1.4em;
+        }
+
+        .the-middle {
+            padding: 5px;
+            top: 3%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.7em;
+            line-height: 2em;
+            text-align: center;
+        }
+
+        .imgicon {
+            height: 1em;
+            vertical-align: middle;
+        }
+
+        .browser_name {
+            display: inline;
+            vertical-align: middle;
+            font-size: 0.9em;
+            line-height: 0.9em;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,20 +84,25 @@
         </div>
         <div id="download-section">
             <div class="download-link">
-                <img src="icons/gmail.png" class="imgicon"><span class="browser_name"> <a  target="_blank" href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90">E-Mail</a></span>
+                <img src="icons/gmail.png" class="imgicon"><span class="browser_name"> <a target="_blank"
+                        href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90">E-Mail</a></span>
             </div>
             <div class="download-link">
-                <img src="icons/wa2.png" style=" height: 1.4em;" class="imgicon"><span class="browser_name"> <a target="_blank" href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90">WhatsApp</a></span>
+                <img src="icons/wa2.png" style=" height: 1.4em;" class="imgicon"><span class="browser_name"> <a
+                        target="_blank"
+                        href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90">WhatsApp</a></span>
             </div>
             <div class="download-link">
-                    <span class="browser_name">oder <a  target="_blank" href="https://www.tu-fast.de">www.tu-fast.de</a></span>
+                <span class="browser_name">oder <a target="_blank"
+                        href="https://www.tu-fast.de">www.tu-fast.de</a></span>
             </div>
         </div>
     </div>
 
 
     <div class="the-bottom">
-        <p>Gemacht mit 🖤 | <a href="https://github.com/TUfast-TUD/TUfast_TUD" target="_blank">GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast" target="_blank">Kontakt</a>
+        <p>Gemacht mit 🖤 | <a href="https://github.com/TUfast-TUD/TUfast_TUD" target="_blank">GitHub</a> | <a
+                href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast" target="_blank">Kontakt</a>
         </p>
     </div>
 

@@ -60,26 +60,3 @@ html {
 a {
     text-decoration: none;
 }
-
-@media (max-width: 500px) 
-{
-   .the-bottom 
-   {
-       font-size: 0.9em; 
-   }
-   .the-middle
-   {
-       font-size: 1.35em;
-	   top: 30%;
-   }
-
-
-@media (max-height: 780px)
-{
-    .the-middle {
-        top: 15%;
-    }
-	#download-section{
-	    top: 1em;
-	}
-}
