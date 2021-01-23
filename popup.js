@@ -1,3 +1,6 @@
+const share = '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Teile</span></div><div class="tufast_text huge"><img class=imgicon src=/images/tufast48.png style=position:relative;top:-4px><span class=tufasst_name> TUfast</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link href=javascript:void(0)>sammle coole Raketen</a>!</span></div><div id=download-section><div class=download-link><img class=imgicon src=icons/gmail.png><span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank> E-Mail</a></span></div><div class=download-link><img class=imgicon src=icons/wa2.png style=height:1.4em><span class=browser_name><a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
+
+
 window.onload = async function () {
 
     //get things from storage
@@ -66,14 +69,22 @@ function openSettings() {
     return false //Required for ff
 }
 
-function openShare() {
+async function openShare() {
     /*
     chrome.runtime.sendMessage({ cmd: 'open_share_page', param: "" }, function (result) { }) //for some reason I need to pass empty param - else it wont work in ff
     let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
     if (isFirefox) window.close()
     return false //Required for ff
     */
-    document.getElementById("list").innerHTML = '<object type="text/html" style="height: 450px; width: 510px; overflow: hidden;" data="share.html" ></object>'
+    document.getElementById("list").innerHTML = share   //it needs to be injected this way, else click doesnt work
+    await new Promise(r => setTimeout(r, 500))
+    document.getElementById("rewards_link").addEventListener("click", function () {   //click handler needs to be set this way
+        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { }) //for some reason I need to pass empty param - else it wont work in ff
+        let isFirefox = navigator.userAgent.includes("Firefox/")  //attention: no failsave browser detection
+        if (isFirefox) window.close()
+        return false //Required for ff
+    })    
+
 }
 
 function openSettingsTimeSection() {

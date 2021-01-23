@@ -1,6 +1,6 @@
 .the-bottom {
     padding:0px;
-    bottom: 0%;
+    bottom: 13%;
     font-size: 1.3em;
     position: absolute;
     left: 50%;
@@ -8,6 +8,18 @@
     white-space: nowrap;
     display: "inline-block";
 }
+
+.grey_a {
+    text-decoration: underline;
+    color: grey;
+    font-weight: 100;
+}
+
+.grey {
+    color: grey;
+    font-weight: 100;
+}
+
 
 #download-section{
     position: relative;

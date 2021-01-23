@@ -481,7 +481,6 @@ function openSettingsPage(params) {
 
 function openSharePage(){
 	chrome.tabs.create(({ url: "share.html" }))
-
 }
 
 //timeout is 2000 default
