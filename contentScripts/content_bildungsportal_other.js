@@ -42,24 +42,26 @@ chrome.storage.local.get(['isEnabled', "availableRockets", "removedUnlockRockets
     if (result.saved_click_counter > 50 && !result.showedUnreadMailCounterBanner) {
         showUnreadMailCounter = true
     }
-    else if (result.saved_click_counter > 100 && !result.showedKeyboardBanner2 ) {
+    else if (result.saved_click_counter > 100 && !result.showedKeyboardBanner2) {
         showKeyboardUpdate = true
     }
-    else if (result.saved_click_counter > 150 && !result.showedOpalCustomizeBanner){
+    else if (result.saved_click_counter > 150 && !result.showedOpalCustomizeBanner) {
         showOpalCustomize = true
     }
-    else if (result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt){
+    else if (result.saved_click_counter > 250 && !result.unlockRocketsFirstPrompt) {
         showUnlockRocketsFirstPrompt = true
     }
+    /*
     else if (result.saved_click_counter > 300 && result.unlockRocketsFirstPrompt && mod100Clicks < 7 && !result.removedUnlockRocketsBanner) {
         //dont show banner, if all rockets are already unlocked
-        if(!result.availableRockets.includes("RI1") || !result.availableRockets.includes("RI2")) {
+        if (!result.availableRockets.includes("RI1") || !result.availableRockets.includes("RI2")) {
             showUnlockRockets = true
         }
     }
+    */
 
     //reset unlock rockets banner
-    if (mod100Clicks > 7) {chrome.storage.local.set({ removedUnlockRocketsBanner: false }, function () { })}
+    if (mod100Clicks > 7) { chrome.storage.local.set({ removedUnlockRocketsBanner: false }, function () { }) }
 
     window.addEventListener("load", async function (e) {
         if (showReviewBanner) { showLeaveReviewBanner() }
@@ -67,8 +69,8 @@ chrome.storage.local.get(['isEnabled', "availableRockets", "removedUnlockRockets
         //if (showImplementationForFirefox) { showImplementationForFirefoxBanner() }
         if (showUnreadMailCounter) { showUnreadMailCounterBanner() }
         if (showUnlockRocketsFirstPrompt) { showUnlockRocketsFirstBanner() }
-        if (showOpalCustomize) {showOpalCustomizeBanner()}
-        if (showUnlockRockets) {showUnlockRocketsBanner()}
+        if (showOpalCustomize) { showOpalCustomizeBanner() }
+        if (showUnlockRockets) { showUnlockRocketsBanner() }
 
         if (this.document.getElementById("removeReviewBanner")) {
             this.document.getElementById("removeReviewBanner").onclick = removeReviewBanner
@@ -101,6 +103,7 @@ chrome.storage.local.get(['isEnabled', "availableRockets", "removedUnlockRockets
         }
         if (this.document.getElementById("unlockRocketsFirstPrompt")) {
             this.document.getElementById("openMoreRocketIcons").onclick = openMoreRocketIconsSettingsFirstPrompt
+            document.getElementById("removeMoreRocketIconsFirst").onclick = removeFirstRocketBanner
         }
         if (this.document.getElementById("unlockRocketsPrompt")) {
             this.document.getElementById("openMoreRocketIcons").onclick = openMoreRocketIconsSettings
@@ -116,12 +119,12 @@ function RemoveMoreRocketIcons() {
     }
 }
 
-function showUnlockRocketsBanner(){
+function showUnlockRocketsBanner() {
     let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "unlockRocketsPrompt"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<b>Empfehle <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast</b> deinen Freunden und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥 <a id="removeMoreRocketIcons" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Später</a>'
+    banner.innerHTML = '<b>Unterstütze <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast</b>, empfehle es deinen Mitstudierenden und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥 <a id="removeMoreRocketIcons" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Nein</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
@@ -161,6 +164,14 @@ function openKeyboardShortcutSettings() {
     }
 }
 
+function removeFirstRocketBanner() {
+    if (document.getElementById("unlockRocketsFirstPrompt")) {
+        document.getElementById("unlockRocketsFirstPrompt").remove()
+        chrome.storage.local.set({ unlockRocketsFirstPrompt: true }, function () { })
+    }
+}
+
+
 function openMoreRocketIconsSettingsFirstPrompt() {
     if (document.getElementById("unlockRocketsFirstPrompt")) {
         chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: "rocket_icons_settings" }, function (result) { })
@@ -192,7 +203,7 @@ function removeKeyboardShortcutSettings() {
     }
 }
 
-function removeOpenOpalCustomizeSettings(){
+function removeOpenOpalCustomizeSettings() {
     chrome.storage.local.set({ showedOpalCustomizeBanner: true }, function () { })
     if (document.getElementById("showOpalCustomizeBanner")) {
         document.getElementById("showOpalCustomizeBanner").remove()
@@ -229,7 +240,7 @@ function showUnlockRocketsFirstBanner() {
     let banner = this.document.createElement("div")
     banner.id = "unlockRocketsFirstPrompt"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<b>Du findest <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast cool?</b> Unterstütze das TUfast-Projekt und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥'
+    banner.innerHTML = '<b>Dir gefällt <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast ?</b> Unterstütze das Projekt, empfehle es deinen Freunden und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥 <a id="removeMoreRocketIconsFirst" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Nein</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
@@ -238,11 +249,11 @@ function showImplementationForFirefoxBanner() {
     let banner = this.document.createElement("div")
     banner.id = "showImplementationForFirefoxBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="RemoveShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Close X</a>'
+    banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="RemoveShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
-function showOpalCustomizeBanner(){
+function showOpalCustomizeBanner() {
     let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "showOpalCustomizeBanner"
@@ -256,7 +267,7 @@ function showUnreadMailCounterBanner() {
     let banner = this.document.createElement("div")
     banner.id = "showUnreadMailCounterBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Neu: mit TUfast verpasst du keine Mails aus deinem TU Dresden Postfach. <a id="OpenUnreadMailCounterSettings" href="javascript:void(0)">Jetzt probieren.<a id="RemoveShowUnreadMailCounterBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Später</a>'
+    banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Neu: mit TUfast verpasst du keine Mails aus deinem TU Dresden Postfach. <a id="OpenUnreadMailCounterSettings" href="javascript:void(0)">Jetzt probieren.<a id="RemoveShowUnreadMailCounterBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
