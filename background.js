@@ -206,14 +206,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			})
 			//if easteregg was discovered in an earlier version: enable and select specific rocket!
 			chrome.storage.local.get(['Rocket', "foundEasteregg", "saved_click_counter"], function (result) {
-				if (result.saved_click_counter > 250 && !avRockets.includes("RI4")) avRockets.push("RI4")
-				if (result.saved_click_counter > 2500 && !avRockets.includes("RI5")) avRockets.push("RI5")
 				if (result.Rocket === "colorful" && result.foundEasteregg === undefined) {
 					chrome.storage.local.set({ foundEasteregg: true }, function () { })
 					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/3_120px.png"}' }, function () { })
 					chrome.storage.local.get(["availableRockets"], (resp) => {
 						let avRockets = resp.availableRockets
 						avRockets.push("RI3")
+						if (result.saved_click_counter > 250 && !avRockets.includes("RI4")) avRockets.push("RI4")
+						if (result.saved_click_counter > 2500 && !avRockets.includes("RI5")) avRockets.push("RI5")
 						chrome.storage.local.set({ "availableRockets": avRockets })
 					})
 					chrome.browserAction.setIcon({
