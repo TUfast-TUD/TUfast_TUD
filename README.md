@@ -31,11 +31,11 @@ Du hast Lust mitzumachen? :) Suche dir gerne ein Feature aus und fange an zu Ent
 - **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js. Aktuell gibts dieses Feature nur für Hisqis.
 - **Design-Rework von der Einstellungsseite in TUfast [assinged]**: Hauptsache Nutzerfreundlicher als es jetzt ist. Am besten sprechen wir uns hier vorher kurz ab.
 - Damit man bei der Eingabe falscher Login-Daten nicht gesperrt wird, sollte TUfast beim Anmelden prüfen, ob ein Fehler vorliegt. Tatsächlich ist das bei steigender Nutzerzahl wichtig. 
+- **Support https://videocampus.sachsen.de**: Die Berechtigung für sachsen.de/ muss optional sein! (Diese Implementierung wird häufig nachgefragt - vlt hat ja jemand Lust)
 
 ### Mid-Prio
 - **Reminder für Ablauf der Campus Sachsen Lizenz (Word & Co)**: Ist im Prinzip einfach zu machen: das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. Die Berechtigung für die Campussachsen-Website sollte optional sein.
 - Benachrichtigungen für neue Noten im HISQIS
-- Support https://videocampus.sachsen.de
 
 ### Low-Prio
 - Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
