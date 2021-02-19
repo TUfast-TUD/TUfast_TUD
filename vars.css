@@ -1,0 +1,76 @@
+:root {
+  /* background */
+  --color-bg-dark-primary: #18191a; /* to fill large areas */
+  --color-bg-light-primary: #f0f2f5;
+  --color-bg-dark-secondary: #242526; /* to fill smaller areas */
+  --color-bg-light-secondary: #ffffff;
+  --color-bg-dark-secondary-hover: #3a3b3c;
+  --color-bg-light-secondary-hover: #f2f2f2;
+  /* text */
+  --color-text-dark-primary: #e4e6eb; /* for headers and short paragraphs */
+  --color-text-light-primary: #050505;
+  --color-text-dark-secondary: #b0b3b8; /* for regular paragraphs and more text, subheadings */
+  --color-text-light-secondary: #65676b;
+  --color-link-dark-primary: hsl(206.7, 100%, 70%);
+  --color-link-light-primary: hsl(200, 100%, 40%);
+  /* button */
+  --color-button-bg-primary: #2d88ff;
+  --color-button-bg-primary-hover: #3272de;
+  --color-button-bg-secondary: #e4e6eb;
+  --color-button-bg-secondary-hover: #d8dadf; /* r: -12, g: -12, b: -12 */
+  --color-button-bg-red: #de3f4e;
+  --color-button-bg-red-hover: #d23342;
+  --color-button-bg-green: #66ba6c;
+  --color-button-bg-orange: #eeba4b;
+  /* text input */
+  --color-text-input-bg-dark: #3a3b3c;
+  --color-text-input-bg-dark-hover: #4e4f50;
+  --color-text-input-bg-light: #f0f2f5;
+  --color-text-input-bg-light-hover: #e4e6e8;
+  --color-text-input-text-dark: var(--color-text-dark-secondary);
+  --color-text-input-text-dark-hover: #b8bbbf;
+  --color-text-input-text-light: var(--color-text-light-secondary);
+  --color-text-input-text-light-hover: #606266;
+  /* colors */
+  --color-base-blue: #1877f2;
+  --color-base-cherry: #f3425f;
+  --color-base-grape: #9360f7;
+  --color-base-lemon: #f7b928;
+  --color-base-lime: #45bd62;
+  --color-base-pink: #ff66bf;
+  --color-base-seafoam: #54c7ec;
+  --color-base-teal: #2abba7;
+  --color-base-tomato: #fb724b;
+  --color-base-blue-link: #4599ff;
+  --color-base-warning: hsl(40, 89%, 52%);
+  /* animations */
+  --fn-animation-soft: cubic-bezier(0.08, 0.52, 0.52, 1);
+  --fn-animation-strong: cubic-bezier(0.12, 0.8, 0.32, 1);
+  --fn-animation-swap-shuffle-in: cubic-bezier(0.14, 1, 0.34, 1);
+  --fn-animation-swap-shuffle-out: cubic-bezier(0.45, 0.1, 0.2, 1);
+  --fn-animation-move-in: cubic-bezier(0.17, 0.17, 0, 1);
+  --fn-animation-move-out: cubic-bezier(0.17, 0.17, 0, 1);
+  --fn-animation-expand-collapse-in: cubic-bezier(0.17, 0.17, 0, 1);
+  --fn-animation-expand-collapse-out: cubic-bezier(0.17, 0.17, 0, 1);
+  --fn-animation-passive-move-in: cubic-bezier(0.5, 0, 0.1, 1);
+  --fn-animation-passive-move-out: cubic-bezier(0.5, 0, 0.1, 1);
+  --fn-animation-quick-move-in: cubic-bezier(0.1, 0.9, 0.2, 1);
+  --fn-animation-quick-move-out: cubic-bezier(0.1, 0.9, 0.2, 1);
+  --fn-animation-fade-in: cubic-bezier(0, 0, 1, 1);
+  --fn-animation-fade-out: cubic-bezier(0, 0, 1, 1);
+  /* durations */
+  --fn-duration-slow: 400ms;
+  --fn-duration-extra-extra-short-in: 100ms;
+  --fn-duration-extra-extra-short-out: 100ms;
+  --fn-duration-extra-short-in: 200ms;
+  --fn-duration-extra-short-out: 150ms;
+  --fn-duration-short-in: 280ms;
+  --fn-duration-short-out: 200ms;
+  --fn-duration-medium-in: 400ms;
+  --fn-duration-medium-out: 350ms;
+  --fn-duration-long-in: 500ms;
+  --fn-duration-long-out: 350ms;
+  --fn-duration-extra-long-in: 1000ms;
+  --fn-duration-extra-long-out: 1000ms;
+  --fn-duration-none: 0ms;
+}

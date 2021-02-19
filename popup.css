@@ -16,7 +16,7 @@
   margin-left: 5px;
   margin-right: 5px;
   text-decoration: none;
-  color: var(--text-color);
+  color: var(--color-text);
 }
 
 .list-search {
@@ -64,7 +64,7 @@ input:focus,
 
 body {
   border: solid 2px #909090;
-  background-color: var(--content-background-color);
+  background-color: var(--color-bg-secondary);
   border-radius: 4px;
   max-width: 510px; /*limit by chrome: 789px*/
   min-width: 510px; /*limit by chrome: 789px*/
@@ -74,7 +74,7 @@ body {
 }
 
 html {
-  background-color: var(--content-background-color);
+  background-color: var(--color-bg-secondary);
 }
 
 /* Footer */
