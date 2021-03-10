@@ -40,6 +40,7 @@ Du hast Lust mitzumachen? :) Suche dir gerne ein Feature aus und fange an zu Ent
 ### Low-Prio
 - Migrating to [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
 - add eportal.tumed to Portal-Icons
+- add option for the user to synchronize settings and opal courses across devices.
 
 ## Entwickler
 Entwickelt von Studenten, für Studenten:
