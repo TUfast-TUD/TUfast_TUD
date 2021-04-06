@@ -9,6 +9,7 @@ chrome.storage.local.get(["pdfInNewTab"], function (result) {
             "load",
             function () {
                 modifyPdfLinks();
+                pdfButtonExternalReload();
             },
             true
         );
@@ -26,5 +27,34 @@ function modifyPdfLinks() {
                 return false;
             };
         }
+    }
+}
+
+function pdfButtonExternalReload() {
+    // Only run logic if URL path includes 'downloadering'.
+    // This is the page Opal requests on click on - let's call it - a 'document button'.
+    if (document.documentURI.includes('downloadering')) {
+        // The fiber code gets auto genereted, it seems kind of random.
+        // It doesn't identify a document, I saw two codes for the same PDF.
+
+        const fibercode_query = 'fibercode=';
+        const fibercode_pos = document.documentURI.lastIndexOf(fibercode_query);
+
+        const fibercode = document.documentURI.slice(fibercode_pos+fibercode_query.length);
+
+
+        // check if fibercode is already present to not reload the same page forever
+        chrome.storage.local.get(['fibercode'], (result) => {
+            if (result.fibercode === fibercode) {
+                // remove fibercode again after page opened in new tab (runs in new tab)
+                chrome.storage.local.set({fibercode: ''});
+            } else {
+                // set the fibercode if it doesn't exist in db (runs on button click)
+                chrome.storage.local.set({fibercode: fibercode}, () => {
+                    open(document.documentURI, '_blank');
+                    history.back();
+                });
+            }
+        });
     }
 }
