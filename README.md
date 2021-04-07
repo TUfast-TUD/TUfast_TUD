@@ -32,7 +32,7 @@ Du hast Lust mitzumachen? :) Suche dir gerne ein Feature aus und fange an zu Ent
 - **Design-Rework von der Einstellungsseite in TUfast [assinged]**: Hauptsache Nutzerfreundlicher als es jetzt ist. Am besten sprechen wir uns hier vorher kurz ab.
 - Damit man bei der Eingabe falscher Login-Daten nicht gesperrt wird, sollte TUfast beim Anmelden prüfen, ob ein Fehler vorliegt. Tatsächlich ist das bei steigender Nutzerzahl wichtig. 
 - **Support https://videocampus.sachsen.de**: Die Berechtigung für sachsen.de/ muss optional sein! (Diese Implementierung wird häufig nachgefragt - vlt hat ja jemand Lust)
-- **support shortcuts for DuckDuckGo and other search engines"": For now, only google is supportet. I.e. when typing "tumail" to be forwarded to owa and so on.
+- **support shortcuts for DuckDuckGo and other search engines**: For now, only google is supportet. I.e. when typing "tumail" to be forwarded to owa and so on.
 
 ### Mid-Prio
 - **Reminder für Ablauf der Campus Sachsen Lizenz (Word & Co)**: Ist im Prinzip einfach zu machen: das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. Die Berechtigung für die Campussachsen-Website sollte optional sein.
