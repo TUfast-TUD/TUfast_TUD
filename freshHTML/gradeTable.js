@@ -1,19 +1,16 @@
-const table_html = '<div id="TUFast_table"> \
-<vs-table :data="users"> \
+const table_html = '<div id="table"> \
+<vs-table stripe :data="table"> \
   <template slot="header"> \
-	<h3>Users</h3> \
+	<h1>Deine Notenübersicht</h1> \
   </template> \
+ \
   <template slot="thead"> \
-	<vs-th> Email </vs-th> \
-	<vs-th> Name </vs-th> \
-	<vs-th> Website </vs-th> \
-	<vs-th> Nro </vs-th> \
+	<vs-th v-for="(header_text, index) in table[1]"  :sort-key="`${index}`" :key="index"> {{header_text}} </vs-th> \
   </template> \
+ \
   <template slot-scope="{data}"> \
-	<vs-tr :key="indextr" v-for="(tr, indextr) in data"> \
-	  <vs-td :data="data[indextr].username"> {{data[indextr].name}} </vs-td> \
-	  <vs-td :data="data[indextr].id"> {{data[indextr].id}} </vs-td> \
-	  <vs-td :data="data[indextr].id"> {{data[indextr].website}} </vs-td> \
+	<vs-tr :state="getColour(indextr, tr)" :key="indextr" v-for="(tr, indextr) in data.slice(2)"> \
+	  <vs-td v-for="(td, index) in tr" :key="index" :data="td"> {{td}} </vs-td> \
 	</vs-tr> \
   </template> \
 </vs-table> \

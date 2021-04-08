@@ -25,7 +25,8 @@ function getGradesFromTable() {
         table.push(new_row);
     });
 
-    console.table(table);
+    // remove ugly table from page
+    document.getElementsByTagName('table')[2].style.display = 'none';
 
     let levels = {
         mainLevel: [],
@@ -37,19 +38,11 @@ function getGradesFromTable() {
     table.filter((row, index) => row[0][3] === '0' && levels.mainLevel.indexOf(index) < 0 ? levels.moduleLevel.push(index) : []);
     table.filter((row, index) => levels.mainLevel.indexOf(index) < 0 && levels.moduleLevel.indexOf(index) < 0 && index > 2 ? levels.examLevel.push(index) : []);
 
-    // let sum = 0;
-    // table.slice(2).forEach((row) => {
-    //     if (row[3] !== "")
-    //         sum += parseInt(row[3]);
-    // });
-    // sum /= 39;
-    // console.log(sum);
-
-    applyCSSToTable(levels);
-    runVue();
+    runVue(table, levels);
 }
 
-function runVue() {
+function runVue(table, levels) {
+    console.table(levels);
 
     let x = new Vue({
         el: '#container',
@@ -57,78 +50,24 @@ function runVue() {
             console.log('Hello World from Vue!');
         },
         data: {
-            users: [
-                {
-                    id: 1,
-                    name: 'Leanne Graham',
-                    username: 'Bret',
-                    email: 'Sincere@april.biz',
-                    website: 'hildegard.org',
-                },
-                {
-                    id: 2,
-                    name: 'Ervin Howell',
-                    username: 'Antonette',
-                    email: 'Shanna@melissa.tv',
-                    website: 'anastasia.net',
-                },
-                {
-                    id: 3,
-                    name: 'Clementine Bauch',
-                    username: 'Samantha',
-                    email: 'Nathan@yesenia.net',
-                    website: 'ramiro.info',
-                },
-                {
-                    id: 4,
-                    name: 'Patricia Lebsack',
-                    username: 'Karianne',
-                    email: 'Julianne.OConner@kory.org',
-                    website: 'kale.biz',
-                },
-                {
-                    id: 5,
-                    name: 'Chelsey Dietrich',
-                    username: 'Kamren',
-                    email: 'Lucio_Hettinger@annie.ca',
-                    website: 'demarco.info',
-                },
-                {
-                    id: 6,
-                    name: 'Mrs. Dennis Schulist',
-                    username: 'Leopoldo_Corkery',
-                    email: 'Karley_Dach@jasper.info',
-                    website: 'ola.org',
-                },
-                {
-                    id: 7,
-                    name: 'Kurtis Weissnat',
-                    username: 'Elwyn.Skiles',
-                    email: 'Telly.Hoeger@billy.biz',
-                    website: 'elvis.io',
-                },
-                {
-                    id: 8,
-                    name: 'Nicholas Runolfsdottir V',
-                    username: 'Maxime_Nienow',
-                    email: 'Sherwood@rosamond.me',
-                    website: 'jacynthe.com',
-                },
-                {
-                    id: 9,
-                    name: 'Glenna Reichert',
-                    username: 'Delphine',
-                    email: 'Chaim_McDermott@dana.io',
-                    website: 'conrad.com',
-                },
-                {
-                    id: 10,
-                    name: 'Clementina DuBuque',
-                    username: 'Moriah.Stanton',
-                    email: 'Rey.Padberg@karina.biz',
-                    website: 'ambrose.net',
-                },
-            ],
+            table,
+            levels,
+        },
+        methods: {
+            getColour(row_index, row) {
+                row_index += 2;
+                grade = parseFloat(row[3].replace(',', '.'));
+                return this.levels.mainLevel.indexOf(row_index) > -1 ? 'dark' :
+                this.levels.moduleLevel.indexOf(row_index) > -1 ? 'primary' :
+                grade === '' ? 'dark' : parseFloat(grade) < 5.0 ? 'success' : 'danger'
+                // if (this.levels.mainLevel.indexOf(row_index) > -1) {
+                //     return 'dark';
+                // } else if (this.levels.moduleLevel.indexOf(row_index) > -1) {
+                //     return 'primary';
+                // } else {
+                //     return 'success';
+                // }
+            }
         }
     });
 }
