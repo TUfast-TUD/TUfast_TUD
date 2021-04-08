@@ -96,7 +96,14 @@
       "js": [
         "thirdParty/jquery-3.4.1.min.js",
         "thirdParty/Chart.bundle.min.js",
+        "thirdParty/vue.js",
+        "thirdParty/vuesax.js",
+        "freshHTML/gradeTable.js",
+        "contentScripts/pimpHISQIS_table.js",
         "contentScripts/pimpHISQIS.js"
+      ],
+      "css": [
+        "thirdParty/vuesax.css"
       ],
       "run_at": "document_start",
       "matches": [
