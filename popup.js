@@ -26,8 +26,8 @@ window.onload = async function () {
             document.getElementById("banana").innerHTML = bananaHTML
         }
 
-        //exclusive style adjustments for medicine
-        if (result.studiengang == "medizin") styleAdjustMedicine()
+        //exclusive style adjustments
+        styleAdjust(result.studiengang)
 
     })
 
@@ -64,13 +64,17 @@ window.onload = async function () {
 }
 
 //dasbhaord adjustments for medicine
-function styleAdjustMedicine() {
-    document.getElementById("qis").style.display = "none"
-    document.getElementById("moodle").style.display = "flex"
-    document.getElementById("eportal").style.display = "flex"
-    document.getElementById("je").style.display = "none"
-    document.getElementById("swdd").href = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html"
-
+function styleAdjust(studiengang) {
+    if (studiengang == "medizin") {
+        document.getElementById("qis").style.display = "none"
+        document.getElementById("moodle").style.display = "flex"
+        document.getElementById("eportal").style.display = "flex"
+        document.getElementById("matrix").style.display = "none"
+        document.getElementById("je").style.display = "none"
+        document.getElementById("swdd").href = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html"
+    } else if (studiengang == "maschinenbau") {
+        document.getElementById("je").style.display = "none"
+    }
 }
 
 function clicksToTime(clicks) {

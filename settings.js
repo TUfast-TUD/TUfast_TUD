@@ -385,10 +385,15 @@ window.onload = async function () {
     }
   })
 
-  //add medizin checkbox listener
+  //add studiengang-select listener
   document.getElementById("studiengangSelect").addEventListener("change", function () {
     let value = document.getElementById("studiengangSelect").value
-    chrome.storage.local.set({ studiengang: value }, function () { })
+    if (value == "add") {
+      document.getElementById("addStudiengang").style.display = "block"
+    } else {
+      document.getElementById("addStudiengang").style.display = "none"
+      chrome.storage.local.set({ studiengang: value }, function () { })
+    }
   })
 
   //add storage listener for autologin
