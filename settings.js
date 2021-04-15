@@ -79,9 +79,10 @@ function displayEnabled() {
     document.getElementById("additionalNotification").checked = result.additionalNotificationOnNewMail
   })
   chrome.storage.local.get(['studiengang'], function (result) {
-    console.log(result.studiengang)
-    if (result.studiengang == "medizin") {
-      document.getElementById("checkMedizin").checked = true
+    if (result.studiengang == null || result.studiengang == undefined || result.studiengang == "general") {
+      document.getElementById("studiengangSelect").value = "general"
+    } else {
+      document.getElementById("studiengangSelect").value = result.studiengang
     }
   })
 
@@ -385,13 +386,9 @@ window.onload = async function () {
   })
 
   //add medizin checkbox listener
-  document.getElementById("checkMedizin").addEventListener("click", function () {
-    console.log(this.checked)
-    if (this.checked) {
-      chrome.storage.local.set({ studiengang: "medizin" }, function () { })
-    } else {
-      chrome.storage.local.set({ studiengang: null }, function () { })
-    }
+  document.getElementById("studiengangSelect").addEventListener("change", function () {
+    let value = document.getElementById("studiengangSelect").value
+    chrome.storage.local.set({ studiengang: value }, function () { })
   })
 
   //add storage listener for autologin

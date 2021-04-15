@@ -15,9 +15,12 @@
   <p id="welcome"></p>
   <p id="settings_comment"></p>
   <p id="addition_host_permissions"></p>
-  <p style="position:relative; left:-4px" id="studiengangSection">
-    <input type="checkbox" id="checkMedizin" name="checkMedizinLabel">
-    <label for="checkMedizinLabel"><b>NEU:</b> Ich studiere Medizin und m&ouml;chte <i>exklusive Anpassungen</i> im Dashbaord.</label>
+  <p id="studiengangSection">
+    <label for="studiengang"><b>NEU:</b> Ich m&ouml;chte <i>exklusive Anpassungen</i> f&uuml;r meinen Studiengang im Dashbaord:</label>
+    <select style="width: 120px; height: 22px; text-align:center;" name="studiengang" id="studiengangSelect">
+      <option value="general">Allgemein</option>
+      <option value="medizin">Medizin</option>
+    </select>
   </p>
   <!-- endregion -->
   <!-- New Accordion section-->
