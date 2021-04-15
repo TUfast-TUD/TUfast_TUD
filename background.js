@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 //start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
@@ -23,7 +23,7 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
 		let r = JSON.parse(resp.selectedRocketIcon)
 		chrome.browserAction.setIcon({
 			path: r.link
-		});
+		})
 	} catch (e) { console.log("Cannot set rocket icon: " + e) }
 })
 
@@ -40,7 +40,7 @@ chrome.storage.local.set({ loggedOutCloudstore: false }, function () { })
 chrome.storage.local.set({ loggedOutTumed: false }, function () { })
 chrome.storage.local.get(["pdfInNewTab"], function (result) {
 	if (result.pdfInNewTab) {
-		enableHeaderListener(true);
+		enableHeaderListener(true)
 	}
 })
 
@@ -90,9 +90,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 		case 'install':
 			console.log('TUfast installed.')
 			openSettingsPage("first_visit") //open settings page
-			chrome.storage.local.set({ installed: true }, function () { });
-			chrome.storage.local.set({ showed_50_clicks: false }, function () { });
-			chrome.storage.local.set({ showed_100_clicks: false }, function () { });
+			chrome.storage.local.set({ installed: true }, function () { })
+			chrome.storage.local.set({ showed_50_clicks: false }, function () { })
+			chrome.storage.local.set({ showed_100_clicks: false }, function () { })
 			chrome.storage.local.set({ isEnabled: false }, function () { })
 			chrome.storage.local.set({ fwdEnabled: true }, function () { })
 			chrome.storage.local.set({ mostLiklySubmittedReview: false }, function () { })
@@ -118,7 +118,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
-			break;
+			chrome.storage.local.set({ studiengang: null }, function () { })
+			break
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
 			chrome.storage.local.get(['encryption_level'], (resp) => {
@@ -215,15 +216,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 					avRockets.push("RI3")
 					chrome.browserAction.setIcon({
 						path: "RocketIcons/3_120px.png"
-					});
+					})
 				}
 				chrome.storage.local.set({ "availableRockets": avRockets })
 
 			})
-			break;
+			break
 		default:
 			console.log('Other install events within the browser for TUfast.')
-			break;
+			break
 	}
 })
 
@@ -305,8 +306,8 @@ async function owaFetch() {
 		if (!(result.NumberOfUnreadMails === undefined || result.NumberOfUnreadMails === "undefined") && result.additionalNotificationOnNewMail) {
 			if (result.NumberOfUnreadMails < numberUnreadMails) {
 				if (confirm("Neue Mail in deinem TU Dresden Postfach!\nDruecke 'Ok' um OWA zu oeffnen.")) {
-					let URL = "https://msx.tu-dresden.de/owa/auth/logon.aspx?url=https%3a%2f%2fmsx.tu-dresden.de%2fowa&reason=0";
-					chrome.tabs.create({ url: URL });
+					let URL = "https://msx.tu-dresden.de/owa/auth/logon.aspx?url=https%3a%2f%2fmsx.tu-dresden.de%2fowa&reason=0"
+					chrome.tabs.create({ url: URL })
 				}
 			}
 		}
@@ -401,12 +402,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			else { chrome.tabs.create({ url: "chrome://extensions/shortcuts" }) } //for chrome and everything else
 			break
 		case 'toggle_pdf_inline_setting':
-			enableHeaderListener(request.enabled);
+			enableHeaderListener(request.enabled)
 			break
 		case "update_rocket_logo_easteregg":
 			chrome.browserAction.setIcon({
 				path: "RocketIcons/3_120px.png"
-			});
+			})
 			break
 		default:
 			console.log('Cmd not found!')
@@ -453,19 +454,19 @@ function enableHeaderListener(enabled) {
 				],
 			},
 			["blocking", "responseHeaders"]
-		);
+		)
 	} else {
-		chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc);
+		chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
 	}
 }
 
 function headerListenerFunc(details) {
 	let header = details.responseHeaders.find(
 		e => e.name.toLowerCase() === "content-disposition"
-	);
-	if (!header.value.includes(".pdf")) return; //only for pdf
-	header.value = "inline";
-	return { responseHeaders: details.responseHeaders };
+	)
+	if (!header.value.includes(".pdf")) return //only for pdf
+	header.value = "inline"
+	return { responseHeaders: details.responseHeaders }
 }
 
 //open settings (=options) page, if required set params
@@ -490,17 +491,17 @@ function loggedOut(portal) {
 	if (portal === "loggedOutCloudstore") { timeout = 7000 }
 	let loggedOutPortal = {}
 	loggedOutPortal[portal] = true
-	chrome.storage.local.set(loggedOutPortal, function () { });
+	chrome.storage.local.set(loggedOutPortal, function () { })
 	setTimeout(function () {
 		loggedOutPortal[portal] = false
-		chrome.storage.local.set(loggedOutPortal, function () { });
-	}, timeout);
+		chrome.storage.local.set(loggedOutPortal, function () { })
+	}, timeout)
 }
 
 //show badge
 function show_badge(Text, Color, timeout) {
-	chrome.browserAction.setBadgeText({ text: Text });
-	chrome.browserAction.setBadgeBackgroundColor({ color: Color });
+	chrome.browserAction.setBadgeText({ text: Text })
+	chrome.browserAction.setBadgeBackgroundColor({ color: Color })
 	//setTimeout(function() {
 	//  chrome.browserAction.setBadgeText({text: ""});
 	//}, timeout);
@@ -509,12 +510,12 @@ function show_badge(Text, Color, timeout) {
 //save_click_counter
 function save_clicks(counter) {
 	//load number of saved clicks and add counter!
-	var saved_clicks = 0;
+	var saved_clicks = 0
 	chrome.storage.local.get(['saved_click_counter'], (result) => {
 		saved_clicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter
 		chrome.storage.local.set({ saved_click_counter: saved_clicks + counter }, function () {
 			console.log('You just saved yourself ' + counter + " clicks!")
-		});
+		})
 		//make rocketIcons available if appropriate
 		chrome.storage.local.get(["availableRockets"], (resp) => {
 			let avRockets = resp.availableRockets

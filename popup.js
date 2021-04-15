@@ -5,7 +5,7 @@ const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target
 window.onload = async function () {
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter"], async function (result) {
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang"], async function (result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
@@ -25,6 +25,9 @@ window.onload = async function () {
         if (result.saved_click_counter > 100) {
             document.getElementById("banana").innerHTML = bananaHTML
         }
+
+        //exclusive style adjustments for medicine
+        if (result.studiengang == "medizin") styleAdjustMedicine()
 
     })
 
@@ -58,6 +61,16 @@ window.onload = async function () {
             }
         }
     })
+}
+
+//dasbhaord adjustments for medicine
+function styleAdjustMedicine() {
+    document.getElementById("qis").style.display = "none"
+    document.getElementById("moodle").style.display = "flex"
+    document.getElementById("eportal").style.display = "flex"
+    document.getElementById("je").style.display = "none"
+    document.getElementById("swdd").href = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html"
+
 }
 
 function clicksToTime(clicks) {
