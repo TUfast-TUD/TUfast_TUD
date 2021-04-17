@@ -1,6 +1,6 @@
 # TUfast 🚀
 TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. Das spart Zeit und Nerven!
-Aktuell ist TUfast verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-fast.de)
+TUfast ist verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-fast.de).
 ______________
 
 Für Entwickler: OWAHackFetch ist die Main-Branch!
