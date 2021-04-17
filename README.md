@@ -27,16 +27,16 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 
 ### Häufig nachgefragt
 - **Portierung für Safari [assinged]**: Dafür gibt es schon einen PR (in Arbeit)
-- **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js.
-- **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
 - **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
 - **Prüfen von Login-Daten**: Damit man bei der Eingabe falscher Login-Daten nicht für die Portale gesperrt wird, sollte TUfast beim speichern der Login-Daten prüfen, ob diese valide sind.
 - **Unterstütze https://videocampus.sachsen.de**: Dieses Feature wird häufig nachgefragt. Die Berechtigung für sachsen.de/ muss optional sein! 
-- **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..) **: Aktuell wird hier nur google supported.
+- **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..)**: Aktuell wird hier nur google supported.
 
 ### Manchmal nachgefragt
 - **Reminder für Ablauf der Campus Sachsen Lizenz**: Das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. TUfast könnte den Nutzer erinnern die Lizenz zu erneuern, bevor sie abläuft.
-- Benachrichtigungen für neue Noten im HISQIS, jExam oder Selma
+- **Benachrichtigungen für neue Noten** im HISQIS, jExam oder Selma
+- **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js.
+- **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
 
 ### Weiteres
 - Migrierung zu [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
