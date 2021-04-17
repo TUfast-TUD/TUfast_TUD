@@ -9,7 +9,7 @@ Lizenz und Copyright: Informationen werden in Kürze hinzugefügt. Meldet euch b
 ## Funktionen
  - Automatisches Anmelden in Opal, Selma und Co.
  - Opal-Kurse und Opal-Favoriten über das Dashbaord öffnen
- - Benachrichtigungen für neue Mails im TU Dresden Postfach
+ - Benachrichtigungen für neue E-Mails im TU Dresden Postfach
  - Abkürzungen in der Google-Suche, z.B. "tumail" öffnet OWA Mail TU Dresden
  - Shortcuts für TU Dresden IT-Services, z.B. Alt+O öffnet Opal
  - Notenstatistik im Hisqis
