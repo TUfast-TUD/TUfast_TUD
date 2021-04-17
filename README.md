@@ -48,7 +48,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - Migrierung zu [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/).
 - Option, die Einstellungen und OPAL-Kurse über die Broweser zu synchronisieren.
 
-## Thanks
+## 🖤🖤🖤
 Danke an alle Contributer und Unterstützer. Das ist großartige Arbeit für Studierende und die TU Dresden!
 
 ## Kontakt
