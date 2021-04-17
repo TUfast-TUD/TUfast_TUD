@@ -23,9 +23,9 @@ Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lok
 Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing)
 
 ## Zukünftige Entwicklung und Feature Ideen
-Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ein Feature vor oder fang an zu entwickeln! Hier sind ein paar Ideen:
+Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ein Feature vor oder fang an zu entwickeln! Hier sind ein paar Ideen, sortiert nach Anzahl der Nachfragen:
 
-### High-Prio
+### Häufig nachgefragt
 - **Portierung für Safari [assinged]**: Dafür gibt es schon einen PR (in Arbeit)
 - **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js.
 - **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
@@ -34,11 +34,11 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - **Unterstütze https://videocampus.sachsen.de**: Dieses Feature wird häufig nachgefragt. Die Berechtigung für sachsen.de/ muss optional sein! 
 - **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..) **: Aktuell wird hier nur google supported.
 
-### Mid-Prio
+### Manchmal nachgefragt
 - **Reminder für Ablauf der Campus Sachsen Lizenz**: Das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. TUfast könnte den Nutzer erinnern die Lizenz zu erneuern, bevor sie abläuft.
 - Benachrichtigungen für neue Noten im HISQIS, jExam oder Selma
 
-### Low-Prio
+### Weiteres
 - Migrierung zu [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
 - Option, die Einstellungen und OPAL-Kurse über die Broweser zu synchronisieren.
 
