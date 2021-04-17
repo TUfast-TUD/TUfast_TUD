@@ -247,15 +247,6 @@
     },
     {
       "js": [
-        "contentScripts/extra.js"
-      ],
-      "run_at": "document_start",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/*"
-      ]
-    },
-    {
-      "js": [
         "contentScripts/content_bildungsportal_other.js"
       ],
       "run_at": "document_start",
