@@ -49,7 +49,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - Option, die Einstellungen und OPAL-Kurse über die Broweser zu synchronisieren.
 
 ## 🖤🖤🖤
-Danke an alle Contributer und Unterstützer. Das ist großartige Arbeit für Studierende und die TU Dresden!
+Danke an alle Contributer und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden!
 
 ## Kontakt
 frage@tu-fast.de
