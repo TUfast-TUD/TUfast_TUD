@@ -4,6 +4,9 @@ TUfast ist verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https
 
 TUfast soll für deinen Studiengang angepasst werden? Lass es uns wissen: kontakiere uns!
 Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
+
+![image](https://user-images.githubusercontent.com/31124624/115123463-72e24980-9fbd-11eb-8ff9-7466ba8e0df2.png)
+
 ______________
 
 Für Entwickler: OWAHackFetch ist die Main-Branch!
