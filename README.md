@@ -20,7 +20,7 @@ Unterstützt werden u.a. die Portale OPAL, hisqis, selma, cloudstore, outlook we
 
 ## Datenschutz
 Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lokal auf dem PC gespeichert und verschlüsselt.
-Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing)
+Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing).
 
 ## Zukünftige Entwicklung und Feature Ideen
 Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ein Feature vor oder fang an zu entwickeln! Hier sind ein paar Ideen, sortiert nach Anzahl der Nachfragen:
