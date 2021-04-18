@@ -96,14 +96,7 @@
       "js": [
         "thirdParty/jquery-3.4.1.min.js",
         "thirdParty/Chart.bundle.min.js",
-        "thirdParty/vue.js",
-        "thirdParty/vuesax.js",
-        "freshHTML/gradeTable.js",
-        "contentScripts/pimpHISQIS_table.js",
         "contentScripts/pimpHISQIS.js"
-      ],
-      "css": [
-        "thirdParty/vuesax.css"
       ],
       "run_at": "document_start",
       "matches": [
@@ -111,6 +104,22 @@
       ],
       "include_globs": [
         "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*auswahlBaum*"
+      ]
+    },
+    {
+      "js": [
+        "thirdParty/vue.js",
+        "thirdParty/vuesax.js",
+        "freshContent/gradeTable.js",
+        "contentScripts/pimpHISQIS_table.js"
+      ],
+      "css": [
+        "thirdParty/vuesax.css",
+        "freshContent/gradeTable.css"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
       ]
     },
     {

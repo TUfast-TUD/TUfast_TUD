@@ -4,7 +4,9 @@ function getGradesFromTable() {
     // create container for vuejs table
     const container = document.createElement('div');
     container.id = 'container';
-    document.getElementsByTagName('table')[2].insertAdjacentElement('afterend', container);
+    const atable = document.getElementsByTagName('table')[2];
+    console.log(atable);
+    atable.insertAdjacentElement('afterend', container);
     container.innerHTML = table_html;
 
     let table = [];
@@ -25,7 +27,7 @@ function getGradesFromTable() {
         table.push(new_row);
     });
 
-    // remove ugly table from page
+    // remove that ugly table from the page
     document.getElementsByTagName('table')[2].style.display = 'none';
 
     let levels = {
@@ -34,6 +36,7 @@ function getGradesFromTable() {
         examLevel: []
     };
 
+    // Logic to figure out which row is a section, module or exam
     table.filter((row, index) => row[0][1] === '0' || parseInt(row[0]) < 1000 ? levels.mainLevel.push(index) : []);
     table.filter((row, index) => row[0][3] === '0' && levels.mainLevel.indexOf(index) < 0 ? levels.moduleLevel.push(index) : []);
     table.filter((row, index) => levels.mainLevel.indexOf(index) < 0 && levels.moduleLevel.indexOf(index) < 0 && index > 2 ? levels.examLevel.push(index) : []);
@@ -41,10 +44,9 @@ function getGradesFromTable() {
     runVue(table, levels);
 }
 
+// Vue.js logic, attaches Vue to the new container under the old table and draws the new table
 function runVue(table, levels) {
-    console.table(levels);
-
-    let x = new Vue({
+    new Vue({
         el: '#container',
         mounted() {
             console.log('Hello World from Vue!');
@@ -56,17 +58,10 @@ function runVue(table, levels) {
         methods: {
             getColour(row_index, row) {
                 row_index += 2;
-                grade = parseFloat(row[3].replace(',', '.'));
+                const passedText = row[5];
                 return this.levels.mainLevel.indexOf(row_index) > -1 ? 'dark' :
                 this.levels.moduleLevel.indexOf(row_index) > -1 ? 'primary' :
-                grade === '' ? 'dark' : parseFloat(grade) < 5.0 ? 'success' : 'danger'
-                // if (this.levels.mainLevel.indexOf(row_index) > -1) {
-                //     return 'dark';
-                // } else if (this.levels.moduleLevel.indexOf(row_index) > -1) {
-                //     return 'primary';
-                // } else {
-                //     return 'success';
-                // }
+                passedText === '' ? 'dark' : passedText === 'bestanden' ? 'success' : 'danger'
             }
         }
     });
