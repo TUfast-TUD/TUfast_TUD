@@ -6,7 +6,7 @@ chrome.storage.local.get(['isEnabled'], function (result) {
             let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
             let rawGrades = parseGrades()
             $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal" style="margin-bottom:0px">powered by <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p><p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">test</a></p>'
+                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal" style="margin-bottom:0px">powered by <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p><p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)"></a></p>'
             )
             var ctx = document.getElementById('myChart').getContext('2d')
             ctx.canvas.width = 500
@@ -131,3 +131,5 @@ function getWeightedAverage(rawGrades) {
     let totalWeight = grades.reduce((acc, value) => acc + value.weight, 0)
     return totalWeight ? (grades.reduce((acc, value) => acc + value.grade * value.weight, 0) / totalWeight).toFixed(1) : 0
 }
+
+undefined

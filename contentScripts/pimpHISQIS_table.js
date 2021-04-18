@@ -1,3 +1,5 @@
+console.log("pimping table ... maybe :)")
+
 //this needs to be done first
 let oldTable = document.getElementsByTagName('table')[2]
 let changeTableLink = document.getElementById("changeTableLink")
@@ -99,3 +101,5 @@ function runVue(table, levels) {
         }
     })
 }
+
+undefined

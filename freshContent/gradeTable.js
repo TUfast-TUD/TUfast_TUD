@@ -24,3 +24,5 @@ const table_html = '<div id="pimpedTable" style="display:none"> \
   </template> \
 </vs-table> \
 </div>'
+
+undefined
