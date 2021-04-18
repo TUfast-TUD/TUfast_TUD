@@ -1,5 +1,4 @@
 chrome.storage.local.get(['loggedOutElearningMED'], function (result) {
-    console.log(result.loggedOutElearningMED)
     if (!result.loggedOutElearningMED) {
         if (document.readyState !== 'loading') {
             loginElearningMED(result.loggedOutElearningMED)
@@ -19,6 +18,13 @@ function loginElearningMED(loggedOutElearningMED) {
     } else if (location.href === "https://elearning.med.tu-dresden.de/moodle/academiLogin.html" && document.querySelectorAll('[href="https://elearning.med.tu-dresden.de/moodle/auth/shibboleth/index.php"]')[0]) {
         document.querySelectorAll('[href="https://elearning.med.tu-dresden.de/moodle/auth/shibboleth/index.php"]')[0].click()
         chrome.runtime.sendMessage({ cmd: "save_clicks", click_count: 1 })
+    }
+
+    //second login screen (or it was just changed?!)
+    if (location.href.includes("elearning.med.tu-dresden.de/moodle/login")) {
+        if (document.querySelectorAll("a[title='ZIH-Login']")[0].href = "https://elearning.med.tu-dresden.de/moodle/auth/shibboleth/index.php") {
+            document.querySelectorAll("a[title='ZIH-Login']")[0].click()
+        }
     }
 
     //detecting logout

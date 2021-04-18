@@ -78,6 +78,13 @@ function displayEnabled() {
   chrome.storage.local.get(['additionalNotificationOnNewMail'], function (result) {
     document.getElementById("additionalNotification").checked = result.additionalNotificationOnNewMail
   })
+  chrome.storage.local.get(['studiengang'], function (result) {
+    if (result.studiengang == null || result.studiengang == undefined || result.studiengang == "general") {
+      document.getElementById("studiengangSelect").value = "general"
+    } else {
+      document.getElementById("studiengangSelect").value = result.studiengang
+    }
+  })
 
   chrome.storage.local.get(['pdfInInline'], function (result) {
     this.document.getElementById('switch_pdf_inline').checked = result.pdfInInline
@@ -375,6 +382,17 @@ window.onload = async function () {
       })
     } else {
       chrome.storage.local.set({ additionalNotificationOnNewMail: false })
+    }
+  })
+  
+  //add studiengang-select listener
+  document.getElementById("studiengangSelect").addEventListener("change", function () {
+    let value = document.getElementById("studiengangSelect").value
+    if (value == "add") {
+      document.getElementById("addStudiengang").style.display = "block"
+    } else {
+      document.getElementById("addStudiengang").style.display = "none"
+      chrome.storage.local.set({ studiengang: value }, function () { })
     }
   })
 
