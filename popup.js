@@ -22,9 +22,9 @@ window.onload = async function () {
         this.document.getElementById('time').onclick = openSettingsTimeSection
 
         //display banana
-        if (result.saved_click_counter > 100) {
-            document.getElementById("banana").innerHTML = bananaHTML
-        }
+        // if (result.saved_click_counter > 100) {
+        //     document.getElementById("banana").innerHTML = bananaHTML
+        // }
 
         //exclusive style adjustments
         styleAdjust(result.studiengang)
