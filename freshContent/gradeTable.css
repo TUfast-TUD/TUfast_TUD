@@ -58,3 +58,9 @@
 	align-items: center;
 	width: 33%
 }
+
+/* fix original css */
+
+#portal-footer {
+	height: inherit !important;
+}
