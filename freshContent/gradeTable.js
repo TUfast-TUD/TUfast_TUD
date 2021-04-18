@@ -1,4 +1,4 @@
-const table_html = '<div id="table"> \
+const table_html = '<div id="pimpedTable" style="display:none"> \
 <vs-table hover-flat :data="table"> \
   <template slot="header"> \
     <h1>Deine Notenübersicht</h1> \
