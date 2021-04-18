@@ -1,59 +1,59 @@
 console.log("Pimping up hisqis...")
 
 chrome.storage.local.get(['isEnabled'], function (result) {
-    if (result.isEnabled) {
-        document.addEventListener("DOMContentLoaded", function () {
-            let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
-            let rawGrades = parseGrades()
-            $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-                '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal" style="margin-bottom:0px">powered by <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p><p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)"></a></p>'
-            )
-            var ctx = document.getElementById('myChart').getContext('2d')
-            ctx.canvas.width = 500
-            ctx.canvas.height = 250
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['1', '2', '3', '4', 'nicht bestanden'],
-                    datasets: [{
-                        data: countGrades(rawGrades.filter(x => !x.isModule)),
-                        backgroundColor: [
-                            '#0b2a51',
-                            '#0b2a51',
-                            '#0b2a51',
-                            '#0b2a51',
-                            '#0b2a51',
-                        ],
-                        borderColor: [
-                            '#0b2a51',
-                        ],
-                        borderWidth: 1
-                    }]
+    //if (result.isEnabled) {
+    document.addEventListener("DOMContentLoaded", function () {
+        let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+        let rawGrades = parseGrades()
+        $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
+            '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal" style="margin-bottom:0px">powered by <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a></p><p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml; Firefox!</a></p>'
+        )
+        var ctx = document.getElementById('myChart').getContext('2d')
+        ctx.canvas.width = 500
+        ctx.canvas.height = 250
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['1', '2', '3', '4', 'nicht bestanden'],
+                datasets: [{
+                    data: countGrades(rawGrades.filter(x => !x.isModule)),
+                    backgroundColor: [
+                        '#0b2a51',
+                        '#0b2a51',
+                        '#0b2a51',
+                        '#0b2a51',
+                        '#0b2a51',
+                    ],
+                    borderColor: [
+                        '#0b2a51',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false,
                 },
-                options: {
-                    responsive: false,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                //display: true,
-                                //labelString: "<a href='http://www.yahoo.com'>here</a>"
-                            }
-                        }]
-                    }
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            //display: true,
+                            //labelString: "<a href='http://www.yahoo.com'>here</a>"
+                        }
+                    }]
                 }
-            })
-
+            }
         })
-    }
+
+    })
+    //}
 })
 
 //returns: [{grade: X.X, isModule: true}]

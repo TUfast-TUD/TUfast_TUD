@@ -26,13 +26,13 @@ changeTableLink.onclick = function () {
 function setPimpedTable() {
     oldTable.style.display = "none"
     pimpedTable.style.display = "block"
-    changeTableLink.innerHTML = "langweiligen, alten Tabelle"
+    changeTableLink.innerHTML = "langweiligen, alten Tabelle."
 }
 
 function setOldTable() {
     oldTable.style.display = "block"
     pimpedTable.style.display = "none"
-    changeTableLink.innerHTML = "neuen, coolen TUfast-Tabelle 🔥"
+    changeTableLink.innerHTML = "neuen, coolen TUfast-Tabelle 🔥 (Beta)."
 }
 
 function getGradesFromTable() {
