@@ -47,6 +47,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 ### Weiteres
 - Migrierung zu [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/).
 - Option, die Einstellungen und OPAL-Kurse über die Broweser zu synchronisieren.
+- **Ein Masterpasswort** das man jedes mal vor dem AutoLogin eingeben muss um die Anwendung noch sicherer zu machen.
 
 ## 🖤🖤🖤
 Danke an alle Contributer und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden!
