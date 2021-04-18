@@ -2,7 +2,6 @@ console.log("Pimping up hisqis...")
 
 chrome.storage.local.get(['isEnabled'], function (result) {
     if (result.isEnabled) {
-        console.log('method run.');
         document.addEventListener("DOMContentLoaded", function () {
             let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
             let rawGrades = parseGrades();
