@@ -1,6 +1,6 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "5.5.1.1",
+  "version": "5.5.1.2",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage",
@@ -103,7 +103,26 @@
         "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
       ],
       "include_globs": [
-        "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*auswahlBaum*"
+        "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*"
+      ]
+    },
+    {
+      "js": [
+        "thirdParty/vue.js",
+        "thirdParty/vuesax.js",
+        "freshContent/gradeTable.js",
+        "contentScripts/pimpHISQIS_table.js"
+      ],
+      "css": [
+        "thirdParty/vuesax.css",
+        "freshContent/gradeTable.css"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
+      ],
+      "include_globs": [
+        "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*"
       ]
     },
     {

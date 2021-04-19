@@ -4,7 +4,7 @@ chrome.storage.local.get(["pdfInNewTab"], function (result) {
         document.addEventListener("DOMNodeInserted", function (e) {
             modifyPdfLinks();
         });
-        //on document changes
+        //on document loaded
         window.addEventListener(
             "load",
             function () {
@@ -41,7 +41,6 @@ function pdfButtonExternalReload() {
         const fibercode_pos = document.documentURI.lastIndexOf(fibercode_query);
 
         const fibercode = document.documentURI.slice(fibercode_pos+fibercode_query.length);
-
 
         // check if fibercode is already present to not reload the same page forever
         chrome.storage.local.get(['fibercode'], (result) => {

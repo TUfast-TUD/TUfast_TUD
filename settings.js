@@ -384,7 +384,7 @@ window.onload = async function () {
       chrome.storage.local.set({ additionalNotificationOnNewMail: false })
     }
   })
-
+  
   //add studiengang-select listener
   document.getElementById("studiengangSelect").addEventListener("change", function () {
     let value = document.getElementById("studiengangSelect").value

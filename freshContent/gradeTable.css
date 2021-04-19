@@ -1,0 +1,66 @@
+.tr-table-state-dark .td {
+	background-color: #2A272AAA;
+	color: white;
+}
+
+.tr-table-state-dark .td:first-child {
+	background-color: #2A272AAA;
+	color: white;
+}
+
+.tr-table-state-danger .td, .red {
+	background-color: #CE5D7399;
+}
+
+.tr-table-state-danger .td:first-child {
+	background-color: #2A272AAA;
+	color: white;
+}
+
+.tr-table-state-success .td, .green {
+	background-color: #91F08C99;
+}
+
+.tr-table-state-success .td:first-child {
+	background-color: #2A272AAA;
+	color: white;
+}
+
+.tr-table-state-primary .td, .blue {
+	background-color: #90B5FF99;
+}
+
+.tr-table-state-primary .td:first-child {
+	background-color: #2A272AAA;
+	color: white;
+}
+
+.tr-table-state-success, .tr-table-state-primary, .tr-table-state-danger {
+	color: black;
+}
+
+.info-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	width: 50%;
+}
+
+.square {
+	width: 20px;
+	height: 20px;
+	margin: 0 8px;
+}
+
+.info-row__info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 33%
+}
+
+/* fix original css */
+
+#portal-footer {
+	height: inherit !important;
+}

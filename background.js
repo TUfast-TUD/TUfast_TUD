@@ -114,6 +114,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ flakeState: false }, function () { })
 			chrome.storage.local.set({ availableRockets: ["RI_default"] }, function () { })
 			chrome.storage.local.set({ foundEasteregg: false }, function () { })
+			chrome.storage.local.set({ hisqisPimpedTable: true }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
 			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
@@ -203,6 +204,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.get(['selectedRocketIcon'], function (result) {
 				if (result.selectedRocketIcon === undefined || result.selectedRocketIcon === null) {
 					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
+				}
+			})
+			//check if hisqisPimpedTable
+			chrome.storage.local.get(['hisqisPimpedTable'], function (result) {
+				if (result.hisqisPimpedTable === undefined || result.hisqisPimpedTable === null) {
+					chrome.storage.local.set({ hisqisPimpedTable: true }, function () { })
 				}
 			})
 			//if easteregg was discovered in an earlier version: enable and select specific rocket!
