@@ -61,6 +61,10 @@ function getGradesFromTable() {
         })
         table.push(new_row)
     })
+    
+    //if first row is Prüfungsnr., then we need to add dummy row[0]
+    //this is required, because there are two different views of the hisqis table, dependent on how you navigate there
+    if (table[0][0] == "Prüfungsnr.") table.unshift(["dummy"])
 
     // remove that ugly table from the page
     oldTable.style.display = 'none'
