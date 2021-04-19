@@ -73,7 +73,7 @@ function getGradesFromTable() {
 
     // Logic to figure out which row is a section, module or exam
     table.filter((row, index) => row[0][1] === '0' || parseInt(row[0]) < 1000 ? levels.mainLevel.push(index) : [])
-    table.filter((row, index) => row[0][3] === '0' && levels.mainLevel.indexOf(index) < 0 ? levels.moduleLevel.push(index) : [])
+    table.filter((row, index) => row[0].slice(-2)[0] === '0' && levels.mainLevel.indexOf(index) < 0 ? levels.moduleLevel.push(index) : [])
     table.filter((row, index) => levels.mainLevel.indexOf(index) < 0 && levels.moduleLevel.indexOf(index) < 0 && index > 2 ? levels.examLevel.push(index) : [])
 
     runVue(table, levels)
@@ -83,9 +83,6 @@ function getGradesFromTable() {
 function runVue(table, levels) {
     new Vue({
         el: '#container',
-        mounted() {
-            console.log('Hello World from Vue!')
-        },
         data: {
             table,
             levels,
