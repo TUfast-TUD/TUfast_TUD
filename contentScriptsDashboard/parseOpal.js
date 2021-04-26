@@ -115,5 +115,12 @@ function parseCoursesFromWebPage() {
             catch (e) {console.log("Error in parsing course list. Could not parse course list: " + e) }
         }
     }
+    
+    //alert, if still null-entries found
+    let getAllNullEntriesFinal = course_list.list.filter(el => !el.link && !el.name)
+    if(getAllNullEntriesFinal.length > 0) {console.log("Possible Error in parsing courses. Found null entries.")}
+    //if present, remove all null entries
+    course_list = course_list.list.filter(el => !(!el.link && !el.name))
+    
     return course_list
 }
