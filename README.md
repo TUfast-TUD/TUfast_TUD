@@ -7,10 +7,6 @@ Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
 
 ![image](https://user-images.githubusercontent.com/31124624/115123463-72e24980-9fbd-11eb-8ff9-7466ba8e0df2.png)
 
-______________
-
-Für Entwickler: OWAHackFetch ist die Main-Branch!
-Lizenz und Copyright: Informationen werden in Kürze hinzugefügt. Meldet euch bei aktuen Fragen!
 
 ## Funktionen
  - Automatisches Anmelden in Opal, Selma und Co.
@@ -43,6 +39,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - **Benachrichtigungen für neue Noten** im HISQIS, jExam oder Selma.
 - **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js.
 - **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
+- Aufrufen ungelesener Nachrichten von Matrix-Chat
 
 ### Weiteres
 - Migrierung zu [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/).
