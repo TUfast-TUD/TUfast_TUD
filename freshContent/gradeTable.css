@@ -35,7 +35,16 @@
 	color: white;
 }
 
-.tr-table-state-success, .tr-table-state-primary, .tr-table-state-danger {
+.tr-table-state-warn .td {
+	background-color: #E5EE1B99;
+}
+
+.tr-table-state-warn .td:first-child {
+	background-color: #2A272AAA;
+	color: white;
+}
+
+.tr-table-state-success, .tr-table-state-primary, .tr-table-state-danger, .tr-table-state-warning {
 	color: black;
 }
 
