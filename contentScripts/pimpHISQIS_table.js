@@ -97,7 +97,8 @@ function runVue(table, levels) {
                 const passedText = row[5]
                 return this.levels.mainLevel.indexOf(row_index) > -1 ? 'dark' :
                     this.levels.moduleLevel.indexOf(row_index) > -1 ? 'primary' :
-                        passedText === '' ? 'dark' : passedText === 'bestanden' ? 'success' : 'danger'
+                        passedText === '' ? 'dark' : passedText === 'bestanden' ? 'success' :
+                        passedText === 'in Bearbeitung' ? 'warn' : 'danger'
             }
         }
     })
