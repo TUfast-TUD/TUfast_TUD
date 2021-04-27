@@ -36,7 +36,8 @@ chrome.storage.local.set({ loggedOutOpal: false }, function () { })
 chrome.storage.local.set({ loggedOutOwa: false }, function () { })
 chrome.storage.local.set({ loggedOutMagma: false }, function () { })
 chrome.storage.local.set({ loggedOutJexam: false }, function () { })
-chrome.storage.local.set({ loggedOutCloudstore: false }, function () { })
+chrome.storage.local.set({ loggedOutCloudstore: false }, function () {});
+chrome.storage.local.set({ loggedOutTex: false }, function () {});
 chrome.storage.local.set({ loggedOutTumed: false }, function () { })
 chrome.storage.local.get(["pdfInNewTab"], function (result) {
 	if (result.pdfInNewTab) {
@@ -52,17 +53,57 @@ function regAddContentScripts() {
 	//additional content script injection CHROME
 	try {
 		chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-			// create rule
+			// create rules
 			var ruleTUMED = {
 				conditions: [
 					new chrome.declarativeContent.PageStateMatcher({
-						pageUrl: { hostEquals: 'eportal.med.tu-dresden.de', schemes: ['https'] }
+						pageUrl: {
+							hostEquals: 'eportal.med.tu-dresden.de',
+							schemes: ['https']
+						}
 					})
 				],
-				actions: [new chrome.declarativeContent.RequestContentScript({ js: ["contentScripts/content_tumed.js"] })]
-			}
+				actions: [
+					new chrome.declarativeContent.RequestContentScript({
+						js: ["contentScripts/content_tumed.js"]
+					})
+				]
+			};
+			var ruleTEX = {
+				conditions: [
+					new chrome.declarativeContent.PageStateMatcher({
+						pageUrl: {
+							hostEquals: "tex.zih.tu-dresden.de",
+							schemes: ["https"],
+						},
+					}),
+				],
+				actions: [
+					new chrome.declarativeContent.RequestContentScript({
+						js: ["contentScripts/content_tex.js"],
+					}),
+				],
+			};
+			//thats a new version of IDP
+			var ruleIDP = {
+				conditions: [
+					new chrome.declarativeContent.PageStateMatcher({
+						pageUrl: {
+							hostEquals: "idp.tu-dresden.de",
+							schemes: ["https"],
+						},
+					}),
+				],
+				actions: [
+					new chrome.declarativeContent.RequestContentScript({
+						js: ["contentScripts/content_idp.js"],
+					}),
+				],
+			};
 			// register rule
-			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED])
+			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
+			chrome.declarativeContent.onPageChanged.addRules([ruleIDP]);
+      		chrome.declarativeContent.onPageChanged.addRules([ruleTEX]);
 			console.log("Tried to register addtional content scripts. Success unconfirmed.")
 		})
 	} catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
@@ -73,7 +114,17 @@ function regAddContentScripts() {
 			"js": [{ file: "contentScripts/content_tumed.js" }],
 			"matches": ["https://eportal.med.tu-dresden.de/*"],
 			"runAt": "document_start"
-		}).then(() => console.log("Successfully registered additional content scripts for FF"))
+		}).then(() => console.log("Successfully registered additional content script tumed for FF"))
+		browser.contentScripts.register({
+			"js": [{ file: "contentScripts/content_tex.js" }],
+			"matches": ["https://tex.zih.tu-dresden.de/*"],
+			"runAt": "document_end"
+		}).then(() => console.log("Successfully registered additional content script tex for FF"))
+		browser.contentScripts.register({
+			"js": [{ file: "contentScripts/content_idp.js" }],
+			"matches": ["https://idp.tu-dresden.de/idp/profile/*"],
+			"runAt": "document_start"
+		}).then(() => console.log("Successfully registered additional content script idp for FF"))
 	} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
 }
 

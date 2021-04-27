@@ -1,5 +1,4 @@
 chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], function (result) {
-    console.log('GOT: ' + result.loggedOutSelma)
     if (result.isEnabled && !result.loggedOutSelma) {
         document.addEventListener('DOMContentLoaded', function () {
             if (document.getElementById('field_user')) {
