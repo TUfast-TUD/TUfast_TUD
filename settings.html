@@ -9,36 +9,36 @@
 
 <body>
   <p class="heading">Willkommen bei TUfast &#x1F680; </p>
-  <p class="">Hier kannst alle Funktionen entdecken und Einstellungen vornehmen.</p>
+  <p class="">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</p>
   <img style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px;"
     src="./images/DashboardTutorialSmall.png">
   <p id="welcome"></p>
   <p id="settings_comment"></p>
   <p id="addition_host_permissions"></p>
   <p id="studiengangSection">
-    <label for="studiengang"><b>NEU:</b> Ich m&ouml;chte <i>exklusive Anpassungen</i> f&uuml;r meinen Studiengang im Dashbaord:</label>
+    <label for="studiengang"><b>NEU:</b> Ich m&ouml;chte <i>exklusive Anpassungen</i> f&uuml;r meinen Studiengang im Dashboard:</label>
     <select style="height: 22px; text-align:center;" name="studiengang" id="studiengangSelect">
       <option value="general">Allgemein</option>
       <option value="medizin">Medizin</option>
       <option value="maschinenbau">Maschinenbau</option>
-      <option value="add">Studiengang hinzuf&uuml;gen...</option>
+      <option value="add">Studiengang hinzuf&uuml;gen ...</option>
     </select>
   </p>
   <p id="addStudiengang" style="display: none">Um <i>exklusive Personalisierung</i> von TUfast f&uuml;r deinen Studiengang zu erhalten, wende dich bitte an deinen <a href="https://www.stura.tu-dresden.de/fachschaften" target="_blank">FSR</a>. Dieser soll uns kontaktieren.</p>
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="auto_login_settings">Automatisches Anmelden in Opal, Selma & Co.</button>
+  <button class="accordion" id="auto_login_settings">Automatisches Anmelden in OPAL, selma & Co.</button>
   <div class="panel">
-    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine Selma
+    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine selma
       Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschl&uuml;sselt
       gespeichert.<br>
       Du kannst sie jederzeit l&ouml;schen.<br>
       <font class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</font>
     </p>
     <form>
-      <input placeholder="Nutzername (Selma-Login)" type="text" id="username_field"><br>
-      <input placeholder="Passwort (Selma-Login)" type="password" id="password_field"><br>
+      <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"><br>
+      <input placeholder="Passwort (selma-Login)" type="password" id="password_field"><br>
       <button type="button" class="button-accept" id="save_data">Lokal Speichern</button>
       <p id="status_msg" style="display: inline;"></p>
     </form>
@@ -50,7 +50,7 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r neue E-Mails im TU Dresden Postfach</button>
+  <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r neue E-Mails im TU-Dresden-Postfach</button>
   <div class="panel">
     <p>TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben
       der Rakete an.<br>
@@ -79,10 +79,10 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion">Opal-Kurse im Dashboard</button>
+  <button class="accordion">OPAL-Kurse im Dashboard</button>
   <div class="panel">
-    <p>Finde alle deine Opal-Kurse direkt im Dashbaord.<br>
-      &Ouml;ffne das Dashbaord oben rechts oder mit<b> Alt+Q</b> (<a href="javascript:void(0)"
+    <p>Finde alle deine OPAL-Kurse direkt im Dashboard.<br>
+      &Ouml;ffne das Dashboard oben rechts oder mit<b> Alt+Q</b> (<a href="javascript:void(0)"
         id="open_shortcut_settings">&auml;ndern</a>).<br>
     </p>
     <p>
@@ -99,10 +99,10 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="opal_modifications">Opal Personalisieren und Verbessern</button>
+  <button class="accordion" id="OPAL_modifications">OPAL personalisieren und verbessern</button>
   <div class="panel">
     <p>
-      Damit die Einstellungen wirksam werden, musst du Opal einmal aktualisieren. F&uuml;r Firefox funktioniert dieses Feature leider nicht stabil.<br>
+      Damit die Einstellungen wirksam werden, musst du OPAL  einmal aktualisieren. F&uuml;r Firefox funktioniert dieses Feature leider nicht stabil.<br>
       <text class="grey-text">
         M&ouml;glicherweise braucht TUfast eine spezielle Berechtigung. Dr&uuml;cke bitte auf
         "Erlauben" im folgenden
@@ -114,7 +114,7 @@
         <input type="checkbox" id="switch_pdf_inline">
         <span class="slider round"></span>
       </label>
-      &nbsp;&nbsp;PDF-Dokumente aus Opal direkt im Browser &ouml;ffnen, anstatt sie herunterzuladen.
+      &nbsp;&nbsp;PDF-Dokumente aus OPAL direkt im Browser &ouml;ffnen, anstatt sie herunterzuladen.
     </p>
     <p id="switch_pdf_newtab_block">
       <label class="switch">
@@ -127,14 +127,14 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion">Shortcuts f&uuml;r Opal & Co.</button>
+  <button class="accordion">Shortcuts f&uuml;r OPAL & Co.</button>
   <div class="panel">
-    <p>&Ouml;ffne Opal & Co. einfach mit Tastenkombinationen.<br>
+    <p>&Ouml;ffne OPAL & Co. einfach mit Tastenkombinationen.<br>
       <a href="javascript:void(0)" id="open_shortcut_settings1">Hier</a> kannst du alle Shortcuts sehen und &auml;ndern.
     </p>
     <ul style="margin:0;">
       <li class="grey-text">Alt+Q &rarr; Dashboard &ouml;ffnen</li>
-      <li class="grey-text">Alt+O &rarr; Opal &ouml;ffnen</li>
+      <li class="grey-text">Alt+O &rarr; OPAL &ouml;ffnen</li>
       <li class="grey-text">Alt+M &rarr; Mail (Outlook-Web-App) &ouml;ffnen</li>
       <li class="grey-text">Alt+J &rarr; jExam &ouml;ffnen</li>
     </ul>
@@ -157,10 +157,10 @@
     </p>
     <ul style="margin:0;">
       <li class="grey-text">tumail &rarr; Outlook Web App</li>
-      <li class="grey-text">opal &rarr; Opal</li>
+      <li class="grey-text">OPAL &rarr; OPAL</li>
       <li class="grey-text">tucloud &rarr; Cloudstore TU Dresden</li>
       <li class="grey-text">hisqis &rarr; Hisqis TU Dresden</li>
-      <li class="grey-text">selma &rarr; Selma TU Dresden</li>
+      <li class="grey-text">selma &rarr; selma TU Dresden</li>
       <li class="grey-text">jexam &rarr; jExam</li>
       <li class="grey-text">tumatrix &rarr; Matrix-Chat TU Dresden</li>
       <li class="grey-text">magma &rarr; Magma TU Dresden</li>
@@ -203,7 +203,7 @@
       Ein gesparter Klick = 3 Sekunden<br>
       Einen Shortcut verwenden = 2 gesparte Klicks<br>
       Eine automatische Anmeldung = 3 gesparte Klicks<br>
-      Einen Kurs &uuml;ber Dashbaord aufrufen = 3 gesparte Klicks<br>
+      Einen Kurs &uuml;ber Dashboard aufrufen = 3 gesparte Klicks<br>
       Eine Weiterleitung der Google-Suche = 2 gesparte Klicks
     </p>
   </div>
