@@ -28,11 +28,12 @@ Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMl
 Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ein Feature vor oder fang an zu entwickeln! Hier sind ein paar Ideen, sortiert nach Anzahl der Nachfragen:
 
 ### Häufig nachgefragt
-- **Portierung für Safari [assinged]**: Dafür gibt es schon einen PR (in Arbeit).
+- **Portierung für Safari ~[assinged]~**: Dafür gibt es schon einen PR (in Arbeit).
 - **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
 - **Prüfen von Login-Daten**: Damit man bei der Eingabe falscher Login-Daten nicht für die Portale gesperrt wird, sollte TUfast beim speichern der Login-Daten prüfen, ob diese valide sind.
 - **Unterstütze https://videocampus.sachsen.de**: Dieses Feature wird häufig nachgefragt. Die Berechtigung für sachsen.de/ muss optional sein! 
 - **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..)**: Aktuell wird hier nur google supported.
+- **Neue Nachricht-Icons für Matrix**: Analog wie die Benachrichtigungen / Icons für neue Mail; nur eben für Matrix. Ist anscheinend vielen wichtig & **macht bestimmt Spaß zu implementieren! :D**
 
 ### Manchmal nachgefragt
 - **Reminder für Ablauf der Campus Sachsen Lizenz**: Das Datum wird bei Aktivierung der Lizenz auf https://campussachsen.tu-dresden.de/ angezeigt. TUfast könnte den Nutzer erinnern die Lizenz zu erneuern, bevor sie abläuft.
