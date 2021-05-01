@@ -24,6 +24,8 @@ Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMl
 ## ❤️❤️❤️
 Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden!
 
+[Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Projekt mit einer kleinen Spende unterstützen.
+
 ## Zukünftige Entwicklung und Feature Ideen ⭐
 Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ein Feature vor oder fang an zu entwickeln! Hier sind ein paar Ideen, sortiert nach Anzahl der Nachfragen:
 
