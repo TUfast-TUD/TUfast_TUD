@@ -34,7 +34,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
 - **Prüfen von Login-Daten**: Damit man bei der Eingabe falscher Login-Daten nicht für die Portale gesperrt wird, sollte TUfast beim speichern der Login-Daten prüfen, ob diese valide sind.
 - **Unterstütze https://videocampus.sachsen.de**: Dieses Feature wird häufig nachgefragt. Die Berechtigung für sachsen.de/ muss optional sein! 
-- **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..)**: Aktuell wird hier nur google supported.
+- **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..)**: Aktuell wird hier nur google supported. #28
 - **Neue Nachricht-Icons für Matrix**: Analog wie die Benachrichtigungen / Icons für neue Mail; nur eben für Matrix. Ist anscheinend vielen wichtig & **macht bestimmt Spaß zu implementieren! :D**
 
 #### Manchmal nachgefragt
