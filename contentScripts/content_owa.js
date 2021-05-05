@@ -20,8 +20,15 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function (result) {
 
 //detecting logout
 document.addEventListener("DOMNodeInserted", function (e) {
+    // old owa version
     if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
         document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+            chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
+        })
+    }
+    // new owa version
+    if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML == "Abmelden") {
+        document.querySelectorAll('[aria-label="Abmelden"]')[1].addEventListener('click', function () {
             chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
         })
     }
@@ -54,10 +61,11 @@ function loginOWA(loggedOutOwa) {
 window.onload = function () {
     chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
         if (resp.enabledOWAFetch) {
-            //check if all mails are loaded
+            //check if all mails are loaded | also check for new owa version
             let checkForNode = setInterval(() => {
                 this.console.log("checking")
-                if (document.querySelectorAll("[autoid='_n_x1']")[1] && document.querySelectorAll("[autoid='_n_x1']")[1].textContent != "") {
+                if ((document.querySelectorAll("[autoid='_n_x1']")[1] && document.querySelectorAll("[autoid='_n_x1']")[1].textContent != "") ||
+                    (document.querySelectorAll("[autoid='_n_41']")[1] && document.querySelectorAll("[autoid='_n_41']")[1].textContent != "")) {
                     readMailObserver()
                     clearInterval(checkForNode)
                 }
@@ -68,15 +76,20 @@ window.onload = function () {
 
 function readMailObserver() {
     //use mutation observer to detect page changes
-    const config = { attributes: true, childList: true, subtree: true }
+    const config = { attributes: true, childList: true, subtree: true, characterData: true }
     const callback = function (mutationsList, observer) {
 
         //check again, if enabled
         chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
             if (resp.enabledOWAFetch) {
 
-                //get number of unread messages.
-                let NrUnreadMails = parseInt(document.querySelectorAll("[autoid='_n_x1']")[1].textContent)
+                //get number of unread messages | also check for new owa version
+                try {
+                    var NrUnreadMails = parseInt(document.querySelectorAll("[autoid='_n_x1']")[1].textContent)
+                } catch {
+                    var NrUnreadMails = parseInt(document.querySelectorAll("[autoid='_n_41']")[1].textContent)
+                }
+
                 if (isNaN(NrUnreadMails)) NrUnreadMails = 0
 
                 console.log("Number of unread mails: " + NrUnreadMails)
@@ -87,8 +100,9 @@ function readMailObserver() {
 
     }
 
-    //node containing unreadCounr
-    let unreadCountNode = document.querySelectorAll("[autoid='_n_t1']")[0]
+    //node containing unreadCount | also check new owa version
+    let unreadCountNode = document.querySelectorAll("[autoid='_n_41']")[1]
+    if (unreadCountNode == undefined) unreadCountNode = document.querySelectorAll("[autoid='_n_c']")[0]
 
     const observer = new MutationObserver(callback);
     observer.observe(unreadCountNode, config);
