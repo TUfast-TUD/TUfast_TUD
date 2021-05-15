@@ -18,11 +18,17 @@
 
 }
 
+.studiengang-img {
+  flex: 1;
+  padding-right: 7px;
+  max-height: 35px;
+  width: auto;
+}
+
 .list-search {
-  width: 89%;
+  flex: 100;
   margin-left: 7px;
-  margin-right: 7px;
-  margin-top: 4px;
+  margin-right: 10px;
   border-radius: 3px;
   font-size: 12px;
   border: #dddddd solid 1.5px;
