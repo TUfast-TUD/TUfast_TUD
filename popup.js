@@ -2,8 +2,8 @@ const shareHTML = '<div style=height:450px;width:510px;overflow:hidden><div clas
 const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -66px; width:240px; height: auto;" > <img style="width: 170px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a banana&emoji=🍌&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
 
 //this config is used to customize TUfast for a course of study
-//Note: Custom settings are inherited from popup.html
-//Note: If you want to add an footer icon, you need to add it to popup.html and set footer_icons_display
+//it overrides the default setting from popup.html
+//if you want to add an footer icon for your course of study, you need to add it to popup.html and set footer_icons_display property in this config
 const studiengang_config = {
     "medizin": {
         "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
