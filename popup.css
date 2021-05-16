@@ -173,8 +173,8 @@ html {
 
 /* Dropdown Button */
 .select_studiengang_btn {
-  width: 20px;
-  padding: 10px 4px 4px 4px
+  width: 15px;
+  padding: 13px 4px 4px 4px
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -187,12 +187,12 @@ html {
 .select_studiengang_dropdown_content {
   display: none;
   position: absolute;
-  min-width: 160px;
+  min-width: 180px;
   background-color: #ffffff;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   right:14px;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 /* Links inside the dropdown */

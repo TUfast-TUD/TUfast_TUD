@@ -127,7 +127,7 @@ function addDropdownOptions() {
     Object.keys(studiengang_config).forEach(function (key) {
         
         let listEntry = document.createElement("p")
-        listEntry.style = "display:flex;align-items: center; min-height: 36px"
+        listEntry.style = "display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;"
         listEntry.onclick = changeStudiengangSelection
         listEntry.setAttribute('studiengang', key);
 
@@ -155,6 +155,9 @@ function customizeForStudiengang(studiengang) {
     if (studiengang_config[studiengang].fsr_icon) {
         document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
         document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
+        
+    } else {
+        document.getElementById("fsr_icon").style.display = "none"
     }
 
 
