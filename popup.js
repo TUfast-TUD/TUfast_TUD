@@ -132,6 +132,8 @@ function addDropdownOptions() {
         listTxt.style = "flex:10"
         listTxt.innerHTML = studiengang_config[key].name
 
+        listEntry.appendChild(listTxt)
+
         if (studiengang_config[key].fsr_icon) {
             let listImg = document.createElement("img")
             listImg.style = "flex: 1;height: 30px; width: auto; vertical-align:middle"
@@ -139,7 +141,7 @@ function addDropdownOptions() {
             listEntry.appendChild(listImg)
         }
 
-        listEntry.appendChild(listTxt)
+       
 
         dropdown_content.appendChild(listEntry)
     });
@@ -162,7 +164,7 @@ function customizeForStudiengang(studiengang) {
         console.log(icons)
         for (var i = 0; i < icons.length; i++) {
             console.log(icons[i].style); //second console output
-            icons[i].style.display = "none"
+            icons[i].style.display = + "none"
         }
 
         //set visible icons
