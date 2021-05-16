@@ -20,7 +20,8 @@
 
 .studiengang-img {
   flex: 1;
-  padding-right: 7px;
+  padding-right: 3px;
+  padding-left: 3px;
   max-height: 35px;
   width: auto;
 }
@@ -28,7 +29,7 @@
 .list-search {
   flex: 100;
   margin-left: 7px;
-  margin-right: 10px;
+  margin-right: 5px;
   border-radius: 3px;
   font-size: 12px;
   border: #dddddd solid 1.5px;
@@ -164,7 +165,45 @@ html {
 }
 
 .list-entry:hover,
-.settings-section-icon:hover
+.settings-section-icon:hover,
+.select_studiengang_dropdown:hover
 {
   background-color: #e5e5e5;
 }
+
+/* Dropdown Button */
+.select_studiengang_btn {
+  width: 20px;
+  padding: 10px 4px 4px 4px
+}
+
+/* The container <div> - needed to position the dropdown content */
+.select_studiengang_dropdown {
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.select_studiengang_dropdown_content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  background-color: #ffffff;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  right:14px;
+  border-radius: 2px;
+}
+
+/* Links inside the dropdown */
+.select_studiengang_dropdown_content p {
+  padding: 3px;;
+  display: block;
+  margin: 0;
+}
+
+/* Change color of dropdown links on hover */
+.select_studiengang_dropdown_content p:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}

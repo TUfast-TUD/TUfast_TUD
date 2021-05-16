@@ -5,27 +5,27 @@ const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target
 //it overrides the default setting from popup.html
 //if you want to add an footer icon for your course of study, you need to add it to popup.html and set footer_icons_display property in this config
 const studiengang_config = {
+    "general": {
+        "name": "Standardeinstellungen",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"]
+    },
     "medizin": {
+        "name": "Medizin",
         "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
         "fsr_icon_dashboard_style": "",
-        "footer_icons_display": {
-            "qis": "none",
-            "moodle": "flex",
-            "eportal": "flex",
-            "matrix": "none",
-            "je": "none",
-            "swdd": "",
-        },
+        "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd":"https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
         }
     },
     "maschinenbau": {
+        "name": "Maschinenwesen",
         "fsr_icon": "./OfficialIcons/fsr_mw.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
-        "footer_icons_display": { 
-            "je": "none",
-        },
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
     }
 }
 
@@ -88,21 +88,86 @@ window.onload = async function () {
             }
         }
     })
+
+    //set custom dropdown styles and js for studiengang selection
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.select_studiengang_btn')) {
+            var dropdowns = document.getElementsByClassName("select_studiengang_dropdown_content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    //studiengang selection drop-down
+    document.getElementById("select_studiengang_btn").onclick = selectStudiengangDropdown
+    addDropdownOptions()
+
+
 }
 
+function changeStudiengangSelection() {
+    studiengang = this.getAttribute('studiengang')
+    chrome.storage.local.set({ studiengang: studiengang }, function () { })
+    customizeForStudiengang(studiengang)
+}
 
-//dashboard adjustments for medicine
+function addDropdownOptions() {
+    let dropdown_content = document.getElementById("select_studiengang_dropdown_content")
+
+    //set footer icons
+    Object.keys(studiengang_config).forEach(function (key) {
+        
+        let listEntry = document.createElement("p")
+        listEntry.style = "display:flex;align-items: center; min-height: 36px"
+        listEntry.onclick = changeStudiengangSelection
+        listEntry.setAttribute('studiengang', key);
+
+        let listTxt = document.createElement("text")
+        listTxt.style = "flex:10"
+        listTxt.innerHTML = studiengang_config[key].name
+
+        if (studiengang_config[key].fsr_icon) {
+            let listImg = document.createElement("img")
+            listImg.style = "flex: 1;height: 30px; width: auto; vertical-align:middle"
+            listImg.src = studiengang_config[key].fsr_icon
+            listEntry.appendChild(listImg)
+        }
+
+        listEntry.appendChild(listTxt)
+
+        dropdown_content.appendChild(listEntry)
+    });
+}
+
+//dashboard adjustments for studiengang
 function customizeForStudiengang(studiengang) {
 
     //set fsr icon
-    document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
-    document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
+    if (studiengang_config[studiengang].fsr_icon) {
+        document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
+        document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
+    }
 
 
     //set footer icons
     if (studiengang_config[studiengang].footer_icons_display) {
-        Object.keys(studiengang_config[studiengang].footer_icons_display).forEach(function (key) {
-            document.getElementById(key).style.display = studiengang_config[studiengang].footer_icons_display[key]
+        //set visibility for all icons to none
+        icons = document.getElementById("settings-footer-bar-icons").children
+        console.log(icons)
+        for (var i = 0; i < icons.length; i++) {
+            console.log(icons[i].style); //second console output
+            icons[i].style.display = "none"
+        }
+
+        //set visible icons
+        studiengang_config[studiengang].footer_icons_display.forEach(element => {
+            document.getElementById(element).style.display = "flex"
         });
     }
 
@@ -309,3 +374,11 @@ function loadCourses(type) {
         }
     })
 }
+
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function selectStudiengangDropdown() {
+    document.getElementById("select_studiengang_dropdown_content").classList.toggle("show");
+}
+
