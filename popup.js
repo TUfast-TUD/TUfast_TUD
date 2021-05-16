@@ -7,7 +7,10 @@ const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target
 const studiengang_config = {
     "general": {
         "name": "Standardeinstellungen",
-        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"]
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
     },
     "medizin": {
         "name": "Medizin",
@@ -141,8 +144,6 @@ function addDropdownOptions() {
             listEntry.appendChild(listImg)
         }
 
-       
-
         dropdown_content.appendChild(listEntry)
     });
 }
@@ -161,10 +162,8 @@ function customizeForStudiengang(studiengang) {
     if (studiengang_config[studiengang].footer_icons_display) {
         //set visibility for all icons to none
         icons = document.getElementById("settings-footer-bar-icons").children
-        console.log(icons)
         for (var i = 0; i < icons.length; i++) {
-            console.log(icons[i].style); //second console output
-            icons[i].style.display = + "none"
+            icons[i].style.display = "none"
         }
 
         //set visible icons
