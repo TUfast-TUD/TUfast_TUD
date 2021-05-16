@@ -5,9 +5,11 @@ const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target
 //it overrides the default setting from popup.html
 //if you want to add an footer icon for your course of study, you need to add it to popup.html and set footer_icons_display property in this config
 const studiengang_config = {
-    "general": {
-        "name": "Standardeinstellungen",
-        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
+    "maschinenbau": {
+        "name": "Maschinenwesen",
+        "fsr_icon": "./OfficialIcons/fsr_mw.png",
+        "fsr_icon_dashboard_style": "max-height: 32px;",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
@@ -18,18 +20,19 @@ const studiengang_config = {
         "fsr_icon_dashboard_style": "",
         "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
         "footer_icons_links": {
-            "swdd":"https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
         }
     },
-    "maschinenbau": {
-        "name": "Maschinenwesen",
-        "fsr_icon": "./OfficialIcons/fsr_mw.png",
-        "fsr_icon_dashboard_style": "max-height: 32px;",
-        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+    "general": {
+        "name": "Standardeinstellungen",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
-    }
+    },
+    "addStudiengang": {
+        "name": "&#65291; Studiengang hinzufügen...",
+    },
 }
 
 window.onload = async function () {
@@ -115,7 +118,14 @@ window.onload = async function () {
 }
 
 function changeStudiengangSelection() {
+    
     studiengang = this.getAttribute('studiengang')
+
+    if (studiengang === "addStudiengang") {
+        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'add_studiengang' }, function (result) { })
+        return
+    }
+
     chrome.storage.local.set({ studiengang: studiengang }, function () { })
     customizeForStudiengang(studiengang)
 }

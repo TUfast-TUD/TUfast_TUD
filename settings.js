@@ -78,8 +78,12 @@ function displayEnabled() {
   chrome.storage.local.get(['additionalNotificationOnNewMail'], function (result) {
     document.getElementById("additionalNotification").checked = result.additionalNotificationOnNewMail
   })
-  chrome.storage.local.get(['studiengang'], function (result) {
-    if (result.studiengang == null || result.studiengang == undefined || result.studiengang == "general") {
+  chrome.storage.local.get(['studiengang', 'openSettingsPageParam'], function (result) {
+    if (result.openSettingsPageParam === "add_studiengang") {
+      document.getElementById("studiengangSelect").value = "add"
+      document.getElementById("addStudiengang").style.display = "block"
+    }
+    else if (result.studiengang == null || result.studiengang == undefined || result.studiengang == "general") {
       document.getElementById("studiengangSelect").value = "general"
     } else {
       document.getElementById("studiengangSelect").value = result.studiengang
@@ -405,6 +409,11 @@ window.onload = async function () {
         }
         chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
         document.getElementById("settings_comment").innerHTML = "<strong>F&uuml;r dieses Feature gib hier deine Zugangsdaten ein.</strong>"
+      }
+      if (key === "openSettingsPageParam" && changes[key].newValue === "add_studiengang") {
+        document.getElementById("studiengangSelect").value = "add"
+        document.getElementById("addStudiengang").style.display = "block"
+        chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
       }
     }
   })
