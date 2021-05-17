@@ -7,7 +7,6 @@ Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
 
 ![image](https://user-images.githubusercontent.com/31124624/115123463-72e24980-9fbd-11eb-8ff9-7466ba8e0df2.png)
 
-
 ### Funktionen
  - Automatisches Anmelden in Opal, Selma und Co. (insgesamt über 11 Portale der TU Dresden!)
  - Opal-Kurse und Opal-Favoriten über das Dashbaord öffnen
