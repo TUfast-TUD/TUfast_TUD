@@ -41,6 +41,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - **Benachrichtigungen für neue Noten** im HISQIS, jExam oder Selma.
 - **Notenstatistik in Selma**: schöne, graphische Darstellung aller Noten im Selma, zB. mit Charts.js.
 - **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
+- **AutoLoad Kontostand**: Man könnte den Kontostand von Mensa-AutoLoad abfragen und im Dashboard zeigen!
 
 
 ### Weiteres
