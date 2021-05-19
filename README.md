@@ -1,8 +1,8 @@
 # TUfast 🚀
 TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. Das spart Zeit und Nerven!
-TUfast ist verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-fast.de) und hat aktuell 800+ Nutzer.
+TUfast ist verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-fast.de) und hat aktuell 950+ Nutzer.
 
-TUfast soll für deinen Studiengang angepasst werden? Melde es deinem [FSR](https://www.stura.tu-dresden.de/fachschaften), welcher uns bitte kontaktieren soll!
+TUfast soll für deinen Studiengang angepasst werden? Schreibe uns eine Mail an frage@tu-fast.de mit deinem Vorschlag und melde es am besten zusätzlich deinem [FSR](https://www.stura.tu-dresden.de/fachschaften), welcher uns unterstützen kann!
 Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
 
 ![image](https://user-images.githubusercontent.com/31124624/115123463-72e24980-9fbd-11eb-8ff9-7466ba8e0df2.png)
