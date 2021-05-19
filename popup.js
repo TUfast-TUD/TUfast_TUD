@@ -9,6 +9,7 @@ const studiengang_config = {
         "name": "Maschinenwesen",
         "fsr_icon": "./OfficialIcons/fsr_mw.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
+        "fsr_link": "https://tu-dresden.de/ing/maschinenwesen/fsr",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
@@ -17,6 +18,7 @@ const studiengang_config = {
     "medizin": {
         "name": "Medizin",
         "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
+        "fsr_link": "https://www.medforum-dresden.de/",
         "fsr_icon_dashboard_style": "",
         "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
         "footer_icons_links": {
@@ -165,11 +167,14 @@ function customizeForStudiengang(studiengang) {
     if (studiengang_config[studiengang].fsr_icon) {
         document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
         document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
-        
     } else {
         document.getElementById("fsr_icon").style.display = "none"
     }
 
+    //set fsr link
+    if (studiengang_config[studiengang].fsr_link) {
+        document.getElementById("fsr_link").href = studiengang_config[studiengang].fsr_link
+    }
 
     //set footer icons
     if (studiengang_config[studiengang].footer_icons_display) {

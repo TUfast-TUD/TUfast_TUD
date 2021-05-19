@@ -242,7 +242,7 @@ let rocketIconsConfig = {
   "RI5": {
     IconPathEnabled: "RocketIcons/13_128px.png",
     IconPathDisabled: "RocketIcons/13_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 2500 Klicks. Damit bist du Profi!",
+    innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 2500 Klicks. Du bist Profi!",
     innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 2500 Klicks gespart. TUfast ist n&uuml;tzlich!",
     id: "RI5"
   },
