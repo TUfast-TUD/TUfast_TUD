@@ -27,6 +27,8 @@ const studiengang_config = {
     },
     "general": {
         "name": "Standardeinstellungen",
+        "fsr_icon": "",
+        "fsr_link": "javascript: void(0)",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
@@ -116,11 +118,15 @@ window.onload = async function () {
     document.getElementById("select_studiengang_btn").onclick = selectStudiengangDropdown
     addDropdownOptions()
 
-
+    //highlight studiengang selection (only once)
+    chrome.storage.local.get(['seenCustomizeStudiengang', "saved_click_counter"], function (result) {
+        if (result.seenCustomizeStudiengang != true && result.saved_click_counter > 100) {
+            document.getElementById("select_studiengang_dropdown_id").style.border = "2px solid red"
+        }
+    })
 }
 
 function changeStudiengangSelection() {
-    
     studiengang = this.getAttribute('studiengang')
 
     if (studiengang === "addStudiengang") {
@@ -158,23 +164,11 @@ function addDropdownOptions() {
 
         dropdown_content.appendChild(listEntry)
     });
+
 }
 
 //dashboard adjustments for studiengang
 function customizeForStudiengang(studiengang) {
-
-    //set fsr icon
-    if (studiengang_config[studiengang].fsr_icon) {
-        document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
-        document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
-    } else {
-        document.getElementById("fsr_icon").style.display = "none"
-    }
-
-    //set fsr link
-    if (studiengang_config[studiengang].fsr_link) {
-        document.getElementById("fsr_link").href = studiengang_config[studiengang].fsr_link
-    }
 
     //set footer icons
     if (studiengang_config[studiengang].footer_icons_display) {
@@ -195,6 +189,19 @@ function customizeForStudiengang(studiengang) {
         Object.keys(studiengang_config[studiengang].footer_icons_links).forEach(function (key) {
             document.getElementById(key).href = studiengang_config[studiengang].footer_icons_links[key]
         });
+    }
+
+    //set fsr icon
+    if (studiengang_config[studiengang].fsr_icon) {
+        document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
+        document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
+    } else {
+        document.getElementById("fsr_icon").style.display = "none"
+    }
+
+    //set fsr link
+    if (studiengang_config[studiengang].fsr_link) {
+        document.getElementById("fsr_link").href = studiengang_config[studiengang].fsr_link
     }
 }
 
@@ -399,5 +406,7 @@ function loadCourses(type) {
 toggle between hiding and showing the dropdown content */
 function selectStudiengangDropdown() {
     document.getElementById("select_studiengang_dropdown_content").classList.toggle("show");
+    chrome.storage.local.set({ seenCustomizeStudiengang: true }, function () { })
+    document.getElementById("select_studiengang_dropdown_id").style.border = "none"
 }
 
