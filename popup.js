@@ -25,6 +25,16 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
         }
     },
+    "psychologie": {
+        "name": "Psychologie",
+        "fsr_icon": "./OfficialIcons/fsr_psy.png",
+        "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+        "fsr_icon_dashboard_style": "",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
+    },
     "general": {
         "name": "Standardeinstellungen",
         "fsr_icon": "",
@@ -143,7 +153,7 @@ function addDropdownOptions() {
 
     //set footer icons
     Object.keys(studiengang_config).forEach(function (key) {
-        
+
         let listEntry = document.createElement("p")
         listEntry.style = "display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;"
         listEntry.onclick = changeStudiengangSelection
@@ -185,7 +195,7 @@ function customizeForStudiengang(studiengang) {
     }
 
     //set footer icon links
-    if (studiengang_config[studiengang].footer_icons_links) { 
+    if (studiengang_config[studiengang].footer_icons_links) {
         Object.keys(studiengang_config[studiengang].footer_icons_links).forEach(function (key) {
             document.getElementById(key).href = studiengang_config[studiengang].footer_icons_links[key]
         });
@@ -409,4 +419,3 @@ function selectStudiengangDropdown() {
     chrome.storage.local.set({ seenCustomizeStudiengang: true }, function () { })
     document.getElementById("select_studiengang_dropdown_id").style.border = "none"
 }
-
