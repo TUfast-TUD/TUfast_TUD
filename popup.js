@@ -1,6 +1,59 @@
 const shareHTML = '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Hilf deinen Mitstudierenden</span></div><div class="tufast_text" style=position:relative;top:6px><img class="imgicon huge" src=/images/tufast48.png style=position:relative;top:-7px;left:0px><span class="tufasst_name huge" style=position:relative;top:-7px;left:3px>TUfast</span><span class=tufasst_name> &nbsp;zu entdecken</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link href=javascript:void(0)>sammle coole Raketen</a>!</span></div><div id=download-section><div>Teilen mit</div><div class=download-link><img class=imgicon src=icons/gmail.png><span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank> E-Mail</a></span></div><div class=download-link><img class=imgicon src=icons/wa2.png style=height:1.4em><span class=browser_name><a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 von Studenten | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
 const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -66px; width:240px; height: auto;" > <img style="width: 170px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a banana&emoji=🍌&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
 
+//this config is used to customize TUfast for a course of study
+//it overrides the default setting from popup.html
+//if you want to add an footer icon for your course of study, you need to add it to popup.html and set footer_icons_display property in this config
+const studiengang_config = {
+    "maschinenbau": {
+        "name": "Maschinenwesen",
+        "fsr_icon": "./OfficialIcons/fsr_mw.png",
+        "fsr_icon_dashboard_style": "max-height: 32px;",
+        "fsr_link": "https://tu-dresden.de/ing/maschinenwesen/fsr",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
+    },
+    // "medizin": {
+    //     "name": "Medizin",
+    //     "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
+    //     "fsr_link": "https://www.medforum-dresden.de/",
+    //     "fsr_icon_dashboard_style": "",
+    //     "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
+    //     "footer_icons_links": {
+    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
+    //     }
+    // },
+    // "psychologie": {
+    //     "name": "Psychologie",
+    //     "fsr_icon": "./OfficialIcons/fsr_psy.png",
+    //     "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+    //     "fsr_icon_dashboard_style": "",
+    //     "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+    //     "footer_icons_links": {
+    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+    //     }
+    // },
+    "general": {
+        "name": "Standardeinstellungen",
+        "fsr_icon": "",
+        "fsr_link": "javascript: void(0)",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
+    },
+    "addStudiengang": {
+        "name": "&#65291; Studiengang hinzufügen...",
+    },
+}
+
+//change this, if you want to highlight the dropdown arrow for the studiengang selection
+//this can be used e.g. if a new studiengang was added
+//settings this to false (bool-value) will cause no action
+//dropdown_update_id is a random string
+const dropdown_update_id = false
 
 window.onload = async function () {
 
@@ -27,7 +80,7 @@ window.onload = async function () {
         // }
 
         //exclusive style adjustments
-        styleAdjust(result.studiengang)
+        customizeForStudiengang(result.studiengang)
 
     })
 
@@ -61,21 +114,118 @@ window.onload = async function () {
             }
         }
     })
+
+    //set custom dropdown styles and js for studiengang selection
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.select_studiengang_btn')) {
+            var dropdowns = document.getElementsByClassName("select_studiengang_dropdown_content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    //studiengang selection drop-down
+    document.getElementById("select_studiengang_btn").onclick = selectStudiengangDropdown
+    addDropdownOptions()
+
+    //highlight studiengang selection (only once)
+    chrome.storage.local.get(['updateCustomizeStudiengang', "saved_click_counter"], function (result) {
+        if (result.updateCustomizeStudiengang != dropdown_update_id && dropdown_update_id != false && result.saved_click_counter > -1) {
+            document.getElementById("select_studiengang_dropdown_id").style.border = "2px solid red"
+        }
+    })
+
+    //we need to set dropdown selection max-height, in case the dashboard is small
+    //before wait XXXms because everything needs to be loaded first
+    await new Promise(r => setTimeout(r, 100));
+    document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
 }
 
-//dasbhaord adjustments for medicine
-function styleAdjust(studiengang) {
-    if (studiengang == "medizin") {
-        document.getElementById("qis").style.display = "none"
-        document.getElementById("moodle").style.display = "flex"
-        document.getElementById("eportal").style.display = "flex"
-        document.getElementById("matrix").style.display = "none"
-        document.getElementById("je").style.display = "none"
-        document.getElementById("swdd").href = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html"
-    } else if (studiengang == "maschinenbau") {
-        document.getElementById("je").style.display = "none"
+function changeStudiengangSelection() {
+    studiengang = this.getAttribute('studiengang')
+
+    if (studiengang === "addStudiengang") {
+        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'add_studiengang' }, function (result) { })
+        return
+    }
+
+    chrome.storage.local.set({ studiengang: studiengang }, function () { })
+    customizeForStudiengang(studiengang)
+}
+
+function addDropdownOptions() {
+    let dropdown_content = document.getElementById("select_studiengang_dropdown_content")
+
+    //set footer icons
+    Object.keys(studiengang_config).forEach(function (key) {
+
+        let listEntry = document.createElement("p")
+        listEntry.style = "display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;"
+        listEntry.onclick = changeStudiengangSelection
+        listEntry.setAttribute('studiengang', key);
+
+        let listTxt = document.createElement("text")
+        listTxt.style = "flex:10"
+        listTxt.innerHTML = studiengang_config[key].name
+
+        listEntry.appendChild(listTxt)
+
+        if (studiengang_config[key].fsr_icon) {
+            let listImg = document.createElement("img")
+            listImg.style = "flex: 1;height: 30px; width: auto; vertical-align:middle"
+            listImg.src = studiengang_config[key].fsr_icon
+            listEntry.appendChild(listImg)
+        }
+
+        dropdown_content.appendChild(listEntry)
+    });
+
+}
+
+//dashboard adjustments for studiengang
+function customizeForStudiengang(studiengang) {
+
+    //set footer icons
+    if (studiengang_config[studiengang].footer_icons_display) {
+        //set visibility for all icons to none
+        icons = document.getElementById("settings-footer-bar-icons").children
+        for (var i = 0; i < icons.length; i++) {
+            icons[i].style.display = "none"
+        }
+
+        //set visible icons
+        studiengang_config[studiengang].footer_icons_display.forEach(element => {
+            document.getElementById(element).style.display = "flex"
+        });
+    }
+
+    //set footer icon links
+    if (studiengang_config[studiengang].footer_icons_links) {
+        Object.keys(studiengang_config[studiengang].footer_icons_links).forEach(function (key) {
+            document.getElementById(key).href = studiengang_config[studiengang].footer_icons_links[key]
+        });
+    }
+
+    //set fsr icon
+    if (studiengang_config[studiengang].fsr_icon) {
+        document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
+        document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
+    } else {
+        document.getElementById("fsr_icon").style.display = "none"
+    }
+
+    //set fsr link
+    if (studiengang_config[studiengang].fsr_link) {
+        document.getElementById("fsr_link").href = studiengang_config[studiengang].fsr_link
     }
 }
+
 
 function clicksToTime(clicks) {
     clicks = clicks * 3
@@ -270,4 +420,13 @@ function loadCourses(type) {
                 break
         }
     })
+}
+
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function selectStudiengangDropdown() {
+    document.getElementById("select_studiengang_dropdown_content").classList.toggle("show");
+    chrome.storage.local.set({ updateCustomizeStudiengang: dropdown_update_id }, function () { })
+    document.getElementById("select_studiengang_dropdown_id").style.border = "none"
 }

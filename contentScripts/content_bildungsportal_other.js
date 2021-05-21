@@ -124,7 +124,7 @@ function showUnlockRocketsBanner() {
     let banner = this.document.createElement("div")
     banner.id = "unlockRocketsPrompt"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
-    banner.innerHTML = '<b>Unterstütze <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast</b>, empfehle es deinen Mitstudierenden und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥 <a id="removeMoreRocketIcons" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Nein</a>'
+    banner.innerHTML = '<b>Unterstütze <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 33px;">TUfast</b> und schalte <a id="openMoreRocketIcons" href="javascript:void(0)">coole neue Raketen</a> frei! 🔥🔥🔥 <a id="removeMoreRocketIcons" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Nein</a>'
     this.document.body.insertBefore(banner, document.body.childNodes[0])
 }
 
