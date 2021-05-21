@@ -171,7 +171,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
 			chrome.storage.local.set({ studiengang: null }, function () { })
-			chrome.storage.local.set({ seenCustomizeStudiengang: false }, function () { })
+			chrome.storage.local.set({ updateCustomizeStudiengang: false }, function () { })
 			break
 		case 'update':
 			//check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
@@ -281,9 +281,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
 			})
 			//seen customized studiengang
-			chrome.storage.local.get(['seenCustomizeStudiengang'], function (result) {
-				if (result.seenCustomizeStudiengang === undefined || result.seenCustomizeStudiengang === null) {
-					chrome.storage.local.set({ seenCustomizeStudiengang: false}, function () { })
+			chrome.storage.local.get(['updateCustomizeStudiengang'], function (result) {
+				if (result.updateCustomizeStudiengang === undefined || result.updateCustomizeStudiengang === null) {
+					chrome.storage.local.set({ updateCustomizeStudiengang: false}, function () { })
 				}
 			})
 			break

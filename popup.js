@@ -15,26 +15,26 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
     },
-    "medizin": {
-        "name": "Medizin",
-        "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
-        "fsr_link": "https://www.medforum-dresden.de/",
-        "fsr_icon_dashboard_style": "",
-        "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
-        "footer_icons_links": {
-            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
-        }
-    },
-    "psychologie": {
-        "name": "Psychologie",
-        "fsr_icon": "./OfficialIcons/fsr_psy.png",
-        "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
-        "fsr_icon_dashboard_style": "",
-        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
-        "footer_icons_links": {
-            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-        }
-    },
+    // "medizin": {
+    //     "name": "Medizin",
+    //     "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
+    //     "fsr_link": "https://www.medforum-dresden.de/",
+    //     "fsr_icon_dashboard_style": "",
+    //     "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
+    //     "footer_icons_links": {
+    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
+    //     }
+    // },
+    // "psychologie": {
+    //     "name": "Psychologie",
+    //     "fsr_icon": "./OfficialIcons/fsr_psy.png",
+    //     "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+    //     "fsr_icon_dashboard_style": "",
+    //     "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+    //     "footer_icons_links": {
+    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+    //     }
+    // },
     "general": {
         "name": "Standardeinstellungen",
         "fsr_icon": "",
@@ -48,6 +48,12 @@ const studiengang_config = {
         "name": "&#65291; Studiengang hinzufügen...",
     },
 }
+
+//change this, if you want to highlight the dropdown arrow for the studiengang selection
+//this can be used e.g. if a new studiengang was added
+//settings this to false (bool-value) will cause no action
+//dropdown_update_id is a random string
+const dropdown_update_id = false
 
 window.onload = async function () {
 
@@ -129,11 +135,16 @@ window.onload = async function () {
     addDropdownOptions()
 
     //highlight studiengang selection (only once)
-    chrome.storage.local.get(['seenCustomizeStudiengang', "saved_click_counter"], function (result) {
-        if (result.seenCustomizeStudiengang != true && result.saved_click_counter > 100) {
+    chrome.storage.local.get(['updateCustomizeStudiengang', "saved_click_counter"], function (result) {
+        if (result.updateCustomizeStudiengang != dropdown_update_id && dropdown_update_id != false && result.saved_click_counter > -1) {
             document.getElementById("select_studiengang_dropdown_id").style.border = "2px solid red"
         }
     })
+
+    //we need to set dropdown selection max-height, in case the dashboard is small
+    //before wait XXXms because everything needs to be loaded first
+    await new Promise(r => setTimeout(r, 100));
+    document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
 }
 
 function changeStudiengangSelection() {
@@ -416,6 +427,6 @@ function loadCourses(type) {
 toggle between hiding and showing the dropdown content */
 function selectStudiengangDropdown() {
     document.getElementById("select_studiengang_dropdown_content").classList.toggle("show");
-    chrome.storage.local.set({ seenCustomizeStudiengang: true }, function () { })
+    chrome.storage.local.set({ updateCustomizeStudiengang: dropdown_update_id }, function () { })
     document.getElementById("select_studiengang_dropdown_id").style.border = "none"
 }

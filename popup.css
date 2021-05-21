@@ -193,6 +193,7 @@ html {
   z-index: 1;
   right:14px;
   border-radius: 3px;
+  overflow-y:auto;
 }
 
 /* Links inside the dropdown */
