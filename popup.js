@@ -53,7 +53,7 @@ const studiengang_config = {
 //this can be used e.g. if a new studiengang was added
 //settings this to false (bool-value) will cause no action
 //dropdown_update_id is a random string
-const dropdown_update_id = false
+const dropdown_update_id = "aw4e5rt"
 
 window.onload = async function () {
 
