@@ -15,16 +15,16 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
     },
-    // "medizin": {
-    //     "name": "Medizin",
-    //     "fsr_icon": "./OfficialIcons/fsr_medi.jpg",
-    //     "fsr_link": "https://www.medforum-dresden.de/",
-    //     "fsr_icon_dashboard_style": "",
-    //     "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
-    //     "footer_icons_links": {
-    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
-    //     }
-    // },
+    "medizin": {
+        "name": "Medizin",
+        "fsr_icon": "", //"./OfficialIcons/fsr_medi.jpg",
+        "fsr_link": "javascript: void(0)", //"https://www.medforum-dresden.de/",
+        "fsr_icon_dashboard_style": "",
+        "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
+        }
+    },
     // "psychologie": {
     //     "name": "Psychologie",
     //     "fsr_icon": "./OfficialIcons/fsr_psy.png",
