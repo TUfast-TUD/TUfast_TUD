@@ -17,8 +17,8 @@ const studiengang_config = {
     },
     "medizin": {
         "name": "Medizin",
-        "fsr_icon": "", //"./OfficialIcons/fsr_medi.jpg",
-        "fsr_link": "javascript: void(0)", //"https://www.medforum-dresden.de/",
+        "fsr_icon": "./OfficialIcons/fsr_medi_small.png",
+        "fsr_link": "https://www.medforum-dresden.de/",
         "fsr_icon_dashboard_style": "",
         "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
         "footer_icons_links": {
@@ -143,7 +143,7 @@ window.onload = async function () {
 
     //we need to set dropdown selection max-height, in case the dashboard is small
     //before wait XXXms because everything needs to be loaded first
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 200));
     document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
 }
 
