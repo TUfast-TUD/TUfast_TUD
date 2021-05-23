@@ -69,6 +69,15 @@ function regAddContentScripts() {
 					})
 				]
 			};
+			// register rule
+			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
+			console.log("Tried to register addtional content scripts. Success unconfirmed.")
+		})
+	} catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
+
+	try {
+		chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+			// create rules
 			var ruleTEX = {
 				conditions: [
 					new chrome.declarativeContent.PageStateMatcher({
@@ -84,6 +93,15 @@ function regAddContentScripts() {
 					}),
 				],
 			};
+			// register rule
+			chrome.declarativeContent.onPageChanged.addRules([ruleTEX]);
+			console.log("Tried to register addtional content scripts. Success unconfirmed.")
+		})
+	} catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
+
+	try {
+		chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+			// create rules
 			//thats a new version of IDP
 			var ruleIDP = {
 				conditions: [
@@ -101,9 +119,7 @@ function regAddContentScripts() {
 				],
 			};
 			// register rule
-			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
 			chrome.declarativeContent.onPageChanged.addRules([ruleIDP]);
-      		chrome.declarativeContent.onPageChanged.addRules([ruleTEX]);
 			console.log("Tried to register addtional content scripts. Success unconfirmed.")
 		})
 	} catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
@@ -115,11 +131,15 @@ function regAddContentScripts() {
 			"matches": ["https://eportal.med.tu-dresden.de/*"],
 			"runAt": "document_start"
 		}).then(() => console.log("Successfully registered additional content script tumed for FF"))
+	} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
+	try {
 		browser.contentScripts.register({
 			"js": [{ file: "contentScripts/content_tex.js" }],
 			"matches": ["https://tex.zih.tu-dresden.de/*"],
 			"runAt": "document_end"
 		}).then(() => console.log("Successfully registered additional content script tex for FF"))
+	} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
+	try {
 		browser.contentScripts.register({
 			"js": [{ file: "contentScripts/content_idp.js" }],
 			"matches": ["https://idp.tu-dresden.de/idp/profile/*"],

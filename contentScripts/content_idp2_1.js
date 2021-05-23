@@ -1,3 +1,4 @@
+console.log("inserted content script...")
 chrome.storage.local.get(['isEnabled'], function (result) {
   if (document.readyState !== 'loading') {
     logInQis(result.isEnabled)
