@@ -170,7 +170,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
-			chrome.storage.local.set({ studiengang: null }, function () { })
+			chrome.storage.local.set({ studiengang: "general" }, function () { })
 			chrome.storage.local.set({ updateCustomizeStudiengang: false }, function () { })
 			break
 		case 'update':
@@ -284,6 +284,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.get(['updateCustomizeStudiengang'], function (result) {
 				if (result.updateCustomizeStudiengang === undefined || result.updateCustomizeStudiengang === null) {
 					chrome.storage.local.set({ updateCustomizeStudiengang: false}, function () { })
+				}
+			})
+			//selected studiengang
+			chrome.storage.local.get(['studiengang'], function (result) {
+				if (result.studiengang === undefined || result.studiengang === null) {
+					chrome.storage.local.set({ studiengang: "general"}, function () { })
 				}
 			})
 			break
