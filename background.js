@@ -36,9 +36,10 @@ chrome.storage.local.set({ loggedOutOpal: false }, function () { })
 chrome.storage.local.set({ loggedOutOwa: false }, function () { })
 chrome.storage.local.set({ loggedOutMagma: false }, function () { })
 chrome.storage.local.set({ loggedOutJexam: false }, function () { })
-chrome.storage.local.set({ loggedOutCloudstore: false }, function () {});
-chrome.storage.local.set({ loggedOutTex: false }, function () {});
+chrome.storage.local.set({ loggedOutCloudstore: false }, function () { })
+chrome.storage.local.set({ loggedOutTex: false }, function () { })
 chrome.storage.local.set({ loggedOutTumed: false }, function () { })
+chrome.storage.local.set({ loggedOutGitlab: false }, function () { })
 chrome.storage.local.get(["pdfInNewTab"], function (result) {
 	if (result.pdfInNewTab) {
 		enableHeaderListener(true)
@@ -68,7 +69,7 @@ function regAddContentScripts() {
 						js: ["contentScripts/content_tumed.js"]
 					})
 				]
-			};
+			}
 			var ruleTEX = {
 				conditions: [
 					new chrome.declarativeContent.PageStateMatcher({
@@ -83,7 +84,7 @@ function regAddContentScripts() {
 						js: ["contentScripts/content_tex.js"],
 					}),
 				],
-			};
+			}
 			//thats a new version of IDP
 			var ruleIDP = {
 				conditions: [
@@ -99,11 +100,28 @@ function regAddContentScripts() {
 						js: ["contentScripts/content_idp.js"],
 					}),
 				],
-			};
+			}
+			//gitlab
+			var ruleGitlab = {
+				conditions: [
+					new chrome.declarativeContent.PageStateMatcher({
+						pageUrl: {
+							hostEquals: "gitlab.mn.tu-dresden.de",
+							schemes: ["https"],
+						},
+					}),
+				],
+				actions: [
+					new chrome.declarativeContent.RequestContentScript({
+						js: ["contentScripts/gitlab.js"],
+					}),
+				],
+			}
 			// register rule
-			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED]);
-			chrome.declarativeContent.onPageChanged.addRules([ruleIDP]);
-      		chrome.declarativeContent.onPageChanged.addRules([ruleTEX]);
+			chrome.declarativeContent.onPageChanged.addRules([ruleTUMED])
+			chrome.declarativeContent.onPageChanged.addRules([ruleIDP])
+			chrome.declarativeContent.onPageChanged.addRules([ruleTEX])
+			chrome.declarativeContent.onPageChanged.addRules([ruleGitlab])
 			console.log("Tried to register addtional content scripts. Success unconfirmed.")
 		})
 	} catch (e) { console.log("Error requesting additional content script for Chrome: " + e) }
@@ -123,6 +141,11 @@ function regAddContentScripts() {
 		browser.contentScripts.register({
 			"js": [{ file: "contentScripts/content_idp.js" }],
 			"matches": ["https://idp.tu-dresden.de/idp/profile/*"],
+			"runAt": "document_start"
+		}).then(() => console.log("Successfully registered additional content script idp for FF"))
+		browser.contentScripts.register({
+			"js": [{ file: "contentScripts/gitlab.js" }],
+			"matches": ["https://gitlab.mn.tu-dresden.de/*"],
 			"runAt": "document_start"
 		}).then(() => console.log("Successfully registered additional content script idp for FF"))
 	} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
@@ -283,13 +306,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			//seen customized studiengang
 			chrome.storage.local.get(['updateCustomizeStudiengang'], function (result) {
 				if (result.updateCustomizeStudiengang === undefined || result.updateCustomizeStudiengang === null) {
-					chrome.storage.local.set({ updateCustomizeStudiengang: false}, function () { })
+					chrome.storage.local.set({ updateCustomizeStudiengang: false }, function () { })
 				}
 			})
 			//selected studiengang
 			chrome.storage.local.get(['studiengang'], function (result) {
 				if (result.studiengang === undefined || result.studiengang === null) {
-					chrome.storage.local.set({ studiengang: "general"}, function () { })
+					chrome.storage.local.set({ studiengang: "general" }, function () { })
 				}
 			})
 			break
