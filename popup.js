@@ -15,6 +15,16 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
     },
+    "mathematik": {
+        "name": "Mathematik",
+        "fsr_icon": "./OfficialIcons/fsr_mathe.png",
+        "fsr_icon_dashboard_style": "max-height: 32px;",
+        "fsr_link": "https://myfsr.de/dokuwiki/doku.php?id=start",
+        "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
+    },
     "medizin": {
         "name": "Medizin",
         "fsr_icon": "./OfficialIcons/fsr_medi_small.png",
@@ -53,7 +63,7 @@ const studiengang_config = {
 //this can be used e.g. if a new studiengang was added
 //settings this to false (bool-value) will cause no action
 //dropdown_update_id is a random string
-const dropdown_update_id = "aw4e5rt"
+const dropdown_update_id = "89uijk"
 
 window.onload = async function () {
 
@@ -119,12 +129,12 @@ window.onload = async function () {
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function (event) {
         if (!event.target.matches('.select_studiengang_btn')) {
-            var dropdowns = document.getElementsByClassName("select_studiengang_dropdown_content");
-            var i;
+            var dropdowns = document.getElementsByClassName("select_studiengang_dropdown_content")
+            var i
             for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
+                var openDropdown = dropdowns[i]
                 if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
+                    openDropdown.classList.remove('show')
                 }
             }
         }
@@ -143,7 +153,7 @@ window.onload = async function () {
 
     //we need to set dropdown selection max-height, in case the dashboard is small
     //before wait XXXms because everything needs to be loaded first
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise(r => setTimeout(r, 200))
     document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
 }
 
@@ -168,7 +178,7 @@ function addDropdownOptions() {
         let listEntry = document.createElement("p")
         listEntry.style = "display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;"
         listEntry.onclick = changeStudiengangSelection
-        listEntry.setAttribute('studiengang', key);
+        listEntry.setAttribute('studiengang', key)
 
         let listTxt = document.createElement("text")
         listTxt.style = "flex:10"
@@ -184,7 +194,7 @@ function addDropdownOptions() {
         }
 
         dropdown_content.appendChild(listEntry)
-    });
+    })
 
 }
 
@@ -202,14 +212,14 @@ function customizeForStudiengang(studiengang) {
         //set visible icons
         studiengang_config[studiengang].footer_icons_display.forEach(element => {
             document.getElementById(element).style.display = "flex"
-        });
+        })
     }
 
     //set footer icon links
     if (studiengang_config[studiengang].footer_icons_links) {
         Object.keys(studiengang_config[studiengang].footer_icons_links).forEach(function (key) {
             document.getElementById(key).href = studiengang_config[studiengang].footer_icons_links[key]
-        });
+        })
     }
 
     //set fsr icon
@@ -426,7 +436,7 @@ function loadCourses(type) {
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function selectStudiengangDropdown() {
-    document.getElementById("select_studiengang_dropdown_content").classList.toggle("show");
+    document.getElementById("select_studiengang_dropdown_content").classList.toggle("show")
     chrome.storage.local.set({ updateCustomizeStudiengang: dropdown_update_id }, function () { })
     document.getElementById("select_studiengang_dropdown_id").style.border = "none"
 }
