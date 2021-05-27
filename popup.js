@@ -20,7 +20,7 @@ const studiengang_config = {
         "fsr_icon": "./OfficialIcons/fsr_mathe.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
         "fsr_link": "https://myfsr.de/dokuwiki/doku.php?id=start",
-        "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "swdd"],
+        "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "je", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
