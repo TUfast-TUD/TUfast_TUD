@@ -1,9 +1,5 @@
 # TUfast 🚀
-TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. Das spart Zeit und Nerven!
-TUfast ist verfügbar für Firefox, Chrome und Edge über [www.tu-fast.de](https://www.tu-fast.de) und hat aktuell 950+ Nutzer.
-
-TUfast soll für deinen Studiengang angepasst werden? Schreibe uns eine Mail an frage@tu-fast.de mit deinem Vorschlag und melde es am besten zusätzlich deinem [FSR](https://www.stura.tu-dresden.de/fachschaften), welcher uns unterstützen kann!
-Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
+TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. TUfast ein ein studentisches, quelloffenes Projekt und hat mittlerweils über 1000 Nutzer! Verfügbar auf [www.tu-fast.de](https://www.tu-fast.de).
 
 ![image](https://user-images.githubusercontent.com/31124624/115123463-72e24980-9fbd-11eb-8ff9-7466ba8e0df2.png)
 
@@ -16,17 +12,17 @@ Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
  - Notenstatistik im Hisqisi & coole Tabelle
  - ... weitere Optionen findest du in TUfast :)
 
-### Datenschutz
+## Datenschutz
 Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lokal auf dem PC gespeichert und verschlüsselt.
 Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing).
 
 ## Das Projekt unterstützen❤️❤️❤️
 Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! 
 
-# TUfast-Entwickler werden
+### TUfast-Entwickler werden
 Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfast-Entwickler! Wenn du zwei Funktionen erfolgreich implementiert hast, erhältst du einen Nachweis für dein Engagement im TUfast-Team für deine Unterlagen! :)
 
-# Spenden
+### Spenden
 [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Projekt mit einer kleinen Spende unterstützen.
 
 ## Zukünftige Entwicklung und Feature Ideen ⭐
