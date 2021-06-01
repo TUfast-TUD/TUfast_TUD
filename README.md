@@ -16,7 +16,7 @@ TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schnel
 Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lokal auf dem PC gespeichert und verschlüsselt.
 Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing).
 
-## Das Projekt unterstützen❤️❤️❤️
+## Das Projekt unterstützen❤️
 Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! 
 
 ### TUfast-Entwickler werden
@@ -25,8 +25,8 @@ Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfas
 ### Spenden
 [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Projekt mit einer kleinen Spende unterstützen.
 
-## Zukünftige Entwicklung und Feature Ideen ⭐
-Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ein Feature vor oder fang an zu entwickeln! Hier sind ein paar Ideen, sortiert nach Anzahl der Nachfragen:
+## Feature Ideen ⭐
+Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach Anzahl der Nachfragen:
 
 ### Häufig nachgefragt
 - **Portierung für Safari ~[assinged]~**: Dafür gibt es schon einen PR (in Arbeit).
@@ -43,6 +43,7 @@ Du willst auch das Leben der Studenten an unserer Uni verbessern? Dann schlag ei
 - **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
 - **AutoLoad Kontostand**: Man könnte den Kontostand von Mensa-AutoLoad abfragen und im Dashboard zeigen!
 - **PDF aus OPAL über Kontext-Menu direkt in neuem Fenster öffnen**: Über [diese](https://developer.chrome.com/docs/extensions/reference/contextMenus/) API ist das möglich. Ist ewas eleganter als die aktuelle Lösung mit dem Switch!
+- **Dark-Mode**
 
 
 ### Weiteres
