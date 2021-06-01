@@ -30,7 +30,6 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 
 ### Häufig nachgefragt
 - **Portierung für Safari ~[assinged]~**: Dafür gibt es schon einen PR (in Arbeit).
-- **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
 - **Prüfen von Login-Daten**: Damit man bei der Eingabe falscher Login-Daten nicht für die Portale gesperrt wird, sollte TUfast beim speichern der Login-Daten prüfen, ob diese valide sind.
 - **Unterstütze https://videocampus.sachsen.de**: Dieses Feature wird häufig nachgefragt. Die Berechtigung für sachsen.de/ muss optional sein! 
 - **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..)**: Aktuell wird hier nur google supported. [Issue 28](https://github.com/TUfast-TUD/TUfast_TUD/issues/28)
@@ -51,6 +50,7 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 - Option, die Einstellungen und OPAL-Kurse über die Broweser zu synchronisieren.
 - **Ein Masterpasswort** das man jedes mal vor dem AutoLogin eingeben muss um die Anwendung noch sicherer zu machen.
 - TUfast für Android (Freifox, und bald auch Chrome)
+- **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
 
 ## Kontakt
 frage@tu-fast.de
