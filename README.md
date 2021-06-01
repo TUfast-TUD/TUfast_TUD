@@ -20,9 +20,13 @@ Aktuell gibt es exklusive Anpassungen für: Maschinenbau und Medizin.
 Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lokal auf dem PC gespeichert und verschlüsselt.
 Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing).
 
-## ❤️❤️❤️
-Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfast-Entwickler! Wenn du zwei Funktionen erfolgreich implementiert hast, erhältst du einen Nachweis für dein Engagement im TUfast-Team für deine Unterlagen! :)
+## Das Projekt unterstützen❤️❤️❤️
+Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! 
 
+# TUfast-Entwickler werden
+Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfast-Entwickler! Wenn du zwei Funktionen erfolgreich implementiert hast, erhältst du einen Nachweis für dein Engagement im TUfast-Team für deine Unterlagen! :)
+
+# Spenden
 [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Projekt mit einer kleinen Spende unterstützen.
 
 ## Zukünftige Entwicklung und Feature Ideen ⭐
