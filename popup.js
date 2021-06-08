@@ -12,7 +12,7 @@ const studiengang_config = {
         "fsr_icon_2": "./icons/OPAL.png",
         "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605",
         "fsr_icon_dashboard_style": "",
-        "fsr_icon_dashboard_style_2": "max-height: 20px; margin-top: 10px;",
+        "fsr_icon_dashboard_style_2": "max-height: 20px; margin-top: 10px; padding-right:10px",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
