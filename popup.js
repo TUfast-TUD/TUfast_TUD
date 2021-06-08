@@ -5,6 +5,19 @@ const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target
 //it overrides the default setting from popup.html
 //if you want to add an footer icon for your course of study, you need to add it to popup.html and set footer_icons_display property in this config
 const studiengang_config = {
+    "geowissenschaften": {
+        "name": "Geowissenschaften",
+        "fsr_icon": "./OfficialIcons/fsr_geo.png",
+        "fsr_link": "https://tu-dresden.de/bu/umwelt/geo/fsr",
+        "fsr_icon_2": "./icons/OPAL.png",
+        "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605",
+        "fsr_icon_dashboard_style": "",
+        "fsr_icon_dashboard_style_2": "max-height: 20px; margin-top: 10px; padding-right:10px",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
+        }
+    },
     "maschinenbau": {
         "name": "Maschinenwesen",
         "fsr_icon": "./OfficialIcons/fsr_mw.png",
@@ -20,7 +33,7 @@ const studiengang_config = {
         "fsr_icon": "./OfficialIcons/fsr_mathe.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
         "fsr_link": "https://myfsr.de/dokuwiki/doku.php?id=start",
-        "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "swdd"],
+        "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "je", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
@@ -35,16 +48,16 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
         }
     },
-    // "psychologie": {
-    //     "name": "Psychologie",
-    //     "fsr_icon": "./OfficialIcons/fsr_psy.png",
-    //     "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
-    //     "fsr_icon_dashboard_style": "",
-    //     "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
-    //     "footer_icons_links": {
-    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-    //     }
-    // },
+    "psychologie": {
+        "name": "Psychologie",
+        "fsr_icon": "./OfficialIcons/fsr_psy.png",
+        "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+        "fsr_icon_dashboard_style": "",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "orsee"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
+        }
+    },
     "general": {
         "name": "Standardeinstellungen",
         "fsr_icon": "",
@@ -63,7 +76,7 @@ const studiengang_config = {
 //this can be used e.g. if a new studiengang was added
 //settings this to false (bool-value) will cause no action
 //dropdown_update_id is a random string
-const dropdown_update_id = "89uijk"
+const dropdown_update_id = "56tzoguhjk"
 
 window.onload = async function () {
 
@@ -230,9 +243,22 @@ function customizeForStudiengang(studiengang) {
         document.getElementById("fsr_icon").style.display = "none"
     }
 
+    //set fsr icon 2
+    if (studiengang_config[studiengang].fsr_icon_2) {
+        document.getElementById("fsr_icon_2").src = studiengang_config[studiengang].fsr_icon_2
+        document.getElementById("fsr_icon_2").style = studiengang_config[studiengang].fsr_icon_dashboard_style_2
+    } else {
+        document.getElementById("fsr_icon_2").style.display = "none"
+    }
+
     //set fsr link
     if (studiengang_config[studiengang].fsr_link) {
         document.getElementById("fsr_link").href = studiengang_config[studiengang].fsr_link
+    }
+
+    //set fsr link 2
+    if (studiengang_config[studiengang].fsr_link_2) {
+        document.getElementById("fsr_link_2").href = studiengang_config[studiengang].fsr_link_2
     }
 }
 
