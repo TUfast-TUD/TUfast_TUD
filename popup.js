@@ -35,16 +35,16 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
         }
     },
-    // "psychologie": {
-    //     "name": "Psychologie",
-    //     "fsr_icon": "./OfficialIcons/fsr_psy.png",
-    //     "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
-    //     "fsr_icon_dashboard_style": "",
-    //     "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
-    //     "footer_icons_links": {
-    //         "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-    //     }
-    // },
+    "psychologie": {
+        "name": "Psychologie",
+        "fsr_icon": "./OfficialIcons/fsr_psy.png",
+        "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+        "fsr_icon_dashboard_style": "",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "orsee"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
+        }
+    },
     "general": {
         "name": "Standardeinstellungen",
         "fsr_icon": "",
