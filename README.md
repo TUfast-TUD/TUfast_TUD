@@ -52,6 +52,7 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 - TUfast für Android (Freifox, und bald auch Chrome)
 - **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
 - Motivationssprüche & Mantras für die Prüfungszeit!
+- Link bei Mouseover auf Icons im Dashboard zeigen
 
 ## Kontakt
 frage@tu-fast.de
