@@ -72,6 +72,32 @@ const studiengang_config = {
     },
 }
 
+var starRatingSettings = [{
+
+    // initial rating value
+    "rating": "3.5",
+
+    // max rating value
+    "maxRating": "5",
+
+    // min rating value
+    "minRating": "0.5",
+
+    // readonly mode?
+    "readOnly": "no",
+
+    // custom rating symbols here
+    "starImage": "./icons/starRate.png",
+    "emptyStarImage": "./icons/starbackground.png",
+
+    // symbol size
+    "starSize": "20",
+
+    // step size for fractional rating
+    "step": "0.5"
+
+}]
+
 //change this, if you want to highlight the dropdown arrow for the studiengang selection
 //this can be used e.g. if a new studiengang was added
 //settings this to false (bool-value) will cause no action
@@ -168,6 +194,13 @@ window.onload = async function () {
     //before wait XXXms because everything needs to be loaded first
     await new Promise(r => setTimeout(r, 200))
     document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
+
+    //show star rating
+    rateSystem("className", starRatingSettings, function (rating, ratingTargetElement) {
+        // ratingTargetElement.parentElement.parentElement.getElementsByClassName("ratingHolder")[0].innerHTML = rating
+        console.log(rating)
+        console.log(ratingTargetElement)
+    })
 }
 
 function changeStudiengangSelection() {
@@ -345,50 +378,61 @@ function displayCourseList(courseList, htmlList, type) {
     }
 
     courseList.forEach(element => {
+        let listEntrywrapper = document.createElement("div")
         let listEntry = document.createElement("a")
         let listImg = document.createElement("div")
         let listText = document.createElement("div")
         let img = document.createElement("img")
+        let rateEntry
+
         listEntry.className = "list-entry"
-        listImg.className = "list-entry-img"
         listEntry.href = element.link
         listEntry.target = "_blank"
         listEntry.onclick = save__two_clicks
+
+        listImg.className = "list-entry-img"
+
         listText.className = "list-entry-text"
         listText.innerHTML = element.name
+
         img.className = "list-img"
         img.src = imgSrc
+
         if (element.img === "./icons/reload.png") img.src = "./icons/reload.png"
+
         listImg.appendChild(img)
         if (!(element.img === false)) { listEntry.appendChild(listImg) }
         listEntry.appendChild(listText)
-
-        htmlList.appendChild(listEntry)
+        listEntrywrapper.appendChild(listEntry)
+        htmlList.appendChild(listEntrywrapper)
     })
 
-    //Create button so switch courses <> favorites, only if 
+    //Create button so switch courses <> favorites
     let listEntry = document.createElement("a")
     let listImg = document.createElement("div")
     let listText = document.createElement("div")
     let img = document.createElement("img")
+
     listImg.className = "list-entry-img"
+
     listEntry.className = "list-entry"
     listEntry.href = "javascript:void(0)"
     listEntry.onclick = switch_courses_to_show
+
     listText.className = "list-entry-text"
-    //listText.style.flex = "none"    //Required
+
     img.className = "list-img"
-    //listImg.style.flex = "none"     //Required
+
     if (type === "favoriten") img.src = "./icons/CoursesOpalIcon.png"
     if (type === "meine_kurse") img.src = "./icons/star.png"
 
     listImg.appendChild(img)
     listEntry.appendChild(listImg)
+
     if (type === "favoriten") listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
     if (type === "meine_kurse") listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
 
     listEntry.appendChild(listText)
-
     htmlList.appendChild(listEntry)
 
 }

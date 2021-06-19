@@ -15,7 +15,6 @@
   margin-right: 5px;
   text-decoration: none;
   color: black;
-
 }
 
 .studiengang-img {
@@ -33,7 +32,7 @@
   border-radius: 3px;
   font-size: 12px;
   border: #dddddd solid 1.5px;
-  background-image: url('./icons/searchicon.png'); /* Add a search icon to input */
+  background-image: url("./icons/searchicon.png"); /* Add a search icon to input */
   background-position: 12px 7px; /* Position the search icon */
   background-size: 19px;
   background-repeat: no-repeat; /* Do not repeat the icon image */
@@ -42,7 +41,7 @@
 
 input:focus,
 .list-search:focus {
-    /*outline: none !important;
+  /*outline: none !important;
     border: #dddddd solid 2px;*/
 }
 
@@ -83,7 +82,6 @@ html {
   background-color: #909090;
 }
 
-
 /* Footer */
 .settings-footer {
   border-top: solid 2px #909090;
@@ -100,24 +98,24 @@ html {
 }
 
 .settings-section {
-   border-right: solid 2px #dddddd;
-   border-left: solid 2px #dddddd;
-   display: flex;
-   align-items: center;
-   justify-content: space-evenly;/*start*/;
-   padding-left: 4px;
-   padding-right: 4px;
+  border-right: solid 2px #dddddd;
+  border-left: solid 2px #dddddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly; /*start*/
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .settings-section-icon {
-   display: flex;
-   border: none;
-   height: 100%;
-   align-items: center; /*space-between*/
-   justify-content: center;
-   padding-left: 6px;
-   padding-right: 6px;
-   border-radius: 3px;
+  display: flex;
+  border: none;
+  height: 100%;
+  align-items: center; /*space-between*/
+  justify-content: center;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-radius: 3px;
 }
 
 .settings-text {
@@ -141,40 +139,35 @@ html {
 }
 
 /* scrollbar */
-.custom-scrollbar::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
-	box-shadow: inset 0 0 6px rgba(68,68,68,0.3);
-	border-radius: 10px;
+.custom-scrollbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  border-radius: 10px;
   background-color: #dbdbdb;
 }
 
-.custom-scrollbar::-webkit-scrollbar
-{
-	width: 10px;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
   background-color: #dbdbdb;
-  
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(68,68,68,.3);
-	box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
-	background-color: #9c9c9c;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  background-color: #9c9c9c;
 }
 
 .list-entry:hover,
 .settings-section-icon:hover,
-.select_studiengang_dropdown:hover
-{
+.select_studiengang_dropdown:hover {
   background-color: #e5e5e5;
 }
 
 /* Dropdown Button */
 .select_studiengang_btn {
   width: 15px;
-  padding: 13px 4px 4px 4px
+  padding: 13px 4px 4px 4px;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -189,22 +182,31 @@ html {
   position: absolute;
   min-width: 180px;
   background-color: #ffffff;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  right:14px;
+  right: 14px;
   border-radius: 3px;
-  overflow-y:auto;
+  overflow-y: auto;
 }
 
 /* Links inside the dropdown */
 .select_studiengang_dropdown_content p {
-  padding: 3px;;
+  padding: 3px;
   display: block;
   margin: 0;
 }
 
 /* Change color of dropdown links on hover */
-.select_studiengang_dropdown_content p:hover {background-color: #ddd}
+.select_studiengang_dropdown_content p:hover {
+  background-color: #ddd;
+}
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
+.show {
+  display: block;
+}
+
+/*custom cursor for star rating*/
+.starRatingContainer {
+  cursor: pointer;
+}

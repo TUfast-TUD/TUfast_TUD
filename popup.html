@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <script src="starRating.js"></script>
   <script src="popup.js"></script>
   <link rel="stylesheet" href="popup.css">
   <link rel="stylesheet" href="switch.css">
@@ -12,6 +13,8 @@
 
 <body>
   <div class="headline">TU Dresden Dashboard</div>
+
+
   <div class="list custom-scrollbar" id="list">
     <div style="display: flex; margin-top: 4px;">
       <input class="list-search" type="text" id="searchListInput" placeholder="Kurs suchen..." autofocus>
@@ -27,11 +30,11 @@
           <!-- items will be dynamically added based on config in popup.js--> 
         </div>
       </div>
-      
     </div>
     <div id="banana"></div>
     <!-- here come list entries; injected via js --> 
   </div>
+<div>  <div class="starRatingContainer"> <div class="className"> </div> </div></div>
   <div class="settings-footer">
     <div class="settings-footer-bar" id="settings-footer-bar-icons" style="border:none">
       <!--div class="settings-section" style="flex: 7.5">
