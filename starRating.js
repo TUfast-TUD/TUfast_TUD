@@ -1,48 +1,53 @@
+/*
+    That is a third party file. Original source: https://www.cssscript.com/tiny-star-rating-system/
+    Slight modifications where done!
+*/
+
 
 /* myStarCollection.push("className"); */
 var mouseClickedStarRating = false
 function rateSystem(className, obj, fnc = function () { }, fncMove = function () { }, fncLeave = function () { }) {
     /* window.myStarCollection.push(className); */
-    for (let i = 0; i < obj.length; i++) {
+    for (let i = 0; i < document.getElementsByClassName(className).length; i++) {
 
-        document.getElementsByClassName(className)[i].style.width = (obj[i].rating * obj[i].starSize) + "px"
-        document.getElementsByClassName(className)[i].style.height = obj[i].starSize + "px"
-        document.getElementsByClassName(className)[i].style.backgroundSize = obj[i].starSize + "px"
-        document.getElementsByClassName(className)[i].style.backgroundImage = "url('" + obj[i].starImage + "')"
+        document.getElementsByClassName(className)[i].style.width = (obj.rating * obj.starSize) + "px"
+        document.getElementsByClassName(className)[i].style.height = obj.starSize + "px"
+        document.getElementsByClassName(className)[i].style.backgroundSize = obj.starSize + "px"
+        document.getElementsByClassName(className)[i].style.backgroundImage = "url('" + obj.starImage + "')"
         document.getElementsByClassName(className)[i].style.backgroundRepeat = "repeat-x"
-        document.getElementsByClassName(className)[i].parentElement.style.width = (parseInt(obj[i].starSize) * parseInt(obj[i].maxRating)) + "px"
-        document.getElementsByClassName(className)[i].parentElement.style.maxWidth = (parseInt(obj[i].starSize) * parseInt(obj[i].maxRating)) + "px"
-        document.getElementsByClassName(className)[i].parentElement.style.height = parseInt(obj[i].starSize) + "px"
+        document.getElementsByClassName(className)[i].parentElement.style.width = (parseInt(obj.starSize) * parseInt(obj.maxRating)) + "px"
+        document.getElementsByClassName(className)[i].parentElement.style.maxWidth = (parseInt(obj.starSize) * parseInt(obj.maxRating)) + "px"
+        document.getElementsByClassName(className)[i].parentElement.style.height = parseInt(obj.starSize) + "px"
 
-        if (obj[i].minRating) {
-            document.getElementsByClassName(className)[i].style.minWidth = (obj[i].minRating * obj[i].starSize) + "px"
+        if (obj.minRating) {
+            document.getElementsByClassName(className)[i].style.minWidth = (obj.minRating * obj.starSize) + "px"
         } else {
             document.getElementsByClassName(className)[i].style.minWidth = "0px"
         }
 
-        if (obj[i].backgroundStarImage) {
-            document.getElementsByClassName(className)[i].parentElement.style.backgroundSize = obj[i].starSize + "px"
+        if (obj.backgroundStarImage) {
+            document.getElementsByClassName(className)[i].parentElement.style.backgroundSize = obj.starSize + "px"
             document.getElementsByClassName(className)[i].parentElement.style.backgroundRepeat = "repeat-x"
-            document.getElementsByClassName(className)[i].parentElement.style.backgroundImage = "url('" + obj[i].backgroundStarImage + "')"
+            document.getElementsByClassName(className)[i].parentElement.style.backgroundImage = "url('" + obj.backgroundStarImage + "')"
         }
 
-        if (obj[i].emptyStarImage) {
+        if (obj.emptyStarImage) {
             document.getElementsByClassName(className)[i].innerHTML = '<div class="emptyStarRating"></div>'
-            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.backgroundSize = parseInt(obj[i].starSize) + "px"
-            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.backgroundImage = "url('" + obj[i].emptyStarImage + "')"
+            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.backgroundSize = parseInt(obj.starSize) + "px"
+            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.backgroundImage = "url('" + obj.emptyStarImage + "')"
             document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.backgroundRepeat = "repeat-x"
-            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.width = (parseInt(obj[i].starSize) * parseInt(obj[i].maxRating)) + "px"
-            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.height = parseInt(obj[i].starSize) + "px"
+            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.width = (parseInt(obj.starSize) * parseInt(obj.maxRating)) + "px"
+            document.getElementsByClassName(className)[i].getElementsByClassName("emptyStarRating")[0].style.height = parseInt(obj.starSize) + "px"
         }
 
-        document.getElementsByClassName(className)[i].style.maxWidth = obj[i].starSize * obj[i].maxRating + "px"
-        /* document.getElementsByClassName(className)[i].title = obj[i].rating; */
-        document.getElementsByClassName(className)[i].dataset.rating = obj[i].rating
-        document.getElementsByClassName(className)[i].dataset.step = obj[i].step
-        if (obj[i].readOnly === "yes") {
+        document.getElementsByClassName(className)[i].style.maxWidth = obj.starSize * obj.maxRating + "px"
+        /* document.getElementsByClassName(className)[i].title = obj.rating; */
+        document.getElementsByClassName(className)[i].dataset.rating = obj.rating
+        document.getElementsByClassName(className)[i].dataset.step = obj.step
+        if (obj.readOnly === "yes") {
             document.getElementsByClassName(className)[i].classList.add("readOnlyStarRating")
         }
-        /*     document.getElementsByClassName(className)[i].innerHTML=obj[i].rating; */
+        /*     document.getElementsByClassName(className)[i].innerHTML=obj.rating; */
         document.getElementsByClassName(className)[i].parentElement.addEventListener("mousemove", function () { zmouseMoveStarRating(fncMove) }, false)
         document.getElementsByClassName(className)[i].parentElement.addEventListener("click", function () { zmouseMoveStarRatingClick(fnc) }, false)
         document.getElementsByClassName(className)[i].parentElement.addEventListener("mouseleave", function () { zmouseMoveStarRatingLeave(fncLeave) }, false)

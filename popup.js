@@ -72,16 +72,16 @@ const studiengang_config = {
     },
 }
 
-var starRatingSettings = [{
+var starRatingSettings = {
 
     // initial rating value
-    "rating": "3.5",
+    "rating": "0.0",
 
     // max rating value
     "maxRating": "5",
 
     // min rating value
-    "minRating": "0.5",
+    "minRating": "0.0",
 
     // readonly mode?
     "readOnly": "no",
@@ -91,12 +91,12 @@ var starRatingSettings = [{
     "emptyStarImage": "./icons/starbackground.png",
 
     // symbol size
-    "starSize": "20",
+    "starSize": "17",
 
     // step size for fractional rating
     "step": "0.5"
 
-}]
+}
 
 //change this, if you want to highlight the dropdown arrow for the studiengang selection
 //this can be used e.g. if a new studiengang was added
@@ -196,10 +196,10 @@ window.onload = async function () {
     document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
 
     //show star rating
-    rateSystem("className", starRatingSettings, function (rating, ratingTargetElement) {
+    rateSystem("myRatingClassName", starRatingSettings, function (rating, ratingTargetElement) {
         // ratingTargetElement.parentElement.parentElement.getElementsByClassName("ratingHolder")[0].innerHTML = rating
         console.log(rating)
-        console.log(ratingTargetElement)
+        console.log(ratingTargetElement.id)
     })
 }
 
@@ -383,7 +383,31 @@ function displayCourseList(courseList, htmlList, type) {
         let listImg = document.createElement("div")
         let listText = document.createElement("div")
         let img = document.createElement("img")
-        let rateEntry
+        let rateEntryWrapper = document.createElement("div")
+        let rateEntry = document.createElement("div")
+        let confirmEntry = document.createElement("div")
+
+        listEntrywrapper.className = "list-entry-wrapper"
+
+        rateEntryWrapper.style.display = "flex"
+        rateEntryWrapper.style.alignItems = "center"
+        rateEntryWrapper.style.marginBottom = "7px"
+        rateEntry.style.flex = 1
+        rateEntry.style.marginLeft = "150px"
+        confirmEntry.style.flex = 2
+
+        confirmEntry.innerHTML = "<a style='font-size:15px;' href='javascript: void (0)'>Fertig <text style='font-size:14px'>✅</text></a>"
+
+        //this is the structure required by starRating.js
+        let rateEntryInner1 = document.createElement("div")
+        let rateEntryInner2 = document.createElement("div")
+        rateEntryInner1.className = "starRatingContainer"
+        rateEntryInner2.className = "myRatingClassName"
+        rateEntryInner2.id = element.name
+        rateEntryInner1.appendChild(rateEntryInner2)
+        rateEntry.appendChild(rateEntryInner1)
+
+
 
         listEntry.className = "list-entry"
         listEntry.href = element.link
@@ -404,6 +428,9 @@ function displayCourseList(courseList, htmlList, type) {
         if (!(element.img === false)) { listEntry.appendChild(listImg) }
         listEntry.appendChild(listText)
         listEntrywrapper.appendChild(listEntry)
+        rateEntryWrapper.appendChild(rateEntry)
+        rateEntryWrapper.appendChild(confirmEntry)
+        listEntrywrapper.appendChild(rateEntryWrapper)
         htmlList.appendChild(listEntrywrapper)
     })
 

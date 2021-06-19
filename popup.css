@@ -9,12 +9,15 @@
 .list-entry {
   display: flex;
   padding: 9px;
-  border-bottom: #dddddd solid 1.5px;
   margin: 2px;
   margin-left: 5px;
   margin-right: 5px;
   text-decoration: none;
   color: black;
+}
+
+.list-entry-wrapper {
+  border-bottom: #dddddd solid 1.5px;
 }
 
 .studiengang-img {
