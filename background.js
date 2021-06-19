@@ -151,10 +151,22 @@ function regAddContentScripts() {
 	} catch (e) { console.log("Error requesting additional content script for FF: " + e) }
 }
 
-//check whether to ask for additional host permission
-chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1', "installed", "saved_click_counter"], function (result) {
-	if (!result.gotInteractionOnHostPermissionExtension1 && result.saved_click_counter > 10) {
-		chrome.tabs.create(({ url: "updatePermissions.html" }))
+//check whether to ask for additional host permission: if not granted and not shown yet
+chrome.storage.local.get(['gotInteractionOnHostPermissionExtension2', "installed", "saved_click_counter"], function (result) {
+	if (!result.gotInteractionOnHostPermissionExtension2 && result.saved_click_counter > 10) { //ADAPT FOR RELEASE
+		chrome.storage.local.set({ gotInteractionOnHostPermissionExtension2: true }, function () { })
+		chrome.permissions.contains({
+			origins: ["*://*/*"]
+		}, function (hasPermission) {
+			if (hasPermission) {
+				// Everything alright.
+
+			} else {
+
+				// Show options to grant permission.
+				chrome.tabs.create(({ url: "updatePermissions.html" }))
+			}
+		})
 	}
 })
 

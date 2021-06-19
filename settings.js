@@ -200,24 +200,20 @@ function enableOWAFetch() {
 }
 
 function denyHostPermissionS() {
-  chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
-  alert("Okay, das ist schade. Trotzdem wird TUfast bei dir auf den wichtigsten Seiten Funktionieren. Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
-  document.getElementById("addition_host_permissions").remove()
+  alert("Okay, das ist schade. Beachte bitte, dass diese TUfast sich bei dir bald automatisch deaktivieren wird und du die Erweiterung wieder manuell aktivieren musst. Wir empfehlen dir, die Berechtigung zu akzeptieren!")
 }
 
 function requestHostPermissionS() {
-  chrome.storage.local.set({ gotInteractionOnHostPermissionExtension1: true }, function () { })
   chrome.permissions.request({
-    origins: ["*://*.tu-dresden.de/*", "*://*.slub-dresden.de/*"]
+    origins: ["*://*/*"]
   }, function (granted) {
     if (granted) {
-      alert("Perfekt! TUfast funktioniert jetzt auf allen Seiten! Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
+      alert("Perfekt! TUfast hat jetzt maximale Funktionalität! Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
       chrome.runtime.sendMessage({ cmd: 'register_addition_content_scripts' }, function (result) { })
       document.getElementById("addition_host_permissions").remove()
 
     } else {
-      alert("Okay, das ist schade. Trotzdem wird TUfast bei dir weiterhin Funktionieren. Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
-      document.getElementById("addition_host_permissions").remove()
+      alert("Okay, das ist schade. Beachte bitte, dass TUfast sich bei dir bald automatisch deaktivieren wird und du die Erweiterung wieder manuell aktivieren musst. Wir empfehlen dir, die Berechtigung zu akzeptieren!")
     }
   })
 }
@@ -263,7 +259,7 @@ let rocketIconsConfig = {
   "RI6": {
     IconPathEnabled: "RocketIcons/6_128px.png",
     IconPathDisabled: "RocketIcons/6_grey_128px.png",
-    innerHTMLToEnable: "&nbsp;&nbsp;Gef&auml;llt dir TUfast? Oder hast du Anmerkdungen? Dann hinterlasse eine Bewertung im &#128073;<a target='_blank' href=" + webstorelink +">Webstore</a>!",
+    innerHTMLToEnable: "&nbsp;&nbsp;Gef&auml;llt dir TUfast? Oder hast du Anmerkdungen? Dann hinterlasse eine Bewertung im &#128073;<a target='_blank' href=" + webstorelink + ">Webstore</a>!",
     innerHTMLEnabled: "&nbsp;&nbsp;Danke f&uuml;r deine Bewertung im Webstore!",
     id: "RI6"
   },
@@ -404,7 +400,7 @@ window.onload = async function () {
       chrome.storage.local.set({ additionalNotificationOnNewMail: false })
     }
   })
-  
+
   //add studiengang-select listener
   document.getElementById("studiengangSelect").addEventListener("change", function () {
     let value = document.getElementById("studiengangSelect").value
@@ -475,7 +471,7 @@ window.onload = async function () {
 
 
   //get things from storage
-  chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled", "gotInteractionOnHostPermissionExtension1"], (result) => {
+  chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled"], (result) => {
     //set text on isEnabled
     if (result.isEnabled) {
       document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
@@ -502,7 +498,6 @@ window.onload = async function () {
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
       }, 500)
     }
-    //else if (result.gotInteractionOnHostPermissionExtension1) { document.getElementsByTagName("button")[0].click() }
 
 
 
@@ -540,12 +535,17 @@ window.onload = async function () {
   }
 
 
-  //additional host permissions
-  //check whether to ask for additional host permission
-  chrome.storage.local.get(['gotInteractionOnHostPermissionExtension1'], async function (result) {
-    if (!result.gotInteractionOnHostPermissionExtension1) {
+  //additional host permissions: all urls
+  //show, if dont have permission for all acceptDomainschrome.permissions.contains({
+  chrome.permissions.contains({
+    origins: ["*://*/*"]
+  }, async function (hasPermission) {
+    if (hasPermission) {
+      // Everything alright.
+    } else {
+      // Show options to grant permission.
       let hpDiv = document.getElementById("addition_host_permissions")
-      hpDiv.innerHTML = '<p>TUfast braucht eine zus&auml;tzliche Berechtigung, damit alle Online-Portale der TU Dresden unterst&uuml;tzt werden.<br>Dr&uuml;cke jetzt "Akzeptieren", um TUfast f&uuml;r alle Online-Portale zu verwenden.</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button>'
+      hpDiv.innerHTML = '<p>TUfast braucht eine zus&auml;tzliche Berechtigung, damit alle Online-Portale der TU Dresden unterst&uuml;tzt werden. <br><b>Die Berechtigung ist n&ouml;tig, um TUfast weiterhin zu verwenden.<br>Wenn du ablehnst, deaktiviert sich TUfast aufgrund des Rechtemanagements leider bei dir demn&auml;chst automatisch.</b><br>Eine ausf&uuml;hrliche Erkl&auml;rung von uns, warum die Berechtigung ben&ouml;tigt wird, findest du <a target="_blank" href="https://docs.google.com/document/d/1B3E6X5-Yy4UryxzS7CD-4m-Xfs0GKmWbFWfRPEB6Zz0/edit?usp=sharing"><b>hier<b></a>.<br>Dr&uuml;cke jetzt auf "Akzeptieren".</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button><br>'
       await new Promise(r => setTimeout(r, 500))
       document.getElementById("refuseDomains").addEventListener('click', denyHostPermissionS) //innerHTML is not async. However, it takes time to render, so lets wait 500ms
       document.getElementById("acceptDomains").addEventListener('click', requestHostPermissionS)
