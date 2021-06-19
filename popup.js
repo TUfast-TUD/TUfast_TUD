@@ -91,7 +91,7 @@ var starRatingSettings = {
     "emptyStarImage": "./icons/starbackground.png",
 
     // symbol size
-    "starSize": "17",
+    "starSize": "18",
 
     // step size for fractional rating
     "step": "0.5"
@@ -107,12 +107,13 @@ const dropdown_update_id = "56tzoguhjk"
 window.onload = async function () {
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang"], async function (result) {
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses"], async function (result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
         let htmlList = document.getElementsByClassName("list")[0]
-        displayCourseList(courseList, htmlList, dashboardDisplay)
+        displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses)
+        document.getElementById("intro").onclick = remove_intro
 
         //filter list
         listSearchFunction()
@@ -197,9 +198,7 @@ window.onload = async function () {
 
     //show star rating
     rateSystem("myRatingClassName", starRatingSettings, function (rating, ratingTargetElement) {
-        // ratingTargetElement.parentElement.parentElement.getElementsByClassName("ratingHolder")[0].innerHTML = rating
-        console.log(rating)
-        console.log(ratingTargetElement.id)
+        //callback for clicking on star rating. We dont do anything here.
     })
 }
 
@@ -351,7 +350,7 @@ function listSearchFunction() {
     if (listEntries[listEntries.length - 1].innerHTML.includes("aktualisieren")) { listEntries[listEntries.length - 1].style.display = "" }
 }
 
-function displayCourseList(courseList, htmlList, type) {
+function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourses) {
     let link = ""
     let name = ""
     let imgSrc = ""
@@ -377,6 +376,20 @@ function displayCourseList(courseList, htmlList, type) {
         courseList.push({ "name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "./icons/reload.png" })
     }
 
+    //add introduction to course Rating element
+    if (!closedIntro1) {
+        let introRating = document.createElement("div")
+        introRating.id = "intro_rating"
+        let introRatingText = document.createElement("p")
+        introRating.classList.add("list-entry-wrapper")
+        introRatingText.classList.add("list-intro")
+
+        introRatingText.innerHTML = "<b>Wir suchen den besten Kurs an der TU Dresden. Bewerte jetzt deine Kurse mit 1-5 Sternen!</b> Deine Bewertung ist zu 100% völlig anonym. Die Ergebnisse der Abstimmung veröffentlichen wir anschließend. Details und die Erweiterung zur Datenschutzerklärung gibts <a target='_blank' href='https://docs.google.com/document/d/1CIt2Q16gtzsuopXZxxMcC1BU1urpJF6FCQ8d77-um1U/edit?usp=sharing'>hier</a>. <a id='intro' href='#'>Schließen</a>."
+        introRating.appendChild(introRatingText)
+        htmlList.appendChild(introRating)
+    }
+
+
     courseList.forEach(element => {
         let listEntrywrapper = document.createElement("div")
         let listEntry = document.createElement("a")
@@ -386,17 +399,24 @@ function displayCourseList(courseList, htmlList, type) {
         let rateEntryWrapper = document.createElement("div")
         let rateEntry = document.createElement("div")
         let confirmEntry = document.createElement("div")
+        let confirmEntryLink = document.createElement("a")
 
         listEntrywrapper.className = "list-entry-wrapper"
 
         rateEntryWrapper.style.display = "flex"
         rateEntryWrapper.style.alignItems = "center"
         rateEntryWrapper.style.marginBottom = "7px"
+        rateEntryWrapper.id = element.name + " Wrapper"
         rateEntry.style.flex = 1
         rateEntry.style.marginLeft = "150px"
         confirmEntry.style.flex = 2
 
-        confirmEntry.innerHTML = "<a style='font-size:15px;' href='javascript: void (0)'>Fertig <text style='font-size:14px'>✅</text></a>"
+        confirmEntryLink.setAttribute("courseRef", element.name)
+        confirmEntryLink.style.fontSize = "15px"
+        confirmEntryLink.href = "#"
+        confirmEntryLink.innerHTML = "Fertig <text style='font-size:14px'>✅</text>"
+        confirmEntryLink.onclick = sendRating
+        confirmEntry.appendChild(confirmEntryLink)
 
         //this is the structure required by starRating.js
         let rateEntryInner1 = document.createElement("div")
@@ -430,7 +450,13 @@ function displayCourseList(courseList, htmlList, type) {
         listEntrywrapper.appendChild(listEntry)
         rateEntryWrapper.appendChild(rateEntry)
         rateEntryWrapper.appendChild(confirmEntry)
-        listEntrywrapper.appendChild(rateEntryWrapper)
+        let isRated = false
+        if (ratedCourses == undefined) {
+            isRated = false
+        } else {
+            isRated = ratedCourses.includes(element.name)
+        }
+        if (!(element.name == "Diese Kursliste jetzt aktualisieren..." || element.name == "Klicke, um deine Opal-Kurse zu importieren" || isRated)) listEntrywrapper.appendChild(rateEntryWrapper)
         htmlList.appendChild(listEntrywrapper)
     })
 
@@ -536,4 +562,40 @@ function selectStudiengangDropdown() {
     document.getElementById("select_studiengang_dropdown_content").classList.toggle("show")
     chrome.storage.local.set({ updateCustomizeStudiengang: dropdown_update_id }, function () { })
     document.getElementById("select_studiengang_dropdown_id").style.border = "none"
+}
+
+function sendRating() {
+    let course = this.getAttribute("courseref")
+    let rating = document.getElementById(course).dataset.rating
+
+    console.log(course)
+    console.log(rating)
+
+    //rating cannot be zero
+    if (rating == "0.0") {
+        alert("Bitte bewerte den Kurs mit Sternen, bevor du dein Rating abgibst!")
+        return
+    }
+
+    //add to rated list
+    chrome.storage.local.get(['ratedCourses'], async function (result) {
+        let updatedCourseList = []
+        if (result.ratedCourses == undefined) {
+            updatedCourseList = []
+        } else {
+            updatedCourseList = result.ratedCourses
+        }
+        updatedCourseList.push(course)
+        chrome.storage.local.set({ ratedCourses: updatedCourseList }, function () { })
+    })
+
+    //remove the rating div
+    document.getElementById(course + " Wrapper").remove()
+
+    //send rating
+}
+
+function remove_intro() {
+    document.getElementById("intro_rating").remove()
+    chrome.storage.local.set({ closedIntro1: true }, function () { })
 }
