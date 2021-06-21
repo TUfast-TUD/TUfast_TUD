@@ -153,7 +153,7 @@ function regAddContentScripts() {
 
 //check whether to ask for additional host permission: if not granted and not shown yet
 chrome.storage.local.get(['gotInteractionOnHostPermissionExtension2', "installed", "saved_click_counter"], function (result) {
-	if (!result.gotInteractionOnHostPermissionExtension2 && result.saved_click_counter > 10) { //ADAPT FOR RELEASE
+	if (!result.gotInteractionOnHostPermissionExtension2 && result.saved_click_counter > 10) {
 		chrome.storage.local.set({ gotInteractionOnHostPermissionExtension2: true }, function () { })
 		chrome.permissions.contains({
 			origins: ["*://*/*"]

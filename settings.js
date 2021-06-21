@@ -208,7 +208,7 @@ function requestHostPermissionS() {
     origins: ["*://*/*"]
   }, function (granted) {
     if (granted) {
-      alert("Perfekt! TUfast hat jetzt maximale Funktionalität! Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
+      alert("Perfekt! TUfast hat jetzt maximale Funktionalit&auml;t! Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
       chrome.runtime.sendMessage({ cmd: 'register_addition_content_scripts' }, function (result) { })
       document.getElementById("addition_host_permissions").remove()
 
@@ -545,7 +545,7 @@ window.onload = async function () {
     } else {
       // Show options to grant permission.
       let hpDiv = document.getElementById("addition_host_permissions")
-      hpDiv.innerHTML = '<p>TUfast braucht eine zus&auml;tzliche Berechtigung, damit alle Online-Portale der TU Dresden unterst&uuml;tzt werden. <br><b>Die Berechtigung ist n&ouml;tig, um TUfast weiterhin zu verwenden.<br>Wenn du ablehnst, deaktiviert sich TUfast aufgrund des Rechtemanagements leider bei dir demn&auml;chst automatisch.</b><br>Eine ausf&uuml;hrliche Erkl&auml;rung von uns, warum die Berechtigung ben&ouml;tigt wird, findest du <a target="_blank" href="https://docs.google.com/document/d/1B3E6X5-Yy4UryxzS7CD-4m-Xfs0GKmWbFWfRPEB6Zz0/edit?usp=sharing"><b>hier<b></a>.<br>Dr&uuml;cke jetzt auf "Akzeptieren".</p> <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button><br>'
+      hpDiv.innerHTML = '<p><b>TUfast braucht eine zus&auml;tzliche Berechtigung, um zu funktionieren &#10071;&#10071;</b> <br> Dr&uuml;cke jetzt auf "Akzeptieren", um die Berechtigung anzufordern. Eine ausf&uuml;hrliche Erkl&auml;rung zum Thema findest du <a target="_blank" href="https://docs.google.com/document/d/1B3E6X5-Yy4UryxzS7CD-4m-Xfs0GKmWbFWfRPEB6Zz0/edit?usp=sharing">hier</a>. TUfast funktioniert weiterhin ausschlie&szlig;lich lokal auf deinem PC und sammelt keine Nutzerdaten. Wir entwickeln TUfast f&uuml;r euch &#128153; und hoffen, euer Leben damit ein bisschen einfacher zu machen.</p > <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button><br>'
       await new Promise(r => setTimeout(r, 500))
       document.getElementById("refuseDomains").addEventListener('click', denyHostPermissionS) //innerHTML is not async. However, it takes time to render, so lets wait 500ms
       document.getElementById("acceptDomains").addEventListener('click', requestHostPermissionS)
