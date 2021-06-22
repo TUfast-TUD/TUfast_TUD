@@ -593,14 +593,19 @@ function sendRating() {
     //remove the rating div
     document.getElementById(course + " Wrapper").remove()
 
-    //url encoding, remove special chars, replace decimal seperator...
-
     //send rating
-    fetch("https://us-central1-tufastcourserating2.cloudfunctions.net/setRating?rating=" + rating + "&course=" + course)
+    let courseURI = course.replaceAll("/", "") //very important, as it is interpreted as documents and collections in the db
+    courseURI = encodeURIComponent(courseURI)
+    courseURI = courseURI.replaceAll("!", "%21").replaceAll("'", "%27").replaceAll("(", "%28").replaceAll(")", "%29").replaceAll("~", "%7E")
+    let ratingURI = rating.replace(".", ",")
+    console.log(courseURI)
+
+    url = "https://us-central1-tufastcourserating2.cloudfunctions.net/setRating?rating=" + ratingURI + "&course=" + courseURI
+    console.log(url)
+
+    fetch(url)
         .then((resp) => resp.text())
         .then((resp => console.log(resp)))
-
-
 }
 
 function remove_intro() {
