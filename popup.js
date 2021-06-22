@@ -568,6 +568,7 @@ function sendRating() {
     let course = this.getAttribute("courseref")
     let rating = document.getElementById(course).dataset.rating
 
+    console.log("GOT THE FOLLOWING RATING:")
     console.log(course)
     console.log(rating)
 
@@ -592,7 +593,14 @@ function sendRating() {
     //remove the rating div
     document.getElementById(course + " Wrapper").remove()
 
+    //url encoding, remove special chars, replace decimal seperator...
+
     //send rating
+    fetch("https://us-central1-tufastcourserating2.cloudfunctions.net/setRating?rating=" + rating + "&course=" + course)
+        .then((resp) => resp.text())
+        .then((resp => console.log(resp)))
+
+
 }
 
 function remove_intro() {
