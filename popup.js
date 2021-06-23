@@ -385,7 +385,7 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
     //THIS NEEDS TO BE ADAPTED FOR EACH SEMESTER because ratedCourses is never purged for now - its only expanded. However, courses which are not longer in courseList shouldnt be in ratedCourses either!
     if (ratedCourses == undefined) ratedCourses = []
     showIntro = (ratingEnabledFlag && !closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
-    showOutro = (ratingEnabledFlag && !closedOutro1 && courseList.length > 1 && !showIntro)
+    showOutro = (ratingEnabledFlag && !closedOutro1 && courseList.length > 1 && !showIntro && (courseList.length - 2 < ratedCourses.length))
 
 
 
@@ -410,7 +410,7 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         outroRating.classList.add("list-entry-wrapper")
         outroRatingText.classList.add("list-outro")
 
-        outroRatingText.innerHTML = "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
+        outroRatingText.innerHTML = "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Damit k&ouml;nnen wir die Lehre an der TU verbessern! Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
         outroRating.appendChild(outroRatingText)
         htmlList.appendChild(outroRating)
     }
