@@ -10,7 +10,7 @@ function requestHostPermission() {
 		origins: ["*://*/*"]
 	}, function (granted) {
 		if (granted) {
-			alert("Perfekt! Bald gibts die neuen Funktionen! Diese Seite schliesst sich jetzt.")
+			alert("Perfekt! TUfast hast jetzt maximale Funktiontn. Viel Spass!")
 			chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
 			window.close()
 		} else {

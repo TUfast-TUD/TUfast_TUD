@@ -208,7 +208,7 @@ function requestHostPermissionS() {
     origins: ["*://*/*"]
   }, function (granted) {
     if (granted) {
-      alert("Perfekt! TUfast hat jetzt maximale Funktionalit&auml;t! Entdecke auf dieser Seite jetzt alle Funktionen von TUfast!")
+      alert("Perfekt! TUfast hat jetzt maximale Funktionen! Entdecke auf dieser Seite jetzt alle Optionen von TUfast!")
       chrome.runtime.sendMessage({ cmd: 'register_addition_content_scripts' }, function (result) { })
       document.getElementById("addition_host_permissions").remove()
 
