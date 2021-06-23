@@ -381,8 +381,19 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         courseList.push({ "name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "./icons/reload.png" })
     }
 
+    console.log(courseList)
+    console.log(ratedCourses)
+
+    //determine when to show outro and intro for course rating
+    //THIS NEEDS TO BE ADAPTED FOR EACH SEMESTER because ratedCourses is never purged for now - its only expanded. However, courses which are not longer in courseList shouldnt be in ratedCourses either!
+    if (ratedCourses == undefined) ratedCourses = []
+    showIntro = (!closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
+    showOutro = (!closedOutro1 && courseList.length > 1 && !showIntro)
+
+
+
     //add introduction to course Rating element
-    if (!closedIntro1) {
+    if (showIntro) {
         let introRating = document.createElement("div")
         introRating.id = "intro_rating"
         let introRatingText = document.createElement("p")
@@ -394,8 +405,8 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         htmlList.appendChild(introRating)
     }
 
-    //add introduction to course Rating element
-    if (!closedOutro1) {
+    //add outro to course Rating element
+    if (showOutro) {
         let outroRating = document.createElement("div")
         outroRating.id = "outro_rating"
         let outroRatingText = document.createElement("p")
