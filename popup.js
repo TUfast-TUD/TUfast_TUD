@@ -107,12 +107,12 @@ const dropdown_update_id = "56tzoguhjk"
 window.onload = async function () {
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses", "closedOutro1"], async function (result) {
+    chrome.storage.local.get(['dashboardDisplay', "ratingEnabledFlag", "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses", "closedOutro1"], async function (result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
         let htmlList = document.getElementsByClassName("list")[0]
-        displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1)
+        displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag)
         if (document.getElementById("intro")) {
             document.getElementById("intro").onclick = remove_intro
         }
@@ -355,7 +355,7 @@ function listSearchFunction() {
     if (listEntries[listEntries.length - 1].innerHTML.includes("aktualisieren")) { listEntries[listEntries.length - 1].style.display = "" }
 }
 
-function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1) {
+function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1, ratingEnabledFlag) {
     let link = ""
     let name = ""
     let imgSrc = ""
@@ -381,14 +381,11 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         courseList.push({ "name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "./icons/reload.png" })
     }
 
-    console.log(courseList)
-    console.log(ratedCourses)
-
     //determine when to show outro and intro for course rating
     //THIS NEEDS TO BE ADAPTED FOR EACH SEMESTER because ratedCourses is never purged for now - its only expanded. However, courses which are not longer in courseList shouldnt be in ratedCourses either!
     if (ratedCourses == undefined) ratedCourses = []
-    showIntro = (!closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
-    showOutro = (!closedOutro1 && courseList.length > 1 && !showIntro)
+    showIntro = (ratingEnabledFlag && !closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
+    showOutro = (ratingEnabledFlag && !closedOutro1 && courseList.length > 1 && !showIntro)
 
 
 
@@ -485,7 +482,7 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         } else {
             isRated = ratedCourses.includes(element.name)
         }
-        if (!(element.name == "Diese Kursliste jetzt aktualisieren..." || element.name == "Klicke, um deine Opal-Kurse zu importieren" || isRated)) listEntrywrapper.appendChild(rateEntryWrapper)
+        if (!(element.name == "Diese Kursliste jetzt aktualisieren..." || element.name == "Klicke, um deine Opal-Kurse zu importieren" || isRated) && ratingEnabledFlag) listEntrywrapper.appendChild(rateEntryWrapper)
         htmlList.appendChild(listEntrywrapper)
     })
 
