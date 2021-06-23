@@ -30,6 +30,16 @@
   margin-bottom: 5px;
 }
 
+.list-outro {
+  border-radius: 3px;
+  background-color: rgb(230 255 228);
+  margin: 5px 15px 5px 15px;
+  margin: 2px;
+  margin-left: 5px;
+  padding: 9px;
+  margin-bottom: 5px;
+}
+
 .studiengang-img {
   flex: 1;
   padding-right: 3px;

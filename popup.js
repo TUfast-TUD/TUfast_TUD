@@ -107,13 +107,18 @@ const dropdown_update_id = "56tzoguhjk"
 window.onload = async function () {
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses"], async function (result) {
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses", "closedOutro1"], async function (result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
         let htmlList = document.getElementsByClassName("list")[0]
-        displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses)
-        document.getElementById("intro").onclick = remove_intro
+        displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1)
+        if (document.getElementById("intro")) {
+            document.getElementById("intro").onclick = remove_intro
+        }
+        if (document.getElementById("outro")) {
+            document.getElementById("outro").onclick = remove_outro
+        }
 
         //filter list
         listSearchFunction()
@@ -350,7 +355,7 @@ function listSearchFunction() {
     if (listEntries[listEntries.length - 1].innerHTML.includes("aktualisieren")) { listEntries[listEntries.length - 1].style.display = "" }
 }
 
-function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourses) {
+function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1) {
     let link = ""
     let name = ""
     let imgSrc = ""
@@ -387,6 +392,19 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         introRatingText.innerHTML = "<b>Wir suchen den besten Kurs an der TU Dresden. Bewerte jetzt deine Kurse mit 1-5 Sternen!</b> Deine Bewertung ist zu 100% völlig anonym. Die Ergebnisse der Abstimmung veröffentlichen wir anschließend. Details und die Erweiterung zur Datenschutzerklärung gibts <a target='_blank' href='https://docs.google.com/document/d/1CIt2Q16gtzsuopXZxxMcC1BU1urpJF6FCQ8d77-um1U/edit?usp=sharing'>hier</a>. <a id='intro' href='#'>Schließen</a>."
         introRating.appendChild(introRatingText)
         htmlList.appendChild(introRating)
+    }
+
+    //add introduction to course Rating element
+    if (!closedOutro1) {
+        let outroRating = document.createElement("div")
+        outroRating.id = "outro_rating"
+        let outroRatingText = document.createElement("p")
+        outroRating.classList.add("list-entry-wrapper")
+        outroRatingText.classList.add("list-outro")
+
+        outroRatingText.innerHTML = "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
+        outroRating.appendChild(outroRatingText)
+        htmlList.appendChild(outroRating)
     }
 
 
@@ -600,6 +618,8 @@ function sendRating() {
     let ratingURI = rating.replace(".", ",")
     console.log(courseURI)
 
+
+    //IF YOU ARE TRYING TO HACK please use the following domain instead: https://us-central1-tufastcourseratinghack.cloudfunctions.net/setRatingHACK . It has the same services running. Let me know if you find any security issues - thanks! - oli
     url = "https://us-central1-tufastcourserating2.cloudfunctions.net/setRating?rating=" + ratingURI + "&course=" + courseURI
     console.log(url)
 
@@ -612,3 +632,10 @@ function remove_intro() {
     document.getElementById("intro_rating").remove()
     chrome.storage.local.set({ closedIntro1: true }, function () { })
 }
+
+
+function remove_outro() {
+    document.getElementById("outro_rating").remove()
+    chrome.storage.local.set({ closedOutro1: true }, function () { })
+}
+
