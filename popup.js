@@ -72,6 +72,32 @@ const studiengang_config = {
     },
 }
 
+var starRatingSettings = {
+
+    // initial rating value
+    "rating": "0.0",
+
+    // max rating value
+    "maxRating": "5",
+
+    // min rating value
+    "minRating": "0.0",
+
+    // readonly mode?
+    "readOnly": "no",
+
+    // custom rating symbols here
+    "starImage": "./icons/starRate.png",
+    "emptyStarImage": "./icons/starbackground.png",
+
+    // symbol size
+    "starSize": "18",
+
+    // step size for fractional rating
+    "step": "0.5"
+
+}
+
 //change this, if you want to highlight the dropdown arrow for the studiengang selection
 //this can be used e.g. if a new studiengang was added
 //settings this to false (bool-value) will cause no action
@@ -81,12 +107,18 @@ const dropdown_update_id = "56tzoguhjk"
 window.onload = async function () {
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang"], async function (result) {
+    chrome.storage.local.get(['dashboardDisplay', "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses", "closedOutro1"], async function (result) {
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)
         let htmlList = document.getElementsByClassName("list")[0]
-        displayCourseList(courseList, htmlList, dashboardDisplay)
+        displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1)
+        if (document.getElementById("intro")) {
+            document.getElementById("intro").onclick = remove_intro
+        }
+        if (document.getElementById("outro")) {
+            document.getElementById("outro").onclick = remove_outro
+        }
 
         //filter list
         listSearchFunction()
@@ -168,6 +200,11 @@ window.onload = async function () {
     //before wait XXXms because everything needs to be loaded first
     await new Promise(r => setTimeout(r, 200))
     document.getElementById("select_studiengang_dropdown_content").style.maxHeight = (document.body.offsetHeight - 45).toString() + "px"
+
+    //show star rating
+    rateSystem("myRatingClassName", starRatingSettings, function (rating, ratingTargetElement) {
+        //callback for clicking on star rating. We dont do anything here.
+    })
 }
 
 function changeStudiengangSelection() {
@@ -318,7 +355,7 @@ function listSearchFunction() {
     if (listEntries[listEntries.length - 1].innerHTML.includes("aktualisieren")) { listEntries[listEntries.length - 1].style.display = "" }
 }
 
-function displayCourseList(courseList, htmlList, type) {
+function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1) {
     let link = ""
     let name = ""
     let imgSrc = ""
@@ -344,51 +381,140 @@ function displayCourseList(courseList, htmlList, type) {
         courseList.push({ "name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "./icons/reload.png" })
     }
 
+    console.log(courseList)
+    console.log(ratedCourses)
+
+    //determine when to show outro and intro for course rating
+    //THIS NEEDS TO BE ADAPTED FOR EACH SEMESTER because ratedCourses is never purged for now - its only expanded. However, courses which are not longer in courseList shouldnt be in ratedCourses either!
+    if (ratedCourses == undefined) ratedCourses = []
+    showIntro = (!closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
+    showOutro = (!closedOutro1 && courseList.length > 1 && !showIntro)
+
+
+
+    //add introduction to course Rating element
+    if (showIntro) {
+        let introRating = document.createElement("div")
+        introRating.id = "intro_rating"
+        let introRatingText = document.createElement("p")
+        introRating.classList.add("list-entry-wrapper")
+        introRatingText.classList.add("list-intro")
+
+        introRatingText.innerHTML = "<b>Wir suchen den besten Kurs an der TU Dresden. Bewerte jetzt deine Kurse mit 1-5 Sternen!</b> Deine Bewertung ist zu 100% völlig anonym. Die Ergebnisse der Abstimmung veröffentlichen wir anschließend. Details und die Erweiterung zur Datenschutzerklärung gibts <a target='_blank' href='https://docs.google.com/document/d/1CIt2Q16gtzsuopXZxxMcC1BU1urpJF6FCQ8d77-um1U/edit?usp=sharing'>hier</a>. <a id='intro' href='#'>Schließen</a>."
+        introRating.appendChild(introRatingText)
+        htmlList.appendChild(introRating)
+    }
+
+    //add outro to course Rating element
+    if (showOutro) {
+        let outroRating = document.createElement("div")
+        outroRating.id = "outro_rating"
+        let outroRatingText = document.createElement("p")
+        outroRating.classList.add("list-entry-wrapper")
+        outroRatingText.classList.add("list-outro")
+
+        outroRatingText.innerHTML = "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
+        outroRating.appendChild(outroRatingText)
+        htmlList.appendChild(outroRating)
+    }
+
+
     courseList.forEach(element => {
+        let listEntrywrapper = document.createElement("div")
         let listEntry = document.createElement("a")
         let listImg = document.createElement("div")
         let listText = document.createElement("div")
         let img = document.createElement("img")
+        let rateEntryWrapper = document.createElement("div")
+        let rateEntry = document.createElement("div")
+        let confirmEntry = document.createElement("div")
+        let confirmEntryLink = document.createElement("a")
+
+        listEntrywrapper.className = "list-entry-wrapper"
+
+        rateEntryWrapper.style.display = "flex"
+        rateEntryWrapper.style.alignItems = "center"
+        rateEntryWrapper.style.marginBottom = "7px"
+        rateEntryWrapper.id = element.name + " Wrapper"
+        rateEntry.style.flex = 1
+        rateEntry.style.marginLeft = "150px"
+        confirmEntry.style.flex = 2
+
+        confirmEntryLink.setAttribute("courseRef", element.name)
+        confirmEntryLink.style.fontSize = "15px"
+        confirmEntryLink.href = "#"
+        confirmEntryLink.innerHTML = "Fertig <text style='font-size:14px'>✅</text>"
+        confirmEntryLink.onclick = sendRating
+        confirmEntry.appendChild(confirmEntryLink)
+
+        //this is the structure required by starRating.js
+        let rateEntryInner1 = document.createElement("div")
+        let rateEntryInner2 = document.createElement("div")
+        rateEntryInner1.className = "starRatingContainer"
+        rateEntryInner2.className = "myRatingClassName"
+        rateEntryInner2.id = element.name
+        rateEntryInner1.appendChild(rateEntryInner2)
+        rateEntry.appendChild(rateEntryInner1)
+
+
+
         listEntry.className = "list-entry"
-        listImg.className = "list-entry-img"
         listEntry.href = element.link
         listEntry.target = "_blank"
         listEntry.onclick = save__two_clicks
+
+        listImg.className = "list-entry-img"
+
         listText.className = "list-entry-text"
         listText.innerHTML = element.name
+
         img.className = "list-img"
         img.src = imgSrc
+
         if (element.img === "./icons/reload.png") img.src = "./icons/reload.png"
+
         listImg.appendChild(img)
         if (!(element.img === false)) { listEntry.appendChild(listImg) }
         listEntry.appendChild(listText)
-
-        htmlList.appendChild(listEntry)
+        listEntrywrapper.appendChild(listEntry)
+        rateEntryWrapper.appendChild(rateEntry)
+        rateEntryWrapper.appendChild(confirmEntry)
+        let isRated = false
+        if (ratedCourses == undefined) {
+            isRated = false
+        } else {
+            isRated = ratedCourses.includes(element.name)
+        }
+        if (!(element.name == "Diese Kursliste jetzt aktualisieren..." || element.name == "Klicke, um deine Opal-Kurse zu importieren" || isRated)) listEntrywrapper.appendChild(rateEntryWrapper)
+        htmlList.appendChild(listEntrywrapper)
     })
 
-    //Create button so switch courses <> favorites, only if 
+    //Create button so switch courses <> favorites
     let listEntry = document.createElement("a")
     let listImg = document.createElement("div")
     let listText = document.createElement("div")
     let img = document.createElement("img")
+
     listImg.className = "list-entry-img"
+
     listEntry.className = "list-entry"
     listEntry.href = "javascript:void(0)"
     listEntry.onclick = switch_courses_to_show
+
     listText.className = "list-entry-text"
-    //listText.style.flex = "none"    //Required
+
     img.className = "list-img"
-    //listImg.style.flex = "none"     //Required
+
     if (type === "favoriten") img.src = "./icons/CoursesOpalIcon.png"
     if (type === "meine_kurse") img.src = "./icons/star.png"
 
     listImg.appendChild(img)
     listEntry.appendChild(listImg)
+
     if (type === "favoriten") listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
     if (type === "meine_kurse") listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
 
     listEntry.appendChild(listText)
-
     htmlList.appendChild(listEntry)
 
 }
@@ -466,3 +592,61 @@ function selectStudiengangDropdown() {
     chrome.storage.local.set({ updateCustomizeStudiengang: dropdown_update_id }, function () { })
     document.getElementById("select_studiengang_dropdown_id").style.border = "none"
 }
+
+function sendRating() {
+    let course = this.getAttribute("courseref")
+    let rating = document.getElementById(course).dataset.rating
+
+    console.log("GOT THE FOLLOWING RATING:")
+    console.log(course)
+    console.log(rating)
+
+    //rating cannot be zero
+    if (rating == "0.0") {
+        alert("Bitte bewerte den Kurs mit Sternen, bevor du dein Rating abgibst!")
+        return
+    }
+
+    //add to rated list
+    chrome.storage.local.get(['ratedCourses'], async function (result) {
+        let updatedCourseList = []
+        if (result.ratedCourses == undefined) {
+            updatedCourseList = []
+        } else {
+            updatedCourseList = result.ratedCourses
+        }
+        updatedCourseList.push(course)
+        chrome.storage.local.set({ ratedCourses: updatedCourseList }, function () { })
+    })
+
+    //remove the rating div
+    document.getElementById(course + " Wrapper").remove()
+
+    //send rating
+    let courseURI = course.replaceAll("/", "") //very important, as it is interpreted as documents and collections in the db
+    courseURI = encodeURIComponent(courseURI)
+    courseURI = courseURI.replaceAll("!", "%21").replaceAll("'", "%27").replaceAll("(", "%28").replaceAll(")", "%29").replaceAll("~", "%7E")
+    let ratingURI = rating.replace(".", ",")
+    console.log(courseURI)
+
+
+    //IF YOU ARE TRYING TO HACK please use the following domain instead: https://us-central1-tufastcourseratinghack.cloudfunctions.net/setRatingHACK . It has the same services running. Let me know if you find any security issues - thanks! - oli
+    url = "https://us-central1-tufastcourserating2.cloudfunctions.net/setRating?rating=" + ratingURI + "&course=" + courseURI
+    console.log(url)
+
+    fetch(url)
+        .then((resp) => resp.text())
+        .then((resp => console.log(resp)))
+}
+
+function remove_intro() {
+    document.getElementById("intro_rating").remove()
+    chrome.storage.local.set({ closedIntro1: true }, function () { })
+}
+
+
+function remove_outro() {
+    document.getElementById("outro_rating").remove()
+    chrome.storage.local.set({ closedOutro1: true }, function () { })
+}
+
