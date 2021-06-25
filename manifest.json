@@ -1,7 +1,8 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "5.6.0.5",
+  "version": "5.6.1.0",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
+  "key":"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlWUrHLvVGkNEDwoKboVwl/zmYVpJq8lk8B57Q0gQUyrneDOBoihJsTtBRZaZZWGZpeYvtPalbxYN2WeH7vXiXbSmfEEF8AsgglhIIITOI1AMMg+DPwQhu2yWZYwNuKlaYx+A1zSCJW7pmMOyELs8EPwKNi3SdadwaEabrnEPNP+AYCcsMcf17dSsvo7oRgQINoxMpx62m6jHREz8vpnePCZVJiPe8z3tz10Io2M1wFvOOv/8wxH8ki44tGV5KsOU0QtzPLawqAIP7e0bEhTjb92171wI/tl0JOgPl2ouBqicN3us3l7ZUWxa2nQNQmECch+ZhmNkvA/GnF7FqDzSwwIDAQAB",
   "permissions": [
     "storage",
     "system.cpu",

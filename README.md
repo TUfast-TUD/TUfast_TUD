@@ -51,6 +51,8 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 - **Ein Masterpasswort** das man jedes mal vor dem AutoLogin eingeben muss um die Anwendung noch sicherer zu machen.
 - TUfast für Android (Freifox, und bald auch Chrome)
 - **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
+- Motivationssprüche & Mantras für die Prüfungszeit!
+- Link bei Mouseover auf Icons im Dashboard zeigen
 
 ## Kontakt
 frage@tu-fast.de
