@@ -340,10 +340,10 @@ function listSearchFunction() {
     input = document.getElementById("searchListInput")
     filter = input.value.toLowerCase()
     list = document.getElementById("list")
-    listEntries = list.getElementsByClassName("list-entry")
+    listEntries = list.getElementsByClassName("list-entry-wrapper")
 
     for (i = 0; i < listEntries.length; i++) {
-        let txtValue = listEntries[i].text.toLowerCase()
+        let txtValue = listEntries[i].firstChild.text.toLowerCase()
         if (!txtValue.includes(filter)) {
             listEntries[i].style.display = "none"
         } else {
