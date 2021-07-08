@@ -20,7 +20,7 @@ Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMl
 Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! 
 
 ### TUfast-Entwickler werden
-Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfast-Entwickler! Wenn du zwei Funktionen erfolgreich implementiert hast, erhältst du einen raketenstarken Nachweis für dein Engagement im TUfast-Team für deine Unterlagen! 🙂 Dabei kannst du dir entweder etwas aus der ToDo-List s.u. heraussuchen oder du implementierst eigene Ideen. Eröffne dazu einfach einen Pull-Request.
+Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfast-Entwickler! Wenn du zwei Funktionen erfolgreich implementiert hast, erhältst du einen raketenstarken Nachweis für dein Engagement im TUfast-Team für deine Unterlagen! 🙂 Dabei kannst du dir entweder etwas aus der ToDo-List s.u. heraussuchen oder du implementierst eigene Ideen. Eröffne dazu einfach einen Pull-Request auf die Master-Branch.
 
 ### Spenden
 [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Projekt mit einer kleinen Spende unterstützen.
