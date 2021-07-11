@@ -65,3 +65,12 @@
 input[type="checkbox"]:checked{
   filter: hue-rotate(220deg);
 }
+
+
+/* dark theme */
+
+@media (prefers-color-scheme: dark) {
+  .slider {
+    background-color: #30363d;
+  }
+}
