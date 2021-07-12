@@ -28,8 +28,16 @@ a:hover {
     font-weight: bold;
 }
 
-.grey-text, font[color=grey] {
+.grey-text {
   color: var(--color-text-secondary);
+}
+
+.red-text {
+  color: var(--color-text-danger);
+}
+
+.green-text {
+  color: var(--color-text-success);
 }
 
 .the-bottom {
