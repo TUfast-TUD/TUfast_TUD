@@ -11,6 +11,9 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
 	})
 })
 
+//enable rating
+chrome.storage.local.set({ratingEnabledFlag: true}, function () {})
+
 //DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], (resp) => {
 	if (resp.openSettingsOnReload) openSettingsPage()
@@ -144,7 +147,7 @@ function regAddContentScripts() {
 	try {
 		browser.contentScripts.register({
 			"js": [{ file: "contentScripts/content_idp.js" }],
-			"matches": ["https://idp.tu-dresden.de/idp/profile/*"],
+			"matches	": ["https://idp.tu-dresden.de/idp/profile/*"],
 			"runAt": "document_start"
 		}).then(() => console.log("Successfully registered additional content script idp for FF"))
 		browser.contentScripts.register({
@@ -156,9 +159,9 @@ function regAddContentScripts() {
 }
 
 //check whether to ask for additional host permission: if not granted and not shown yet
-chrome.storage.local.get(['gotInteractionOnHostPermissionExtension2', "installed", "saved_click_counter"], function (result) {
-	if (!result.gotInteractionOnHostPermissionExtension2 && result.saved_click_counter > 10) {
-		chrome.storage.local.set({ gotInteractionOnHostPermissionExtension2: true }, function () { })
+chrome.storage.local.get(['gotInteractionOnHostPermissionExtension3', "installed", "saved_click_counter"], function (result) {
+	if (!result.gotInteractionOnHostPermissionExtension3 && result.saved_click_counter > 10) {
+		chrome.storage.local.set({ gotInteractionOnHostPermissionExtension3: true }, function () { })
 		chrome.permissions.contains({
 			origins: ["*://*/*"]
 		}, function (hasPermission) {
@@ -168,7 +171,7 @@ chrome.storage.local.get(['gotInteractionOnHostPermissionExtension2', "installed
 			} else {
 
 				// Show options to grant permission.
-				chrome.tabs.create(({ url: "updatePermissions.html" }))
+				chrome.tabs.create(({ url: "updatePermissions2.html" }))
 			}
 		})
 	}

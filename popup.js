@@ -343,12 +343,18 @@ function listSearchFunction() {
     listEntries = list.getElementsByClassName("list-entry-wrapper")
 
     for (i = 0; i < listEntries.length; i++) {
-        let txtValue = listEntries[i].firstChild.text.toLowerCase()
-        if (!txtValue.includes(filter)) {
-            listEntries[i].style.display = "none"
-        } else {
-            listEntries[i].style.display = ""
+        try {
+            let txtValue = listEntries[i].firstChild.text.toLowerCase()
+            if (!txtValue.includes(filter)) {
+                listEntries[i].style.display = "none"
+            } else {
+                listEntries[i].style.display = ""
+            }
         }
+        catch (e) {
+            console.log("Could not set visibility of item. Does not necessarily need to be an error.")
+        }
+        
     }
 
     //always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
