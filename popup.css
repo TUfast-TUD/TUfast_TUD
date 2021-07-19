@@ -193,7 +193,7 @@ body {
 .list-entry:hover,
 .settings-section-icon:hover,
 .select_studiengang_dropdown:hover {
-  background-color: var(--color-btn-hover-bg);
+  background-color: var(--color-btn-active-bg);
 }
 
 /* Dropdown Button */
