@@ -263,6 +263,11 @@ button:hover {
   background-color: var(--color-btn-deny-hover-bg);
 }
 
+.unread-mail-icon {
+  vertical-align:middle;
+  height: 32px;
+}
+
 
 @media (prefers-color-scheme: dark) {
   .invert {
