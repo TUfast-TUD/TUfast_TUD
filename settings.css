@@ -268,10 +268,32 @@ button:hover {
   height: 32px;
 }
 
+.img-opal-kurse {
+  max-width: 100%;
+  width: 550px;
+  border-radius: 2px;
+}
+
+.swap-light {
+  display: block;
+}
+
+.swap-dark {
+  display: none;
+}
+
 
 @media (prefers-color-scheme: dark) {
   .invert {
     filter: invert(1) hue-rotate(180deg);
+  }
+
+  .swap-light {
+    display: none;
+  }
+  
+  .swap-dark {
+    display: block;
   }
 
   :root {
