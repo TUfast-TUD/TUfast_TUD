@@ -42,7 +42,6 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 - **Notenstatistik in jExam**: schöne, graphische Darstellung aller Noten im jExam, zB. mit Charts.js. Die Informatiker freuen sich bestimmt darüber.
 - **AutoLoad Kontostand**: Man könnte den Kontostand von Mensa-AutoLoad abfragen und im Dashboard zeigen!
 - **PDF aus OPAL über Kontext-Menu direkt in neuem Fenster öffnen**: Über [diese](https://developer.chrome.com/docs/extensions/reference/contextMenus/) API ist das möglich. Ist ewas eleganter als die aktuelle Lösung mit dem Switch!
-- **Dark-Mode**
 
 
 ### Weiteres
