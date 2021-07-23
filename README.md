@@ -1,5 +1,5 @@
 # TUfast TU Dresden 🚀
-TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. TUfast ein ein studentisches, quelloffenes Projekt und hat mittlerweils über 1000 Nutzer! Verfügbar auf [www.tu-fast.de](https://www.tu-fast.de).
+TUfast ist eine Browser-Erweiterung, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. TUfast ein ein studentisches, quelloffenes Projekt und hat mittlerweils über 1500 Nutzer! Verfügbar auf [www.tu-fast.de](https://www.tu-fast.de).
 
 ![image](https://user-images.githubusercontent.com/31124624/115123463-72e24980-9fbd-11eb-8ff9-7466ba8e0df2.png)
 
