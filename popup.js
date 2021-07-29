@@ -107,7 +107,19 @@ const dropdown_update_id = "56tzoguhjk"
 window.onload = async function () {
 
     //get things from storage
-    chrome.storage.local.get(['dashboardDisplay', "ratingEnabledFlag", "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses", "closedOutro1"], async function (result) {
+    chrome.storage.local.get(['dashboardDisplay', "ratingEnabledFlag", "saved_click_counter", "studiengang", "closedIntro1", "ratedCourses", "closedOutro1", 'theme'], async function (result) {
+        // set initial theme
+        if (result.theme == 'system') {
+            document.documentElement.removeAttribute('data-theme')
+        } else {
+            document.documentElement.setAttribute('data-theme', result.theme)
+        }
+
+        // prevent transition on page load
+        setTimeout(() => {
+            document.documentElement.removeAttribute('data-preload')
+        }, 500)
+
         //display courses
         let dashboardDisplay = result.dashboardDisplay
         let courseList = await loadCourses(dashboardDisplay)

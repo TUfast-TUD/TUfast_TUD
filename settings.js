@@ -6,6 +6,46 @@ if (isFirefox) {
   webstorelink = "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de"
 }
 
+var currentTheme;
+
+const availableThemes = {
+  system: 'System theme',
+  light: 'Light theme',
+  dark: 'Dark theme',
+}
+
+async function applyTheme(theme) {
+  if (theme in availableThemes) {
+    if (theme == 'system') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    currentTheme = theme
+    chrome.storage.local.set({theme: theme})
+    
+    // update switcher
+    document.querySelector('#themeSwitcher > .theme-text').innerHTML = availableThemes[theme]
+  } else {
+    console.error('invalid theme: ' + theme)
+  }
+}
+
+async function nextTheme() {
+  const themeOrder = [
+    'system',
+    'light',
+    'dark'
+  ]
+
+  let i = themeOrder.indexOf(currentTheme) + 1
+
+  if (i >= themeOrder.length) i = 0
+
+  applyTheme(themeOrder[i])
+}
+
 function saveUserData() {
   var asdf = document.getElementById('username_field').value
   var fdsa = document.getElementById('password_field').value
@@ -364,6 +404,16 @@ async function enableRocketIcon() {
 //this need to be done here since manifest v2
 window.onload = async function () {
 
+  // apply initial theme
+  chrome.storage.local.get('theme', (res) => {
+    applyTheme(res.theme)
+
+    // prevent transition on page load
+    setTimeout(() => {
+      document.documentElement.removeAttribute('data-preload')
+    }, 500)
+  })
+
   //only display additionNotificationSection in chrome, because it doesnt work in ff
   if (isFirefox) {
     document.getElementById("additionNotificationSection").style.display = "none"
@@ -378,6 +428,7 @@ window.onload = async function () {
   document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
   document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
   document.getElementById("owa_mail_fetch").addEventListener('click', toggleOWAfetch)
+  document.getElementById('themeSwitcher').addEventListener('click', nextTheme)
 
   //document.getElementById('fav').onclick = dashboardCourseSelect
   //document.getElementById('crs').onclick = dashboardCourseSelect

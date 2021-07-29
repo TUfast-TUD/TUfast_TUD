@@ -24,7 +24,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--color-btn-switch-bg);
     -webkit-transition: .4s;
     transition: .4s;
   }
@@ -66,13 +66,4 @@
 
 input[type="checkbox"]:checked{
   filter: hue-rotate(220deg);
-}
-
-
-/* dark theme */
-
-@media (prefers-color-scheme: dark) {
-  .slider {
-    background-color: #30363d;
-  }
 }

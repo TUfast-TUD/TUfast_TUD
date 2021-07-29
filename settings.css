@@ -1,18 +1,25 @@
 @import 'palette.css';
 
 body {
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-bottom: 50px;
-    margin-top: 30px;
-    font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 25px;
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-primary);
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-bottom: 50px;
+  margin-top: 30px;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 25px;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: background-color .4s ease;
 } 
 
-html { overflow-y: scroll; }
+[data-preload] * {
+  transition: none !important;
+}
+
+html {
+  overflow-y: scroll;
+}
 
 a {
   color: var(--color-text-link);
@@ -24,8 +31,8 @@ a:hover {
 }
 
 .heading {
-    font-size: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .grey-text {
@@ -67,6 +74,7 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+  transition: background-color .4s ease, border-color .4s ease;
 }
 
 input[type=text]::placeholder,
@@ -84,10 +92,11 @@ select {
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border-input);
   outline: none;
+  transition: all .4s ease;
 }
 
 input::-webkit-input-placeholder {
-    font-size: 13px;
+  font-size: 13px;
 }
 
 input:focus {
@@ -104,10 +113,19 @@ button {
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
+  transition: background-color .4s ease;
 }
 
 button:hover {
   background-color: var(--color-btn-hover-bg);
+}
+
+#themeSwitcher {
+  display: block;
+}
+
+.theme-text {
+  margin-left: .5em;
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
@@ -133,27 +151,27 @@ button:hover {
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
-    padding: 0 18px;
-    background-color: var(--color-bg-tertiary);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    box-shadow: 0 1px 4px rgba(12, 12, 13, 0.1);
+  padding: 0 18px;
+  background-color: var(--color-bg-tertiary);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out, background-color .4s ease;
+  box-shadow: 0 1px 4px rgba(12, 12, 13, 0.1);
 }
 
 .accordion:after {
-    content: '\2039'; /* Unicode character for "arrow" sign  */
-    -webkit-transform: rotate(-90deg) scale(2.5 , 2.5);
-    transform: rotate(-90deg) scale(2.5 , 2.5);
-    font-size: 14px;
-    color: var(--color-btn-text);
-    float: right;
-    margin-left: 5px;
-  }
-  
-  .active:after {
-    content: "\203A"; /* Unicode character for "arrow" sign  */
-  }
+  content: '\2039'; /* Unicode character for "arrow" sign  */
+  -webkit-transform: rotate(-90deg) scale(2.5 , 2.5);
+  transform: rotate(-90deg) scale(2.5 , 2.5);
+  font-size: 14px;
+  color: var(--color-btn-text);
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\203A"; /* Unicode character for "arrow" sign  */
+}
 
 #dashboard-tutorial {
   position: fixed; /* absolute //for scrolling*/
@@ -169,66 +187,67 @@ button:hover {
 
 [type="radio"]:checked,
 [type="radio"]:not(:checked) {
-    position: absolute;
-    left: -9999px;
+  position: absolute;
+  left: -9999px;
 }
 [type="radio"]:checked + label,
 [type="radio"]:not(:checked) + label
 {
-    position: relative;
-    padding-left: 28px;
-    cursor: pointer;
-    line-height: 20px;
-    /*display: inline-block;*/
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  /*display: inline-block;*/
 }
 
 [type="radio"]:checked + label:before,
 [type="radio"]:not(:checked) + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 18px;
-    height: 18px;
-    border: 1px solid var(--color-border-radio);
-    border-radius: 100%;
-    background: var(--color-btn-bg);
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--color-border-radio);
+  border-radius: 100%;
+  background-color: var(--color-btn-bg);
+  transition: background-color .4s ease, border-color .4s ease;
 }
 [type="radio"]:hover:checked + label:before,
 [type="radio"]:hover:not(:checked) + label:before {
-  background: var(--color-btn-hover-bg);
+  background-color: var(--color-btn-hover-bg);
 }
 [type="radio"]:checked + label:after,
 [type="radio"]:not(:checked) + label:after {
-    content: '';
-    width: 12px;
-    height: 12px;
-    background: rgb(47, 143, 18);
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    border-radius: 100%;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: rgb(47, 143, 18);
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 [type="radio"]:not(:checked) + label:after {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    transform: scale(0);
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
 }
 [type="radio"]:checked + label:after {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
 }
 
 .helper {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
 }
 .helper img {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .button-accept {
@@ -272,35 +291,5 @@ button:hover {
   max-width: 100%;
   width: 550px;
   border-radius: 2px;
-}
-
-.swap-light {
-  display: block;
-}
-
-.swap-dark {
-  display: none;
-}
-
-
-@media (prefers-color-scheme: dark) {
-  .invert {
-    filter: invert(1) hue-rotate(180deg);
-  }
-
-  .swap-light {
-    display: none;
-  }
-  
-  .swap-dark {
-    display: block;
-  }
-
-  :root {
-    /* chrome, webkit */
-    color-scheme: dark;
-    /* firefox */
-    scrollbar-color: #737373 #38383D;
-  }
 }
 
