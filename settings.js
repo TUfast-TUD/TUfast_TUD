@@ -6,23 +6,62 @@ if (isFirefox) {
   webstorelink = "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de"
 }
 
+var currentTheme;
+
+const availableThemes = {
+  system: 'System theme',
+  light: 'Light theme',
+  dark: 'Dark theme',
+}
+
+async function applyTheme(theme) {
+  if (theme in availableThemes) {
+    if (theme == 'system') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    currentTheme = theme
+    chrome.storage.local.set({theme: theme})
+    
+    // update switcher
+    document.querySelector('#themeSwitcher > .theme-text').innerHTML = availableThemes[theme]
+  } else {
+    console.error('invalid theme: ' + theme)
+  }
+}
+
+async function nextTheme() {
+  const themeOrder = [
+    'system',
+    'light',
+    'dark'
+  ]
+
+  let i = themeOrder.indexOf(currentTheme) + 1
+
+  if (i >= themeOrder.length) i = 0
+
+  applyTheme(themeOrder[i])
+}
+
 function saveUserData() {
   var asdf = document.getElementById('username_field').value
   var fdsa = document.getElementById('password_field').value
   if (asdf === '' || fdsa === '') {
-    document.getElementById('status_msg').innerHTML = "<font color='red'>Die Felder d&uuml;rfen nicht leer sein!</font>"
+    document.getElementById('status_msg').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
     return false
   } else {
     chrome.storage.local.set({ isEnabled: true }, function () { }) //need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: "clear_badge" })
     chrome.runtime.sendMessage({ cmd: "set_user_data", userData: { asdf: asdf, fdsa: fdsa } })
     document.getElementById('status_msg').innerHTML = ""
-    document.getElementById("save_data").innerHTML = '<font>Gespeichert!</font>'
+    document.getElementById("save_data").innerHTML = '<span>Gespeichert!</span>'
     document.getElementById("save_data").disabled = true
-    document.getElementById("save_data").style.backgroundColor = "rgb(47, 143, 18)"
     document.getElementById("username_field").value = ""
     document.getElementById("password_field").value = ""
-    document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
+    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
     setTimeout(() => {
       document.getElementById("save_data").innerHTML = 'Speichern'
       document.getElementById("save_data").disabled = false
@@ -47,15 +86,15 @@ function deleteUserData() {
   document.getElementById("additionalNotification").checked = false
   // --
   document.getElementById('status_msg').innerHTML = ""
-  document.getElementById("delete_data").innerHTML = '<font>Gel&ouml;scht!</font>'
-  document.getElementById("delete_data").style.backgroundColor = "rgb(47, 143, 18)"
+  document.getElementById("delete_data").innerHTML = '<span>Gel&ouml;scht!</span>'
+  document.getElementById("delete_data").setAttribute("class", "button-accept")
   document.getElementById("delete_data").disabled = true
   document.getElementById("username_field").value = ""
   document.getElementById("password_field").value = ""
-  document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
   setTimeout(() => {
     document.getElementById("delete_data").innerHTML = 'Alle Daten l&ouml;schen'
-    document.getElementById("delete_data").style.backgroundColor = "grey"
+    document.getElementById("delete_data").setAttribute("class", "button-deny")
     document.getElementById("delete_data").disabled = false
     chrome.storage.local.get(['Data'], function (result) {
     })
@@ -191,7 +230,7 @@ function enableOWAFetch() {
           chrome.storage.local.set({ openSettingsPageParam: "mailFetchSettings", openSettingsOnReload: true }, function () { })
           chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
         } else {
-          document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>Speichere deine Login-Daten im Punkt 'Automatisches Anmelden in Opal, Selma & Co.' um diese Funktion zu nutzen!<font>"
+          document.getElementById("owa_fetch_msg").innerHTML = '<span class="red-text">Speichere deine Login-Daten im Punkt \'Automatisches Anmelden in Opal, Selma & Co.\' um diese Funktion zu nutzen!</span>'
           this.document.getElementById('owa_mail_fetch').checked = false
         }
       })
@@ -253,7 +292,7 @@ let rocketIconsConfig = {
     IconPathEnabled: "RocketIcons/2_128px.png",
     IconPathDisabled: "RocketIcons/2_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Du findest TUfast n&uuml;tzlich? Erz&auml;hle es zwei Leuten mit &#128073;<a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90'>E-Mail</a>, um diese schicke Rakete freizuschalten!",
-    innerHTMLEnabled: "&nbsp;&nbsp;Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90'>E-Mail</a> empfohlen.</a>",
+    innerHTMLEnabled: "&nbsp;&nbsp;Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90'>E-Mail</a> empfohlen.",
     id: "RI2"
   },
   "RI6": {
@@ -365,6 +404,16 @@ async function enableRocketIcon() {
 //this need to be done here since manifest v2
 window.onload = async function () {
 
+  // apply initial theme
+  chrome.storage.local.get('theme', (res) => {
+    applyTheme(res.theme)
+
+    // prevent transition on page load
+    setTimeout(() => {
+      document.documentElement.removeAttribute('data-preload')
+    }, 500)
+  })
+
   //only display additionNotificationSection in chrome, because it doesnt work in ff
   if (isFirefox) {
     document.getElementById("additionNotificationSection").style.display = "none"
@@ -379,6 +428,7 @@ window.onload = async function () {
   document.getElementById('open_shortcut_settings').onclick = openKeyboardSettings
   document.getElementById('open_shortcut_settings1').onclick = openKeyboardSettings
   document.getElementById("owa_mail_fetch").addEventListener('click', toggleOWAfetch)
+  document.getElementById('themeSwitcher').addEventListener('click', nextTheme)
 
   //document.getElementById('fav').onclick = dashboardCourseSelect
   //document.getElementById('crs').onclick = dashboardCourseSelect
@@ -392,7 +442,7 @@ window.onload = async function () {
         if (resp.enabledOWAFetch) {
           chrome.storage.local.set({ additionalNotificationOnNewMail: true })
         } else {
-          document.getElementById("owa_fetch_msg").innerHTML = "<font color='red'>F&uuml;r dieses Feature musst der Button auf 'Ein' stehen.<font color='red'>"
+          document.getElementById("owa_fetch_msg").innerHTML = '<span class="red-text">F&uuml;r dieses Feature musst der Button auf \'Ein\' stehen.</span>'
           document.getElementById('additionalNotification').checked = false
         }
       })
@@ -474,10 +524,10 @@ window.onload = async function () {
   chrome.storage.local.get(['saved_click_counter', "openSettingsPageParam", "isEnabled"], (result) => {
     //set text on isEnabled
     if (result.isEnabled) {
-      document.getElementById('status_msg').innerHTML = "<font color='green'>Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</font>"
+      document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
     }
     else {
-      document.getElementById('status_msg').innerHTML = "<font color='grey'>Du bist nicht angemeldet.</font>"
+      document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
     }
     //update saved clicks  
     //see if any params are available
