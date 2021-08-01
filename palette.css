@@ -62,10 +62,10 @@
     --color-border-radio: #e1e4e8;
     --color-border-popup: #dddddd;
   }
-  :root[data-theme="light"] .swap-light {
+  :root .swap-light {
     display: block;
   }
-  :root[data-theme="light"] .swap-dark {
+  :root .swap-dark {
     display: none;
   }
   :root .invert {
