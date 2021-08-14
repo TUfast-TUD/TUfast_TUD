@@ -1,0 +1,47 @@
+body {
+    padding:5px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    line-height: 1.6em;
+    font-size: 1.1em;
+    width: 50vw;
+    top: 5vh;
+    bottom: 1vh
+}
+
+
+
+
+html {
+  overflow-y: scroll;
+}
+
+.heading {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.t1{
+
+}
+
+.t2{
+
+}
+
+.t3{
+
+}
+
+.t4{
+    bottom: 0px;
+    position: absolute;
+
+}
+
+.t5{
+
+}
