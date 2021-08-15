@@ -344,7 +344,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			})
 			//if not yet invite shown: show, and set shown to true
 			chrome.storage.local.get(['TUfastCampInvite1'], (res) => {
-				if (!res.TUfastCampInvite1 === true) {
+				let today = new Date();
+				let max_invite_date = new Date(2021, 8, 30) //27.09.2021; month is zero based
+				if (!res.TUfastCampInvite1 === true && today < max_invite_date) {
 					chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
 					chrome.tabs.create(({ url: "TUfastCamp.html" }))
 				}
