@@ -214,6 +214,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
 			chrome.storage.local.set({ studiengang: "general" }, function () { })
 			chrome.storage.local.set({ updateCustomizeStudiengang: false }, function () { })
+			chrome.storage.local.set({ TUfastCampInvite1: false }, function () { })
 			chrome.storage.local.set({ theme: 'system' })
 			break
 		case 'update':
@@ -341,6 +342,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 					chrome.storage.local.set({ theme: 'system' })
 				}
 			})
+			//if not yet invite shown: show, and set shown to true
+			chrome.storage.local.get(['TUfastCampInvite1'], (res) => {
+				if (!res.TUfastCampInvite1 === true) {
+					chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
+					chrome.tabs.create(({ url: "TUfastCamp.html" }))
+				}
+			})
+
+
 			break
 		default:
 			console.log('Other install events within the browser for TUfast.')
