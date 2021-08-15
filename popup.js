@@ -79,7 +79,7 @@ const studiengang_config = {
     },
     "addStudiengang": {
         "name": "&#65291; Studiengang hinzufügen...",
-
+    },
 }
 
 var starRatingSettings = {
