@@ -57,6 +57,16 @@ const studiengang_config = {
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
         }
+    },     
+    "wirtschaftswissenschaften": {
+        "name": "Wirtschaftswissenschaften",
+        "fsr_icon": "./OfficialIcons/fsr:wiwi.png",
+        "fsr_icon_dashboard_style": "max-height: 32px;",
+        "fsr_link": "https://fsrwiwi.de",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
     },
     "general": {
         "name": "Standardeinstellungen",
