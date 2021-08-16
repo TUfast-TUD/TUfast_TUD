@@ -49,24 +49,6 @@ chrome.storage.local.get(["pdfInNewTab"], function (result) {
 	}
 })
 
-//check whether to ask for additional host permission: if not granted and not shown yet
-chrome.storage.local.get(['gotInteractionOnHostPermissionExtension3', "installed", "saved_click_counter"], function (result) {
-	if (!result.gotInteractionOnHostPermissionExtension3 && result.saved_click_counter > 10) {
-		chrome.storage.local.set({ gotInteractionOnHostPermissionExtension3: true }, function () { })
-		chrome.permissions.contains({
-			origins: ["*://*/*"]
-		}, function (hasPermission) {
-			if (hasPermission) {
-				// Everything alright.
-
-			} else {
-
-				// Show options to grant permission.
-				chrome.tabs.create(({ url: "updatePermissions2.html" }))
-			}
-		})
-	}
-})
 
 chrome.runtime.onInstalled.addListener(async (details) => {
 	const reason = details.reason
