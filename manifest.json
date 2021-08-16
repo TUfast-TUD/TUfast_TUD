@@ -57,7 +57,13 @@
       "matches": [
         "https://jexam.inf.tu-dresden.de/",
         "https://www.google.de/search?*q=jexam*",
-        "https://www.google.com/search?*q=jexam*"
+        "https://www.google.com/search?*q=jexam*",
+        "https://duckduckgo.com/?*q=jexam*",
+        "https://www.ecosia.org/search?*q=jexam*",
+        "https://www.bing.com/search?*q=jexam*",
+        "https://www.startpage.com/do/search?*q=jexam*",
+        "https://www.qwant.com/?*q=jexam*",
+        "https://search.brave.com/search?*q=jexam*"
       ]
     },
     {
@@ -68,8 +74,20 @@
       "matches": [
         "https://www.google.de/search?*q=tustore*",
         "https://www.google.com/search?*q=tustore*",
+        "https://duckduckgo.com/?*q=tustore*",
+        "https://www.ecosia.org/search?*q=tustore*",
+        "https://www.bing.com/search?*q=tustore*",
+        "https://www.startpage.com/do/search?*q=tustore*",
+        "https://www.qwant.com/?*q=tustore*",
+        "https://search.brave.com/search?*q=tustore*",
         "https://www.google.de/search?q=tucloud*",
-        "https://www.google.com/search?q=tucloud*"
+        "https://www.google.com/search?q=tucloud*",        
+        "https://duckduckgo.com/?*q=tucloud*",
+        "https://www.ecosia.org/search?*q=tucloud*",
+        "https://www.bing.com/search?*q=tucloud*",
+        "https://www.startpage.com/do/search?*q=tucloud*",
+        "https://www.qwant.com/?*q=tucloud*",
+        "https://search.brave.com/search?*q=tucloud*"
       ]
     },
     {
@@ -79,9 +97,21 @@
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?*q=tumail*",
-        "https://www.google.de/search?*q=tudmail*",
         "https://www.google.com/search?*q=tumail*",
-        "https://www.google.com/search?*q=tudmail*"
+        "https://duckduckgo.com/?*q=tumail*",
+        "https://www.ecosia.org/search?*q=tumail*",
+        "https://www.bing.com/search?*q=tumail*",
+        "https://www.startpage.com/do/search?*q=tumail*",
+        "https://www.qwant.com/?*q=tumail*",
+        "https://search.brave.com/search?*q=tumail*",
+        "https://www.google.de/search?*q=tudmail*",
+        "https://www.google.com/search?*q=tudmail*",
+        "https://duckduckgo.com/?*q=tudmail*",
+        "https://www.ecosia.org/search?*q=tudmail*",
+        "https://www.bing.com/search?*q=tudmail*",
+        "https://www.startpage.com/do/search?*q=tudmail*",
+        "https://www.qwant.com/?*q=tudmail*",
+        "https://search.brave.com/search?*q=tudmail*"
       ]
     },
     {
@@ -134,7 +164,13 @@
       "matches": [
         "*://opal.de/*",
         "https://www.google.de/search?*q=opal*",
-        "https://www.google.com/search?*q=opal*"
+        "https://www.google.com/search?*q=opal*",
+        "https://duckduckgo.com/?*q=opal*",
+        "https://www.ecosia.org/search?*q=opal*",
+        "https://www.bing.com/search?*q=opal*",
+        "https://www.startpage.com/do/search?*q=opal*",
+        "https://www.qwant.com/?*q=opal*",
+        "https://search.brave.com/search?*q=opal*"
       ]
     },
     {
@@ -153,7 +189,13 @@
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?*q=hisqis*",
-        "https://www.google.com/search?*q=hisqis*"
+        "https://www.google.com/search?*q=hisqis*",
+        "https://duckduckgo.com/?*q=hisqis*",
+        "https://www.ecosia.org/search?*q=hisqis*",
+        "https://www.bing.com/search?*q=hisqis*",
+        "https://www.startpage.com/do/search?*q=hisqis*",
+        "https://www.qwant.com/?*q=hisqis*",
+        "https://search.brave.com/search?*q=hisqis*"
       ]
     },
     {
@@ -163,7 +205,13 @@
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?*q=tumed*",
-        "https://www.google.com/search?*q=tumed*"
+        "https://www.google.com/search?*q=tumed*",
+        "https://duckduckgo.com/?*q=tumed*",
+        "https://www.ecosia.org/search?*q=tumed*",
+        "https://www.bing.com/search?*q=tumed*",
+        "https://www.startpage.com/do/search?*q=tumed*",
+        "https://www.qwant.com/?*q=tumed*",
+        "https://search.brave.com/search?*q=tumed*"
       ]
     },
     {
@@ -173,7 +221,13 @@
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?q=*selma*",
-        "https://www.google.com/search?q=*selma*"
+        "https://www.google.com/search?q=*selma*",
+        "https://duckduckgo.com/?*q=selma*",
+        "https://www.ecosia.org/search?*q=selma*",
+        "https://www.bing.com/search?*q=selma*",
+        "https://www.startpage.com/do/search?*q=selma*",
+        "https://www.qwant.com/?*q=selma*",
+        "https://search.brave.com/search?*q=selma*"
       ]
     },
     {
@@ -203,7 +257,13 @@
       "run_at": "document_start",
       "matches": [
         "https://www.google.com/search?q=*tumatrix*",
-        "https://www.google.de/search?q=*tumatrix*"
+        "https://www.google.de/search?q=*tumatrix*",
+        "https://duckduckgo.com/?*q=tumatrix*",
+        "https://www.ecosia.org/search?*q=tumatrix*",
+        "https://www.bing.com/search?*q=tumatrix*",
+        "https://www.startpage.com/do/search?*q=tumatrix*",
+        "https://www.qwant.com/?*q=tumatrix*",
+        "https://search.brave.com/search?*q=tumatrix*"
       ]
     },
     {
@@ -295,7 +355,13 @@
       "run_at": "document_start",
       "matches": [
         "https://www.google.com/search?*q=magma*",
-        "https://www.google.de/search?*q=magma*"
+        "https://www.google.de/search?*q=magma*",
+        "https://duckduckgo.com/?*q=magma*",
+        "https://www.ecosia.org/search?*q=magma*",
+        "https://www.bing.com/search?*q=magma*",
+        "https://www.startpage.com/do/search?*q=magma*",
+        "https://www.qwant.com/?*q=magma*",
+        "https://search.brave.com/search?*q=magma*"
       ]
     },
     {
