@@ -6,10 +6,10 @@
     "storage",
     "system.cpu",
     "alarms",
-    "declarativeContent"
+    "declarativeContent",
+    "*://*/"
   ],
   "optional_permissions": [
-    "*://*/",
     "tabs",
     "webRequest",
     "webRequestBlocking"
@@ -296,6 +296,42 @@
       "matches": [
         "https://www.google.com/search?*q=magma*",
         "https://www.google.de/search?*q=magma*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_tumed.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://eportal.med.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_tex.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://tex.zih.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_idp.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://idp.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/gitlab.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://gitlab.mn.tu-dresden.de/*"
       ]
     }
   ],

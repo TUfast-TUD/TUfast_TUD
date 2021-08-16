@@ -8,7 +8,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutGitlab'], function (result) {
                         chrome.runtime.sendMessage({ cmd: "perform_login" })
                         document.getElementById('username').value = (result.asdf)
                         document.getElementById('password').value = (result.fdsa)
-                        document.getElementsByTagName('input')[5].click()
+                        document.getElementsByTagName('input')[4].click()
                     } else {
                         chrome.runtime.sendMessage({ cmd: "no_login_data" })
                     }
