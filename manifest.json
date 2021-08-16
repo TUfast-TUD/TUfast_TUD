@@ -6,10 +6,10 @@
     "storage",
     "system.cpu",
     "alarms",
-    "declarativeContent"
+    "declarativeContent",
+    "*://*/"
   ],
   "optional_permissions": [
-    "*://*/",
     "tabs",
     "webRequest",
     "webRequestBlocking"
