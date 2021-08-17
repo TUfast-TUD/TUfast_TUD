@@ -413,7 +413,7 @@
       "js": [
         "contentScripts/content_fwd_startpage.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_start",
       "matches": [
         "https://www.startpage.com/*"
       ]
