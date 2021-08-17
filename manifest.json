@@ -399,6 +399,24 @@
       "matches": [
         "https://gitlab.mn.tu-dresden.de/*"
       ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_qwant.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.qwant.com/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/content_fwd_startpage.js"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "https://www.startpage.com/*"
+      ]
     }
   ],
   "icons": {
