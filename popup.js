@@ -68,6 +68,16 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
         }
     },
+     "elektrotechnik": {
+        "name": "Elektrotechnik",
+        "fsr_icon": "./OfficialIcons/FSR_ET.png",
+        "fsr_icon_dashboard_style": "max-height: 32px;",
+        "fsr_link": "https://fsret.de",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        }
+    },
     "general": {
         "name": "Standardeinstellungen",
         "fsr_icon": "",
