@@ -16,7 +16,8 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "geoportal"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
-        }
+        },
+        "invert_icon_dark_theme": false
     },
     "maschinenbau": {
         "name": "Maschinenwesen",
@@ -26,7 +27,8 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-        }
+        },
+        "invert_icon_dark_theme": false
     },
     "mathematik": {
         "name": "Mathematik",
@@ -36,7 +38,8 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "je", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-        }
+        },
+        "invert_icon_dark_theme": false
     },
     "medizin": {
         "name": "Medizin",
@@ -46,7 +49,8 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html",
-        }
+        },
+        "invert_icon_dark_theme": false
     },
     "psychologie": {
         "name": "Psychologie",
@@ -56,7 +60,8 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "orsee"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
-        }
+        },
+        "invert_icon_dark_theme": false
     },     
     "wirtschaftswissenschaften": {
         "name": "Wirtschaftswissenschaften",
@@ -66,7 +71,19 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-        }
+        },
+        "invert_icon_dark_theme": false
+    },
+     "elektrotechnik": {
+        "name": "Elektrotechnik",
+        "fsr_icon": "./OfficialIcons/FSR_ET.png",
+        "fsr_icon_dashboard_style": "max-height: 32px;",
+        "fsr_link": "https://fsret.de",
+        "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+        "footer_icons_links": {
+            "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
+        },
+        "invert_icon_dark_theme": true
     },
     "general": {
         "name": "Standardeinstellungen",
@@ -75,7 +92,8 @@ const studiengang_config = {
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
         "footer_icons_links": {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/",
-        }
+        },
+        "invert_icon_dark_theme": false
     },
     "addStudiengang": {
         "name": "&#65291; Studiengang hinzufügen...",
@@ -262,6 +280,10 @@ function addDropdownOptions() {
             let listImg = document.createElement("img")
             listImg.style = "flex: 1;height: 30px; width: auto; vertical-align:middle"
             listImg.src = studiengang_config[key].fsr_icon
+            if (studiengang_config[key].invert_icon_dark_theme) {
+                listImg.className += " invert"
+            }
+
             listEntry.appendChild(listImg)
         }
 
@@ -298,6 +320,9 @@ function customizeForStudiengang(studiengang) {
     if (studiengang_config[studiengang].fsr_icon) {
         document.getElementById("fsr_icon").src = studiengang_config[studiengang].fsr_icon
         document.getElementById("fsr_icon").style = studiengang_config[studiengang].fsr_icon_dashboard_style
+        if (studiengang_config[studiengang].invert_icon_dark_theme) {
+            document.getElementById("fsr_icon").className += " invert"
+        }
     } else {
         document.getElementById("fsr_icon").style.display = "none"
     }
