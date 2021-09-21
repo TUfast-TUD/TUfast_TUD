@@ -32,7 +32,7 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 - **Portierung für Safari ~[assinged]~**: Dafür gibt es schon einen PR (in Arbeit).
 - **Prüfen von Login-Daten**: Damit man bei der Eingabe falscher Login-Daten nicht für die Portale gesperrt wird, sollte TUfast beim speichern der Login-Daten prüfen, ob diese valide sind.
 - **Unterstütze https://videocampus.sachsen.de**: Dieses Feature wird häufig nachgefragt. Die Berechtigung für sachsen.de/ muss optional sein! 
-- **Praktische Weiterleitung für weitere Suchmaschinen (DuckDuckGo,..)**: Aktuell wird hier nur google supported. [Issue 28](https://github.com/TUfast-TUD/TUfast_TUD/issues/28)
+- SLUB-Login
 - **Aufrufen Anzahl ungelesener Nachrichten aus Matrix-Chat**: Analog wie die Benachrichtigungen / Icons für neue Mail; nur eben für Matrix. Ist anscheinend vielen wichtig & **macht bestimmt Spaß zu implementieren! :D** Vielleicht macht es Sinn, die Code-Struktur so anzulegen, dass weitere Portale zukünftig leicht hinzugefügt werden können.
 
 ### Manchmal nachgefragt
@@ -46,7 +46,7 @@ Hier sind Feature-Ideen, die uns durch Nutzer zugetragen wurden, sortiert nach A
 
 ### Weiteres
 - Migrierung zu [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/).
-- Option, die Einstellungen und OPAL-Kurse über die Broweser zu synchronisieren.
+- Option, die Einstellungen und OPAL-Kurse über die Browser zu synchronisieren.
 - **Ein Masterpasswort** das man jedes mal vor dem AutoLogin eingeben muss um die Anwendung noch sicherer zu machen.
 - TUfast für Android (Freifox, und bald auch Chrome)
 - **Design-Rework von der Einstellungsseite in TUfast**: Noch Nutzerfreundlicher. Noch Übersichtlicher. Noch Besser!
