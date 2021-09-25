@@ -238,25 +238,6 @@ function enableOWAFetch() {
   })
 }
 
-function denyHostPermissionS() {
-  alert("Okay, das ist schade. Beachte bitte, dass diese TUfast sich bei dir bald automatisch deaktivieren wird und du die Erweiterung wieder manuell aktivieren musst. Wir empfehlen dir, die Berechtigung zu akzeptieren!")
-}
-
-function requestHostPermissionS() {
-  chrome.permissions.request({
-    origins: ["*://*/*"]
-  }, function (granted) {
-    if (granted) {
-      alert("Perfekt! TUfast hat jetzt maximale Funktionen! Entdecke auf dieser Seite jetzt alle Optionen von TUfast!")
-      chrome.runtime.sendMessage({ cmd: 'register_addition_content_scripts' }, function (result) { })
-      document.getElementById("addition_host_permissions").remove()
-
-    } else {
-      alert("Okay, das ist schade. Beachte bitte, dass TUfast sich bei dir bald automatisch deaktivieren wird und du die Erweiterung wieder manuell aktivieren musst. Wir empfehlen dir, die Berechtigung zu akzeptieren!")
-    }
-  })
-}
-
 async function getAvailableRockets() {
   return new Promise((res, rej) => {
     chrome.storage.local.get(["availableRockets"], (resp) => {
@@ -583,23 +564,5 @@ window.onload = async function () {
       }
     })
   }
-
-
-  //additional host permissions: all urls
-  //show, if dont have permission for all acceptDomainschrome.permissions.contains({
-  chrome.permissions.contains({
-    origins: ["*://*/*"]
-  }, async function (hasPermission) {
-    if (hasPermission) {
-      // Everything alright.
-    } else {
-      // Show options to grant permission.
-      let hpDiv = document.getElementById("addition_host_permissions")
-      hpDiv.innerHTML = '<p><b>TUfast braucht eine zus&auml;tzliche Berechtigung, um zu funktionieren &#10071;&#10071;</b> <br> Dr&uuml;cke jetzt auf "Akzeptieren", um die Berechtigung anzufordern. Akzeptierst du die Berechtigung nicht, deaktiviert sich TUfast bei dir demn&auml;chst automatisch. Eine ausf&uuml;hrliche Erkl&auml;rung zum Thema findest du <a target="_blank" href="https://docs.google.com/document/d/1B3E6X5-Yy4UryxzS7CD-4m-Xfs0GKmWbFWfRPEB6Zz0/edit?usp=sharing">hier</a>. TUfast funktioniert weiterhin ausschlie&szlig;lich lokal auf deinem PC und sammelt keine Nutzerdaten. Wir entwickeln TUfast f&uuml;r euch &#128153; und hoffen, euer Leben damit ein bisschen einfacher zu machen.</p > <button class="button-deny" id="refuseDomains">Ablehnen</button><button id="acceptDomains" style="margin-left:30px;" class="button-accept">Akzeptieren</button><br>'
-      await new Promise(r => setTimeout(r, 500))
-      document.getElementById("refuseDomains").addEventListener('click', denyHostPermissionS) //innerHTML is not async. However, it takes time to render, so lets wait 500ms
-      document.getElementById("acceptDomains").addEventListener('click', requestHostPermissionS)
-    }
-  })
 }
 
