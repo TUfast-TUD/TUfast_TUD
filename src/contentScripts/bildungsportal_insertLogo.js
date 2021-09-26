@@ -113,14 +113,14 @@ async function logoOnClickEasteregg() {
             typeOfMsg = "text"
             //enable rocketIcon, set selected rocketIcon (RI3)
             chrome.storage.local.set({ foundEasteregg: true }, function () { })
-            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/7_128px.png"}' }, function () { })
+            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "../assets/icons/RocketIcons/7_128px.png"}' }, function () { })
             chrome.storage.local.get(["availableRockets"], (resp) => {
                 let avRockets = resp.availableRockets
                 avRockets.push("RI3")
                 chrome.storage.local.set({ "availableRockets": avRockets })
             })
             //live-update the logo
-            updateRocketLogo("RocketIcons/7_128px.png")
+            updateRocketLogo("../assets/icons/RocketIcons/7_128px.png")
             //change the onclick function
             document.getElementById("TUFastLogo").onclick = logoOnClick
             break

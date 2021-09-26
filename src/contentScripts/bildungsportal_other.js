@@ -34,7 +34,7 @@ chrome.storage.local.get(['isEnabled', "availableRockets", "removedUnlockRockets
 
 
     //show implementationForFirefox not longer required
-    //if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) { 
+    //if (!showKeyboardUpdate && !showReviewBanner && !result.showedFirefoxBanner && result.saved_click_counter > 50) {
     //    let isChrome = navigator.userAgent.includes("Chrome/")  //attention: no failsave browser detection | also for new edge!
     //    if(isChrome) showImplementationForFirefox = true
     //}
@@ -120,7 +120,7 @@ function RemoveMoreRocketIcons() {
 }
 
 function showUnlockRocketsBanner() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "unlockRocketsPrompt"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -227,7 +227,7 @@ function clickedWebstoreLink() {
 }
 
 function showKeyboardShortcutUpdate() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "keyboardBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -236,7 +236,7 @@ function showKeyboardShortcutUpdate() {
 }
 
 function showUnlockRocketsFirstBanner() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "unlockRocketsFirstPrompt"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -245,7 +245,7 @@ function showUnlockRocketsFirstBanner() {
 }
 
 function showImplementationForFirefoxBanner() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "showImplementationForFirefoxBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -254,7 +254,7 @@ function showImplementationForFirefoxBanner() {
 }
 
 function showOpalCustomizeBanner() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "showOpalCustomizeBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -263,7 +263,7 @@ function showOpalCustomizeBanner() {
 }
 
 function showUnreadMailCounterBanner() {
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "showUnreadMailCounterBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"
@@ -280,7 +280,7 @@ function showLeaveReviewBanner() {
     else if (isFirefox) { webstoreLink = "https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" }
     else { webstoreLink = "https://www.tu-fast.de" }
 
-    let imgUrl = chrome.runtime.getURL("../images/tufast48.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/tufast48.png")
     let banner = this.document.createElement("div")
     banner.id = "reviewBanner"
     banner.style = "font-size:22px; height:55px; line-height:55px;text-align:center"

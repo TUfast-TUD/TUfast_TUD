@@ -1,4 +1,4 @@
-@import 'palette.css';
+@import '../palette.css';
 
 /* list */
 .list {
@@ -57,7 +57,7 @@
   border-radius: 4px;
   font-size: 12px;
   border: 1.5px solid var(--color-border-input);
-  background-image: url("./icons/searchicon.png"); /* Add a search icon to input */
+  background-image: url("../../assets/icons/searchicon.png"); /* Add a search icon to input */
   background-position: 12px 7px; /* Position the search icon */
   background-size: 19px;
   background-repeat: no-repeat; /* Do not repeat the icon image */
