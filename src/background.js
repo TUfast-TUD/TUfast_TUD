@@ -82,7 +82,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			chrome.storage.local.set({ foundEasteregg: false }, function () { })
 			chrome.storage.local.set({ hisqisPimpedTable: true }, function () { })
 			chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
-			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
+			chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}' }, function () { })
 			chrome.storage.local.set({ pdfInInline: false }, function () { })
 			chrome.storage.local.set({ pdfInNewTab: false }, function () { })
 			chrome.storage.local.set({ studiengang: "general" }, function () { })
@@ -172,7 +172,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 			//check if selectedRocketIcon
 			chrome.storage.local.get(['selectedRocketIcon'], function (result) {
 				if (result.selectedRocketIcon === undefined || result.selectedRocketIcon === null) {
-					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px.png"}' }, function () { })
+					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}' }, function () { })
 				}
 			})
 			//check if hisqisPimpedTable
@@ -188,10 +188,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 				if (result.saved_click_counter > 2500 && !avRockets.includes("RI5")) avRockets.push("RI5")
 				if (result.Rocket === "colorful" && result.foundEasteregg === undefined) {
 					chrome.storage.local.set({ foundEasteregg: true }, function () { })
-					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/3_120px.png"}' }, function () { })
+					chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}' }, function () { })
 					avRockets.push("RI3")
 					chrome.browserAction.setIcon({
-						path: "RocketIcons/3_120px.png"
+						path: "assets/icons/RocketIcons/3_120px.png"
 					})
 				}
 				chrome.storage.local.set({ "availableRockets": avRockets })
@@ -411,7 +411,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			break
 		case "update_rocket_logo_easteregg":
 			chrome.browserAction.setIcon({
-				path: "RocketIcons/3_120px.png"
+				path: "assets/icons/RocketIcons/3_120px.png"
 			})
 			break
 		default:
