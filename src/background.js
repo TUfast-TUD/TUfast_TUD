@@ -216,14 +216,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 				}
 			})
 			//if not yet invite shown: show, and set shown to true
-			chrome.storage.local.get(['TUfastCampInvite1'], (res) => {
-				let today = new Date();
-				let max_invite_date = new Date(2021, 8, 30) //27.09.2021; month is zero based
-				if (!res.TUfastCampInvite1 === true && today < max_invite_date) {
-					chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
-					chrome.tabs.create(({ url: "TUfastCamp.html" }))
-				}
-			})
+			//chrome.storage.local.get(['TUfastCampInvite1'], (res) => {
+			//	let today = new Date();
+			//	let max_invite_date = new Date(2021, 8, 30) //27.09.2021; month is zero based
+			//	if (!res.TUfastCampInvite1 === true && today < max_invite_date) {
+			//		chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
+			//		chrome.tabs.create(({ url: "TUfastCamp.html" }))
+			//	}
+			// })
 
 
 			break
@@ -583,7 +583,7 @@ function getKeyBuffer() {
 	})
 }
 
-//this functions saved user login-data locally. 
+//this functions saved user login-data locally.
 //user data is encrypted using the crpyto-js library (aes-cbc). The encryption key is created from pc-information with system.cpu
 //a lot of encoding and transforming needs to be done, in order to provide all values in the right format.
 async function setUserData(userData) {

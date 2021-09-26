@@ -24,7 +24,7 @@ async function applyTheme(theme) {
 
     currentTheme = theme
     chrome.storage.local.set({theme: theme})
-    
+
     // update switcher
     document.querySelector('#themeSwitcher > .theme-text').innerHTML = availableThemes[theme]
   } else {
@@ -206,7 +206,7 @@ async function toggleOWAfetch() {
     }
   })
   //    }
-  //  } 
+  //  }
   //);
 }
 
@@ -249,43 +249,43 @@ async function getAvailableRockets() {
 let rocketIconsConfig = {
 
   "RI4": {
-    IconPathEnabled: "RocketIcons/4_103px.png",
-    IconPathDisabled: "RocketIcons/4_grey_103px.png",
+    IconPathEnabled: "../../assets/icons/RocketIcons/4_103px.png",
+    IconPathDisabled: "../../assets/icons/RocketIcons/4_grey_103px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 250 Klicks.",
     innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 250 Klicks gespart. TUfast scheint n&uuml;tzlich!",
     id: "RI4"
   },
   "RI5": {
-    IconPathEnabled: "RocketIcons/13_128px.png",
-    IconPathDisabled: "RocketIcons/13_grey_128px.png",
+    IconPathEnabled: "../../assets/icons/RocketIcons/13_128px.png",
+    IconPathDisabled: "../../assets/icons/RocketIcons/13_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Spare mehr als 2500 Klicks. Du bist Profi!",
     innerHTMLEnabled: "&nbsp;&nbsp;Mehr als 2500 Klicks gespart. TUfast ist n&uuml;tzlich!",
     id: "RI5"
   },
   "RI3": {
-    IconPathEnabled: "RocketIcons/7_128px.png",
-    IconPathDisabled: "RocketIcons/7_grey_128px.png",
+    IconPathEnabled: "../../assets/icons/RocketIcons/7_128px.png",
+    IconPathDisabled: "../../assets/icons/RocketIcons/7_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Finde das Easteregg!",
     innerHTMLEnabled: "&nbsp;&nbsp;Easteregg gefunden :)",
     id: "RI3"
   },
   "RI2": {
-    IconPathEnabled: "RocketIcons/2_128px.png",
-    IconPathDisabled: "RocketIcons/2_grey_128px.png",
+    IconPathEnabled: "../../assets/icons/RocketIcons/2_128px.png",
+    IconPathDisabled: "../../assets/icons/RocketIcons/2_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Du findest TUfast n&uuml;tzlich? Erz&auml;hle es zwei Leuten mit &#128073;<a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90'>E-Mail</a>, um diese schicke Rakete freizuschalten!",
     innerHTMLEnabled: "&nbsp;&nbsp;Diese Rakete hast du dir verdient! Mit <a target='_blank' href='mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90'>E-Mail</a> empfohlen.",
     id: "RI2"
   },
   "RI6": {
-    IconPathEnabled: "RocketIcons/6_128px.png",
-    IconPathDisabled: "RocketIcons/6_grey_128px.png",
+    IconPathEnabled: "../../assets/icons/RocketIcons/6_128px.png",
+    IconPathDisabled: "../../assets/icons/RocketIcons/6_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Gef&auml;llt dir TUfast? Oder hast du Anmerkdungen? Dann hinterlasse eine Bewertung im &#128073;<a target='_blank' href=" + webstorelink + ">Webstore</a>!",
     innerHTMLEnabled: "&nbsp;&nbsp;Danke f&uuml;r deine Bewertung im Webstore!",
     id: "RI6"
   },
   "RI1": {
-    IconPathEnabled: "RocketIcons/1_128px.png",
-    IconPathDisabled: "RocketIcons/1_grey_128px.png",
+    IconPathEnabled: "../../assets/icons/RocketIcons/1_128px.png",
+    IconPathDisabled: "../../assets/icons/RocketIcons/1_grey_128px.png",
     innerHTMLToEnable: "&nbsp;&nbsp;Coole Dinge Teilen ist dein Ding? Teile TUfast mit zwei Freunden auf &#128073;<a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%3A%20www.tu-fast.de%20%F0%9F%96%90' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> und sammle diese tolle Rakete!",
     innerHTMLEnabled: "&nbsp;&nbsp;Danke f&uuml;r deine Unterst&uuml;tzung! Mit <a href='https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%3A%20www.tu-fast.de%20%F0%9F%96%90' data-action='share/whatsapp/share' target='_blank'>WhatsApp</a> empfohlen.",
     id: "RI1"
@@ -347,7 +347,7 @@ async function insertAllRocketIcons() {
 function rocketIconSelectionChange() {
   let rocketNode = this.parentElement
   let rocketID = this.id
-  let imgSrc = "RocketIcons" + rocketNode.querySelectorAll("img")[0].src.split("RocketIcons")[1]
+  let imgSrc = "../../assets/icons/RocketIcons" + rocketNode.querySelectorAll("img")[0].src.split("RocketIcons")[1]
   chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc + '"}' }, function () { })
   chrome.browserAction.setIcon({
     path: imgSrc
@@ -510,7 +510,7 @@ window.onload = async function () {
     else {
       document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
     }
-    //update saved clicks  
+    //update saved clicks
     //see if any params are available
     if (result.openSettingsPageParam === "auto_login_settings") { setTimeout(function () { this.document.getElementById("auto_login_settings").click() }, 200) }
     else if (result.openSettingsPageParam === "time_settings") {

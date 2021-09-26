@@ -1,4 +1,3 @@
-
 /*
    { selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }
 */
@@ -53,7 +52,7 @@ var typeOfMsg = ""  //type of message which is displayed
 function updateRocketLogo(iconPath) {
     let timestamp = new Date().getTime();
     chrome.runtime.sendMessage({ cmd: 'update_rocket_logo_easteregg'}, function (result) { })
-    document.querySelectorAll("#TUFastLogo img")[0].src = chrome.runtime.getURL("../" + iconPath) + "?t =" + timestamp;
+    document.querySelectorAll("#TUFastLogo img")[0].src = chrome.runtime.getURL("" + iconPath) + "?t =" + timestamp;
 }
 
 function setProBadge() {
@@ -113,14 +112,14 @@ async function logoOnClickEasteregg() {
             typeOfMsg = "text"
             //enable rocketIcon, set selected rocketIcon (RI3)
             chrome.storage.local.set({ foundEasteregg: true }, function () { })
-            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "RocketIcons/7_128px.png"}' }, function () { })
+            chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "../assets/icons/RocketIcons/7_128px.png"}' }, function () { })
             chrome.storage.local.get(["availableRockets"], (resp) => {
                 let avRockets = resp.availableRockets
                 avRockets.push("RI3")
                 chrome.storage.local.set({ "availableRockets": avRockets })
             })
             //live-update the logo
-            updateRocketLogo("RocketIcons/7_128px.png")
+            updateRocketLogo("../assets/icons/RocketIcons/7_128px.png")
             //change the onclick function
             document.getElementById("TUFastLogo").onclick = logoOnClick
             break

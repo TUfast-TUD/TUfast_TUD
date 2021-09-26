@@ -14,7 +14,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', "remove
 
         // show banner
         if (showDashboardBanner) { showDashboardBannerFunc() }
-        // 
+        //
 
         //if all courses loaded --> parse
         if (!document.getElementsByClassName("pager-showall")[0]) {
@@ -75,7 +75,7 @@ function closeOpalBanner() {
 
 function showDashboardBannerFunc() {
     let banner = this.document.createElement("div")
-    let imgUrl = chrome.runtime.getURL("../images/OpalBanner3.png")
+    let imgUrl = chrome.runtime.getURL("../assets/images/OpalBanner3.png")
     banner.id = "opalBanner"
     banner.style.height = "50px"
     banner.style.margin = "auto"
@@ -115,12 +115,12 @@ function parseCoursesFromWebPage() {
             catch (e) {console.log("Error in parsing course list. Could not parse course list: " + e) }
         }
     }
-    
+
     //alert, if still null-entries found
     let getAllNullEntriesFinal = course_list.list.filter(el => !el.link && !el.name)
     if(getAllNullEntriesFinal.length > 0) {console.log("Possible Error in parsing courses. Found null entries.")}
     //if present, remove all null entries
     course_list.list = course_list.list.filter(el => !(!el.link && !el.name))
-    
+
     return course_list
 }

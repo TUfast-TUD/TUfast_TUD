@@ -23,7 +23,7 @@
   "content_scripts": [
     {
       "js": [
-        "contentScripts/content_elearningMED.js"
+        "contentScripts/elearningMED.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -32,7 +32,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_opalError.js"
+        "contentScripts/fwd_opalError.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -41,7 +41,7 @@
     },
     {
       "js": [
-        "contentScripts/content_idp2_1.js"
+        "contentScripts/idp2_1.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -51,7 +51,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_jexam.js"
+        "contentScripts/fwd_jexam.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -69,7 +69,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_cloudstore.js"
+        "contentScripts/fwd_cloudstore.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -95,7 +95,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_owa.js"
+        "contentScripts/fwd_owa.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -121,7 +121,7 @@
     },
     {
       "js": [
-        "contentScripts/content_jexam.js"
+        "contentScripts/jexam.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -163,7 +163,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_opal.js"
+        "contentScripts/fwd_opal.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -181,7 +181,7 @@
     },
     {
       "js": [
-        "contentScripts/content_selma.js"
+        "contentScripts/selma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -190,7 +190,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_hisqis.js"
+        "contentScripts/fwd_hisqis.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -207,7 +207,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_tumed.js"
+        "contentScripts/fwd_tumed.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -224,7 +224,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_selma.js"
+        "contentScripts/fwd_selma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -241,7 +241,7 @@
     },
     {
       "js": [
-        "contentScripts/content_qis.js"
+        "contentScripts/qis.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -250,7 +250,7 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal.js"
+        "contentScripts/bildungsportal.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -261,7 +261,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_matrix.js"
+        "contentScripts/fwd_matrix.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -278,7 +278,7 @@
     },
     {
       "js": [
-        "contentScripts/content_matrix.js"
+        "contentScripts/matrix.js"
       ],
       "run_at": "document_end",
       "matches": [
@@ -292,7 +292,7 @@
     },
     {
       "js": [
-        "contentScripts/content_owa.js"
+        "contentScripts/owa.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -301,7 +301,7 @@
     },
     {
       "js": [
-        "contentScripts/content_cloudstore.js"
+        "contentScripts/cloudstore.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -310,7 +310,7 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal_main.js"
+        "contentScripts/bildungsportal_main.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -320,8 +320,8 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal_insertLogo.js",
-        "contentScripts/content_bildungsportal_viewPDFinBrowser.js"
+        "contentScripts/bildungsportal_insertLogo.js",
+        "contentScripts/bildungsportal_viewPDFinBrowser.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -330,7 +330,7 @@
     },
     {
       "js": [
-        "contentScripts/content_bildungsportal_other.js"
+        "contentScripts/bildungsportal_other.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -340,7 +340,7 @@
     {
       "js": [
         "thirdParty/jquery-3.4.1.min.js",
-        "contentScriptsDashboard/parseOpal.js"
+        "contentScripts/parseOpal.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -351,7 +351,7 @@
     },
     {
       "js": [
-        "contentScripts/content_magma.js"
+        "contentScripts/magma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -360,7 +360,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_magma.js"
+        "contentScripts/fwd_magma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -377,7 +377,7 @@
     },
     {
       "js": [
-        "contentScripts/content_tumed.js"
+        "contentScripts/tumed.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -386,7 +386,7 @@
     },
     {
       "js": [
-        "contentScripts/content_tex.js"
+        "contentScripts/tex.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -395,7 +395,7 @@
     },
     {
       "js": [
-        "contentScripts/content_idp.js"
+        "contentScripts/idp.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -413,7 +413,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_qwant.js"
+        "contentScripts/fwd_qwant.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -422,7 +422,7 @@
     },
     {
       "js": [
-        "contentScripts/content_fwd_startpage.js"
+        "contentScripts/fwd_startpage.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -431,37 +431,20 @@
     }
   ],
   "icons": {
-    "16": "images/tufast16.png",
-    "32": "images/tufast32.png",
-    "48": "images/tufast48.png",
-    "128": "images/tufast128.png"
+    "16": "./assets/images/tufast16.png",
+    "32": "./assets/images/tufast32.png",
+    "48": "./assets/images/tufast48.png",
+    "128": "./assets/images/tufast128.png"
   },
   "browser_action": {
-    "default_popup": "popup.html"
+    "default_popup": "freshContent/popup/popup.html"
   },
   "options_ui": {
-    "page": "settings.html",
+    "page": "freshContent/settings/settings.html",
     "open_in_tab": true
   },
   "web_accessible_resources": [
-    "images/OpalBanner3.png",
-    "images/tufast48.png",
-    "RocketIcons/1_128px.png",
-    "RocketIcons/2_128px.png",
-    "RocketIcons/3_120px.png",
-    "RocketIcons/4_103px.png",
-    "RocketIcons/5_116px.png",
-    "RocketIcons/6_128px.png",
-    "RocketIcons/7_128px.png",
-    "RocketIcons/8_128px.png",
-    "RocketIcons/9_108px.png",
-    "RocketIcons/10_128px.png",
-    "RocketIcons/11_128px.png",
-    "RocketIcons/12_128px.png",
-    "RocketIcons/13_128px.png",
-    "RocketIcons/14_128px.png",
-    "RocketIcons/15_128px.png",
-    "RocketIcons/default_128px.png"
+    "assets/*"
   ],
   "manifest_version": 2,
   "commands": {
