@@ -9,7 +9,7 @@ const studiengang_config = {
         "name": "Geowissenschaften",
         "fsr_icon": "../../assets/icons/FSRIcons/fsr_geo.png",
         "fsr_link": "https://tu-dresden.de/bu/umwelt/geo/fsr",
-        "fsr_icon_2": "./icons/OPAL.png",
+        "fsr_icon_2": "../../assets/icons/OPAL.png",
         "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605",
         "fsr_icon_dashboard_style": "",
         "fsr_icon_dashboard_style_2": "max-height: 20px; margin-top: 10px; padding-right:10px",
@@ -115,8 +115,8 @@ var starRatingSettings = {
     "readOnly": "no",
 
     // custom rating symbols here
-    "starImage": "./icons/starRate.png",
-    "emptyStarImage": "./icons/starbackground.png",
+    "starImage": "../../assets/icons/starRate.png",
+    "emptyStarImage": "../../assets/icons/starbackground.png",
 
     // symbol size
     "starSize": "18",
@@ -416,12 +416,12 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         case "favoriten":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/favorites"
             name = "Klicke, um deine Opal-Kurse zu importieren"
-            imgSrc = "./icons/star.png"
+            imgSrc = "../../assets/icons/star.png"
             break
         case "meine_kurse":
             link = "https://bildungsportal.sachsen.de/opal/auth/resource/courses"
             name = "Klicke, um deine Opal-Kurse zu importieren"
-            imgSrc = "./icons/CoursesOpalIcon.png"
+            imgSrc = "../../assets/icons/CoursesOpalIcon.png"
             break
         default:
             break
@@ -558,8 +558,8 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
 
     img.className = "list-img"
 
-    if (type === "favoriten") img.src = "./icons/CoursesOpalIcon.png"
-    if (type === "meine_kurse") img.src = "./icons/star.png"
+    if (type === "favoriten") img.src = "../../assets/icons/CoursesOpalIcon.png"
+    if (type === "meine_kurse") img.src = "../../assets/icons/star.png"
 
     listImg.appendChild(img)
     listEntry.appendChild(listImg)
