@@ -340,7 +340,7 @@
     {
       "js": [
         "thirdParty/jquery-3.4.1.min.js",
-        "contentScriptsDashboard/parseOpal.js"
+        "contentScripts/parseOpal.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -431,10 +431,10 @@
     }
   ],
   "icons": {
-    "16": "assets/images/tufast16.png",
-    "32": "assets/images/tufast32.png",
-    "48": "assets/images/tufast48.png",
-    "128": "assets/images/tufast128.png"
+    "16": "./assets/images/tufast16.png",
+    "32": "./assets/images/tufast32.png",
+    "48": "./assets/images/tufast48.png",
+    "128": "./assets/images/tufast128.png"
   },
   "browser_action": {
     "default_popup": "freshContent/popup/popup.html"
@@ -444,24 +444,24 @@
     "open_in_tab": true
   },
   "web_accessible_resources": [
-    "assets/images/OpalBanner3.png",
-    "assets/images/tufast48.png",
-    "assets/icons/RocketIcons/1_128px.png",
-    "assets/icons/RocketIcons/2_128px.png",
-    "assets/icons/RocketIcons/3_120px.png",
-    "assets/icons/RocketIcons/4_103px.png",
-    "assets/icons/RocketIcons/5_116px.png",
-    "assets/icons/RocketIcons/6_128px.png",
-    "assets/icons/RocketIcons/7_128px.png",
-    "assets/icons/RocketIcons/8_128px.png",
-    "assets/icons/RocketIcons/9_108px.png",
-    "assets/icons/RocketIcons/10_128px.png",
-    "assets/icons/RocketIcons/11_128px.png",
-    "assets/icons/RocketIcons/12_128px.png",
-    "assets/icons/RocketIcons/13_128px.png",
-    "assets/icons/RocketIcons/14_128px.png",
-    "assets/icons/RocketIcons/15_128px.png",
-    "assets/icons/RocketIcons/default_128px.png"
+    "./assets/images/OpalBanner3.png",
+    "./assets/images/tufast48.png",
+    "./assets/icons/RocketIcons/1_128px.png",
+    "./assets/icons/RocketIcons/2_128px.png",
+    "./assets/icons/RocketIcons/3_120px.png",
+    "./assets/icons/RocketIcons/4_103px.png",
+    "./assets/icons/RocketIcons/5_116px.png",
+    "./assets/icons/RocketIcons/6_128px.png",
+    "./assets/icons/RocketIcons/7_128px.png",
+    "./assets/icons/RocketIcons/8_128px.png",
+    "./assets/icons/RocketIcons/9_108px.png",
+    "./assets/icons/RocketIcons/10_128px.png",
+    "./assets/icons/RocketIcons/11_128px.png",
+    "./assets/icons/RocketIcons/12_128px.png",
+    "./assets/icons/RocketIcons/13_128px.png",
+    "./assets/icons/RocketIcons/14_128px.png",
+    "./assets/icons/RocketIcons/15_128px.png",
+    "./assets/icons/RocketIcons/default_128px.png"
   ],
   "manifest_version": 2,
   "commands": {
