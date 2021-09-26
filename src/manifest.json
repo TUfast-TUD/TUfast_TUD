@@ -41,12 +41,12 @@
     },
     {
       "js": [
-        "contentScripts/idp2_1.js"
+        "contentScripts/idp.js"
       ],
       "run_at": "document_start",
       "matches": [
-        "https://idp2.tu-dresden.de/idp/profile/*",
-        "https://idp.tu-dresden.de/idp/profile/*"
+        "https://idp.tu-dresden.de/*",
+        "https://idp2.tu-dresden.de/*"
       ]
     },
     {
@@ -391,15 +391,6 @@
       "run_at": "document_start",
       "matches": [
         "https://tex.zih.tu-dresden.de/*"
-      ]
-    },
-    {
-      "js": [
-        "contentScripts/idp.js"
-      ],
-      "run_at": "document_start",
-      "matches": [
-        "https://idp.tu-dresden.de/*"
       ]
     },
     {
