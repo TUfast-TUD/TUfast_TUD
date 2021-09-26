@@ -1,4 +1,4 @@
-const shareHTML = '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Hilf deinen Mitstudierenden</span></div><div class="tufast_text" style=position:relative;top:6px><img class="imgicon huge invert" src=/images/tufast48.png style=position:relative;top:-7px;left:0px><span class="tufasst_name huge" style=position:relative;top:-7px;left:3px>TUfast</span><span class=tufasst_name> &nbsp;zu entdecken</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link href=javascript:void(0)>sammle coole Raketen</a>!</span></div><div id=download-section><div>Teilen mit</div><div class=download-link><img class=imgicon src=icons/gmail.png> <span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank>E-Mail</a></span></div><div class=download-link><img class=imgicon src=icons/wa2.png style=height:1.4em><span class=browser_name> <a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 von Studenten | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
+const shareHTML = '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Hilf deinen Mitstudierenden</span></div><div class="tufast_text" style=position:relative;top:6px><img class="imgicon huge invert" src=../../assets/images/tufast48.png style=position:relative;top:-7px;left:0px><span class="tufasst_name huge" style=position:relative;top:-7px;left:3px>TUfast</span><span class=tufasst_name> &nbsp;zu entdecken</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link href=javascript:void(0)>sammle coole Raketen</a>!</span></div><div id=download-section><div>Teilen mit</div><div class=download-link><img class=imgicon src=../../assets/icons/gmail.png> <span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank>E-Mail</a></span></div><div class=download-link><img class=imgicon src=../../assets/icons/wa2.png style=height:1.4em><span class=browser_name> <a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 von Studenten | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
 const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -66px; width:240px; height: auto;" > <img style="width: 170px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a banana&emoji=🍌&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
 
 //this config is used to customize TUfast for a course of study
@@ -7,7 +7,7 @@ const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target
 const studiengang_config = {
     "geowissenschaften": {
         "name": "Geowissenschaften",
-        "fsr_icon": "./OfficialIcons/fsr_geo.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/fsr_geo.png",
         "fsr_link": "https://tu-dresden.de/bu/umwelt/geo/fsr",
         "fsr_icon_2": "./icons/OPAL.png",
         "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605",
@@ -21,7 +21,7 @@ const studiengang_config = {
     },
     "maschinenbau": {
         "name": "Maschinenwesen",
-        "fsr_icon": "./OfficialIcons/fsr_mw.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/fsr_mw.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
         "fsr_link": "https://tu-dresden.de/ing/maschinenwesen/fsr",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
@@ -32,7 +32,7 @@ const studiengang_config = {
     },
     "mathematik": {
         "name": "Mathematik",
-        "fsr_icon": "./OfficialIcons/fsr_mathe.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/fsr_mathe.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
         "fsr_link": "https://myfsr.de/dokuwiki/doku.php?id=start",
         "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "je", "swdd"],
@@ -43,7 +43,7 @@ const studiengang_config = {
     },
     "medizin": {
         "name": "Medizin",
-        "fsr_icon": "./OfficialIcons/fsr_medi_small.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/fsr_medi_small.png",
         "fsr_link": "https://www.medforum-dresden.de/",
         "fsr_icon_dashboard_style": "",
         "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
@@ -54,7 +54,7 @@ const studiengang_config = {
     },
     "psychologie": {
         "name": "Psychologie",
-        "fsr_icon": "./OfficialIcons/fsr_psy.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/fsr_psy.png",
         "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
         "fsr_icon_dashboard_style": "",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "orsee"],
@@ -62,10 +62,10 @@ const studiengang_config = {
             "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html",
         },
         "invert_icon_dark_theme": false
-    },     
+    },
     "wirtschaftswissenschaften": {
         "name": "Wirtschaftswissenschaften",
-        "fsr_icon": "./OfficialIcons/fsr_wiwi.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/fsr_wiwi.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
         "fsr_link": "https://fsrwiwi.de",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
@@ -76,7 +76,7 @@ const studiengang_config = {
     },
      "elektrotechnik": {
         "name": "Elektrotechnik",
-        "fsr_icon": "./OfficialIcons/FSR_ET.png",
+        "fsr_icon": "../../assets/icons/FSRIcons/FSR_ET.png",
         "fsr_icon_dashboard_style": "max-height: 32px;",
         "fsr_link": "https://fsret.de",
         "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
@@ -401,7 +401,7 @@ function listSearchFunction() {
         catch (e) {
             console.log("Could not set visibility of item. Does not necessarily need to be an error.")
         }
-        
+
     }
 
     //always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
@@ -429,9 +429,9 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
 
     if (courseList.length === 0 || courseList === undefined || courseList === false) {
         courseList = []
-        courseList.push({ "name": name, "link": link, "img": "./icons/reload.png" })
+        courseList.push({ "name": name, "link": link, "img": "../../assets/icons/reload.png" })
     } else {
-        courseList.push({ "name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "./icons/reload.png" })
+        courseList.push({ "name": "Diese Kursliste jetzt aktualisieren...", "link": link, "img": "../../assets/icons/reload.png" })
     }
 
     //determine when to show outro and intro for course rating
@@ -521,8 +521,8 @@ function displayCourseList(courseList, htmlList, type, closedIntro1, ratedCourse
         img.className = "list-img"
         img.src = imgSrc
 
-        if (element.img === "./icons/reload.png") {
-            img.src = "./icons/reload.png"
+        if (element.img === "../../assets/icons/reload.png") {
+            img.src = "../../assets/icons/reload.png"
             img.className += " invert"
         }
 
