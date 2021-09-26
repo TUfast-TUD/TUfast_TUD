@@ -73,15 +73,32 @@ function closeOpalBanner() {
     }
 }
 
+// CSS found in banner.css
 function showDashboardBannerFunc() {
-    let banner = this.document.createElement("div")
-    let imgUrl = chrome.runtime.getURL("../assets/images/OpalBanner3.png")
-    banner.id = "opalBanner"
-    banner.style.height = "50px"
-    banner.style.margin = "auto"
-    //add remove button -->
-    banner.innerHTML = '<img src=' + imgUrl + ' style=" -webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa); height: 55px; right: 30px; z-index: 999; position:fixed;"> <span id="closeOpalBanner" style="-webkit-filter: drop-shadow(2px 2px 2px #aaa);filter: drop-shadow(2px 2px 2px #aaa);font-size: 18px; z-index: 999; cursor: pointer; position: fixed; top: 14.1px; right: 13px; padding: 5.8px 7px; background-color: #ddd">x</span>'
-    this.document.body.insertBefore(banner, document.body.childNodes[0])
+    // create banner div
+    const banner = document.createElement("div")
+    banner.classList.add("banner")
+    // create image for rocket
+    const img = document.createElement("img")
+    img.classList.add("banner__icon")
+    img.src = chrome.runtime.getURL("../assets/icons/RocketIcons/default_128px.png")
+    // create title
+    const title = document.createElement("h2")
+    title.classList.add("banner__title")
+    title.innerHTML = "Hier Dashboard öffnen oder <strong>Alt + Q</strong> drücken"
+    // create close button
+    const button = document.createElement("button")
+    button.classList.add("banner__close")
+    button.innerHTML = "&#215;"
+    button.addEventListener("click", () => {
+        banner.remove()
+        chrome.storage.local.set({ removedOpalBanner: true }, () => {})
+    })
+
+    banner.appendChild(img)
+    banner.appendChild(title)
+    banner.appendChild(button)
+    document.body.appendChild(banner)
 }
 
 function parseCoursesFromWebPage() {
