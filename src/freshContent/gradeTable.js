@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const table_html = '<div id="pimpedTable" style="display:none"> \
 <vs-table hover-flat :data="table"> \
   <template slot="header"> \
