@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html data-preload>
+<html lang="de" data-preload>
 
 <head>
   <meta charset="UTF-8">
-  <script src="settings.js"></script>
-  <link rel="stylesheet" href="/css/components/switch.css">
-  <link rel="stylesheet" href="/css/settings.css">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TUFast - Einstellungen</title>
+  <script defer src="settings.js"></script>
+  <link rel="stylesheet" href="../switch.css">
+  <link rel="stylesheet" href="settings.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
 </head>
 
 <body>
   <p class="heading">Willkommen bei TUfast &#x1F680; </p>
   <p class="">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</p>
-  <img style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px; z-index: 100;"
-    src="../../assets/images/DashboardTutorialSmall.png">
+  <!-- <img style="max-width: 27%; width: 220px; position: fixed; top: 0px; right:8px; z-index: 100;"
+    src="../../assets/images/DashboardTutorialSmall.png"> -->
+
   <p id="welcome"></p>
   <p id="settings_comment"></p>
   <p id="studiengangSection">
-    <label for="studiengang">Exklusive Anpassungen f&uuml;r meinen Studiengang im Dashboard:</label>
+    <label for="studiengang">Exklusive Anpassungen für meinen Studiengang im Dashboard:</label>
     <select style="height: 22px; text-align:center;" name="studiengang" id="studiengangSelect">
       <option value="geowissenschaften">Geowissenschaften</option>
       <option value="maschinenbau">Maschinenbau</option>
@@ -27,7 +31,7 @@
       <option value="wirtschaftswissenschaften">Wirtschaftswissenschaften</option>
        <option value="elektrotechnik">Elektrotechnik</option>
       <option value="general">Standardeinstellungen</option>
-      <option value="add">&#65291; Studiengang hinzuf&uuml;gen ...</option>
+      <option value="add">&#65291; Studiengang hinzufügen ...</option>
     </select>
   </p>
   <p id="addStudiengang" style="display: none">Schicke uns ganz unkompliziert eine Mail mit Vorschl&auml;gen an <a href="mailto:frage@tu-fast.de?Subject=Feedback TUfast">frage@tu-fast.de</a>, wenn du auch Anpassungen f&uuml;r deinen Studiengang in TUfast haben
@@ -35,8 +39,8 @@
   <p>
   <p id="addStudiengang" style="display: none"></p>
   <p id="themeSection" style="margin: 0px;">
-    <label for="theme"><b><mark>NEU:</mark></b> W&auml;hle dein bevorzugtes Farbschema: &#160;&#160;</label>
-    <button name="theme" id="themeSwitcher" style="display: inline-block;">
+    <label for="theme"><b><mark>NEU:</mark></b> Wähle dein bevorzugtes Farbschema: &#160;&#160;</label>
+    <button class="btn--settings" name="theme" id="themeSwitcher" style="display: inline-block;">
       <i class="fas fa-sync-alt"></i>
       <span class="theme-text"></span>
     </button>&#160;&#160;(entwickelt von <a href="https://github.com/FugiMuffi" target="_blank">Lucas</a>)
@@ -44,29 +48,29 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="auto_login_settings">Automatisches Anmelden in OPAL, selma & Co.</button>
+  <button class="accordion btn--settings" id="auto_login_settings">Automatisches Anmelden in OPAL, selma & Co.</button>
   <div class="panel">
-    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Daf&uuml;r m&uuml;ssen deine selma
-      Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschl&uuml;sselt
+    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Dafür müssen deine selma
+      Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschlüsselt
       gespeichert.<br>
-      Du kannst sie jederzeit l&ouml;schen.<br>
+      Du kannst sie jederzeit löschen.<br>
       <span class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</span>
     </p>
     <form>
       <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"> (ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")<br>
       <input placeholder="Passwort (selma-Login)" type="password" id="password_field"><br>
-      <button type="button" class="button-accept" id="save_data">Lokal Speichern</button>
+      <button type="button" class="button-accept btn--settings" id="save_data">Lokal Speichern</button>
       <p id="status_msg" style="display: inline;"></p>
     </form>
-    <p>Hier kannst du alle Daten l&ouml;schen:<br>
-      <button id="delete_data" class="button-deny">Alle Daten l&ouml;schen</button>
+    <p>Hier kannst du alle Daten löschen:<br>
+      <button id="delete_data" class="button-deny btn--settings">Alle Daten löschen</button>
     </p>
     <p id="status_msg2"></p>
   </div>
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="owa_mail_settings">Benachrichtigungen f&uuml;r neue E-Mails im TU-Dresden-Postfach</button>
+  <button class="accordion btn--settings" id="owa_mail_settings">Benachrichtigungen für neue E-Mails im TU-Dresden-Postfach</button>
   <div class="panel">
     <p>TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben
       der Rakete an.<br>
@@ -75,7 +79,7 @@
       <img class="unread-mail-icon invert" src="../../assets/images/UnreadMails16.png">16 neue Mails
     </p>
     <p> <text class="grey-text">Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern.
-        <br>Weil TUfast daf&uuml;r eine spezielle Berechtigung braucht, dr&uuml;cke bitte auf "Erlauben" im folgenden
+        <br>Weil TUfast dafür eine spezielle Berechtigung braucht, drücke bitte auf "Erlauben" im folgenden
         Pop-Up.
       </text> </p>
     <p>Aus <label class="switch">
@@ -84,29 +88,29 @@
       </label> Ein <text id="owa_fetch_msg"></text></p>
     <p style="position:relative; left:-4px" id="additionNotificationSection">
       <input type="checkbox" id="additionalNotification" name="additionalNotification" checked>
-      <label for="additionalNotification">Zus&auml;tzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail
+      <label for="additionalNotification">Zusätzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail
         erhalten.</label>
     </p>
-    <p class="red-text">F&uuml;r diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU
-      Dresden ab. Zum Anmelden werden deine Login-Daten verschl&uuml;sselt &uuml;bertragen. Diese Verbindung ist sicher.
-      Es funktioniert genauso, als w&uuml;rdest du deine Mails &uuml;ber den Browser abrufen.</p>
+    <p class="red-text">Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU
+      Dresden ab. Zum Anmelden werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher.
+      Es funktioniert genauso, als würdest du deine Mails über den Browser abrufen.</p>
   </div>
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion">OPAL-Kurse im Dashboard</button>
+  <button class="accordion btn--settings">OPAL-Kurse im Dashboard</button>
   <div class="panel">
     <p>Finde alle deine OPAL-Kurse direkt im Dashboard.<br>
-      &Ouml;ffne das Dashboard oben rechts oder mit<b> Alt+Q</b> (<a href="javascript:void(0)"
-        id="open_shortcut_settings">&auml;ndern</a>).<br>
+      öffne das Dashboard oben rechts oder mit<b> Alt+Q</b> (<a href="javascript:void(0)"
+        id="open_shortcut_settings">ändern</a>).<br>
     </p>
     <p>
       <img class="img-opal-kurse swap-light" src="../../assets/images/DashboardTutorialBigLight.png">
       <img class="img-opal-kurse swap-dark" src="../../assets/images/DashboardTutorialBigDark.png">
     </p>
-    <p><b>F&uuml;r Power-User &#9889&#9889&#9889</b><br>
-      &Ouml;ffne dein Dashboard mit Alt+Q und beginne direkt zu tippen. Wenn du dann Enter dr&uuml;ckst,
-        wird der erste Kurs aus der Liste ge&ouml;ffnet.<br>
+    <p><b>Für Power-User &#9889;&#9889;&#9889;</b><br>
+      Öffne dein Dashboard mit Alt+Q und beginne direkt zu tippen. Wenn du dann Enter drückst,
+        wird der erste Kurs aus der Liste geöffnet.<br>
     </p>
 
     <p></p>
@@ -114,12 +118,12 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="OPAL_modifications">OPAL Personalisieren und Verbessern</button>
+  <button class="accordion btn--settings" id="OPAL_modifications">OPAL Personalisieren und Verbessern</button>
   <div class="panel">
     <p>
-      Damit die Einstellungen wirksam werden, musst du OPAL  einmal aktualisieren. F&uuml;r Firefox funktioniert dieses Feature leider nicht stabil.<br>
+      Damit die Einstellungen wirksam werden, musst du OPAL  einmal aktualisieren. Für Firefox funktioniert dieses Feature leider nicht stabil.<br>
       <text class="grey-text">
-        M&ouml;glicherweise braucht TUfast eine spezielle Berechtigung. Dr&uuml;cke bitte auf
+        Möglicherweise braucht TUfast eine spezielle Berechtigung. Drücke bitte auf
         "Erlauben" im folgenden
         Pop-Up.
       </text>
@@ -129,14 +133,14 @@
         <input type="checkbox" id="switch_pdf_inline">
         <span class="slider round"></span>
       </label>
-      &nbsp;&nbsp;PDF-Dokumente aus OPAL direkt im Browser &ouml;ffnen, anstatt sie herunterzuladen.
+      &nbsp;&nbsp;PDF-Dokumente aus OPAL direkt im Browser öffnen, anstatt sie herunterzuladen.
     </p>
     <p id="switch_pdf_newtab_block">
       <label class="switch">
         <input type="checkbox" id="switch_pdf_newtab">
         <span class="slider round"></span>
       </label>
-      &nbsp;&nbsp;PDF-Dokumente in neuem Tab &ouml;ffnen (empfohlen!)
+      &nbsp;&nbsp;PDF-Dokumente in neuem Tab öffnen (empfohlen!)
     </p>
     <p>
       <text>(entwickelt von <a href="https://github.com/peterkappelt" target="_blank">peterkappelt</a>, <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>)</text>
@@ -145,10 +149,10 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion">Shortcuts f&uuml;r OPAL & Co.</button>
+  <button class="accordion btn--settings">Shortcuts für OPAL & Co.</button>
   <div class="panel">
-    <p>&Ouml;ffne OPAL & Co. einfach mit Tastenkombinationen.<br>
-      <a href="javascript:void(0)" id="open_shortcut_settings1">Hier</a> kannst du alle Shortcuts sehen und &auml;ndern.
+    <p>Öffne OPAL & Co. einfach mit Tastenkombinationen.<br>
+      <a href="javascript:void(0)" id="open_shortcut_settings1">Hier</a> kannst du alle Shortcuts sehen und ändern.
     </p>
     <ul style="margin:0;">
       <li class="grey-text">Alt+Q &rarr; Dashboard &ouml;ffnen</li>
@@ -163,9 +167,9 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion">Abk&uuml;rzungen in Suchmaschinen (Google & Co.)</button>
+  <button class="accordion btn--settings">Abkürzungen in Suchmaschinen (Google & Co.)</button>
   <div class="panel">
-    <p>Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterst&uuml;tzt!</p>
+    <p>Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!</p>
     <p>Aus
       <label class="switch">
         <input type="checkbox" id="switch_fwd">
@@ -189,13 +193,13 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="rocket_icons">Raketen sammeln &#x1F680;&#x1F680;&#x1F680; und TUfast unterst&uuml;tzen</button>
+  <button class="accordion btn--settings" id="rocket_icons">Raketen sammeln &#x1F680;&#x1F680;&#x1F680; und TUfast unterstützen</button>
   <div class="panel" id="panel_rocket_icons">
     <p>
     <form id="RocketForm">
       <p>
         <b>Schalte neue Raketen frei und gestalte damit OPAL und deinen Browser!</b> <br>
-        Damit unterst&uuml;tzt du auch das TUfast-Projekt und das hilft uns sehr &#128578
+        Damit unterstützt du auch das TUfast-Projekt und das hilft uns sehr &#128578;
       </p>
       <p><input type="radio" id="RI_default" name="Rockets" value="RI_default"><label for="RI_default"></label><span
           class="helper"><img src="../../assets/icons/RocketIcons/default_128px.png" class="invert"
@@ -207,26 +211,30 @@
   <!-- endregion -->
   <!-- New Accordion section-->
   <!-- #region -->
-  <button class="accordion" id="time_settings">Weiteres & Kontakt &#x1F4E7;</button>
+  <button class="accordion btn--settings" id="time_settings">Weiteres & Kontakt &#x1F4E7;</button>
   <div class="panel">
-    <p>Hey, ich bin Oli &#128578 <br> TUfast ist ein quelloffenes und studentisches Projekt.<br>
-      Wenn du es unterst&uuml;tzen m&ouml;chtest, schau mal in der Sektion oben dr&uuml;ber nach &#128521;.<br>
+    <p>Hey, ich bin Oli &#128578; <br> TUfast ist ein quelloffenes und studentisches Projekt.<br>
+      Wenn du es unterstützen möchtest, schau mal in der Sektion oben drüber nach &#128521;.<br>
       Fragen und Feedback gern an <a id="" href="mailto:frage@tu-fast.de?Subject=Feedback TUfast">frage@tu-fast.de</a>.</p>
     <p>TUfast <a href="https://www.tu-fast.de" target="_blank" class="">Website</a>. Der Quelltext ist Open Source auf <a href="https://github.com/OliEfr/TUfast_TUD" target="_blank"
         class="">GitHub</a>.<br>
       Ich bin verpflichtet eine <a
         href="https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing"
-        target="_blank" class="">Datenschutzerkl&auml;rung</a> zu ver&ouml;ffentlichen.<br></p>
-    <p> Danke an die gro&szlig;artigen Mitentwickler: <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>, <a href="https://github.com/peterkappelt" target="_blank">peterkappelt</a>, <a href="https://github.com/FugiMuffi" target="_blank">Lucas</a>, <a href="https://github.com/C0ntroller" target="_blank">Daniel</a>!</p>
+        target="_blank" class="">Datenschutzerklärung</a> zu veröffentlichen.<br></p>
+    <p> Danke an die großartigen Mitentwickler: <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>, <a href="https://github.com/peterkappelt" target="_blank">peterkappelt</a>, <a href="https://github.com/FugiMuffi" target="_blank">Lucas</a>, <a href="https://github.com/C0ntroller" target="_blank">Daniel</a>!</p>
     <p><b>So berechnen sich die gesparten Klicks:</b><br>
       Ein gesparter Klick = 3 Sekunden<br>
       Einen Shortcut verwenden = 2 gesparte Klicks<br>
       Eine automatische Anmeldung = 3 gesparte Klicks<br>
-      Einen Kurs &uuml;ber Dashboard aufrufen = 3 gesparte Klicks<br>
+      Einen Kurs über Dashboard aufrufen = 3 gesparte Klicks<br>
       Eine Weiterleitung der Google-Suche = 2 gesparte Klicks
     </p>
   </div>
-
+  <div class="banner">
+    <img src="../../assets/icons/RocketIcons/default_128px.png" class="banner__icon" />
+    <h2 class="banner__title">Hier Dashboard öffnen oder <strong>Alt + Q</strong> drücken</h2>
+    <button class="banner__close">&#215;</button>
+  </div>
 </body>
 
 </html>
