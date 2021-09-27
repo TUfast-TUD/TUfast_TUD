@@ -10,6 +10,10 @@ on:
         description: 'Version number (four digits)'     
         required: true
         default: 'X.X.X.X'
+      description:
+        description: 'Description for the release (optional)'     
+        required: false
+        default: ''
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,7 +35,8 @@ jobs:
       
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "../TUfast_TUD.zip"
+          artifacts: "TUfast_TUD.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.version }}
+          body: ${{ github.event.inputs.description }}
         
