@@ -13,8 +13,6 @@ Summarize the feature you would like to see.
 **Why would you like to see the feature and what would it improve?**
 E.g. improvement in design or usability.
 
-**Is it a completely new feature, a extension or a change?**
-
 **Have you considered any downsides of the proposed feature?**
 Explain the negative aspects and disadvantages of the solution.
 
