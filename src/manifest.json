@@ -1,0 +1,477 @@
+{
+  "name": "TUfast TU Dresden",
+  "version": "5.6.4.0",
+  "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
+  "permissions": [
+    "storage",
+    "system.cpu",
+    "alarms",
+    "declarativeContent",
+    "*://*/"
+  ],
+  "optional_permissions": [
+    "tabs",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "contentScripts/elearningMED.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://elearning.med.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_opalError.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/cgi-bin/forward.cgi"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/idp.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://idp.tu-dresden.de/*",
+        "https://idp2.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_jexam.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://jexam.inf.tu-dresden.de/",
+        "https://www.google.de/search?*q=jexam*",
+        "https://www.google.com/search?*q=jexam*",
+        "https://duckduckgo.com/?*q=jexam*",
+        "https://www.ecosia.org/search?*q=jexam*",
+        "https://www.bing.com/search?*q=jexam*",
+        "https://www.startpage.com/do/search?*q=jexam*",
+        "https://www.startpage.com/do/search?*query=jexam*",
+        "https://www.qwant.com/?*q=jexam*",
+        "https://search.brave.com/search?*q=jexam*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_cloudstore.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=tustore*",
+        "https://www.google.com/search?*q=tustore*",
+        "https://duckduckgo.com/?*q=tustore*",
+        "https://www.ecosia.org/search?*q=tustore*",
+        "https://www.bing.com/search?*q=tustore*",
+        "https://www.startpage.com/do/search?*q=tustore*",
+        "https://www.startpage.com/do/search?*query=tustore*",
+        "https://www.qwant.com/?*q=tustore*",
+        "https://search.brave.com/search?*q=tustore*",
+        "https://www.google.de/search?*q=tucloud*",
+        "https://www.google.com/search?*q=tucloud*",
+        "https://duckduckgo.com/?*q=tucloud*",
+        "https://www.ecosia.org/search?*q=tucloud*",
+        "https://www.bing.com/search?*q=tucloud*",
+        "https://www.startpage.com/do/search?*q=tucloud*",
+        "https://www.startpage.com/do/search?*query=tucloud*",
+        "https://www.qwant.com/?*q=tucloud*",
+        "https://search.brave.com/search?*q=tucloud*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_owa.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=tumail*",
+        "https://www.google.com/search?*q=tumail*",
+        "https://duckduckgo.com/?*q=tumail*",
+        "https://www.ecosia.org/search?*q=tumail*",
+        "https://www.bing.com/search?*q=tumail*",
+        "https://www.startpage.com/do/search?*q=tumail*",
+        "https://www.startpage.com/do/search?*query=tumail*",
+        "https://www.qwant.com/?*q=tumail*",
+        "https://search.brave.com/search?*q=tumail*",
+        "https://www.google.de/search?*q=tudmail*",
+        "https://www.google.com/search?*q=tudmail*",
+        "https://duckduckgo.com/?*q=tudmail*",
+        "https://www.ecosia.org/search?*q=tudmail*",
+        "https://www.bing.com/search?*q=tudmail*",
+        "https://www.startpage.com/do/search?*q=tudmail*",
+        "https://www.startpage.com/do/search?*query=tudmail*",
+        "https://www.qwant.com/?*q=tudmail*",
+        "https://search.brave.com/search?*q=tudmail*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/jexam.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://jexam.inf.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "thirdParty/jquery-3.4.1.min.js",
+        "thirdParty/Chart.bundle.min.js",
+        "contentScripts/pimpHISQIS.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
+      ],
+      "include_globs": [
+        "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*"
+      ]
+    },
+    {
+      "js": [
+        "thirdParty/vue.js",
+        "thirdParty/vuesax.js",
+        "freshContent/gradeTable.js",
+        "contentScripts/pimpHISQIS_table.js"
+      ],
+      "css": [
+        "thirdParty/vuesax.css",
+        "css/components/gradeTable.css"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
+      ],
+      "include_globs": [
+        "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_opal.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "*://opal.de/*",
+        "https://www.google.de/search?*q=opal*",
+        "https://www.google.com/search?*q=opal*",
+        "https://duckduckgo.com/?*q=opal*",
+        "https://www.ecosia.org/search?*q=opal*",
+        "https://www.bing.com/search?*q=opal*",
+        "https://www.startpage.com/do/search?*q=opal*",
+        "https://www.startpage.com/do/search?*query=opal*",
+        "https://www.qwant.com/?*q=opal*",
+        "https://search.brave.com/search?*q=opal*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/selma.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://selma.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_hisqis.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=hisqis*",
+        "https://www.google.com/search?*q=hisqis*",
+        "https://duckduckgo.com/?*q=hisqis*",
+        "https://www.ecosia.org/search?*q=hisqis*",
+        "https://www.bing.com/search?*q=hisqis*",
+        "https://www.startpage.com/do/search?*q=hisqis*",
+        "https://www.startpage.com/do/search?*query=hisqis*",
+        "https://www.qwant.com/?*q=hisqis*",
+        "https://search.brave.com/search?*q=hisqis*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_tumed.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=tumed*",
+        "https://www.google.com/search?*q=tumed*",
+        "https://duckduckgo.com/?*q=tumed*",
+        "https://www.ecosia.org/search?*q=tumed*",
+        "https://www.bing.com/search?*q=tumed*",
+        "https://www.startpage.com/do/search?*q=tumed*",
+        "https://www.startpage.com/do/search?*query=tumed*",
+        "https://www.qwant.com/?*q=tumed*",
+        "https://search.brave.com/search?*q=tumed*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_selma.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.de/search?*q=selma*",
+        "https://www.google.com/search?*q=selma*",
+        "https://duckduckgo.com/?*q=selma*",
+        "https://www.ecosia.org/search?*q=selma*",
+        "https://www.bing.com/search?*q=selma*",
+        "https://www.startpage.com/do/search?*q=selma*",
+        "https://www.startpage.com/do/search?*query=selma*",
+        "https://www.qwant.com/?*q=selma*",
+        "https://search.brave.com/search?*q=selma*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/qis.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://qis.dez.tu-dresden.de/qisserver/servlet*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/bildungsportal.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/resource*",
+        "https://bildungsportal.sachsen.de/opal/home*",
+        "https://bildungsportal.sachsen.de/opal/auth/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_matrix.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.com/search?*q=tumatrix*",
+        "https://www.google.de/search?*q=tumatrix*",
+        "https://duckduckgo.com/?*q=tumatrix*",
+        "https://www.ecosia.org/search?*q=tumatrix*",
+        "https://www.bing.com/search?*q=tumatrix*",
+        "https://www.startpage.com/do/search?*q=tumatrix*",
+        "https://www.startpage.com/do/search?*query=tumatrix*",
+        "https://www.qwant.com/?*q=tumatrix*",
+        "https://search.brave.com/search?*q=tumatrix*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/matrix.js"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "https://matrix.tu-dresden.de/*"
+      ],
+      "include_globs": [
+        "*/welcome",
+        "*/login",
+        "*://matrix.tu-dresden.de/"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/owa.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://msx.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/cloudstore.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://cloudstore.zih.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/bildungsportal_main.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/shiblogin*",
+        "https://bildungsportal.sachsen.de/opal/login*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/bildungsportal_insertLogo.js",
+        "contentScripts/bildungsportal_viewPDFinBrowser.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/bildungsportal_other.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal*"
+      ]
+    },
+    {
+      "js": [
+        "thirdParty/jquery-3.4.1.min.js",
+        "contentScripts/parseOpal.js"
+      ],
+      "css": [
+        "css/components/banner.css"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/opal/auth/resource/favorites*",
+        "https://bildungsportal.sachsen.de/opal/auth/resource/courses*",
+        "https://bildungsportal.sachsen.de/opal/auth/resource/groups*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/magma.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://bildungsportal.sachsen.de/magma*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_magma.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.google.com/search?*q=magma*",
+        "https://www.google.de/search?*q=magma*",
+        "https://duckduckgo.com/?*q=magma*",
+        "https://www.ecosia.org/search?*q=magma*",
+        "https://www.bing.com/search?*q=magma*",
+        "https://www.startpage.com/do/search?*q=magma*",
+        "https://www.startpage.com/do/search?*query=magma*",
+        "https://www.qwant.com/?*q=magma*",
+        "https://search.brave.com/search?*q=magma*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/tumed.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://eportal.med.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/tex.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://tex.zih.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/gitlab.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://gitlab.mn.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_qwant.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.qwant.com/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/fwd_startpage.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://www.startpage.com/*"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "./assets/images/tufast16.png",
+    "32": "./assets/images/tufast32.png",
+    "48": "./assets/images/tufast48.png",
+    "128": "./assets/images/tufast128.png"
+  },
+  "browser_action": {
+    "default_popup": "freshContent/popup/popup.html"
+  },
+  "options_ui": {
+    "page": "freshContent/settings/settings.html",
+    "open_in_tab": true
+  },
+  "web_accessible_resources": [
+    "assets/*"
+  ],
+  "manifest_version": 2,
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+Q",
+        "windows": "Alt+Q",
+        "mac": "Alt+Q"
+      }
+    },
+    "open_opal_hotkey": {
+      "suggested_key": {
+        "default": "Alt+O",
+        "windows": "Alt+O",
+        "mac": "Alt+O"
+      },
+      "description": "Opal öffnen"
+    },
+    "open_owa_hotkey": {
+      "suggested_key": {
+        "default": "Alt+M",
+        "windows": "Alt+M",
+        "mac": "Alt+M"
+      },
+      "description": "Mail (OWA) öffnen"
+    },
+    "open_jexam_hotkey": {
+      "suggested_key": {
+        "default": "Alt+J",
+        "windows": "Alt+J",
+        "mac": "Alt+J"
+      },
+      "description": "jExam öffnen"
+    }
+  }
+}
