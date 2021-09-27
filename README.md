@@ -1,4 +1,4 @@
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+[![ESlint](https://badges.aleen42.com/src/eslint.svg)](https://eslint.org/)
 ![Test and Build](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/node.js.yml/badge.svg?branch=main)
 
 
