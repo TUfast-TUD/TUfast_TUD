@@ -134,7 +134,7 @@ const dropdownUpdateId = '56tzoguhjk'
 
 window.onload = async function () {
   // get things from storage
-  chrome.storage.local.get(['dashboardDisplay', 'ratingEnabledFlag', 'saved_click_counter', 'studiengang', 'closedIntro1', 'ratedCourses', 'closedOutro1', 'theme'], async function (result) {
+  chrome.storage.local.get(['dashboardDisplay', 'ratingEnabledFlag', 'saved_click_counter', 'studiengang', 'closedIntro1', 'ratedCourses', 'closedOutro1', 'theme', 'closedMsg1'], async function (result) {
     // set initial theme
     if (result.theme === 'system') {
       document.documentElement.removeAttribute('data-theme')
@@ -151,12 +151,15 @@ window.onload = async function () {
     const dashboardDisplay = result.dashboardDisplay
     const courseList = await loadCourses(dashboardDisplay)
     const htmlList = document.getElementsByClassName('list')[0]
-    displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag)
+    displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag, result.closedMsg1)
     if (document.getElementById('intro')) {
       document.getElementById('intro').onclick = removeIntro
     }
     if (document.getElementById('outro')) {
-      document.getElementById('outro').onclick = remoteOutro
+      document.getElementById('outro').onclick = removeOutro
+    }
+    if (document.getElementById('msg1')) {
+      document.getElementById('msg1').onclick = removeMsg1
     }
 
     // filter list
@@ -404,7 +407,7 @@ function listSearchFunction () {
   if (listEntries[listEntries.length - 1].innerHTML.includes('aktualisieren')) { listEntries[listEntries.length - 1].style.display = '' }
 }
 
-function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1, ratingEnabledFlag) {
+function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1, ratingEnabledFlag, closedMsg1) {
   let link = ''
   let name = ''
   let imgSrc = ''
@@ -435,6 +438,11 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
   if (ratedCourses === undefined) ratedCourses = []
   const showIntro = (ratingEnabledFlag && !closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
   const showOutro = (ratingEnabledFlag && !closedOutro1 && courseList.length > 1 && !showIntro && (courseList.length - 2 < ratedCourses.length))
+  const d = new Date()
+  const month = d.getMonth() + 1 // starts at 0
+  const day = d.getDate()
+  //  show gOPAL-Banner at beginning of semester. showMsg1 is resetted in background.js
+  const showMsg1 = (!showIntro && !showOutro && !closedMsg1 && month === 10 && day < 20)
 
   // add introduction to course Rating element
   if (showIntro) {
@@ -460,6 +468,19 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
     outroRatingText.innerHTML = "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Damit k&ouml;nnen wir die Lehre an der TU verbessern! Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
     outroRating.appendChild(outroRatingText)
     htmlList.appendChild(outroRating)
+  }
+
+  // add msg1
+  if (showMsg1) {
+    const msg1 = document.createElement('div')
+    msg1.id = 'msg1-wrapper'
+    const msg1Text = document.createElement('p')
+    msg1.classList.add('list-entry-wrapper')
+    msg1Text.classList.add('list-outro')
+
+    msg1Text.innerHTML = "<b>Tipp für Erstis: Erfahre alles wichtige rund um dein Studium mit gOPAL - dem mobilen Studienassistenzsystem! Hier <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL öffnen.</a> <a id='msg1' href='#'>Schließen</a>."
+    msg1.appendChild(msg1Text)
+    htmlList.appendChild(msg1)
   }
 
   courseList.forEach(element => {
@@ -683,7 +704,12 @@ function removeIntro () {
   chrome.storage.local.set({ closedIntro1: true }, function () { })
 }
 
-function remoteOutro () {
+function removeOutro () {
   document.getElementById('outro_rating').remove()
   chrome.storage.local.set({ closedOutro1: true }, function () { })
+}
+
+function removeMsg1 () {
+  document.getElementById('msg1-wrapper').remove()
+  chrome.storage.local.set({ closedMsg1: true }, function () { })
 }
