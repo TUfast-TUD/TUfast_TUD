@@ -7,8 +7,7 @@
     "lint": "npx eslint --fix .",
     "test": "npm run lint",
     "dev": "sass --watch src/scss:src/css",
-    "build": "sass src/scss:src/css --style=compressed",
-    "package": "npm run build && cd src && zip -x scss/\\* @ ../dist/TUfast_TUD.zip *"
+    "build": "sass src/scss:src/css --style=compressed"
   },
   "repository": {
     "type": "git",
