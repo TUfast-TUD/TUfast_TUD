@@ -109,3 +109,6 @@ function runVue (table, levels) {
     }
   })
 }
+
+// eslint-disable-next-line no-unused-expressions
+undefined

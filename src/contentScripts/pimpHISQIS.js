@@ -130,3 +130,6 @@ function getWeightedAverage (rawGrades) {
   const totalWeight = grades.reduce((acc, value) => acc + value.weight, 0) // BUG:
   return totalWeight ? (grades.reduce((acc, value) => acc + value.grade * value.weight, 0) / totalWeight).toFixed(1) : 0
 }
+
+// eslint-disable-next-line no-unused-expressions
+undefined
