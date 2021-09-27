@@ -25,5 +25,3 @@ Wir kommunizieren über einen [Matrix-Raum](https://matrix.to/#/#tu-fast:tu-dres
 - ESlint: We are following standard styling. Run `npm run lint` to check your code style before committing code.
 - We are using gitflow-workflow (simple [Tutorial](
 https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: In you fork, create a Feature-Branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of the upstream repository.
-
-
