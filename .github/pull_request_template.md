@@ -1,24 +1,28 @@
-### Pull Request Template
+### Pull Request
+Please fill out the following template when you create a PR. This will help to process your PR faster!
 
-**Description**
-The following changes are proposed in this PR:
+#### Description
+I proprose the following changes in my PR:
 - Change 1
 - Change 2
 
-**References**
+#### References
+I created the PR because ...
 
-Referenced Issue or ToDo from [project-board](https://github.com/orgs/TUfast-TUD/projects/1).
+Referenced Issue:
 
-**Type of change**
+Referenced ToDo from [project-board](https://github.com/orgs/TUfast-TUD/projects/1):
+
+#### Type of change
 - [ ] Bug fix (non-breaking change which fixes a bug)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that might cause existing functionality to not work as expected)
 
-**Further info**
+#### Further info
 - [ ] This change requires a documentation update
 - [ ] I updated the documentation accordingly
 
-**Testing**
+#### Testing
 We have 1500+ Users. Please test your changes thoroughly.
 - [ ] Tested on Firefox
 - [ ] Tested on Chromium-Based-Browsers
