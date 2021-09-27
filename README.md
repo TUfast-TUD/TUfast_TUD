@@ -1,5 +1,6 @@
 [![ESlint](https://badges.aleen42.com/src/eslint.svg)](https://eslint.org/)
 ![Test and Build](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/node.js.yml/badge.svg?branch=main)
+![Release](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/release.yml/badge.svg?branch=main)
 
 
 # TUfast TU Dresden 🚀
