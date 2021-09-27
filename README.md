@@ -1,4 +1,5 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+![example branch parameter](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/node.js.yml/badge.svg?branch=main)
 
 
 # TUfast TU Dresden 🚀
