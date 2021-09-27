@@ -1,18 +1,18 @@
 ### Pull Request Template
 
 **Description**
-Please list changes you have done here.
+The following changes are proposed in this PR:
+- Change 1
+- Change 2
 
 **References**
 
-Referenced Issue.
-
-Referenced ToDo from [project-board](https://github.com/orgs/TUfast-TUD/projects/1).
+Referenced Issue or ToDo from [project-board](https://github.com/orgs/TUfast-TUD/projects/1).
 
 **Type of change**
-- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] Bug fix (non-breaking change which fixes a bug)
 - [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Breaking change (fix or feature that might cause existing functionality to not work as expected)
 
 **Further info**
 - [ ] This change requires a documentation update
