@@ -146,7 +146,6 @@
       "js": [
         "thirdParty/vue.js",
         "thirdParty/vuesax.js",
-        "freshContent/gradeTable.js",
         "contentScripts/pimpHISQIS_table.js"
       ],
       "css": [
