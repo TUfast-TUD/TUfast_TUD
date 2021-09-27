@@ -11,7 +11,7 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
   })
 })
 
-// enable rating
+// disable star rating
 chrome.storage.local.set({ ratingEnabledFlag: false }, function () {})
 
 // DOESNT WORK IN RELEASE VERSION

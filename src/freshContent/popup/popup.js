@@ -198,10 +198,10 @@ window.onload = async function () {
       // Cancel the default action, if needed
       // event.preventDefault();
       // Click the first element which is visible
-      const listEntries = document.getElementsByClassName('list-entry')
+      const listEntries = document.getElementsByClassName('list-entry-wrapper')
       for (let i = 0; i < listEntries.length; i++) {
         if (!(listEntries[i].style.display === 'none')) {
-          listEntries[i].click()
+          listEntries[i].firstElementChild.click()
           break
         }
       }
