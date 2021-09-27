@@ -1,2 +1,0 @@
-### TUfast-Entwickler werden
-Wenn du auch den Alltag der Studierenden verbessern möchtest, werde jetzt TUfast-Entwickler! Wenn du zwei Funktionen erfolgreich implementiert hast, erhältst du einen raketenstarken Nachweis für dein Engagement im TUfast-Team für deine Unterlagen! 🙂 Dabei kannst du dir entweder etwas aus der ToDo-List s.u. heraussuchen oder du implementierst eigene Ideen. Eröffne dazu einfach einen Pull-Request auf die Master-Branch.

@@ -28,9 +28,11 @@ Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/cont
 [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Entwicklerteam mit einem kleinen Snack unterstützen.
 
 ## Zum Projekt beitragen (Contributing)
-Siehe CONTRIBUTING.md.
+Willst du Code beitragen, konsultiere bitte [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md).
 
 ## Roadmap
+Wir entwickeln stetig an TUfast, um es noch besser und für mehr Studierende verfügbar zu machen.
+
 Siehe unser [Projekt-Board](https://github.com/orgs/TUfast-TUD/projects/1).
 
 ## Kontakt, Support und Feedback
