@@ -151,7 +151,7 @@
       ],
       "css": [
         "thirdParty/vuesax.css",
-        "freshContent/gradeTable.css"
+        "css/components/gradeTable.css"
       ],
       "run_at": "document_end",
       "matches": [
@@ -343,7 +343,7 @@
         "contentScripts/parseOpal.js"
       ],
       "css": [
-        "sass/components/banner.css"
+        "css/components/banner.css"
       ],
       "run_at": "document_start",
       "matches": [
