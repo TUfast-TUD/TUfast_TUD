@@ -16,7 +16,7 @@ Wir kommunizieren über einen [Matrix-Raum](https://matrix.to/#/#tu-fast:tu-dres
 3. Checkout develop branch `git checkout develop`
 4. Create new Feature branch `git checkout -b BRANCHNAME`
 5. Install dependencies `npm install`
-6. --> Implement you Code <-- and run `npm run dev`. This is required and will translate sass into css. See below.
+6. --> Implement your Code <-- and run `npm run dev`. This is required and will translate sass into css. See below.
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on the develop branch
 
