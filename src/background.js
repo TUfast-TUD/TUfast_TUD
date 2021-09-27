@@ -17,7 +17,15 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
 })
 
 // disable star rating
-chrome.storage.local.set({ ratingEnabledFlag: false }, function () {})
+chrome.storage.local.set({ ratingEnabledFlag: false }, function () { })
+
+//  reset banner for gOPAL
+const d = new Date()
+const month = d.getMonth() + 1 // starts at 0
+const day = d.getDate()
+if (month === 10 && day > 20) {
+  chrome.storage.local.set({ closedMsg1: false }, function () { })
+}
 
 // DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], (resp) => {

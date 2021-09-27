@@ -1,5 +1,5 @@
 const shareHTML = '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Hilf deinen Mitstudierenden</span></div><div class="tufast_text" style=position:relative;top:6px><img class="imgicon huge invert" src=../../assets/images/tufast48.png style=position:relative;top:-7px;left:0px><span class="tufasst_name huge" style=position:relative;top:-7px;left:3px>TUfast</span><span class=tufasst_name> &nbsp;zu entdecken</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link href=javascript:void(0)>sammle coole Raketen</a>!</span></div><div id=download-section><div>Teilen mit</div><div class=download-link><img class=imgicon src=../../assets/icons/gmail.png> <span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank>E-Mail</a></span></div><div class=download-link><img class=imgicon src=../../assets/icons/wa2.png style=height:1.4em><span class=browser_name> <a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 von Studenten | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
-// const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -66px; width:240px; height: auto;" > <img style="width: 170px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a banana&emoji=🍌&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
+const bananaHTML = '<a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -75px; width:240px; height: auto;" > <img style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a Mate&emoji=🍾&slug=olihausdoerfer&button_colour=fbd54b&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
 
 // this config is used to customize TUfast for a course of study
 // it overrides the default setting from popup.html
@@ -134,7 +134,7 @@ const dropdownUpdateId = '56tzoguhjk'
 
 window.onload = async function () {
   // get things from storage
-  chrome.storage.local.get(['dashboardDisplay', 'ratingEnabledFlag', 'saved_click_counter', 'studiengang', 'closedIntro1', 'ratedCourses', 'closedOutro1', 'theme'], async function (result) {
+  chrome.storage.local.get(['dashboardDisplay', 'ratingEnabledFlag', 'saved_click_counter', 'studiengang', 'closedIntro1', 'ratedCourses', 'closedOutro1', 'theme', 'closedMsg1'], async function (result) {
     // set initial theme
     if (result.theme === 'system') {
       document.documentElement.removeAttribute('data-theme')
@@ -151,12 +151,15 @@ window.onload = async function () {
     const dashboardDisplay = result.dashboardDisplay
     const courseList = await loadCourses(dashboardDisplay)
     const htmlList = document.getElementsByClassName('list')[0]
-    displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag)
+    displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag, result.closedMsg1)
     if (document.getElementById('intro')) {
       document.getElementById('intro').onclick = removeIntro
     }
     if (document.getElementById('outro')) {
-      document.getElementById('outro').onclick = remoteOutro
+      document.getElementById('outro').onclick = removeOutro
+    }
+    if (document.getElementById('msg1')) {
+      document.getElementById('msg1').onclick = removeMsg1
     }
 
     // filter list
@@ -168,10 +171,15 @@ window.onload = async function () {
     document.getElementById('saved_clicks').innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>" + time + '</a></text>'
     this.document.getElementById('time').onclick = openSettingsTimeSection
 
-    // display banana
-    // if (result.saved_click_counter > 100) {
-    //     document.getElementById("banana").innerHTML = bananaHTML
-    // }
+    // display banana at each end of semester for two weeks!
+    let bananaTime = false
+    const d = new Date()
+    const month = d.getMonth() + 1 // starts at 0
+    const day = d.getDate()
+    if ((month === 7 && day < 15) || (month === 1 && day > 15)) bananaTime = true
+    if (result.saved_click_counter > 100 && bananaTime) {
+      document.getElementById('banana').innerHTML = bananaHTML
+    }
 
     // exclusive style adjustments
     customizeForStudiengang(result.studiengang)
@@ -399,7 +407,7 @@ function listSearchFunction () {
   if (listEntries[listEntries.length - 1].innerHTML.includes('aktualisieren')) { listEntries[listEntries.length - 1].style.display = '' }
 }
 
-function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1, ratingEnabledFlag) {
+function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1, ratingEnabledFlag, closedMsg1) {
   let link = ''
   let name = ''
   let imgSrc = ''
@@ -430,6 +438,11 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
   if (ratedCourses === undefined) ratedCourses = []
   const showIntro = (ratingEnabledFlag && !closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
   const showOutro = (ratingEnabledFlag && !closedOutro1 && courseList.length > 1 && !showIntro && (courseList.length - 2 < ratedCourses.length))
+  const d = new Date()
+  const month = d.getMonth() + 1 // starts at 0
+  const day = d.getDate()
+  //  show gOPAL-Banner at beginning of semester. showMsg1 is resetted in background.js
+  const showMsg1 = (!showIntro && !showOutro && !closedMsg1 && month === 10 && day < 20)
 
   // add introduction to course Rating element
   if (showIntro) {
@@ -455,6 +468,19 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
     outroRatingText.innerHTML = "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Damit k&ouml;nnen wir die Lehre an der TU verbessern! Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
     outroRating.appendChild(outroRatingText)
     htmlList.appendChild(outroRating)
+  }
+
+  // add msg1
+  if (showMsg1) {
+    const msg1 = document.createElement('div')
+    msg1.id = 'msg1-wrapper'
+    const msg1Text = document.createElement('p')
+    msg1.classList.add('list-entry-wrapper')
+    msg1Text.classList.add('list-outro')
+
+    msg1Text.innerHTML = "<b>Tipp für Erstis: Erfahre alles wichtige rund um dein Studium mit gOPAL - dem mobilen Studienassistenzsystem! Hier <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL öffnen.</a> <a id='msg1' href='#'>Schließen</a>."
+    msg1.appendChild(msg1Text)
+    htmlList.appendChild(msg1)
   }
 
   courseList.forEach(element => {
@@ -678,7 +704,12 @@ function removeIntro () {
   chrome.storage.local.set({ closedIntro1: true }, function () { })
 }
 
-function remoteOutro () {
+function removeOutro () {
   document.getElementById('outro_rating').remove()
   chrome.storage.local.set({ closedOutro1: true }, function () { })
+}
+
+function removeMsg1 () {
+  document.getElementById('msg1-wrapper').remove()
+  chrome.storage.local.set({ closedMsg1: true }, function () { })
 }
