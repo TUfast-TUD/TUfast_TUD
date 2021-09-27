@@ -1,5 +1,6 @@
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
-![example branch parameter](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/node.js.yml/badge.svg?branch=main)
+[![ESlint](https://badges.aleen42.com/src/eslint.svg)](https://eslint.org/)
+![Test and Build](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/node.js.yml/badge.svg?branch=main)
+![Release](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/release.yml/badge.svg?branch=main)
 
 
 # TUfast TU Dresden 🚀
@@ -29,10 +30,10 @@ Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/cont
 [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Entwicklerteam mit einem kleinen Snack unterstützen.
 
 ## Zum Projekt beitragen (Contributing)
-- before you implement major changes or features, communicate with us via [Matrix](https://matrix.to/#/#tu-fast:tu-dresden.de) or GitHub
+- before you implement any changes or features, communicate with us via [Matrix](https://matrix.to/#/#tu-fast:tu-dresden.de) or GitHub
 - use `npm run test` and fix any linting before submitting a pull request
-- commit any pull requests against the develop  branch. We are using the gitlow-workflow (simple [Tutorial](
-https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow))
+- commit any pull requests against the develop-branch
+- hotfixes can be committed to main-branch
 - consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for further information
 
 ## Roadmap
