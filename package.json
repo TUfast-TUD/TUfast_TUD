@@ -8,7 +8,7 @@
     "test": "npm run lint",
     "dev": "sass --watch src/scss:src/css",
     "build": "sass src/scss:src/css --style=compressed",
-    "package": "npm run build && mkdir -p dist && cd src && zip -x scss/\\* @ ../dist/TUfast_TUD.zip *"
+    "package": "npm run build && cd src && zip -x scss/\\* @ ../dist/TUfast_TUD.zip *"
   },
   "repository": {
     "type": "git",
