@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars, no-undef, no-var */
+
 // global vars
 const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
+var webstorelink
 if (isFirefox) {
   webstorelink = 'https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search'
 } else {
@@ -16,7 +19,7 @@ const availableThemes = {
 
 async function applyTheme (theme) {
   if (theme in availableThemes) {
-    if (theme == 'system') {
+    if (theme === 'system') {
       document.documentElement.removeAttribute('data-theme')
     } else {
       document.documentElement.setAttribute('data-theme', theme)
@@ -127,7 +130,7 @@ function displayEnabled () {
     if (result.openSettingsPageParam === 'add_studiengang') {
       document.getElementById('studiengangSelect').value = 'add'
       document.getElementById('addStudiengang').style.display = 'block'
-    } else if (result.studiengang == null || result.studiengang == undefined || result.studiengang == 'general') {
+    } else if (result.studiengang == null || result.studiengang === undefined || result.studiengang === 'general') {
       document.getElementById('studiengangSelect').value = 'general'
     } else {
       document.getElementById('studiengangSelect').value = result.studiengang
@@ -160,16 +163,16 @@ function displayEnabled () {
 } */
 
 function clicksToTime (clicks) {
-  const clicks_calc = clicks * 3
-  const secs = clicks_calc % 60
-  const mins = Math.floor(clicks_calc / 60)
+  const clicksCalc = clicks * 3
+  const secs = clicksCalc % 60
+  const mins = Math.floor(clicksCalc / 60)
   return '<strong>' + clicks + ' Klicks &#x1F5B1</strong> und <strong>' + mins + 'min ' + secs + 's</strong> &#9202; gespart!'
 }
 
 function clicksToTimeNoIcon (clicks) {
-  const clicks_calc = clicks * 3
-  const secs = clicks_calc % 60
-  const mins = Math.floor(clicks_calc / 60)
+  const clicksCalc = clicks * 3
+  const secs = clicksCalc % 60
+  const mins = Math.floor(clicksCalc / 60)
   return '<strong>' + clicks + ' Klicks </strong> und <strong>' + mins + 'min ' + secs + 's</strong> gespart!'
 }
 
@@ -233,9 +236,9 @@ function enableOWAFetch () {
 }
 
 async function getAvailableRockets () {
-  return new Promise((res, rej) => {
+  return new Promise((resolve, reject) => {
     chrome.storage.local.get(['availableRockets'], (resp) => {
-      res(resp.availableRockets)
+      resolve(resp.availableRockets)
     })
   })
 }
@@ -360,7 +363,7 @@ async function enableRocketIcon () {
     }
   })
 
-  await new Promise(r => setTimeout(r, 7000))
+  await new Promise(resolve => setTimeout(resolve, 7000))
 
   // change picture and text and enable radio button
   const timestamp = new Date().getTime()
@@ -425,7 +428,7 @@ window.onload = async function () {
   // add studiengang-select listener
   document.getElementById('studiengangSelect').addEventListener('change', function () {
     const value = document.getElementById('studiengangSelect').value
-    if (value == 'add') {
+    if (value === 'add') {
       document.getElementById('addStudiengang').style.display = 'block'
     } else {
       document.getElementById('addStudiengang').style.display = 'none'

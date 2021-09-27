@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*
     That is a third party file. Original source: https://www.cssscript.com/tiny-star-rating-system/
     Slight modifications where done!

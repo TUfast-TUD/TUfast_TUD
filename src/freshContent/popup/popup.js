@@ -236,8 +236,7 @@ window.onload = async function () {
 
   // we need to set dropdown selection max-height, in case the dashboard is small
   // before wait XXXms because everything needs to be loaded first
-  // eslint-disable-next-line promise/param-names
-  await new Promise(r => setTimeout(r, 200))
+  await new Promise(resolve => setTimeout(resolve, 200))
   document.getElementById('select_studiengang_dropdown_content').style.maxHeight = (document.body.offsetHeight - 45).toString() + 'px'
 
   // show star rating
@@ -361,8 +360,7 @@ function openSettings () {
 // eslint-disable-next-line no-unused-vars
 async function openShare () {
   document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
-  // eslint-disable-next-line promise/param-names
-  await new Promise(r => setTimeout(r, 500))
+  await new Promise(resolve => setTimeout(resolve, 500))
   document.getElementById('rewards_link').addEventListener('click', function () { // click handler needs to be set this way
     chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { }) // for some reason I need to pass empty param - else it wont work in ff
     const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection

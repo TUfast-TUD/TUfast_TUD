@@ -1,4 +1,9 @@
+/* eslint-disable no-async-promise-executor */
 'use strict'
+
+// eslint-disable-next-line no-unused-vars
+const isChrome = navigator.userAgent.includes('Chrome/') // attention: no failsave browser detection | also for new edge!
+const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
 
 // start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], (resp) => {
@@ -215,12 +220,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       })
       // if not yet invite shown: show, and set shown to true
       // chrome.storage.local.get(['TUfastCampInvite1'], (res) => {
-      //	let today = new Date();
-      //	let max_invite_date = new Date(2021, 8, 30) //27.09.2021; month is zero based
-      //	if (!res.TUfastCampInvite1 === true && today < max_invite_date) {
-      //		chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
-      //		chrome.tabs.create(({ url: "TUfastCamp.html" }))
-      //	}
+      //   const today = new Date()
+      //   const max_invite_date = new Date(2021, 8, 30) // 27.09.2021; month is zero based
+      //   if (!res.TUfastCampInvite1 === true && today < max_invite_date) {
+      //     chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
+      //     chrome.tabs.create(({ url: 'TUfastCamp.html' }))
+      //   }
       // })
 
       break
@@ -246,14 +251,15 @@ function owaIsOpened () {
 }
 
 function getAllChromeTabs () {
-  return new Promise(async (res, rej) => {
+  return new Promise(async (resolve, reject) => {
     await chrome.tabs.query({}, function (tabs) {
-      res(tabs)
+      resolve(tabs)
     })
   })
 }
 
 // check if user stored login data
+// eslint-disable-next-line no-unused-vars
 async function loginDataExists () {
   getUserData().then((userData) => {
     if (userData.asdf === undefined || userData.fdsa === undefined) {
@@ -334,12 +340,12 @@ function readMailOWA (NrUnreadMails) {
 
 function setBadgeUnreadMails (numberUnreadMails) {
   // set badge
-  if (numberUnreadMails == 0) {
-    show_badge('', '#4cb749')
+  if (numberUnreadMails === 0) {
+    showBadge('', '#4cb749')
   } else if (numberUnreadMails > 99) {
-    show_badge('99+', '#4cb749')
+    showBadge('99+', '#4cb749')
   } else {
-    show_badge(numberUnreadMails.toString(), '#4cb749')
+    showBadge(numberUnreadMails.toString(), '#4cb749')
   }
 }
 
@@ -359,7 +365,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       // show_badge("", "#ffffff", 0)
       break
     case 'save_clicks':
-      save_clicks(request.click_count)
+      saveClicks(request.click_count)
       break
     case 'get_user_data':
       getUserData().then((userData) => sendResponse(userData))
@@ -391,12 +397,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case 'open_share_page':
       openSharePage()
       break
-    case 'register_addition_content_scripts':
-      regAddContentScripts()
-      break
     case 'open_shortcut_settings':
-      const isChrome = navigator.userAgent.includes('Chrome/') // attention: no failsave browser detection | also for new edge!
-      const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
       if (isFirefox) { chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' }) } else { chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }) } // for chrome and everything else
       break
     case 'toggle_pdf_inline_setting':
@@ -420,15 +421,16 @@ chrome.commands.onCommand.addListener(function (command) {
   switch (command) {
     case 'open_opal_hotkey':
       chrome.tabs.update({ url: 'https://bildungsportal.sachsen.de/opal/home/' })
-      save_clicks(2)
+      saveClicks(2)
       break
     case 'open_owa_hotkey':
-      save_clicks(2)
+      saveClicks(2)
       chrome.tabs.update({ url: 'https://msx.tu-dresden.de/owa/' })
       break
     case 'open_jexam_hotkey':
       chrome.tabs.update({ url: 'https://jexam.inf.tu-dresden.de/' })
-      save_clicks(2)
+      saveClicks(2)
+      break
     default:
       break
   }
@@ -494,7 +496,7 @@ function loggedOut (portal) {
 }
 
 // show badge
-function show_badge (Text, Color, timeout) {
+function showBadge (Text, Color, timeout) {
   chrome.browserAction.setBadgeText({ text: Text })
   chrome.browserAction.setBadgeBackgroundColor({ color: Color })
   // setTimeout(function() {
@@ -503,12 +505,12 @@ function show_badge (Text, Color, timeout) {
 }
 
 // save_click_counter
-function save_clicks (counter) {
+function saveClicks (counter) {
   // load number of saved clicks and add counter!
-  let saved_clicks = 0
+  let savedClicks = 0
   chrome.storage.local.get(['saved_click_counter'], (result) => {
-    saved_clicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter
-    chrome.storage.local.set({ saved_click_counter: saved_clicks + counter }, function () {
+    savedClicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter
+    chrome.storage.local.set({ saved_click_counter: savedClicks + counter }, function () {
       console.log('You just saved yourself ' + counter + ' clicks!')
     })
     // make rocketIcons available if appropriate
@@ -538,9 +540,6 @@ function hashDigest (string) {
 function getKeyBuffer () {
   return new Promise((resolve, reject) => {
     let sysInfo = ''
-    const isChrome = navigator.userAgent.includes('Chrome/') // attention: no failsave browser detection | also for new edge!
-    const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
-
     // key differs between browsers, because different APIs
     if (isFirefox) {
       sysInfo = sysInfo + window.navigator.hardwareConcurrency
@@ -654,15 +653,15 @@ async function getUserData () {
 
 // save parsed courses
 // course_list = {type:"", list:[{link:link, name: name}, ...]}
-function saveCourses (course_list) {
-  course_list.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
-  switch (course_list.type) {
+function saveCourses (courseList) {
+  courseList.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
+  switch (courseList.type) {
     case 'favoriten':
-      chrome.storage.local.set({ favoriten: JSON.stringify(course_list.list) }, function () { })
+      chrome.storage.local.set({ favoriten: JSON.stringify(courseList.list) }, function () { })
       console.log('saved Favoriten in TUfast')
       break
     case 'meine_kurse':
-      chrome.storage.local.set({ meine_kurse: JSON.stringify(course_list.list) }, function () { })
+      chrome.storage.local.set({ meine_kurse: JSON.stringify(courseList.list) }, function () { })
       console.log('saved Meine Kurse in TUfast')
       break
     default:
@@ -672,22 +671,22 @@ function saveCourses (course_list) {
 
 // get parsed courses
 // return course_list = [{link:link, name: name}, ...]
-function loadCourses (type) {
-  switch (type) {
-    case 'favoriten':
-      chrome.storage.local.get(['favoriten'], function (result) {
-        console.log(JSON.parse(result.favoriten))
-      })
-      break
-    case 'meine_kurse':
-      chrome.storage.local.get(['meine_kurse'], function (result) {
-        console.log(JSON.parse(result.meine_kurse))
-      })
-      break
-    default:
-      break
-  }
-}
+// function loadCourses (type) {
+//   switch (type) {
+//     case 'favoriten':
+//       chrome.storage.local.get(['favoriten'], function (result) {
+//         console.log(JSON.parse(result.favoriten))
+//       })
+//       break
+//     case 'meine_kurse':
+//       chrome.storage.local.get(['meine_kurse'], function (result) {
+//         console.log(JSON.parse(result.meine_kurse))
+//       })
+//       break
+//     default:
+//       break
+//   }
+// }
 
 // function for custom URIEncoding
 function customURIEncoding (string) {
@@ -703,6 +702,7 @@ function fetchOWA (username, password, logout) {
     username = customURIEncoding(username)
     password = customURIEncoding(password)
 
+    // eslint-disable-next-line no-new-object
     let mailInfoJson = new Object() // contains all required info
 
     // login
