@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx eslint --fix .",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "dev": "sass --watch src/scss:src/css",
+    "build": "sass src/scss:src/css --style=compressed",
+    "package": "npm run build && mkdir -p dist && cd src && zip -x scss/\\* @ ../dist/TUfast_TUD.zip *"
   },
   "repository": {
     "type": "git",
@@ -39,7 +42,8 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0"
+    "eslint-plugin-promise": "^5.1.0",
+    "sass": "^1.42.1"
   },
   "dependencies": {
     "typescript": "^4.4.3"
