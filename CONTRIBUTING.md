@@ -9,10 +9,10 @@ Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-T
 
 ## How to contribute code
 We are using gitflow-workflow (simple [Tutorial](
-https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
+https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
 
 Steps to contribute a feature:
-1. Create a fork from this repo. This parent/original repository is commonly called upstream.
+1. Create a fork from this repo.
 2. Create a local clone of your fork `git clone ...`
 3. Checkout develop branch `git checkout develop`
 4. Create new feature branch `git checkout -b my_new_feature_branch`
@@ -21,7 +21,10 @@ Steps to contribute a feature:
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on develop branch
 
-One common issue is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/)
+**One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/)
+
+**Upstream repo** is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.
+
 
 ## Used Frameworks
 - CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
