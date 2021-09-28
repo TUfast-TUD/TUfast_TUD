@@ -6,6 +6,8 @@ I proprose the following changes in my PR:
 - Change 1
 - Change 2
 
+Here you can also add screenshots, if applicable.
+
 #### References
 I created the PR because ...
 
@@ -20,10 +22,14 @@ Referenced ToDo from [project-board](https://github.com/orgs/TUfast-TUD/projects
 
 #### Further info
 - [ ] This change requires a documentation update
-- [ ] I updated the documentation accordingly
+- [ ] I updated the documentation accordingly, if required
+- [ ] I commented my code where its useful
 
 #### Testing
 We have 1500+ Users. Please test your changes thoroughly.
-- [ ] Tested on Firefox
-- [ ] Tested on Chromium-Based-Browsers
+- [ ] Tested my changes on Firefox
+- [ ] Tested my changes on Chromium-Based-Browsers
 - [ ] Successfully run `npm run test` locally
+
+#### Additional Information
+Add anything here, that might be important.
