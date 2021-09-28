@@ -23,5 +23,5 @@ Steps to contribute a feature:
 
 ## Guidelines, Frameworks, Hints
 - CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
-- ESlint: We are following standard styling. Run `npm run lint` to check your code style before committing code.
+- ESlint: We are following standard styling with minor additions. Run `npm run lint` to check your code style before committing code.
 - We decided against using prettier and didn't set a max-line-length in order to keep some large files compact
