@@ -4,7 +4,7 @@ Please fill out the following template when you create a PR. This will help to p
 #### Description
 I proprose the following changes in my PR:
 - Change 1
-- Change 2
+- ...
 
 Here you can also add screenshots, if applicable.
 
