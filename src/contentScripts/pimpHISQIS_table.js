@@ -1,4 +1,33 @@
+/* eslint-disable no-multi-str */
 console.log('pimping table ... maybe :)')
+
+// eslint-disable-next-line no-template-curly-in-string
+const tableHtml = "<div id='pimpedTable' style='display:none'> \
+<vs-table hover-flat :data='table'> \
+  <template slot='header'> \
+    <h1>Deine Notenübersicht</h1> \
+    <div class='info-row'> \
+  <div class='info-row__info'> \
+   <div class='square blue'></div><h5>Module</h5> \
+  </div> \
+  <div class='info-row__info'> \
+    <div class='square green'></div><h5>Bestandene Prüfung</h5> \
+  </div> \
+  <div class='info-row__info'> \
+    <div class='square red'></div><h5>Nicht bestandene Prüfung</h5> \
+  </div> \
+</div> \
+  </template> \
+  <template slot='thead'> \
+    <vs-th v-for='(header_text, index) in table[1]'  :sort-key='`${index}`' :key='index'> {{header_text}} </vs-th> \
+  </template> \
+  <template slot-scope='{data}'> \
+    <vs-tr :class='getColour(indextr, tr)' style='background-color=red' :state='getColour(indextr, tr)' :key='indextr' v-for='(tr, indextr) in data.slice(2)'> \
+      <vs-td v-for='(td, index) in tr' :key='index' :data='td'> {{td}} </vs-td> \
+    </vs-tr> \
+  </template> \
+</vs-table> \
+</div>"
 
 // this needs to be done first
 const oldTable = document.getElementsByTagName('table')[2]
@@ -36,13 +65,11 @@ function setOldTable () {
 }
 
 function getGradesFromTable () {
-  // create container for vuejs table
+  // create container for vuejs table and insert it after the old table
   const container = document.createElement('div')
   container.id = 'container'
-  const atable = document.getElementsByTagName('table')[2]
-  // console.log(atable);
-  atable.insertAdjacentElement('afterend', container)
-  container.innerHTML = table_html
+  oldTable.insertAdjacentElement('afterend', container)
+  container.innerHTML = tableHtml
 
   const table = []
   // second table is the grade table
@@ -78,7 +105,7 @@ function getGradesFromTable () {
   // Logic to figure out which row is a section, module or exam
   table.filter((row, index) => row[0][1] === '0' || parseInt(row[0]) < 1000 ? levels.mainLevel.push(index) : [])
   table.filter((row, index) => row[0].slice(-2)[0] === '0' && levels.mainLevel.indexOf(index) < 0 ? levels.moduleLevel.push(index) : [])
-  table.filter((row, index) => levels.mainLevel.indexOf(index) < 0 && levels.moduleLevel.indexOf(index) < 0 && index > 2 ? levels.examLevel.push(index) : [])
+  table.filter((_row, index) => levels.mainLevel.indexOf(index) < 0 && levels.moduleLevel.indexOf(index) < 0 && index > 2 ? levels.examLevel.push(index) : [])
 
   runVue(table, levels)
 }

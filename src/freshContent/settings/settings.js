@@ -378,6 +378,8 @@ async function enableRocketIcon () {
 
 // this need to be done here since manifest v2
 window.onload = async function () {
+  document.getElementsByClassName('banner__close')[0]?.addEventListener('click', () => document.getElementsByClassName('banner')[0]?.remove())
+
   // apply initial theme
   chrome.storage.local.get('theme', (res) => {
     applyTheme(res.theme)
