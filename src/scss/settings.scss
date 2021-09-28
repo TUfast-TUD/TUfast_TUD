@@ -103,7 +103,7 @@ input:focus {
   outline: none !important;
 }
 
-button {
+.btn--settings {
   width: 200px;
   background-color: var(--color-btn-bg);
   color: var(--color-btn-text);
@@ -116,7 +116,7 @@ button {
   transition: background-color .4s ease;
 }
 
-button:hover {
+.btn--settings:hover {
   background-color: var(--color-btn-hover-bg);
 }
 
@@ -283,7 +283,7 @@ button:hover {
 }
 
 .unread-mail-icon {
-  vertical-align:middle;
+  vertical-align: middle;
   height: 32px;
 }
 
@@ -293,3 +293,7 @@ button:hover {
   border-radius: 2px;
 }
 
+.banner {
+  right: 20px;
+  font-size: .9em;
+}

@@ -21,11 +21,13 @@ Steps to contribute a feature:
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on develop branch
 
+## Guidelines, Frameworks, Hints
+- CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
+- ESlint: We are following standard styling with minor additions. Run `npm run lint` to check your code style before committing code.
+- We decided against using prettier and didn't set a max-line-length in order to keep some large files compact
+
 **One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/)
 
 **Upstream repo** is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.
 
-
-## Used Frameworks
-- CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
-- ESlint: We are following standard styling. Run `npm run lint` to check your code style before committing code.
+#### Have fun developing! 🔥
