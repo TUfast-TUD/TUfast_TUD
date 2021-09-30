@@ -17,7 +17,7 @@ Steps to contribute a feature:
 3. Checkout develop branch `git checkout develop`
 4. Create new feature branch `git checkout -b my_new_feature_branch`
 5. Install dependencies `npm install` (you need node package manager = npm installed)
-6. --> Implement your Code <-- and run `npm run dev`. This is required and will translate sass into css. See below for details.
+6. --> Implement your Code <-- and run `npm run dev` for developing. This is required and will translate sass into css. See below for details.
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on develop branch
 
