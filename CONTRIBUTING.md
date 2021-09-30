@@ -13,7 +13,7 @@ https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)
 
 Steps to contribute a feature:
 1. Create a fork from this repo.
-2. Create a local clone of your fork `git clone ...`
+2. Create a local clone of your fork `git clone <url-of-your-repo>`
 3. Checkout develop branch `git checkout develop`
 4. Create new feature branch `git checkout -b my_new_feature_branch`
 5. Install dependencies `npm install` (you need node package manager = npm installed)
