@@ -437,7 +437,8 @@
     "open_in_tab": true
   },
   "web_accessible_resources": [
-    "assets/*"
+    "assets/*",
+    "assets/icons/RocketIcons/default_128px.png"
   ],
   "manifest_version": 2,
   "commands": {
