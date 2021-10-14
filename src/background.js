@@ -8,9 +8,9 @@ const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no fail
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], async (resp) => {
   if (await userDataExists() && resp.enabledOWAFetch) {
     await enableOWAFetch() // start owa fetch
-    setBadgeUnreadMails(resp.NumberOfUnreadMails) // read number of unread mails from storage and display badge
+    await setBadgeUnreadMails(resp.NumberOfUnreadMails) // read number of unread mails from storage and display badge
     console.log('Activated OWA fetch.')
-  } else { console.log('No OWAfetch registered') }
+  } else console.log('No OWAfetch registered')
 })
 
 // disable star rating
@@ -25,9 +25,10 @@ if (month === 10 && day > 20) {
 }
 
 // DOESNT WORK IN RELEASE VERSION
-chrome.storage.local.get(['openSettingsOnReload'], (resp) => {
-  if (resp.openSettingsOnReload) openSettingsPage()
-  chrome.storage.local.set({ openSettingsOnReload: false })
+chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
+  if (resp.openSettingsOnReload) await openSettingsPage()
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ openSettingsOnReload: false }, resolve))
 })
 
 // set browserIcon
