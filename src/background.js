@@ -14,20 +14,20 @@ chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], async (resp
 })
 
 // disable star rating
-chrome.storage.local.set({ ratingEnabledFlag: false }, function () { })
+chrome.storage.local.set({ ratingEnabledFlag: false })
 
 //  reset banner for gOPAL
 const d = new Date()
 const month = d.getMonth() + 1 // starts at 0
 const day = d.getDate()
 if (month === 10 && day > 20) {
-  chrome.storage.local.set({ closedMsg1: false }, function () { })
+  chrome.storage.local.set({ closedMsg1: false })
 }
 
 // DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], (resp) => {
   if (resp.openSettingsOnReload) openSettingsPage()
-  chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
+  chrome.storage.local.set({ openSettingsOnReload: false })
 })
 
 // set browserIcon
@@ -41,19 +41,19 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
 })
 
 console.log('Loaded TUfast')
-chrome.storage.local.set({ loggedOutSelma: false }, function () { })
-chrome.storage.local.set({ loggedOutElearningMED: false }, function () { })
-chrome.storage.local.set({ loggedOutTumed: false }, function () { })
-chrome.storage.local.set({ loggedOutQis: false }, function () { })
-chrome.storage.local.set({ loggedOutOpal: false }, function () { })
-chrome.storage.local.set({ loggedOutOwa: false }, function () { })
-chrome.storage.local.set({ loggedOutMagma: false }, function () { })
-chrome.storage.local.set({ loggedOutJexam: false }, function () { })
-chrome.storage.local.set({ loggedOutCloudstore: false }, function () { })
-chrome.storage.local.set({ loggedOutTex: false }, function () { })
-chrome.storage.local.set({ loggedOutTumed: false }, function () { })
-chrome.storage.local.set({ loggedOutGitlab: false }, function () { })
-chrome.storage.local.get(['pdfInNewTab'], function (result) {
+chrome.storage.local.set({ loggedOutSelma: false })
+chrome.storage.local.set({ loggedOutElearningMED: false })
+chrome.storage.local.set({ loggedOutTumed: false })
+chrome.storage.local.set({ loggedOutQis: false })
+chrome.storage.local.set({ loggedOutOpal: false })
+chrome.storage.local.set({ loggedOutOwa: false })
+chrome.storage.local.set({ loggedOutMagma: false })
+chrome.storage.local.set({ loggedOutJexam: false })
+chrome.storage.local.set({ loggedOutCloudstore: false })
+chrome.storage.local.set({ loggedOutTex: false })
+chrome.storage.local.set({ loggedOutTumed: false })
+chrome.storage.local.set({ loggedOutGitlab: false })
+chrome.storage.local.get(['pdfInNewTab'], (result) => {
   if (result.pdfInNewTab) {
     enableHeaderListener(true)
   }
@@ -65,38 +65,38 @@ chrome.runtime.onInstalled.addListener((details) => {
     case 'install':
       console.log('TUfast installed.')
       openSettingsPage('first_visit') // open settings page
-      chrome.storage.local.set({ installed: true }, function () { })
-      chrome.storage.local.set({ showed_50_clicks: false }, function () { })
-      chrome.storage.local.set({ showed_100_clicks: false }, function () { })
-      chrome.storage.local.set({ isEnabled: false }, function () { })
-      chrome.storage.local.set({ fwdEnabled: true }, function () { })
-      chrome.storage.local.set({ mostLiklySubmittedReview: false }, function () { })
-      chrome.storage.local.set({ removedReviewBanner: false }, function () { })
-      chrome.storage.local.set({ neverShowedReviewBanner: true }, function () { })
-      chrome.storage.local.set({ encryption_level: 2 }, function () { })
-      chrome.storage.local.set({ meine_kurse: false }, function () { })
-      chrome.storage.local.set({ favoriten: false }, function () { })
-      // chrome.storage.local.set({openSettingsPageParam: false}, function() {})
-      chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: 0 }, function () { })
-      chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, function () { })
+      chrome.storage.local.set({ installed: true })
+      chrome.storage.local.set({ showed_50_clicks: false })
+      chrome.storage.local.set({ showed_100_clicks: false })
+      chrome.storage.local.set({ isEnabled: false })
+      chrome.storage.local.set({ fwdEnabled: true })
+      chrome.storage.local.set({ mostLiklySubmittedReview: false })
+      chrome.storage.local.set({ removedReviewBanner: false })
+      chrome.storage.local.set({ neverShowedReviewBanner: true })
+      chrome.storage.local.set({ encryption_level: 2 })
+      chrome.storage.local.set({ meine_kurse: false })
+      chrome.storage.local.set({ favoriten: false })
+      // chrome.storage.local.set({openSettingsPageParam: false})
+      chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: 0 })
+      chrome.storage.local.set({ dashboardDisplay: 'favoriten' })
       chrome.storage.local.set({ additionalNotificationOnNewMail: false })
       chrome.storage.local.set({ NumberOfUnreadMails: 'undefined' })
-      chrome.storage.local.set({ removedOpalBanner: false }, function () { })
-      chrome.storage.local.set({ nameIsTUfast: true }, function () { })
-      chrome.storage.local.set({ enabledOWAFetch: false }, function () { })
-      chrome.storage.local.set({ colorfulRocket: 'black' }, function () { })
-      chrome.storage.local.set({ PRObadge: false }, function () { })
-      chrome.storage.local.set({ flakeState: false }, function () { })
-      chrome.storage.local.set({ availableRockets: ['RI_default'] }, function () { })
-      chrome.storage.local.set({ foundEasteregg: false }, function () { })
-      chrome.storage.local.set({ hisqisPimpedTable: true }, function () { })
-      chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
-      chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}' }, function () { })
-      chrome.storage.local.set({ pdfInInline: false }, function () { })
-      chrome.storage.local.set({ pdfInNewTab: false }, function () { })
-      chrome.storage.local.set({ studiengang: 'general' }, function () { })
-      chrome.storage.local.set({ updateCustomizeStudiengang: false }, function () { })
-      chrome.storage.local.set({ TUfastCampInvite1: false }, function () { })
+      chrome.storage.local.set({ removedOpalBanner: false })
+      chrome.storage.local.set({ nameIsTUfast: true })
+      chrome.storage.local.set({ enabledOWAFetch: false })
+      chrome.storage.local.set({ colorfulRocket: 'black' })
+      chrome.storage.local.set({ PRObadge: false })
+      chrome.storage.local.set({ flakeState: false })
+      chrome.storage.local.set({ availableRockets: ['RI_default'] })
+      chrome.storage.local.set({ foundEasteregg: false })
+      chrome.storage.local.set({ hisqisPimpedTable: true })
+      chrome.storage.local.set({ openSettingsOnReload: false })
+      chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}' })
+      chrome.storage.local.set({ pdfInInline: false })
+      chrome.storage.local.set({ pdfInNewTab: false })
+      chrome.storage.local.set({ studiengang: 'general' })
+      chrome.storage.local.set({ updateCustomizeStudiengang: false })
+      chrome.storage.local.set({ TUfastCampInvite1: false })
       chrome.storage.local.set({ theme: 'system' })
       break
     case 'update':
@@ -104,100 +104,100 @@ chrome.runtime.onInstalled.addListener((details) => {
       chrome.storage.local.get(['encryption_level'], (resp) => {
         if (!(resp.encryption_level === 2)) {
           console.log('Upgrading encryption standard to level 2...')
-          chrome.storage.local.get(['asdf', 'fdsa'], function (result) {
+          chrome.storage.local.get(['asdf', 'fdsa'], (result) => {
             setUserData({ asdf: atob(result.asdf), fdsa: atob(result.fdsa) })
-            chrome.storage.local.set({ encryption_level: 2 }, function () { })
+            chrome.storage.local.set({ encryption_level: 2 })
           })
         }
       })
       // check if the type of courses is selected which should be display in the dasbhaord. If not, set to default
       chrome.storage.local.get(['dashboardDisplay'], (resp) => {
         if (resp.dashboardDisplay === null || resp.dashboardDisplay === undefined || resp.dashboardDisplay === '') {
-          chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, function () { })
+          chrome.storage.local.set({ dashboardDisplay: 'favoriten' })
         }
       })
       // check if mostLiklySubmittedReview
       chrome.storage.local.get(['mostLiklySubmittedReview'], (resp) => {
         if (resp.mostLiklySubmittedReview === null || resp.mostLiklySubmittedReview === undefined || resp.mostLiklySubmittedReview === '') {
-          chrome.storage.local.set({ mostLiklySubmittedReview: false }, function () { })
+          chrome.storage.local.set({ mostLiklySubmittedReview: false })
         }
       })
       // check if removedReviewBanner
       chrome.storage.local.get(['removedReviewBanner'], (resp) => {
         if (resp.removedReviewBanner === null || resp.removedReviewBanner === undefined || resp.removedReviewBanner === '') {
-          chrome.storage.local.set({ removedReviewBanner: false }, function () { })
+          chrome.storage.local.set({ removedReviewBanner: false })
         }
       })
       // check if neverShowedReviewBanner
       chrome.storage.local.get(['neverShowedReviewBanner'], (resp) => {
         if (resp.neverShowedReviewBanner === null || resp.neverShowedReviewBanner === undefined || resp.neverShowedReviewBanner === '') {
-          chrome.storage.local.set({ neverShowedReviewBanner: true }, function () { })
+          chrome.storage.local.set({ neverShowedReviewBanner: true })
         }
       })
       // check if seenInOpalAfterDashbaordUpdate exists
       chrome.storage.local.get(['seenInOpalAfterDashbaordUpdate'], (resp) => {
         if (resp.seenInOpalAfterDashbaordUpdate === null || resp.seenInOpalAfterDashbaordUpdate === undefined || resp.seenInOpalAfterDashbaordUpdate === '') {
-          chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: 0 }, function () { })
+          chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: 0 })
         }
       })
       // check if enabledOWAFetch exists
       chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
         if (resp.enabledOWAFetch === null || resp.enabledOWAFetch === undefined || resp.enabledOWAFetch === '') {
-          chrome.storage.local.set({ enabledOWAFetch: false }, function () { })
+          chrome.storage.local.set({ enabledOWAFetch: false })
           chrome.storage.local.set({ NumberOfUnreadMails: 'undefined' })
           chrome.storage.local.set({ additionalNotificationOnNewMail: false })
         }
       })
       // check, whether flake state exists. If not, initialize with false.
-      chrome.storage.local.get(['flakeState'], function (result) {
+      chrome.storage.local.get(['flakeState'], (result) => {
         if (result.flakeState === undefined || result.flakeState === null) { // set to true, so that state will be false!
-          chrome.storage.local.set({ flakeState: false }, function () { })
+          chrome.storage.local.set({ flakeState: false })
         }
       })
       // check if ShowedFirefoxBanner
-      chrome.storage.local.get(['showedFirefoxBanner'], function (result) {
+      chrome.storage.local.get(['showedFirefoxBanner'], (result) => {
         if (result.showedFirefoxBanner === undefined || result.showedFirefoxBanner === null) {
-          chrome.storage.local.set({ showedFirefoxBanner: false }, function () { })
+          chrome.storage.local.set({ showedFirefoxBanner: false })
         }
       })
       // check if showedUnreadMailCounterBanner
-      chrome.storage.local.get(['showedUnreadMailCounterBanner'], function (result) {
+      chrome.storage.local.get(['showedUnreadMailCounterBanner'], (result) => {
         if (result.showedUnreadMailCounterBanner === undefined || result.showedUnreadMailCounterBanner === null) {
-          chrome.storage.local.set({ showedUnreadMailCounterBanner: false }, function () { })
+          chrome.storage.local.set({ showedUnreadMailCounterBanner: false })
         }
       })
       // check if openSettingsOnReload
-      chrome.storage.local.get(['openSettingsOnReload'], function (result) {
+      chrome.storage.local.get(['openSettingsOnReload'], (result) => {
         if (result.openSettingsOnReload === undefined || result.openSettingsOnReload === null) {
-          chrome.storage.local.set({ openSettingsOnReload: false }, function () { })
+          chrome.storage.local.set({ openSettingsOnReload: false })
         }
       })
       // check if availableRockets
-      chrome.storage.local.get(['availableRockets'], function (result) {
+      chrome.storage.local.get(['availableRockets'], (result) => {
         if (result.availableRockets === undefined || result.availableRockets === null) {
-          chrome.storage.local.set({ availableRockets: ['RI_default'] }, function () { })
+          chrome.storage.local.set({ availableRockets: ['RI_default'] })
         }
       })
       // check if selectedRocketIcon
-      chrome.storage.local.get(['selectedRocketIcon'], function (result) {
+      chrome.storage.local.get(['selectedRocketIcon'], (result) => {
         if (result.selectedRocketIcon === undefined || result.selectedRocketIcon === null) {
-          chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}' }, function () { })
+          chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}' })
         }
       })
       // check if hisqisPimpedTable
-      chrome.storage.local.get(['hisqisPimpedTable'], function (result) {
+      chrome.storage.local.get(['hisqisPimpedTable'], (result) => {
         if (result.hisqisPimpedTable === undefined || result.hisqisPimpedTable === null) {
-          chrome.storage.local.set({ hisqisPimpedTable: true }, function () { })
+          chrome.storage.local.set({ hisqisPimpedTable: true })
         }
       })
       // if easteregg was discovered in an earlier version: enable and select specific rocket!
-      chrome.storage.local.get(['Rocket', 'foundEasteregg', 'saved_click_counter', 'availableRockets'], function (result) {
+      chrome.storage.local.get(['Rocket', 'foundEasteregg', 'saved_click_counter', 'availableRockets'], (result) => {
         const avRockets = result.availableRockets
         if (result.saved_click_counter > 250 && !avRockets.includes('RI4')) avRockets.push('RI4')
         if (result.saved_click_counter > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5')
         if (result.Rocket === 'colorful' && result.foundEasteregg === undefined) {
-          chrome.storage.local.set({ foundEasteregg: true }, function () { })
-          chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}' }, function () { })
+          chrome.storage.local.set({ foundEasteregg: true })
+          chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}' })
           avRockets.push('RI3')
           chrome.browserAction.setIcon({
             path: 'assets/icons/RocketIcons/3_120px.png'
@@ -206,15 +206,15 @@ chrome.runtime.onInstalled.addListener((details) => {
         chrome.storage.local.set({ availableRockets: avRockets })
       })
       // seen customized studiengang
-      chrome.storage.local.get(['updateCustomizeStudiengang'], function (result) {
+      chrome.storage.local.get(['updateCustomizeStudiengang'], (result) => {
         if (result.updateCustomizeStudiengang === undefined || result.updateCustomizeStudiengang === null) {
-          chrome.storage.local.set({ updateCustomizeStudiengang: false }, function () { })
+          chrome.storage.local.set({ updateCustomizeStudiengang: false })
         }
       })
       // selected studiengang
-      chrome.storage.local.get(['studiengang'], function (result) {
+      chrome.storage.local.get(['studiengang'], (result) => {
         if (result.studiengang === undefined || result.studiengang === null) {
-          chrome.storage.local.set({ studiengang: 'general' }, function () { })
+          chrome.storage.local.set({ studiengang: 'general' })
         }
       })
       // selected theme
@@ -228,7 +228,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       //   const today = new Date()
       //   const max_invite_date = new Date(2021, 8, 30) // 27.09.2021; month is zero based
       //   if (!res.TUfastCampInvite1 === true && today < max_invite_date) {
-      //     chrome.storage.local.set({ TUfastCampInvite1: true }, function () { })
+      //     chrome.storage.local.set({ TUfastCampInvite1: true })
       //     chrome.tabs.create(({ url: 'TUfastCamp.html' }))
       //   }
       // })
@@ -481,7 +481,7 @@ async function showBadge (text, color, _timeout) {
   await new Promise((resolve) => chrome.browserAction.setBadgeText({ text }, resolve))
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.browserAction.setBadgeBackgroundColor({ color }, resolve))
-  // setTimeout(function() {
+  // setTimeout(() => {
   //  chrome.browserAction.setBadgeText({text: ""});
   // }, timeout);
 }
@@ -650,12 +650,12 @@ async function saveCourses (courseList) {
 // function loadCourses (type) {
 //   switch (type) {
 //     case 'favoriten':
-//       chrome.storage.local.get(['favoriten'], function (result) {
+//       chrome.storage.local.get(['favoriten'], (result) => {
 //         console.log(JSON.parse(result.favoriten))
 //       })
 //       break
 //     case 'meine_kurse':
-//       chrome.storage.local.get(['meine_kurse'], function (result) {
+//       chrome.storage.local.get(['meine_kurse'], (result) => {
 //         console.log(JSON.parse(result.meine_kurse))
 //       })
 //       break
