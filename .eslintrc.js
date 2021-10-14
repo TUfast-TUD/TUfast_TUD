@@ -6,11 +6,6 @@ module.exports = {
     jquery: true
   },
   extends: ['standard'],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 12,
-    sourceType: 'module'
-  },
-  plugins: ['@typescript-eslint'],
+  plugins: ['promise'],
   rules: {}
 }
