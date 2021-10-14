@@ -283,7 +283,8 @@ async function owaFetch () {
     if (result.NumberOfUnreadMails < numberUnreadMails) {
       if (confirm("Neue Mail in deinem TU Dresden Postfach!\nDruecke 'Ok' um OWA zu oeffnen.")) {
         const url = 'https://msx.tu-dresden.de/owa/auth/logon.aspx?url=https%3a%2f%2fmsx.tu-dresden.de%2fowa&reason=0'
-        chrome.tabs.create({ url })
+        // Promisified until usage of Manifest V3
+        await new Promise((resolve) => chrome.tabs.create({ url }, resolve))
       }
     }
   }
@@ -305,7 +306,8 @@ async function disableOwaFetch () {
 
 async function readMailOWA (NrUnreadMails) {
   // set badge and local storage
-  chrome.storage.local.set({ NumberOfUnreadMails: NrUnreadMails })
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ NumberOfUnreadMails: NrUnreadMails }, resolve))
   await setBadgeUnreadMails(NrUnreadMails)
 }
 
@@ -366,18 +368,24 @@ chrome.runtime.onMessage.addListener(async (request, _sender, sendResponse) => {
       await openSettingsPage(request.params)
       break
     case 'open_share_page':
-      openSharePage()
+      await openSharePage()
       break
     case 'open_shortcut_settings':
-      if (isFirefox) { chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' }) } else { chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }) } // for chrome and everything else
+      if (isFirefox) {
+        // Promisified until usage of Manifest V3
+        await new Promise((resolve) => chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' }, resolve))
+      } else {
+        // for chrome and everything else
+        // Promisified until usage of Manifest V3
+        await new Promise((resolve) => chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }, resolve))
+      }
       break
     case 'toggle_pdf_inline_setting':
       enableHeaderListener(request.enabled)
       break
     case 'update_rocket_logo_easteregg':
-      chrome.browserAction.setIcon({
-        path: 'assets/icons/RocketIcons/3_120px.png'
-      })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' }, resolve))
       break
     default:
       console.log('Cmd not found!')
@@ -441,14 +449,17 @@ async function openSettingsPage (params) {
   if (params) {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: params }, resolve))
-    chrome.runtime.openOptionsPage()
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.runtime.openOptionsPage(resolve))
   } else {
-    chrome.runtime.openOptionsPage()
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.runtime.openOptionsPage(resolve))
   }
 }
 
-function openSharePage () {
-  chrome.tabs.create(({ url: 'share.html' }))
+async function openSharePage () {
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.tabs.create({ url: 'share.html' }, resolve))
 }
 
 // timeout is 2000 default
