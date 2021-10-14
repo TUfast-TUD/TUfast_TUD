@@ -42,18 +42,19 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
 })
 
 console.log('Loaded TUfast')
-chrome.storage.local.set({ loggedOutSelma: false })
-chrome.storage.local.set({ loggedOutElearningMED: false })
-chrome.storage.local.set({ loggedOutTumed: false })
-chrome.storage.local.set({ loggedOutQis: false })
-chrome.storage.local.set({ loggedOutOpal: false })
-chrome.storage.local.set({ loggedOutOwa: false })
-chrome.storage.local.set({ loggedOutMagma: false })
-chrome.storage.local.set({ loggedOutJexam: false })
-chrome.storage.local.set({ loggedOutCloudstore: false })
-chrome.storage.local.set({ loggedOutTex: false })
-chrome.storage.local.set({ loggedOutTumed: false })
-chrome.storage.local.set({ loggedOutGitlab: false })
+chrome.storage.local.set({
+  loggedOutSelma: false,
+  loggedOutElearningMED: false,
+  loggedOutTumed: false,
+  loggedOutQis: false,
+  loggedOutOpal: false,
+  loggedOutOwa: false,
+  loggedOutMagma: false,
+  loggedOutJexam: false,
+  loggedOutCloudstore: false,
+  loggedOutTex: false,
+  loggedOutGitlab: false
+})
 chrome.storage.local.get(['pdfInNewTab'], (result) => {
   if (result.pdfInNewTab) {
     enableHeaderListener(true)
