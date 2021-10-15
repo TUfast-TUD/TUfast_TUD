@@ -84,7 +84,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         seenInOpalAfterDashbaordUpdate: 0,
         dashboardDisplay: 'favoriten',
         additionalNotificationOnNewMail: false,
-        NumberOfUnreadMails: 'undefined',
+        // NumberOfUnreadMails: 'undefined',
         removedOpalBanner: false,
         nameIsTUfast: true,
         enabledOWAFetch: false,
@@ -161,7 +161,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       // check if enabledOWAFetch exists
       if (!settings.enabledOWAFetch && typeof settings.enabledOWAFetch !== 'boolean') {
         updateObj.enabledOWAFetch = false
-        updateObj.NumberOfUnreadMails = 'undefined'
+        updateObj.NumberOfUnreadMails = undefined
         updateObj.additionalNotificationOnNewMail = false
       }
 
@@ -281,7 +281,7 @@ async function owaFetch () {
   // alert on new Mail
   // Promisified until usage of Manifest V3
   const result = await new Promise((resolve) => chrome.storage.local.get(['NumberOfUnreadMails', 'additionalNotificationOnNewMail'], (result) => resolve(result)))
-  if (!(result.NumberOfUnreadMails === undefined || result.NumberOfUnreadMails === 'undefined') && result.additionalNotificationOnNewMail) {
+  if (!result.NumberOfUnreadMails !== undefined && result.additionalNotificationOnNewMail) {
     if (result.NumberOfUnreadMails < numberUnreadMails) {
       if (confirm("Neue Mail in deinem TU Dresden Postfach!\nDruecke 'Ok' um OWA zu oeffnen.")) {
         const url = 'https://msx.tu-dresden.de/owa/auth/logon.aspx?url=https%3a%2f%2fmsx.tu-dresden.de%2fowa&reason=0'
@@ -301,7 +301,7 @@ async function disableOwaFetch () {
   console.log('stopped owa connection')
   await setBadgeUnreadMails(0)
   // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.storage.local.set({ NumberOfUnreadMails: 'undefined' }, resolve))
+  await new Promise((resolve) => chrome.storage.local.remove(['NumberOfUnreadMails'], resolve))
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.alarms.clear('fetchOWAAlarm', resolve))
 }
@@ -515,7 +515,7 @@ async function saveClicks (counter) {
 // create hash from input-string (can also be json of course)
 // output hash is always of same length and is of type buffer
 async function hashDigest (string) {
-  const hashBuffer = await crypto.subtle.digest('SHA-256', TextEncoder().encode(string))
+  const hashBuffer = await crypto.subtle.digest('SHA-256', (new TextEncoder()).encode(string))
   return hashBuffer
 }
 
@@ -561,7 +561,7 @@ async function getKeyBuffer () {
 async function setUserData (userData) {
   // collect all required information for encryption in the right format
   const userDataConcat = userData.asdf + '@@@@@' + userData.fdsa
-  const userDataEncoded = TextEncoder().encode(userDataConcat)
+  const userDataEncoded = (new TextEncoder()).encode(userDataConcat)
   const keyBuffer = await getKeyBuffer()
   let iv = crypto.getRandomValues(new Uint8Array(16))
 
@@ -601,7 +601,7 @@ async function getUserData () {
   const data = await new Promise((resolve) => chrome.storage.local.get(['Data'], (data) => resolve(data.Data)))
 
   // check if Data exists, else return
-  if (data === undefined || data === 'undefined' || data === null) {
+  if (data === undefined) {
     return ({ asdf: undefined, fdsa: undefined })
   }
   let iv = data.slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
