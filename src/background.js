@@ -325,7 +325,7 @@ async function setBadgeUnreadMails (numberUnreadMails) {
 }
 
 // show badge when extension is triggered
-chrome.runtime.onMessage.addListener(async (request, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   switch (request.cmd) {
     case 'show_ok_badge':
       // show_badge('Login', '#4cb749', request.timeout)
@@ -340,54 +340,52 @@ chrome.runtime.onMessage.addListener(async (request, _sender, sendResponse) => {
       // show_badge("", "#ffffff", 0)
       break
     case 'save_clicks':
-      await saveClicks(request.click_count)
+      saveClicks(request.click_count)
       break
-    case 'get_user_data':
-      sendResponse(await getUserData())
+    case 'get_user_data': {
+      sendResponse(getUserData())
       break
+    }
     case 'set_user_data':
-      await setUserData(request.userData)
+      setUserData(request.userData)
       break
     case 'read_mail_owa':
-      await readMailOWA(request.NrUnreadMails)
+      readMailOWA(request.NrUnreadMails)
       break
     case 'logged_out':
-      await loggedOut(request.portal)
+      loggedOut(request.portal)
       break
     case 'enable_owa_fetch':
-      await enableOWAFetch()
+      enableOWAFetch()
       break
     case 'disable_owa_fetch':
-      await disableOwaFetch()
+      disableOwaFetch()
       break
     case 'reload_extension':
       chrome.runtime.reload()
       break
     case 'save_courses':
-      await saveCourses(request.course_list)
+      saveCourses(request.course_list)
       break
     case 'open_settings_page':
-      await openSettingsPage(request.params)
+      openSettingsPage(request.params)
       break
     case 'open_share_page':
-      await openSharePage()
+      openSharePage()
       break
     case 'open_shortcut_settings':
       if (isFirefox) {
-        // Promisified until usage of Manifest V3
-        await new Promise((resolve) => chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' }, resolve))
+        chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' })
       } else {
         // for chrome and everything else
-        // Promisified until usage of Manifest V3
-        await new Promise((resolve) => chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }, resolve))
+        chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
       }
       break
     case 'toggle_pdf_inline_setting':
       enableHeaderListener(request.enabled)
       break
     case 'update_rocket_logo_easteregg':
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' }, resolve))
+      chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
       break
     default:
       console.log('Cmd not found!')
