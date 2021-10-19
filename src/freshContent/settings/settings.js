@@ -2,14 +2,7 @@
 
 // global vars
 const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
-var webstorelink
-if (isFirefox) {
-  webstorelink = 'https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search'
-} else {
-  webstorelink = 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de'
-}
-
-let currentTheme
+const webstorelink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de'
 
 const availableThemes = {
   system: 'System theme',
@@ -25,8 +18,8 @@ async function applyTheme (theme) {
       document.documentElement.setAttribute('data-theme', theme)
     }
 
-    currentTheme = theme
-    chrome.storage.local.set({ theme: theme })
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ theme: theme }, resolve))
 
     // update switcher
     document.querySelector('#themeSwitcher > .theme-text').innerHTML = availableThemes[theme]
@@ -36,27 +29,21 @@ async function applyTheme (theme) {
 }
 
 async function nextTheme () {
-  const themeOrder = [
-    'system',
-    'light',
-    'dark'
-  ]
+  const themeOrder = Object.keys(availableThemes)
+  const currentTheme = document.documentElement.getAttribute('data-theme')
+  const idx = (themeOrder.indexOf(currentTheme) + 1) % themeOrder.length
 
-  let i = themeOrder.indexOf(currentTheme) + 1
-
-  if (i >= themeOrder.length) i = 0
-
-  applyTheme(themeOrder[i])
+  await applyTheme(themeOrder[idx])
 }
 
 function saveUserData () {
-  const asdf = document.getElementById('username_field').value
-  const fdsa = document.getElementById('password_field').value
-  if (asdf === '' || fdsa === '') {
+  const asdf = document.getElementById('username_field')?.value
+  const fdsa = document.getElementById('password_field')?.value
+  if (!asdf || !fdsa) {
     document.getElementById('status_msg').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
     return false
   } else {
-    chrome.storage.local.set({ isEnabled: true }, function () { }) // need to activate auto login feature
+    chrome.storage.local.set({ isEnabled: true }) // need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: 'clear_badge' })
     chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } })
     document.getElementById('status_msg').innerHTML = ''
@@ -74,17 +61,19 @@ function saveUserData () {
 
 function deleteUserData () {
   chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-  chrome.storage.local.set({ Data: 'undefined' }, function () { }) // this is how to delete user data!
-  chrome.storage.local.set({ isEnabled: false }, function () { }) // need to deactivate auto login feature
-  // -- also delete courses in dashboard
-  chrome.storage.local.set({ meine_kurse: false }, function () { })
-  chrome.storage.local.set({ favoriten: false }, function () { })
+  chrome.storage.local.remove([
+    'Data', // this is how to delete user data!
+    'meine_kurse', // delete opal courses
+    'favoriten', // delete opal courses
+    'isEnabled']) // need to deactivate auto login feature
   // --
   // -- also deactivate owa fetch
   document.getElementById('owa_mail_fetch').checked = false
   chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
-  chrome.storage.local.set({ enabledOWAFetch: false })
-  chrome.storage.local.set({ additionalNotificationOnNewMail: false })
+  chrome.storage.local.set({
+    enabledOWAFetch: false,
+    additionalNotificationOnNewMail: false
+  })
   document.getElementById('additionalNotification').checked = false
   // --
   document.getElementById('status_msg').innerHTML = ''
@@ -98,56 +87,63 @@ function deleteUserData () {
     document.getElementById('delete_data').innerHTML = 'Alle Daten l&ouml;schen'
     document.getElementById('delete_data').setAttribute('class', 'button-deny')
     document.getElementById('delete_data').disabled = false
-    chrome.storage.local.get(['Data'], function (result) {
-    })
   }, 2000)
 }
+
+// Use Promises or async/await here when Manifest V3 is used
 function fwdGoogleSearch () {
-  chrome.storage.local.get(['fwdEnabled'], function (result) {
+  chrome.storage.local.get(['fwdEnabled'], (result) => {
     chrome.storage.local.set({ fwdEnabled: !(result.fwdEnabled) }, function () { })
   })
 }
 
+// Use Promises or async/await here when Manifest V3 is used
 function checkSelectedRocket () {
   chrome.storage.local.get(['selectedRocketIcon'], (res) => {
-    const icon = JSON.parse(res.selectedRocketIcon)
-    document.getElementById(icon.id).checked = true
+    try {
+      const icon = JSON.parse(res.selectedRocketIcon)
+      document.getElementById(icon.id).checked = true
+    } catch {
+      console.error('Cannot set rocket icon')
+    }
   })
 }
 
 // set switches and other elements
-function displayEnabled () {
-  chrome.storage.local.get(['fwdEnabled'], function (result) {
-    this.document.getElementById('switch_fwd').checked = result.fwdEnabled
-  })
-  chrome.storage.local.get(['enabledOWAFetch'], function (result) {
-    this.document.getElementById('owa_mail_fetch').checked = result.enabledOWAFetch
-  })
-  chrome.storage.local.get(['additionalNotificationOnNewMail'], function (result) {
-    document.getElementById('additionalNotification').checked = result.additionalNotificationOnNewMail
-  })
-  chrome.storage.local.get(['studiengang', 'openSettingsPageParam'], function (result) {
-    if (result.openSettingsPageParam === 'add_studiengang') {
-      document.getElementById('studiengangSelect').value = 'add'
-      document.getElementById('addStudiengang').style.display = 'block'
-    } else if (result.studiengang == null || result.studiengang === undefined || result.studiengang === 'general') {
-      document.getElementById('studiengangSelect').value = 'general'
-    } else {
-      document.getElementById('studiengangSelect').value = result.studiengang
-    }
-  })
+async function displayEnabled () {
+  const result = await new Promise((resolve) => chrome.storage.local.get([
+    'fwdEnabled',
+    'enabledOWAFetch',
+    'additionalNotificationOnNewMail',
+    'studiengang',
+    'openSettingsPageParam',
+    'pdfInInline',
+    'pdfInNewTab'
+    // 'dashboardDisplay'
+  ], resolve))
 
-  chrome.storage.local.get(['pdfInInline'], function (result) {
-    this.document.getElementById('switch_pdf_inline').checked = result.pdfInInline
-    if (!result.pdfInInline) {
-      document.getElementById('switch_pdf_newtab_block').style.visibility = 'hidden'
-    }
-  })
+  // '!!' should be used in checkboxes if value is undefined. Value will be false then
+  document.getElementById('switch_fwd').checked = !!result.fwdEnabled
+  document.getElementById('owa_mail_fetch').checked = !!result.enabledOWAFetch
+  document.getElementById('additionalNotification').checked = !!result.additionalNotificationOnNewMail
 
-  chrome.storage.local.get(['pdfInNewTab'], function (result) {
-    this.document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
-  })
-  /* chrome.storage.local.get(['dashboardDisplay'], function(result) {
+  if (result.openSettingsPageParam === 'add_studiengang') {
+    document.getElementById('studiengangSelect').value = 'add'
+    document.getElementById('addStudiengang').style.display = 'block'
+  } else if (!result.studiengang || result.studiengang === 'general') {
+    document.getElementById('studiengangSelect').value = 'general'
+  } else {
+    document.getElementById('studiengangSelect').value = result.studiengang
+  }
+
+  document.getElementById('switch_pdf_inline').checked = !!result.pdfInInline
+  if (!result.pdfInInline) {
+    document.getElementById('switch_pdf_newtab_block').style.visibility = 'hidden'
+  }
+
+  document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
+
+  /*
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
     if(result.dashboardDisplay === "meine_kurse") {document.getElementById('crs').checked = true}
   }) */
@@ -177,7 +173,7 @@ function clicksToTimeNoIcon (clicks) {
 }
 
 function openKeyboardSettings () {
-  chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' }, function (result) { })
+  chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' })
 }
 
 async function toggleOWAfetch () {
@@ -191,56 +187,63 @@ async function toggleOWAfetch () {
   //    }
   //    else {
   // request permission
-  chrome.permissions.request({
-    permissions: ['tabs']
-  }, function (granted) {
-    if (granted) {
-      enableOWAFetch()
-    } else {
-      chrome.storage.local.set({ enabledOWAFetch: false })
-      this.document.getElementById('owa_mail_fetch').checked = false
-      alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
-    }
-  })
+  // Promisified until usage of Manifest V3
+  const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['tabs'] }, resolve))
+  if (granted) {
+    await enableOWAFetch()
+  } else {
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
+    document.getElementById('owa_mail_fetch').checked = false
+    alert("TUfast braucht diese Berechtigung, um regelmaessig alle Mails abzurufen. Bitte druecke auf 'Erlauben'.")
+  }
   //    }
   //  }
   // );
 }
 
-function enableOWAFetch () {
-  chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-    if (resp.enabledOWAFetch) {
-      // disable
-      chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
-      chrome.storage.local.set({ enabledOWAFetch: false })
-      chrome.storage.local.set({ additionalNotificationOnNewMail: false })
-      document.getElementById('additionalNotification').checked = false
+async function enableOWAFetch () {
+  // Promisified until usage of Manifest V3
+  const result = await new Promise((resolve) => chrome.storage.local.get(['enabledOWAFetch'], resolve))
+  if (result.enabledOWAFetch) {
+    // disable
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, resolve))
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({
+      enabledOWAFetch: false,
+      additionalNotificationOnNewMail: false
+    }, resolve))
+
+    document.getElementById('additionalNotification').checked = false
+  } else {
+    // Promisified until usage of Manifest V3
+    const resp = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
+    const userData = await resp
+    // check if user data is saved
+    if (userData.asdf && userData.fdsa) {
+      document.getElementById('owa_fetch_msg').innerHTML = ''
+      chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({
+        enabledOWAFetch: true,
+        openSettingsPageParam: 'mailFetchSettings',
+        openSettingsOnReload: true
+      }, resolve))
+      // reload chrome extension is necessary
+      alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
+      chrome.runtime.sendMessage({ cmd: 'reload_extension' })
     } else {
-      chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
-        // check if user data is saved
-        if (!(result.asdf === undefined || result.fdsa === undefined)) {
-          document.getElementById('owa_fetch_msg').innerHTML = ''
-          chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, function (result) { })
-          chrome.storage.local.set({ enabledOWAFetch: true })
-          // reload chrome extension is necessary
-          alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
-          chrome.storage.local.set({ openSettingsPageParam: 'mailFetchSettings', openSettingsOnReload: true }, function () { })
-          chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
-        } else {
-          document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">Speichere deine Login-Daten im Punkt \'Automatisches Anmelden in Opal, Selma & Co.\' um diese Funktion zu nutzen!</span>'
-          this.document.getElementById('owa_mail_fetch').checked = false
-        }
-      })
+      document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">Speichere deine Login-Daten im Punkt \'Automatisches Anmelden in Opal, Selma & Co.\' um diese Funktion zu nutzen!</span>'
+      document.getElementById('owa_mail_fetch').checked = false
     }
-  })
+  }
 }
 
 async function getAvailableRockets () {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get(['availableRockets'], (resp) => {
-      resolve(resp.availableRockets)
-    })
-  })
+  // Promisified until usage of Manifest V3
+  const availableRockets = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], (resp) => resolve(resp.availableRockets)))
+  return availableRockets || {} // To prevent errors when undefined
 }
 
 const rocketIconsConfig = {
@@ -343,10 +346,8 @@ function rocketIconSelectionChange () {
   const rocketNode = this.parentElement
   const rocketID = this.id
   const imgSrc = '../../assets/icons/RocketIcons' + rocketNode.querySelectorAll('img')[0].src.split('RocketIcons')[1]
-  chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc + '"}' }, function () { })
-  chrome.browserAction.setIcon({
-    path: imgSrc
-  })
+  chrome.storage.local.set({ selectedRocketIcon: '{"id": "' + rocketID + '", "link": "' + imgSrc + '"}' })
+  chrome.browserAction.setIcon({ path: imgSrc })
 }
 
 async function enableRocketIcon () {
@@ -354,16 +355,16 @@ async function enableRocketIcon () {
   const rocketID = el.querySelectorAll('input')[0].id
 
   // save in storage
-  chrome.storage.local.get(['availableRockets'], (resp) => {
-    const avRockets = resp.availableRockets
-    // only add rocketID, if is not in there already
-    if (!resp.availableRockets.includes(rocketID)) {
-      avRockets.push(rocketID)
-      chrome.storage.local.set({ availableRockets: avRockets })
-    }
-  })
-
-  await new Promise(resolve => setTimeout(resolve, 7000))
+  // Promisified until usage of Manifest V3
+  const availRockets = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], (resp) => resolve(resp.availableRockets)))
+  if (!availRockets) {
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ availableRockets: [rocketID] }, resolve))
+  } else if (!availRockets.includes(rocketID)) {
+    availRockets.push(rocketID)
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ availableRockets: avRockets }, resolve))
+  }
 
   // change picture and text and enable radio button
   const timestamp = new Date().getTime()
@@ -377,25 +378,25 @@ async function enableRocketIcon () {
 }
 
 // this need to be done here since manifest v2
-window.onload = async function () {
+window.onload = async () => {
   document.getElementsByClassName('banner__close')[0]?.addEventListener('click', () => document.getElementsByClassName('banner')[0]?.remove())
 
   // apply initial theme
-  chrome.storage.local.get('theme', (res) => {
-    applyTheme(res.theme)
+  // Promisified until usage of Manifest V3
+  const theme = await new Promise((resolve) => chrome.storage.local.get('theme', (res) => resolve(res.theme)))
+  await applyTheme(theme)
 
-    // prevent transition on page load
-    setTimeout(() => {
-      document.documentElement.removeAttribute('data-preload')
-    }, 500)
-  })
+  // prevent transition on page load
+  setTimeout(() => {
+    document.documentElement.removeAttribute('data-preload')
+  }, 500)
 
   // only display additionNotificationSection in chrome, because it doesnt work in ff
   if (isFirefox) {
     document.getElementById('additionNotificationSection').style.display = 'none'
   }
 
-  insertAllRocketIcons()
+  await insertAllRocketIcons()
 
   // assign functions
   document.getElementById('save_data').onclick = saveUserData
@@ -411,139 +412,114 @@ window.onload = async function () {
 
   // add additional notification checkbox listener
   const checkbox = document.getElementById('additionalNotification')
-  checkbox.addEventListener('change', function () {
-    if (this.checked) {
-      // only if owa fetch enables
-      chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
-        if (resp.enabledOWAFetch) {
-          chrome.storage.local.set({ additionalNotificationOnNewMail: true })
-        } else {
-          document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">F&uuml;r dieses Feature musst der Button auf \'Ein\' stehen.</span>'
-          document.getElementById('additionalNotification').checked = false
-        }
-      })
+  checkbox.addEventListener('change', async (e) => {
+    if (e.target.checked) {
+      // only when owa fetch enabled
+      // Promisified until usage of Manifest V3
+      const enabledOWAFetch = await new Promise((resolve) => chrome.storage.local.get(['enabledOWAFetch'], (resp) => resolve(resp.enabledOWAFetch)))
+      if (enabledOWAFetch) {
+        // Promisified until usage of Manifest V3
+        await new Promise((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: true }, resolve))
+      } else {
+        document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">F&uuml;r dieses Feature musst der Button auf \'Ein\' stehen.</span>'
+        document.getElementById('additionalNotification').checked = false
+      }
     } else {
-      chrome.storage.local.set({ additionalNotificationOnNewMail: false })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
     }
   })
 
   // add studiengang-select listener
-  document.getElementById('studiengangSelect').addEventListener('change', function () {
-    const value = document.getElementById('studiengangSelect').value
-    if (value === 'add') {
+  document.getElementById('studiengangSelect').addEventListener('change', async (e) => {
+    if (e.target.value === 'add') {
       document.getElementById('addStudiengang').style.display = 'block'
     } else {
       document.getElementById('addStudiengang').style.display = 'none'
-      chrome.storage.local.set({ studiengang: value }, function () { })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({ studiengang: e.target.value }, resolve))
     }
   })
 
   // add storage listener for autologin
-  chrome.storage.onChanged.addListener(function (changes, namespace) {
-    for (const key in changes) {
-      if (key === 'openSettingsPageParam' && changes[key].newValue === 'auto_login_settings') {
-        if (!document.getElementById('auto_login_settings').classList.contains('active')) {
-          document.getElementById('auto_login_settings').click()
-        }
-        chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
-        document.getElementById('settings_comment').innerHTML = '<strong>F&uuml;r dieses Feature gib hier deine Zugangsdaten ein.</strong>'
+  chrome.storage.onChanged.addListener(async (changes) => {
+    if ('openSettingsPageParam' in changes && changes.openSettingsPageParam.newValue === 'auto_login_settings') {
+      if (!document.getElementById('auto_login_settings').classList.contains('active')) {
+        document.getElementById('auto_login_settings').click()
       }
-      if (key === 'openSettingsPageParam' && changes[key].newValue === 'add_studiengang') {
-        document.getElementById('studiengangSelect').value = 'add'
-        document.getElementById('addStudiengang').style.display = 'block'
-        chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
-      }
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: false }, resolve))
+      document.getElementById('settings_comment').innerHTML = '<strong>F&uuml;r dieses Feature gib hier deine Zugangsdaten ein.</strong>'
+    }
+
+    if ('openSettingsPageParam' in changes && changes.openSettingsPageParam.newValue === 'add_studiengang') {
+      document.getElementById('studiengangSelect').value = 'add'
+      document.getElementById('addStudiengang').style.display = 'block'
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: false }, resolve))
     }
   })
 
-  document.getElementById('switch_pdf_inline').addEventListener('click', function () {
-    chrome.storage.local.set({ pdfInInline: this.checked }, function () { })
-    document.getElementById('switch_pdf_newtab_block').style.visibility = this.checked ? 'visible' : 'hidden'
+  document.getElementById('switch_pdf_inline').addEventListener('click', async (e) => {
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ pdfInInline: e.target.checked }, resolve))
 
-    if (this.checked) {
+    document.getElementById('switch_pdf_newtab_block').style.visibility = e.target.checked ? 'visible' : 'hidden'
+
+    if (e.target.checked) {
       // request necessary permissions
-      chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] },
-        function (granted) {
-          if (granted) {
-            chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true })
-            if (isFirefox) {
-              alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
-              chrome.storage.local.set({ openSettingsPageParam: 'opalCustomize', openSettingsOnReload: true }, function () { })
-              chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
-            }
-          } else {
-            // permission granting failed :( -> revert checkbox settings
-            chrome.storage.local.set({ pdfInInline: false })
-            this.document.getElementById('switch_pdf_inline').checked = false
-            alert('TUfast braucht diese Berechtigung, um die PDFs im Browser anzeigen zu koennen. Versuche es erneut.')
-            document.getElementById('switch_pdf_newtab_block').style.visibility = 'hidden'
-          }
+      // Promisified until usage of Manifest V3
+      const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
+      if (granted) {
+        chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true })
+        if (isFirefox) {
+          alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
+          // Promisified until usage of Manifest V3
+          await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: 'opalCustomize', openSettingsOnReload: true }, resolve))
+          chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
         }
-      )
+      } else {
+        // permission granting failed :( -> revert checkbox settings
+        // Promisified until usage of Manifest V3
+        await new Promise((resolve) => chrome.storage.local.set({ pdfInInline: false }, resolve))
+        e.target.checked = false
+        alert('TUfast braucht diese Berechtigung, um die PDFs im Browser anzeigen zu koennen. Versuche es erneut.')
+        document.getElementById('switch_pdf_newtab_block').style.visibility = 'hidden'
+      }
     } else {
       // disable "pdf in new tab" setting since it doesn't make any sense without inline pdf
-      chrome.storage.local.set({ pdfInNewTab: false })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({ pdfInNewTab: false }, resolve))
       document.getElementById('switch_pdf_newtab').checked = false
       chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false })
     }
   })
 
-  document.getElementById('switch_pdf_newtab').addEventListener('click', function () {
-    chrome.storage.local.set({ pdfInNewTab: this.checked }, function () { })
+  document.getElementById('switch_pdf_newtab').addEventListener('click', async (e) => {
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ pdfInNewTab: e.target.checked }, resolve))
   })
 
   // set all switches and elements
-  displayEnabled()
-
-  // get things from storage
-  chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], (result) => {
-    // set text on isEnabled
-    if (result.isEnabled) {
-      document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
-    } else {
-      document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
-    }
-    // update saved clicks
-    // see if any params are available
-    if (result.openSettingsPageParam === 'auto_login_settings') { setTimeout(function () { this.document.getElementById('auto_login_settings').click() }, 200) } else if (result.openSettingsPageParam === 'time_settings') {
-      setTimeout(function () { this.document.getElementById('time_settings').click() }, 200)
-      setTimeout(function () {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-      }, 500)
-    } else if (result.openSettingsPageParam === 'mailFetchSettings') { setTimeout(function () { this.document.getElementById('owa_mail_settings').click() }, 200) } else if (result.openSettingsPageParam === 'opalCustomize') { setTimeout(function () { this.document.getElementById('opal_modifications').click() }, 200) } else if (result.openSettingsPageParam === 'rocket_icons_settings') {
-      setTimeout(function () {
-        this.document.getElementById('rocket_icons').click()
-      }, 200)
-      setTimeout(function () {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-      }, 500)
-    }
-
-    if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
-    this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.saved_click_counter)
-    chrome.storage.local.set({ openSettingsPageParam: false }, function () { })
-  })
+  await displayEnabled()
 
   // prep accordion
-  const acc = document.getElementsByClassName('accordion')
-  let i
-  for (i = 0; i < acc.length; i++) {
-    acc[i].addEventListener('click', function () {
+  const accList = document.getElementsByClassName('accordion')
+  for (const acc of accList) {
+    acc.addEventListener('click', (e) => {
       // --only open one accordions section at a time
-      const acc = document.getElementsByClassName('accordion')
-      let i
-      for (i = 0; i < acc.length; i++) {
-        if (acc[i] === this) continue // skip actual clicked element
-        const pan = acc[i].nextElementSibling
+      for (const acc of accList) {
+        if (acc === e.target) continue // skip actual clicked element
+        const pan = acc.nextElementSibling
         if (pan.style.maxHeight) {
           pan.style.maxHeight = null
-          acc[i].classList.toggle('active')
+          acc.classList.toggle('active')
         }
       }
       // --
       // open clicked accordion section and set active
-      this.classList.toggle('active')
-      const panel = this.nextElementSibling
+      e.target.classList.toggle('active')
+      const panel = e.target.nextElementSibling
       if (panel.style.maxHeight) {
         panel.style.maxHeight = null
       } else {
@@ -551,4 +527,36 @@ window.onload = async function () {
       }
     })
   }
+
+  // get things from storage// Promisified until usage of Manifest V3
+  const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], resolve))
+  // set text on isEnabled
+  if (result.isEnabled) {
+    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
+  } else {
+    document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
+  }
+  // update saved clicks
+  // see if any params are available
+  if (result.openSettingsPageParam === 'auto_login_settings') {
+    setTimeout(document.getElementById('auto_login_settings').click, 200)
+  } else if (result.openSettingsPageParam === 'time_settings') {
+    setTimeout(document.getElementById('time_settings').click, 200)
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    }, 500)
+  } else if (result.openSettingsPageParam === 'mailFetchSettings') {
+    setTimeout(document.getElementById('owa_mail_settings').click, 200)
+  } else if (result.openSettingsPageParam === 'opalCustomize') {
+    setTimeout(document.getElementById('opal_modifications').click, 200)
+  } else if (result.openSettingsPageParam === 'rocket_icons_settings') {
+    setTimeout(document.getElementById('rocket_icons').click, 200)
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    }, 500)
+  }
+
+  this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.saved_click_counter || 0)
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: false }, resolve))
 }
