@@ -129,7 +129,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'studiengang',
         'theme'
         // TUfastCampInvite1
-      ], (resp) => resolve(resp)))
+      ], resolve))
 
       const updateObj = {}
 
@@ -137,7 +137,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (settings.encryption_level !== 2) {
         console.log('Upgrading encryption standard to level 2...')
         // Promisified until usage of Manifest V3
-        const userData = await new Promise((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], (result) => resolve(result)))
+        const userData = await new Promise((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve))
         await setUserData({ asdf: atob(userData.asdf), fdsa: atob(userData.fdsa) })
 
         updateObj.encryption_level = 2
@@ -242,7 +242,7 @@ async function owaIsOpened () {
 
 function getAllChromeTabs () {
   // Promisified until usage of Manifest V3
-  return new Promise((resolve) => chrome.tabs.query({}, (tabs) => resolve(tabs)))
+  return new Promise((resolve) => chrome.tabs.query({}, resolve))
 }
 
 // check if user stored login data
@@ -280,7 +280,7 @@ async function owaFetch () {
 
   // alert on new Mail
   // Promisified until usage of Manifest V3
-  const result = await new Promise((resolve) => chrome.storage.local.get(['NumberOfUnreadMails', 'additionalNotificationOnNewMail'], (result) => resolve(result)))
+  const result = await new Promise((resolve) => chrome.storage.local.get(['NumberOfUnreadMails', 'additionalNotificationOnNewMail'], resolve))
   if (!result.NumberOfUnreadMails !== undefined && result.additionalNotificationOnNewMail) {
     if (result.NumberOfUnreadMails < numberUnreadMails) {
       if (confirm("Neue Mail in deinem TU Dresden Postfach!\nDruecke 'Ok' um OWA zu oeffnen.")) {
@@ -491,7 +491,7 @@ async function saveClicks (counter) {
   // load number of saved clicks and add counter!
   let savedClicks = 0
   // Promisified until usage of Manifest V3
-  const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter'], (result) => resolve(result)))
+  const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter'], resolve))
   savedClicks = (result.saved_click_counter === undefined) ? 0 : result.saved_click_counter
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.set({ saved_click_counter: savedClicks + counter }, () => {
@@ -500,7 +500,7 @@ async function saveClicks (counter) {
   }))
   // make rocketIcons available if appropriate
   // Promisified until usage of Manifest V3
-  const resp = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], (resp) => resolve(resp)))
+  const resp = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
   const avRockets = resp.availableRockets
   if (result.saved_click_counter > 250 && !avRockets.includes('RI4')) avRockets.push('RI4')
   if (result.saved_click_counter > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5')
