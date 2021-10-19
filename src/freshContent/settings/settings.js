@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars, no-undef, no-var */
-
 // global vars
 const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
 const webstorelink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de'
@@ -164,6 +162,7 @@ async function displayEnabled () {
   }
 } */
 
+// eslint-disable-next-line no-unused-vars
 function clicksToTime (clicks) {
   const clicksCalc = clicks * 3
   const secs = clicksCalc % 60
@@ -373,7 +372,7 @@ async function enableRocketIcon () {
   } else if (!availRockets.includes(rocketID)) {
     availRockets.push(rocketID)
     // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.storage.local.set({ availableRockets: avRockets }, resolve))
+    await new Promise((resolve) => chrome.storage.local.set({ availableRockets: availRockets }, resolve))
   }
 
   // change picture and text and enable radio button
