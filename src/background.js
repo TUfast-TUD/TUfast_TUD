@@ -324,7 +324,8 @@ async function setBadgeUnreadMails (numberUnreadMails) {
   }
 }
 
-// show badge when extension is triggered
+// command listener
+// this listener behaves weirdly with an async function so it just calls async functions and returns true
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   switch (request.cmd) {
     case 'show_ok_badge':
@@ -343,7 +344,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       saveClicks(request.click_count)
       break
     case 'get_user_data': {
-      sendResponse(getUserData())
+      getUserData().then(userData => sendResponse(userData))
       break
     }
     case 'set_user_data':
