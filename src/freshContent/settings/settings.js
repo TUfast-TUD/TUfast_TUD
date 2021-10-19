@@ -220,6 +220,7 @@ async function enableOWAFetch () {
     // Promisified until usage of Manifest V3
     const resp = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
     const userData = await resp
+    console.log(userData)
     // check if user data is saved
     if (userData.asdf && userData.fdsa) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
@@ -539,21 +540,17 @@ window.onload = async () => {
   // update saved clicks
   // see if any params are available
   if (result.openSettingsPageParam === 'auto_login_settings') {
-    setTimeout(document.getElementById('auto_login_settings').click, 200)
+    setTimeout(() => document.getElementById('auto_login_settings').click(), 200)
   } else if (result.openSettingsPageParam === 'time_settings') {
-    setTimeout(document.getElementById('time_settings').click, 200)
-    setTimeout(() => {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-    }, 500)
+    setTimeout(() => document.getElementById('time_settings').click(), 200)
+    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 500)
   } else if (result.openSettingsPageParam === 'mailFetchSettings') {
-    setTimeout(document.getElementById('owa_mail_settings').click, 200)
+    setTimeout(() => document.getElementById('owa_mail_settings').click(), 200)
   } else if (result.openSettingsPageParam === 'opalCustomize') {
-    setTimeout(document.getElementById('opal_modifications').click, 200)
+    setTimeout(() => document.getElementById('opal_modifications').click(), 200)
   } else if (result.openSettingsPageParam === 'rocket_icons_settings') {
-    setTimeout(document.getElementById('rocket_icons').click, 200)
-    setTimeout(() => {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-    }, 500)
+    setTimeout(() => document.getElementById('rocket_icons').click(), 200)
+    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 500)
   }
 
   this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.saved_click_counter || 0)
