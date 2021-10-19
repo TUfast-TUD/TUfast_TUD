@@ -36,16 +36,19 @@ async function nextTheme () {
   await applyTheme(themeOrder[idx])
 }
 
-function saveUserData () {
+async function saveUserData () {
   const asdf = document.getElementById('username_field')?.value
   const fdsa = document.getElementById('password_field')?.value
   if (!asdf || !fdsa) {
     document.getElementById('status_msg').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
     return false
   } else {
-    chrome.storage.local.set({ isEnabled: true }) // need to activate auto login feature
-    chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } })
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'clear_badge' }, resolve))
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } }, resolve))
     document.getElementById('status_msg').innerHTML = ''
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
@@ -59,21 +62,25 @@ function saveUserData () {
   }
 }
 
-function deleteUserData () {
-  chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-  chrome.storage.local.remove([
+async function deleteUserData () {
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'clear_badge' }, resolve))
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.remove([
     'Data', // this is how to delete user data!
     'meine_kurse', // delete opal courses
     'favoriten', // delete opal courses
-    'isEnabled']) // need to deactivate auto login feature
+    'isEnabled'], resolve)) // need to deactivate auto login feature
   // --
   // -- also deactivate owa fetch
   document.getElementById('owa_mail_fetch').checked = false
-  chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
-  chrome.storage.local.set({
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, resolve))
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({
     enabledOWAFetch: false,
     additionalNotificationOnNewMail: false
-  })
+  }, resolve))
   document.getElementById('additionalNotification').checked = false
   // --
   document.getElementById('status_msg').innerHTML = ''
@@ -90,23 +97,22 @@ function deleteUserData () {
   }, 2000)
 }
 
-// Use Promises or async/await here when Manifest V3 is used
-function fwdGoogleSearch () {
-  chrome.storage.local.get(['fwdEnabled'], (result) => {
-    chrome.storage.local.set({ fwdEnabled: !(result.fwdEnabled) }, function () { })
-  })
+async function fwdGoogleSearch () {
+  // Promisified until usage of Manifest V3
+  const result = await new Promise((resolve) => chrome.storage.local.get(['fwdEnabled'], resolve))
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ fwdEnabled: !(result.fwdEnabled) }, resolve))
 }
 
-// Use Promises or async/await here when Manifest V3 is used
-function checkSelectedRocket () {
-  chrome.storage.local.get(['selectedRocketIcon'], (res) => {
-    try {
-      const icon = JSON.parse(res.selectedRocketIcon)
-      document.getElementById(icon.id).checked = true
-    } catch {
-      console.error('Cannot set rocket icon')
-    }
-  })
+async function checkSelectedRocket () {
+  // Promisified until usage of Manifest V3
+  const res = await new Promise((resolve) => chrome.storage.local.get(['selectedRocketIcon'], resolve))
+  try {
+    const icon = JSON.parse(res.selectedRocketIcon)
+    document.getElementById(icon.id).checked = true
+  } catch {
+    console.error('Cannot set rocket icon')
+  }
 }
 
 // set switches and other elements
@@ -172,8 +178,9 @@ function clicksToTimeNoIcon (clicks) {
   return '<strong>' + clicks + ' Klicks </strong> und <strong>' + mins + 'min ' + secs + 's</strong> gespart!'
 }
 
-function openKeyboardSettings () {
-  chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' })
+async function openKeyboardSettings () {
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' }, resolve))
 }
 
 async function toggleOWAfetch () {
@@ -224,7 +231,8 @@ async function enableOWAFetch () {
     // check if user data is saved
     if (userData.asdf && userData.fdsa) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
-      chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, resolve))
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({
         enabledOWAFetch: true,
@@ -233,7 +241,8 @@ async function enableOWAFetch () {
       }, resolve))
       // reload chrome extension is necessary
       alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
-      chrome.runtime.sendMessage({ cmd: 'reload_extension' })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'reload_extension' }, resolve))
     } else {
       document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">Speichere deine Login-Daten im Punkt \'Automatisches Anmelden in Opal, Selma & Co.\' um diese Funktion zu nutzen!</span>'
       document.getElementById('owa_mail_fetch').checked = false
@@ -330,7 +339,7 @@ async function insertAllRocketIcons () {
     document.getElementById('RocketForm').appendChild(p)
   })
 
-  checkSelectedRocket()
+  await checkSelectedRocket()
 
   // attach on click handlers
   document.querySelectorAll('#RocketForm a').forEach((el) => {
@@ -472,12 +481,14 @@ window.onload = async () => {
       // Promisified until usage of Manifest V3
       const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
       if (granted) {
-        chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true })
+        // Promisified until usage of Manifest V3
+        await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true }, resolve))
         if (isFirefox) {
           alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
           // Promisified until usage of Manifest V3
           await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: 'opalCustomize', openSettingsOnReload: true }, resolve))
-          chrome.runtime.sendMessage({ cmd: 'reload_extension' }, function (result) { })
+          // Promisified until usage of Manifest V3
+          await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'reload_extension' }, resolve))
         }
       } else {
         // permission granting failed :( -> revert checkbox settings
@@ -492,7 +503,8 @@ window.onload = async () => {
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({ pdfInNewTab: false }, resolve))
       document.getElementById('switch_pdf_newtab').checked = false
-      chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false })
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false }, resolve))
     }
   })
 
