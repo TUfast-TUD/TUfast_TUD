@@ -3,7 +3,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutCloudstore'], (result) => {
   if (result.isEnabled && !result.loggedOutCloudstore) {
     document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('user') && document.getElementById('password')) {
-        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
+        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+          await result
           if (result.asdf && result.fdsa) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'perform_login' })

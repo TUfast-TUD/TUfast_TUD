@@ -18,7 +18,8 @@ function loginQis (isEnabled) {
     document.getElementsByTagName('a')[4].click()
     chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
   } else if (document.getElementById('asdf') && isEnabled) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
       if (result.asdf && result.fdsa) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })

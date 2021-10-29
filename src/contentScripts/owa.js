@@ -36,7 +36,8 @@ document.addEventListener('DOMNodeInserted', () => {
 
 function loginOWA () {
   if (document.getElementById('username') && document.getElementById('password')) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
       if (result.asdf && result.fdsa) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })

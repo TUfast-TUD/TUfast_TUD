@@ -2,7 +2,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], (result) => {
   if (result.isEnabled && !result.loggedOutSelma) {
     document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('field_user')) {
-        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (response) => {
+        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (response) => {
+          await response
           if (response.asdf && response.fdsa) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })

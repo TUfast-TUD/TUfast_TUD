@@ -2,7 +2,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutGitlab'], (result) => {
   if (result.isEnabled && !result.loggedOutGitlab) {
     document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('username') && document.getElementById('password')) {
-        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
+        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+          await result
           if (result.asdf && result.fdsa) {
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
             chrome.runtime.sendMessage({ cmd: 'perform_login' })

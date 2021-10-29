@@ -13,7 +13,8 @@ chrome.storage.local.get(['isEnabled'], (result) => {
 
 function logInQis () {
   if (document.getElementById('username')) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
       if (result.fdsa && result.asdf) {
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         document.getElementById('username').value = result.asdf

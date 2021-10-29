@@ -3,7 +3,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutTumed'], (result) => {
     document.addEventListener('DOMContentLoaded', () => {
       // that is the old e-portal. Leave it for now
       if (document.querySelectorAll('label[for=__ac_name]')[0] && document.querySelectorAll('label[for=__ac_password]')[0] && document.getElementById('__ac_name') && document.getElementById('__ac_password')) {
-        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
+        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+          await result
           if (result.asdf && result.fdsa) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 2 })
