@@ -7,5 +7,7 @@ module.exports = {
   },
   extends: ['standard'],
   plugins: ['promise'],
-  rules: {}
+  rules: {
+    'prefer-arrow-callback': 'warn'
+  }
 }
