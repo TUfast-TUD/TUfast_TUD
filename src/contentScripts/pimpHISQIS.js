@@ -5,9 +5,15 @@ chrome.storage.local.get(['isEnabled'], (result) => {
     document.addEventListener('DOMContentLoaded', () => {
       const imgUrl = chrome.runtime.getURL('../assets/images/tufast48.png')
       const rawGrades = parseGrades()
-      $("table[summary!='Liste der Stammdaten des Studierenden']").parent().eq(2).children().eq(3).after(
-        '<br><br><canvas id="myChart" style="margin:0 auto;"></canvas><p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ' + getWeightedAverage(rawGrades) + ' </p><p class="Konto" style="margin:0 auto;">Anzahl Module: ' + rawGrades.filter(x => x.isModule).length + '</p><p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ' + rawGrades.filter(x => !x.isModule).length + '</p><p class="normal" style="margin-bottom:0">powered by <img src=' + imgUrl + ' style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a> (entwickelt von <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>, <a href="https://github.com/C0ntroller" target="_blank">Daniel</a>)</p><p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml;r Firefox!</a></p>'
-      )
+      const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')
+      const notenStatistik = `<br><br>
+        <canvas id="myChart" style="margin:0 auto;"></canvas>
+        <p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ${getWeightedAverage(rawGrades)}</p>
+        <p class="Konto" style="margin:0 auto;">Anzahl Module: ${rawGrades.filter(x => x.isModule).length}</p>
+        <p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ${rawGrades.filter(x => !x.isModule).length}</p>
+        <p class="normal" style="margin-bottom:0">powered by <img src="${imgUrl}" style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a> (entwickelt von <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>, <a href="https://github.com/C0ntroller" target="_blank">C0ntroller</a>)</p>
+        <p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml;r Firefox!</a></p>`
+      table.insertAdjacentHTML('afterend', notenStatistik)
       const ctx = document.getElementById('myChart').getContext('2d')
       ctx.canvas.width = 500
       ctx.canvas.height = 250
@@ -60,29 +66,24 @@ chrome.storage.local.get(['isEnabled'], (result) => {
 // only count subjects (not modules!)
 function parseGrades () {
   const grades = []
-  const $ = this.$
 
-  $("table[summary!='Liste der Stammdaten des Studierenden'] > tbody").children().each(function () {
-    // Skip stuff
-    if ($(this).children().attr('class') === 'Konto' ||
-            $(this).children().attr('class') === 'tabelleheader' ||
-            $(this).children().eq(1).text().trim() === 'Zurück' ||
-            $(this).children().eq(1).attr('bgcolor') === '#ADADAD'
-    ) { return true }
+  const tableRows = document.querySelector('form table:not([summary="Liste der Stammdaten des Studierenden"]) > tbody').children
+  for (const row of tableRows) {
+    if (row.children.length < 7) continue
 
-    let grade = $(this).children().eq(3).text().trim()
-    const isModule = $(this).children().eq(1).attr('bgcolor') === '#DDDDDD'
-    const exam = $(this).children().eq(1).text().trim()
-    let weight = isModule ? parseInt($(this).children().eq(7).text().trim()) : 0
-    if (isNaN(weight)) { weight = 0 }
+    const background = row.children[1].getAttribute('bgcolor')
+    if (background === '#ADADAD') continue
+    const grade = Number.parseFloat(row.children[3].innerHTML.trim().replace(',', '.'))
+    if (Number.isNaN(grade)) continue
+    const isModule = background === '#DDDDDD'
+    let weight = isModule ? Number.parseInt(row.children[7].innerHTML.trim()) : 0
+    if (Number.isNaN(weight)) weight = 0
+    const exam = row.children[1].innerHTML.trim()
+    if (exam === '' || exam === 'Gesamtnote Zwischenprüfung') continue
 
-    // Skip more stuff
-    if (exam === '') { return true }
-    if (exam === 'Gesamtnote Zwischenprüfung') { return }
-    if (grade === '') { return } else { grade = parseFloat(grade.replace(',', '.')) }
+    grades.push({ grade, isModule, weight })
+  }
 
-    grades.push({ grade: grade, isModule: isModule, weight: weight })
-  })
   return grades
 }
 
