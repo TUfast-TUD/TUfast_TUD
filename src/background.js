@@ -514,8 +514,7 @@ async function saveClicks (counter) {
 // create hash from input-string (can also be json of course)
 // output hash is always of same length and is of type buffer
 async function hashDigest (string) {
-  const hashBuffer = await crypto.subtle.digest('SHA-256', (new TextEncoder()).encode(string))
-  return hashBuffer
+  return await crypto.subtle.digest('SHA-256', (new TextEncoder()).encode(string))
 }
 
 // get key for encryption (format: buffer)
@@ -547,11 +546,10 @@ async function getKeyBuffer () {
   })
 
   // create key
-  const keyBuffer = await crypto.subtle.importKey('raw', await hashDigest(sysInfo),
+  return await crypto.subtle.importKey('raw', await hashDigest(sysInfo),
     { name: 'AES-CBC' },
     false,
     ['encrypt', 'decrypt'])
-  return keyBuffer
 }
 
 // this functions saved user login-data locally.
