@@ -130,7 +130,6 @@
     },
     {
       "js": [
-        "thirdParty/jquery-3.4.1.min.js",
         "thirdParty/Chart.bundle.min.js",
         "contentScripts/pimpHISQIS.js"
       ],
@@ -338,7 +337,6 @@
     },
     {
       "js": [
-        "thirdParty/jquery-3.4.1.min.js",
         "contentScripts/parseOpal.js"
       ],
       "css": [
