@@ -1,6 +1,6 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutMagma'], function (result) {
+chrome.storage.local.get(['isEnabled', 'loggedOutMagma'], (result) => {
   if (result.isEnabled && !result.loggedOutMagma) {
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementsByName('loginButton')[0] && document.getElementsByName('wayfSelect')[0]) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
@@ -12,13 +12,13 @@ chrome.storage.local.get(['isEnabled', 'loggedOutMagma'], function (result) {
       }
       // logout
       if (document.querySelectorAll('#page > header > div:nth-child(2) > div > a')[0]) {
-        document.querySelectorAll('#page > header > div:nth-child(2) > div > a')[0].addEventListener('click', function () {
+        document.querySelectorAll('#page > header > div:nth-child(2) > div > a')[0].addEventListener('click', () => {
           chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutMagma' })
         })
       }
     })
     console.log('Auto Login to magma.')
   } else if (result.loggedOutMagma) {
-    chrome.storage.local.set({ loggedOutMagma: false }, function () { })
+    chrome.storage.local.set({ loggedOutMagma: false })
   }
 })

@@ -1,9 +1,9 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], function (result) {
+chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], (result) => {
   if (result.isEnabled && !result.loggedOutSelma) {
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('field_user')) {
-        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (response) {
-          if (!(response.asdf === undefined || response.fdsa === undefined)) {
+        chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (response) => {
+          if (response.asdf && response.fdsa) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
             chrome.runtime.sendMessage({ cmd: 'perform_login' })
@@ -17,7 +17,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], function (result) {
       }
       // abmelden button
       if (document.getElementById('logOut_btn')) {
-        document.getElementById('logOut_btn').addEventListener('click', function () {
+        document.getElementById('logOut_btn').addEventListener('click', () => {
           chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutSelma' })
         })
       }
@@ -25,8 +25,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], function (result) {
     console.log('Auto Login to Selma.')
     // page is reloaded two times
   } else if (result.loggedOutSelma) {
-    chrome.storage.local.set({ loggedOutSelma: undefined }, function () { })
+    chrome.storage.local.set({ loggedOutSelma: undefined })
   } else if (result.loggedOutSelma === undefined) {
-    chrome.storage.local.set({ loggedOutSelma: false }, function () { })
+    chrome.storage.local.set({ loggedOutSelma: false })
   }
 })

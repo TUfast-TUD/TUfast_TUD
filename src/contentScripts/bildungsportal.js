@@ -1,16 +1,13 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function (result) {
-  if (/* result.isEnabled && */ !(result.loggedOutOpal)) {
+chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], (result) => {
+  if (result.isEnabled && !(result.loggedOutOpal)) {
     // when pop-up shows
-    document.addEventListener('DOMNodeInserted', function (e) {
+    document.addEventListener('DOMNodeInserted', () => {
       // select TU Dresden from selector
-      if (document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0]) {
+      if (document.getElementsByName('content:container:login:shibAuthForm:wayfselection') && document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0]) {
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         const selectionList = document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0]
-        for (const el of selectionList) {
-          if (el.textContent === 'TU Dresden' || el.textContent === 'Technsiche Universität Dresden') {
-            document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0].value = el.value
-          }
-        }
+        const element = selectionList.find((el) => el.textContent === 'TU Dresden' || el.textContent === 'Technsiche Universität Dresden')
+        document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0].value = element.value
       }
       // submit selected
       if (document.getElementsByName('content:container:login:shibAuthForm:shibLogin')[0]) {
@@ -21,7 +18,7 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function (result) {
     }, false)
 
     // start login process
-    window.addEventListener('load', function () {
+    window.addEventListener('load', () => {
       if (document.getElementsByClassName('btn btn-sm')[1].innerText.includes('Login')) {
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 4000 })
@@ -30,6 +27,6 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], function (result) {
     }, true)
     console.log('Auto Login to Opal.')
   } else if (result.loggedOutOpal) {
-    chrome.storage.local.set({ loggedOutOpal: false }, function () { })
+    chrome.storage.local.set({ loggedOutOpal: false })
   }
 })

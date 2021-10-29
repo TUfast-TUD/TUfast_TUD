@@ -1,12 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelectorAll('.btn.btn-sm[title="Abmelden"]')[0]) {
-    document.querySelectorAll('.btn.btn-sm[title="Abmelden"]')[0].addEventListener('click', function () {
+    document.querySelectorAll('.btn.btn-sm[title="Abmelden"]')[0].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOpal' })
     })
   }
 })
 
-chrome.storage.local.get(['isEnabled', 'availableRockets', 'removedUnlockRocketsBanner', 'showedOpalCustomizeBanner', 'unlockRocketsFirstPrompt', 'saved_click_counter', 'showedUnreadMailCounterBanner', 'showedFirefoxBanner', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner', 'showedKeyboardBanner2', 'nameIsTUfast'], function (result) {
+chrome.storage.local.get(['isEnabled', 'availableRockets', 'removedUnlockRocketsBanner', 'showedOpalCustomizeBanner', 'unlockRocketsFirstPrompt', 'saved_click_counter', 'showedUnreadMailCounterBanner', 'showedFirefoxBanner', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner', 'showedKeyboardBanner2', 'nameIsTUfast'], (result) => {
   // decide whether to show review banner
   const showReviewBanner = false
   let showKeyboardUpdate = false
@@ -57,9 +57,9 @@ chrome.storage.local.get(['isEnabled', 'availableRockets', 'removedUnlockRockets
     */
 
   // reset unlock rockets banner
-  if (mod100Clicks > 7) { chrome.storage.local.set({ removedUnlockRocketsBanner: false }, function () { }) }
+  if (mod100Clicks > 7) { chrome.storage.local.set({ removedUnlockRocketsBanner: false }) }
 
-  window.addEventListener('load', async function (e) {
+  window.addEventListener('load', async function () {
     if (showReviewBanner) { showLeaveReviewBanner() }
     if (showKeyboardUpdate) { showKeyboardShortcutUpdate() }
     // if (showImplementationForFirefox) { showImplementationForFirefoxBanner() }
@@ -89,9 +89,9 @@ chrome.storage.local.get(['isEnabled', 'availableRockets', 'removedUnlockRockets
     if (this.document.getElementById('removeNameBanner')) {
       this.document.getElementById('removeNameBanner').onclick = removeNameBanner
     }
-    if (this.document.getElementById('RemoveShowImplementationForFirefoxBanner')) {
-      this.document.getElementById('RemoveShowImplementationForFirefoxBanner').onclick = RemoveShowImplementationForFirefoxBanner
-      this.document.getElementById('LinkShowImplementationForFirefoxBanner').onclick = RemoveShowImplementationForFirefoxBanner
+    if (this.document.getElementById('removeShowImplementationForFirefoxBanner')) {
+      this.document.getElementById('removeShowImplementationForFirefoxBanner').onclick = removeShowImplementationForFirefoxBanner
+      this.document.getElementById('LinkShowImplementationForFirefoxBanner').onclick = removeShowImplementationForFirefoxBanner
     }
     if (this.document.getElementById('showUnreadMailCounterBanner')) {
       this.document.getElementById('OpenUnreadMailCounterSettings').onclick = openSettingsUnreadMail
@@ -111,7 +111,7 @@ chrome.storage.local.get(['isEnabled', 'availableRockets', 'removedUnlockRockets
 function RemoveMoreRocketIcons () {
   if (document.getElementById('unlockRocketsPrompt')) {
     document.getElementById('unlockRocketsPrompt').remove()
-    chrome.storage.local.set({ removedUnlockRocketsBanner: true }, function () { })
+    chrome.storage.local.set({ removedUnlockRocketsBanner: true })
   }
 }
 
@@ -127,28 +127,28 @@ function showUnlockRocketsBanner () {
 function RemoveShowUnreadMailCounterBanner () {
   if (document.getElementById('showUnreadMailCounterBanner')) {
     document.getElementById('showUnreadMailCounterBanner').remove()
-    chrome.storage.local.set({ showedUnreadMailCounterBanner: true }, function () { })
+    chrome.storage.local.set({ showedUnreadMailCounterBanner: true })
   }
 }
 
 function openSettingsUnreadMail () {
-  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'mailFetchSettings' }, function (result) { })
+  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'mailFetchSettings' })
   if (document.getElementById('showUnreadMailCounterBanner')) {
     document.getElementById('showUnreadMailCounterBanner').remove()
-    chrome.storage.local.set({ showedUnreadMailCounterBanner: true }, function () { })
+    chrome.storage.local.set({ showedUnreadMailCounterBanner: true })
   }
 }
 
 function removeReviewBanner () {
   if (document.getElementById('reviewBanner')) {
     document.getElementById('reviewBanner').remove()
-    chrome.storage.local.set({ removedReviewBanner: true }, function () { })
-    chrome.storage.local.set({ neverShowedReviewBanner: false }, function () { })
+    chrome.storage.local.set({ removedReviewBanner: true })
+    chrome.storage.local.set({ neverShowedReviewBanner: false })
   }
 }
 
-function RemoveShowImplementationForFirefoxBanner () {
-  chrome.storage.local.set({ showedFirefoxBanner: true }, function () { })
+function removeShowImplementationForFirefoxBanner () {
+  chrome.storage.local.set({ showedFirefoxBanner: true })
   if (document.getElementById('showImplementationForFirefoxBanner')) {
     document.getElementById('showImplementationForFirefoxBanner').remove()
   }
@@ -156,57 +156,57 @@ function RemoveShowImplementationForFirefoxBanner () {
 
 function openKeyboardShortcutSettings () {
   if (document.getElementById('keyboardBanner')) {
-    chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' }, function (result) { })
+    chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' })
   }
 }
 
 function removeFirstRocketBanner () {
   if (document.getElementById('unlockRocketsFirstPrompt')) {
     document.getElementById('unlockRocketsFirstPrompt').remove()
-    chrome.storage.local.set({ unlockRocketsFirstPrompt: true }, function () { })
+    chrome.storage.local.set({ unlockRocketsFirstPrompt: true })
   }
 }
 
 function openMoreRocketIconsSettingsFirstPrompt () {
   if (document.getElementById('unlockRocketsFirstPrompt')) {
-    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
     document.getElementById('unlockRocketsFirstPrompt').remove()
-    chrome.storage.local.set({ unlockRocketsFirstPrompt: true }, function () { })
+    chrome.storage.local.set({ unlockRocketsFirstPrompt: true })
   }
 }
 
 function openMoreRocketIconsSettings () {
   if (document.getElementById('unlockRocketsPrompt')) {
-    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
     document.getElementById('unlockRocketsPrompt').remove()
-    chrome.storage.local.set({ removedUnlockRocketsBanner: true }, function () { })
+    chrome.storage.local.set({ removedUnlockRocketsBanner: true })
   }
 }
 
 function openOpalCustomizeSettings () {
-  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opalCustomize' }, function (result) { })
+  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opalCustomize' })
   if (document.getElementById('showOpalCustomizeBanner')) {
     document.getElementById('showOpalCustomizeBanner').remove()
-    chrome.storage.local.set({ showedOpalCustomizeBanner: true }, function () { })
+    chrome.storage.local.set({ showedOpalCustomizeBanner: true })
   }
 }
 
 function removeKeyboardShortcutSettings () {
-  chrome.storage.local.set({ showedKeyboardBanner2: true }, function () { })
+  chrome.storage.local.set({ showedKeyboardBanner2: true })
   if (document.getElementById('keyboardBanner')) {
     document.getElementById('keyboardBanner').remove()
   }
 }
 
 function removeOpenOpalCustomizeSettings () {
-  chrome.storage.local.set({ showedOpalCustomizeBanner: true }, function () { })
+  chrome.storage.local.set({ showedOpalCustomizeBanner: true })
   if (document.getElementById('showOpalCustomizeBanner')) {
     document.getElementById('showOpalCustomizeBanner').remove()
   }
 }
 
 function removeNameBanner () {
-  chrome.storage.local.set({ nameIsTUfast: true }, function () { })
+  chrome.storage.local.set({ nameIsTUfast: true })
   if (document.getElementById('nameBanner')) {
     document.getElementById('nameBanner').remove()
   }
@@ -215,8 +215,8 @@ function removeNameBanner () {
 function clickedWebstoreLink () {
   if (document.getElementById('reviewBanner')) {
     document.getElementById('reviewBanner').remove()
-    chrome.storage.local.set({ mostLiklySubmittedReview: true }, function () { })
-    chrome.storage.local.set({ neverShowedReviewBanner: false }, function () { })
+    chrome.storage.local.set({ mostLiklySubmittedReview: true })
+    chrome.storage.local.set({ neverShowedReviewBanner: false })
   }
 }
 
@@ -243,7 +243,7 @@ function showUnlockRocketsFirstBanner () {
 //   const banner = this.document.createElement('div')
 //   banner.id = 'showImplementationForFirefoxBanner'
 //   banner.style = 'font-size:22px; height:55px; line-height:55px;text-align:center'
-//   banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="RemoveShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen</a>'
+//   banner.innerHTML = '<img src=' + imgUrl + ' style="position:relative; right: 15px;height: 35px;">Supergeil und Brandneu: <b>TUfast für <a href="https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search" id="LinkShowImplementationForFirefoxBanner" target="_blank">Firefox</a>! 🔥🔥🔥<a id="removeShowImplementationForFirefoxBanner" href="javascript:void(0)" style="position:absolute; right:10px; font-size:30; color: #888">Schließen</a>'
 //   this.document.body.insertBefore(banner, document.body.childNodes[0])
 // }
 
@@ -269,7 +269,7 @@ function showLeaveReviewBanner () {
   // webstore link depends on browser!
   const isChrome = navigator.userAgent.includes('Chrome/') // attention: no failsave browser detection | also for new edge!
   const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
-  let webstoreLink = ''
+  let webstoreLink
   if (isChrome) { webstoreLink = 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de' } else if (isFirefox) { webstoreLink = 'https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search' } else { webstoreLink = 'https://www.tu-fast.de' }
 
   const imgUrl = chrome.runtime.getURL('../assets/images/tufast48.png')

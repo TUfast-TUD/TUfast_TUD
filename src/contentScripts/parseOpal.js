@@ -1,11 +1,10 @@
-chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'removedOpalBanner', 'saved_click_counter', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner'], function (result) {
+chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'removedOpalBanner', 'saved_click_counter', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner'], (result) => {
   // decide whether to show dashbaord banner
-  let showDashboardBanner = false
-  if (result.seenInOpalAfterDashbaordUpdate < 5 && !result.removedOpalBanner) { showDashboardBanner = true }
-  chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1 }, function () { })
+  const showDashboardBanner = result.seenInOpalAfterDashbaordUpdate < 5 && !result.removedOpalBanner
+  chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1 })
 
   // wait until full page is loaded
-  window.addEventListener('load', async function (e) {
+  window.addEventListener('load', async () => {
     let oldLocationHref = location.href
     let parsedCourses = false
 
@@ -31,7 +30,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
 
     // use mutation observer to detect page changes
     const config = { attributes: true, childList: true, subtree: true }
-    const callback = function (mutationsList, observer) {
+    const callback = function (_mutationsList, _observer) {
       // detect new page
       if (location.href !== oldLocationHref) {
         oldLocationHref = location.href
@@ -65,7 +64,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
 function closeOpalBanner () {
   if (document.getElementById('opalBanner')) {
     document.getElementById('opalBanner').remove()
-    chrome.storage.local.set({ removedOpalBanner: true }, function () { })
+    chrome.storage.local.set({ removedOpalBanner: true }, () => { })
   }
 }
 
@@ -88,7 +87,7 @@ function showDashboardBannerFunc () {
   button.innerHTML = '&#215;'
   button.addEventListener('click', () => {
     banner.remove()
-    chrome.storage.local.set({ removedOpalBanner: true }, () => {})
+    chrome.storage.local.set({ removedOpalBanner: true })
   })
 
   banner.appendChild(img)

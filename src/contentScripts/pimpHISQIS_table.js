@@ -38,18 +38,18 @@ getGradesFromTable()
 const pimpedTable = document.getElementById('pimpedTable')
 
 // check if hisqisPimpedTable is activated
-chrome.storage.local.get(['hisqisPimpedTable'], function (result) {
+chrome.storage.local.get(['hisqisPimpedTable'], (result) => {
   result.hisqisPimpedTable ? setPimpedTable() : setOldTable()
 })
 
 // listen for event for switching table
-changeTableLink.onclick = function () {
+changeTableLink.onclick = () => {
   const pimpedTableActivated = pimpedTable.style.display !== 'none'
 
   // switch table
   pimpedTableActivated ? setOldTable() : setPimpedTable()
   // store permanently
-  chrome.storage.local.set({ hisqisPimpedTable: !pimpedTableActivated }, function () { })
+  chrome.storage.local.set({ hisqisPimpedTable: !pimpedTableActivated })
 }
 
 function setPimpedTable () {
@@ -136,6 +136,3 @@ function runVue (table, levels) {
     }
   })
 }
-
-// eslint-disable-next-line no-unused-expressions
-undefined
