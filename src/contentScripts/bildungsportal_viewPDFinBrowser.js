@@ -19,7 +19,7 @@ chrome.storage.local.get(['pdfInNewTab'], (result) => {
 function modifyPdfLinks () {
   // Modify js so that link is opened in new tab
   const links = document.getElementsByTagName('a')
-  links.forEach((link) => {
+  for (const link of links) {
     if (link.href.includes('.pdf')) {
       link.onclick = function (event) {
         event.stopImmediatePropagation() // prevents OPAL to load in the same tab
@@ -27,7 +27,7 @@ function modifyPdfLinks () {
         return false
       }
     }
-  })
+  }
 }
 
 function pdfButtonExternalReload () {
