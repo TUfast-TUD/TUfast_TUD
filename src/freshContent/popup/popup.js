@@ -264,8 +264,7 @@ async function changeStudiengangSelection () {
   const studiengang = this.getAttribute('studiengang')
 
   if (studiengang === 'addStudiengang') {
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'add_studiengang' }, resolve))
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'add_studiengang' })
     return
   }
 
@@ -366,8 +365,7 @@ function clicksToTime (clicks) {
 }
 
 async function openSettings () {
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_settings_page', param: '' }, resolve)) // for some reason I need to pass empty param - else it wont work in ff
+  chrome.runtime.sendMessage({ cmd: 'open_settings_page', param: '' }) // for some reason I need to pass empty param - else it wont work in ff
   const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
   if (isFirefox) window.close()
   return false // Required for ff
@@ -377,8 +375,7 @@ async function openShare () {
   document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
   await new Promise(resolve => setTimeout(resolve, 500))
   document.getElementById('rewards_link').addEventListener('click', async (e) => { // click handler needs to be set this way
-    // Promisified until usage of Manifest V3
-    await new Promise(resolve => chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, resolve)) // for some reason I need to pass empty param - else it wont work in ff
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }) // for some reason I need to pass empty param - else it wont work in ff
     const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
     if (isFirefox) window.close()
     return false // Required for ff
@@ -386,8 +383,7 @@ async function openShare () {
 }
 
 async function openSettingsTimeSection () {
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'time_settings' }, resolve))
+  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'time_settings' })
   const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
   if (isFirefox) window.close()
   return false // Required for ff
@@ -599,8 +595,7 @@ async function switchCoursesToShow () {
 }
 
 async function saveTwoClicks () {
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 2 }, resolve))
+  chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 2 })
 }
 
 // changeIsEnabledState
@@ -615,8 +610,7 @@ async function saveEnabled () {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: !(isEnabled.isEnabled) }, resolve))
   } else {
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'auto_login_settings' }, resolve))
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'auto_login_settings' })
     window.close()
   }
 }

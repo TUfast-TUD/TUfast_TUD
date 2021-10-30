@@ -53,8 +53,7 @@ let typeOfMsg = '' // type of message which is displayed
 async function updateRocketLogo (iconPath) {
   const timestamp = new Date().getTime()
   document.querySelectorAll('#TUFastLogo img')[0].src = chrome.runtime.getURL('' + iconPath) + '?t =' + timestamp
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'update_rocket_logo_easteregg' }, resolve))
+  chrome.runtime.sendMessage({ cmd: 'update_rocket_logo_easteregg' })
 }
 
 // function setProBadge() {
@@ -160,8 +159,7 @@ async function logoOnClickEasteregg () {
 async function logoOnClick () {
   // console.log('here')
   if (timeUp) {
-  // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, resolve))
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
   }
 }
 

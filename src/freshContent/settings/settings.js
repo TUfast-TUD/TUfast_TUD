@@ -43,10 +43,8 @@ async function saveUserData () {
   } else {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'clear_badge' }, resolve))
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } }, resolve))
+    chrome.runtime.sendMessage({ cmd: 'clear_badge' })
+    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } })
     document.getElementById('status_msg').innerHTML = ''
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
@@ -61,8 +59,7 @@ async function saveUserData () {
 }
 
 async function deleteUserData () {
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'clear_badge' }, resolve))
+  chrome.runtime.sendMessage({ cmd: 'clear_badge' })
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.remove([
     'Data', // this is how to delete user data!
@@ -72,8 +69,7 @@ async function deleteUserData () {
   // --
   // -- also deactivate owa fetch
   document.getElementById('owa_mail_fetch').checked = false
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, resolve))
+  chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.set({
     enabledOWAFetch: false,
@@ -178,8 +174,7 @@ function clicksToTimeNoIcon (clicks) {
 }
 
 async function openKeyboardSettings () {
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' }, resolve))
+  chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' })
 }
 
 async function toggleOWAfetch () {
@@ -213,8 +208,7 @@ async function enableOWAFetch () {
   const result = await new Promise((resolve) => chrome.storage.local.get(['enabledOWAFetch'], resolve))
   if (result.enabledOWAFetch) {
     // disable
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' }, resolve))
+    chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({
       enabledOWAFetch: false,
@@ -226,12 +220,10 @@ async function enableOWAFetch () {
     // Promisified until usage of Manifest V3
     const resp = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
     const userData = await resp
-    console.log(userData)
     // check if user data is saved
     if (userData.asdf && userData.fdsa) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' }, resolve))
+      chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' })
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({
         enabledOWAFetch: true,
@@ -240,8 +232,7 @@ async function enableOWAFetch () {
       }, resolve))
       // reload chrome extension is necessary
       alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'reload_extension' }, resolve))
+      chrome.runtime.sendMessage({ cmd: 'reload_extension' })
     } else {
       document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">Speichere deine Login-Daten im Punkt \'Automatisches Anmelden in Opal, Selma & Co.\' um diese Funktion zu nutzen!</span>'
       document.getElementById('owa_mail_fetch').checked = false
@@ -480,14 +471,12 @@ window.onload = async () => {
       // Promisified until usage of Manifest V3
       const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
       if (granted) {
-        // Promisified until usage of Manifest V3
-        await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true }, resolve))
+        chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true })
         if (isFirefox) {
           alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
           // Promisified until usage of Manifest V3
           await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: 'opalCustomize', openSettingsOnReload: true }, resolve))
-          // Promisified until usage of Manifest V3
-          await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'reload_extension' }, resolve))
+          chrome.runtime.sendMessage({ cmd: 'reload_extension' })
         }
       } else {
         // permission granting failed :( -> revert checkbox settings
@@ -502,8 +491,7 @@ window.onload = async () => {
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({ pdfInNewTab: false }, resolve))
       document.getElementById('switch_pdf_newtab').checked = false
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false }, resolve))
+      chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false })
     }
   })
 
