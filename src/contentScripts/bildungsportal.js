@@ -6,7 +6,8 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOpal'], (result) => {
       if (document.getElementsByName('content:container:login:shibAuthForm:wayfselection') && document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0]) {
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         const selectionList = document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0]
-        const element = selectionList.find((el) => el.textContent === 'TU Dresden' || el.textContent === 'Technsiche Universität Dresden')
+        // The following spread operator is needed because HTMLCollection has no "find"
+        const element = [...selectionList].find((el) => el.textContent === 'TU Dresden' || el.textContent === 'Technsiche Universität Dresden')
         document.getElementsByName('content:container:login:shibAuthForm:wayfselection')[0].value = element.value
       }
       // submit selected
