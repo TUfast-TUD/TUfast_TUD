@@ -28,7 +28,7 @@ async function applyTheme (theme) {
 
 async function nextTheme () {
   const themeOrder = Object.keys(availableThemes)
-  const currentTheme = document.documentElement.getAttribute('data-theme')
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'system'
   const idx = (themeOrder.indexOf(currentTheme) + 1) % themeOrder.length
 
   await applyTheme(themeOrder[idx])
