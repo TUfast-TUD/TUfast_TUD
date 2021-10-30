@@ -6,27 +6,34 @@ Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-T
 ## Kommunikation
 **Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Raum](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden. Ansonsten auch gerne Issues nutzen.
 
+## Getting started
+#### Developing browser extensions
+If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/mv2/getstarted/) by google (note that we are using manifest-version v2!). You should read most chapters in this tutorial. Espacially make sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging. If you go through this tutorial, you should understand how TUfast works.
 
-## How to contribute code
+#### Working with this repo
+Everything related to the browser extension can be found in `/src`. There you will find the `manifest.json` and background-script (`background.js`) directly. Content scripts are in `/src/contentScripts`. in `/src/freshContent` you can find newly created webcontent that is used in TUfast, e.g. the popup or settings-page.
+
+#### Used frameworks
+- CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
+- ESlint: We are following standard styling with minor additions. Run `npm run lint` to check your code style before committing code.
+
+## How to contribute code (as a non-TUfastTeamMember)
 We are using gitflow-workflow (simple [Tutorial](
 https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
 
-Steps to contribute a feature:
+Steps to contribute a feature (as a non-TUfast-member):
 1. Create a fork from this repo.
-2. Create a local clone of your fork `git clone ...`
+2. Create a local clone of your fork `git clone <url-of-your-repo>`
 3. Checkout develop branch `git checkout develop`
 4. Create new feature branch `git checkout -b my_new_feature_branch`
-5. Install dependencies `npm install`
-6. --> Implement your Code <-- and run `npm run dev`. This is required and will translate sass into css. See below for details.
+5. Install dependencies `npm install` (you need node package manager = npm installed)
+6. --> Implement your Code <-- and run `npm run dev` for developing. This is required and will translate sass into css. See below for details.
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on develop branch
 
-## Guidelines, Frameworks, Hints
-- CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
-- ESlint: We are following standard styling with minor additions. Run `npm run lint` to check your code style before committing code.
-- We decided against using prettier and didn't set a max-line-length in order to keep some large files compact
-
 **One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/)
+
+**Note:** as a member of the TUfast-Team you can work in this repo directly, e.g. you can create branches and push to them, making the contribution process easier.
 
 **Upstream repo** is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.
 
