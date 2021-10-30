@@ -7,11 +7,11 @@ Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-T
 **Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Raum](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden. Ansonsten auch gerne Issues nutzen.
 
 
-## How to contribute code
+## How to contribute code (as a non-TUfast-member)
 We are using gitflow-workflow (simple [Tutorial](
 https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
 
-Steps to contribute a feature:
+Steps to contribute a feature (as a non-TUfast-member):
 1. Create a fork from this repo.
 2. Create a local clone of your fork `git clone <url-of-your-repo>`
 3. Checkout develop branch `git checkout develop`
@@ -20,6 +20,8 @@ Steps to contribute a feature:
 6. --> Implement your Code <-- and run `npm run dev` for developing. This is required and will translate sass into css. See below for details.
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on develop branch
+
+Note: as a member of the TUfast-Team you can work in this repo directly, e.g. you can create branches, making the contribution process easier.
 
 ## Guidelines, Frameworks, Hints
 - CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
