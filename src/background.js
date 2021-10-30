@@ -315,7 +315,7 @@ async function readMailOWA (NrUnreadMails) {
 
 async function setBadgeUnreadMails (numberUnreadMails) {
   // set badge
-  if (numberUnreadMails === 0) {
+  if (!numberUnreadMails) {
     await showBadge('', '#4cb749')
   } else if (numberUnreadMails > 99) {
     await showBadge('99+', '#4cb749')
