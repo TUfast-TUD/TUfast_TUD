@@ -3,8 +3,7 @@ Trage zu TUfast bei und verbessere den Alltag der Studierenden und Mitarbeiter d
 
 Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1). Dort findest du ToDos - erhalten durch eigene Ziele und Nutzerfeedback. Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen!
 
-## Kommunikation
-**Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Raum](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden. Ansonsten auch gerne Issues nutzen.
+**Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Space](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden. Ansonsten auch gerne Issues nutzen.
 
 ## Getting started
 #### Developing browser extensions
@@ -16,6 +15,9 @@ Everything related to the browser extension can be found in `/src`. There you wi
 #### Used frameworks
 - CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
 - ESlint: We are following standard styling with minor additions. Run `npm run lint` to check your code style before committing code.
+
+#### Known peculiarities with browser extensions
+**Error:** `Unchecked runtime.lastError: The message port closed before a response was received.` Promisifying chrome.runtime.sendMessage({...}) doesnt work, because when you define a callback (Promise.resolve) sendMessage will wait until sendResponse is called in the message handler. It just stalls execution and then dies if it's never called. **Solutions:** 1) Unpromisify sendMessage. 2) Always return a value (return true is fine).
 
 ## How to contribute code (as a non-TUfastTeamMember)
 We are using gitflow-workflow (simple [Tutorial](
@@ -31,10 +33,9 @@ Steps to contribute a feature (as a non-TUfast-member):
 7. **run tests locally** before contributing code: `npm run test`
 8. Create a PR on develop branch
 
-**One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/)
+**One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/). (Upstream repo is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.)
 
 **Note:** as a member of the TUfast-Team you can work in this repo directly, e.g. you can create branches and push to them, making the contribution process easier.
 
-**Upstream repo** is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.
 
 #### Have fun developing! 🔥
