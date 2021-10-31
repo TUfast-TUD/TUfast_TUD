@@ -7,8 +7,8 @@ const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no fail
 // start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'NumberOfUnreadMails'], async (resp) => {
   if (await userDataExists() && resp.enabledOWAFetch) {
-    await enableOWAFetch() // start owa fetch
     await setBadgeUnreadMails(resp.NumberOfUnreadMails) // read number of unread mails from storage and display badge
+    await enableOWAFetch() // start owa fetch
     console.log('Activated OWA fetch.')
   } else console.log('No OWAfetch registered')
 })
@@ -315,8 +315,6 @@ async function readMailOWA (NrUnreadMails) {
 
 async function setBadgeUnreadMails (numberUnreadMails) {
   // set badge
-  // sometimes there is an error where its not defined
-  if (numberUnreadMails === undefined) return
   if (!numberUnreadMails) {
     await showBadge('', '#4cb749')
   } else if (numberUnreadMails > 99) {
