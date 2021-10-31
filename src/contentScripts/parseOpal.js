@@ -42,7 +42,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
           parsedCourses = true
         }
         // not all courses loaded already --> load all courses
-        if (document.getElementsByClassName('pager-showall')[0].innerText === 'alle anzeigen') {
+        if (document.getElementsByClassName('pager-showall')[0]?.innerText === 'alle anzeigen') {
           document.getElementsByClassName('pager-showall')[0].click()
           chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
           parsedCourses = false
@@ -104,7 +104,7 @@ function parseCoursesFromWebPage () {
   // there are two options, how the coursse-overview table can be build.
   // They are simply tried out
   try {
-    const tableEntries = document.getElementsByClassName('table-panel')[0].getElementsByTagName('tbody')[0].children
+    const tableEntries = document.querySelector('.table-panel tbody')?.children
     for (const item of tableEntries) {
       const name = item.children[2].children[0].getAttribute('title')
       const link = item.children[2].children[0].getAttribute('href')
@@ -118,7 +118,7 @@ function parseCoursesFromWebPage () {
       throw new Error('most likely parsing error') // throw error
     }
   } catch {
-    const tableEntries = document.getElementsByClassName('table-panel')[0].getElementsByClassName('content-preview-container')[0].getElementsByClassName('list-unstyled')[0].getElementsByClassName('content-preview content-preview-horizontal')
+    const tableEntries = document.querySelectorAll('.table-panel .content-preview-container .list-unstyled .content-preview.content-preview-horizontal')
     for (const item of tableEntries) {
       try {
         const name = item.getElementsByClassName('content-preview-title')[0].innerHTML
