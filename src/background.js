@@ -356,9 +356,6 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'logged_out':
       loggedOut(request.portal)
       break
-    case 'enable_owa_fetch':
-      enableOWAFetch()
-      break
     case 'disable_owa_fetch':
       disableOwaFetch()
       break

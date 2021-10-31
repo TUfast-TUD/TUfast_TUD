@@ -223,7 +223,6 @@ async function enableOWAFetch () {
     // check if user data is saved
     if (userData.asdf && userData.fdsa) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
-      chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' })
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({
         enabledOWAFetch: true,
