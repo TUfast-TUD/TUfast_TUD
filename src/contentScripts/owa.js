@@ -80,6 +80,7 @@ function readMailObserver () {
   const config = { attributes: true, childList: true, subtree: true, characterData: true }
   let nrUnreadMails
   const callback = (_mutationsList, _observer) => {
+    const chrome = this.chrome
     // check again, if enabled
     chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
       if (resp.enabledOWAFetch) {

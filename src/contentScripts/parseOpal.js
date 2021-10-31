@@ -30,7 +30,8 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
 
     // use mutation observer to detect page changes
     const config = { attributes: true, childList: true, subtree: true }
-    const callback = function (_mutationsList, _observer) {
+    const callback = (_mutationsList, _observer) => {
+      const chrome = this.chrome
       // detect new page
       if (location.href !== oldLocationHref) {
         oldLocationHref = location.href
