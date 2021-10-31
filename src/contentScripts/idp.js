@@ -1,29 +1,29 @@
 console.log('injected login script successfully ...')
-chrome.storage.local.get(['isEnabled'], function (result) {
+chrome.storage.local.get(['isEnabled'], (result) => {
+  if (!result.isEnabled) return
   if (document.readyState !== 'loading') {
     logInQis(result.isEnabled)
   } else {
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', () => {
       logInQis(result.isEnabled)
     })
     console.log('Auto Login to TU Dresden Auth.')
   }
 })
 
-function logInQis (enabled) {
+function logInQis () {
   if (document.getElementById('username')) {
-    if (enabled) { // yes, this if-statements need to be nested!
-      chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
-        if (!(result.fdsa === undefined || result.asdf === undefined)) {
-          chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
-          document.getElementById('username').value = (result.asdf)
-          document.getElementById('password').value = (result.fdsa)
-          document.getElementsByName('_eventId_proceed')[0].click()
-        } else {
-          chrome.runtime.sendMessage({ cmd: 'no_login_data' })
-        }
-      })
-    }
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
+      if (result.fdsa && result.asdf) {
+        chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
+        document.getElementById('username').value = result.asdf
+        document.getElementById('password').value = result.fdsa
+        document.getElementsByName('_eventId_proceed')[0].click()
+      } else {
+        chrome.runtime.sendMessage({ cmd: 'no_login_data' })
+      }
+    })
   } else if (document.getElementsByName('_eventId_proceed')[0]) {
     document.getElementsByName('_eventId_proceed')[0].click()
     chrome.runtime.sendMessage({ cmd: 'perform_login' })

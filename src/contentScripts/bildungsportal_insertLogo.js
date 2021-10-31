@@ -1,7 +1,8 @@
 /*
    { selectedRocketIcon: '{"id": "RI_default", "link": "RocketIcons/default_128px"}' }
 */
-chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', 'selectedRocketIcon', 'foundEasteregg'], function (result) {
+// No async await on top level
+chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', 'selectedRocketIcon', 'foundEasteregg'], (result) => {
   if (result.isEnabled || result.fwdEnabled) {
     // parse selectedRocketIcon
     const selectedRocketIcon = JSON.parse(result.selectedRocketIcon)
@@ -14,26 +15,26 @@ chrome.storage.local.get(['isEnabled', 'fwdEnabled', 'PRObadge', 'flakeState', '
     if (month === 12 && day > 15 && day < 27) christmasTime = true
 
     // switch flakeState to false in november
-    if (month === 11) chrome.storage.local.set({ flakeState: false }, function () { })
+    if (month === 11) chrome.storage.local.set({ flakeState: false })
 
     if (christmasTime) {
       // on load
-      document.addEventListener('DOMNodeInserted', function (e) {
+      document.addEventListener('DOMNodeInserted', () => {
         if (!document.getElementById('flake')) insertFlakeSwitch(result.flakeState)
       })
       // on document changes
-      window.addEventListener('load', function () {
+      window.addEventListener('load', () => {
         if (!document.getElementById('flake')) insertFlakeSwitch(result.flakeState)
         if (!document.getElementById('snowflakes') && result.flakeState) insertFlakes()
       }, true)
       // standard rocket logo
     } else {
       // on load
-      document.addEventListener('DOMNodeInserted', function (e) {
+      document.addEventListener('DOMNodeInserted', () => {
         if (!document.getElementById('TUFastLogo')) { insertRocket(selectedRocketIcon, result.PRObadge, result.foundEasteregg) }
       })
       // on document changes
-      window.addEventListener('load', function () {
+      window.addEventListener('load', () => {
         if (!document.getElementById('TUFastLogo')) { insertRocket(selectedRocketIcon, result.PRObadge, result.foundEasteregg) }
       }, true)
     }
@@ -49,10 +50,10 @@ let timeUp = true // true, when time is up
 let displayValue // number of text, which shows on screen
 let typeOfMsg = '' // type of message which is displayed
 
-function updateRocketLogo (iconPath) {
+async function updateRocketLogo (iconPath) {
   const timestamp = new Date().getTime()
-  chrome.runtime.sendMessage({ cmd: 'update_rocket_logo_easteregg' }, function (result) { })
   document.querySelectorAll('#TUFastLogo img')[0].src = chrome.runtime.getURL('' + iconPath) + '?t =' + timestamp
+  chrome.runtime.sendMessage({ cmd: 'update_rocket_logo_easteregg' })
 }
 
 // function setProBadge() {
@@ -105,23 +106,26 @@ async function logoOnClickEasteregg () {
 
   // trigger actions based on counter
   switch (globalCounter) {
-    case 10:
+    case 10: {
       // easteregg finished
       displayValue = '&#x1F680; &#x1F680; &#x1F680;'
       typeOfMsg = 'text'
       // enable rocketIcon, set selected rocketIcon (RI3)
-      chrome.storage.local.set({ foundEasteregg: true }, function () { })
-      chrome.storage.local.set({ selectedRocketIcon: '{"id": "RI3", "link": "../assets/icons/RocketIcons/7_128px.png"}' }, function () { })
-      chrome.storage.local.get(['availableRockets'], (resp) => {
-        const avRockets = resp.availableRockets
-        avRockets.push('RI3')
-        chrome.storage.local.set({ availableRockets: avRockets })
-      })
       // live-update the logo
       updateRocketLogo('../assets/icons/RocketIcons/7_128px.png')
       // change the onclick function
       document.getElementById('TUFastLogo').onclick = logoOnClick
+      // Promisified until usage of Manifest V3
+      const availableRockets = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], resp => resolve(resp.availableRockets)))
+      availableRockets.push('RI3')
+      // Promisified until usage of Manifest V3
+      await new Promise((resolve) => chrome.storage.local.set({
+        foundEasteregg: true,
+        selectedRocketIcon: '{"id": "RI3", "link": "../assets/icons/RocketIcons/7_128px.png"}',
+        availableRockets
+      }, resolve))
       break
+    }
     default:
       typeOfMsg = 'number'
       displayValue = globalCounter
@@ -129,18 +133,12 @@ async function logoOnClickEasteregg () {
 
   // decide how to show text
   switch (typeOfMsg) {
-    case 'number':
-      timeout = 1000
-      blocker = false
-      counter.style.fontSize = '150px'
-      break
     case 'text':
       counter.style.fontSize = '100px'
       timeout = 3000
       blocker = true
       break
     default:
-      // same as number
       timeout = 1000
       blocker = false
       counter.style.fontSize = '150px'
@@ -151,16 +149,18 @@ async function logoOnClickEasteregg () {
 
   timeUp = false
 
-  coutdownRemoveScreenOverlay = setTimeout(function () {
+  coutdownRemoveScreenOverlay = setTimeout(() => {
     counter = document.getElementById('counter')
     counter.parentNode.removeChild(counter)
     timeUp = true
   }, timeout)
 }
 
-function logoOnClick () {
-  console.log('here')
-  if (timeUp) chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { })
+async function logoOnClick () {
+  // console.log('here')
+  if (timeUp) {
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
+  }
 }
 
 function funnyColor (color, step) {
@@ -176,7 +176,7 @@ function funnyColor (color, step) {
   else if (rgb[3] > 0 + step) rgb[3] -= step
   color = 'rgb(' + rgb[1] + ',' + rgb[2] + ',' + rgb[3] + ')'
   return color
-};
+}
 
 function insertRocket (selectedRocketIcon, PRObadge = false, foundEasteregg) {
   let imgUrl, header, logoNode, logoLink, logoImg, badge
@@ -231,18 +231,20 @@ function insertRocket (selectedRocketIcon, PRObadge = false, foundEasteregg) {
 }
 
 // toggle flake state
-function flakesSwitchOnClick () {
-  chrome.storage.local.get(['flakeState'], function (result) {
-    chrome.storage.local.set({ flakeState: !(result.flakeState) }, function () { })
-    // careful: this has to be negated, as its toggled
-    if (!result.flakeState) {
-      document.getElementById('flakeLink').style.color = 'black'
-      insertFlakes()
-    } else if (result.flakeState) {
-      document.getElementById('flakeLink').style.color = 'Grey'
-      removeFlakes()
-    }
-  })
+async function flakesSwitchOnClick () {
+  // Promisified until usage of Manifest V3
+  const flakeState = await new Promise((resolve) => chrome.storage.local.get(['flakeState'], resp => resolve(resp.flakeState)))
+
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ flakeState: !flakeState }, resolve))
+  // careful: this has to be negated, as its toggled
+  if (!flakeState) {
+    document.getElementById('flakeLink').style.color = 'black'
+    insertFlakes()
+  } else {
+    document.getElementById('flakeLink').style.color = 'grey'
+    removeFlakes()
+  }
 }
 
 function removeFlakes () {
@@ -266,7 +268,7 @@ function insertFlakes () {
       }
 
       // add snowflage style tag to website head
-      document.getElementsByTagName('Head')[0].appendChild(snowflakeStyle)
+      document.getElementsByTagName('head')[0].appendChild(snowflakeStyle)
 
       // create snowflake div
       const snowflakes = document.createElement('div')
@@ -276,7 +278,7 @@ function insertFlakes () {
       snowflakes.innerHTML = '<div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>'
 
       // add snowflake div to website body
-      document.getElementsByTagName('Body')[0].prepend(snowflakes)
+      document.getElementsByTagName('body')[0].prepend(snowflakes)
     }
   } catch (e) { console.log('cannot insert snowFlakes: ' + e) }
 }
@@ -310,4 +312,4 @@ function insertFlakeSwitch (currentlyActivated) {
   } catch (e) {
     console.log('Error inserting flakeSwitch: ' + e)
   }
-};
+}

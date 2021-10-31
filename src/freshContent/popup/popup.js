@@ -132,84 +132,92 @@ const starRatingSettings = {
 // dropdown_update_id is a random string
 const dropdownUpdateId = '56tzoguhjk'
 
-window.onload = async function () {
+// TODO
+window.onload = async () => {
   // get things from storage
-  chrome.storage.local.get(['dashboardDisplay', 'ratingEnabledFlag', 'saved_click_counter', 'studiengang', 'closedIntro1', 'ratedCourses', 'closedOutro1', 'theme', 'closedMsg1'], async function (result) {
-    // set initial theme
-    if (result.theme === 'system') {
-      document.documentElement.removeAttribute('data-theme')
-    } else {
-      document.documentElement.setAttribute('data-theme', result.theme)
-    }
+  // Promisified until usage of Manifest V3
+  const result = await new Promise((resolve) => chrome.storage.local.get([
+    'dashboardDisplay',
+    'ratingEnabledFlag',
+    'saved_click_counter',
+    'studiengang',
+    'closedIntro1',
+    'ratedCourses',
+    'closedOutro1',
+    'theme',
+    'closedMsg1'], resolve))
 
-    // prevent transition on page load
-    setTimeout(() => {
-      document.documentElement.removeAttribute('data-preload')
-    }, 500)
+  // set initial theme
+  if (result.theme === 'system') {
+    document.documentElement.removeAttribute('data-theme')
+  } else {
+    document.documentElement.setAttribute('data-theme', result.theme)
+  }
 
-    // display courses
-    const dashboardDisplay = result.dashboardDisplay
-    const courseList = await loadCourses(dashboardDisplay)
-    const htmlList = document.getElementsByClassName('list')[0]
-    displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag, result.closedMsg1)
-    if (document.getElementById('intro')) {
-      document.getElementById('intro').onclick = removeIntro
-    }
-    if (document.getElementById('outro')) {
-      document.getElementById('outro').onclick = removeOutro
-    }
-    if (document.getElementById('msg1')) {
-      document.getElementById('msg1').onclick = removeMsg1
-    }
+  // prevent transition on page load
+  setTimeout(() => {
+    document.documentElement.removeAttribute('data-preload')
+  }, 500)
 
-    // filter list
-    listSearchFunction()
+  // display courses
+  const dashboardDisplay = result.dashboardDisplay
+  const courseList = await loadCourses(dashboardDisplay)
+  const htmlList = document.getElementsByClassName('list')[0]
+  displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag, result.closedMsg1)
+  if (document.getElementById('intro')) {
+    document.getElementById('intro').onclick = removeIntro
+  }
+  if (document.getElementById('outro')) {
+    document.getElementById('outro').onclick = removeOutro
+  }
+  if (document.getElementById('msg1')) {
+    document.getElementById('msg1').onclick = removeMsg1
+  }
 
-    // display saved clicks
-    if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
-    const time = clicksToTime(result.saved_click_counter)
-    document.getElementById('saved_clicks').innerHTML = "<text><font color='green'>" + result.saved_click_counter + " Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>" + time + '</a></text>'
-    this.document.getElementById('time').onclick = openSettingsTimeSection
+  // filter list
+  listSearchFunction()
 
-    // display banana at each end of semester for two weeks!
-    let bananaTime = false
-    const d = new Date()
-    const month = d.getMonth() + 1 // starts at 0
-    const day = d.getDate()
-    if ((month === 7 && day < 15) || (month === 1 && day > 15)) bananaTime = true
-    if (result.saved_click_counter > 100 && bananaTime) {
-      document.getElementById('banana').innerHTML = bananaHTML
-    }
+  // display saved clicks
+  if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
+  const time = clicksToTime(result.saved_click_counter)
+  document.getElementById('saved_clicks').innerHTML = `<text><font color='green'>${result.saved_click_counter} Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>${time}</a></text>`
+  document.getElementById('time').onclick = openSettingsTimeSection
 
-    // exclusive style adjustments
-    customizeForStudiengang(result.studiengang)
-  })
+  // display banana at each end of semester for two weeks!
+  let bananaTime = false
+  const d = new Date()
+  const month = d.getMonth() + 1 // starts at 0
+  const day = d.getDate()
+  if ((month === 7 && day < 15) || (month === 1 && day > 15)) bananaTime = true
+  if (result.saved_click_counter > 100 && bananaTime) {
+    document.getElementById('banana').innerHTML = bananaHTML
+  }
+
+  // exclusive style adjustments
+  customizeForStudiengang(result.studiengang)
 
   // assign switch function
-  document.getElementById('switch').addEventListener('change', () => {
-    saveEnabled()
-  })
+  document.getElementById('switch').addEventListener('change', saveEnabled)
 
   // asign input search fct
   // onkeydown?
   this.document.getElementById('searchListInput').onkeyup = listSearchFunction
 
-  this.document.getElementById('settings').onclick = this.openSettings
-  this.document.getElementById('share').onclick = this.openShare
+  this.document.getElementById('settings').onclick = openSettings
+  this.document.getElementById('share').onclick = openShare
 
-  displayEnabled()
+  await displayEnabled()
 
   // bind enter key --> when enter key is pressed the first course in list is clicked
-  document.getElementById('list').addEventListener('keyup', function (event) {
-    // Number 13 is the "Enter" key on the keyboard
-    if (event.keyCode === 13) {
+  document.getElementById('list').addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
       // Cancel the default action, if needed
       // event.preventDefault();
       // Click the first element which is visible
       const listEntries = document.getElementsByClassName('list-entry-wrapper')
-      for (let i = 0; i < listEntries.length; i++) {
-        if (!(listEntries[i].style.display === 'none')) {
-          listEntries[i].firstElementChild.click()
+      for (const entry of listEntries) {
+        if (!(entry.style.display === 'none')) {
+          entry.firstElementChild.click()
           break
         }
       }
@@ -218,14 +226,12 @@ window.onload = async function () {
 
   // set custom dropdown styles and js for studiengang selection
   // Close the dropdown menu if the user clicks outside of it
-  window.onclick = function (event) {
+  window.onclick = (event) => {
     if (!event.target.matches('.select_studiengang_btn')) {
       const dropdowns = document.getElementsByClassName('select_studiengang_dropdown_content')
-      let i
-      for (i = 0; i < dropdowns.length; i++) {
-        const openDropdown = dropdowns[i]
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show')
+      for (const dropdown of dropdowns) {
+        if (dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show')
         }
       }
     }
@@ -236,11 +242,11 @@ window.onload = async function () {
   addDropdownOptions()
 
   // highlight studiengang selection (only once)
-  chrome.storage.local.get(['updateCustomizeStudiengang', 'saved_click_counter'], function (result) {
-    if (result.updateCustomizeStudiengang !== dropdownUpdateId && dropdownUpdateId !== false && result.saved_click_counter > -1) {
-      document.getElementById('select_studiengang_dropdown_id').style.border = '2px solid red'
-    }
-  })
+  // Promisified until usage of Manifest V3
+  const studiengangResult = await new Promise((resolve) => chrome.storage.local.get(['updateCustomizeStudiengang', 'saved_click_counter'], resolve))
+  if (studiengangResult.updateCustomizeStudiengang !== dropdownUpdateId && dropdownUpdateId !== false && studiengangResult.saved_click_counter > -1) {
+    document.getElementById('select_studiengang_dropdown_id').style.border = '2px solid red'
+  }
 
   // we need to set dropdown selection max-height, in case the dashboard is small
   // before wait XXXms because everything needs to be loaded first
@@ -249,20 +255,21 @@ window.onload = async function () {
 
   // show star rating
   // eslint-disable-next-line no-undef
-  rateSystem('myRatingClassName', starRatingSettings, function (rating, ratingTargetElement) {
+  rateSystem('myRatingClassName', starRatingSettings, (rating, ratingTargetElement) => {
     // callback for clicking on star rating. We dont do anything here.
   })
 }
 
-function changeStudiengangSelection () {
+async function changeStudiengangSelection () {
   const studiengang = this.getAttribute('studiengang')
 
   if (studiengang === 'addStudiengang') {
-    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'add_studiengang' }, function (result) { })
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'add_studiengang' })
     return
   }
 
-  chrome.storage.local.set({ studiengang: studiengang }, function () { })
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ studiengang: studiengang }, resolve))
   customizeForStudiengang(studiengang)
 }
 
@@ -270,7 +277,7 @@ function addDropdownOptions () {
   const dropdownContent = document.getElementById('select_studiengang_dropdown_content')
 
   // set footer icons
-  Object.keys(studiengangConfig).forEach(function (key) {
+  Object.keys(studiengangConfig).forEach((key) => {
     const listEntry = document.createElement('p')
     listEntry.style = 'display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;'
     listEntry.onclick = changeStudiengangSelection
@@ -315,7 +322,7 @@ function customizeForStudiengang (studiengang) {
 
   // set footer icon links
   if (studiengangConfig[studiengang].footer_icons_links) {
-    Object.keys(studiengangConfig[studiengang].footer_icons_links).forEach(function (key) {
+    Object.keys(studiengangConfig[studiengang].footer_icons_links).forEach((key) => {
       document.getElementById(key).href = studiengangConfig[studiengang].footer_icons_links[key]
     })
   }
@@ -357,46 +364,42 @@ function clicksToTime (clicks) {
   return mins + 'min ' + secs + 's'
 }
 
-// eslint-disable-next-line no-unused-vars
-function openSettings () {
-  chrome.runtime.sendMessage({ cmd: 'open_settings_page', param: '' }, function (result) { }) // for some reason I need to pass empty param - else it wont work in ff
+async function openSettings () {
+  chrome.runtime.sendMessage({ cmd: 'open_settings_page', param: '' }) // for some reason I need to pass empty param - else it wont work in ff
   const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
   if (isFirefox) window.close()
   return false // Required for ff
 }
 
-// eslint-disable-next-line no-unused-vars
 async function openShare () {
   document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
   await new Promise(resolve => setTimeout(resolve, 500))
-  document.getElementById('rewards_link').addEventListener('click', function () { // click handler needs to be set this way
-    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }, function (result) { }) // for some reason I need to pass empty param - else it wont work in ff
+  document.getElementById('rewards_link').addEventListener('click', async (e) => { // click handler needs to be set this way
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }) // for some reason I need to pass empty param - else it wont work in ff
     const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
     if (isFirefox) window.close()
     return false // Required for ff
   })
 }
 
-function openSettingsTimeSection () {
-  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'time_settings' }, function (result) { })
+async function openSettingsTimeSection () {
+  chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'time_settings' })
   const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
   if (isFirefox) window.close()
   return false // Required for ff
 }
 
 function listSearchFunction () {
-  const input = document.getElementById('searchListInput')
-  const filter = input.value.toLowerCase()
-  const list = document.getElementById('list')
-  const listEntries = list.getElementsByClassName('list-entry-wrapper')
+  const filter = document.getElementById('searchListInput').value.toLowerCase()
+  const listEntries = document.querySelectorAll('#list .list-entry-wrapper')
 
-  for (let i = 0; i < listEntries.length; i++) {
+  for (const entry of listEntries) {
     try {
-      const txtValue = listEntries[i].firstChild.text.toLowerCase()
+      const txtValue = entry.firstChild.text.toLowerCase()
       if (!txtValue.includes(filter)) {
-        listEntries[i].style.display = 'none'
+        entry.style.display = 'none'
       } else {
-        listEntries[i].style.display = ''
+        entry.style.display = 'block'
       }
     } catch (e) {
       console.log('Could not set visibility of item. Does not necessarily need to be an error.')
@@ -404,7 +407,7 @@ function listSearchFunction () {
   }
 
   // always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
-  if (listEntries[listEntries.length - 1].innerHTML.includes('aktualisieren')) { listEntries[listEntries.length - 1].style.display = '' }
+  if (listEntries[listEntries.length - 1].innerHTML.includes('aktualisieren')) { listEntries[listEntries.length - 1].style.display = 'block' }
 }
 
 function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCourses, closedOutro1, ratingEnabledFlag, closedMsg1) {
@@ -426,16 +429,16 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
       break
   }
 
-  if (courseList.length === 0 || courseList === undefined || courseList === false) {
+  if (courseList === undefined || courseList.length === 0 || courseList === false) {
     courseList = []
-    courseList.push({ name: name, link: link, img: '../../assets/icons/reload.png' })
+    courseList.push({ name, link, img: '../../assets/icons/reload.png' })
   } else {
-    courseList.push({ name: 'Diese Kursliste jetzt aktualisieren...', link: link, img: '../../assets/icons/reload.png' })
+    courseList.push({ name: 'Diese Kursliste jetzt aktualisieren...', link, img: '../../assets/icons/reload.png' })
   }
 
   // determine when to show outro and intro for course rating
   // THIS NEEDS TO BE ADAPTED FOR EACH SEMESTER because ratedCourses is never purged for now - its only expanded. However, courses which are not longer in courseList shouldnt be in ratedCourses either!
-  if (ratedCourses === undefined) ratedCourses = []
+  ratedCourses = ratedCourses || []
   const showIntro = (ratingEnabledFlag && !closedIntro1 && courseList.length > 1 && !(courseList.length - 2 < ratedCourses.length))
   const showOutro = (ratingEnabledFlag && !closedOutro1 && courseList.length > 1 && !showIntro && (courseList.length - 2 < ratedCourses.length))
   const d = new Date()
@@ -583,78 +586,63 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
   htmlList.appendChild(listEntry)
 }
 
-function switchCoursesToShow () {
-  chrome.storage.local.get(['dashboardDisplay'], async function (result) {
-    if (result.dashboardDisplay === 'meine_kurse') chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, function () { })
-    if (result.dashboardDisplay === 'favoriten') chrome.storage.local.set({ dashboardDisplay: 'meine_kurse' }, function () { })
-    location.reload()
-  })
+async function switchCoursesToShow () {
+  // Promisified until usage of Manifest V3
+  const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
+  if (result.dashboardDisplay === 'meine_kurse') await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, resolve))
+  if (result.dashboardDisplay === 'favoriten') await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'meine_kurse' }, resolve))
+  location.reload()
 }
 
-function saveTwoClicks () {
+async function saveTwoClicks () {
   chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 2 })
 }
 
 // changeIsEnabledState
-function saveEnabled () {
+async function saveEnabled () {
   // only save, if user data is available. Else forward to settings page
-  chrome.storage.local.get(['isEnabled'], function (resp) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
-      if (!(result.asdf === undefined || result.fdsa === undefined)) {
-        chrome.storage.local.set({ isEnabled: !(resp.isEnabled) }, function () { })
-      } else {
-        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'auto_login_settings' }, function (result) { })
-        window.close()
-      }
-    })
-  })
+  // Promisified until usage of Manifest V3
+  const isEnabled = await new Promise((resolve) => chrome.storage.local.get(['isEnabled'], resolve))
+  // Promisified until usage of Manifest V3
+  const userData = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
+  await userData
+  if (userData.asdf && userData.fdsa) {
+    // Promisified until usage of Manifest V3
+    await new Promise((resolve) => chrome.storage.local.set({ isEnabled: !(isEnabled.isEnabled) }, resolve))
+  } else {
+    chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'auto_login_settings' })
+    window.close()
+  }
 }
 
 // set switch
-function displayEnabled () {
-  chrome.storage.local.get(['isEnabled'], function (result) {
-    this.document.getElementById('switch').checked = result.isEnabled
-  })
+async function displayEnabled () {
+  // Promisified until usage of Manifest V3
+  const isEnabled = await new Promise((resolve) => chrome.storage.local.get(['isEnabled'], resolve))
+  document.getElementById('switch').checked = !!isEnabled.isEnabled
 }
 
 // return course_list = [{link:link, name: name}, ...]
-function loadCourses (type) {
-  return new Promise((resolve, reject) => {
-    switch (type) {
-      case 'favoriten':
-        chrome.storage.local.get(['favoriten'], function (result) {
-          try {
-            resolve(JSON.parse(result.favoriten))
-          } catch {
-            resolve(false)
-          }
-        })
-        break
-      case 'meine_kurse':
-        chrome.storage.local.get(['meine_kurse'], function (result) {
-          try {
-            resolve(JSON.parse(result.meine_kurse))
-          } catch {
-            resolve(false)
-          }
-        })
-        break
-      default:
-        resolve(false)
-        break
-    }
-  })
+async function loadCourses (type) {
+  // Promisified until usage of Manifest V3
+  const data = await new Promise((resolve) => chrome.storage.local.get(['favoriten', 'meine_kurse'], resolve))
+  try {
+    return JSON.parse(data[type])
+  } catch {
+    return false
+  }
 }
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
-function selectStudiengangDropdown () {
+async function selectStudiengangDropdown () {
   document.getElementById('select_studiengang_dropdown_content').classList.toggle('show')
-  chrome.storage.local.set({ updateCustomizeStudiengang: dropdownUpdateId }, function () { })
   document.getElementById('select_studiengang_dropdown_id').style.border = 'none'
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ updateCustomizeStudiengang: dropdownUpdateId }, resolve))
 }
 
-function sendRating () {
+async function sendRating () {
   const course = this.getAttribute('courseref')
   const rating = document.getElementById(course).dataset.rating
 
@@ -669,16 +657,12 @@ function sendRating () {
   }
 
   // add to rated list
-  chrome.storage.local.get(['ratedCourses'], async function (result) {
-    let updatedCourseList = []
-    if (result.ratedCourses === undefined) {
-      updatedCourseList = []
-    } else {
-      updatedCourseList = result.ratedCourses
-    }
-    updatedCourseList.push(course)
-    chrome.storage.local.set({ ratedCourses: updatedCourseList }, function () { })
-  })
+  // Promisified until usage of Manifest V3
+  const ratedCoursesFetch = await new Promise((resolve) => chrome.storage.local.get(['ratedCourses'], resolve))
+  const updatedCourseList = ratedCoursesFetch.ratedCourses || []
+  updatedCourseList.push(course)
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ ratedCourses: updatedCourseList }, resolve))
 
   // remove the rating div
   document.getElementById(course + ' Wrapper').remove()
@@ -688,28 +672,30 @@ function sendRating () {
   courseURI = encodeURIComponent(courseURI)
   courseURI = courseURI.replaceAll('!', '%21').replaceAll("'", '%27').replaceAll('(', '%28').replaceAll(')', '%29').replaceAll('~', '%7E')
   const ratingURI = rating.replace('.', ',')
-  console.log(courseURI)
+  // console.log(courseURI)
 
   // IF YOU ARE TRYING TO HACK please use the following domain instead: https://us-central1-tufastcourseratinghack.cloudfunctions.net/setRatingHACK . It has the same services running. Let me know if you find any security issues - thanks! - oli
   const url = 'https://us-central1-tufastcourserating2.cloudfunctions.net/setRating?rating=' + ratingURI + '&course=' + courseURI
-  console.log(url)
+  // console.log(url)
 
-  fetch(url)
-    .then((resp) => resp.text())
-    .then(resp => console.log(resp))
+  const resp = await fetch(url)
+  console.log(await resp.text())
 }
 
-function removeIntro () {
+async function removeIntro () {
   document.getElementById('intro_rating').remove()
-  chrome.storage.local.set({ closedIntro1: true }, function () { })
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ closedIntro1: true }, resolve))
 }
 
-function removeOutro () {
+async function removeOutro () {
   document.getElementById('outro_rating').remove()
-  chrome.storage.local.set({ closedOutro1: true }, function () { })
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ closedOutro1: true }, resolve))
 }
 
-function removeMsg1 () {
+async function removeMsg1 () {
   document.getElementById('msg1-wrapper').remove()
-  chrome.storage.local.set({ closedMsg1: true }, function () { })
+  // Promisified until usage of Manifest V3
+  await new Promise((resolve) => chrome.storage.local.set({ closedMsg1: true }, resolve))
 }

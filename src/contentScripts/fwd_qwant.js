@@ -1,4 +1,4 @@
-chrome.storage.local.get(['fwdEnabled', 'isEnabled'], function (result) {
+chrome.storage.local.get(['fwdEnabled', 'isEnabled'], (result) => {
   if (result.fwdEnabled) {
     console.log('register fwds in qwant')
     const searchForm = document.querySelector('form[data-testid="mainSearchBar"]')

@@ -1,11 +1,10 @@
-chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'removedOpalBanner', 'saved_click_counter', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner'], function (result) {
+chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'removedOpalBanner', 'saved_click_counter', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner'], (result) => {
   // decide whether to show dashbaord banner
-  let showDashboardBanner = false
-  if (result.seenInOpalAfterDashbaordUpdate < 5 && !result.removedOpalBanner) { showDashboardBanner = true }
-  chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1 }, function () { })
+  const showDashboardBanner = result.seenInOpalAfterDashbaordUpdate < 5 && !result.removedOpalBanner
+  chrome.storage.local.set({ seenInOpalAfterDashbaordUpdate: result.seenInOpalAfterDashbaordUpdate + 1 })
 
   // wait until full page is loaded
-  window.addEventListener('load', async function (e) {
+  window.addEventListener('load', async () => {
     let oldLocationHref = location.href
     let parsedCourses = false
 
@@ -31,7 +30,8 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
 
     // use mutation observer to detect page changes
     const config = { attributes: true, childList: true, subtree: true }
-    const callback = function (mutationsList, observer) {
+    const callback = (_mutationsList, _observer) => {
+      const chrome = this.chrome
       // detect new page
       if (location.href !== oldLocationHref) {
         oldLocationHref = location.href
@@ -42,7 +42,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
           parsedCourses = true
         }
         // not all courses loaded already --> load all courses
-        if (document.getElementsByClassName('pager-showall')[0].innerText === 'alle anzeigen') {
+        if (document.getElementsByClassName('pager-showall')[0]?.innerText === 'alle anzeigen') {
           document.getElementsByClassName('pager-showall')[0].click()
           chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
           parsedCourses = false
@@ -65,7 +65,7 @@ chrome.storage.local.get(['isEnabled', 'seenInOpalAfterDashbaordUpdate', 'remove
 function closeOpalBanner () {
   if (document.getElementById('opalBanner')) {
     document.getElementById('opalBanner').remove()
-    chrome.storage.local.set({ removedOpalBanner: true }, function () { })
+    chrome.storage.local.set({ removedOpalBanner: true }, () => { })
   }
 }
 
@@ -88,7 +88,7 @@ function showDashboardBannerFunc () {
   button.innerHTML = '&#215;'
   button.addEventListener('click', () => {
     banner.remove()
-    chrome.storage.local.set({ removedOpalBanner: true }, () => {})
+    chrome.storage.local.set({ removedOpalBanner: true })
   })
 
   banner.appendChild(img)
@@ -104,7 +104,7 @@ function parseCoursesFromWebPage () {
   // there are two options, how the coursse-overview table can be build.
   // They are simply tried out
   try {
-    const tableEntries = document.getElementsByClassName('table-panel')[0].getElementsByTagName('tbody')[0].children
+    const tableEntries = document.querySelector('.table-panel tbody')?.children
     for (const item of tableEntries) {
       const name = item.children[2].children[0].getAttribute('title')
       const link = item.children[2].children[0].getAttribute('href')
@@ -118,7 +118,7 @@ function parseCoursesFromWebPage () {
       throw new Error('most likely parsing error') // throw error
     }
   } catch {
-    const tableEntries = document.getElementsByClassName('table-panel')[0].getElementsByClassName('content-preview-container')[0].getElementsByClassName('list-unstyled')[0].getElementsByClassName('content-preview content-preview-horizontal')
+    const tableEntries = document.querySelectorAll('.table-panel .content-preview-container .list-unstyled .content-preview.content-preview-horizontal')
     for (const item of tableEntries) {
       try {
         const name = item.getElementsByClassName('content-preview-title')[0].innerHTML

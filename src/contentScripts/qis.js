@@ -1,15 +1,15 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutQis'], function (result) {
+chrome.storage.local.get(['isEnabled', 'loggedOutQis'], (result) => {
   if (!result.loggedOutQis) {
     if (document.readyState !== 'loading') {
       loginQis(result.isEnabled)
     } else {
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('DOMContentLoaded', () => {
         loginQis(result.isEnabled)
       })
     }
     console.log('Auto Login to hisqis.')
   } else if (result.loggedOutQis) {
-    chrome.storage.local.set({ loggedOutQis: false }, function () { })
+    chrome.storage.local.set({ loggedOutQis: false })
   }
 })
 
@@ -18,8 +18,9 @@ function loginQis (isEnabled) {
     document.getElementsByTagName('a')[4].click()
     chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
   } else if (document.getElementById('asdf') && isEnabled) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
-      if (!(result.asdf === undefined || result.fdsa === undefined)) {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
+      if (result.asdf && result.fdsa) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         chrome.runtime.sendMessage({ cmd: 'perform_login' })
@@ -33,7 +34,7 @@ function loginQis (isEnabled) {
   }
   // abmelden button
   if (document.querySelectorAll('#visual-footer-wrapper :nth-child(5)')[0]) {
-    document.querySelectorAll('#visual-footer-wrapper :nth-child(5)')[0].addEventListener('click', function () {
+    document.querySelectorAll('#visual-footer-wrapper :nth-child(5)')[0].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutQis' })
     })
   }

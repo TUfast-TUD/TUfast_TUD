@@ -1,4 +1,4 @@
-chrome.storage.local.get(['fwdEnabled', 'isEnabled'], function (result) {
+chrome.storage.local.get(['fwdEnabled', 'isEnabled'], (result) => {
   if (result.fwdEnabled) {
     console.log('register fwds in startpage')
     const searchForm = document.getElementById('search')

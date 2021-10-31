@@ -1,10 +1,10 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function (result) {
+chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], (result) => {
   if (result.isEnabled && !result.loggedOutOwa) {
     if (document.readyState !== 'loading') {
-      loginOWA(result.loggedOutOwa)
+      loginOWA()
     } else {
-      document.addEventListener('DOMContentLoaded', function () {
-        loginOWA(result.loggedOutOwa)
+      document.addEventListener('DOMContentLoaded', () => {
+        loginOWA()
       })
     }
     console.log('Auto Login to OWA.')
@@ -19,30 +19,31 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function (result) {
 })
 
 // detecting logout
-document.addEventListener('DOMNodeInserted', function (e) {
+document.addEventListener('DOMNodeInserted', () => {
   // old owa version
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
   // new owa version
   if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
-    document.querySelectorAll('[aria-label="Abmelden"]')[1].addEventListener('click', function () {
+    document.querySelectorAll('[aria-label="Abmelden"]')[1].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
 }, false)
 
-function loginOWA (loggedOutOwa) {
-  if (document.getElementById('username') && document.getElementById('password') && !loggedOutOwa) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
-      if (!(result.asdf === undefined || result.fdsa === undefined)) {
+function loginOWA () {
+  if (document.getElementById('username') && document.getElementById('password')) {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
+      if (result.asdf && result.fdsa) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         chrome.runtime.sendMessage({ cmd: 'perform_login' })
-        document.getElementById('username').value = (result.asdf) + '@msx.tu-dresden.de'
-        document.getElementById('password').value = (result.fdsa)
+        document.getElementById('username').value = result.asdf + '@msx.tu-dresden.de'
+        document.getElementById('password').value = result.fdsa
         document.getElementsByClassName('signinbutton')[0].click()
         chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
       } else {
@@ -52,13 +53,13 @@ function loginOWA (loggedOutOwa) {
   }
   // detecting logout
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
 }
 
-window.onload = function () {
+window.onload = () => {
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
     if (resp.enabledOWAFetch) {
       // check if all mails are loaded | also check for new owa version
@@ -78,7 +79,8 @@ function readMailObserver () {
   // use mutation observer to detect page changes
   const config = { attributes: true, childList: true, subtree: true, characterData: true }
   let nrUnreadMails
-  const callback = function (mutationsList, observer) {
+  const callback = (_mutationsList, _observer) => {
+    const chrome = this.chrome
     // check again, if enabled
     chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
       if (resp.enabledOWAFetch) {
@@ -101,7 +103,7 @@ function readMailObserver () {
 
   // node containing unreadCount | also check new owa version
   let unreadCountNode = document.querySelectorAll("[autoid='_n_41']")[1]
-  if (unreadCountNode === undefined) unreadCountNode = document.querySelectorAll("[autoid='_n_c']")[0]
+  if (!unreadCountNode) unreadCountNode = document.querySelectorAll("[autoid='_n_c']")[0]
 
   const observer = new MutationObserver(callback)
   observer.observe(unreadCountNode, config)

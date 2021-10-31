@@ -1,13 +1,13 @@
-chrome.storage.local.get(['pdfInNewTab'], function (result) {
+chrome.storage.local.get(['pdfInNewTab'], (result) => {
   if (result.pdfInNewTab) {
     // on load
-    document.addEventListener('DOMNodeInserted', function (e) {
+    document.addEventListener('DOMNodeInserted', () => {
       modifyPdfLinks()
     })
     // on document loaded
     window.addEventListener(
       'load',
-      function () {
+      () => {
         modifyPdfLinks()
         pdfButtonExternalReload()
       },
@@ -19,9 +19,9 @@ chrome.storage.local.get(['pdfInNewTab'], function (result) {
 function modifyPdfLinks () {
   // Modify js so that link is opened in new tab
   const links = document.getElementsByTagName('a')
-  for (let idx = 0; idx < links.length; idx++) {
-    if (links[idx].href.includes('.pdf')) {
-      links[idx].onclick = function (event) {
+  for (const link of links) {
+    if (link.href.includes('.pdf')) {
+      link.onclick = function (event) {
         event.stopImmediatePropagation() // prevents OPAL to load in the same tab
         window.open(this.href, '_blank')
         return false
