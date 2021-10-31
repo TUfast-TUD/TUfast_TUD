@@ -261,7 +261,7 @@ async function enableOWAFetch () {
   await new Promise((resolve) => chrome.alarms.clear('fetchOWAAlarm', resolve))
   chrome.alarms.create('fetchOWAAlarm', { delayInMinutes: 1, periodInMinutes: 5 })
   chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm === 'fetchOWAAlarm') await owaFetch()
+    if (alarm.name === 'fetchOWAAlarm') await owaFetch()
   })
 }
 
