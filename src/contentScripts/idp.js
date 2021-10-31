@@ -1,6 +1,6 @@
 console.log('injected login script successfully ...')
 chrome.storage.local.get(['isEnabled'], (result) => {
-  if (!result.isEnabled) return;
+  if (!result.isEnabled) return
   if (document.readyState !== 'loading') {
     logInQis(result.isEnabled)
   } else {
