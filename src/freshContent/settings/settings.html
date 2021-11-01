@@ -55,9 +55,13 @@
       <span class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</span>
     </p>
     <form>
-      <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"> (ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")<br>
+      <!-- currently disabled as there is no other platform supported -->
+      <select name="platform" id="platform_select" disabled>
+        <option value="zih">ZIH/Selma</option>
+      </select><br>
+      <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"> <span id="user_extra_hint">(ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")</span><br>
       <input placeholder="Passwort (selma-Login)" type="password" id="password_field"><br>
-      <button type="button" class="button-accept btn--settings" id="save_data">Lokal Speichern</button>
+      <input type="submit" class="button-accept btn--settings" id="save_data" value="Lokal Speichern" />
       <p id="status_msg" style="display: inline;"></p>
     </form>
     <p>Hier kannst du alle Daten löschen:<br>

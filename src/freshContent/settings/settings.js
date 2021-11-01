@@ -34,7 +34,23 @@ async function nextTheme () {
   await applyTheme(themeOrder[idx])
 }
 
+async function changePlatform (e) {
+  const platform = e.target.value
+  let usernameExtraHint, usernameFieldHint, passwordFieldHint
+  switch (platform) {
+    case 'zih':
+      usernameFieldHint = 'Nutzername (selma-Login)'
+      passwordFieldHint = 'Passwort (selma-Login)'
+      usernameExtraHint = '(ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")'
+      break
+  }
+  document.getElementById('username_field').setAttribute('placeholder', usernameFieldHint)
+  document.getElementById('password_field').setAttribute('placeholder', passwordFieldHint)
+  document.getElementById('user_extra_hint').innerHTML = usernameExtraHint
+}
+
 async function saveUserData () {
+  const platform = document.getElementById('platform_select')?.value || 'zih'
   const user = document.getElementById('username_field')?.value
   const pass = document.getElementById('password_field')?.value
   if (!user || !pass) {
@@ -44,7 +60,7 @@ async function saveUserData () {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass } })
+    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass }, platform })
     document.getElementById('status_msg').innerHTML = ''
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
@@ -398,6 +414,7 @@ window.onload = async () => {
   await insertAllRocketIcons()
 
   // assign functions
+  document.getElementById('platform_select').onchange = changePlatform
   document.getElementById('save_data').onclick = saveUserData
   document.getElementById('delete_data').onclick = deleteUserData
   document.getElementById('switch_fwd').onclick = fwdGoogleSearch
