@@ -362,6 +362,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       setUserData(request.userData, platform)
       break
     }
+    case 'check_user_data': {
+      const platform = request.platform || 'zih'
+      userDataExists(platform).then(response => sendResponse(response))
+      break
+    }
     case 'read_mail_owa':
       readMailOWA(request.NrUnreadMails)
       break
