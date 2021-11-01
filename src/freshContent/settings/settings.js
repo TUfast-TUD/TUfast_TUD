@@ -36,7 +36,7 @@ async function nextTheme () {
 
 async function changePlatform (e) {
   const platform = e.target.value
-  let usernameExtraHint, usernameFieldHint, passwordFieldHint
+  let [usernameExtraHint, usernameFieldHint, passwordFieldHint] = ['', '', '']
   switch (platform) {
     case 'zih':
       usernameFieldHint = 'Nutzername (selma-Login)'
@@ -47,6 +47,7 @@ async function changePlatform (e) {
   document.getElementById('username_field').setAttribute('placeholder', usernameFieldHint)
   document.getElementById('password_field').setAttribute('placeholder', passwordFieldHint)
   document.getElementById('user_extra_hint').innerHTML = usernameExtraHint
+  await updatePlatformStatus(platform)
 }
 
 async function saveUserData () {
@@ -54,19 +55,19 @@ async function saveUserData () {
   const user = document.getElementById('username_field')?.value
   const pass = document.getElementById('password_field')?.value
   if (!user || !pass) {
-    document.getElementById('status_msg').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
+    document.getElementById('status_platform').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
     return false
   } else {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: 'clear_badge' })
     chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass }, platform })
-    document.getElementById('status_msg').innerHTML = ''
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
     document.getElementById('username_field').value = ''
     document.getElementById('password_field').value = ''
-    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
+    document.getElementById('status_platform').innerHTML = '<span class="green-text">Deine Zugangsdaten für diese Platform sind gespeichert!</span>'
+    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du hast Daten hinterlegt und wirst überall wo möglich automatisch eingeloggt!</span>'
     setTimeout(() => {
       document.getElementById('save_data').innerHTML = 'Speichern'
       document.getElementById('save_data').disabled = false
@@ -78,7 +79,7 @@ async function deleteUserData () {
   chrome.runtime.sendMessage({ cmd: 'clear_badge' })
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.remove([
-    'Data', // this is how to delete user data!
+    'udata', // this is how to delete user data!
     'meine_kurse', // delete opal courses
     'favoriten', // delete opal courses
     'isEnabled'], resolve)) // need to deactivate auto login feature
@@ -93,13 +94,13 @@ async function deleteUserData () {
   }, resolve))
   document.getElementById('additionalNotification').checked = false
   // --
-  document.getElementById('status_msg').innerHTML = ''
   document.getElementById('delete_data').innerHTML = '<span>Gel&ouml;scht!</span>'
   document.getElementById('delete_data').setAttribute('class', 'button-accept')
   document.getElementById('delete_data').disabled = true
   document.getElementById('username_field').value = ''
   document.getElementById('password_field').value = ''
-  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
+  document.getElementById('status_platform').innerHTML = '<span class="gray-text">Derzeit sind keine Daten für diese Platform gespeichert.</span>'
+  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Autologin is deaktiviert.</span>'
   setTimeout(() => {
     document.getElementById('delete_data').innerHTML = 'Alle Daten l&ouml;schen'
     document.getElementById('delete_data').setAttribute('class', 'button-deny')
@@ -158,6 +159,7 @@ async function displayEnabled () {
   }
 
   document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
+  await updatePlatformStatus(document.getElementById('status_platform').value)
 
   /*
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
@@ -173,6 +175,14 @@ async function displayEnabled () {
     chrome.storage.local.set({dashboardDisplay: "meine_kurse"}, function() {})
   }
 } */
+
+async function updatePlatformStatus (platform = 'zih') {
+  const statusField = document.getElementById('status_platform')
+  statusField.innerHTML = ''
+  const dataSet = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform }, resolve))
+  if (dataSet) statusField.innerHTML = '<span class="green-text">Deine Zugangsdaten für diese Platform sind gespeichert!</span>'
+  else statusField.innerHTML = '<span class="gray-text">Derzeit sind keine Daten für diese Platform gespeichert.</span>'
+}
 
 // eslint-disable-next-line no-unused-vars
 function clicksToTime (clicks) {
@@ -548,9 +558,9 @@ window.onload = async () => {
   const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], resolve))
   // set text on isEnabled
   if (result.isEnabled) {
-    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
+    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du hast Daten hinterlegt und wirst überall wo möglich automatisch eingeloggt!</span>'
   } else {
-    document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
+    document.getElementById('status_msg').innerHTML = '<span class="grey-text">Autologin is deaktiviert.</span>'
   }
   // update saved clicks
   // see if any params are available

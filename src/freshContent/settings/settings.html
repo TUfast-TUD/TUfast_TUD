@@ -56,12 +56,13 @@
     </p>
     <form>
       <!-- currently disabled as there is no other platform supported -->
-      <select name="platform" id="platform_select" disabled>
+      <select name="platform" id="platform_select">
         <option value="zih">ZIH/Selma</option>
       </select><br>
       <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"> <span id="user_extra_hint">(ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")</span><br>
       <input placeholder="Passwort (selma-Login)" type="password" id="password_field"><br>
-      <input type="submit" class="button-accept btn--settings" id="save_data" value="Lokal Speichern" />
+      <input type="button" class="button-accept btn--settings" id="save_data" value="Lokal Speichern" />
+      <p id="status_platform" style="display: inline;"></p><br>
       <p id="status_msg" style="display: inline;"></p>
     </form>
     <p>Hier kannst du alle Daten löschen:<br>
