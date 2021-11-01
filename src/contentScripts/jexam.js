@@ -4,12 +4,12 @@ chrome.storage.local.get(['isEnabled', 'loggedOutJexam'], (result) => {
       if (document.getElementById('username') && document.getElementById('password')) {
         chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
           await result
-          if (result.asdf && result.fdsa) {
+          if (result.user && result.pass) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
             chrome.runtime.sendMessage({ cmd: 'perform_login' })
-            document.getElementById('username').value = result.asdf
-            document.getElementById('password').value = result.fdsa
+            document.getElementById('username').value = result.user
+            document.getElementById('password').value = result.pass
             document.getElementsByTagName('input')[2].click()
           } else {
             chrome.runtime.sendMessage({ cmd: 'no_login_data' })

@@ -606,7 +606,7 @@ async function saveEnabled () {
   // Promisified until usage of Manifest V3
   const userData = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
   await userData
-  if (userData.asdf && userData.fdsa) {
+  if (userData.user && userData.pass) {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: !(isEnabled.isEnabled) }, resolve))
   } else {

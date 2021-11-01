@@ -35,16 +35,16 @@ async function nextTheme () {
 }
 
 async function saveUserData () {
-  const asdf = document.getElementById('username_field')?.value
-  const fdsa = document.getElementById('password_field')?.value
-  if (!asdf || !fdsa) {
+  const user = document.getElementById('username_field')?.value
+  const pass = document.getElementById('password_field')?.value
+  if (!user || !pass) {
     document.getElementById('status_msg').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
     return false
   } else {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } })
+    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass } })
     document.getElementById('status_msg').innerHTML = ''
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
@@ -221,7 +221,7 @@ async function enableOWAFetch () {
     const resp = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
     const userData = await resp
     // check if user data is saved
-    if (userData.asdf && userData.fdsa) {
+    if (userData.user && userData.pass) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({

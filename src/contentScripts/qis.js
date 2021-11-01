@@ -20,12 +20,12 @@ function loginQis (isEnabled) {
   } else if (document.getElementById('asdf') && isEnabled) {
     chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
       await result
-      if (result.asdf && result.fdsa) {
+      if (result.user && result.pass) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         chrome.runtime.sendMessage({ cmd: 'perform_login' })
-        document.getElementById('asdf').value = result.asdf
-        document.getElementById('fdsa').value = result.fdsa
+        document.getElementById('asdf').value = result.user
+        document.getElementById('fdsa').value = result.pass
         document.getElementsByName('submit')[0].click()
       } else {
         chrome.runtime.sendMessage({ cmd: 'no_login_data' })

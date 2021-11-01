@@ -515,7 +515,7 @@ async function saveClicks (counter) {
 }
 
 /// ///////////// FUNCTIONS FOR ENCRYPTION AND USERDATA HANDLING ////////////////
-// info: asdf = username | fdsa = password
+// info: user = username | pass = password
 
 // create hash from input-string (can also be json of course)
 // output hash is always of same length and is of type buffer
