@@ -353,12 +353,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       saveClicks(request.click_count)
       break
     case 'get_user_data': {
-      getUserData().then(userData => sendResponse(userData))
+      const platform = request.platform || 'zih'
+      getUserData(platform).then(userData => sendResponse(userData))
       break
     }
-    case 'set_user_data':
-      setUserData(request.userData)
+    case 'set_user_data': {
+      const platform = request.platform || 'zih'
+      setUserData(request.userData, platform)
       break
+    }
     case 'read_mail_owa':
       readMailOWA(request.NrUnreadMails)
       break
@@ -562,7 +565,7 @@ async function getKeyBuffer () {
 // user data is encrypted using the crpyto-js library (aes-cbc). The encryption key is created from pc-information with system.cpu
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format.
 async function setUserData (userData, platform = 'zih') {
-  if (!userData || !userData.user || !userData.pass) return
+  if (!userData || !userData.user || !userData.pass || !platform) return
 
   // local function so it's not easily called from elsewhere
   const encode = async (decoded) => {
@@ -624,7 +627,7 @@ async function getUserData (platform = 'zih') {
   const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
 
   // check if Data exists, else return
-  if (typeof data !== 'string') {
+  if (typeof data !== 'string' || !platform) {
     return ({ user: undefined, pass: undefined })
   }
 
