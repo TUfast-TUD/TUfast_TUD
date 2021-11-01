@@ -77,7 +77,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         mostLiklySubmittedReview: false,
         removedReviewBanner: false,
         neverShowedReviewBanner: true,
-        encryption_level: 2,
+        encryption_level: 3,
         meine_kurse: false,
         favoriten: false,
         // openSettingsPageParam: false
@@ -133,14 +133,23 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
       const updateObj = {}
 
-      // check if encryption is already on level 2. This should be the case for every install now. But I'll leave this here anyway
-      if (settings.encryption_level !== 2) {
-        console.log('Upgrading encryption standard to level 2...')
-        // Promisified until usage of Manifest V3
-        const userData = await new Promise((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve))
-        await setUserData({ asdf: atob(userData.asdf), fdsa: atob(userData.fdsa) })
-
-        updateObj.encryption_level = 2
+      // check if encryption is already on level 3
+      if (settings.encryption_level !== 3) {
+        switch (settings.encryption_level) {
+          case 1: {
+            // This branch probably will not be called anymore...
+            console.log('Upgrading encryption standard from level 1 to level 3...')
+            // Promisified until usage of Manifest V3
+            const userData = await new Promise((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve))
+            await setUserData({ asdf: atob(userData.asdf), fdsa: atob(userData.fdsa) }, 'zih')
+            break
+          }
+          case 2: {
+            const userData = await getUserDataLagacy()
+            await setUserData(userData, 'zih')
+          }
+        }
+        updateObj.encryption_level = 3
       }
 
       // check if the type of courses is selected which should be display in the dasbhaord. If not, set to default
@@ -235,7 +244,7 @@ async function owaIsOpened () {
   const tabs = await getAllChromeTabs()
   // Find element with msx in uri, -1 if none found
   if (tabs.findIndex((element) => element.url.includes(uri)) >= 0) {
-    console.log('currentyl opened owa')
+    console.log('currently opened owa')
     return true
   } else return false
 }
@@ -247,9 +256,9 @@ function getAllChromeTabs () {
 
 // check if user stored login data
 // eslint-disable-next-line no-unused-vars
-async function loginDataExists () {
-  const { asdf, fdsa } = await getUserData()
-  return asdf !== undefined && fdsa !== undefined
+async function loginDataExists (platform = 'zih') {
+  const { user, pass } = await getUserData(platform)
+  return user && pass
 }
 
 // start OWA fetch funtion based on interval
@@ -271,9 +280,9 @@ async function owaFetch () {
   console.log('executing fetch ...')
 
   // get user data
-  const { asdf, fdsa } = await getUserData()
+  const { user, pass } = await getUserData('zih')
   // call fetch
-  const mailInfoJson = await fetchOWA(asdf, fdsa, logout)
+  const mailInfoJson = await fetchOWA(user, pass, logout)
   // check # of unread mails
   const numberUnreadMails = countUnreadMsg(mailInfoJson)
   console.log('Unread mails in OWA: ' + numberUnreadMails)
@@ -552,45 +561,111 @@ async function getKeyBuffer () {
 // this functions saved user login-data locally.
 // user data is encrypted using the crpyto-js library (aes-cbc). The encryption key is created from pc-information with system.cpu
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format.
-async function setUserData (userData) {
-  // collect all required information for encryption in the right format
-  const userDataConcat = userData.asdf + '@@@@@' + userData.fdsa
-  const userDataEncoded = (new TextEncoder()).encode(userDataConcat)
-  const keyBuffer = await getKeyBuffer()
-  let iv = crypto.getRandomValues(new Uint8Array(16))
+async function setUserData (userData, platform = 'zih') {
+  if (!userData || !userData.user || !userData.pass) return
 
-  // encrypt
-  let userDataEncrypted = await crypto.subtle.encrypt(
-    {
-      name: 'AES-CBC',
-      iv: iv
-    },
-    keyBuffer,
-    userDataEncoded
-  )
+  // local function so it's not easily called from elsewhere
+  const encode = async (decoded) => {
+    const dataEncoded = (new TextEncoder()).encode(decoded)
+    const keyBuffer = await getKeyBuffer()
+    let iv = crypto.getRandomValues(new Uint8Array(16))
 
-  // adjust format to save encrypted data in lokal storage
-  userDataEncrypted = Array.from(new Uint8Array(userDataEncrypted))
-  userDataEncrypted = userDataEncrypted.map(byte => String.fromCharCode(byte)).join('')
-  userDataEncrypted = btoa(userDataEncrypted)
-  iv = Array.from(iv).map(b => ('00' + b.toString(16)).slice(-2)).join('')
+    // encrypt
+    let dataEnc = await crypto.subtle.encrypt(
+      {
+        name: 'AES-CBC',
+        iv: iv
+      },
+      keyBuffer,
+      dataEncoded
+    )
+
+    // adjust format to save encrypted data in local storage
+    dataEnc = Array.from(new Uint8Array(dataEnc))
+    dataEnc = dataEnc.map(byte => String.fromCharCode(byte)).join('')
+    dataEnc = btoa(dataEnc)
+    iv = Array.from(iv).map(b => ('00' + b.toString(16)).slice(-2)).join('')
+    return iv + dataEnc
+  }
+
+  const user = await encode(userData.user)
+  const pass = await encode(userData.pass)
+
+  let dataObj
+  try {
+    // Promisified until usage of Manifest V3
+    const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
+    if (typeof data !== 'string') throw Error()
+    dataObj = JSON.parse(data)
+  } catch {
+    // data field is undefined or broken -> reset it
+    dataObj = {}
+  }
+  dataObj[platform] = { user, pass }
+
   // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.storage.local.set({ Data: iv + userDataEncrypted }, resolve))
+  await new Promise((resolve) => chrome.storage.local.set({ udata: JSON.stringify(dataObj) }, resolve))
 }
 
 // check if username, password exist
-async function userDataExists () {
-  const { asdf, fdsa } = await getUserData()
-  return asdf !== undefined && fdsa !== undefined
+async function userDataExists (platform = 'zih') {
+  const { user, pass } = await getUserData(platform)
+  return user && pass
 }
 
-// return {asdf: "", fdsa: ""}
+// return {user: string, pass: string}
 // decrypt and return user data
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format
-async function getUserData () {
+async function getUserData (platform = 'zih') {
   // get required data for decryption
   const keyBuffer = await getKeyBuffer()
-  // asnyc fetch of user data
+  // async fetch of user data
+  // Promisified until usage of Manifest V3
+  const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
+
+  // check if Data exists, else return
+  if (typeof data !== 'string') {
+    return ({ user: undefined, pass: undefined })
+  }
+
+  // local function so it's not easily called from elsewhere
+  const decode = async (encoded) => {
+    if (!encoded) return undefined
+    let iv = encoded.slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
+    iv = new Uint8Array(iv)
+    let dataEncrypted = atob(encoded.slice(32))
+    dataEncrypted = new Uint8Array(dataEncrypted.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
+
+    // decrypt
+    const decoded = await crypto.subtle.decrypt(
+      {
+        name: 'AES-CBC',
+        iv: iv
+      },
+      keyBuffer,
+      dataEncrypted
+    )
+
+    // adjust to useable format
+    return new TextDecoder().decode(decoded)
+  }
+
+  try {
+    const userDataJson = JSON.parse(data)
+    const encUser = userDataJson[platform].user
+    const encPass = userDataJson[platform].pass
+    return { user: await decode(encUser), pass: await decode(encPass) }
+  } catch {
+    return { user: undefined, pass: undefined }
+  }
+}
+
+// return {user: string, pass: string}
+// This is the old method to get the user data. It will be preserved until probably every installation uses the new format
+async function getUserDataLagacy () {
+  // get required data for decryption
+  const keyBuffer = await getKeyBuffer()
+  // async fetch of user data
   // Promisified until usage of Manifest V3
   const data = await new Promise((resolve) => chrome.storage.local.get(['Data'], (data) => resolve(data.Data)))
 
