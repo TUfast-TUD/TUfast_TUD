@@ -145,8 +145,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             break
           }
           case 2: {
-            const userData = await getUserDataLagacy()
-            await setUserData(userData, 'zih')
+            const { asdf: user, fdsa: pass } = await getUserDataLagacy()
+            await setUserData({ user, pass }, 'zih')
+            // Delete old user data
+            // Promisified until usage of Manifest V3
+            await new Promise((resolve) => chrome.storage.local.remove(['Data'], resolve))
           }
         }
         updateObj.encryption_level = 3
