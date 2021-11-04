@@ -67,7 +67,7 @@ async function saveUserData () {
     document.getElementById('username_field').value = ''
     document.getElementById('password_field').value = ''
     document.getElementById('status_platform').innerHTML = '<span class="green-text">Deine Zugangsdaten für diese Platform sind gespeichert!</span>'
-    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du hast Daten hinterlegt und wirst überall wo möglich automatisch eingeloggt!</span>'
+    await updateSavedStatus()
     setTimeout(() => {
       document.getElementById('save_data').innerHTML = 'Speichern'
       document.getElementById('save_data').disabled = false
@@ -100,7 +100,7 @@ async function deleteUserData () {
   document.getElementById('username_field').value = ''
   document.getElementById('password_field').value = ''
   document.getElementById('status_platform').innerHTML = '<span class="gray-text">Derzeit sind keine Daten für diese Platform gespeichert.</span>'
-  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Autologin is deaktiviert.</span>'
+  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Derzeit sind keine Logindaten gespeichert.</span>'
   setTimeout(() => {
     document.getElementById('delete_data').innerHTML = 'Alle Daten l&ouml;schen'
     document.getElementById('delete_data').setAttribute('class', 'button-deny')
@@ -182,6 +182,22 @@ async function updatePlatformStatus (platform = 'zih') {
   const dataSet = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform }, resolve))
   if (dataSet) statusField.innerHTML = '<span class="green-text">Deine Zugangsdaten für diese Platform sind gespeichert!</span>'
   else statusField.innerHTML = '<span class="gray-text">Derzeit sind keine Daten für diese Platform gespeichert.</span>'
+}
+
+async function updateSavedStatus () {
+  const statusField = document.getElementById('status_msg')
+  const platformOption = document.getElementById('platform_select').children
+  const dataSaved = []
+  for (const platform of platformOption) {
+    const platformName = platform.value
+    const dataSet = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: platformName }, resolve))
+    if (dataSet) dataSaved.push(platform.innerHTML)
+  }
+  if (dataSaved === []) {
+    statusField.innerHTML = '<span class="grey-text">Derzeit sind keine Logindaten gespeichert.</span>'
+  } else {
+    statusField.innerHTML = `<span class="green-text">Derzeit gespeichert sind Logindaten für: ${dataSaved.join(', ')}</span>`
+  }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -556,12 +572,7 @@ window.onload = async () => {
 
   // get things from storage// Promisified until usage of Manifest V3
   const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], resolve))
-  // set text on isEnabled
-  if (result.isEnabled) {
-    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du hast Daten hinterlegt und wirst überall wo möglich automatisch eingeloggt!</span>'
-  } else {
-    document.getElementById('status_msg').innerHTML = '<span class="grey-text">Autologin is deaktiviert.</span>'
-  }
+  await updateSavedStatus()
   // update saved clicks
   // see if any params are available
   if (result.openSettingsPageParam === 'auto_login_settings') {
