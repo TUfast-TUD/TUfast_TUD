@@ -193,7 +193,7 @@ async function updateSavedStatus () {
     const dataSet = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: platformName }, resolve))
     if (dataSet) dataSaved.push(platform.innerHTML)
   }
-  if (dataSaved === []) {
+  if (dataSaved.length === 0) {
     statusField.innerHTML = '<span class="grey-text">Derzeit sind keine Logindaten gespeichert.</span>'
   } else {
     statusField.innerHTML = `<span class="green-text">Derzeit gespeichert sind Logindaten für: ${dataSaved.join(', ')}</span>`
