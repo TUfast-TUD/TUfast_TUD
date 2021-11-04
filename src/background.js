@@ -366,8 +366,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       break
     }
     case 'check_user_data': {
-      const platform = request.platform || 'zih'
-      userDataExists(platform).then(response => sendResponse(response))
+      userDataExists(request.platform).then(response => sendResponse(response))
       break
     }
     case 'read_mail_owa':
@@ -619,9 +618,25 @@ async function setUserData (userData, platform = 'zih') {
 }
 
 // check if username, password exist
-async function userDataExists (platform = 'zih') {
-  const { user, pass } = await getUserData(platform)
-  return user && pass
+async function userDataExists (platform) {
+  if (typeof platform === 'string') {
+    // Query for a specific platform
+    const { user, pass } = await getUserData(platform)
+    return user && pass
+  } else {
+    // Query for any platform
+    const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
+    if (typeof data !== 'string') return false
+
+    try {
+      const dataJson = JSON.parse(data)
+      for (const platform of Object.keys(dataJson)) {
+        const { user, pass } = await getUserData(platform)
+        if (user && pass) return true
+      }
+    } catch {}
+  }
+  return false
 }
 
 // return {user: string, pass: string}
