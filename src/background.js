@@ -141,7 +141,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             console.log('Upgrading encryption standard from level 1 to level 3...')
             // Promisified until usage of Manifest V3
             const userData = await new Promise((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve))
-            await setUserData({ asdf: atob(userData.asdf), fdsa: atob(userData.fdsa) }, 'zih')
+            await setUserData({ user: atob(userData.asdf), pass: atob(userData.fdsa) }, 'zih')
             break
           }
           case 2: {
