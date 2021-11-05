@@ -261,7 +261,7 @@ function getAllChromeTabs () {
 // eslint-disable-next-line no-unused-vars
 async function loginDataExists (platform = 'zih') {
   const { user, pass } = await getUserData(platform)
-  return user && pass
+  return !!(user && pass)
 }
 
 // start OWA fetch funtion based on interval
@@ -622,7 +622,7 @@ async function userDataExists (platform) {
   if (typeof platform === 'string') {
     // Query for a specific platform
     const { user, pass } = await getUserData(platform)
-    return user && pass
+    return !!(user && pass)
   } else {
     // Query for any platform
     const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
