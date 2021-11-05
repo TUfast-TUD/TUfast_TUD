@@ -61,12 +61,12 @@ async function saveUserData () {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass }, platform })
+    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass }, platform }, resolve))
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
     document.getElementById('username_field').value = ''
     document.getElementById('password_field').value = ''
-    document.getElementById('status_platform').innerHTML = '<span class="green-text">Deine Zugangsdaten für diese Platform sind gespeichert!</span>'
+    await updatePlatformStatus(platform)
     await updateSavedStatus()
     setTimeout(() => {
       document.getElementById('save_data').innerHTML = 'Speichern'

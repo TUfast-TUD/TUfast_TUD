@@ -362,7 +362,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     }
     case 'set_user_data': {
       const platform = request.platform || 'zih'
-      setUserData(request.userData, platform)
+      setUserData(request.userData, platform).then(() => sendResponse(true))
       break
     }
     case 'check_user_data': {
