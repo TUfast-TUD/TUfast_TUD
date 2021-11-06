@@ -342,11 +342,15 @@ function customizeForStudiengang (studiengang) {
   // set fsr link
   if (studiengangConfig[studiengang].fsr_link) {
     document.getElementById('fsr_link').href = studiengangConfig[studiengang].fsr_link
+  } else {
+    document.getElementById('fsr_link').style.display = 'none'
   }
 
   // set fsr link 2
   if (studiengangConfig[studiengang].fsr_link_2) {
     document.getElementById('fsr_link_2').href = studiengangConfig[studiengang].fsr_link_2
+  } else {
+    document.getElementById('fsr_link_2').style.display = 'none'
   }
 }
 
