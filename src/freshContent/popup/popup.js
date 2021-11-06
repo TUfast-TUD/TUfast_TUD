@@ -88,7 +88,7 @@ const studiengangConfig = {
   general: {
     name: 'Standardeinstellungen',
     fsr_icon: '',
-    fsr_link: 'javascript: void(0)',
+    fsr_link: '',
     footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'je', 'swdd'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
