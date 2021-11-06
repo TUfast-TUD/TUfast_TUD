@@ -88,7 +88,7 @@ const studiengangConfig = {
   general: {
     name: 'Standardeinstellungen',
     fsr_icon: '',
-    fsr_link: 'javascript: void(0)',
+    fsr_link: '',
     footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'je', 'swdd'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
@@ -342,11 +342,17 @@ function customizeForStudiengang (studiengang) {
   // set fsr link
   if (studiengangConfig[studiengang].fsr_link) {
     document.getElementById('fsr_link').href = studiengangConfig[studiengang].fsr_link
+    document.getElementById('fsr_link').style.display = 'unset'
+  } else {
+    document.getElementById('fsr_link').style.display = 'none'
   }
 
   // set fsr link 2
   if (studiengangConfig[studiengang].fsr_link_2) {
     document.getElementById('fsr_link_2').href = studiengangConfig[studiengang].fsr_link_2
+    document.getElementById('fsr_link_2').style.display = 'unset'
+  } else {
+    document.getElementById('fsr_link_2').style.display = 'none'
   }
 }
 
