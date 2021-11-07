@@ -696,7 +696,7 @@ async function getUserDataLagacy () {
   const data = await new Promise((resolve) => chrome.storage.local.get(['Data'], (data) => resolve(data.Data)))
 
   // check if Data exists, else return
-  if (data === undefined) {
+  if (data === undefined || data === 'undefined') {
     return ({ asdf: undefined, fdsa: undefined })
   }
   let iv = data.slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
