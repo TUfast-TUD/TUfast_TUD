@@ -19,7 +19,7 @@ Everything related to the browser extension can be found in `/src`. There you wi
 #### Known peculiarities with browser extensions
 **Error:** `Unchecked runtime.lastError: The message port closed before a response was received.` Promisifying chrome.runtime.sendMessage({...}) doesnt work, because when you define a callback (Promise.resolve) sendMessage will wait until sendResponse is called in the message handler. It just stalls execution and then dies if it's never called. **Solutions:** 1) Unpromisify sendMessage. 2) Always return a value (return true is fine).
 
-## How to contribute code (as a non-TUfastTeamMember)
+## How to contribute code (as a non-TUfastTeam-member)
 We are using gitflow-workflow (simple [Tutorial](
 https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
 
