@@ -48,18 +48,24 @@
   <!-- #region -->
   <button class="accordion btn--settings" id="auto_login_settings">Automatisches Anmelden in OPAL, selma & Co.</button>
   <div class="panel">
-    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Dafür müssen deine selma
+    <p><b>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</b><br>Dafür müssen deine
       Login-Daten sicher auf diesem PC gespeichert werden.<br>Die Daten werden nur lokal und verschlüsselt
       gespeichert.<br>
       Du kannst sie jederzeit löschen.<br>
       <span class="grey-text">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</span>
     </p>
     <form>
-      <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"> (ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")<br>
+      <!-- currently disabled as there is no other platform supported -->
+      Plattform: <select name="platform" id="platform_select">
+        <option value="zih">ZIH/Selma</option>
+      </select><br>
+      <input placeholder="Nutzername (selma-Login)" type="text" id="username_field"> <span id="user_extra_hint">(ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")</span><br>
       <input placeholder="Passwort (selma-Login)" type="password" id="password_field"><br>
-      <button type="button" class="button-accept btn--settings" id="save_data">Lokal Speichern</button>
-      <p id="status_msg" style="display: inline;"></p>
+      <input type="button" class="button-accept btn--settings" id="save_data" value="Lokal Speichern" />
+      <p id="status_platform" style="display: inline;"></p>
     </form>
+    <hr>
+    <p id="status_msg" style="display: inline;"></p><br>
     <p>Hier kannst du alle Daten löschen:<br>
       <button id="delete_data" class="button-deny btn--settings">Alle Daten löschen</button>
     </p>

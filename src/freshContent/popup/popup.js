@@ -604,9 +604,10 @@ async function saveEnabled () {
   // Promisified until usage of Manifest V3
   const isEnabled = await new Promise((resolve) => chrome.storage.local.get(['isEnabled'], resolve))
   // Promisified until usage of Manifest V3
-  const userData = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
-  await userData
-  if (userData.asdf && userData.fdsa) {
+  // If there are multiple platforms user data has to be checked for every platform
+  const userDataAvail = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data' }, resolve))
+  await userDataAvail
+  if (userDataAvail) {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: !(isEnabled.isEnabled) }, resolve))
   } else {

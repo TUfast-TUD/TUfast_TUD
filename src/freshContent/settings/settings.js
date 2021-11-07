@@ -34,23 +34,40 @@ async function nextTheme () {
   await applyTheme(themeOrder[idx])
 }
 
+async function changePlatform (e) {
+  const platform = e.target.value
+  let [usernameExtraHint, usernameFieldHint, passwordFieldHint] = ['', '', '']
+  switch (platform) {
+    case 'zih':
+      usernameFieldHint = 'Nutzername (selma-Login)'
+      passwordFieldHint = 'Passwort (selma-Login)'
+      usernameExtraHint = '(ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")'
+      break
+  }
+  document.getElementById('username_field').setAttribute('placeholder', usernameFieldHint)
+  document.getElementById('password_field').setAttribute('placeholder', passwordFieldHint)
+  document.getElementById('user_extra_hint').innerHTML = usernameExtraHint
+  await updatePlatformStatus(platform)
+}
+
 async function saveUserData () {
-  const asdf = document.getElementById('username_field')?.value
-  const fdsa = document.getElementById('password_field')?.value
-  if (!asdf || !fdsa) {
-    document.getElementById('status_msg').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
+  const platform = document.getElementById('platform_select')?.value || 'zih'
+  const user = document.getElementById('username_field')?.value
+  const pass = document.getElementById('password_field')?.value
+  if (!user || !pass) {
+    document.getElementById('status_platform').innerHTML = '<span class="red-text">Die Felder d&uuml;rfen nicht leer sein!</span>'
     return false
   } else {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) => chrome.storage.local.set({ isEnabled: true }, resolve)) // need to activate auto login feature
     chrome.runtime.sendMessage({ cmd: 'clear_badge' })
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: asdf, fdsa: fdsa } })
-    document.getElementById('status_msg').innerHTML = ''
+    await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user, pass }, platform }, resolve))
     document.getElementById('save_data').innerHTML = '<span>Gespeichert!</span>'
     document.getElementById('save_data').disabled = true
     document.getElementById('username_field').value = ''
     document.getElementById('password_field').value = ''
-    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
+    await updatePlatformStatus(platform)
+    await updateSavedStatus()
     setTimeout(() => {
       document.getElementById('save_data').innerHTML = 'Speichern'
       document.getElementById('save_data').disabled = false
@@ -62,7 +79,7 @@ async function deleteUserData () {
   chrome.runtime.sendMessage({ cmd: 'clear_badge' })
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.remove([
-    'Data', // this is how to delete user data!
+    'udata', // this is how to delete user data!
     'meine_kurse', // delete opal courses
     'favoriten', // delete opal courses
     'isEnabled'], resolve)) // need to deactivate auto login feature
@@ -77,13 +94,13 @@ async function deleteUserData () {
   }, resolve))
   document.getElementById('additionalNotification').checked = false
   // --
-  document.getElementById('status_msg').innerHTML = ''
   document.getElementById('delete_data').innerHTML = '<span>Gel&ouml;scht!</span>'
   document.getElementById('delete_data').setAttribute('class', 'button-accept')
   document.getElementById('delete_data').disabled = true
   document.getElementById('username_field').value = ''
   document.getElementById('password_field').value = ''
-  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
+  document.getElementById('status_platform').innerHTML = '<span class="gray-text">Derzeit sind keine Daten für diese Platform gespeichert.</span>'
+  document.getElementById('status_msg').innerHTML = '<span class="grey-text">Derzeit sind keine Logindaten gespeichert.</span>'
   setTimeout(() => {
     document.getElementById('delete_data').innerHTML = 'Alle Daten l&ouml;schen'
     document.getElementById('delete_data').setAttribute('class', 'button-deny')
@@ -142,6 +159,7 @@ async function displayEnabled () {
   }
 
   document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
+  await updatePlatformStatus(document.getElementById('status_platform').value)
 
   /*
     if(result.dashboardDisplay === "favoriten") {document.getElementById('fav').checked = true}
@@ -157,6 +175,30 @@ async function displayEnabled () {
     chrome.storage.local.set({dashboardDisplay: "meine_kurse"}, function() {})
   }
 } */
+
+async function updatePlatformStatus (platform = 'zih') {
+  const statusField = document.getElementById('status_platform')
+  statusField.innerHTML = ''
+  const dataSet = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform }, resolve))
+  if (dataSet) statusField.innerHTML = '<span class="green-text">Deine Zugangsdaten für diese Platform sind gespeichert!</span>'
+  else statusField.innerHTML = '<span class="gray-text">Derzeit sind keine Daten für diese Platform gespeichert.</span>'
+}
+
+async function updateSavedStatus () {
+  const statusField = document.getElementById('status_msg')
+  const platformOption = document.getElementById('platform_select').children
+  const dataSaved = []
+  for (const platform of platformOption) {
+    const platformName = platform.value
+    const dataSet = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: platformName }, resolve))
+    if (dataSet) dataSaved.push(platform.innerHTML)
+  }
+  if (dataSaved.length === 0) {
+    statusField.innerHTML = '<span class="grey-text">Derzeit sind keine Logindaten gespeichert.</span>'
+  } else {
+    statusField.innerHTML = `<span class="green-text">Derzeit gespeichert sind Logindaten für: ${dataSaved.join(', ')}</span>`
+  }
+}
 
 // eslint-disable-next-line no-unused-vars
 function clicksToTime (clicks) {
@@ -221,7 +263,7 @@ async function enableOWAFetch () {
     const resp = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data' }, resolve))
     const userData = await resp
     // check if user data is saved
-    if (userData.asdf && userData.fdsa) {
+    if (userData.user && userData.pass) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
       // Promisified until usage of Manifest V3
       await new Promise((resolve) => chrome.storage.local.set({
@@ -398,6 +440,7 @@ window.onload = async () => {
   await insertAllRocketIcons()
 
   // assign functions
+  document.getElementById('platform_select').onchange = changePlatform
   document.getElementById('save_data').onclick = saveUserData
   document.getElementById('delete_data').onclick = deleteUserData
   document.getElementById('switch_fwd').onclick = fwdGoogleSearch
@@ -529,12 +572,7 @@ window.onload = async () => {
 
   // get things from storage// Promisified until usage of Manifest V3
   const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], resolve))
-  // set text on isEnabled
-  if (result.isEnabled) {
-    document.getElementById('status_msg').innerHTML = '<span class="green-text">Du bist angemeldet und wirst automatisch in Opal & Co. eingeloggt.</span>'
-  } else {
-    document.getElementById('status_msg').innerHTML = '<span class="grey-text">Du bist nicht angemeldet.</span>'
-  }
+  await updateSavedStatus()
   // update saved clicks
   // see if any params are available
   if (result.openSettingsPageParam === 'auto_login_settings') {

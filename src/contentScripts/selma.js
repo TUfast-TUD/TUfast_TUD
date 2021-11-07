@@ -4,12 +4,12 @@ chrome.storage.local.get(['isEnabled', 'loggedOutSelma'], (result) => {
       if (document.getElementById('field_user')) {
         chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (response) => {
           await response
-          if (response.asdf && response.fdsa) {
+          if (response.user && response.pass) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
             chrome.runtime.sendMessage({ cmd: 'perform_login' })
-            document.getElementById('field_user').value = response.asdf
-            document.getElementById('field_pass').value = response.fdsa
+            document.getElementById('field_user').value = response.user
+            document.getElementById('field_pass').value = response.pass
             document.getElementById('logIn_btn').click()
           } else {
             chrome.runtime.sendMessage({ cmd: 'no_login_data' })

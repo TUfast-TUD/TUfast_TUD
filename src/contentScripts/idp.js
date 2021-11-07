@@ -15,10 +15,10 @@ function logInQis () {
   if (document.getElementById('username')) {
     chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
       await result
-      if (result.fdsa && result.asdf) {
+      if (result.user && result.pass) {
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
-        document.getElementById('username').value = result.asdf
-        document.getElementById('password').value = result.fdsa
+        document.getElementById('username').value = result.user
+        document.getElementById('password').value = result.pass
         document.getElementsByName('_eventId_proceed')[0].click()
       } else {
         chrome.runtime.sendMessage({ cmd: 'no_login_data' })

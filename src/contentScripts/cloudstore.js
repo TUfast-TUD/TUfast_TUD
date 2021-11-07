@@ -5,12 +5,12 @@ chrome.storage.local.get(['isEnabled', 'loggedOutCloudstore'], (result) => {
       if (document.getElementById('user') && document.getElementById('password')) {
         chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
           await result
-          if (result.asdf && result.fdsa) {
+          if (result.user && result.pass) {
             chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
             chrome.runtime.sendMessage({ cmd: 'perform_login' })
             chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
-            document.getElementById('user').value = result.asdf
-            document.getElementById('password').value = result.fdsa
+            document.getElementById('user').value = result.user
+            document.getElementById('password').value = result.pass
             document.getElementById('submit-form').click()
           } else {
             chrome.runtime.sendMessage({ cmd: 'no_login_data' })
