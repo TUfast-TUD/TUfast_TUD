@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "npx eslint --fix .",
     "test": "npm run lint && npm run build",
-    "dev": "sass --watch src/scss:src/css",
-    "build": "sass src/scss:src/css --style=compressed"
+    "dev": "snowpack build --watch",
+    "build": "snowpack build"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/TUfast-TUD/TUfast_TUD#readme",
   "devDependencies": {
+    "@snowpack/plugin-sass": "^1.4.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.2",
