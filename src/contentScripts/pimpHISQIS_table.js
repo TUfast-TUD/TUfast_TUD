@@ -1,57 +1,6 @@
 /* eslint-disable no-multi-str */
 console.log('pimping table ... maybe :)')
 
-// eslint-disable-next-line no-template-curly-in-string
-const tableHtml = "<div id='pimpedTable' style='display:none'> \
-<vs-table hover-flat :data='table'> \
-  <template slot='header'> \
-    <h1>Deine Notenübersicht</h1> \
-    <div class='info-row'> \
-  <div class='info-row__info'> \
-   <div class='square blue'></div><h5>Module</h5> \
-  </div> \
-  <div class='info-row__info'> \
-    <div class='square green'></div><h5>Bestandene Prüfung</h5> \
-  </div> \
-  <div class='info-row__info'> \
-    <div class='square red'></div><h5>Nicht bestandene Prüfung</h5> \
-  </div> \
-</div> \
-  </template> \
-  <template slot='thead'> \
-    <vs-th v-for='(header_text, index) in table[1]'  :sort-key='`${index}`' :key='index'> {{header_text}} </vs-th> \
-  </template> \
-  <template slot-scope='{data}'> \
-    <vs-tr :class='getColour(indextr, tr)' style='background-color=red' :state='getColour(indextr, tr)' :key='indextr' v-for='(tr, indextr) in data.slice(2)'> \
-      <vs-td v-for='(td, index) in tr' :key='index' :data='td'> {{td}} </vs-td> \
-    </vs-tr> \
-  </template> \
-</vs-table> \
-</div>"
-
-// this needs to be done first
-const oldTable = document.getElementsByTagName('table')[2]
-const changeTableLink = document.getElementById('changeTableLink')
-
-// insert pimped table with style display:none
-getGradesFromTable()
-const pimpedTable = document.getElementById('pimpedTable')
-
-// check if hisqisPimpedTable is activated
-chrome.storage.local.get(['hisqisPimpedTable'], (result) => {
-  result.hisqisPimpedTable ? setPimpedTable() : setOldTable()
-})
-
-// listen for event for switching table
-changeTableLink.onclick = () => {
-  const pimpedTableActivated = pimpedTable.style.display !== 'none'
-
-  // switch table
-  pimpedTableActivated ? setOldTable() : setPimpedTable()
-  // store permanently
-  chrome.storage.local.set({ hisqisPimpedTable: !pimpedTableActivated })
-}
-
 function setPimpedTable () {
   oldTable.style.display = 'none'
   pimpedTable.style.display = 'block'
@@ -135,4 +84,55 @@ function runVue (table, levels) {
       }
     }
   })
+}
+
+// eslint-disable-next-line no-template-curly-in-string
+const tableHtml = "<div id='pimpedTable' style='display:none'> \
+<vs-table hover-flat :data='table'> \
+  <template slot='header'> \
+    <h1>Deine Notenübersicht</h1> \
+    <div class='info-row'> \
+  <div class='info-row__info'> \
+   <div class='square blue'></div><h5>Module</h5> \
+  </div> \
+  <div class='info-row__info'> \
+    <div class='square green'></div><h5>Bestandene Prüfung</h5> \
+  </div> \
+  <div class='info-row__info'> \
+    <div class='square red'></div><h5>Nicht bestandene Prüfung</h5> \
+  </div> \
+</div> \
+  </template> \
+  <template slot='thead'> \
+    <vs-th v-for='(header_text, index) in table[1]'  :sort-key='`${index}`' :key='index'> {{header_text}} </vs-th> \
+  </template> \
+  <template slot-scope='{data}'> \
+    <vs-tr :class='getColour(indextr, tr)' style='background-color=red' :state='getColour(indextr, tr)' :key='indextr' v-for='(tr, indextr) in data.slice(2)'> \
+      <vs-td v-for='(td, index) in tr' :key='index' :data='td'> {{td}} </vs-td> \
+    </vs-tr> \
+  </template> \
+</vs-table> \
+</div>"
+
+// this needs to be done first
+const oldTable = document.getElementsByTagName('table')[2]
+const changeTableLink = document.getElementById('changeTableLink')
+
+// insert pimped table with style display:none
+getGradesFromTable()
+const pimpedTable = document.getElementById('pimpedTable')
+
+// check if hisqisPimpedTable is activated
+chrome.storage.local.get(['hisqisPimpedTable'], (result) => {
+  result.hisqisPimpedTable ? setPimpedTable() : setOldTable()
+})
+
+// listen for event for switching table
+changeTableLink.onclick = () => {
+  const pimpedTableActivated = pimpedTable.style.display !== 'none'
+
+  // switch table
+  pimpedTableActivated ? setOldTable() : setPimpedTable()
+  // store permanently
+  chrome.storage.local.set({ hisqisPimpedTable: !pimpedTableActivated })
 }
