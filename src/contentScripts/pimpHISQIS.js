@@ -1,67 +1,3 @@
-console.log('Pimping up hisqis...')
-
-chrome.storage.local.get(['isEnabled'], (result) => {
-  if (result.isEnabled) {
-    document.addEventListener('DOMContentLoaded', () => {
-      const imgUrl = chrome.runtime.getURL('../assets/images/tufast48.png')
-      const rawGrades = parseGrades()
-      const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')
-      const notenStatistik = `<br><br>
-        <canvas id="myChart" style="margin:0 auto;"></canvas>
-        <p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ${getWeightedAverage(rawGrades)}</p>
-        <p class="Konto" style="margin:0 auto;">Anzahl Module: ${rawGrades.filter(x => x.isModule).length}</p>
-        <p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ${rawGrades.filter(x => !x.isModule).length}</p>
-        <p class="normal" style="margin-bottom:0">powered by <img src="${imgUrl}" style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a> (entwickelt von <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>, <a href="https://github.com/C0ntroller" target="_blank">C0ntroller</a>)</p>
-        <p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml;r Firefox!</a></p>`
-      table.insertAdjacentHTML('afterend', notenStatistik)
-      const ctx = document.getElementById('myChart').getContext('2d')
-      ctx.canvas.width = 500
-      ctx.canvas.height = 250
-      // eslint-disable-next-line no-unused-vars, no-undef
-      const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['1', '2', '3', '4', 'nicht bestanden'],
-          datasets: [{
-            data: countGrades(rawGrades.filter(x => !x.isModule)),
-            backgroundColor: [
-              '#0b2a51',
-              '#0b2a51',
-              '#0b2a51',
-              '#0b2a51',
-              '#0b2a51'
-            ],
-            borderColor: [
-              '#0b2a51'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: false,
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }],
-            xAxes: [{
-              scaleLabel: {
-                // display: true,
-                // labelString: "<a href='http://www.yahoo.com'>here</a>"
-              }
-            }]
-          }
-        }
-      })
-    })
-  }
-})
-
 // returns: [{grade: X.X, isModule: true}]
 // only count subjects (not modules!)
 function parseGrades () {
@@ -131,3 +67,62 @@ function getWeightedAverage (rawGrades) {
   const totalWeight = grades.reduce((acc, value) => acc + value.weight, 0) // BUG:
   return totalWeight ? (grades.reduce((acc, value) => acc + value.grade * value.weight, 0) / totalWeight).toFixed(1) : 0
 }
+
+
+console.log('Pimping up hisqis...')
+
+const imgUrl = chrome.runtime.getURL('../assets/images/tufast48.png')
+const rawGrades = parseGrades()
+const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')
+const notenStatistik = `<br><br>
+  <canvas id="myChart" style="margin:0 auto;"></canvas>
+  <p class="Konto" style="margin:0 auto;">Deine Durchschnittnote (nach CP gewichtet): ${getWeightedAverage(rawGrades)}</p>
+  <p class="Konto" style="margin:0 auto;">Anzahl Module: ${rawGrades.filter(x => x.isModule).length}</p>
+  <p class="Konto" style="margin:0 auto;">Anzahl Prüfungen: ${rawGrades.filter(x => !x.isModule).length}</p>
+  <p class="normal" style="margin-bottom:0">powered by <img src="${imgUrl}" style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de">TUfast</a> (entwickelt von <a href="https://github.com/Noxdor" target="_blank">Noxdor</a>, <a href="https://github.com/C0ntroller" target="_blank">C0ntroller</a>)</p>
+  <p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml;r Firefox!</a></p>`
+table.insertAdjacentHTML('afterend', notenStatistik)
+const ctx = document.getElementById('myChart').getContext('2d')
+ctx.canvas.width = 500
+ctx.canvas.height = 250
+// eslint-disable-next-line no-unused-vars, no-undef
+const myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['1', '2', '3', '4', 'nicht bestanden'],
+    datasets: [{
+      data: countGrades(rawGrades.filter(x => !x.isModule)),
+      backgroundColor: [
+        '#0b2a51',
+        '#0b2a51',
+        '#0b2a51',
+        '#0b2a51',
+        '#0b2a51'
+      ],
+      borderColor: [
+        '#0b2a51'
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: false,
+    maintainAspectRatio: false,
+    legend: {
+      display: false
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          // display: true,
+          // labelString: "<a href='http://www.yahoo.com'>here</a>"
+        }
+      }]
+    }
+  }
+})

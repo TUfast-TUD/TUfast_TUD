@@ -1,17 +1,4 @@
-console.log('injected login script successfully ...')
-chrome.storage.local.get(['isEnabled'], (result) => {
-  if (!result.isEnabled) return
-  if (document.readyState !== 'loading') {
-    logInQis(result.isEnabled)
-  } else {
-    document.addEventListener('DOMContentLoaded', () => {
-      logInQis(result.isEnabled)
-    })
-    console.log('Auto Login to TU Dresden Auth.')
-  }
-})
-
-function logInQis () {
+function loginIdp () {
   if (document.getElementById('username')) {
     chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
       await result
@@ -34,4 +21,16 @@ function logInQis () {
       window.location.replace('https://bildungsportal.sachsen.de/opal/login')
     }
   }
+
+  console.log('Auto Login to TU Dresden Auth.')
 }
+
+chrome.storage.local.get(['isEnabled'], (result) => {
+  if (!result.isEnabled) return
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loginIdp)
+  } else {
+    loginIdp()
+  }
+})

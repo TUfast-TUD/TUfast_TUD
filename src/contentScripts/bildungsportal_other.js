@@ -1,10 +1,16 @@
-document.addEventListener('DOMContentLoaded', () => {
+function addLogoutButtonListener () {
   if (document.querySelectorAll('.btn.btn-sm[title="Abmelden"]')[0]) {
     document.querySelectorAll('.btn.btn-sm[title="Abmelden"]')[0].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOpal' })
     })
   }
-})
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', addLogoutButtonListener)
+} else {
+  addLogoutButtonListener()
+}
 
 chrome.storage.local.get(['isEnabled', 'availableRockets', 'removedUnlockRocketsBanner', 'showedOpalCustomizeBanner', 'unlockRocketsFirstPrompt', 'saved_click_counter', 'showedUnreadMailCounterBanner', 'showedFirefoxBanner', 'mostLiklySubmittedReview', 'removedReviewBanner', 'neverShowedReviewBanner', 'showedKeyboardBanner2', 'nameIsTUfast'], (result) => {
   // decide whether to show review banner
