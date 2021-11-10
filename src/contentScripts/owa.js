@@ -1,13 +1,38 @@
+function loginOWA () {
+  if (document.getElementById('username') && document.getElementById('password')) {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
+      await result
+      if (result.user && result.pass) {
+        chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
+        chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
+        chrome.runtime.sendMessage({ cmd: 'perform_login' })
+        document.getElementById('username').value = result.user + '@msx.tu-dresden.de'
+        document.getElementById('password').value = result.pass
+        document.getElementsByClassName('signinbutton')[0].click()
+        chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
+      } else {
+        chrome.runtime.sendMessage({ cmd: 'no_login_data' })
+      }
+    })
+  }
+
+  // detecting logout
+  if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
+    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', () => {
+      chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
+    })
+  }
+
+  console.log('Auto Login to OWA.')
+}
+
 chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], (result) => {
   if (result.isEnabled && !result.loggedOutOwa) {
-    if (document.readyState !== 'loading') {
-      loginOWA()
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loginOWA)
     } else {
-      document.addEventListener('DOMContentLoaded', () => {
-        loginOWA()
-      })
+      loginOWA()
     }
-    console.log('Auto Login to OWA.')
   }
   // sometimes it reloades the page, sometimes it doesnt...
   // else if(result.loggedOutOwa) {
@@ -33,31 +58,6 @@ document.addEventListener('DOMNodeInserted', () => {
     })
   }
 }, false)
-
-function loginOWA () {
-  if (document.getElementById('username') && document.getElementById('password')) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, async (result) => {
-      await result
-      if (result.user && result.pass) {
-        chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
-        chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
-        chrome.runtime.sendMessage({ cmd: 'perform_login' })
-        document.getElementById('username').value = result.user + '@msx.tu-dresden.de'
-        document.getElementById('password').value = result.pass
-        document.getElementsByClassName('signinbutton')[0].click()
-        chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
-      } else {
-        chrome.runtime.sendMessage({ cmd: 'no_login_data' })
-      }
-    })
-  }
-  // detecting logout
-  if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', () => {
-      chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
-    })
-  }
-}
 
 window.onload = () => {
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {

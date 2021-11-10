@@ -1,18 +1,3 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutQis'], (result) => {
-  if (!result.loggedOutQis) {
-    if (document.readyState !== 'loading') {
-      loginQis(result.isEnabled)
-    } else {
-      document.addEventListener('DOMContentLoaded', () => {
-        loginQis(result.isEnabled)
-      })
-    }
-    console.log('Auto Login to hisqis.')
-  } else if (result.loggedOutQis) {
-    chrome.storage.local.set({ loggedOutQis: false })
-  }
-})
-
 function loginQis (isEnabled) {
   if (document.getElementsByTagName('a')[4].innerText === 'Ich habe die Nutzungsbedingungen gelesen, verstanden und akzeptiert. >>>') {
     document.getElementsByTagName('a')[4].click()
@@ -38,4 +23,20 @@ function loginQis (isEnabled) {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutQis' })
     })
   }
+
+  console.log('Auto Login to hisqis.')
 }
+
+chrome.storage.local.get(['isEnabled', 'loggedOutQis'], (result) => {
+  if (!result.loggedOutQis) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        loginQis(result.isEnabled)
+      })
+    } else {
+      loginQis(result.isEnabled)
+    }
+  } else if (result.loggedOutQis) {
+    chrome.storage.local.set({ loggedOutQis: false })
+  }
+})

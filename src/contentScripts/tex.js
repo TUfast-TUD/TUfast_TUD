@@ -1,17 +1,22 @@
+function loginTex () {
+  document.querySelectorAll("a[href='/saml/login/go']")[0].click()
+  console.log('Auto Login to tex.')
+}
+
 chrome.storage.local.get(['loggedOutTex'], (result) => {
   if (!result.loggedOutTex) {
     // there is only a button and no reason to not click
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll("a[href='/saml/login/go']")[0].click()
-      console.log('Auto Login to tex.')
-    })
-  } else if (result.loggedOutTex) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loginTex)
+    } else {
+      loginTex()
+    }
+  } else {
     chrome.storage.local.set({ loggedOutTex: false })
   }
 })
 
-document.addEventListener('DOMContentLoaded', () => {
-  // add event listener for log-out button
+function addLogoutButtonListener () {
   const buttons = document.querySelectorAll(
     'button.btn-link.text-left.dropdown-menu-button'
   )
@@ -27,4 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     }
   }
-})
+}
+
+// add event listener for log-out button
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', addLogoutButtonListener)
+} else {
+  addLogoutButtonListener()
+}

@@ -1,16 +1,3 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutElearningMED'], (result) => {
-  if (result.isEnabled && !result.loggedOutElearningMED) {
-    if (document.readyState !== 'loading') {
-      loginElearningMED()
-    } else {
-      document.addEventListener('DOMContentLoaded', () => {
-        loginElearningMED()
-      })
-    }
-    console.log('Auto Login to elearning.med.')
-  }
-})
-
 function loginElearningMED () {
   if (document.getElementsByTagName('a')[0].textContent === 'Moodle' && location.href === 'https://elearning.med.tu-dresden.de/') {
     document.getElementsByTagName('a')[0].click()
@@ -34,4 +21,18 @@ function loginElearningMED () {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutElearningMED' })
     })
   }
+
+  console.log('Auto Login to elearning.med.')
 }
+
+chrome.storage.local.get(['isEnabled', 'loggedOutElearningMED'], (result) => {
+  if (result.isEnabled && !result.loggedOutElearningMED) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        loginElearningMED()
+      })
+    } else {
+      loginElearningMED()
+    }
+  }
+})
