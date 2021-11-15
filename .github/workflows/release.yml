@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number (four digits)'     
+        description: 'Version number (four digits)'
         required: true
         default: 'X.X.X.X'
       description:
-        description: 'Description for the release (optional)'     
+        description: 'Description for the release (optional)'
         required: false
         default: ''
 
@@ -31,12 +31,12 @@ jobs:
       - run: npm ci
       #- run: npm run test
       - run: npm run build
-      - run: cd src && zip -r -x scss/\\* @ ../TUfast_TUD.zip *
-      
+      - run: cd build && zip -r ../TUfast_TUD.zip *
+
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "TUfast_TUD.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.version }}
           body: ${{ github.event.inputs.description }}
-        
+
