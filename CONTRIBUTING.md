@@ -13,7 +13,8 @@ If you never worked with browser extensions before, you should read this very [n
 Everything related to the browser extension can be found in `/src`. There you will find the `manifest.json` and background-script (`background.js`) directly. Content scripts are in `/src/contentScripts`. In `/src/freshContent` you can find newly created webcontent that is used in TUfast, e.g. the popup or settings-page.
 
 #### Used frameworks
-- CSS-Preprocessor: We are using [SASS](https://sass-lang.com/). You need to run `npm run dev` while developing to translate to css.
+- Build tool: [Snowpack](https://www.snowpack.dev/) - You need to run `npm run dev` while developing to compile sass and ts files.
+- CSS-Preprocessor: We are using [SASS](https://sass-lang.com/).
 - ESlint: We are following standard styling with minor additions. Run `npm run lint` to check your code style before committing code.
 
 #### Known peculiarities with browser extensions
@@ -21,17 +22,18 @@ Everything related to the browser extension can be found in `/src`. There you wi
 
 ## How to contribute code (as a non-TUfastTeam-member)
 We are using gitflow-workflow (simple [Tutorial](
-https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
+https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In your fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly.
 
 Steps to contribute a feature (as a non-TUfast-member):
 1. Create a fork from this repo.
 2. Create a local clone of your fork `git clone <url-of-your-repo>`
 3. Checkout develop branch `git checkout develop`
-4. Create new feature branch `git checkout -b my_new_feature_branch`
-5. Install dependencies `npm install` (you need node package manager = npm installed)
-6. --> Implement your Code <-- and run `npm run dev` for developing. This is required and will translate sass into css. See below for details.
-7. **run tests locally** before contributing code: `npm run test`
-8. Create a PR on develop branch
+4. Create new feature branch `git checkout -b <my_new_feature_branch>`
+5. Install dependencies `npm ci` (you need node package manager = npm installed)
+6. Run `npm run dev` while developing. This is will compile sass and ts files and watch for changes in your working tree.
+7. Load the ./build directory as an unpacked extension in your browser and --> Implement your Code <--
+8. **run tests locally** before contributing code: `npm run test`
+9. Create a PR on develop branch
 
 **One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case,  you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/). (Upstream repo is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.)
 
