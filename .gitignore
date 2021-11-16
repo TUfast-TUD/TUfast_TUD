@@ -1,3 +1,4 @@
+build/
 node_modules/
-dist/*
-src/css/
+.vscode/
+*.zip
