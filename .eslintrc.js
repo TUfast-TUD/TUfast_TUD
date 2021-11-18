@@ -5,7 +5,10 @@ module.exports = {
     webextensions: true,
     jquery: true
   },
-  extends: ['standard'],
+  extends: [
+    'standard',
+    'plugin:vue/vue3-recommended',
+  ],
   plugins: ['promise'],
   rules: {
     'prefer-arrow-callback': 'warn'

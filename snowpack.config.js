@@ -8,6 +8,7 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-sass',
+    '@snowpack/plugin-vue',
   ],
   packageOptions: {
     /* ... */
