@@ -5,19 +5,3 @@
 # the repo. Unless a later match takes precedence.
 *       @FugiMuffi
 
-# Order is important; the last matching pattern takes the most
-# precedence.
-
-# /
-/.gitignore          @OliEfr @FugiMuffi
-/.eslintrc.js        @OliEfr @FugiMuffi
-/.eslintignore       @OliEfr @FugiMuffi
-/snowpack.config.js  @FugiMuffi
-
-# /.github
-/.github/            @OliEfr
-/.github/workflows/  @OliEfr @FugiMuffi
-
-# /src
-
-
