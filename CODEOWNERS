@@ -9,14 +9,14 @@
 # precedence.
 
 # /
-/.gitignore          @OliEfr @FugiMuffi
-/.eslintrc.js        @OliEfr @FugiMuffi
-/.eslintignore       @OliEfr @FugiMuffi
-/snowpack.config.js  @FugiMuffi
+.gitignore          @OliEfr @FugiMuffi
+.eslintrc.js        @OliEfr @FugiMuffi
+.eslintignore       @OliEfr @FugiMuffi
+snowpack.config.js  @FugiMuffi
 
 # /.github
-/.github/            @OliEfr
-/.github/workflows/  @OliEfr @FugiMuffi
+.github/            @OliEfr
+.github/workflows/  @OliEfr @FugiMuffi
 
 # /src
 
