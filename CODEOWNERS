@@ -1,0 +1,22 @@
+# This is a comment.
+# Each line is a file pattern followed by one or more owners.
+
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence.
+*       @TUfast-TUD/coreteam
+
+# Order is important; the last matching pattern takes the most
+# precedence.
+
+# /
+.gitignore, .eslintrc.js, .eslintignore         @OliEfr @FugiMuffi
+package.json        @TUfast-TUD/coreteam
+snowpack.config.js  @FugiMuffi
+
+# /.github
+/.github            @OliEfr
+/.github/workflows  @OliEfr @FugiMuffi
+
+# /src
+
+
