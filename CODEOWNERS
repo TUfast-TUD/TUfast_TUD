@@ -9,7 +9,9 @@
 # precedence.
 
 # /
-.gitignore, .eslintrc.js, .eslintignore         @OliEfr @FugiMuffi
+.gitignore          @OliEfr @FugiMuffi
+.eslintrc.js        @OliEfr @FugiMuffi
+.eslintignore       @OliEfr @FugiMuffi
 package.json        @TUfast-TUD/coreteam
 snowpack.config.js  @FugiMuffi
 
