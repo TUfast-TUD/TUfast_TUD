@@ -15,8 +15,8 @@
 /snowpack.config.js  @FugiMuffi
 
 # /.github
-/.github            @OliEfr
-/.github/workflows  @OliEfr @FugiMuffi
+/.github/            @OliEfr
+/.github/workflows/  @OliEfr @FugiMuffi
 
 # /src
 
