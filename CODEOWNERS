@@ -5,4 +5,9 @@
 
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence.
-* @OliEfr 
+*                   @TUfast-TUD/coreteam
+
+# dot-files should be handled by creators and lead
+.*                  @OliEfr @FugiMuffi
+snowpack.config.js  @FugiMuffi
+
