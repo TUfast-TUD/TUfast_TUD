@@ -1,23 +1,12 @@
 # This is a comment.
 # Each line is a file pattern followed by one or more owners.
-
-# These owners will be the default owners for everything in
-# the repo. Unless a later match takes precedence.
-*       @TUfast-TUD/coreteam
-
 # Order is important; the last matching pattern takes the most
 # precedence.
 
-# /
-.gitignore          @OliEfr @FugiMuffi
-.eslintrc.js        @OliEfr @FugiMuffi
-.eslintignore       @OliEfr @FugiMuffi
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence.
+*                   @TUfast-TUD/coreteam
+
+# dot-files should be handled by creators and lead
+.*                  @OliEfr @FugiMuffi
 snowpack.config.js  @FugiMuffi
-
-# /.github
-.github/            @OliEfr
-.github/workflows/  @OliEfr @FugiMuffi
-
-# /src
-
-
