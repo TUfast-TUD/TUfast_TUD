@@ -1,0 +1,44 @@
+body
+	font-family: var(--ff-heading)
+	font-size: var(--fs-400)
+	background-color: hsl(var(--clr-black) )
+	color: hsl(var(--clr-white) )
+	line-height: 1.5
+	box-sizing: border-box
+
+*, *::after, *::before
+	box-sizing: inherit
+
+// reset margins
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+picture
+	margin: 0
+
+img,
+picture
+	max-width: 100%
+	display: block
+
+input,
+button,
+textarea,
+select
+	font: inherit
+
+// Remove animations for people who prefer them turned off
+@media (prefers-reduced-motion: reduce)
+	*,
+	*::before,
+	*::after
+		animation-duration: 0.01ms !important
+		animation-iteration-count: 1 !important
+		transition-duration: 0.01ms !important
+		scroll-behavior: auto !important

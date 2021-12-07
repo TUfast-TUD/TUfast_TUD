@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "downlevelIteration": true,
       "strict": true,
       "noImplicitAny": false,
       "noImplicitThis": false,
@@ -11,6 +12,7 @@
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
       "sourceMap": true,
+      "resolveJsonModule": true,
       "baseUrl": ".",
       "lib": [
         "esnext",

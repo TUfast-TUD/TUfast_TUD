@@ -1,4 +1,8 @@
 import { createApp } from "vue"
 import Settings from "./Settings.vue"
+import PhosphorVue from "phosphor-vue"
 
-createApp(Settings).mount("#app")
+
+createApp(Settings)
+    .use(PhosphorVue)
+    .mount("#app")
