@@ -1,0 +1,34 @@
+[
+    {
+        "title": "Automatisches Anmelden",
+        "icon": "ph-lock-key"
+    },
+    {
+        "title": "E-Mail Benachrichtigungen",
+        "icon": "ph-notification"
+    },
+    {
+        "title": "Opalkurse im Dashboard",
+        "icon": "ph-list-dashes"
+    },
+    {
+        "title": "Opal personaliseren und verbessern",
+        "icon": "ph-sparkle"
+    },
+    {
+        "title": "Shortcuts",
+        "icon": "ph-gauge"
+    },
+    {
+        "title": "Abkürzungen in Suchmaschinen",
+        "icon": "ph-google-logo"
+    },
+    {
+        "title": "Raketen sammeln",
+        "icon": "ph-rocket"
+    },
+    {
+        "title": "Weiteres & Kontakt",
+        "icon": "ph-envelope-open"
+    }
+]
