@@ -64,7 +64,8 @@ export default defineComponent({
     display: grid
     grid-template-columns: min-content auto
     height: min-content
-    width: min-content
+    min-width: min-content
+    width: 125px
     
     &__selector
         transition: all 200ms ease-out

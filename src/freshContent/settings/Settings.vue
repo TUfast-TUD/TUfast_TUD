@@ -1,8 +1,8 @@
 <template>
     <div class="main-grid">
-        <header class="main-grid__title">
-            <h1>Willkommen bei TUFast 🚀</h1>
-            <h3>Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</h3>
+        <header class="main-grid__header">
+            <h1 class="upper txt-bold main-grid__title">Willkommen bei TUFast 🚀</h1>
+            <h3 class="txt-bold main-grid__subtitle">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</h3>
         </header>
         <Lottie></Lottie>
         <div class="main-grid__menues">
@@ -11,7 +11,6 @@
             <LanguageSelect />
         </div>
         <div class="main-grid__settings">
-            <!-- <component :is="'ph-cursor'"></component> -->
             <SettingTile
                 v-for="(setting, index) in settings"
                 :key="index"
@@ -63,6 +62,9 @@ export default defineComponent({
     grid-template-rows: 1fr auto
     margin: 20px
 
+    &__subtitle
+        max-width: 45ch
+
     &__menues
         justify-self: end
         display: flex
@@ -70,6 +72,7 @@ export default defineComponent({
         width: 80%
     
     &__settings
+        margin-top: 4rem
         grid-column: span 3
         display: grid
         grid-template-columns: repeat(4, 1fr)
@@ -77,18 +80,11 @@ export default defineComponent({
         justify-items: center
         align-items: space-between
         gap: 2rem
-
-    &__tile:hover
-        transform: translateY(-7px) scale(1.05)
-        box-shadow: 5px 6px 20px 7px rgb(255 255 255 / 20%)
-
-    &:hover &__tile:not(:hover)
-        transform: scale(0.95)
-        filter: brightness(.8)
 </style>
 
 <style lang="sass">
 body
     background-repeat: no-repeat
     background-size: cover
+    overflow: hidden
 </style>
