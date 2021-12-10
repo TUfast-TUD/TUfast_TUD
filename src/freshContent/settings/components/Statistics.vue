@@ -3,8 +3,8 @@
         <p class="txt-bold">Bereits gespart</p>
         <div class="statistics__clicks">
                 <ph-cursor />
-                <span class="txt-bold">40</span>
-                <span>Clicks</span>
+                <span class="txt-bold">{{ counter }}</span>
+                <span>{{ counter === 1 ? "Click" : "Clicks" }}</span>
         </div>
         <div class="statistics__minutes">
             <ph-timer />
@@ -16,10 +16,18 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
     setup() {
+
+        const counter = ref(null)
+        chrome.storage.local.get(["saved_click_counter"], (clicks) => counter.value = clicks.saved_click_counter)
+
+
+        return {
+            counter,
+        }
         
     },
 })

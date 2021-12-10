@@ -1,7 +1,8 @@
 [
     {
         "title": "Automatisches Anmelden",
-        "icon": "ph-lock-key"
+        "icon": "ph-lock-key",
+        "settingsPage": "AutoLogin"
     },
     {
         "title": "E-Mail Benachrichtigungen",
@@ -13,7 +14,8 @@
     },
     {
         "title": "Opal personaliseren und verbessern",
-        "icon": "ph-sparkle"
+        "icon": "ph-sparkle",
+        "settingsPage": "ImproveOpal"
     },
     {
         "title": "Shortcuts",

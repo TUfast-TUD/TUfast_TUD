@@ -37,6 +37,7 @@
   "devDependencies": {
     "@snowpack/plugin-sass": "^1.4.0",
     "@snowpack/plugin-vue": "^2.6.2",
+    "@types/chrome": "^0.0.169",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.2",

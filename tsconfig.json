@@ -18,7 +18,10 @@
         "esnext",
         "dom",
         "dom.iterable",
-        "scripthost"
+        "scripthost",
+      ],
+      "types": [
+        "chrome"
       ]
     },
     "include": [

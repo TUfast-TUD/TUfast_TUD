@@ -29,7 +29,10 @@ export default defineComponent({
         }
 
         const click = (e : Event) => {
-            const target = e.target as HTMLDivElement
+            console.log("clicked!")
+            let target = e.target as HTMLElement
+            if(target.parentElement?.classList.contains("settings-tile"))
+                target = target.parentElement
             target.classList.add("settings-tile--animate")
             setTimeout(() => target.classList.remove("settings-tile--animate"), 1000);
         }
@@ -48,8 +51,7 @@ export default defineComponent({
     --wave-animation-time: 1000ms
     --wave-delay: 150ms
     background-color: hsl(var(--clr-black) )
-    border-radius: 40px
-
+    border-radius: var(--brd-rad)
     display: flex
     flex-direction: column
     justify-content: center
@@ -88,7 +90,7 @@ export default defineComponent({
             left: 0
             width: 100%
             height: 100%
-            border-radius: inherit
+            border-radius: var(--brd-rad)
             animation-fill-mode: forwards
             background-color: hsl(var(--clr-black) )
         &::before

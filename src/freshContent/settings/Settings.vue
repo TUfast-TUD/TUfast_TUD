@@ -16,13 +16,19 @@
                 :key="index"
                 :icon="setting.icon"
                 :title="setting.title"
-                class="main-grid__tile" />
+                class="main-grid__tile"
+                @click="openSetting(setting)"/>
         </div>
     </div>
+        <Card v-if="showCard" @close-me="showCard=false" :title="currentSetting.title" >
+            <template v-slot:default>
+                <component :is="currentSetting.settingsPage" />
+            </template>
+        </Card>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 // Components
 import Lottie from "./components/Lottie.vue"
@@ -34,20 +40,51 @@ import SettingTile from './components/SettingTile.vue'
 // Settings Data (Names and Icons)
 import settings from "./settings.json"
 
+type setting = { title: string;
+    icon: string;
+    settingsPage: string;
+} | {
+    title: string;
+    icon: string;
+    settingsPage?: undefined;
+}
+
+// Components
+import Card from './components/Card.vue'
+import Toggle from './components/Toggle.vue'
+
+// Settings Page Components
+import AutoLogin from "./settingPages/AutoLogin.vue"
+import ImproveOpal from './settingPages/ImproveOpal.vue'
+
 export default defineComponent({
     components: {
-    Lottie,
-    LanguageSelect,
-    Statistics,
-    Dropdown,
-    SettingTile
-},
+        Lottie,
+        LanguageSelect,
+        Statistics,
+        Dropdown,
+        SettingTile,
+        Card,
+        Toggle,
+        ImproveOpal,
+        AutoLogin,
+    },
     setup() {
         const body = document.getElementsByTagName("body")[0]
+        const showCard = ref(false)
+        const currentSetting = ref(settings[0])
         body.style.backgroundImage = "url('/assets/settings/background_dark.svg')"
+
+        const openSetting = (setting : setting) => {
+            showCard.value = true
+            currentSetting.value = setting
+        }
 
         return {
             settings,
+            showCard,
+            currentSetting,
+            openSetting,
         }
     }
 })
@@ -80,6 +117,7 @@ export default defineComponent({
         justify-items: center
         align-items: space-between
         gap: 2rem
+
 </style>
 
 <style lang="sass">

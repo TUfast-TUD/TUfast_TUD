@@ -25,7 +25,6 @@ export default defineComponent({
         const direction = ref(-1)
 
         onMounted(() => {
-            console.log(anim.value.setDirection)
             setTimeout(() => {
                 anim.value.seek("98%")
             }, 0);
