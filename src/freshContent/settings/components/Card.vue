@@ -2,7 +2,7 @@
     <div class="card-bg" @click="close()" />
     <div class="card">
             <div class="card__header">
-                <h1 class="card__title">{{ title }}</h1>
+                <h1 class="card__title upper">{{ title }}</h1>
                 <ph-x class="card__close" @click="close()"></ph-x>
             </div>
             <div class="card__body">
@@ -64,9 +64,8 @@ export default defineComponent({
     height: var(--card-height)
     background-color: hsl(var(--clr-black) )
     border-radius: var(--brd-rad)
-
-    &__title
-        text-transform: uppercase
+    // display: flex
+    // flex-direction: column
 
     &__header
         // width: 100%
@@ -78,6 +77,9 @@ export default defineComponent({
 
     &__body
         margin: 2rem 2.5rem
+        overflow-y: auto
+        // overflow-x: visible
+        height: auto
 
     &__close
         width: 4rem
