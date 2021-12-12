@@ -6,7 +6,8 @@
     },
     {
         "title": "E-Mail Benachrichtigungen",
-        "icon": "ph-notification"
+        "icon": "ph-notification",
+        "settingsPage": "Email"
     },
     {
         "title": "Opalkurse im Dashboard",

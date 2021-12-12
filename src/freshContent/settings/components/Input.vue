@@ -18,8 +18,12 @@ export default defineComponent({
             type: String as PropType<string>,
             required: true,
         },
+        pattern: {
+            type: Object as PropType<RegExp>,
+            default: null,
+        }
     },
-    setup() {
+    setup(props) {
         const statusIcon = ref("ph-check-circle")
         const inputText = ref("")
         const regexPatternSelmaLogin = /([s]\d{6})|(\w+\d{3}\w)/gm

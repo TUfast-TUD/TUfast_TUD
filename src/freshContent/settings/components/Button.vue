@@ -20,6 +20,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .button
+    border: none
     border-radius: 12px
     padding: .8rem 2rem
     background-color: hsl(var(--clr-primary) )
@@ -30,5 +31,16 @@ export default defineComponent({
     font-weight: 600
 
     &:hover
-        transform: scale(1.1)
+        // transform: scale(1.1)
+        outline: 1px solid hsl(var(--clr-white) )
+        outline-offset: .5rem
+
+    &:active
+        transform: scale(.95)
+        outline-offset: .25rem
+
+    &--secondary
+        background-color: hsl(var(--clr-grey), .8 )
+        &:hover
+            outline: none 
 </style>

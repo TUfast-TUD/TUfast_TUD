@@ -64,11 +64,10 @@ export default defineComponent({
     height: var(--card-height)
     background-color: hsl(var(--clr-black) )
     border-radius: var(--brd-rad)
-    // display: flex
-    // flex-direction: column
+    display: flex
+    flex-direction: column
 
     &__header
-        // width: 100%
         height: min-content
         display: flex
         justify-content: space-between
@@ -77,14 +76,12 @@ export default defineComponent({
 
     &__body
         margin: 2rem 2.5rem
-        overflow-y: auto
-        // overflow-x: visible
-        height: auto
+        height: 100%
+        overflow: auto
 
     &__close
         width: 4rem
         height: 4rem
-        // margin: 1rem 1rem
         cursor: pointer
         &:hover
             color: hsl(var(--clr-alert) )

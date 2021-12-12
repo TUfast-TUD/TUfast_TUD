@@ -6,9 +6,10 @@
 
     <p class="p-margin important">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</p>
     <div class="form">
-        <Input placeholder="Input" />
-        <Input placeholder="Input" />
+        <Input placeholder="Nutzername (selma-Login)" />
+        <Input placeholder="Passwort (selma-Login)" />
         <Button title="Lokal speichern" />
+        <Button title="Daten löschen" class="button--secondary" />
     </div>
 </template>
 
@@ -39,6 +40,7 @@ export default defineComponent({
     align-items: stretch
     justify-content: space-between   
     gap: 1rem
+    margin-left: 1rem
 
 .important
     font-weight: 600
