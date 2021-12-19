@@ -1,8 +1,10 @@
 function loginVideoCampus () {
   if (document.querySelector('#login .loginOptions .form-control[name="entityID"]')) {
     // The login form manipulation has to be first else we will always click on "login"
+    chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 3 })
+    chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
+    chrome.runtime.sendMessage({ cmd: 'perform_login' })
     document.querySelector('#login .loginOptions .form-control[name="entityID"]').value = 'https://idp.tu-dresden.de/idp/shibboleth'
-    chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 2 })
     document.querySelector('#login .loginOptions input[type="submit"]').click()
   } else if (document.querySelector('.nav-link[href="/login"]')) {
     chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
