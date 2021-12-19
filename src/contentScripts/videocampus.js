@@ -23,10 +23,14 @@ function loginVideoCampus () {
 
 chrome.storage.local.get(['isEnabled'], (result) => {
   if (result.isEnabled && !document.cookie.includes('vcLoggedOut')) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loginVideoCampus)
-    } else {
-      loginVideoCampus()
-    }
+    chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: 'zih' }, async (result) => {
+      await result
+      if (!result) return
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loginVideoCampus)
+      } else {
+        loginVideoCampus()
+      }
+    })
   }
 })
