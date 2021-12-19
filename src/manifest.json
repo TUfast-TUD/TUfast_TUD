@@ -384,6 +384,15 @@
     },
     {
       "js": [
+        "contentScripts/videocampus.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://videocampus.sachsen.de/*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/gitlab.js"
       ],
       "run_at": "document_start",
