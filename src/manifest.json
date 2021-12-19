@@ -393,6 +393,15 @@
     },
     {
       "js": [
+        "contentScripts/slub.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://*.slub-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/fwd_qwant.js"
       ],
       "run_at": "document_start",

@@ -43,6 +43,10 @@ async function changePlatform (e) {
       passwordFieldHint = 'Passwort (selma-Login)'
       usernameExtraHint = '(ohne @mailbox.tu-dresden.de. Also z.B. "s3276763" oder "luka075d")'
       break
+    case 'slub':
+      usernameFieldHint = 'Benutzernummer (SLUB-Login)'
+      passwordFieldHint = 'Passwort (SLUB-Login)'
+      usernameExtraHint = '(die Nutzernummer findest du u.a. auf deiner SLUB-Karte)'
   }
   document.getElementById('username_field').setAttribute('placeholder', usernameFieldHint)
   document.getElementById('password_field').setAttribute('placeholder', passwordFieldHint)
