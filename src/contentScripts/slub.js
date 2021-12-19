@@ -41,10 +41,14 @@ function loginSlub () {
 
 chrome.storage.local.get(['isEnabled'], (result) => {
   if (result.isEnabled && !document.cookie.includes('slubLoggedOut')) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loginSlub)
-    } else {
-      loginSlub()
-    }
+    chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: 'slub' }, async (result) => {
+      await result
+      if (!result) return
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loginSlub)
+      } else {
+        loginSlub()
+      }
+    })
   }
 })
