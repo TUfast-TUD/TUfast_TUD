@@ -11,6 +11,7 @@ function loginSlub () {
         chrome.runtime.sendMessage({ cmd: 'perform_login' })
         document.getElementById('username').value = result.user
         document.getElementById('password').value = result.pass
+        chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
         document.querySelector('input.slubbutton[type="submit"]').click()
       } else {
         chrome.runtime.sendMessage({ cmd: 'no_login_data' })
