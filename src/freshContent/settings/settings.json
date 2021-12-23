@@ -11,7 +11,8 @@
     },
     {
         "title": "Opalkurse im Dashboard",
-        "icon": "ph-list-dashes"
+        "icon": "ph-list-dashes",
+        "settingsPage": "OpalCourses"
     },
     {
         "title": "Opal personaliseren und verbessern",

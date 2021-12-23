@@ -56,6 +56,7 @@ import Toggle from './components/Toggle.vue'
 // Settings Page Components
 import AutoLogin from "./settingPages/AutoLogin.vue"
 import Email from "./settingPages/Email.vue"
+import OpalCourses from "./settingPages/OpalCourses.vue"
 import ImproveOpal from './settingPages/ImproveOpal.vue'
 
 export default defineComponent({
@@ -67,9 +68,10 @@ export default defineComponent({
         SettingTile,
         Card,
         Toggle,
-        ImproveOpal,
         AutoLogin,
         Email,
+        OpalCourses,
+        ImproveOpal,
     },
     setup() {
         const body = document.getElementsByTagName("body")[0]

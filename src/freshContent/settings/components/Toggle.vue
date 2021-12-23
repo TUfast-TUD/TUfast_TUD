@@ -1,6 +1,6 @@
 <template>
     <div :class="`toggle ${toggled ? 'toggle--toggled' : ''}`" @click="toggled = !toggled">
-        <ph-check v-if="toggled" class="toggle__icon" />    
+        <ph-check v-show="toggled" class="toggle__icon" />    
     </div>    
 </template>
 
@@ -29,8 +29,15 @@ export default defineComponent({
     height: 40px
     border-radius: 100%
 
+    &:hover
+        background-color: hsl(var(--clr-white), .8)
+        cursor: pointer
+        
+
     &--toggled
         background-color: hsl(var(--clr-primary) )
+        &:hover
+            background-color: hsl(var(--clr-primary), .8)
 
     &__icon
         width: 80%
