@@ -40,13 +40,10 @@ import SettingTile from './components/SettingTile.vue'
 // Settings Data (Names and Icons)
 import settings from "./settings.json"
 
-type setting = { title: string;
-    icon: string;
-    settingsPage: string;
-} | {
-    title: string;
-    icon: string;
-    settingsPage?: undefined;
+type setting = {
+    title: string,
+    icon: string,
+    settingsPage: string,
 }
 
 // Components
@@ -58,6 +55,10 @@ import AutoLogin from "./settingPages/AutoLogin.vue"
 import Email from "./settingPages/Email.vue"
 import OpalCourses from "./settingPages/OpalCourses.vue"
 import ImproveOpal from './settingPages/ImproveOpal.vue'
+import Shortcuts from './settingPages/Shortcuts.vue'
+import SearchEngines from './settingPages/SearchEngines.vue'
+import Rockets from './settingPages/Rockets.vue'
+import Contact from './settingPages/Contact.vue'
 
 export default defineComponent({
     components: {
@@ -72,6 +73,10 @@ export default defineComponent({
         Email,
         OpalCourses,
         ImproveOpal,
+        Shortcuts,
+        SearchEngines,
+        Rockets,
+        Contact,
     },
     setup() {
         const body = document.getElementsByTagName("body")[0]

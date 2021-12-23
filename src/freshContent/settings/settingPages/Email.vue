@@ -1,8 +1,5 @@
 <template>
-    <div class="setting">
-        <Toggle class="setting__toggle" />
-        <h2 class="max-line">TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben der Rakete an.</h2>
-    </div>
+    <Setting txt="TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben der Rakete an." />
     <div class="example-row"><img class="icon" src="../../../assets/images/UnreadMails0.png"><span>keine neuen Mails</span></div>
     <div class="example-row"><img class="icon" src="../../../assets/images/UnreadMails5.png"><span>5 neue Mails</span></div>
     <div class="example-row"><img class="icon" src="../../../assets/images/UnreadMails16.png"><span>16 neue Mails</span></div>
@@ -21,11 +18,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Toggle from "../components/Toggle.vue"
+import Setting from "../components/Setting.vue"
 
 export default defineComponent({
     components: {
-        Toggle,
+        Setting,
     },
     setup() {
         

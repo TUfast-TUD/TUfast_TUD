@@ -21,18 +21,22 @@
     },
     {
         "title": "Shortcuts",
-        "icon": "ph-gauge"
+        "icon": "ph-gauge",
+        "settingsPage": "Shortcuts"
     },
     {
         "title": "Abkürzungen in Suchmaschinen",
-        "icon": "ph-google-logo"
+        "icon": "ph-google-logo",
+        "settingsPage": "SearchEngines"
     },
     {
         "title": "Raketen sammeln",
-        "icon": "ph-rocket"
+        "icon": "ph-rocket",
+        "settingsPage": "Rockets"
     },
     {
         "title": "Weiteres & Kontakt",
-        "icon": "ph-envelope-open"
+        "icon": "ph-envelope-open",
+        "settingsPage": "Contact"
     }
 ]

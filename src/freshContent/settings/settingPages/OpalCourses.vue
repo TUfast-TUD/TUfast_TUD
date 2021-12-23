@@ -1,23 +1,37 @@
 <template>
     <p class="max-line">Finde alle deine OPAL-Kurse direkt im Dashboard. öffne das Dashboard oben rechts oder mit Alt+Q.</p>
-    <a class="link">
-        Hier kannst du die Shortcuts ändern 
-        <ph-arrow-right />
-    </a>
+
+    <Link @click="openShortcutSettings()" txt="Hier kannst du die Shortcuts ändern" />
+   
+    <img class="image p-margin" src="../../../assets/images/DashboardTutorialBigDark.png" alt="Zeigt wo man klicken muss, um verschiedene Funktionen des Popups zu nutzen.">
+
+    <p class="p-margin max-line">Für Power-User ⚡⚡⚡<br />
+    Öffne dein Dashboard mit Alt+Q und beginne direkt zu tippen. Wenn du dann Enter drückst, wird der erste Kurs aus der Liste geöffnet.</p>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+import Link from '../components/Link.vue'
+
 export default defineComponent({
+    components: {
+        Link,
+    },
     setup() {
-        
+        const openShortcutSettings =  () => {
+            chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' }, (result) => { })
+        }
+
+        return {
+            openShortcutSettings,
+        }
     },
 })
 </script>
 
 <style lang="sass" scoped>
-.link
-    display: flex
-    align-items: center
+.image
+    max-width: 33%
+
 </style>
