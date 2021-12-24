@@ -1,5 +1,8 @@
 <template>
-    <Setting txt="Suchmaschinen Superpower aktivieren" />
+    <Setting
+        @changedSetting="searchEngine()"
+        v-model="searchEngineActive"
+        txt="Suchmaschinen Superpower aktivieren" />
     <p class="max-line p-margin">Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!</p>
 
     <p class="search-terms">tumail → Outlook Web App<br />
@@ -14,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import Setting from '../components/Setting.vue'
 
@@ -23,7 +26,14 @@ export default defineComponent({
         Setting,
     },
     setup() {
-        
+        const searchEngineActive = ref(false)
+        chrome.storage.local.get(['fwdEnabled'], (res) => searchEngineActive.value = res.fwdEnabled)
+        const searchEngine = () => chrome.storage.local.set({ fwdEnabled: !searchEngineActive.value }, () => {})
+
+        return {
+            searchEngine,
+            searchEngineActive,
+        }
     },
 })
 </script>

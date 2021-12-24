@@ -6,6 +6,7 @@
             :disabled="disabled"
             class="setting__toggle" 
         />
+            <slot />
             <span class="max-line">{{ txt }}</span>
     </div>
 </template>
