@@ -25,15 +25,13 @@
         />
 
         <Button @click="saveUserData" title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" />
-        <Button title="Daten löschen" class="button--secondary" />
+        <Button @click="deleteUserData" title="Daten löschen" class="button--secondary" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 
-import Card from "../components/Card.vue"
-import Toggle from "../components/Toggle.vue"
 import Input from '../components/Input.vue'
 import Button from "../components/Button.vue"
 
@@ -66,6 +64,20 @@ export default defineComponent({
 
         }
 
+        const deleteUserData = () => {
+            chrome.runtime.sendMessage({ cmd: "clear_badge" })
+            chrome.storage.local.set({ Data: "undefined" }, function () { }) // delete user data
+            chrome.storage.local.set({ isEnabled: false }, function () { }) // deactivate auto login feature
+            // delete courses in dashboard
+            chrome.storage.local.set({ meine_kurse: false }, function () { })
+            chrome.storage.local.set({ favoriten: false }, function () { })
+            // deactivate owa fetch
+            chrome.runtime.sendMessage({ cmd: "disable_owa_fetch" })
+            chrome.storage.local.set({ enabledOWAFetch: false })
+            chrome.storage.local.set({ additionalNotificationOnNewMail: false })
+            autoLoginActive.value = false
+        }
+
         return {
             username,
             password,
@@ -73,6 +85,7 @@ export default defineComponent({
             passwordValid,
             autoLoginActive,
             saveUserData,
+            deleteUserData,
         }
         
     },
