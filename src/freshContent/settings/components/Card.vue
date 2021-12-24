@@ -1,6 +1,6 @@
 <template>
     <div class="card-bg" @click="close()" />
-    <div class="card">
+    <div tabindex="0" @keydown.esc="close()" class="card">
             <div class="card__header">
                 <h1 class="card__title upper">{{ title }}</h1>
                 <ph-x class="card__close" @click="close()"></ph-x>
@@ -29,9 +29,12 @@ export default defineComponent({
         }
 
         const open = () => {
-            const card = document.querySelector(".card")
+            const card = document.querySelector(".card") as HTMLDivElement
             card?.classList.add("card--opening")
-            setTimeout(() => card?.classList.remove("card--opening"), 850)
+            setTimeout(() => {
+                card?.classList.remove("card--opening")
+                card.focus()
+            }, 850)
         }
 
         onMounted(() => open())
@@ -66,6 +69,7 @@ export default defineComponent({
     border-radius: var(--brd-rad)
     display: flex
     flex-direction: column
+    outline: none
 
     &__header
         height: min-content
