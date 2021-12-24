@@ -21,7 +21,9 @@
     />
 
     <p class="max-line">
-        Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab. Zum Anmelden werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher. Es funktioniert genauso, als würdest du deine Mails über den Browser abrufen.
+        Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab.
+        Zum Anmelden werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher.
+        Es funktioniert genauso, als würdest du deine Mails über den Browser abrufen.
     </p>
 </template>
 
@@ -48,7 +50,6 @@ export default defineComponent({
             if (!autoLoginActive.value) return
 
             if (!OWAFetchActive.value) {
-                console.log("activated")
                 chrome.runtime.sendMessage({ cmd: "enable_owa_fetch" }, () => {})
                 chrome.storage.local.set({ enabledOWAFetch: true })
                 // reload extension
@@ -56,7 +57,6 @@ export default defineComponent({
                 chrome.runtime.sendMessage({ cmd: "reload_extension" }, () => {})
             }
             if (OWAFetchActive.value) {
-                console.log("disabled")
                 chrome.runtime.sendMessage({ cmd: "disable_owa_fetch" })
                 chrome.storage.local.set({ enabledOWAFetch: false })
                 chrome.storage.local.set({ additionalNotificationOnNewMail: false })
