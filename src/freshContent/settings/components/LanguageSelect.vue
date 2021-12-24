@@ -1,9 +1,6 @@
 <template>
     <div class="language-select">
         <ph-caret-double-right
-            ref="selector"
-            color="hsl(var(--clr-primary) )"
-            size="2rem"
             class="language-select__selector"
             :class="selectorClass"
             @click.capture="switchSel($event)" />
@@ -43,14 +40,13 @@ export default defineComponent({
                     selected.value = Selected.German
                     break
             }
-                for (const language of languages.value?.children!)
+                for (const language of languages.value!.children)
                     language.classList.toggle("language-select__languages--selected")    
         }   
 
         return {
             switchSel,
             selectorClass,
-            selected,
             languages
         }
         
@@ -70,6 +66,9 @@ export default defineComponent({
     &__selector
         transition: all 200ms ease-out
         cursor: pointer
+        color: hsl(var(--clr-primary) )
+        width: 2rem
+        height: 2rem
         &--german
             transform: translateY(0)
         &--english
