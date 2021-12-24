@@ -42,5 +42,10 @@ export default defineComponent({
     &--secondary
         background-color: hsl(var(--clr-grey), .8 )
         &:hover
-            outline: none 
+            outline: none
+
+    &:disabled
+        background-color: hsl(var(--clr-primary), .5)
+        &:hover
+            outline: none
 </style>

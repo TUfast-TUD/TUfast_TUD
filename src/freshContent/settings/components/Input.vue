@@ -1,12 +1,15 @@
 <template>
-    <div class="input">
-        <input class="input__input" :type="type" :placeholder="placeholder" v-model="inputText">
-        <component class="input__icon" :is="statusIcon" />
+    <div class="input-container">
+        <div :class="`input ${state}`">
+            <input @input="emitState('update:modelValue', $event)" :value="modelValue" class="input__input" :type="type" :placeholder="placeholder">
+            <component :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`" :is="statusIcon" />
+        </div>
+        <span v-if="!valid && modelValue.length > 0" class="error-message">{{ errorMessage }}</span>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from 'vue'
+import { defineComponent, ref, PropType, computed, watchEffect } from 'vue'
 
 export default defineComponent({
     props: {
@@ -21,23 +24,46 @@ export default defineComponent({
         pattern: {
             type: Object as PropType<RegExp>,
             default: null,
-        }
+        },
+        modelValue: {
+            type: String as PropType<string>,
+            default: "",
+        },
+        valid: {
+            type: Boolean as PropType<boolean>,
+            default: false,
+        },
+        errorMessage: {
+            type: String as PropType<string>,
+            required: true,
+        },
     },
-    setup(props) {
+    setup(props, { emit }) {
         const statusIcon = ref("ph-check-circle")
-        const inputText = ref("")
-        const regexPatternSelmaLogin = /([s]\d{6})|(\w+\d{3}\w)/gm
+        const state = ref("")
 
-        const state = computed(() => {
-            return regexPatternSelmaLogin.test(inputText.value)
+        const emitState = (eventName : string, $event : Event) => {
+            const target = <HTMLInputElement>$event.target
+            emit(eventName, target.value)
+        }
+
+        const correctPattern = computed(() => props.pattern.test(props.modelValue))
+    
+        watchEffect(() => {
+            if (props.modelValue.length > 0) {
+                state.value = correctPattern.value ? "input--correct" : "input--false"
+                statusIcon.value = correctPattern.value ? "ph-check-circle" : "ph-x-circle"
+                emit("update:valid", correctPattern.value)
+            }
+            else
+                state.value = ""
         })
-
-        
 
         return {
             statusIcon,
-            inputText,
-            state,
+            correctPattern,
+            emitState,
+            state
         }
         
     },
@@ -45,6 +71,14 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+.input-container
+    display: flex
+    align-items: center
+    width: max-content
+
+.error-message
+    margin-left: .8rem
+
 .input
     display: flex
     justify-content: space-between
@@ -54,6 +88,11 @@ export default defineComponent({
     border-radius: 12px
     background-color: hsl(var(--clr-grey) )
     border: 1px solid hsl(var(--clr-state, var(--clr-grey)), .4)
+
+    &--correct
+        --clr-state: var(--clr-primary)
+    &--false
+        --clr-state: var(--clr-alert)
 
     &:hover, &:focus-within
         border: 1px solid hsl(var(--clr-state, var(--clr-white)), .8)
@@ -83,4 +122,7 @@ export default defineComponent({
         width: 28px
         color: hsl(var(--clr-state, var(--clr--grey)) )
         margin-right: .3rem
+        opacity: 0
+        &--visible
+            opacity: 1
 </style>
