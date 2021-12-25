@@ -43,4 +43,7 @@ export default defineComponent({
     line-height: 1.75
     margin-left: 1rem
     color: hsl(var(--clr-white), .7)
+
+    @media (prefers-color-scheme: light)
+        color: hsl(var(--clr-grey), .9)
 </style>

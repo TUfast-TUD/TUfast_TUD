@@ -8,8 +8,8 @@
         />
         <div class="rocket-select__rockets">
             <div v-for="(rocket, index) in rockets" :key="index" class="rocket-select__rocket">
-                <img @click="select(index)" class="rocket-select__image rocket-select__image--dark-mode" :src="rocket.iconPathUnlocked">
-                <Link v-if="rocket.link" :txt="rocket.unlocked" />
+                <img @click="select(index, rocket.iconPathUnlocked)" class="rocket-select__image rocket-select__image--dark-mode" :src="rocket.iconPathUnlocked">
+                <Link :href="rocket.link" target="_blank" v-if="rocket.link" :txt="rocket.unlocked" />
                 <p v-else class="rocket-select__text">{{ rocket.unlocked }}</p>
             </div>
         </div>
@@ -30,9 +30,15 @@ export default defineComponent({
     setup() {
         const pos = ref(0)
 
-        const select = (index : number) => {
+        const select = (index : number, iconPath : string) => {
             pos.value = 100 * index
+
+            chrome.storage.local.set({ selectedRocketIcon: `{ "id": 1, link: "${iconPath}" }` }, () => {})
+            chrome.storage.local.set({ selectedRocketId : index }, () => {})
+            chrome.browserAction.setIcon({ path: iconPath })
         }
+
+        onMounted(() => chrome.storage.local.get("selectedRocketId", (res) => { pos.value = 100 * res.selectedRocketId }))
 
         return {
             rockets,

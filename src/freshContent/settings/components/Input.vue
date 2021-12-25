@@ -125,4 +125,8 @@ export default defineComponent({
         opacity: 0
         &--visible
             opacity: 1
+
+.light .input
+    background-color: hsl(var(--clr-black) )
+    color: hsl(var(--clr-white))
 </style>

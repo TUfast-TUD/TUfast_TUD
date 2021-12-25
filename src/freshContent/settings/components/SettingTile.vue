@@ -66,7 +66,6 @@ export default defineComponent({
     user-select: none
     cursor: pointer
     position: relative
-
     transition: all 150ms ease-out
 
     &__title

@@ -34,7 +34,6 @@ export default defineComponent({
         const pdfInline = () => {
             chrome.storage.local.set({ pdfInInline: !pdfInlineActive.value }, () => {})
             if (!pdfInlineActive.value) {
-                console.log("enabled")
                 chrome.permissions.request({ permissions: ["webRequest", "webRequestBlocking"], origins: ["https://bildungsportal.sachsen.de/opal/*"] }, (granted) => {
                     if (granted) {
                         chrome.runtime.sendMessage({ cmd: "toggle_pdf_inline_setting", enabled: true })
@@ -53,9 +52,9 @@ export default defineComponent({
             }
             if (pdfInlineActive.value) {
                 // disable "pdf in new tab" setting since it doesn't make any sense without inline pdf
-                console.log("disabled")
                 chrome.storage.local.set({ pdfInNewTab: false })
-                chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false })   
+                chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false })
+                pdfNewTabActive.value = false
             }
         }
 

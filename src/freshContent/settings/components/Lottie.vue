@@ -4,33 +4,45 @@
             ref="anim"
             src="../../assets/settings/theme_lottie.json"
             background="transparent"
-            speed="1"
             style="width: 150px; height: 150px;"
-            loop
-            :direction="direction"
             @click="play()"
-            ></lottie-player>
+            />
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue"
+import { defineComponent, ref, onMounted, PropType } from "vue"
 import "@lottiefiles/lottie-player"
 import animation from "../../../assets/settings/theme_lottie.json"
 
 export default defineComponent({
-    setup() {
-        const anim : any = ref(null)
+    props: {
+        animState: {
+            type: String as PropType<"dark" | "light">,
+            default: "dark",
+        },
+    },
+    setup(props) {
+        const anim : any = ref()
 
-        const direction = ref(-1)
-
+        const direction = ref(props.animState === "dark" ? -1 : 1)
+        const animSeek = ref(props.animState === "dark" ? 99 : 0)
+        console.log(animSeek.value)
+        console.log(direction.value)
         onMounted(() => {
             setTimeout(() => {
-                anim.value.seek("98%")
+                anim.value.seek(`${animSeek.value}%`)
+                anim.value.setDirection(direction.value)
             }, 0);
         })
 
-        const play = () => anim.value.play()
+        const play = () => {
+            anim.value.setDirection(direction.value)
+            anim.value.seek(`${animSeek.value}%`)
+            direction.value = direction.value === -1 ? 1 : -1
+            animSeek.value = animSeek.value === 99 ? 0 : 99
+            anim.value.play()
+        }
 
         return {
             anim,

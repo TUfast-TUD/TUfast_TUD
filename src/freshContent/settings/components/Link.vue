@@ -31,6 +31,7 @@ export default defineComponent({
     user-select: none
     cursor: pointer
     width: max-content
+    text-decoration: none
 
     &__arrow
         width: 28px

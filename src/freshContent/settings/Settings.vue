@@ -4,7 +4,7 @@
             <h1 class="upper txt-bold main-grid__title">Willkommen bei TUFast 🚀</h1>
             <h3 class="txt-bold main-grid__subtitle">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</h3>
         </header>
-        <Lottie></Lottie>
+        <Lottie @click="toggleTheme()" :animState="animState" />
         <div class="main-grid__menues">
             <Dropdown />
             <Statistics />
@@ -79,14 +79,24 @@ export default defineComponent({
         Contact,
     },
     setup() {
-        const body = document.getElementsByTagName("body")[0]
         const showCard = ref(false)
         const currentSetting = ref(settings[0])
-        body.style.backgroundImage = "url('/assets/settings/background_dark.svg')"
+        const animState = ref<"dark" | "light">("dark")
+
+        const html = document.documentElement
+        if (window.matchMedia("(prefers-color-scheme: light").matches)
+            animState.value = "light"
 
         const openSetting = (setting : setting) => {
             showCard.value = true
             currentSetting.value = setting
+        }
+
+        const toggleTheme = () => {
+            if (animState.value === "dark")
+                html.classList.toggle("light")
+            if(animState.value === "light")
+                html.classList.toggle("dark")
         }
 
         return {
@@ -94,6 +104,8 @@ export default defineComponent({
             showCard,
             currentSetting,
             openSetting,
+            toggleTheme,
+            animState,
         }
     }
 })
@@ -127,11 +139,8 @@ export default defineComponent({
         align-items: space-between
         gap: 2rem
 
-</style>
+.light
+    & .main-grid__header, & .main-grid__menues
+        color: hsl(var(--clr-black) )
 
-<style lang="sass">
-body
-    background-repeat: no-repeat
-    background-size: cover
-    overflow: hidden
 </style>

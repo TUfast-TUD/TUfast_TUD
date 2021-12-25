@@ -30,6 +30,12 @@ export default defineComponent({
     font-size: 1.2em
     font-weight: 600
 
+    @media (prefers-color-scheme: light)
+        color: hsl(var(--clr-grey) )
+
+        &:hover, &:active
+            outline-color: hsl(var(--clr-grey) ) !important
+
     &:hover
         // transform: scale(1.1)
         outline: 1px solid hsl(var(--clr-white) )

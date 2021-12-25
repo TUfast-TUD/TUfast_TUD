@@ -47,11 +47,10 @@ export default defineComponent({
     width: 40px
     height: 40px
     border-radius: 100%
+    cursor: pointer
 
     &:hover
         background-color: hsl(var(--clr-white), .8)
-        cursor: pointer
-        
 
     &--toggled
         background-color: hsl(var(--clr-primary) )
@@ -66,4 +65,5 @@ export default defineComponent({
     &__icon
         width: 80%
         height: 80%
+
 </style>
