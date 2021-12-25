@@ -1,13 +1,11 @@
 <template>
-    <div>
         <lottie-player
             ref="anim"
             src="../../assets/settings/theme_lottie.json"
             background="transparent"
-            style="width: 150px; height: 150px;"
+            class="color-switch"
             @click="play()"
-            />
-    </div>
+        />
 </template>
 
 <script lang="ts">
@@ -53,3 +51,8 @@ export default defineComponent({
     },
 })
 </script>
+
+<style lang="sass" scoped>
+.color-switch
+    width: 40%
+</style>
