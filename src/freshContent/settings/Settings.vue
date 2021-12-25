@@ -97,6 +97,13 @@ export default defineComponent({
                 html.classList.toggle("light")
             if(animState.value === "light")
                 html.classList.toggle("dark")
+
+            if(html.classList.contains("dark"))
+                chrome.storage.local.set({ theme: "dark" })
+            if(html.classList.contains("light"))
+                chrome.storage.local.set({ theme: "light" })
+            else
+                chrome.storage.local.remove("theme")
         }
 
         return {
