@@ -25,8 +25,6 @@ export default defineComponent({
 
         const direction = ref(props.animState === "dark" ? -1 : 1)
         const animSeek = ref(props.animState === "dark" ? 99 : 0)
-        console.log(animSeek.value)
-        console.log(direction.value)
         onMounted(() => {
             setTimeout(() => {
                 anim.value.seek(`${animSeek.value}%`)

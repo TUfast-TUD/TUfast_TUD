@@ -26,12 +26,12 @@ export default defineComponent({
 
         const getMinutes = (clicks : number) => {
             const clickValue = clicks * 3
-            return Math.floor(clicks / 60)
+            return Math.floor(clicks / 60) ?? 0
         }
 
         const getSeconds = (clicks : number) => {
             const clickValue = clicks * 3
-            return clicks % 60
+            return clicks % 60 ?? 0
         }
 
         return {
