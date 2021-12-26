@@ -16,13 +16,13 @@
 
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
     setup() {
 
         const counter = ref<number>(0)
-        chrome.storage.local.get(["saved_click_counter"], (clicks) => counter.value = clicks.saved_click_counter)
+        chrome.storage.local.get(["saved_click_counter"], (clicks) => counter.value = clicks.saved_click_counter ?? 0)
 
         const getMinutes = (clicks : number) => {
             const clickValue = clicks * 3
