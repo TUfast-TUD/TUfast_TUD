@@ -17,8 +17,8 @@ Steps to contribute a feature (as a non-TUfast-member):
 3. Checkout develop branch `git checkout develop`
 4. Create new feature branch `git checkout -b my_new_feature_branch`
 5. Install dependencies `npm install` (you need node package manager = npm installed)
-6. --> Implement your Code <-- and run `npm run dev` for developing. This is required and will translate sass into css. See below for details.
-7. Load extension in the `build` directory in your browser in development load.
+6. --> Implement your Code <-- and run `npm run dev` to build all required files. This is required and will for example translate sass into css. See below for details. The completely build extension will be copied to `/build`.
+7. Load the `build` folder in your browser (e.g. chrome://extensions or about:addons in developer mode).
 8. **run tests locally** before contributing code: `npm run test`
 9. Create a PR on develop branch
 
