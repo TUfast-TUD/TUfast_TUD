@@ -1,4 +1,4 @@
-function loginSlub () {
+function loginSlub (logoutDuration) {
   if (document.getElementsByClassName('login')[0]) {
     document.getElementsByClassName('login')[0].click()
     chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
@@ -23,7 +23,7 @@ function loginSlub () {
   if (document.getElementsByClassName('logout')[0]) {
     document.getElementsByClassName('logout')[0].addEventListener('click', () => {
       const date = new Date()
-      date.setMinutes(date.getMinutes() + 2)
+      date.setMinutes(date.getMinutes() + logoutDuration)
       document.cookie = `slubLoggedOut; expires=${date.toUTCString()}; path=/; domain=.slub-dresden.de; secure`
     })
   }
@@ -31,7 +31,7 @@ function loginSlub () {
   if (document.querySelector('.user a')) {
     document.querySelector('.user a').addEventListener('click', () => {
       const date = new Date()
-      date.setMinutes(date.getMinutes() + 2)
+      date.setMinutes(date.getMinutes() + logoutDuration)
       document.cookie = `slubLoggedOut; expires=${date.toUTCString()}; path=/; domain=.slub-dresden.de; secure`
     })
   }
@@ -39,15 +39,16 @@ function loginSlub () {
   console.log('Auto Login to slub.')
 }
 
-chrome.storage.local.get(['isEnabled'], (result) => {
+chrome.storage.local.get(['isEnabled', 'logoutDuration'], (result) => {
   if (result.isEnabled && !document.cookie.includes('slubLoggedOut')) {
+    const logoutDuration = result.logoutDuration || 5
     chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: 'slub' }, async (result) => {
       await result
       if (!result) return
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loginSlub)
+        document.addEventListener('DOMContentLoaded', () => loginSlub(logoutDuration))
       } else {
-        loginSlub()
+        loginSlub(logoutDuration)
       }
     })
   }
