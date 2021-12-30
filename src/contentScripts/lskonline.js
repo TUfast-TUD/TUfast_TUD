@@ -1,10 +1,10 @@
-function loginLsk () {
+function loginLsk (logoutDuration) {
   // abmelden button
   document.querySelectorAll('a[href="103.0"]').forEach((logoutBtn) => {
     if (logoutBtn.innerHTML !== 'Logout') return
     logoutBtn.addEventListener('click', () => {
       const date = new Date()
-      date.setMinutes(date.getMinutes() + 2)
+      date.setMinutes(date.getMinutes() + logoutDuration)
       document.cookie = `lskLoggedOut; expires=${date.toUTCString()}; path=/; domain=.lskonline.tu-dresden.de; secure`
     })
   })
@@ -30,15 +30,16 @@ function loginLsk () {
   console.log('Auto Login to lsk.')
 }
 
-chrome.storage.local.get(['isEnabled'], (result) => {
+chrome.storage.local.get(['isEnabled', 'logoutDuration'], (result) => {
   if (result.isEnabled && !document.cookie.includes('lskLoggedOut')) {
+    const logoutDuration = result.logoutDuration || 5
     chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: 'zih' }, async (result) => {
       await result
       if (!result) return
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loginLsk)
+        document.addEventListener('DOMContentLoaded', () => loginLsk(logoutDuration))
       } else {
-        loginLsk()
+        loginLsk(logoutDuration)
       }
     })
   }
