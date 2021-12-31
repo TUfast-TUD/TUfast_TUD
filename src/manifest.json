@@ -375,6 +375,15 @@
     },
     {
       "js": [
+        "contentScripts/lskonline.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "https://lskonline.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/tex.js"
       ],
       "run_at": "document_start",
