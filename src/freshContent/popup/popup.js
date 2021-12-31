@@ -85,6 +85,18 @@ const studiengangConfig = {
     },
     invert_icon_dark_theme: true
   },
+  bauingenieurwesen: {
+    name: 'Bauingenieurwesen',
+    fsr_icon: '../../assets/icons/FSRIcons/fsr_bauing.png',
+    fsr_icon_dashboard_style: 'max-height: 32px;',
+    fsr_link: 'https://www.tud-fsrbiw.de/',
+    pa_link: 'https://tu-dresden.de/bu/bauingenieurwesen/studium/infos-fuer-aktuell-studierende/pruefungsamt',
+    footer_icons_display: ['selma', 'opal', 'matrix', 'msx', 'slub', 'pa', 'cloud', 'lsk', 'swdd', 'perinorm'],
+    footer_icons_links: {
+      swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
+    },
+    invert_icon_dark_theme: false
+  },
   general: {
     name: 'Standardeinstellungen',
     fsr_icon: '',
@@ -353,6 +365,11 @@ function customizeForStudiengang (studiengang) {
     document.getElementById('fsr_link_2').style.display = 'unset'
   } else {
     document.getElementById('fsr_link_2').style.display = 'none'
+  }
+
+  // set pa link
+  if (studiengangConfig[studiengang].pa_link) {
+    document.getElementById('pa').href = studiengangConfig[studiengang].pa_link
   }
 }
 
