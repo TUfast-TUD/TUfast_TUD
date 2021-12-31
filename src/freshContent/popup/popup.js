@@ -13,7 +13,7 @@ const studiengangConfig = {
     fsr_link_2: 'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605',
     fsr_icon_dashboard_style: '',
     fsr_icon_dashboard_style_2: 'max-height: 20px; margin-top: 10px; padding-right:10px',
-    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'geoportal'],
+    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'geoportal', 'slub'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html'
     },
@@ -24,7 +24,7 @@ const studiengangConfig = {
     fsr_icon: '../../assets/icons/FSRIcons/fsr_mw.png',
     fsr_icon_dashboard_style: 'max-height: 32px;',
     fsr_link: 'https://tu-dresden.de/ing/maschinenwesen/fsr',
-    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd'],
+    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'slub', 'perinorm'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
     },
@@ -35,7 +35,7 @@ const studiengangConfig = {
     fsr_icon: '../../assets/icons/FSRIcons/fsr_mathe.png',
     fsr_icon_dashboard_style: 'max-height: 32px;',
     fsr_link: 'https://myfsr.de/dokuwiki/doku.php?id=start',
-    footer_icons_display: ['selma', 'opal', 'matrix', 'msx', 'cloud', 'gitlab', 'je', 'swdd'],
+    footer_icons_display: ['selma', 'opal', 'matrix', 'msx', 'cloud', 'gitlab', 'je', 'swdd', 'slub'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
     },
@@ -46,7 +46,7 @@ const studiengangConfig = {
     fsr_icon: '../../assets/icons/FSRIcons/fsr_medi_small.png',
     fsr_link: 'https://www.medforum-dresden.de/',
     fsr_icon_dashboard_style: '',
-    footer_icons_display: ['selma', 'opal', 'moodle', 'eportal', 'msx', 'cloud', 'swdd'],
+    footer_icons_display: ['selma', 'opal', 'moodle', 'eportal', 'msx', 'cloud', 'swdd', 'slub'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html'
     },
@@ -57,7 +57,7 @@ const studiengangConfig = {
     fsr_icon: '../../assets/icons/FSRIcons/fsr_psy.png',
     fsr_link: 'https://tu-dresden.de/mn/psychologie/fsrpsy',
     fsr_icon_dashboard_style: '',
-    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'orsee'],
+    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'orsee', 'slub'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html'
     },
@@ -68,7 +68,7 @@ const studiengangConfig = {
     fsr_icon: '../../assets/icons/FSRIcons/fsr_wiwi.png',
     fsr_icon_dashboard_style: 'max-height: 32px;',
     fsr_link: 'https://fsrwiwi.de',
-    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd'],
+    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'slub'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
     },
@@ -79,7 +79,7 @@ const studiengangConfig = {
     fsr_icon: '../../assets/icons/FSRIcons/FSR_ET.png',
     fsr_icon_dashboard_style: 'max-height: 32px;',
     fsr_link: 'https://fsret.de',
-    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd'],
+    footer_icons_display: ['selma', 'opal', 'qis', 'matrix', 'msx', 'cloud', 'swdd', 'slub', 'perinorm'],
     footer_icons_links: {
       swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
     },
