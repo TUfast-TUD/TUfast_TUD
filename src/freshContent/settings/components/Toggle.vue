@@ -40,6 +40,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .toggle
+    position: relative
     display: flex
     justify-content: center
     align-items: center
@@ -49,8 +50,21 @@ export default defineComponent({
     border-radius: 100%
     cursor: pointer
 
-    &:hover
-        background-color: hsl(var(--clr-white), .8)
+    &::before
+        position: absolute
+        transform: translate(50%)
+        content: ""
+        width: 5%
+        height: 5%
+        opacity: 0
+        border-radius: 100%
+        transition: transform 200ms ease, opacity 200ms ease
+        transform-origin: center
+        background-color: hsl(var(--clr-primary), .8)
+
+    &:hover:not(&--toggled)::before
+        opacity: 1
+        transform: scale(1000%)
 
     &--toggled
         background-color: hsl(var(--clr-primary) )
