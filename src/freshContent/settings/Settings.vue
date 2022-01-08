@@ -124,7 +124,8 @@ export default defineComponent({
 .main-grid
     display: grid
     grid-template-columns: 40% 20% 40%
-    grid-template-rows: 1fr auto
+    grid-template-rows: max-content auto
+    max-height: 100vh
     margin: 20px
 
     &__subtitle
@@ -142,9 +143,15 @@ export default defineComponent({
         display: grid
         grid-template-columns: repeat(4, 1fr)
         grid-template-rows: repeat(2, 1fr)
+        column-gap: clamp(.4rem, 4vw, 8rem)
+        row-gap: clamp(.6rem, 4vw, 4rem)
+        align-self: stretch
         justify-items: center
-        align-items: space-between
-        gap: 2rem
+        align-items: start
+
+        @media screen and (max-width: 600px)
+            grid-template-columns: repeat(2, 1fr)
+            grid-template-rows: repeat(4, 1fr)
 
 .light
     & .main-grid__header, & .main-grid__menues

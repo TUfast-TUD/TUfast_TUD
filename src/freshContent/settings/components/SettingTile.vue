@@ -1,6 +1,6 @@
 <template>
     <div class="settings-tile" @mouseenter="toggleFocus()" @mouseleave="toggleFocus()" @click="click($event)">
-        <component :is="icon" color="hsl(var(--clr-primary) )" size="4rem" />
+        <component :is="icon" color="hsl(var(--clr-primary) )" class="settings-tile__icon" />
         <h2 class="settings-tile__title">{{ title }}</h2>    
     </div>    
 </template>
@@ -57,11 +57,10 @@ export default defineComponent({
     justify-content: center
     align-items: center
     text-align: center
-
-    min-height: 250px
-    min-width: 250px
-    height: 280px
-    width: 280px
+    width: 100%
+    max-width: 300px
+    aspect-ratio: 1
+    padding: 0 .8rem
 
     user-select: none
     cursor: pointer
@@ -70,6 +69,18 @@ export default defineComponent({
 
     &__title
         margin-top: 1rem
+        font-size: clamp(.5rem, 1.5vw, 1.6rem)
+
+        @media screen and (max-width: 600px)
+            font-size: 1.4rem
+
+    &__icon
+        width: clamp(2rem, 4vw, 4rem)
+        height: clamp(2rem, 4vw, 4rem)
+
+        @media screen and (max-width: 600px)
+            width: 3rem
+            height: 3rem
 
     &:hover
         transform: translateY(-7px) scale(1.05)
