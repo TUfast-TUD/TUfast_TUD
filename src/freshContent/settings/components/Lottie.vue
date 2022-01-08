@@ -1,11 +1,14 @@
 <template>
+    <div class="color-switch">
         <lottie-player
             ref="anim"
             src="../../assets/settings/theme_lottie.json"
             background="transparent"
-            class="color-switch"
+            class="color-switch__lottie"
             @click="play()"
         />
+        <span class="color-switch__text">Klick mich!</span>
+    </div>
 </template>
 
 <script lang="ts">
@@ -53,4 +56,22 @@ export default defineComponent({
 <style lang="sass" scoped>
 .color-switch
     width: 40%
+    cursor: pointer
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: space-between
+
+    &__text
+        color: currentColor
+        text-align: center
+        transform: translateY(-70px)
+        opacity: 0
+        transition: transform 225ms ease, opacity 250ms ease
+
+    &:hover &__text
+            transform: translateY(-35px)
+            opacity: 1
+    .light &:hover &__text
+            transform: translateY(-15px) 
 </style>

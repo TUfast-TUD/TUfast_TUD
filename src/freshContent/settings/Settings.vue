@@ -4,7 +4,7 @@
             <h1 class="upper txt-bold main-grid__title">Willkommen bei TUFast 🚀</h1>
             <h3 class="txt-bold main-grid__subtitle">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</h3>
         </header>
-        <Lottie @click="toggleTheme()" :animState="animState" />
+        <Lottie class="main-grid__color-select" @click="toggleTheme()" :animState="animState" />
         <div class="main-grid__menues">
             <Dropdown />
             <Statistics />
@@ -154,7 +154,7 @@ export default defineComponent({
             grid-template-rows: repeat(4, 1fr)
 
 .light
-    & .main-grid__header, & .main-grid__menues
+    & .main-grid__header, & .main-grid__menues, & .main-grid__color-select
         color: hsl(var(--clr-black) )
 
 </style>
