@@ -32,6 +32,6 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .image
-    max-width: 33%
+    max-width: 45%
 
 </style>
