@@ -71,6 +71,7 @@ export default defineComponent({
     align-items: space-between
 
     &__text
+        z-index: -1
         color: currentColor
         text-align: center
         transform: translateY(0%)
