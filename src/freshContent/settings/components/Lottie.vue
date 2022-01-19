@@ -7,7 +7,14 @@
             class="color-switch__lottie"
             @click="play()"
         />
-        <span class="color-switch__text">Klick mich!</span>
+        <svg class="color-switch__text" viewBox="0 0 400 200">
+            <path id="curve" d="M 0 0 A 1 1 0 0 0 400 0" />
+            <text text-anchor="middle">
+                <textPath xlink:href="#curve" startOffset="50%">
+                    Klick Mich!
+                </textPath>
+            </text>
+        </svg>
     </div>
 </template>
 
@@ -58,6 +65,7 @@ export default defineComponent({
     width: 40%
     cursor: pointer
     display: flex
+    position: relative
     flex-direction: column
     justify-content: center
     align-items: space-between
@@ -65,13 +73,23 @@ export default defineComponent({
     &__text
         color: currentColor
         text-align: center
-        transform: translateY(-70px)
+        transform: translateY(0%)
         opacity: 0
         transition: transform 225ms ease, opacity 250ms ease
+        position: absolute
 
     &:hover &__text
-            transform: translateY(-35px)
+            transform: translateY(40%)
             opacity: 1
     .light &:hover &__text
-            transform: translateY(-15px) 
+            transform: translateY(75%) 
+
+path
+  fill: transparent
+
+text
+  fill: hsl(var(--clr-primary) )
+  font-size: 70px
+  font-weight: 700
+  letter-spacing: 6px
 </style>
