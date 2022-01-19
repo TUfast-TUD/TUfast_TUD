@@ -4,7 +4,7 @@
             <h1 class="upper txt-bold main-grid__title">Willkommen bei TUFast 🚀</h1>
             <h3 class="txt-bold main-grid__subtitle">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</h3>
         </header>
-        <Lottie class="main-grid__color-select" @click="toggleTheme()" :animState="animState" />
+        <ColorSwitch class="main-grid__color-select" @click="toggleTheme()" :animState="animState" />
         <div class="main-grid__menues">
             <Dropdown />
             <Statistics />
@@ -31,7 +31,7 @@
 import { defineComponent, ref } from 'vue'
 
 // Components
-import Lottie from "./components/Lottie.vue"
+import ColorSwitch from "./components/ColorSwitch.vue"
 import LanguageSelect from './components/LanguageSelect.vue'
 import Statistics from "./components/Statistics.vue"
 import Dropdown from './components/Dropdown.vue'
@@ -62,7 +62,7 @@ import Contact from './settingPages/Contact.vue'
 
 export default defineComponent({
     components: {
-        Lottie,
+        ColorSwitch,
         LanguageSelect,
         Statistics,
         Dropdown,
