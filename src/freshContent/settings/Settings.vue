@@ -20,11 +20,14 @@
                 @click="openSetting(setting)"/>
         </div>
     </div>
-        <Card v-if="showCard" @close-me="showCard=false" :title="currentSetting.title" >
-            <template v-slot:default>
-                <component :is="currentSetting.settingsPage" />
-            </template>
-        </Card>
+    <Card v-if="showCard" @close-me="showCard=false" :title="currentSetting.title" >
+        <template v-slot:default>
+            <component :is="currentSetting.settingsPage" />
+        </template>
+    </Card>
+    <teleport to="body">
+        <Onboarding />
+    </teleport>
 </template>
 
 <script lang="ts">
@@ -36,6 +39,7 @@ import LanguageSelect from './components/LanguageSelect.vue'
 import Statistics from "./components/Statistics.vue"
 import Dropdown from './components/Dropdown.vue'
 import SettingTile from './components/SettingTile.vue'
+import Onboarding from "./components/Onboarding.vue"
 
 // Settings Data (Names and Icons)
 import settings from "./settings.json"
@@ -62,22 +66,23 @@ import Contact from './settingPages/Contact.vue'
 
 export default defineComponent({
     components: {
-        ColorSwitch,
-        LanguageSelect,
-        Statistics,
-        Dropdown,
-        SettingTile,
-        Card,
-        Toggle,
-        AutoLogin,
-        Email,
-        OpalCourses,
-        ImproveOpal,
-        Shortcuts,
-        SearchEngines,
-        Rockets,
-        Contact,
-    },
+    ColorSwitch,
+    LanguageSelect,
+    Statistics,
+    Dropdown,
+    SettingTile,
+    Card,
+    Toggle,
+    AutoLogin,
+    Email,
+    OpalCourses,
+    ImproveOpal,
+    Shortcuts,
+    SearchEngines,
+    Rockets,
+    Contact,
+    Onboarding
+},
     setup() {
         const showCard = ref(false)
         const currentSetting = ref(settings[0])
