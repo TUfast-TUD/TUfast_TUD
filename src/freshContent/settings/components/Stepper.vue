@@ -24,6 +24,7 @@ export default defineComponent({
 <style lang="sass">
 .stepper
     display: flex
+    min-height: .5rem
     height: .5rem
     gap: .5rem
 

@@ -36,10 +36,16 @@ export default defineComponent({
     z-index: 0
     cursor: pointer
 
-    &:hover &__arrow
-        color: hsl(var(--clr-primary), )
+    // &:hover &__arrow
+    //     color: hsl(var(--clr-primary), )
+
+    &:hover
+        box-shadow: 0 0 3rem 4px hsl(var(--clr-primary), .4)
+        .onboarding-btn__inner
+            transform: scale(1.1)
 
     &__inner
+        transition: all 200ms ease
         border-radius: 100%
         display: flex
         justify-content: center

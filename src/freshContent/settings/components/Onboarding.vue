@@ -1,6 +1,6 @@
 <template>
     <div class="hide-bg">
-        <div class="onboarding">
+        <div class="onboarding onboarding--opening">
             <ph-x class="onboarding__close" @click="close()" />
             <div class="onboarding__main">
                 <slot name="main"/>
@@ -43,6 +43,10 @@ export default defineComponent({
                 close()
         }
 
+        setTimeout(() => {
+            document.querySelector(".onboarding")?.classList.remove("onboarding--opening")
+        }, 800);
+
         return { currentStep, percentDone, steps, close, next }
     }
 
@@ -72,7 +76,7 @@ export default defineComponent({
     min-height: 70vh
     background-color: hsl(var(--clr-white), )
     border-radius: var(--brd-rad)
-    padding-bottom: 3rem
+    padding-bottom: .5rem
 
     &__close
         position: absolute
@@ -92,9 +96,12 @@ export default defineComponent({
         z-index: 0
 
     &__stepper
+        flex: 0 0 auto
         width: 20%
 
     &__footer
+        flex: 1 1 auto
+        padding: 1rem 0 0
         display: flex
         justify-content: space-between
         align-items: center
@@ -110,6 +117,11 @@ export default defineComponent({
         animation-direction: reverse
         animation-fill-mode: forwards
         animation-delay: 150ms
+
+    &--opening
+        animation: enter 500ms ease
+        animation-delay: 300ms
+        animation-fill-mode: backwards
 
 @keyframes enter
     0%
