@@ -25,8 +25,8 @@
             <component :is="currentSetting.settingsPage" />
         </template>
     </Card>
-    <teleport to="body">
-        <Onboarding />
+    <teleport v-if="showWelcome" to="body">
+        <Welcome @close-me="showWelcome=false" />
     </teleport>
 </template>
 
@@ -64,6 +64,9 @@ import SearchEngines from './settingPages/SearchEngines.vue'
 import Rockets from './settingPages/Rockets.vue'
 import Contact from './settingPages/Contact.vue'
 
+// Onboarding Pages
+import Welcome from "./onboardingPages/Welcome.vue"
+
 export default defineComponent({
     components: {
     ColorSwitch,
@@ -81,10 +84,12 @@ export default defineComponent({
     SearchEngines,
     Rockets,
     Contact,
-    Onboarding
+    Onboarding,
+    Welcome,
 },
     setup() {
         const showCard = ref(false)
+        const showWelcome = ref(true)
         const currentSetting = ref(settings[0])
         const animState = ref<"dark" | "light">("dark")
 
@@ -112,8 +117,9 @@ export default defineComponent({
         }
 
         return {
-            settings,
             showCard,
+            showWelcome,
+            settings,
             currentSetting,
             openSetting,
             toggleTheme,

@@ -1,26 +1,49 @@
 <template>
     <div class="hide-bg">
         <div class="onboarding">
-        <lottie-player
-            class="onboarding__rocket"
-            src="../../assets/settings/rocket_lottie.json"
-            loop
-            autoplay
-        />
-        <Stepper class="onboarding__stepper" :steps="5" />
-        <!-- <footer></footer> -->
+            <ph-x class="onboarding__close" @click="close()" />
+            <div class="onboarding__main">
+                <slot name="main"/>
+            </div>
+            
+            <Stepper class="onboarding__stepper" :steps="steps" :currentStep="currentStep" />
+            <div class="onboarding__footer">
+                <slot name="footer" />
+                <OnboardingButton :percentDone="percentDone" @click="next()" class="onboarding__main-btn" />
+            </div>
         </div>
     </div>
-    
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent, ref } from '@vue/runtime-core'
 import Stepper from './Stepper.vue'
+import OnboardingButton from './OnboardingButton.vue'
 
 export default defineComponent({
     components: {
         Stepper,
+        OnboardingButton,
+    },
+    setup(_, { emit }) {
+        const currentStep = ref(1)
+        const percentDone = ref(0)
+        const steps = ref(5)
+
+        const close = () => {
+            document.querySelector(".onboarding")?.classList.add("onboarding--closing")
+            setTimeout(() => emit("close-me"), 650);
+        }
+
+        const next = () => {
+            if (currentStep.value < steps.value) {
+                currentStep.value++
+                percentDone.value += (1 / (steps.value - 1)) * 100
+            } else
+                close()
+        }
+
+        return { currentStep, percentDone, steps, close, next }
     }
 
 })
@@ -44,15 +67,58 @@ export default defineComponent({
     display: flex
     flex-direction: column
     align-items: center
-    justify-content: space-evenly
     width: 50vw
-    height: 60vh
-    max-height: 70vh
+    height: 70vh
+    min-height: 70vh
     background-color: hsl(var(--clr-white), )
+    border-radius: var(--brd-rad)
+    padding-bottom: 3rem
 
-    &__rocket
+    &__close
+        position: absolute
+        z-index: 1
+        top: .5rem
+        left: .5rem
+        width: 4rem
+        height: 4rem
+        cursor: pointer
+        color: hsl(var(--clr-black) )
+        &:hover
+            color: hsl(var(--clr-alert) )
+
+    &__main
+        height: 70%
         max-height: 75%
+        z-index: 0
 
     &__stepper
-        width: 25%
+        width: 20%
+
+    &__footer
+        display: flex
+        justify-content: space-between
+        align-items: center
+        color: hsl(var(--clr-grey), )
+        font-weight: 800
+        width: 90%
+
+    &__main-btn
+        color: hsl(var(--clr-white), )
+
+    &--closing
+        animation: enter 500ms ease
+        animation-direction: reverse
+        animation-fill-mode: forwards
+        animation-delay: 150ms
+
+@keyframes enter
+    0%
+        opacity: .2
+        transform: scale(0)
+    70%
+        opacity: 1
+        transform: scale(1.1)
+    100%
+        transform: scale(1)
+
 </style>

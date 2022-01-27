@@ -14,11 +14,9 @@ import { PropType, ref, defineComponent } from 'vue'
 export default defineComponent({
     props: {
         steps: Number as PropType<number>,
+        currentStep: Number as PropType<number>,
     },
     setup() {
-        const currentStep = ref(1)
-
-        return { currentStep }
     }
 })
 </script>
@@ -26,12 +24,12 @@ export default defineComponent({
 <style lang="sass">
 .stepper
     display: flex
-    height: 1rem
-    gap: .8rem
+    height: .5rem
+    gap: .5rem
 
     &__step
         list-style: none
-        border-radius: .3rem
+        border-radius: .6rem
         background-color: hsl(var(--clr-grey), .4)
         flex: 1 0 auto
         transition: all 500ms ease
