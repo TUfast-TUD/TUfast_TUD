@@ -26,7 +26,11 @@
         </template>
     </Card>
     <teleport v-if="showWelcome" to="body">
-        <Welcome @close-me="showWelcome=false" />
+        <Onboarding @next="onboardingStep++" @close-me="showWelcome=false"  :h1="onboardingSteps[onboardingStep].h1" :h2="onboardingSteps[onboardingStep].h2">
+            <template v-slot:default>
+                <component :is="onboardingSteps[onboardingStep].title" />
+            </template>
+        </Onboarding>
     </teleport>
 </template>
 
@@ -65,7 +69,14 @@ import Rockets from './settingPages/Rockets.vue'
 import Contact from './settingPages/Contact.vue'
 
 // Onboarding Pages
+import onboardingSteps from "./onboarding.json"
 import Welcome from "./onboardingPages/Welcome.vue"
+import SearchSetup from "./onboardingPages/SearchSetup.vue"
+import LoginSetup from './onboardingPages/LoginSetup.vue'
+import LoginAccept from './onboardingPages/LoginAccept.vue'
+import EMailSetup from './onboardingPages/EMailSetup.vue'
+import OpalSetup from './onboardingPages/OpalSetup.vue'
+import DoneSetup from './onboardingPages/DoneSetup.vue'
 
 export default defineComponent({
     components: {
@@ -86,10 +97,17 @@ export default defineComponent({
     Contact,
     Onboarding,
     Welcome,
+    SearchSetup,
+    LoginSetup,
+    LoginAccept,
+    EMailSetup,
+    OpalSetup,
+    DoneSetup,
 },
     setup() {
-        const showCard = ref(false)
         const showWelcome = ref(true)
+        const onboardingStep = ref(0)
+        const showCard = ref(false)
         const currentSetting = ref(settings[0])
         const animState = ref<"dark" | "light">("dark")
 
@@ -116,9 +134,13 @@ export default defineComponent({
                 chrome.storage.local.remove("theme")
         }
 
+        html.classList.add("light")
+
         return {
-            showCard,
             showWelcome,
+            onboardingSteps,
+            onboardingStep,
+            showCard,
             settings,
             currentSetting,
             openSetting,

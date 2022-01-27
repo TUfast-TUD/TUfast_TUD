@@ -4,12 +4,12 @@
             <input @input="emitState('update:modelValue', $event)" :value="modelValue" class="input__input" :type="type" :placeholder="placeholder">
             <component :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`" :is="statusIcon" />
         </div>
-        <span v-if="!valid && modelValue.length > 0" class="error-message">{{ errorMessage }}</span>
+        <span :style="`opacity: ${!valid && modelValue.length > 0 ? 1 : 0}`" class="error-message">{{ errorMessage }}</span>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed, watchEffect } from 'vue'
+import { defineComponent, ref, PropType, computed, watchEffect, onMounted } from 'vue'
 
 export default defineComponent({
     props: {
@@ -37,6 +37,10 @@ export default defineComponent({
             type: String as PropType<string>,
             required: true,
         },
+        column: {
+            type: Boolean as PropType<boolean>,
+            default: false,
+        }
     },
     setup(props, { emit }) {
         const statusIcon = ref("ph-check-circle")
@@ -48,6 +52,11 @@ export default defineComponent({
         }
 
         const correctPattern = computed(() => props.pattern.test(props.modelValue))
+
+        onMounted(() => {
+            if(props.column)
+                document.querySelectorAll(".input-container")?.forEach((el) => el.classList.add("input-container--column"))
+        })
     
         watchEffect(() => {
             if (props.modelValue.length > 0) {
@@ -75,9 +84,13 @@ export default defineComponent({
     display: flex
     align-items: center
     width: max-content
+    gap: .8rem
 
-.error-message
-    margin-left: .8rem
+    &--column
+        flex-direction: column
+
+// .error-message
+//     margin-left: .8rem
 
 .input
     display: flex

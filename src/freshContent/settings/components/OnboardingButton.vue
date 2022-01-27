@@ -31,13 +31,12 @@ export default defineComponent({
     justify-content: center
     align-items: center
     width: 8rem
+    min-width: 8rem
     height: 8rem
-    box-shadow: 0 0 3rem 4px rgb(0 0 0 / 40%)
+    min-height: 8rem
+    box-shadow: 0 0 3rem 4px hsl(var(--clr-white), .4)
     z-index: 0
     cursor: pointer
-
-    // &:hover &__arrow
-    //     color: hsl(var(--clr-primary), )
 
     &:hover
         box-shadow: 0 0 3rem 4px hsl(var(--clr-primary), .4)
@@ -52,7 +51,7 @@ export default defineComponent({
         align-items: center
         width: 80%
         height: 80%
-        background-color: hsl(var(--clr-grey), )
+        background-color: hsl(var(--clr-white), )
         z-index: 2
         position: relative
 
@@ -75,4 +74,5 @@ export default defineComponent({
         width: 80%
         height: 80%
         z-index: 2
+        color: hsl(var(--clr-black), )
 </style>

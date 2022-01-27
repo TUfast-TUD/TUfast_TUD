@@ -6,13 +6,12 @@
             :disabled="disabled"
             class="setting__toggle" 
         />
-            <slot />
             <span class="max-line">{{ txt }}</span>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 
 import Toggle from './Toggle.vue'
 
@@ -33,13 +32,24 @@ export default defineComponent({
             type: Boolean as PropType<boolean>,
             default: false,
         },
+        column: {
+            type: Boolean as PropType<boolean>,
+            default: false,
+        }
     },
     setup(props, { emit }) {
         const toggleState = ref(false)
+        const setting = ref
 
         watch(props, () => toggleState.value = props.modelValue)
 
         watch(toggleState, () => emit("update:modelValue", toggleState.value))
+
+        onMounted(() => {
+            if (props.column)
+                document.querySelectorAll(".setting")?.forEach((el) => el.classList.add("setting--column"))
+        })
+
 
         return { toggleState }
     },
@@ -51,8 +61,16 @@ export default defineComponent({
 .setting
     display: flex
     align-items: center
-    margin: 1.5rem 0
+    gap: 1.5rem
 
     &__toggle
-      margin-right: 1rem  
+      margin-right: 1rem 
+
+    &--column
+        flex-direction: column
+        font-size: 1.4rem
+
+    &--column &__toggle
+        width: 80px
+        height: 80px
 </style>

@@ -31,11 +31,11 @@ export default defineComponent({
     &__step
         list-style: none
         border-radius: .6rem
-        background-color: hsl(var(--clr-grey), .4)
+        background-color: hsl(var(--clr-white), .4)
         flex: 1 0 auto
         transition: all 500ms ease
 
         &--current
             flex: 2 0 auto
-            background-color: hsl(var(--clr-grey), .8)
+            background-color: hsl(var(--clr-white), .8)
 </style>

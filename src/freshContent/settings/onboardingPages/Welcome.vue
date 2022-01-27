@@ -1,19 +1,9 @@
 <template>
-    <Onboarding>
-        <template v-slot:main>
-            <lottie-player
-            src="../../assets/settings/rocket_lottie.json"
-            loop
-            autoplay
-        />
-        </template>
-        <template v-slot:footer>
-            <div class="footer-text">
-                <h1 class="footer-text__welcome">Herzlich Willkommen bei TUfast</h1>
-                <h2 class="footer-text__subtitle">Dein Produktivitätstool für alles rund um die TU Dresden</h2>
-            </div>
-        </template>
-    </Onboarding>
+    <lottie-player
+        src="../../assets/settings/rocket_lottie.json"
+        loop
+        autoplay
+    />
 </template>
 
 <script lang="ts">
@@ -28,12 +18,4 @@ export default defineComponent({
 
     },
 })
-
 </script>
-
-<style lang="sass">
-.footer-text
-    &__welcome
-        text-transform: uppercase
-    
-</style>
