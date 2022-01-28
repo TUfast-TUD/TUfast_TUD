@@ -39,7 +39,6 @@ export default defineComponent({
     },
     setup(props, { emit }) {
         const toggleState = ref(false)
-        const setting = ref
 
         watch(props, () => toggleState.value = props.modelValue)
 
@@ -73,4 +72,7 @@ export default defineComponent({
     &--column &__toggle
         width: 80px
         height: 80px
+.light
+    & .setting__toggle
+        background-color: hsl(var(--clr-black), )
 </style>

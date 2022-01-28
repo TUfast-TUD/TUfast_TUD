@@ -75,4 +75,17 @@ export default defineComponent({
         height: 80%
         z-index: 2
         color: hsl(var(--clr-black), )
+
+.light
+    & .onboarding-btn
+        box-shadow: 0 0 3rem 4px hsl(var(--clr-black), .4)
+
+        &:hover
+            box-shadow: 0 0 3rem 4px hsl(var(--clr-primary), .4)
+
+        &__inner
+            background-color: hsl(var(--clr-black), )
+
+        &__arrow
+            color: hsl(var(--clr-white), )
 </style>

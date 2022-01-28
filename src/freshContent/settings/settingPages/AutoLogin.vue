@@ -97,7 +97,6 @@ export default defineComponent({
     width: 300px
     display: flex
     flex-direction: column
-    align-items: stretch
     justify-content: space-between   
     gap: 1rem
     margin-left: 1rem

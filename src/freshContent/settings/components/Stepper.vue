@@ -38,4 +38,11 @@ export default defineComponent({
         &--current
             flex: 2 0 auto
             background-color: hsl(var(--clr-white), .8)
+
+.light
+    & .stepper__step
+        background-color: hsl(var(--clr-black), .4)
+
+        &--current
+            background-color: hsl(var(--clr-black), .8)
 </style>

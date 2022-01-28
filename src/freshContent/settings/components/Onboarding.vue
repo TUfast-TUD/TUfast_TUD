@@ -12,7 +12,7 @@
                     <h2 class="footer-text__title">{{ h1 }}</h2>
                     <h3 class="footer-text__subtitle max-line">{{ h2 }}</h3>
                 </div>
-                <OnboardingButton :percentDone="percentDone" @click="next()" class="onboarding__main-btn" />
+                <OnboardingButton :percentDone="percentDone" @click="next()" :class="`onboarding__main-btn ${currentStep === steps ? 'onboarding__main-btn--turned' : ''}`" />
             </div>
         </div>
     </div>
@@ -88,7 +88,7 @@ export default defineComponent({
     width: 50vw
     height: 70vh
     min-height: 70vh
-    background-color: hsl(var(--clr-black), )
+    background-color: hsl(var(--clr-grey), )
     border-radius: var(--brd-rad)
     padding-bottom: .5rem
 
@@ -134,6 +134,10 @@ export default defineComponent({
 
     &__main-btn
         color: hsl(var(--clr-white), )
+        transition: transform 300ms ease
+
+        &--turned
+            transform: rotate(90deg)
 
     &--closing
         animation: enter 500ms ease
@@ -145,6 +149,11 @@ export default defineComponent({
         animation: enter 500ms ease
         animation-delay: 300ms
         animation-fill-mode: backwards
+
+.light
+    & .onboarding
+        &__main, &__footer, &__close:not(:hover)
+            color: hsl(var(--clr-black), )
 
 @keyframes enter
     0%

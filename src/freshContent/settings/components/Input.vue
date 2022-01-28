@@ -89,14 +89,21 @@ export default defineComponent({
     &--column
         flex-direction: column
 
-// .error-message
-//     margin-left: .8rem
+html:not(.light) .input-container--column
+        & .input
+            background-color: hsl(var(--clr-white))
+            border: 1px solid hsl(var(--clr-black), .4)
+            &__input
+                color: hsl(var(--clr-black) )
+                &::placeholder
+                    color: hsl(var(--clr-black), .5)
+
 
 .input
     display: flex
     justify-content: space-between
     align-items: center
-    width: min-content
+    width: 300px
     height: 60px
     border-radius: 12px
     background-color: hsl(var(--clr-grey) )

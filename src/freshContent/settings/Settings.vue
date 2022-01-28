@@ -134,7 +134,7 @@ export default defineComponent({
                 chrome.storage.local.remove("theme")
         }
 
-        html.classList.add("light")
+        // html.classList.add("light")
 
         return {
             showWelcome,

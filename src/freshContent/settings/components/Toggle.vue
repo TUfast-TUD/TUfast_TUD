@@ -67,7 +67,7 @@ export default defineComponent({
         transform: scale(1000%)
 
     &--toggled
-        background-color: hsl(var(--clr-primary) )
+        background-color: hsl(var(--clr-primary) ) !important
         &:hover
             background-color: hsl(var(--clr-primary), .8)
 
