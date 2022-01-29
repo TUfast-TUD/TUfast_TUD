@@ -35,6 +35,10 @@ export default defineComponent({
         column: {
             type: Boolean as PropType<boolean>,
             default: false,
+        },
+        default: {
+            type: Boolean as PropType<boolean>,
+            default: false,
         }
     },
     setup(props, { emit }) {
@@ -73,6 +77,6 @@ export default defineComponent({
         width: 80px
         height: 80px
 .light
-    & .setting__toggle
+    & .setting--column .setting__toggle
         background-color: hsl(var(--clr-black), )
 </style>

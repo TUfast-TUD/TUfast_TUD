@@ -164,5 +164,4 @@ export default defineComponent({
         transform: scale(1.1)
     100%
         transform: scale(1)
-
 </style>

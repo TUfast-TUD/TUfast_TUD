@@ -44,6 +44,8 @@ import Statistics from "./components/Statistics.vue"
 import Dropdown from './components/Dropdown.vue'
 import SettingTile from './components/SettingTile.vue'
 import Onboarding from "./components/Onboarding.vue"
+import Card from './components/Card.vue'
+import Toggle from './components/Toggle.vue'
 
 // Settings Data (Names and Icons)
 import settings from "./settings.json"
@@ -53,10 +55,6 @@ type setting = {
     icon: string,
     settingsPage: string,
 }
-
-// Components
-import Card from './components/Card.vue'
-import Toggle from './components/Toggle.vue'
 
 // Settings Page Components
 import AutoLogin from "./settingPages/AutoLogin.vue"
@@ -68,7 +66,7 @@ import SearchEngines from './settingPages/SearchEngines.vue'
 import Rockets from './settingPages/Rockets.vue'
 import Contact from './settingPages/Contact.vue'
 
-// Onboarding Pages
+// Onboarding Page Components
 import onboardingSteps from "./onboarding.json"
 import Welcome from "./onboardingPages/Welcome.vue"
 import SearchSetup from "./onboardingPages/SearchSetup.vue"
@@ -80,30 +78,30 @@ import DoneSetup from './onboardingPages/DoneSetup.vue'
 
 export default defineComponent({
     components: {
-    ColorSwitch,
-    LanguageSelect,
-    Statistics,
-    Dropdown,
-    SettingTile,
-    Card,
-    Toggle,
-    AutoLogin,
-    Email,
-    OpalCourses,
-    ImproveOpal,
-    Shortcuts,
-    SearchEngines,
-    Rockets,
-    Contact,
-    Onboarding,
-    Welcome,
-    SearchSetup,
-    LoginSetup,
-    LoginAccept,
-    EMailSetup,
-    OpalSetup,
-    DoneSetup,
-},
+        ColorSwitch,
+        LanguageSelect,
+        Statistics,
+        Dropdown,
+        SettingTile,
+        Card,
+        Toggle,
+        AutoLogin,
+        Email,
+        OpalCourses,
+        ImproveOpal,
+        Shortcuts,
+        SearchEngines,
+        Rockets,
+        Contact,
+        Onboarding,
+        Welcome,
+        SearchSetup,
+        LoginSetup,
+        LoginAccept,
+        EMailSetup,
+        OpalSetup,
+        DoneSetup,
+    },
     setup() {
         const showWelcome = ref(true)
         const onboardingStep = ref(0)
@@ -133,8 +131,6 @@ export default defineComponent({
             else
                 chrome.storage.local.remove("theme")
         }
-
-        // html.classList.add("light")
 
         return {
             showWelcome,
@@ -189,5 +185,4 @@ export default defineComponent({
 .light
     & .main-grid__header, & .main-grid__menues, & .main-grid__color-select
         color: hsl(var(--clr-black) )
-
 </style>

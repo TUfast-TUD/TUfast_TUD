@@ -6,12 +6,14 @@
         @changedSetting="pdfInline()"
         v-model="pdfInlineActive"
         txt="PDF-Dokumente aus OPAL direkt im Browser öffnen, anstatt sie herunterzuladen."
+        class="setting"
     />
     <Setting
         :disabled="!pdfInlineActive"
         @changedSetting="pdfNewTab()"
         v-model="pdfNewTabActive"
         txt="PDF-Dokumente in neuem Tab öffnen (empfohlen!)"
+        class="setting"
     />
 </template>
 
@@ -71,3 +73,8 @@ export default defineComponent({
     },
 })
 </script>
+
+<style lang="sass" scoped>
+.setting
+    margin-bottom: .8rem   
+</style>
