@@ -9,6 +9,12 @@
   height: 20px;
 }
 
+/* Outline of the focused switch */
+.switch:focus-within {
+  outline: 2px solid white;
+  border-radius: 34px;
+}
+
 /* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
