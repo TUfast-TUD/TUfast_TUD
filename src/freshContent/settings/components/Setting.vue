@@ -36,13 +36,9 @@ export default defineComponent({
             type: Boolean as PropType<boolean>,
             default: false,
         },
-        default: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        }
     },
     setup(props, { emit }) {
-        const toggleState = ref(false)
+        const toggleState = ref(props.modelValue)
 
         watch(props, () => toggleState.value = props.modelValue)
 

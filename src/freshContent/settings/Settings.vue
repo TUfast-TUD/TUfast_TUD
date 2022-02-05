@@ -25,8 +25,8 @@
             <component :is="currentSetting.settingsPage" />
         </template>
     </Card>
-    <teleport v-if="showWelcome" to="body">
-        <Onboarding @next="onboardingStep++" @close-me="showWelcome=false"  :h1="onboardingSteps[onboardingStep].h1" :h2="onboardingSteps[onboardingStep].h2">
+    <teleport v-if="!hideWelcome" to="body">
+        <Onboarding @next="onboardingStep++" @close-me="disableWelcome()"  :h1="onboardingSteps[onboardingStep].h1" :h2="onboardingSteps[onboardingStep].h2">
             <template v-slot:default>
                 <component :is="onboardingSteps[onboardingStep].title" />
             </template>
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 
 // Components
 import ColorSwitch from "./components/ColorSwitch.vue"
@@ -103,11 +103,20 @@ export default defineComponent({
         DoneSetup,
     },
     setup() {
-        const showWelcome = ref(true)
+        const hideWelcome = ref(false)
         const onboardingStep = ref(0)
         const showCard = ref(false)
         const currentSetting = ref(settings[0])
         const animState = ref<"dark" | "light">("dark")
+
+        const test =  chrome.storage.local.get("hideWelcome", (res) => {
+            hideWelcome.value = res.hideWelcome
+        })
+
+        const disableWelcome = () => {
+            chrome.storage.local.set({ hideWelcome: true });
+            hideWelcome.value = true;
+        }
 
         const html = document.documentElement
         if (window.matchMedia("(prefers-color-scheme: light").matches)
@@ -133,7 +142,8 @@ export default defineComponent({
         }
 
         return {
-            showWelcome,
+            hideWelcome,
+            disableWelcome,
             onboardingSteps,
             onboardingStep,
             showCard,
