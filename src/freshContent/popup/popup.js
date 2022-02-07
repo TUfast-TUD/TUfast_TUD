@@ -97,6 +97,18 @@ const studiengangConfig = {
     },
     invert_icon_dark_theme: false
   },
+  informatik: {
+    name: 'Informatik',
+    fsr_icon: '../../assets/icons/FSRIcons/fsr_info.svg',
+    fsr_icon_dashboard_style: 'max-height: 32px;',
+    fsr_link: 'https://www.ifsr.de/',
+    pa_link: 'https://tu-dresden.de/ing/informatik/studium/examination-office#',
+    footer_icons_display: ['selma', 'opal', 'matrix', 'msx', 'slub', 'pa', 'cloud', 'lsk', 'swdd', 'info_discord'],
+    footer_icons_links: {
+      swdd: 'https://www.studentenwerk-dresden.de/mensen/speiseplan/'
+    },
+    invert_icon_dark_theme: true
+  },
   general: {
     name: 'Standardeinstellungen',
     fsr_icon: '',
