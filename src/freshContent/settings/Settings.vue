@@ -119,6 +119,7 @@ export default defineComponent({
         }
 
         const html = document.documentElement
+    
         if (window.matchMedia("(prefers-color-scheme: light").matches)
             animState.value = "light"
 
@@ -128,18 +129,31 @@ export default defineComponent({
         }
 
         const toggleTheme = () => {
-            if (animState.value === "dark")
-                html.classList.toggle("light")
-            if(animState.value === "light")
-                html.classList.toggle("dark")
-
-            if(html.classList.contains("dark"))
-                chrome.storage.local.set({ theme: "dark" })
-            if(html.classList.contains("light"))
+          chrome.storage.local.get(["theme"], (res) => {
+              if (res.theme === "dark")
                 chrome.storage.local.set({ theme: "light" })
-            else
-                chrome.storage.local.remove("theme")
+              if (res.theme === "light")
+                chrome.storage.local.set({ theme: "dark" })
+              
+              updateTheme()
+          })
         }
+        
+        const updateTheme = () => {
+          chrome.storage.local.get(["theme"], (res) => {
+            console.log(res)
+            if (res.theme === "dark") {
+                animState.value = "dark"
+                html.classList.add("dark")
+                html.classList.remove("light")
+            } else if (res.theme === "light") {
+                animState.value = "light"
+                html.classList.add("light")
+                html.classList.remove("dark")
+              }
+          })
+        }
+        updateTheme()
 
         return {
             hideWelcome,

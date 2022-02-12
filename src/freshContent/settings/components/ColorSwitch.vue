@@ -33,8 +33,20 @@ export default defineComponent({
     setup(props) {
         const anim : any = ref()
 
-        const direction = ref(props.animState === "dark" ? -1 : 1)
-        const animSeek = ref(props.animState === "dark" ? 99 : 0)
+        const direction = ref(-1)
+        const animSeek = ref(99)
+       
+        chrome.storage.local.get(["theme"], (res) => {
+            if (res.theme === "dark") {
+                direction.value = -1
+                animSeek.value = 99
+              }
+            if (res.theme === "light") {
+                direction.vlaue = 1
+                animSeek.value = 0
+              }
+          })
+
         onMounted(() => {
             setTimeout(() => {
                 anim.value.seek(`${animSeek.value}%`)
@@ -42,11 +54,20 @@ export default defineComponent({
             }, 0);
         })
 
+        const printProp = () => {
+            setTimeout(() => {
+             console.log(props.animState)
+             printProp()
+            }, 2000);
+          }
+
+        printProp()
+
         const play = () => {
             anim.value.setDirection(direction.value)
             anim.value.seek(`${animSeek.value}%`)
             direction.value = direction.value === -1 ? 1 : -1
-            animSeek.value = animSeek.value === 99 ? 0 : 99
+            animSeek.value = animSeek.value === 98 ? 0 : 98
             anim.value.play()
         }
 
