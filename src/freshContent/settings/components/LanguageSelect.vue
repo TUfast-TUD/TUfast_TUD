@@ -1,5 +1,5 @@
 <template>
-    <div class="language-select">
+    <div class="language-select" disabled>
         <ph-caret-double-right
             class="language-select__selector"
             :class="selectorClass"
@@ -8,6 +8,7 @@
             <p class="language-select__german language-select__languages--selected" @click="switchSel($event)">Deutsch</p>
             <p class="language-select__english" @click="switchSel($event)">English</p>
         </div>
+        <p class="soon">Bald!<br />Soon!</p>
     </div>
 </template>
 
@@ -31,6 +32,9 @@ export default defineComponent({
                 const target = e.target as HTMLParagraphElement
             if (target.classList.contains("language-select__languages--selected"))  
                 return
+
+            // disabled for now until someone translated the app to english ;)
+            return
 
             switch (selected.value) {
                 case Selected.German:
@@ -84,4 +88,16 @@ export default defineComponent({
             font-size: 1.2em
         & :not(&--selected)
             cursor: pointer
+.soon
+  position: absolute
+  left: 30%
+  top: 20%
+  transform: rotate(-45deg)
+  font-weight: 800
+  color: hsl(var(--clr-white) )
+  font-size: 1.5rem
+  background-color: black
+
+*[disabled]:not(.soon)
+  color: hsl(var(--clr-white), .6)
 </style>

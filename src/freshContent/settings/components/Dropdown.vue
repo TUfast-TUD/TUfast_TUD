@@ -106,5 +106,8 @@ export default defineComponent({
         opacity: .2
         z-index: 1
 
-
+.light .dropdown-list
+  &__item
+    &:hover
+      color: hsl(var(--clr-white) )
 </style>
