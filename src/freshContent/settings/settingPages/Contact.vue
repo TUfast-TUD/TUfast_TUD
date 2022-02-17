@@ -1,7 +1,6 @@
 <template>
     <p class="p-margin">Hey, ich bin Oli, Begründer von TUFast 🙂<br />
     TUfast ist ein quelloffenes und studentisches Projekt.<br />
-    Wenn du es unterstützen möchtest, schau mal in der Sektion oben drüber nach 😉<br />
     Fragen und Feedback gern an <a class="link" href="mailto:frage@tu-fast.de?Subject=Feedback TUfast">frage@tu-fast.de</a></p>
 
     <p class="p-margin">Du findest uns auch auf der TUfast <a class="link" href="https://www.tu-fast.de" target="_blank">Website</a>. Der Quelltext ist Open Source auf <a class="link" href="https://github.com/OliEfr/TUfast_TUD" target="_blank">GitHub</a>.<br />
