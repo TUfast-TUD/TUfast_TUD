@@ -35,40 +35,36 @@ export default defineComponent({
 
         const direction = ref(-1)
         const animSeek = ref(99)
-       
-        chrome.storage.local.get(["theme"], (res) => {
-            if (res.theme === "dark") {
+
+        onMounted(async () => {
+          setTimeout(async () => {
+           await setAnimationDirection()
+          console.log(direction.value)
+          console.log(animSeek.value) 
+          }, 10);
+        })
+
+        const play = () => {
+            setAnimationDirection()
+            anim.value.play()
+        }
+
+        const setAnimationDirection = () => {
+          return new Promise((resolve, reject) => {
+            chrome.storage.local.get(["theme"], (res) => {
+              if (res.theme === "dark") {
                 direction.value = -1
                 animSeek.value = 99
               }
-            if (res.theme === "light") {
-                direction.vlaue = 1
+              if (res.theme === "light") {
+                direction.value = 1
                 animSeek.value = 0
               }
+              anim.value.setDirection(direction.value)
+              anim.value.seek(`${animSeek.value}%`)
+              resolve()
+            })
           })
-
-        onMounted(() => {
-            setTimeout(() => {
-                anim.value.seek(`${animSeek.value}%`)
-                anim.value.setDirection(direction.value)
-            }, 0);
-        })
-
-        const printProp = () => {
-            setTimeout(() => {
-             console.log(props.animState)
-             printProp()
-            }, 2000);
-          }
-
-        printProp()
-
-        const play = () => {
-            anim.value.setDirection(direction.value)
-            anim.value.seek(`${animSeek.value}%`)
-            direction.value = direction.value === -1 ? 1 : -1
-            animSeek.value = animSeek.value === 98 ? 0 : 98
-            anim.value.play()
         }
 
         return {
@@ -99,6 +95,7 @@ export default defineComponent({
         opacity: 0
         transition: transform 225ms ease, opacity 250ms ease
         position: absolute
+        user-select: none
 
     &:hover &__text
             transform: translateY(40%)
