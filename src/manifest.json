@@ -6,7 +6,6 @@
     "storage",
     "system.cpu",
     "alarms",
-    "declarativeContent",
     "*://*/"
   ],
   "optional_permissions": [
