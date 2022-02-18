@@ -22,7 +22,7 @@ Gehe einfach auf www.tu-fast.de und wähle deinen Browser aus. Du wirst dann in 
 
 ## Datenschutz
 Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lokal auf dem PC gespeichert und verschlüsselt.
-Siehe auch [Datenschutzerklärung](https://docs.google.com/document/d/1m3LCzlRMlEUR_TbMgP7Ha7MA7jN9mJ6gfyRhCRfUxuM/edit?usp=sharing).
+Siehe auch [Datenschutzerklärung](https://tu-fast.de/datenschutz).
 
 ## Das Projekt unterstützen❤️
 Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden!
