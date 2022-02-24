@@ -23,18 +23,20 @@ document.addEventListener('DOMNodeInserted', function (e) {
   // old owa version
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
     document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+      console.log("OLD LOGOUT DETECTED")
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
   // new owa version
   if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
-    document.querySelectorAll('[aria-label="Abmelden"]')[1].addEventListener('click', function () {
+    document.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', function () {
+      console.log("LOGOUT DETECTED")
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
 }, false)
 
-function loginOWA (loggedOutOwa) {
+function loginOWA(loggedOutOwa) {
   if (document.getElementById('username') && document.getElementById('password') && !loggedOutOwa) {
     chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
       if (!(result.asdf === undefined || result.fdsa === undefined)) {
@@ -54,13 +56,15 @@ function loginOWA (loggedOutOwa) {
   // old owa version
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
     document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+      console.log("OLD LOGOUT DETECTED")
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
   // new owa version
   if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
-    document.querySelectorAll('[aria-label="Abmelden"]')[1].addEventListener('click', function () {
+    ocument.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', function () {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
+      console.log("LOGOUT DETECTED")
     })
   }
 }
@@ -72,7 +76,7 @@ window.onload = function () {
       const checkForNode = setInterval(() => {
         this.console.log('checking')
         if ((document.querySelectorAll("[autoid='_n_x1']")[1] && document.querySelectorAll("[autoid='_n_x1']")[1].textContent !== '') ||
-                    (document.querySelectorAll("[autoid='_n_41']")[1] && document.querySelectorAll("[autoid='_n_41']")[1].textContent !== '')) {
+          (document.querySelectorAll("[autoid='_n_41']")[1] && document.querySelectorAll("[autoid='_n_41']")[1].textContent !== '')) {
           readMailObserver()
           clearInterval(checkForNode)
         }
@@ -81,7 +85,7 @@ window.onload = function () {
   })
 }
 
-function readMailObserver () {
+function readMailObserver() {
   // use mutation observer to detect page changes
   const config = { attributes: true, childList: true, subtree: true, characterData: true }
   let nrUnreadMails
