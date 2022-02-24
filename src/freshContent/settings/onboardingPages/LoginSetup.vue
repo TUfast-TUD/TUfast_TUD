@@ -3,11 +3,11 @@
         <h1 class="upper">AutoLogin</h1>
         <h2>in die Onlineportale der TU Dresden</h2>
     </div>
-    <Setting txt="Dafür Login zu Opal und co. verschlüsselt & lokal speichern?" :column="true" />
+    <Setting v-model="accept" txt="Dafür Login zu Opal und co. verschlüsselt & lokal speichern?" :column="true" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent, ref } from '@vue/runtime-core'
 import Onboarding from '../components/Onboarding.vue'
 import Setting from '../components/Setting.vue'
 
@@ -17,7 +17,9 @@ export default defineComponent({
     Setting,
 },
     setup() {
+      const accept = ref(false)
 
+      return { accept }
     },
 })
 

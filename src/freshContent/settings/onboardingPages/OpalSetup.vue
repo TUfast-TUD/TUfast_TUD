@@ -1,8 +1,8 @@
 <template>
         <h1 class="upper">Opal verbessern</h1>
         <div class="info">
-            <Setting txt="PDF-Dokumenteim Browser öffnen" :column="true" />
-            <Setting txt="PDF-Dokumentein neuem Tab öffnen" :column="true" />
+            <Setting txt="PDF-Dokumente im Browser öffnen" :column="true" />
+            <Setting txt="PDF-Dokumente in neuem Tab öffnen" :column="true" />
         </div>
 </template>
 
