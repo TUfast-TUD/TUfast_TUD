@@ -51,8 +51,15 @@ function loginOWA (loggedOutOwa) {
     })
   }
   // detecting logout
+  // old owa version
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
     document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
+      chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
+    })
+  }
+  // new owa version
+  if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
+    document.querySelectorAll('[aria-label="Abmelden"]')[1].addEventListener('click', function () {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
