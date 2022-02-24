@@ -62,7 +62,7 @@ function loginOWA(loggedOutOwa) {
   }
   // new owa version
   if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
-    ocument.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', function () {
+    document.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', function () {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
       console.log("LOGOUT DETECTED")
     })
