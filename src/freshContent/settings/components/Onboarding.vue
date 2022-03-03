@@ -53,8 +53,8 @@ export default defineComponent({
 
         const next = () => {
             if (props.currentStep < steps.value) {
-                percentDone.value += (1 / (steps.value - 1)) * 100
                 emit("next")
+                percentDone.value = (props.currentStep / (steps.value - 1)) * 100
             } else
                 close()
         }

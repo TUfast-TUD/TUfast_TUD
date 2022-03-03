@@ -131,7 +131,9 @@ export default defineComponent({
         const html = document.documentElement
     
         if (window.matchMedia("(prefers-color-scheme: light").matches)
-            animState.value = "light"
+            chrome.storage.local.set({ theme: "light" })
+        else
+            chrome.storage.local.set({ theme: "dark" })
 
         const openSetting = (setting : setting) => {
             showCard.value = true
@@ -151,8 +153,6 @@ export default defineComponent({
         
         const updateTheme = () => {
           chrome.storage.local.get(["theme"], (res) => {
-            console.log("theme: ")
-            console.log(res)
             if (res.theme === "dark") {
                 animState.value = "dark"
                 html.classList.add("dark")
