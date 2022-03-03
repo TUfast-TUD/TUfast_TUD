@@ -37,9 +37,12 @@ export default defineComponent({
             type: String as PropType<string>,
             required: true,
         },
+        currentStep: {
+            type: Number as PropType<number>,
+            required: true,
+        },
     },
-    setup(_, { emit }) {
-        const currentStep = ref(1)
+    setup(props, { emit }) {
         const percentDone = ref(0)
         const steps = ref(7)
 
@@ -49,8 +52,7 @@ export default defineComponent({
         }
 
         const next = () => {
-            if (currentStep.value < steps.value) {
-                currentStep.value++
+            if (props.currentStep < steps.value) {
                 percentDone.value += (1 / (steps.value - 1)) * 100
                 emit("next")
             } else
@@ -61,7 +63,7 @@ export default defineComponent({
             document.querySelector(".onboarding")?.classList.remove("onboarding--opening")
         }, 800);
 
-        return { currentStep, percentDone, steps, close, next }
+        return { percentDone, steps, close, next }
     }
 
 })

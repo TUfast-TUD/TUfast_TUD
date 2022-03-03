@@ -3,7 +3,7 @@
         <header class="main-grid__header">
             <h1 class="upper txt-bold main-grid__title">Willkommen bei TUFast 🚀</h1>
             <h3 class="txt-bold main-grid__subtitle">Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.</h3>
-        </header>
+       </header>
         <ColorSwitch class="main-grid__color-select" @click="toggleTheme()" :animState="animState" />
         <div class="main-grid__menues">
             <Dropdown />
@@ -26,9 +26,9 @@
         </template>
     </Card>
     <teleport v-if="!hideWelcome" to="body">
-        <Onboarding @next="onboardingStep++" @close-me="disableWelcome()"  :h1="onboardingSteps[onboardingStep].h1" :h2="onboardingSteps[onboardingStep].h2">
+        <Onboarding @next="forward()" @close-me="disableWelcome()" :currentStep="onboardingStep" :h1="onboardingSteps[onboardingStep - 1].h1" :h2="onboardingSteps[onboardingStep - 1].h2">
             <template v-slot:default>
-                <component :is="onboardingSteps[onboardingStep].title" />
+                <component :is="onboardingSteps[onboardingStep - 1].title" @accept="handleSignup($event)" />
             </template>
         </Onboarding>
     </teleport>
@@ -104,9 +104,10 @@ export default defineComponent({
     },
     setup() {
         const hideWelcome = ref(false)
-        const onboardingStep = ref(0)
+        const onboardingStep = ref(1)
         const showCard = ref(false)
         const currentSetting = ref(settings[0])
+        const stepWidth = ref(1)
         const animState = ref<"dark" | "light">("dark")
 
         const test =  chrome.storage.local.get("hideWelcome", (res) => {
@@ -116,6 +117,15 @@ export default defineComponent({
         const disableWelcome = () => {
             chrome.storage.local.set({ hideWelcome: true });
             hideWelcome.value = true;
+        }
+
+        const forward = () => {
+            onboardingStep.value += stepWidth.value
+            stepWidth.value = 1
+          }
+
+        const handleSignup = (state : { value : boolean }) => {
+            stepWidth.value = state.value === true ? 1 : 2;
         }
 
         const html = document.documentElement
@@ -141,6 +151,7 @@ export default defineComponent({
         
         const updateTheme = () => {
           chrome.storage.local.get(["theme"], (res) => {
+            console.log("theme: ")
             console.log(res)
             if (res.theme === "dark") {
                 animState.value = "dark"
@@ -158,6 +169,8 @@ export default defineComponent({
         return {
             hideWelcome,
             disableWelcome,
+            forward,
+            handleSignup,
             onboardingSteps,
             onboardingStep,
             showCard,

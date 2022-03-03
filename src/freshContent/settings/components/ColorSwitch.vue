@@ -39,8 +39,6 @@ export default defineComponent({
         onMounted(async () => {
           setTimeout(async () => {
            await setAnimationDirection()
-          console.log(direction.value)
-          console.log(animSeek.value) 
           }, 10);
         })
 
@@ -49,7 +47,7 @@ export default defineComponent({
             anim.value.play()
         }
 
-        const setAnimationDirection = () => {
+       const setAnimationDirection = () => {
           return new Promise((resolve, reject) => {
             chrome.storage.local.get(["theme"], (res) => {
               if (res.theme === "dark") {

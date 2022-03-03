@@ -20,25 +20,12 @@ import { defineComponent, ref } from 'vue'
 import { time } from '../utilities'
 export default defineComponent({
     setup() {
-
         const counter = ref<number>(0)
         chrome.storage.local.get(["saved_click_counter"], (clicks) => counter.value = clicks.saved_click_counter ?? 0)
-
- //       const getMinutes = (clicks : number) => {
-  //          const clickValue = clicks * 3
-   //         return Math.floor(clicks / 60) ?? 0
-    //    }
-
-     //   const getSeconds = (clicks : number) => {
-      //      const clickValue = clicks * 3
-       //     return clicks % 60 ?? 0
-      //  }
 
         return {
             counter,
             time,
-     //       getMinutes,
-      //      getSeconds,
         }
         
     },
