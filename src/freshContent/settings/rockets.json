@@ -35,7 +35,8 @@
         "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/6_grey_128px.png",
         "beforeUnlock": "Gefällt dir TUfast? Oder hast du Anmerkdungen? Dann hinterlasse eine Bewertung im Webstore!",
         "unlocked": "Danke für deine Bewertung im Webstore!",
-        "link": ""
+        "linkFirefox": "https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search",
+        "linkChromium": "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de"
     },
     {
         "iconPathUnlocked": "../../../assets/icons/RocketIcons/1_128px.png",

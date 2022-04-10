@@ -6,15 +6,17 @@
     />
     <p class="max-line p-margin">Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!</p>
 
-    <p class="search-terms">tumail → Outlook Web App<br />
-    OPAL → OPAL<br />
-    tucloud → Cloudstore TU Dresden<br />
-    hisqis → Hisqis TU Dresden<br />
-    selma → selma TU Dresden<br />
-    jexam → jExam<br />
-    tumatrix → Matrix-Chat TU Dresden<br />
-    magma → Magma TU Dresden<br />
-    tumed → eportal.med.tu-dresden</p>
+    <p class="search-terms">
+        tumail → Outlook Web App<br />
+        OPAL → OPAL<br />
+        tucloud → Cloudstore TU Dresden<br />
+        hisqis → Hisqis TU Dresden<br />
+        selma → selma TU Dresden<br />
+        jexam → jExam<br />
+        tumatrix → Matrix-Chat TU Dresden<br />
+        magma → Magma TU Dresden<br />
+        tumed → eportal.med.tu-dresden
+    </p>
 </template>
 
 <script lang="ts">

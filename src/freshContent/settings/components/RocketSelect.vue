@@ -1,15 +1,16 @@
 <template>
     <div class="rocket-select p-margin">
-        <ph-caret-double-right
+        <div
             ref="sel"
-            @click="print()"
             class="rocket-select__selector"
             :style="`--pos: ${pos}%`"
         />
         <div class="rocket-select__rockets">
             <div v-for="(rocket, index) in rockets" :key="index" class="rocket-select__rocket">
-                <img @click="select(index, rocket.iconPathUnlocked)" class="rocket-select__image rocket-select__image--dark-mode" :src="rocket.iconPathUnlocked">
-                <Link :href="rocket.link" target="_blank" v-if="rocket.link" :txt="rocket.unlocked" />
+                <img @click="select(index, rocket.iconPathUnlocked)" :class="`rocket-select__image ${index === 0 ? 'rocket-select__image--invert' : ''}`" :src="rocket.iconPathUnlocked">
+                <Link v-if="rocket.link" :href="rocket.link" target="_blank" :txt="rocket.unlocked" />
+                <Link v-else-if="isFirefox" :href="rocket.linkFirefox" target="_blank" :txt="rocket.unlocked" />
+                <Link v-else-if="rocket.linkChromium" :href="rocket.linkChromium" target="_blank" :txt="rocket.unlocked" />
                 <p v-else class="rocket-select__text">{{ rocket.unlocked }}</p>
             </div>
         </div>
@@ -30,6 +31,8 @@ export default defineComponent({
     setup() {
         const pos = ref(0)
 
+        const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
+
         const select = (index : number, iconPath : string) => {
             pos.value = 100 * index
 
@@ -44,6 +47,7 @@ export default defineComponent({
             rockets,
             pos,
             select,
+            isFirefox,
         }
     },
 })
@@ -52,21 +56,26 @@ export default defineComponent({
 <style lang="sass" scoped>
 .rocket-select
     position: relative
-    display: grid
-    grid-template-columns: min-content auto
-    height: min-content
+    display: flex
+    flex-direction: column
+    align-items: flex-start
     min-width: max-content
     width: 125px
     
     &__selector
-        color: hsl(var(--clr-primary) )
+        position: absolute
+        top: 0
+        left: 0
         transition: all 200ms ease-out
         height: 4rem
-        width: 3rem
+        width: 4rem
+        padding: .3rem
+        border: 2px solid hsl(var(--clr-primary))
+        border-radius: 100%
         transform: translateY(var(--pos))
 
     &__rockets
-        padding-left: .5rem
+        padding-left: .9rem
         user-select: none
         display: flex
         flex-direction: column
@@ -83,11 +92,11 @@ export default defineComponent({
         cursor: pointer
         transition: transform 200ms ease
 
-        &:hover
+        &:hover:not(&--beforeUnlocked)
             transform: scale(1.15)
 
         &--beforeUnlocked
             filter: grayscale(1)
-        &--dark-mode
+        &--invert
             filter: invert(1)
 </style>
