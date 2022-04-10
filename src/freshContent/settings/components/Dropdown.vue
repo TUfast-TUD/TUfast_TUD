@@ -9,7 +9,12 @@
                 size="2rem" />
         </div>
         <transition-group @mouseleave="clicked=false" v-if="clicked" tag="div" class="dropdown-list">
-            <div v-for="(study, index) in studies" :key="index" class="dropdown-list__item">
+            <div
+                v-for="(study, index) in studies"
+                :key="index"
+                :class="`dropdown-list__item ${selectedStudy === study.name ? 'dropdown-list__item--selected' : ''}`"
+                @click="setStudySubject(study.name)"
+            >
                 <ph-caret-double-right class="dropdown-list__arrow" />
                 <img v-if="study.fsr_icon" class="dropdown-list__image" :src="study.fsr_icon" :alt="`Das Icon des Studiengangs ${study.name}`">
                 <h3 class="dropdown-list__title">{{ study.name }}</h3>
@@ -34,12 +39,25 @@ export default defineComponent({
     },
     setup() {
         const clicked = ref(false)
+        const selectedStudy = ref("Standardeinstellungen")
+ 
+        chrome.storage.local.get("studiengang", (res) => selectedStudy.value = res.studiengang)
+
+        const setStudySubject = (studiengang: string) => {
+            if (studiengang === "+ Studiengang hinzufügen...") {
+                window.location.href = "mailto:frage@tu-fast.de?Subject=Vorschlag Studiengang"
+                return
+            }
+            chrome.storage.local.set({ studiengang })
+            selectedStudy.value = studiengang
+        }
 
         return {
             studies,
             clicked,
+            setStudySubject,
+            selectedStudy,
         }
-        
     },
 })
 </script>
@@ -88,6 +106,13 @@ export default defineComponent({
             & .dropdown-list__arrow
                 transform: translateX(20px)
                 opacity: .4
+
+        &--selected
+            background-color: hsl(var(--clr-primary) )
+
+            &:hover
+                background-color: hsl(var(--clr-primary))
+                filter: brightness(.8)
 
     &__image
         max-height: 100%

@@ -75,7 +75,8 @@ export default defineComponent({
         transform: translateY(var(--pos))
 
     &__rockets
-        padding-left: .9rem
+        padding-left: .8rem
+        padding-top: .2rem
         user-select: none
         display: flex
         flex-direction: column
@@ -85,6 +86,7 @@ export default defineComponent({
         display: flex
         align-items: center
         height: 4rem
+        padding-right: .2rem
 
     &__image
         margin-right: .8rem
