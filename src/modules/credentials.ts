@@ -105,6 +105,9 @@ export async function userDataExists(platform: string|undefined) {
     return false
 }
 
+//Legacy
+export const loginDataExists = (platform = 'zih') => userDataExists(platform);
+
 // return {user: string, pass: string}
 // decrypt and return user data
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format
