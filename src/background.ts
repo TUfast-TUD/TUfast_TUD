@@ -86,7 +86,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             }
 
             // Upgrading availableRockets
-            const avRockets = currentSettings.availableRockets || [];
+            const avRockets = currentSettings.availableRockets || ["RI_default"];
             if (savedClicks > 250 && !avRockets.includes('RI4')) avRockets.push('RI4');
             if (savedClicks > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5');
             if (currentSettings.Rocket === 'colorful' && currentSettings.foundEasteregg === undefined) {
@@ -98,20 +98,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             }
             updateObj.availableRockets = avRockets;
 
-            break;
-    }
-});
+            // Write back to storage
 
-chrome.storage.local.get(["selectedRocketIcon"]).then((result) => {
-    if (!result.selectedRocketIcon) return;
-    try {
-        const icon = JSON.parse(result.selectedRocketIcon);
-        chrome.browserAction.setIcon({ path: icon.link });
-    } catch (e) {
-        console.error(`Cannot parse rocket icon: ${result}`);
-        chrome.browserAction.setIcon({
-            path: "assets/icons/RocketIcons/default_128px.png",
-        });
+            await chrome.storage.local.set(updateObj);
+
+            break;
     }
 });
 
@@ -136,6 +127,7 @@ chrome.commands.onCommand.addListener(async (command) => {
     }
 });
 
+// function to save the opal courses to storage
 async function saveCourses(courseList) {
     courseList.list.sort((a, b) => (a.name > b.name ? 1 : -1));
     switch (courseList.type) {
@@ -150,7 +142,7 @@ async function saveCourses(courseList) {
     }
 }
 
-// save_click_counter
+// function to save the saved clicks to storage
 async function saveClicks(counter: number) {
     // load number of saved clicks and add counter!
     const { savedClickCounter: clicks } = await chrome.storage.local.get(['savedClickCounter']);
@@ -166,12 +158,9 @@ async function saveClicks(counter: number) {
 }
 
 // show badge
-async function showBadge(text: string, color: string, _timeout: number) {
+async function showBadge(text: string, color: string) {
     await chrome.action.setBadgeText({ text });
     await chrome.action.setBadgeBackgroundColor({ color });
-    /* setTimeout(() => {
-        chrome.browserAction.setBadgeText({text: ""});
-    }, timeout);*/
 }
 
 async function openSharePage() {
@@ -211,3 +200,49 @@ function headerListenerFunc(details: any) {
     header.value = 'inline';
     return { responseHeaders: details.responseHeaders };
 }
+
+// Apply settings on startup
+// Icon
+chrome.storage.local.get(["selectedRocketIcon"]).then((result) => {
+    if (!result.selectedRocketIcon) return;
+    try {
+        const icon = JSON.parse(result.selectedRocketIcon);
+        chrome.action.setIcon({ path: icon.link });
+    } catch (e) {
+        console.error(`Cannot parse rocket icon: ${result}`);
+        chrome.action.setIcon({
+            path: "assets/icons/RocketIcons/default_128px.png",
+        });
+    }
+});
+// owaFetch
+chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail']).then(async (result) => {
+    if (await credentials.userDataExists('zih') && result.enabledOWAFetch) {
+        await owaFetch.enableOWAFetch();
+    }
+    // The linter is wrong see https://developer.chrome.com/docs/extensions/reference/permissions/#method-contains
+    const notificationsGranted = await chrome.permissions.contains({permissions: ['notifications']});
+    if (notificationsGranted && result.additionalNotificationOnNewMail) {
+        // register listener for owaFetch notifications
+        chrome.notifications.onClicked.addListener(
+            async (id) => {
+                if (id === 'tuFastNewEmailNotification') {
+                    await chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' });
+                }
+            }
+        );
+    }
+});
+// header listener. this will probably not work because of manifest v3
+chrome.storage.local.get(['pdfInNewTab'], (result) => {
+    if (result.pdfInNewTab) {
+        enableHeaderListener(true);
+    }
+})
+
+// TODO
+// Settings listener
+// listens on all local storage entries that are settings and acts on change
+
+// TODO
+// Add command api

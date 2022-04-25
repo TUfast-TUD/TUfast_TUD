@@ -9,6 +9,7 @@ const availableThemes = {
 }
 
 async function applyTheme (theme) {
+  theme = theme || 'system' // if undefined
   if (theme in availableThemes) {
     if (theme === 'system') {
       document.documentElement.removeAttribute('data-theme')
@@ -16,8 +17,7 @@ async function applyTheme (theme) {
       document.documentElement.setAttribute('data-theme', theme)
     }
 
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.storage.local.set({ theme: theme }, resolve))
+    await chrome.storage.local.set({ theme: theme })
 
     // update switcher
     document.querySelector('#themeSwitcher > .theme-text').innerHTML = availableThemes[theme]
@@ -113,15 +113,12 @@ async function deleteUserData () {
 }
 
 async function fwdGoogleSearch () {
-  // Promisified until usage of Manifest V3
-  const result = await new Promise((resolve) => chrome.storage.local.get(['fwdEnabled'], resolve))
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.storage.local.set({ fwdEnabled: !(result.fwdEnabled) }, resolve))
+  const result = await chrome.storage.local.get(['fwdEnabled'])
+  await chrome.storage.local.set({ fwdEnabled: !(result.fwdEnabled) })
 }
 
 async function checkSelectedRocket () {
-  // Promisified until usage of Manifest V3
-  const res = await new Promise((resolve) => chrome.storage.local.get(['selectedRocketIcon'], resolve))
+  const res = await chrome.storage.local.get(['selectedRocketIcon'])
   try {
     const icon = JSON.parse(res.selectedRocketIcon)
     document.getElementById(icon.id).checked = true
@@ -132,7 +129,7 @@ async function checkSelectedRocket () {
 
 // set switches and other elements
 async function displayEnabled () {
-  const result = await new Promise((resolve) => chrome.storage.local.get([
+  const result = await chrome.storage.local.get([
     'fwdEnabled',
     'enabledOWAFetch',
     'additionalNotificationOnNewMail',
@@ -141,7 +138,7 @@ async function displayEnabled () {
     'pdfInInline',
     'pdfInNewTab'
     // 'dashboardDisplay'
-  ], resolve))
+  ])
 
   // '!!' should be used in checkboxes if value is undefined. Value will be false then
   document.getElementById('switch_fwd').checked = !!result.fwdEnabled
@@ -162,7 +159,7 @@ async function displayEnabled () {
     document.getElementById('switch_pdf_newtab_block').style.visibility = 'hidden'
   }
 
-  document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
+  document.getElementById('switch_pdf_newtab').checked = !!result.pdfInNewTab
   await updatePlatformStatus(document.getElementById('status_platform').value)
 
   /*
@@ -250,16 +247,14 @@ async function toggleOWAfetch () {
 }
 
 async function enableOWAFetch () {
-  // Promisified until usage of Manifest V3
-  const result = await new Promise((resolve) => chrome.storage.local.get(['enabledOWAFetch'], resolve))
+  const result = await chrome.storage.local.get(['enabledOWAFetch'])
   if (result.enabledOWAFetch) {
     // disable
     chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.storage.local.set({
+    await chrome.storage.local.set({
       enabledOWAFetch: false,
       additionalNotificationOnNewMail: false
-    }, resolve))
+    })
 
     document.getElementById('additionalNotification').checked = false
   } else {
@@ -269,12 +264,11 @@ async function enableOWAFetch () {
     // check if user data is saved
     if (userData.user && userData.pass) {
       document.getElementById('owa_fetch_msg').innerHTML = ''
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.storage.local.set({
+      await chrome.storage.local.set({
         enabledOWAFetch: true,
         openSettingsPageParam: 'mailFetchSettings',
         openSettingsOnReload: true
-      }, resolve))
+      })
       // reload chrome extension is necessary
       alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen uebernommen werden!')
       chrome.runtime.sendMessage({ cmd: 'reload_extension' })
@@ -286,9 +280,8 @@ async function enableOWAFetch () {
 }
 
 async function getAvailableRockets () {
-  // Promisified until usage of Manifest V3
-  const availableRockets = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], (resp) => resolve(resp.availableRockets)))
-  return availableRockets || {} // To prevent errors when undefined
+  const { availableRockets } = await chrome.storage.local.get(['availableRockets'])
+  return availableRockets || [] // To prevent errors when undefined
 }
 
 const rocketIconsConfig = {
@@ -400,15 +393,12 @@ async function enableRocketIcon () {
   const rocketID = el.querySelectorAll('input')[0].id
 
   // save in storage
-  // Promisified until usage of Manifest V3
-  const availRockets = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], (resp) => resolve(resp.availableRockets)))
+  const { availableRockets: availRockets } = await chrome.storage.local.get(['availableRockets'])
   if (!availRockets) {
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.storage.local.set({ availableRockets: [rocketID] }, resolve))
+    await chrome.storage.local.set({ availableRockets: [rocketID] })
   } else if (!availRockets.includes(rocketID)) {
     availRockets.push(rocketID)
-    // Promisified until usage of Manifest V3
-    await new Promise((resolve) => chrome.storage.local.set({ availableRockets: availRockets }, resolve))
+    await chrome.storage.local.set({ availableRockets: availRockets })
   }
 
   // change picture and text and enable radio button
@@ -427,8 +417,7 @@ window.onload = async () => {
   document.getElementsByClassName('banner__close')[0]?.addEventListener('click', () => document.getElementsByClassName('banner')[0]?.remove())
 
   // apply initial theme
-  // Promisified until usage of Manifest V3
-  const theme = await new Promise((resolve) => chrome.storage.local.get('theme', (res) => resolve(res.theme)))
+  const { theme } = await chrome.storage.local.get(['theme'])
   await applyTheme(theme)
 
   // prevent transition on page load
@@ -461,18 +450,15 @@ window.onload = async () => {
   checkbox.addEventListener('change', async (e) => {
     if (e.target.checked) {
       // only when owa fetch enabled
-      // Promisified until usage of Manifest V3
-      const enabledOWAFetch = await new Promise((resolve) => chrome.storage.local.get(['enabledOWAFetch'], (resp) => resolve(resp.enabledOWAFetch)))
+      const { enabledOWAFetch } = await chrome.storage.local.get(['enabledOWAFetch'])
       if (enabledOWAFetch) {
-        // Promisified until usage of Manifest V3
-        await new Promise((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: true }, resolve))
+        await chrome.storage.local.set({ additionalNotificationOnNewMail: true })
       } else {
         document.getElementById('owa_fetch_msg').innerHTML = '<span class="red-text">F&uuml;r dieses Feature musst der Button auf \'Ein\' stehen.</span>'
         document.getElementById('additionalNotification').checked = false
       }
     } else {
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
+      await chrome.storage.local.set({ additionalNotificationOnNewMail: false })
     }
   })
 
@@ -482,8 +468,7 @@ window.onload = async () => {
       document.getElementById('addStudiengang').style.display = 'block'
     } else {
       document.getElementById('addStudiengang').style.display = 'none'
-      // Promisified until usage of Manifest V3
-      await new Promise((resolve) => chrome.storage.local.set({ studiengang: e.target.value }, resolve))
+      await chrome.storage.local.set({ studiengang: e.target.value })
     }
   })
 
@@ -574,8 +559,8 @@ window.onload = async () => {
     })
   }
 
-  // get things from storage// Promisified until usage of Manifest V3
-  const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], resolve))
+  // get things from storage
+  const result = await chrome.storage.local.get(['savedClickCounter', 'openSettingsPageParam', 'isEnabled'])
   await updateSavedStatus()
   // update saved clicks
   // see if any params are available
@@ -593,7 +578,7 @@ window.onload = async () => {
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 500)
   }
 
-  this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.saved_click_counter || 0)
+  this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.savedClickCounter || 0)
   // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: false }, resolve))
+  await chrome.storage.local.remove(['openSettingsPageParam'])
 }

@@ -11,7 +11,8 @@
   "optional_permissions": [
     "tabs",
     "webRequest",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "notifications"
   ],
   "host_permissions": [
     "*://*/*"
