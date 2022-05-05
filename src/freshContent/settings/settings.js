@@ -162,7 +162,7 @@ async function displayEnabled () {
     document.getElementById('switch_pdf_newtab_block').style.visibility = 'hidden'
   }
 
-  document.getElementById('switch_pdf_newtab').checked = result.pdfInNewTab
+  document.getElementById('switch_pdf_newtab').checked = !!result.pdfInNewTab
   await updatePlatformStatus(document.getElementById('status_platform').value)
 
   /*
@@ -288,7 +288,7 @@ async function enableOWAFetch () {
 async function getAvailableRockets () {
   // Promisified until usage of Manifest V3
   const availableRockets = await new Promise((resolve) => chrome.storage.local.get(['availableRockets'], (resp) => resolve(resp.availableRockets)))
-  return availableRockets || {} // To prevent errors when undefined
+  return availableRockets || [] // To prevent errors when undefined
 }
 
 const rocketIconsConfig = {
@@ -428,7 +428,7 @@ window.onload = async () => {
 
   // apply initial theme
   // Promisified until usage of Manifest V3
-  const theme = await new Promise((resolve) => chrome.storage.local.get('theme', (res) => resolve(res.theme)))
+  const theme = await new Promise((resolve) => chrome.storage.local.get(['theme'], (res) => resolve(res.theme)))
   await applyTheme(theme)
 
   // prevent transition on page load
@@ -575,7 +575,7 @@ window.onload = async () => {
   }
 
   // get things from storage// Promisified until usage of Manifest V3
-  const result = await new Promise((resolve) => chrome.storage.local.get(['saved_click_counter', 'openSettingsPageParam', 'isEnabled'], resolve))
+  const result = await new Promise((resolve) => chrome.storage.local.get(['savedClickCounter', 'openSettingsPageParam', 'isEnabled'], resolve))
   await updateSavedStatus()
   // update saved clicks
   // see if any params are available
@@ -593,7 +593,7 @@ window.onload = async () => {
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 500)
   }
 
-  this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.saved_click_counter || 0)
+  this.document.getElementById('settings_comment').innerHTML = 'Bereits ' + clicksToTimeNoIcon(result.savedClickCounter || 0)
   // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.storage.local.set({ openSettingsPageParam: false }, resolve))
+  await new Promise((resolve) => chrome.storage.local.remove(['openSettingsPageParam'], resolve))
 }
