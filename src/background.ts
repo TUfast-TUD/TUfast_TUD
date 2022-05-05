@@ -242,7 +242,65 @@ chrome.storage.local.get(['pdfInNewTab'], (result) => {
 
 // TODO
 // Settings listener
-// listens on all local storage entries that are settings and acts on change
+// listens on all local storage entries and acts on change of settings
 
 // TODO
 // Add command api
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+    switch (request.cmd) {
+      case 'save_clicks':
+        saveClicks(request.click_count)
+        break
+      case 'get_user_data': {
+        credentials.getUserData(request.platform || 'zih').then(userData => sendResponse(userData))
+        break
+      }
+      case 'set_user_data': {
+        credentials.setUserData(request.userData, request.platform || 'zih').then(() => sendResponse(true))
+        break
+      }
+      case 'check_user_data': {
+        credentials.userDataExists(request.platform).then(response => sendResponse(response))
+        break
+      }
+      case 'read_mail_owa':
+        owaFetch.readMailOWA(request.numberOfUnreadMails)
+        break
+      /*case 'logged_out':
+        loggedOut(request.portal)
+        break*/
+      case 'disable_owa_fetch':
+        owaFetch.disableOwaFetch()
+        break
+      case 'reload_extension':
+        chrome.runtime.reload()
+        break
+      case 'save_courses':
+        saveCourses(request.course_list)
+        break
+      case 'open_settings_page':
+        openSettingsPage(request.params)
+        break
+      case 'open_share_page':
+        openSharePage()
+        break
+      case 'open_shortcut_settings':
+        if (isFirefox) {
+          chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' })
+        } else {
+          // for chrome and everything else
+          chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
+        }
+        break
+      case 'toggle_pdf_inline_setting':
+        enableHeaderListener(request.enabled)
+        break
+      case 'update_rocket_logo_easteregg':
+        chrome.action.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
+        break
+      default:
+        console.error(`Command ${request.cmd} not found!`)
+        break
+    }
+    return true // required for async sendResponse
+  })
