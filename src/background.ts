@@ -7,10 +7,10 @@ const isFirefox = typeof browser !== 'undefined' && browser.runtime && browser.r
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
-    const reason = details.reason;
+    const reason = details.reason
     switch (reason) {
         case "install":
-            console.log("TUfast installed");
+            console.log("TUfast installed")
             await chrome.storage.local.set({
                 dashboardDisplay: 'favoriten',
                 fwdEnabled: true,
@@ -19,9 +19,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
                 selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}',
                 theme: "system",
                 studiengang: "general",
-            });
-            await openSettingsPage("first_visit");
-            break;
+            })
+            await openSettingsPage("first_visit")
+            break
         case "update":
             // Promisified until usage of Manifest V3
             const currentSettings = await new Promise<any>((resolve) => chrome.storage.local.get([
@@ -40,15 +40,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
                 'foundEasteregg'
             ], resolve))
 
-            const updateObj: any = {};
+            const updateObj: any = {}
 
             // Setting the defaults if keys do not exist
-            if (typeof currentSettings.dashboardDisplay === 'undefined') updateObj.dashboardDisplay = 'favoriten';
-            if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true;
-            if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true;
-            if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system';
-            if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general';
-            if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}';
+            if (typeof currentSettings.dashboardDisplay === 'undefined') updateObj.dashboardDisplay = 'favoriten'
+            if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true
+            if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
+            if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
+            if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
+            if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}'
 
             // Upgrading encryption
             // Currently "encryptionLevel" can't be lower than 3, but "encryption_level" can
@@ -56,30 +56,30 @@ chrome.runtime.onInstalled.addListener(async (details) => {
                 switch (currentSettings.encryption_level) {
                     case 1: {
                         // This branch probably/hopefully will not be called anymore...
-                        console.log('Upgrading encryption standard from level 1 to level 3...');
+                        console.log('Upgrading encryption standard from level 1 to level 3...')
                         // Promisified until usage of Manifest V3
-                        const userData = await new Promise<any>((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve));
+                        const userData = await new Promise<any>((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve))
                         await credentials.setUserData({ user: atob(userData.asdf), pass: atob(userData.fdsa) }, 'zih')
                         // Promisified until usage of Manifest V3
-                        await new Promise<void>((resolve) => chrome.storage.local.remove(['asdf', 'fdsa'], resolve));
-                        break;
+                        await new Promise<void>((resolve) => chrome.storage.local.remove(['asdf', 'fdsa'], resolve))
+                        break
                     }
                     case 2: {
-                        const { asdf: user, fdsa: pass } = await credentials.getUserDataLagacy();
-                        await credentials.setUserData({ user, pass }, 'zih');
+                        const { asdf: user, fdsa: pass } = await credentials.getUserDataLagacy()
+                        await credentials.setUserData({ user, pass }, 'zih')
                         // Delete old user data
                         // Promisified until usage of Manifest V3
                         await new Promise<void>((resolve) => chrome.storage.local.remove(['Data'], resolve))
-                        break;
+                        break
                     }
                 }
-                updateObj.encryptionLevel = 3;
+                updateObj.encryptionLevel = 3
                 // Promisified until usage of Manifest V3
                 await new Promise<void>((resolve) => chrome.storage.local.remove(['encryption_level'], resolve))
             }
 
             // Upgrading saved_clicks_counter to savedClicksCounter
-            const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter;
+            const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter
             if (typeof currentSettings.savedClickCounter === 'undefined' && typeof currentSettings.saved_click_counter !== 'undefined') {
                 updateObj.savedClickCounter = savedClicks
                 // Promisified until usage of Manifest V3
@@ -87,26 +87,26 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             }
 
             // Upgrading availableRockets
-            const avRockets = currentSettings.availableRockets || ["RI_default"];
-            if (savedClicks > 250 && !avRockets.includes('RI4')) avRockets.push('RI4');
-            if (savedClicks > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5');
+            const avRockets = currentSettings.availableRockets || ["RI_default"]
+            if (savedClicks > 250 && !avRockets.includes('RI4')) avRockets.push('RI4')
+            if (savedClicks > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5')
             if (currentSettings.Rocket === 'colorful' && currentSettings.foundEasteregg === undefined) {
-                updateObj.foundEasteregg = true;
-                updateObj.selectedRocketIcon = '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}';
-                avRockets.push('RI3');
+                updateObj.foundEasteregg = true
+                updateObj.selectedRocketIcon = '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}'
+                avRockets.push('RI3')
                 // Promisified until usage of Manifest V3
                 await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_128px.png' }, resolve))
                 // Promisified until usage of Manifest V3
                 await new Promise<void>((resolve) => chrome.storage.local.remove(['Rocket'], resolve))
             }
-            updateObj.availableRockets = avRockets;
+            updateObj.availableRockets = avRockets
 
             // Write back to storage
             // Promisified until usage of Manifest V3
             await new Promise<void>((resolve) => chrome.storage.local.set(updateObj, resolve))
-            break;
+            break
     }
-});
+})
 
 // register hotkeys
 chrome.commands.onCommand.addListener(async (command) => {
@@ -135,17 +135,17 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
             path: r.link
         })
     } catch (e) { 
-        console.error(`Cannot parse rocket icon: ${resp}`);
+        console.error(`Cannot parse rocket icon: ${resp}`)
         chrome.action.setIcon({
             path: "assets/icons/RocketIcons/default_128px.png",
-        });
+        })
     }
 })
 
 // start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail'], async (result: any) => {
     if (await credentials.userDataExists('zih') && result.enabledOWAFetch) {
-        await owaFetch.enableOWAFetch();
+        await owaFetch.enableOWAFetch()
     }
     // Promisified until usage of Manifest V3
     await new Promise<void>((result) => chrome.permissions.contains({permissions: ['notifications']}, (result: any) => {
@@ -338,12 +338,12 @@ async function saveClicks(counter: number) {
 
 // save parsed courses
 interface CourseList {
-    type: string;
-    list: Course[];
+    type: string
+    list: Course[]
 }
 interface Course {
-    link: string;
-    name: string;
+    link: string
+    name: string
 }
 async function saveCourses(courseList: CourseList) {
     courseList.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
