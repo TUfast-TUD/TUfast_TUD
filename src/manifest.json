@@ -22,7 +22,7 @@
   "content_scripts": [
     {
       "js": [
-        "contentScripts/elearningMED.js"
+        "contentScripts/login/elearningMED.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -31,7 +31,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_opalError.js"
+        "contentScripts/forward/opalError.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -40,7 +40,7 @@
     },
     {
       "js": [
-        "contentScripts/idp.js"
+        "contentScripts/login/idp.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -50,7 +50,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_jexam.js"
+        "contentScripts/forward/jexam.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -68,7 +68,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_cloudstore.js"
+        "contentScripts/forward/cloudstore.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -94,7 +94,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_owa.js"
+        "contentScripts/forward/owa.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -120,7 +120,7 @@
     },
     {
       "js": [
-        "contentScripts/jexam.js"
+        "contentScripts/login/jexam.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -130,10 +130,10 @@
     {
       "js": [
         "thirdParty/Chart.bundle.min.js",
-        "contentScripts/pimpHISQIS.js",
+        "contentScripts/other/pimpHISQIS.js",
         "thirdParty/vue.js",
         "thirdParty/vuesax.js",
-        "contentScripts/pimpHISQIS_table.js"
+        "contentScripts/other/pimpHISQIS_table.js"
       ],
       "css": [
         "thirdParty/vuesax.css",
@@ -149,7 +149,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_opal.js"
+        "contentScripts/forward/opal.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -167,7 +167,7 @@
     },
     {
       "js": [
-        "contentScripts/selma.js"
+        "contentScripts/login/selma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -176,7 +176,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_hisqis.js"
+        "contentScripts/forward/hisqis.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -193,7 +193,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_tumed.js"
+        "contentScripts/forward/tumed.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -210,7 +210,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_selma.js"
+        "contentScripts/forward/selma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -227,7 +227,7 @@
     },
     {
       "js": [
-        "contentScripts/qis.js"
+        "contentScripts/login/qis.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -236,7 +236,7 @@
     },
     {
       "js": [
-        "contentScripts/bildungsportal.js"
+        "contentScripts/login/bildungsportal.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -247,7 +247,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_matrix.js"
+        "contentScripts/forward/matrix.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -264,7 +264,7 @@
     },
     {
       "js": [
-        "contentScripts/matrix.js"
+        "contentScripts/login/matrix.js"
       ],
       "run_at": "document_end",
       "matches": [
@@ -278,7 +278,7 @@
     },
     {
       "js": [
-        "contentScripts/owa.js"
+        "contentScripts/login/owa.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -287,7 +287,7 @@
     },
     {
       "js": [
-        "contentScripts/cloudstore.js"
+        "contentScripts/login/cloudstore.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -296,7 +296,7 @@
     },
     {
       "js": [
-        "contentScripts/bildungsportal_main.js"
+        "contentScripts/login/bildungsportal_main.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -306,8 +306,8 @@
     },
     {
       "js": [
-        "contentScripts/bildungsportal_insertLogo.js",
-        "contentScripts/bildungsportal_viewPDFinBrowser.js"
+        "contentScripts/other/bildungsportal_insertLogo.js",
+        "contentScripts/other/bildungsportal_viewPDFinBrowser.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -316,7 +316,7 @@
     },
     {
       "js": [
-        "contentScripts/bildungsportal_other.js"
+        "contentScripts/other/bildungsportal_other.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -325,7 +325,7 @@
     },
     {
       "js": [
-        "contentScripts/parseOpal.js"
+        "contentScripts/other/parseOpal.js"
       ],
       "css": [
         "styles/components/banner.css"
@@ -339,7 +339,7 @@
     },
     {
       "js": [
-        "contentScripts/magma.js"
+        "contentScripts/login/magma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -348,7 +348,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_magma.js"
+        "contentScripts/forward/magma.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -365,7 +365,7 @@
     },
     {
       "js": [
-        "contentScripts/tumed.js"
+        "contentScripts/login/tumed.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -374,7 +374,7 @@
     },
     {
       "js": [
-        "contentScripts/lskonline.js"
+        "contentScripts/login/lskonline.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -383,7 +383,7 @@
     },
     {
       "js": [
-        "contentScripts/tex.js"
+        "contentScripts/login/tex.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -392,7 +392,7 @@
     },
     {
       "js": [
-        "contentScripts/videocampus.js"
+        "contentScripts/login/videocampus.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -401,7 +401,7 @@
     },
     {
       "js": [
-        "contentScripts/gitlab.js"
+        "contentScripts/login/gitlabMN.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -410,7 +410,7 @@
     },
     {
       "js": [
-        "contentScripts/slub.js"
+        "contentScripts/login/slub.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -419,7 +419,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_qwant.js"
+        "contentScripts/forward/qwant.js"
       ],
       "run_at": "document_start",
       "matches": [
@@ -428,7 +428,7 @@
     },
     {
       "js": [
-        "contentScripts/fwd_startpage.js"
+        "contentScripts/forward/startpage.js"
       ],
       "run_at": "document_start",
       "matches": [
