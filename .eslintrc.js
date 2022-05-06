@@ -8,6 +8,9 @@ module.exports = {
   extends: ['standard'],
   plugins: ['promise'],
   rules: {
-    'prefer-arrow-callback': 'warn'
+    'prefer-arrow-callback': 'warn',
+    'no-unused-vars': 'warn', // This should be no error!
+    semi: ['warn', 'never'],
+    quotes: ['warn', 'single', {"avoidEscape": true}]
   }
 }
