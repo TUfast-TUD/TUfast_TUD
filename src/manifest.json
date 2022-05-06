@@ -1,19 +1,19 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "6.1.0.0",
+  "version": "6.2.0.0",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage",
     "system.cpu",
     "alarms",
     "declarativeContent",
-    "*://*/",
-    "notifications"
+    "*://*/"
   ],
   "optional_permissions": [
     "tabs",
     "webRequest",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "notifications"
   ],
   "background": {
     "page": "background.html",

@@ -211,18 +211,30 @@ export async function owaFetch() {
     // alert on new Mail
     // Promisified until usage of Manifest V3
     const result = await new Promise<any>((resolve) => chrome.storage.local.get(['numberOfUnreadMails', 'additionalNotificationOnNewMail'], resolve))
+    // Promisified until usage of Manifest V3
+    const notificationGranted = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, resolve))
+
     if (result.additionalNotificationOnNewMail && typeof result.numberOfUnreadMails !== 'undefined' && result.numberOfUnreadMails < numberOfUnreadMails) {
-        // Promissified notification
-        await new Promise<void>((resolve) => chrome.notifications.create(
-            'tuFastNewEmailNotification',
-            {
-                type: 'basic',
-                message: `Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1?'s':''}`,
-                title: 'Neue E-Mails',
-                iconUrl: 'assets/icons/RocketIcons/default_128px.png'
-            },
-            (_id) => resolve(undefined),
-        ));
+        if (notificationGranted) {
+            // Promissified notification
+            await new Promise<void>((resolve) => chrome.notifications.create(
+                'tuFastNewEmailNotification',
+                {
+                    type: 'basic',
+                    message: `Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1?'s':''}`,
+                    title: 'Neue E-Mails',
+                    iconUrl: 'assets/icons/RocketIcons/default_128px.png'
+                },
+                (_id) => resolve(undefined),
+            ));
+        } else {
+            // Fallback
+            // Maybe we should keep it for compatibility?
+            if (confirm(`Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1?'s':''} in deinem TU Dresden Postfach!\nDr\u00FCcke 'Ok' um OWA zu \u00F6ffnen.`)) {
+                // Promisified until usage of Manifest V3
+                await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
+            }
+        }
     }
 
     // set badge and local storage

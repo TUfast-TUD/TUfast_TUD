@@ -134,7 +134,7 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
         chrome.browserAction.setIcon({
             path: r.link
         })
-    } catch (e) { 
+    } catch (e) {
         console.error(`Cannot parse rocket icon: ${resp}`)
         chrome.action.setIcon({
             path: "assets/icons/RocketIcons/default_128px.png",
@@ -148,17 +148,17 @@ chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalN
         await owaFetch.enableOWAFetch()
     }
     // Promisified until usage of Manifest V3
-    await new Promise<void>((result) => chrome.permissions.contains({permissions: ['notifications']}, (result: any) => {
-        if (result && result.additionalNotificationOnNewMail) {
+    await new Promise<void>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, (granted: boolean) => {
+        if (granted && result.additionalNotificationOnNewMail) {
             // register listener for owaFetch notifications
             chrome.notifications.onClicked.addListener(async (id) => {
-                    if (id === 'tuFastNewEmailNotification') {
-                        // Promisified until usage of Manifest V3
-                        await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
-                    }
+                if (id === 'tuFastNewEmailNotification') {
+                    // Promisified until usage of Manifest V3
+                    await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
                 }
-            )
+            })
         }
+        resolve();
     }))
 })
 
