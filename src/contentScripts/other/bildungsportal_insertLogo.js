@@ -198,7 +198,7 @@ function insertRocket (selectedRocketIcon, PRObadge = false, foundEasteregg) {
       }
 
       // create rocket icon
-      imgUrl = chrome.runtime.getURL('../' + selectedRocketIcon.link)
+      imgUrl = chrome.runtime.getURL('' + selectedRocketIcon.link)
       logoImg.style.display = 'inline-block'
       logoImg.style.width = '37px'
       logoImg.src = imgUrl

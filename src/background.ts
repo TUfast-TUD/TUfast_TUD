@@ -218,7 +218,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             break
         }
         case 'read_mail_owa':
-            owaFetch.readMailOWA(request.NrUnreadMails)
+            owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
             break
         case 'logged_out':
             loggedOut(request.portal)

@@ -158,6 +158,15 @@
     },
     {
       "js": [
+        "contentScripts/other/owaUnreadMailcount.js"
+      ],
+      "run_at": "document_end",
+      "matches": [
+        "https://msx.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/login/cloudstore.js"
       ],
       "run_at": "document_start",
