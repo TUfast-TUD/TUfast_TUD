@@ -4,12 +4,14 @@ const sites = {
     'magma': 'https://bildungsportal.sachsen.de/magma/',
     'opal': 'https://bildungsportal.sachsen.de/opal/shiblogin?0',
     'selma': 'https://selma.tu-dresden.de/APP/EXTERNALPAGES/-N000000000000001,-N000155,-AEXT_willkommen',
+    'slub': 'https://www.slub-dresden.de/',
     'tucloud': 'https://cloudstore.zih.tu-dresden.de/index.php/login',
     'tudmail': 'https://msx.tu-dresden.de/owa/#path=/mail',
     'tumail': 'https://msx.tu-dresden.de/owa/#path=/mail',
     'tumatrix': 'https://matrix.tu-dresden.de/#/',
     'tumed': 'https://eportal.med.tu-dresden.de/login',
     'tustore': 'https://cloudstore.zih.tu-dresden.de/index.php/login',
+    'videocampus': 'https://videocampus.tu-dresden.de/',
 }
 
 export async function fwdEnabled() {
