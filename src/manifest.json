@@ -117,7 +117,7 @@
       "js": [
         "contentScripts/login/qis.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://qis.dez.tu-dresden.de/qisserver/servlet*"
       ]
@@ -315,7 +315,8 @@
   "web_accessible_resources": [
     "assets/*",
     "assets/icons/RocketIcons/default_128px.png",
-    "contentScripts/forward/searchEngines/common.js"
+    "contentScripts/forward/searchEngines/common.js",
+    "contentScripts/login/common.js"
   ],
   "manifest_version": 2,
   "commands": {

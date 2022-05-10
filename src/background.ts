@@ -188,35 +188,22 @@ chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
 // this listener behaves weirdly with an async function so it just calls async functions and returns true
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     switch (request.cmd) {
-        case 'show_ok_badge':
-            // show_badge('Login', '#4cb749', request.timeout)
-            break
-        case 'no_login_data':
-            // alert("Bitte gib deinen Nutzernamen und Passwort in der TUfast Erweiterung an! Klicke dafür auf das Erweiterungssymbol oben rechts.")
-            // show_badge("Error", '#ff0000', 10000)
-            break
-        case 'perform_login':
-            break
-        case 'clear_badge':
-            // show_badge("", "#ffffff", 0)
-            break
         case 'save_clicks':
-            saveClicks(request.click_count)
+            // The first one is legacy and should not be used anymore
+            saveClicks(request.click_count || request.clickCount)
             break
-        case 'get_user_data': {
-            const platform = request.platform || 'zih'
-            credentials.getUserData(platform).then(userData => sendResponse(userData))
+        case 'get_user_data':
+            // Asynchronous response
+            credentials.getUserData(request.platform || 'zih').then(sendResponse)
             break
-        }
-        case 'set_user_data': {
-            const platform = request.platform || 'zih'
-            credentials.setUserData(request.userData, platform).then(() => sendResponse(true))
+        case 'set_user_data': 
+            // Asynchronous response
+            credentials.setUserData(request.userData, request.platform || 'zih').then(() => sendResponse(true))
             break
-        }
-        case 'check_user_data': {
-            credentials.userDataExists(request.platform).then(response => sendResponse(response))
+        case 'check_user_data':
+            // Asynchronous response
+            credentials.userDataExists(request.platform).then(sendResponse)
             break
-        }
         case 'read_mail_owa':
             owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
             break
@@ -253,7 +240,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
             break
         default:
-            console.log('Cmd not found!')
+            console.log(`Cmd not found "${request.cmd}"!`)
             break
     }
     return true // required for async sendResponse
