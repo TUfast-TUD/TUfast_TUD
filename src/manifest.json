@@ -108,7 +108,7 @@
       "js": [
         "contentScripts/login/selma.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://selma.tu-dresden.de/*"
       ]
