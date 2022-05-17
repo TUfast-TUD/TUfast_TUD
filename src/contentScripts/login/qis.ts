@@ -39,7 +39,7 @@ const cookieSettings: CookieSettings = {
         }
 
         async findLogoutButtons(): Promise<HTMLElement[]> {
-            return [document.querySelector('a[title="Abmelden"'), document.querySelector('a[title="Logout"]')]
+            return [document.querySelector('a[title="Abmelden"]'), document.querySelector('a[title="Logout"]')]
         }
 
         async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
