@@ -42,7 +42,7 @@ const cookieSettings: CookieSettings = {
             return [document.querySelector('a[title="Abmelden"'), document.querySelector('a[title="Logout"]')]
         }
 
-        login(userData: UserData, loginFields?: LoginFields): Promise<void> {
+        async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
             if (!loginFields) return
             loginFields.usernameField.value = userData.user
             loginFields.passwordField.value = userData.pass
@@ -50,5 +50,5 @@ const cookieSettings: CookieSettings = {
         }
     }
 
-    await (new HisqisLogin).start()
+    await (new HisqisLogin()).start()
 })()

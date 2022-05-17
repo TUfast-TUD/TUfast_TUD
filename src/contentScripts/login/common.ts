@@ -36,7 +36,7 @@ export abstract class Login {
     // Nothing fancy here
     constructor(platform: string, cookieSettings: CookieSettings, savedClickCount: number = 1) {
         this.platform = platform || 'zih'
-        this.cookieSettings = cookieSettings,
+        this.cookieSettings = cookieSettings
         this.savedClickCount = savedClickCount
     }
 
