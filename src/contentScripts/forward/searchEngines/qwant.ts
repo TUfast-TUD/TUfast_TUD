@@ -1,7 +1,7 @@
 // See if we have a query param - if so we don't want to do anything here
-function shouldAct(): boolean {
+function shouldAct (): boolean {
   const params = new URLSearchParams(window.location.search)
-  const hasQuery = params.has('q') || params.has('query');
+  const hasQuery = params.has('q') || params.has('query')
   return !hasQuery
 }
 
@@ -25,17 +25,17 @@ function shouldAct(): boolean {
 
   // Create a listener function
   const onSubmit = (e: Event) => {
-      e.preventDefault() // We want to do our own stuff
-      // Call the forward function
-      common.forward(sb.value).then((forwarded:boolean) => {
-          if (!forwarded) {
-              // When we didn't forward, the user still wants to search
-              e.target.removeEventListener('submit', onSubmit);
-              (e.target as HTMLFormElement).submit()
-          }
-      })
+    e.preventDefault() // We want to do our own stuff
+    // Call the forward function
+    common.forward(sb.value).then((forwarded:boolean) => {
+      if (!forwarded) {
+        // When we didn't forward, the user still wants to search
+        e.target.removeEventListener('submit', onSubmit);
+        (e.target as HTMLFormElement).submit()
+      }
+    })
   }
 
   // Register the listener
-  sf.addEventListener('submit', onSubmit);
+  sf.addEventListener('submit', onSubmit)
 })()
