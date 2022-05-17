@@ -17,7 +17,7 @@ const cookieSettings: CookieSettings = {
             super(platform, cookieSettings);
         }
 
-        async additionalFunctionsPreCheck(): Promise<void> {}
+        async additionalFunctionsPreCheck(): Promise<void> { }
 
         async additionalFunctionsPostCheck(): Promise<void> {
             this.acceptConditions()
@@ -30,7 +30,7 @@ const cookieSettings: CookieSettings = {
             }
         }
 
-        async loginFieldsAvailable(): Promise<boolean|LoginFields> {
+        async loginFieldsAvailable(): Promise<boolean | LoginFields> {
             return {
                 usernameField: document.getElementById('asdf') as HTMLInputElement,
                 passwordField: document.getElementById('fdsa') as HTMLInputElement,

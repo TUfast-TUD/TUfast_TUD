@@ -17,11 +17,11 @@ const cookieSettings: CookieSettings = {
             super(platform, cookieSettings);
         }
 
-        async additionalFunctionsPreCheck(): Promise<void> {}
+        async additionalFunctionsPreCheck(): Promise<void> { }
 
-        async additionalFunctionsPostCheck(): Promise<void> {}
+        async additionalFunctionsPostCheck(): Promise<void> { }
 
-        async loginFieldsAvailable(): Promise<boolean|LoginFields> {
+        async loginFieldsAvailable(): Promise<boolean | LoginFields> {
             return {
                 usernameField: document.getElementById('field_user') as HTMLInputElement,
                 passwordField: document.getElementById('field_pass') as HTMLInputElement,

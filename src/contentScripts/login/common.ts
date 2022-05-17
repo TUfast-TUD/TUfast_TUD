@@ -43,12 +43,12 @@ export abstract class Login {
     // Abstract classes
     // All these need to be implemented by the login scripts.
     // This function is called on every page load no matter if userdata is available etc
-    abstract additionalFunctionsPreCheck(): Promise<void>; 
+    abstract additionalFunctionsPreCheck(): Promise<void>;
     // This function is called after cheking if we even have valid data and should act.
-    abstract additionalFunctionsPostCheck(userData: UserData): Promise<void>; 
+    abstract additionalFunctionsPostCheck(userData: UserData): Promise<void>;
     // This function should be used if login fields are loaded. It can return a simple boolean (no login will happen on "false") or an LoginFields object. 
     // If user- or pass- input are null no login try will happen.
-    abstract loginFieldsAvailable(): Promise<boolean|LoginFields>; 
+    abstract loginFieldsAvailable(): Promise<boolean | LoginFields>;
     // The actual login function. It has access to credentials and - if the function above returns them - the input fields.
     abstract login(userData: UserData, loginFields?: LoginFields): Promise<void>;
     // This function should return all candidates for logout buttons.
@@ -69,13 +69,13 @@ export abstract class Login {
         let tryLogin: boolean = true
 
         const avail = await this.loginFieldsAvailable().catch(() => { })
-        if(typeof avail === 'boolean' && !avail) tryLogin = false
-        if(typeof avail === 'object') {
+        if (typeof avail === 'boolean' && !avail) tryLogin = false
+        if (typeof avail === 'object') {
             if (!avail.usernameField || !avail.passwordField) tryLogin = false
             else loginFields = avail
         }
 
-        if(tryLogin) {
+        if (tryLogin) {
             await this.onLogin()
             await this.login(userData, loginFields)
         }
