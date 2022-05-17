@@ -11,7 +11,7 @@ const sites = {
     'tumatrix': 'https://matrix.tu-dresden.de/#/',
     'tumed': 'https://eportal.med.tu-dresden.de/login',
     'tustore': 'https://cloudstore.zih.tu-dresden.de/index.php/login',
-    'videocampus': 'https://videocampus.tu-dresden.de/',
+    'videocampus': 'https://videocampus.sachsen.de/',
 }
 
 export async function fwdEnabled() {
