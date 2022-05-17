@@ -11,6 +11,7 @@ const cookieSettings: CookieSettings = {
 (async () => {
     const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
+    // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
     class HisqisLogin extends common.Login {
         constructor() {
             super(platform, cookieSettings);
