@@ -81,7 +81,10 @@ export abstract class Login {
         }
 
         const buttons = await this.findLogoutButtons()
-        console.log(buttons)
+        this.registerLogoutButtonsListener(buttons)
+    }
+
+    registerLogoutButtonsListener(buttons: (HTMLElement | Element)[]) {
         if (buttons) {
             for (const button of buttons) {
                 if (button) button.addEventListener('click', this.setLoggedOutCookie.bind(this))
