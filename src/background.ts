@@ -135,8 +135,8 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
             path: r.link
         })
     } catch (e) {
-        console.error(`Cannot parse rocket icon: ${resp}`)
-        chrome.action.setIcon({
+        console.log(`Cannot parse rocket icon: ${resp}`)
+        chrome.browserAction.setIcon({
             path: "assets/icons/RocketIcons/default_128px.png",
         })
     }
