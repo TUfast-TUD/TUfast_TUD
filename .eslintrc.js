@@ -11,6 +11,9 @@ module.exports = {
     'prefer-arrow-callback': 'warn',
     'no-unused-vars': 'warn', // This should be no error!
     semi: ['warn', 'never'],
-    quotes: ['warn', 'single', {"avoidEscape": true}]
+    quotes: ['warn', 'single', { avoidEscape: true }],
+    'spaced-comment': 'warn',
+    'no-multiple-empty-lines': 'warn',
+    'eol-last': 'warn'
   }
 }

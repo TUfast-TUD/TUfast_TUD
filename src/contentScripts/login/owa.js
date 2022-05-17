@@ -63,14 +63,14 @@ window.onload = () => {
   chrome.storage.local.get(['enabledOWAFetch'], (resp) => {
     if (resp.enabledOWAFetch) {
       // check if all mails are loaded | also check for new owa version
-      /*const checkForNode = setInterval(() => {
+      /* const checkForNode = setInterval(() => {
         this.console.log('checking')
         if ((document.querySelectorAll("[autoid='_n_x1']")[1] && document.querySelectorAll("[autoid='_n_x1']")[1].textContent !== '') ||
                     (document.querySelectorAll("[autoid='_n_41']")[1] && document.querySelectorAll("[autoid='_n_41']")[1].textContent !== '')) {
           //readMailObserver()
           clearInterval(checkForNode)
         }
-      }, 100)*/
+      }, 100) */
     }
   })
 }

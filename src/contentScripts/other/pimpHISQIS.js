@@ -68,7 +68,6 @@ function getWeightedAverage (rawGrades) {
   return totalWeight ? (grades.reduce((acc, value) => acc + value.grade * value.weight, 0) / totalWeight).toFixed(1) : 0
 }
 
-
 console.log('Pimping up hisqis...')
 
 const imgUrl = chrome.runtime.getURL('../assets/images/tufast48.png')
