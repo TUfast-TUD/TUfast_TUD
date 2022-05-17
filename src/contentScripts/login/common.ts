@@ -81,6 +81,7 @@ export abstract class Login {
         }
 
         const buttons = await this.findLogoutButtons()
+        console.log(buttons)
         if (buttons) {
             for (const button of buttons) {
                 if (button) button.addEventListener('click', this.setLoggedOutCookie.bind(this))
@@ -121,7 +122,7 @@ export abstract class Login {
         const date = new Date()
         date.setMinutes(date.getMinutes() + logoutDuration)
         const domain = this.cookieSettings.domain.startsWith(".") ? this.cookieSettings.domain : `.${this.cookieSettings.domain}`
-        document.cookie = `${this.cookieSettings.portalName}LoggedOut; expires=${date.toUTCString()}; path=/; domain=${domain}; secure`
+        document.cookie = `${this.cookieSettings.portalName}LoggedOut=true; expires=${date.toUTCString()}; path=/; domain=${domain}; secure`
     }
 
     // This function is for additional triggers that should happen on login.

@@ -257,7 +257,7 @@
       "js": [
         "contentScripts/login/videocampus.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://videocampus.sachsen.de/*"
       ]
