@@ -33,7 +33,7 @@
       "js": [
         "contentScripts/login/idp.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://idp.tu-dresden.de/*",
         "https://idp2.tu-dresden.de/*"
