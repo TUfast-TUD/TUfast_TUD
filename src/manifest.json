@@ -124,9 +124,9 @@
     },
     {
       "js": [
-        "contentScripts/login/bildungsportal.js"
+        "contentScripts/login/opalHome.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource*",
         "https://bildungsportal.sachsen.de/opal/home*",
@@ -168,9 +168,9 @@
     },
     {
       "js": [
-        "contentScripts/login/bildungsportal_main.js"
+        "contentScripts/login/opalMain.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/shiblogin*",
         "https://bildungsportal.sachsen.de/opal/login*"
