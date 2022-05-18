@@ -1,7 +1,6 @@
 const sites = {
   hisqis: 'https://qis.dez.tu-dresden.de/qisserver/servlet/de.his.servlet.RequestDispatcherServlet?state=template&template=user/news',
   jexam: 'https://jexam.inf.tu-dresden.de/de.jexam.web.v4.5/spring/welcome',
-  magma: 'https://bildungsportal.sachsen.de/magma/',
   opal: 'https://bildungsportal.sachsen.de/opal/shiblogin?0',
   selma: 'https://selma.tu-dresden.de/APP/EXTERNALPAGES/-N000000000000001,-N000155,-AEXT_willkommen',
   slub: 'https://www.slub-dresden.de/',
@@ -23,7 +22,7 @@ export async function fwdEnabled () {
 export async function forward (query: string): Promise<boolean> {
   if (!fwdEnabled() || !query) return false
 
-  const url = sites[query]
+  const url = sites[query.toLowerCase()]
   if (url) {
     console.log(`Forwarding to ${query} (${url})`)
     chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 }) // We don't need to wait for any (useless) response

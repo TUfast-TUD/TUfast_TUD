@@ -211,15 +211,6 @@
     },
     {
       "js": [
-        "contentScripts/login/magma.js"
-      ],
-      "run_at": "document_start",
-      "matches": [
-        "https://bildungsportal.sachsen.de/magma*"
-      ]
-    },
-    {
-      "js": [
         "contentScripts/login/tumed.js"
       ],
       "run_at": "document_start",
