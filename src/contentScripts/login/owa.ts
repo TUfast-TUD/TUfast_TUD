@@ -48,7 +48,7 @@ const cookieSettings: CookieSettings = {
   await login.start()
 
   // As the logout button is injected dynmically we need to wait for it to be available
-  document.body.addEventListener('DOMNodeInserted', async () => {
+  const oberserver = new MutationObserver((_records, _observer) => {
     // old owa version
     const oldBtn = document.querySelector('[aria-label="Abmelden"]')
 
@@ -58,4 +58,6 @@ const cookieSettings: CookieSettings = {
 
     login.registerLogoutButtonsListener([...newBtns, oldBtn])
   })
+
+  oberserver.observe(document.body, {subtree: true, childList: true})
 })()
