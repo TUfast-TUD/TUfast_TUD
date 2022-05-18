@@ -43,7 +43,7 @@
       "js": [
         "contentScripts/forward/jexam.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://jexam.inf.tu-dresden.de/"
       ]
