@@ -13,7 +13,8 @@
     "tabs",
     "webRequest",
     "webRequestBlocking",
-    "notifications"
+    "notifications",
+    "cookies"
   ],
   "background": {
     "page": "background.html",
@@ -296,6 +297,7 @@
     "open_in_tab": true
   },
   "web_accessible_resources": [
+    "freshContent/permissions/permissions.*",
     "assets/*",
     "assets/icons/RocketIcons/default_128px.png",
     "contentScripts/forward/searchEngines/common.js",

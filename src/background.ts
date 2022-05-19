@@ -5,6 +5,16 @@ import * as owaFetch from './modules/owaFetch'
 // eslint-disable-next-line no-unused-vars
 const isFirefox = typeof browser !== 'undefined' && browser.runtime && browser.runtime.getBrowserInfo
 
+// On start, no matter if update or whatever, we check if we have our necessary permissions.
+// If not, we ask for them.
+// .contains "ands" all permissions, so if one is not present it is "false" but we don't know which one.
+// But we can check this in the popup.
+chrome.permissions.contains({ permissions: ['cookies'] }, (result) => {
+  if(!result) {
+    chrome.tabs.create({ url: chrome.runtime.getURL('/freshContent/permissions/permissions.html') })
+  }
+})
+
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
   const reason = details.reason
