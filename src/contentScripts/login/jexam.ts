@@ -30,9 +30,9 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<NodeList> {
       // There should only be one button but let's be safe
-      return Array.from(document.querySelectorAll('a[href$="/logout"]'))
+      return document.querySelectorAll('a[href$="/logout"]')
     }
 
     async login (userData: UserData, loginFields?: LoginFields): Promise<void> {

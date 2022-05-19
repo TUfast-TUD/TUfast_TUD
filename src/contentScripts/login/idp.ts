@@ -49,7 +49,7 @@ const cookieSettings: CookieSettings = {
     }
 
     async findLogoutButtons (): Promise<HTMLElement[]> {
-      return []
+      return null
     }
 
     async login (userData: UserData, loginFields?: LoginFields): Promise<void> {

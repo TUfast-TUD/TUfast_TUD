@@ -53,7 +53,7 @@ export abstract class Login {
     abstract login(userData: UserData, loginFields?: LoginFields): Promise<void>;
     // This function should return all candidates for logout buttons.
     // An onClick listener will be added to set a "loggedOut" cookie
-    abstract findLogoutButtons(): Promise<HTMLElement[] | null>;
+    abstract findLogoutButtons(): Promise<HTMLElement[] | NodeList | null>;
 
     // The main function the only only one that should be actually called from outside.
     async start () {
@@ -84,7 +84,7 @@ export abstract class Login {
       this.registerLogoutButtonsListener(buttons)
     }
 
-    registerLogoutButtonsListener (buttons: (HTMLElement | Element)[]) {
+    registerLogoutButtonsListener (buttons: (HTMLElement | Element)[] | NodeList) {
       if (buttons) {
         for (const button of buttons) {
           if (button) button.addEventListener('click', this.setLoggedOutCookie.bind(this))
