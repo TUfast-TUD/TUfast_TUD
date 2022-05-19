@@ -212,7 +212,7 @@
     },
     {
       "js": [
-        "contentScripts/login/tumed.js"
+        "contentScripts/login/medEPortal.js"
       ],
       "run_at": "document_start",
       "matches": [
