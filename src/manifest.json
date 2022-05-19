@@ -23,9 +23,9 @@
   "content_scripts": [
     {
       "js": [
-        "contentScripts/login/elearningMED.js"
+        "contentScripts/login/medELearning.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://elearning.med.tu-dresden.de/*"
       ]
