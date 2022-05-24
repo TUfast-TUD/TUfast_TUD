@@ -4,7 +4,8 @@ import type { CookieSettings, UserData, Login, LoginFields } from './common'
 const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'videocampus',
-  domain: 'videocampus.sachsen.de'
+  domain: 'videocampus.sachsen.de',
+  usesIdp: true
 };
 
 (async () => {

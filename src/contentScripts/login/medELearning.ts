@@ -5,7 +5,8 @@ import type { CookieSettings, UserData, Login, LoginFields } from './common'
 const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'elearningMed',
-  domain: 'elearning.med.tu-dresden.de'
+  domain: 'elearning.med.tu-dresden.de',
+  usesIdp: true
 };
 
 (async () => {
