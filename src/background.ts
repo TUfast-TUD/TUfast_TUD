@@ -250,6 +250,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'update_rocket_logo_easteregg':
       chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
       break
+    case 'logout_idp':
+      logoutIdp(request.logoutDuration)
+      break;
     default:
       console.log(`Cmd not found "${request.cmd}"!`)
       break
@@ -358,4 +361,46 @@ async function saveCourses (courseList: CourseList) {
       console.log('Saved Meine Kurse in TUfast')
       break
   }
+}
+
+// logout function for idp
+async function logoutIdp(logoutDuration: number = 5) {
+  // Promisified until usage of Manifest V3
+  const granted = await new Promise<boolean>((resolve) => chrome.permissions.request({permissions: ['cookies']}, resolve))
+  if(!granted) return
+
+  // Set the logout cookie for idp
+  const date = new Date()
+  date.setMinutes(date.getMinutes() + logoutDuration)
+  await new Promise<chrome.cookies.Cookie>((resolve) => chrome.cookies.set({
+    url: 'https://idp.tu-dresden.de',
+    name: 'idpLoggedOut',
+    value: 'true',
+    secure: true,
+    expirationDate: date.getTime() / 1000
+  }, resolve))
+
+  // Log out
+  // Promisified until usage of Manifest V3
+  const { idpLogoutEnabled } = await new Promise<any>((resolve) => chrome.storage.local.get(['idpLogoutEnabled'], resolve))
+  if (!idpLogoutEnabled) return
+
+  // get session cookie
+  const sessionCookie = await new Promise<chrome.cookies.Cookie>((resolve) => chrome.cookies.get({
+    url: 'https://idp.tu-dresden.de',
+    name: 'JSESSIONID'
+  }, resolve))
+  if (!sessionCookie) return
+
+  const redirect = await fetch('https://idp.tu-dresden.de/idp/profile/Logout', {
+    headers: {
+      'Cookie': `JSESSIONID=${sessionCookie.value}`
+    }
+  })
+  await fetch(redirect.url, {
+    headers: {
+      'Cookie': `JSESSIONID=${sessionCookie.value}`
+    },
+    method: 'POST'
+  })
 }

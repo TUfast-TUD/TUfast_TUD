@@ -14,6 +14,7 @@ export interface CookieSettings {
     portalName: string;
     domain?: string;
     logoutDuration?: number;
+    usesIdp?: boolean;
 }
 
 export interface LoginFields {
@@ -40,7 +41,7 @@ export abstract class Login {
       this.savedClickCount = savedClickCount
     }
 
-    // Abstract classes
+    // Abstract methods
     // All these need to be implemented by the login scripts.
     // This function is called on every page load no matter if userdata is available etc
     abstract additionalFunctionsPreCheck(): Promise<void>;
@@ -126,6 +127,9 @@ export abstract class Login {
       date.setMinutes(date.getMinutes() + logoutDuration)
       const domain = this.cookieSettings.domain.startsWith('.') ? this.cookieSettings.domain : `.${this.cookieSettings.domain}`
       document.cookie = `${this.cookieSettings.portalName}LoggedOut=true; expires=${date.toUTCString()}; path=/; domain=${domain}; secure`
+
+      // If we use IDP we need to logout we can ask the backgroundscript to log us out of there too
+      if (this.cookieSettings.usesIdp) chrome.runtime.sendMessage({ cmd: 'logout_idp', logoutDuration })
     }
 
     // This function is for additional triggers that should happen on login.

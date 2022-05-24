@@ -5,7 +5,8 @@ import type { CookieSettings, UserData, Login, LoginFields } from './common'
 const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'opal',
-  domain: 'bildungsportal.sachsen.de'
+  domain: 'bildungsportal.sachsen.de',
+  usesIdp: true
 };
 
 (async () => {
