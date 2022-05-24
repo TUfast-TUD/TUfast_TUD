@@ -70,7 +70,7 @@
       "js": [
         "contentScripts/login/jexam.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://jexam.inf.tu-dresden.de/*"
       ]
@@ -214,7 +214,7 @@
       "js": [
         "contentScripts/login/medEPortal.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://eportal.med.tu-dresden.de/*"
       ]
@@ -232,7 +232,7 @@
       "js": [
         "contentScripts/login/tex.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://tex.zih.tu-dresden.de/*"
       ]
