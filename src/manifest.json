@@ -250,7 +250,7 @@
       "js": [
         "contentScripts/login/gitlabMN.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://gitlab.mn.tu-dresden.de/*"
       ]
