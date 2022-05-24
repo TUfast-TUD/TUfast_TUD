@@ -38,7 +38,7 @@ const cookieSettings: CookieSettings = {
       return {
         usernameField: document.getElementById('asdf') as HTMLInputElement,
         passwordField: document.getElementById('fdsa') as HTMLInputElement,
-        submitButton: document.getElementsByName('submit')[0] as HTMLInputElement
+        submitButton: document.querySelector('input[type="submit"]') as HTMLInputElement
       }
     }
 

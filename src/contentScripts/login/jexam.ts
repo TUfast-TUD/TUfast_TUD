@@ -31,7 +31,7 @@ const cookieSettings: CookieSettings = {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
         // Currently there is no english login page but if that changes, this should also catch the english button
-        submitButton: (document.querySelector('input[type="submit"][value="Anmelden"].submit') || document.querySelector('input[type="submit"][value="Login"].submit')) as HTMLInputElement
+        submitButton: document.querySelector('input[type="submit"]') as HTMLInputElement
       }
     }
 
