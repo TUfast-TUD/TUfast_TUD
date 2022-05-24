@@ -259,7 +259,7 @@
       "js": [
         "contentScripts/login/slub.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://*.slub-dresden.de/*"
       ]
