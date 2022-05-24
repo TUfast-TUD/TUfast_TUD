@@ -21,6 +21,10 @@ const cookieSettings: CookieSettings = {
 
     async additionalFunctionsPostCheck (): Promise<void> { }
 
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
+        return document.getElementById('signInErrorDiv')
+    }
+
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {
       const submit = document.querySelector('div.signInEnter div') as HTMLDivElement
 

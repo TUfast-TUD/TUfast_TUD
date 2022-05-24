@@ -21,6 +21,10 @@ const cookieSettings: CookieSettings = {
 
     async additionalFunctionsPostCheck (): Promise<void> { }
 
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
+        return document.getElementsByClassName('wrongPasswordMsg')[0]
+    }
+
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('user') as HTMLInputElement,

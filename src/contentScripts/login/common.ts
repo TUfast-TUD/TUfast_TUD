@@ -44,17 +44,21 @@ export abstract class Login {
     // Abstract methods
     // All these need to be implemented by the login scripts.
     // This function is called on every page load no matter if userdata is available etc
-    abstract additionalFunctionsPreCheck(): Promise<void>;
+    abstract additionalFunctionsPreCheck(): Promise<void>
     // This function is called after cheking if we even have valid data and should act.
-    abstract additionalFunctionsPostCheck(userData: UserData): Promise<void>;
+    abstract additionalFunctionsPostCheck(userData: UserData): Promise<void>
     // This function should be used if login fields are loaded. It can return a simple boolean (no login will happen on "false") or an LoginFields object.
     // If user- or pass- input are null no login try will happen.
-    abstract loginFieldsAvailable(): Promise<boolean | LoginFields>;
+    abstract loginFieldsAvailable(): Promise<boolean | LoginFields>
     // The actual login function. It has access to credentials and - if the function above returns them - the input fields.
-    abstract login(userData: UserData, loginFields?: LoginFields): Promise<void>;
+    abstract login(userData: UserData, loginFields?: LoginFields): Promise<void>
     // This function should return all candidates for logout buttons.
     // An onClick listener will be added to set a "loggedOut" cookie
-    abstract findLogoutButtons(): Promise<HTMLElement[] | NodeList | null>;
+    abstract findLogoutButtons(): Promise<HTMLElement[] | NodeList | null>
+    // This function should be used to find if an error dialog is shown for invalid credentaials.
+    // When the return value is not null it means that the error dialog is shown.
+    // There is a default implementation here but it should be used where possible.
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> { return false }
 
     // The main function the only only one that should be actually called from outside.
     async start () {
@@ -66,20 +70,7 @@ export abstract class Login {
 
       await this.additionalFunctionsPostCheck(userData).catch(() => { })
 
-      let loginFields: LoginFields | undefined
-      let tryLogin: boolean = true
-
-      const avail = await this.loginFieldsAvailable().catch(() => { })
-      if (typeof avail === 'boolean' && !avail) tryLogin = false
-      if (typeof avail === 'object') {
-        if (!avail.usernameField || !avail.passwordField) tryLogin = false
-        else loginFields = avail
-      }
-
-      if (tryLogin) {
-        await this.onLogin()
-        await this.login(userData, loginFields)
-      }
+      await this.tryLogin(userData)
 
       const buttons = await this.findLogoutButtons()
       this.registerLogoutButtonsListener(buttons)
@@ -138,5 +129,23 @@ export abstract class Login {
     async onLogin (): Promise<void> {
       // I don't know if await even works but there is no reason to await any response anyway
       await chrome.runtime.sendMessage({ cmd: 'save_clicks', clickCount: this.savedClickCount })
+    }
+
+    // This method finds the login fields, checks for the error dialog and tries to login.
+    async tryLogin(userData: UserData) {
+      const errorDialog = await this.findCredentialsError()
+      if(!!errorDialog) return
+
+      let loginFields: LoginFields | undefined
+
+      const avail = await this.loginFieldsAvailable().catch(() => { })
+      if (typeof avail === 'boolean' && !avail) return
+      if (typeof avail === 'object') {
+        if (!avail.usernameField || !avail.passwordField) return
+        else loginFields = avail
+      }
+
+      await this.onLogin()
+      await this.login(userData, loginFields)
     }
 }

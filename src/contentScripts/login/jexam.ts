@@ -13,15 +13,20 @@ const cookieSettings: CookieSettings = {
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class JExamLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> { }
 
-    async additionalFunctionsPostCheck (): Promise<void> { }
+    async additionalFunctionsPostCheck(): Promise<void> { }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
+      const params = new URLSearchParams(window.location.search)
+      return params.get('error') === 'badcredentials'
+    }
+
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
@@ -30,12 +35,12 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<NodeList> {
+    async findLogoutButtons(): Promise<NodeList> {
       // There should only be one button but let's be safe
       return document.querySelectorAll('a[href$="/logout"]')
     }
 
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
+    async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
       if (!loginFields) return
       loginFields.usernameField.value = userData.user
       loginFields.passwordField.value = userData.pass

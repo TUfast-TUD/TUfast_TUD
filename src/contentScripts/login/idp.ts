@@ -40,6 +40,10 @@ const cookieSettings: CookieSettings = {
       // We don't know where the user tried to login, so we can't jsut redirect to Opal/etc
     }
 
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
+        return document.querySelector('.content p font[color="red"]')
+    }
+
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,

@@ -17,9 +17,7 @@ const cookieSettings: CookieSettings = {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
-
-    async additionalFunctionsPostCheck (): Promise<void> {
+    async additionalFunctionsPreCheck (): Promise<void> {
       this.acceptConditions()
     }
 
@@ -28,6 +26,12 @@ const cookieSettings: CookieSettings = {
       if (link) {
         (link as HTMLAnchorElement).click()
       }
+    }
+
+    async additionalFunctionsPostCheck (): Promise<void> {}
+
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
+        return document.getElementsByClassName('newSessionMsg')[0]
     }
 
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {
