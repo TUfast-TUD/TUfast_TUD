@@ -36,13 +36,6 @@ const cookieSettings: CookieSettings = {
     async findLogoutButtons (): Promise<HTMLElement[] | NodeList> {
       return document.querySelectorAll('a[href^="https://www.slub-dresden.de/Shibboleth.sso/Logout"]')
     }
-
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
-      if (!loginFields) return
-      loginFields.usernameField.value = userData.user
-      loginFields.passwordField.value = userData.pass
-      loginFields.submitButton.click()
-    }
   }
 
   await (new SlubLogin()).start()

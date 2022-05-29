@@ -36,13 +36,6 @@ const cookieSettings: CookieSettings = {
     async findLogoutButtons (): Promise<HTMLElement[]> {
       return [document.querySelector('[data-id="logout"] > a')]
     }
-
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
-      if (!loginFields) return
-      loginFields.usernameField.value = userData.user
-      loginFields.passwordField.value = userData.pass
-      loginFields.submitButton.click()
-    }
   }
 
   await (new CloudstoreLogin()).start()

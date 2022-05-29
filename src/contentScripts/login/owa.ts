@@ -39,13 +39,6 @@ const cookieSettings: CookieSettings = {
       // Light Version, we need more advanced stuff for the others
       return [document.getElementById('lo')]
     }
-
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
-      if (!loginFields || !loginFields.submitButton) return
-      loginFields.usernameField.value = userData.user
-      loginFields.passwordField.value = userData.pass
-      loginFields.submitButton.click()
-    }
   }
 
   const login = new OWALogin()

@@ -43,13 +43,6 @@ const cookieSettings: CookieSettings = {
     async findLogoutButtons(): Promise<HTMLElement[]> {
       return [document.getElementById('logOut_btn')]
     }
-
-    async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
-      if (!loginFields) return
-      loginFields.usernameField.value = userData.user
-      loginFields.passwordField.value = userData.pass
-      loginFields.submitButton.click()
-    }
   }
 
   await (new SelmaLogin()).start()

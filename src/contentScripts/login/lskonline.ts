@@ -44,13 +44,6 @@ const cookieSettings: CookieSettings = {
       // There should only be one button but let's be safe
       return Array.from(document.getElementsByTagName('a')).filter(link => link?.innerText === "Logout")
     }
-
-    async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
-      if (!loginFields) return
-      loginFields.usernameField.value = userData.user
-      loginFields.passwordField.value = userData.pass
-      loginFields.submitButton.click()
-    }
   }
 
   await (new LSKLogin()).start()

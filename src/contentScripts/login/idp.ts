@@ -55,13 +55,6 @@ const cookieSettings: CookieSettings = {
     async findLogoutButtons (): Promise<HTMLElement[]> {
       return null
     }
-
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
-      if (!loginFields) return
-      loginFields.usernameField.value = userData.user
-      loginFields.passwordField.value = userData.pass
-      loginFields.submitButton.click()
-    }
   }
 
   await (new IdpLogin()).start()

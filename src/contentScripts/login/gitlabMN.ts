@@ -39,10 +39,11 @@ const cookieSettings: CookieSettings = {
 
         async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
             if (!loginFields) return
-            loginFields.usernameField.value = userData.user
-            loginFields.passwordField.value = userData.pass;
+
+            this.fakeInput(loginFields.usernameField, userData.user)
+            this.fakeInput(loginFields.passwordField, userData.pass);
             (document.getElementById('remember_me') as HTMLInputElement).checked = true;
-            loginFields.submitButton.click()
+            loginFields.submitButton?.click()
         }
     }
 
