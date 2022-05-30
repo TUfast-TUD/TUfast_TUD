@@ -243,6 +243,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'logout_idp':
       logoutIdp(request.logoutDuration)
       break;
+    case 'easteregg_found':
+      eastereggFound()
+      break;
     default:
       console.log(`Cmd not found "${request.cmd}"!`)
       break
@@ -393,4 +396,20 @@ async function logoutIdp(logoutDuration: number = 5) {
     },
     method: 'POST'
   })
+}
+
+// Function called when the easteregg is found
+async function eastereggFound() {
+  // Promisified until usage of Manifest V3
+  const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
+  availableRockets.push('RI3')
+  
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.storage.local.set({
+    foundEasteregg: true,
+    selectedRocketIcon: '{"id": "RI3", "link": "/assets/icons/RocketIcons/7_128px.png"}',
+    availableRockets
+  }, resolve))
+
+  chrome.browserAction.setIcon({ path: '/assets/icons/RocketIcons/7_128px.png' })
 }
