@@ -38,6 +38,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'saved_click_counter', // legacy
         'Rocket', // legacy
         'foundEasteregg',
+        'bannersShown', // new banners
         // Old opal banners
         'showedUnreadMailCounterBanner',
         'removedUnlockRocketsBanner', 
@@ -108,12 +109,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       updateObj.availableRockets = avRockets
 
       // Migrating which opal banners where already shown
-      const bannersShown: string[] = []
-      if (currentSettings.showedUnreadMailCounterBanner) bannersShown.push('mailCount')
-      if (currentSettings.removedUnlockRocketsBanner) bannersShown.push('customizeRockets')
-      if (currentSettings.showedOpalCustomizeBanner) bannersShown.push('customizeOpal')
-      if (currentSettings.removedReviewBanner) bannersShown.push('submitReview')
-      if (currentSettings.showedKeyboardBanner2) bannersShown.push('keyboardShortcuts')
+      const bannersShown: string[] = currentSettings.bannersShown || []
+      if (currentSettings.showedUnreadMailCounterBanner && !bannersShown.includes('mailCount')) bannersShown.push('mailCount')
+      if (currentSettings.removedUnlockRocketsBanner && !bannersShown.includes('customizeRockets')) bannersShown.push('customizeRockets')
+      if (currentSettings.showedOpalCustomizeBanner && !bannersShown.includes('customizeOpal')) bannersShown.push('customizeOpal')
+      if (currentSettings.removedReviewBanner && !bannersShown.includes('submitReview')) bannersShown.push('submitReview')
+      if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts')) bannersShown.push('keyboardShortcuts')
       updateObj.bannersShown = bannersShown
 
       // Write back to storage
