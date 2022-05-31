@@ -37,7 +37,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'savedClickCounter',
         'saved_click_counter', // legacy
         'Rocket', // legacy
-        'foundEasteregg'
+        'foundEasteregg',
+        // Old opal banners
+        'showedUnreadMailCounterBanner',
+        'removedUnlockRocketsBanner', 
+        'showedOpalCustomizeBanner', 
+        'removedReviewBanner', 
+        'showedKeyboardBanner2',
       ], resolve))
 
       const updateObj: any = {}
@@ -100,6 +106,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         await new Promise<void>((resolve) => chrome.storage.local.remove(['Rocket'], resolve))
       }
       updateObj.availableRockets = avRockets
+
+      // Migrating which opal banners where already shown
+      const bannersShown: string[] = []
+      if (currentSettings.showedUnreadMailCounterBanner) bannersShown.push('mailCount')
+      if (currentSettings.removedUnlockRocketsBanner) bannersShown.push('customizeRockets')
+      if (currentSettings.showedOpalCustomizeBanner) bannersShown.push('customizeOpal')
+      if (currentSettings.removedReviewBanner) bannersShown.push('submitReview')
+      if (currentSettings.showedKeyboardBanner2) bannersShown.push('keyboardShortcuts')
+      updateObj.bannersShown = bannersShown
 
       // Write back to storage
       // Promisified until usage of Manifest V3

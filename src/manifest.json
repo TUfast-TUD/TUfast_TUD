@@ -181,11 +181,12 @@
       "js": [
         "contentScripts/other/opal/insertLogo.js",
         "contentScripts/other/opal/snowflakes.js",
-        "contentScripts/other/bildungsportal_viewPDFinBrowser.js"
+        "contentScripts/other/opal/insertBanner.js"
       ],
       "css": [
         "contentScripts/other/opal/logo.css",
-        "contentScripts/other/opal/snowflakes.css"
+        "contentScripts/other/opal/snowflakes.css",
+        "contentScripts/other/opal/banner.css"
       ],
       "run_at": "document_end",
       "matches": [
@@ -194,11 +195,11 @@
     },
     {
       "js": [
-        "contentScripts/other/bildungsportal_other.js"
+        "contentScripts/other/opal/viewPdfInNewTab.js"
       ],
       "run_at": "document_start",
       "matches": [
-        "https://bildungsportal.sachsen.de/opal*"
+        "https://bildungsportal.sachsen.de/opal/*"
       ]
     },
     {
