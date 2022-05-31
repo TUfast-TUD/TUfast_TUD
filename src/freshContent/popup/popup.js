@@ -139,7 +139,7 @@ window.onload = async () => {
   const result = await new Promise((resolve) => chrome.storage.local.get([
     'dashboardDisplay',
     'ratingEnabledFlag',
-    'saved_click_counter',
+    'savedClickCounter',
     'studiengang',
     'closedIntro1',
     'ratedCourses',
@@ -178,9 +178,8 @@ window.onload = async () => {
   listSearchFunction()
 
   // display saved clicks
-  if (result.saved_click_counter === undefined) { result.saved_click_counter = 0 }
-  const time = clicksToTime(result.saved_click_counter)
-  document.getElementById('saved_clicks').innerHTML = `<text><font color='green'>${result.saved_click_counter} Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>${time}</a></text>`
+  const time = clicksToTime(result.savedClickCounter || 0)
+  document.getElementById('saved_clicks').innerHTML = `<text><font color='green'>${result.savedClickCounter || 0} Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>${time}</a></text>`
   document.getElementById('time').onclick = openSettingsTimeSection
 
   // display banana at each end of semester for two weeks!
@@ -189,7 +188,7 @@ window.onload = async () => {
   const month = d.getMonth() + 1 // starts at 0
   const day = d.getDate()
   if ((month === 7 && day < 15) || (month === 1 && day > 15)) bananaTime = true
-  if (result.saved_click_counter > 100 && bananaTime) {
+  if (result.savedClickCounter > 100 && bananaTime) {
     document.getElementById('banana').innerHTML = bananaHTML
   }
 
@@ -243,8 +242,8 @@ window.onload = async () => {
 
   // highlight studiengang selection (only once)
   // Promisified until usage of Manifest V3
-  const studiengangResult = await new Promise((resolve) => chrome.storage.local.get(['updateCustomizeStudiengang', 'saved_click_counter'], resolve))
-  if (studiengangResult.updateCustomizeStudiengang !== dropdownUpdateId && dropdownUpdateId !== false && studiengangResult.saved_click_counter > -1) {
+  const studiengangResult = await new Promise((resolve) => chrome.storage.local.get(['updateCustomizeStudiengang', 'savedClickCounter'], resolve))
+  if (studiengangResult.updateCustomizeStudiengang !== dropdownUpdateId && dropdownUpdateId !== false && studiengangResult.savedClickCounter > -1) {
     document.getElementById('select_studiengang_dropdown_id').style.border = '2px solid red'
   }
 
