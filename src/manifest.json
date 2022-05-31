@@ -184,9 +184,9 @@
         "contentScripts/other/opal/insertBanner.js"
       ],
       "css": [
-        "contentScripts/other/opal/logo.css",
-        "contentScripts/other/opal/snowflakes.css",
-        "contentScripts/other/opal/banner.css"
+        "styles/contentScripts/opal/logo.css",
+        "styles/contentScripts/opal/snowflakes.css",
+        "styles/contentScripts/opal/banner.css"
       ],
       "run_at": "document_end",
       "matches": [
