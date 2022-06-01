@@ -204,16 +204,11 @@
     },
     {
       "js": [
-        "contentScripts/other/parseOpal.js"
+        "contentScripts/other/opal/parseCourses.js"
       ],
-      "css": [
-        "styles/components/banner.css"
-      ],
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
-        "https://bildungsportal.sachsen.de/opal/auth/resource/favorites*",
-        "https://bildungsportal.sachsen.de/opal/auth/resource/courses*",
-        "https://bildungsportal.sachsen.de/opal/auth/resource/groups*"
+        "https://bildungsportal.sachsen.de/opal/auth/resource/*"
       ]
     },
     {
