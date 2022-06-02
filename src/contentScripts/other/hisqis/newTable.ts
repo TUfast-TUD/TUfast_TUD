@@ -9,11 +9,13 @@ import { DataTable } from 'simple-datatables'
   // The old table and it's content
   const oldTable = document.getElementsByTagName('table')[2]
   if (!oldTable) return
+  oldTable.id = 'oldGradeTable'
   const oldTableRows = (oldTable as HTMLTableElement).querySelectorAll('tr')
 
   // Create a new table
   const newTable = document.createElement('table')
   newTable.id = 'gradeTable'
+  newTable.style.display = 'none' // Hide by default so there's less flickering
 
   // Caption for our new table
   const newTableCaption = document.createElement('caption')
@@ -66,9 +68,9 @@ import { DataTable } from 'simple-datatables'
   // Append everything together
   newTable.append(newTableCaption, newTableHead, newTableBody)
 
-  let { hisqisPimpedTable } = { hisqisPimpedTable: true } // await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
+  /*let { hisqisPimpedTable } = { hisqisPimpedTable: true } // await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
   if (hisqisPimpedTable) oldTable.style.display = 'none'
-  else newTable.style.display = 'none'
+  else newTable.style.display = 'none'*/
 
   oldTable.parentNode.insertBefore(newTable, oldTable)
 
@@ -80,20 +82,4 @@ import { DataTable } from 'simple-datatables'
       { select: 10, type: 'date', format: 'DD.MM.YYYY' },
     ]
   })
-
-  // Now we need the link to switch the tables
-  const p = document.createElement('p')
-  p.className = 'info'
-
-  const changeLink = document.createElement('a')
-  changeLink.innerText = hisqisPimpedTable ? 'langweiligen, alten Tabelle...' : 'neuen, coolen TUfast-Tabelle 🔥'
-  changeLink.addEventListener('click', async () => {
-    hisqisPimpedTable = !hisqisPimpedTable
-    newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
-    oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
-    // await new Promise<void>((resolve) => chrome.storage.local.set({ hisqisPimpedTable }, resolve))
-  })
-
-  p.append(document.createTextNode(' Weiter zur '), changeLink)
-  tableInfoContainer.appendChild(p)
 })()
