@@ -25,7 +25,7 @@
       "js": [
         "contentScripts/login/medELearning.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://elearning.med.tu-dresden.de/*"
       ]
@@ -34,7 +34,7 @@
       "js": [
         "contentScripts/login/idp.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://idp.tu-dresden.de/*",
         "https://idp2.tu-dresden.de/*"
@@ -44,7 +44,7 @@
       "js": [
         "contentScripts/forward/jexam.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://jexam.inf.tu-dresden.de/"
       ]
@@ -70,7 +70,7 @@
       "js": [
         "contentScripts/login/jexam.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://jexam.inf.tu-dresden.de/*"
       ]
@@ -84,7 +84,7 @@
         "styles/components/gradeTable.css",
         "styles/contentScripts/hisqis.css"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
       ],
@@ -106,7 +106,7 @@
       "js": [
         "contentScripts/login/selma.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://selma.tu-dresden.de/*"
       ]
@@ -115,7 +115,7 @@
       "js": [
         "contentScripts/login/qis.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://qis.dez.tu-dresden.de/qisserver/servlet*"
       ]
@@ -124,7 +124,7 @@
       "js": [
         "contentScripts/login/opalHome.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource*",
         "https://bildungsportal.sachsen.de/opal/home*",
@@ -135,7 +135,7 @@
       "js": [
         "contentScripts/login/matrix.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://matrix.tu-dresden.de/*"
       ],
@@ -150,7 +150,7 @@
         "contentScripts/other/owaUnreadMailcount.js",
         "contentScripts/login/owa.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://msx.tu-dresden.de/*"
       ]
@@ -159,7 +159,7 @@
       "js": [
         "contentScripts/login/cloudstore.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://cloudstore.zih.tu-dresden.de/*"
       ]
@@ -168,7 +168,7 @@
       "js": [
         "contentScripts/login/opalMain.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/shiblogin*",
         "https://bildungsportal.sachsen.de/opal/login*"
@@ -185,7 +185,7 @@
         "styles/contentScripts/opal/snowflakes.css",
         "styles/contentScripts/opal/banner.css"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/*"
       ]
@@ -203,7 +203,7 @@
       "js": [
         "contentScripts/other/opal/parseCourses.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/auth/resource/*"
       ]
@@ -212,7 +212,7 @@
       "js": [
         "contentScripts/login/medEPortal.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://eportal.med.tu-dresden.de/*"
       ]
@@ -230,7 +230,7 @@
       "js": [
         "contentScripts/login/tex.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://tex.zih.tu-dresden.de/*"
       ]
@@ -239,7 +239,7 @@
       "js": [
         "contentScripts/login/videocampus.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://videocampus.sachsen.de/*"
       ]
@@ -248,7 +248,7 @@
       "js": [
         "contentScripts/login/gitlabMN.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://gitlab.mn.tu-dresden.de/*"
       ]
@@ -257,7 +257,7 @@
       "js": [
         "contentScripts/login/slub.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://*.slub-dresden.de/*"
       ]
@@ -266,7 +266,7 @@
       "js": [
         "contentScripts/forward/searchEngines/qwant.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://www.qwant.com/*"
       ]
@@ -275,7 +275,7 @@
       "js": [
         "contentScripts/forward/searchEngines/startpage.js"
       ],
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "matches": [
         "https://www.startpage.com/*"
       ]
