@@ -22,7 +22,7 @@ import { DataTable } from 'simple-datatables'
   // Header for the new table
   const newTableHead = document.createElement('thead')
   const newTableHeadRow = document.createElement('tr')
-  for(const th of oldTableRows[1].getElementsByTagName('th')) {
+  for (const th of oldTableRows[1].getElementsByTagName('th')) {
     const newTh = document.createElement('th')
     newTh.style.textAlign = th.align
     newTh.style.width = th.width
@@ -77,7 +77,7 @@ import { DataTable } from 'simple-datatables'
     searchable: false,
     paging: false,
     columns: [
-      {select: 10,type: 'date', format: 'DD.MM.YYYY'},
+      { select: 10, type: 'date', format: 'DD.MM.YYYY' },
     ]
   })
 
@@ -91,9 +91,9 @@ import { DataTable } from 'simple-datatables'
     hisqisPimpedTable = !hisqisPimpedTable
     newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
     oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
+    // await new Promise<void>((resolve) => chrome.storage.local.set({ hisqisPimpedTable }, resolve))
   })
 
   p.append(document.createTextNode(' Weiter zur '), changeLink)
   tableInfoContainer.appendChild(p)
-  // <p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml;r Firefox!</a></p>
 })()

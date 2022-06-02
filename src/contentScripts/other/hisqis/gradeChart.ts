@@ -42,8 +42,6 @@ function parseGrades(): ParsedGrades {
     }
   }
 
-  console.log(examGrades)
-
   return { exams: examGrades, modules: moduleGrades }
 }
 
@@ -53,8 +51,6 @@ function countGrades(grades: ExamGrades): number[] {
     const grade = Math.round(g)
     gradesArr[grade - 1] += 1
   })
-
-  console.log(gradesArr)
 
   return gradesArr
 }
@@ -89,14 +85,9 @@ function getWeightedAverage(grades: ModuleGrades): number {
   statistik[1].innerHTML = `Anzahl Module: ${Object.keys(grades.modules).length}`
   statistik[2].innerHTML = `Anzahl Prüfungen: ${Object.keys(grades.exams).length}`
 
-
-  //const notenStatistik = `<p class="normal" style="margin-bottom:-20px" id="changeTable">Wechsle zur <a id="changeTableLink" href="javascript:void(0)">... nocht nicht f&uuml;r Firefox!</a></p>`
-
   container.append(canvas, ...statistik)
 
-  //<img src="${imgUrl}" style="position:relative; right: 2px;height: 15px;">
   const ctx = canvas.getContext('2d')
-  //console.log(ctx)
   ctx.canvas.width = 500
   ctx.canvas.height = 250
   const myChart = new Chart(ctx, {
