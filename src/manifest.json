@@ -77,15 +77,12 @@
     },
     {
       "js": [
-        "thirdParty/Chart.bundle.min.js",
-        "contentScripts/other/pimpHISQIS.js",
-        "thirdParty/vue.js",
-        "thirdParty/vuesax.js",
-        "contentScripts/other/pimpHISQIS_table.js"
+        "contentScripts/other/hisqis/pimpAndInjectModules.js"
       ],
       "css": [
         "thirdParty/vuesax.css",
-        "styles/components/gradeTable.css"
+        "styles/components/gradeTable.css",
+        "styles/contentScripts/hisqis.css"
       ],
       "run_at": "document_end",
       "matches": [
@@ -301,7 +298,9 @@
     "assets/*",
     "assets/icons/RocketIcons/default_128px.png",
     "contentScripts/forward/searchEngines/common.js",
-    "contentScripts/login/common.js"
+    "contentScripts/login/common.js",
+    "contentScripts/other/hisqis/*",
+    "snowpack/pkg/*"
   ],
   "manifest_version": 2,
   "commands": {

@@ -10,7 +10,10 @@ module.exports = {
     '@snowpack/plugin-sass',
   ],
   packageOptions: {
-    /* ... */
+    knownEntrypoints: [
+      'dayjs',
+      'dayjs/plugin/customParseFormat'
+    ]
   },
   devOptions: {
     /* ... */
