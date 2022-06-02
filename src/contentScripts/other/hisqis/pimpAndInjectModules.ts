@@ -59,6 +59,5 @@
     tableInfoContainer.appendChild(p)
   })
 
-
   document.head.append(gradeScript, tableScript)
 })()

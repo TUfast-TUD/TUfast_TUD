@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, Login, LoginFields } from './common'
+import type { CookieSettings, LoginFields } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -19,29 +19,29 @@ const cookieSettings: CookieSettings = {
 
     async additionalFunctionsPreCheck (): Promise<void> { }
 
-    async additionalFunctionsPostCheck (): Promise<void> { 
+    async additionalFunctionsPostCheck (): Promise<void> {
       this.confirmData()
       this.outdatedRequest()
     }
 
-    confirmData() {
+    confirmData () {
       // Check if this is the consense page
-      if(!document.getElementById('generalConsentDiv')) return
+      if (!document.getElementById('generalConsentDiv')) return
 
       // Click the button
       const button = document.querySelector('input[type="submit"][name="_eventId_proceed"]')
       if (button) (button as HTMLInputElement).click()
     }
 
-    outdatedRequest() {
+    outdatedRequest () {
       // Check if this is the outdated request page
       // TODO: Decide whether we should really do this?
       // This hint isn't there for no reason can can be reached by "wrong" user choices.
       // We don't know where the user tried to login, so we can't jsut redirect to Opal/etc
     }
 
-    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
-        return document.querySelector('.content p font[color="red"]')
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
+      return document.querySelector('.content p font[color="red"]')
     }
 
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {

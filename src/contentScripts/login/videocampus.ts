@@ -1,4 +1,4 @@
-import type { CookieSettings, UserData, Login, LoginFields } from './common'
+import type { CookieSettings, UserData, LoginFields } from './common'
 
 // "Quicksettings"
 const platform = 'zih'

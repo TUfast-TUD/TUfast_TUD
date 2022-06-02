@@ -1,9 +1,9 @@
-function reloadInNewTab() {
+function reloadInNewTab () {
   // When opening a pdf we get to ".../downloadering?fibercode=xxx"
   // We could save the fibrecode to not reopen the same document over and over
   // or we could go the simpler way and see if there even is a history for this tab.
   // When opening something in a new tab it doesn't have a history.
-  if(!window.location.pathname.includes('downloadering') || window.history.length < 2) return
+  if (!window.location.pathname.includes('downloadering') || window.history.length < 2) return
 
   window.open(window.location.href, '_blank')
   window.history.back()
@@ -23,7 +23,7 @@ function reloadInNewTab() {
   // When only using the method above it works fine for pdf files hosted on Opal.
 
   // This method modifies any anchor nodes it gets to open in a new tab.
-  /*const modifyLinks = (nodeList: NodeList|HTMLCollectionOf<HTMLAnchorElement>) => {
+  /* const modifyLinks = (nodeList: NodeList|HTMLCollectionOf<HTMLAnchorElement>) => {
     for (const node of nodeList) {
       if (node.nodeName.toLowerCase() === 'a' && (node as HTMLAnchorElement).href.includes('.pdf')) {
         node.addEventListener('click', (e: Event) => {
@@ -43,5 +43,5 @@ function reloadInNewTab() {
   }).observe(document.body, { childList: true, subtree: true })
 
   // Because the Mutation observer is only running when the DOM is changed, we need to run it manually once
-  modifyLinks(document.getElementsByTagName('a'))*/
+  modifyLinks(document.getElementsByTagName('a')) */
 })()

@@ -40,6 +40,8 @@
     "@types/chrome": "^0.0.184",
     "@types/firefox": "^0.0.31",
     "@types/simple-datatables": "^3.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.2",

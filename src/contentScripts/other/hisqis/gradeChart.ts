@@ -8,12 +8,12 @@ interface ParsedGrades {
   modules: ModuleGrades
 }
 
-function parseGrades(): ParsedGrades {
+function parseGrades (): ParsedGrades {
   const examGrades: ExamGrades = {}
   const moduleGrades: ModuleGrades = {}
 
   const tableRows = document.querySelectorAll('form table:not([summary="Liste der Stammdaten des Studierenden"]) > tbody > tr')
-  if(tableRows.length === 0) return null
+  if (tableRows.length === 0) return null
 
   for (const row of tableRows) {
     const cells = row.getElementsByTagName('td')
@@ -36,7 +36,7 @@ function parseGrades(): ParsedGrades {
         // If it exists in the list we overwrite it when it's better (we don't count 5.0)
         if (entityGrade < examGrades[entitiyNumber]) examGrades[entitiyNumber] = entityGrade
       } else {
-        // If it doesn't exist we create it 
+        // If it doesn't exist we create it
         examGrades[entitiyNumber] = entityGrade
       }
     }
@@ -45,7 +45,7 @@ function parseGrades(): ParsedGrades {
   return { exams: examGrades, modules: moduleGrades }
 }
 
-function countGrades(grades: ExamGrades): number[] {
+function countGrades (grades: ExamGrades): number[] {
   const gradesArr = [0, 0, 0, 0, 0]
   Object.values(grades).forEach(g => {
     const grade = Math.round(g)
@@ -55,7 +55,7 @@ function countGrades(grades: ExamGrades): number[] {
   return gradesArr
 }
 
-function getWeightedAverage(grades: ModuleGrades): number {
+function getWeightedAverage (grades: ModuleGrades): number {
   let sum = 0
   let count = 0
   for (const { grade, cp } of Object.values(grades)) {
@@ -67,15 +67,15 @@ function getWeightedAverage(grades: ModuleGrades): number {
 
 (async () => {
   const container = document.getElementById('TUfastGradeContainer')
-  if(!container) return
+  if (!container) return
 
   const grades = parseGrades()
-  if(!grades) return
+  if (!grades) return
 
   const canvas = document.createElement('canvas')
 
   const statistik = []
-  for (let i = 0; i<3; i++) {
+  for (let i = 0; i < 3; i++) {
     const p = document.createElement('p')
     p.className = 'info'
     statistik.push(p)
@@ -90,7 +90,8 @@ function getWeightedAverage(grades: ModuleGrades): number {
   const ctx = canvas.getContext('2d')
   ctx.canvas.width = 500
   ctx.canvas.height = 250
-  const myChart = new Chart(ctx, {
+  // eslint-disable-next-line no-unused-vars
+  const gradeChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: ['1', '2', '3', '4', 'nicht bestanden'],
@@ -123,5 +124,5 @@ function getWeightedAverage(grades: ModuleGrades): number {
         }
       }
     }
-  });
+  })
 })()

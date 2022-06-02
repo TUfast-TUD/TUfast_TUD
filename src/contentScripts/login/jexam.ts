@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, Login, LoginFields } from './common'
+import type { CookieSettings, LoginFields } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -13,20 +13,20 @@ const cookieSettings: CookieSettings = {
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class JExamLogin extends common.Login {
-    constructor() {
+    constructor () {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck(): Promise<void> { }
+    async additionalFunctionsPreCheck (): Promise<void> { }
 
-    async additionalFunctionsPostCheck(): Promise<void> { }
+    async additionalFunctionsPostCheck (): Promise<void> { }
 
-    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
       const params = new URLSearchParams(window.location.search)
       return params.get('error') === 'badcredentials'
     }
 
-    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
@@ -35,7 +35,7 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons(): Promise<NodeList> {
+    async findLogoutButtons (): Promise<NodeList> {
       // There should only be one button but let's be safe
       return document.querySelectorAll('a[href$="/logout"]')
     }

@@ -1,10 +1,10 @@
 // Step through the color wheel
-function colorStep(noOfSteps: number = 10) {
+function colorStep (noOfSteps: number = 10) {
   // Get color variable
   const color = document.documentElement.style.getPropertyValue('--counter-color')
 
   // When no color is set on the element we set the first one: red
-  if(!color) {
+  if (!color) {
     document.documentElement.style.setProperty('--counter-color', 'hsl(0, 100%, 50%)')
     return
   }
@@ -15,10 +15,9 @@ function colorStep(noOfSteps: number = 10) {
   document.documentElement.style.setProperty('--counter-color', `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`)
 }
 
-function resetColor() {
+function resetColor () {
   document.documentElement.style.removeProperty('--counter-color')
 }
-
 
 // Main function
 (async () => {
@@ -45,7 +44,7 @@ function resetColor() {
     screenOverlayTimeout: undefined,
     blocker: false,
     timeUp: true,
-    overlay: undefined,
+    overlay: undefined
   }
 
   // Create image node
@@ -83,16 +82,16 @@ function resetColor() {
 
     colorStep()
 
-    let timeout: number;
+    let timeout: number
 
     // trigger actions based on counter
-    if(onClickSettings.counter === 10) {
+    if (onClickSettings.counter === 10) {
       // live-update the logo
       logo.src = chrome.runtime.getURL('assets/icons/RocketIcons/7_128px.png')
       // change the onclick function
       logo.onclick = onClickWhenFound
       // Unlock easteregg
-      chrome.runtime.sendMessage({ cmd: 'easteregg_found'})
+      chrome.runtime.sendMessage({ cmd: 'easteregg_found' })
 
       onClickSettings.overlay.style.fontSize = '100px'
       timeout = 3000
@@ -114,6 +113,5 @@ function resetColor() {
       onClickSettings.timeUp = true
       resetColor()
     }, timeout)
-
   })
 })()

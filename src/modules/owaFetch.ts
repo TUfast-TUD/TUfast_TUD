@@ -70,8 +70,8 @@ export async function fetchOWA (username: string, password: string, logout: bool
   const searchString = "window.clientId = '"
   const idxStart = respText.indexOf(searchString)
   const idxEnd = respText.indexOf("'", idxStart + searchString.length)
-  if(idxStart === -1 || idxEnd === -1) {
-    //console.error(respText)
+  if (idxStart === -1 || idxEnd === -1) {
+    // console.error(respText)
     return
   }
   const clientId = respText.substring(idxStart + 1, idxEnd)
@@ -104,7 +104,7 @@ export async function fetchOWA (username: string, password: string, logout: bool
 
   // only logout, if user is not using owa in browser session
   if (logout) {
-    //console.log('Logging out from owa..')
+    // console.log('Logging out from owa..')
     await fetch('https://msx.tu-dresden.de/owa/logoff.owa', {
       headers: {
         accept:
@@ -145,7 +145,7 @@ export async function owaIsOpened () {
   const tabs = await getAllChromeTabs()
   // Find element with msx in uri, -1 if none found
   if (tabs.findIndex((element) => element.url.includes(uri)) >= 0) {
-    //console.log('currently opened owa')
+    // console.log('currently opened owa')
     return true
   } else return false
 }
@@ -212,7 +212,7 @@ export async function owaFetch () {
   if (!mailInfoJson) return
   // check # of unread mails
   const numberOfUnreadMails = countUnreadMsg(mailInfoJson)
-  //console.log('Unread mails in OWA: ' + numberOfUnreadMails)
+  // console.log('Unread mails in OWA: ' + numberOfUnreadMails)
 
   // alert on new Mail
   // Promisified until usage of Manifest V3

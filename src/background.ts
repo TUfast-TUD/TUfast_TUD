@@ -41,10 +41,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'bannersShown', // new banners
         // Old opal banners
         'showedUnreadMailCounterBanner',
-        'removedUnlockRocketsBanner', 
-        'showedOpalCustomizeBanner', 
-        'removedReviewBanner', 
-        'showedKeyboardBanner2',
+        'removedUnlockRocketsBanner',
+        'showedOpalCustomizeBanner',
+        'removedReviewBanner',
+        'showedKeyboardBanner2'
       ], resolve))
 
       const updateObj: any = {}
@@ -258,10 +258,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       break
     case 'logout_idp':
       logoutIdp(request.logoutDuration)
-      break;
+      break
     case 'easteregg_found':
       eastereggFound()
-      break;
+      break
     default:
       console.log(`Cmd not found "${request.cmd}"!`)
       break
@@ -373,10 +373,10 @@ async function saveCourses (courseList: CourseList) {
 }
 
 // logout function for idp
-async function logoutIdp(logoutDuration: number = 5) {
+async function logoutIdp (logoutDuration: number = 5) {
   // Promisified until usage of Manifest V3
-  const granted = await new Promise<boolean>((resolve) => chrome.permissions.request({permissions: ['cookies']}, resolve))
-  if(!granted) return
+  const granted = await new Promise<boolean>((resolve) => chrome.permissions.request({ permissions: ['cookies'] }, resolve))
+  if (!granted) return
 
   // Set the logout cookie for idp
   const date = new Date()
@@ -403,23 +403,23 @@ async function logoutIdp(logoutDuration: number = 5) {
 
   const redirect = await fetch('https://idp.tu-dresden.de/idp/profile/Logout', {
     headers: {
-      'Cookie': `JSESSIONID=${sessionCookie.value}`
+      Cookie: `JSESSIONID=${sessionCookie.value}`
     }
   })
   await fetch(redirect.url, {
     headers: {
-      'Cookie': `JSESSIONID=${sessionCookie.value}`
+      Cookie: `JSESSIONID=${sessionCookie.value}`
     },
     method: 'POST'
   })
 }
 
 // Function called when the easteregg is found
-async function eastereggFound() {
+async function eastereggFound () {
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
   availableRockets.push('RI3')
-  
+
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({
     foundEasteregg: true,

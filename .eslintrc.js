@@ -6,7 +6,8 @@ module.exports = {
     jquery: true
   },
   extends: ['standard'],
-  plugins: ['promise'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['promise', '@typescript-eslint'],
   rules: {
     'prefer-arrow-callback': 'warn',
     'no-unused-vars': 'warn', // This should be no error!

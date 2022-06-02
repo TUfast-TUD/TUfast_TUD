@@ -23,8 +23,8 @@ interface Course {
     const favorites: Course[] = []
     const courses: Course[] = []
 
-    const tableRows: NodeListOf<HTMLTableRowElement> = document.querySelectorAll('.table-panel tbody tr')
-    Array.from(tableRows).forEach(row => {
+    const tableRows: NodeList = document.querySelectorAll('.table-panel tbody tr');
+    (Array.from(tableRows) as HTMLTableRowElement[]).forEach(row => {
       const link: HTMLAnchorElement = row.children[2]?.children[0] as HTMLAnchorElement
       if (!link || !link.href || !link.textContent) return
       const c = {
@@ -75,9 +75,10 @@ interface Course {
     const coursesChanged = currentPage === 'meine_kurse' && !arraysAreSame(currentCourses || [], courses)
     const favouritesChanged = !arraysAreSame(currentFavourites || [], favorites)
 
-    const updateObj = {}
-    if (coursesChanged) updateObj['meine_kurse'] = JSON.stringify(courses)
-    if (favouritesChanged) updateObj['favoriten'] = JSON.stringify(favorites)
+    // eslint-disable-next-line camelcase
+    const updateObj: {meine_kurse?: string, favoriten?: string} = {}
+    if (coursesChanged) updateObj.meine_kurse = JSON.stringify(courses)
+    if (favouritesChanged) updateObj.favoriten = JSON.stringify(favorites)
 
     if (Object.keys(updateObj).length > 0) {
       await new Promise<void>((resolve) => chrome.storage.local.set(updateObj, resolve))

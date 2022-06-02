@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, Login, LoginFields } from './common'
+import type { CookieSettings, LoginFields } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -21,8 +21,8 @@ const cookieSettings: CookieSettings = {
 
     async additionalFunctionsPostCheck (): Promise<void> { }
 
-    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
-        return document.getElementsByClassName('wrongPasswordMsg')[0]
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
+      return document.getElementsByClassName('wrongPasswordMsg')[0]
     }
 
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {

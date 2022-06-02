@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, Login, LoginFields } from './common'
+import type { CookieSettings, UserData, LoginFields } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -19,20 +19,20 @@ const cookieSettings: CookieSettings = {
 
     async additionalFunctionsPreCheck (): Promise<void> { }
 
-    async additionalFunctionsPostCheck (): Promise<void> { 
-        this.selectTU()
+    async additionalFunctionsPostCheck (): Promise<void> {
+      this.selectTU()
     }
 
     selectTU () {
-        // "id2" seems to be random generated, so we should probably not use it
-        const select = document.querySelector('select[name="wayfselection"]') as HTMLSelectElement | null
-        if(!select) return
-        const value = Array.from(select.options).find(option => option.innerText === 'TU Dresden' || option.innerText === 'Technische Universität Dresden')?.value
-        if (value) { 
-            select.value = value;
-            // same here for "id11"
-            (document.querySelector('button[name="shibLogin"]') as HTMLButtonElement | null)?.click()
-        }
+      // "id2" seems to be random generated, so we should probably not use it
+      const select = document.querySelector('select[name="wayfselection"]') as HTMLSelectElement | null
+      if (!select) return
+      const value = Array.from(select.options).find(option => option.innerText === 'TU Dresden' || option.innerText === 'Technische Universität Dresden')?.value
+      if (value) {
+        select.value = value;
+        // same here for "id11"
+        (document.querySelector('button[name="shibLogin"]') as HTMLButtonElement | null)?.click()
+      }
     }
 
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {

@@ -44,7 +44,7 @@ import { DataTable } from 'simple-datatables'
     for (const cell of cells) {
       const newCell = document.createElement('td')
       newCell.style.textAlign = cell.align
-      //newCell.style.width = cell.width
+      // newCell.style.width = cell.width
       newCell.innerText = cell.innerText
       newRow.appendChild(newCell)
     }
@@ -68,18 +68,19 @@ import { DataTable } from 'simple-datatables'
   // Append everything together
   newTable.append(newTableCaption, newTableHead, newTableBody)
 
-  /*let { hisqisPimpedTable } = { hisqisPimpedTable: true } // await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
+  /* let { hisqisPimpedTable } = { hisqisPimpedTable: true } // await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
   if (hisqisPimpedTable) oldTable.style.display = 'none'
-  else newTable.style.display = 'none'*/
+  else newTable.style.display = 'none' */
 
   oldTable.parentNode.insertBefore(newTable, oldTable)
 
+  // eslint-disable-next-line no-unused-vars
   const dataTable = new DataTable(newTable, {
     sortable: true,
     searchable: false,
     paging: false,
     columns: [
-      { select: 10, type: 'date', format: 'DD.MM.YYYY' },
+      { select: 10, type: 'date', format: 'DD.MM.YYYY' }
     ]
   })
 })()
