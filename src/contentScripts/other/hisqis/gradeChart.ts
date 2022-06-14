@@ -8,7 +8,7 @@ interface ParsedGrades {
   modules: ModuleGrades
 }
 
-function parseGrades (): ParsedGrades {
+function parseGrades (): ParsedGrades | null {
   const examGrades: ExamGrades = {}
   const moduleGrades: ModuleGrades = {}
 
@@ -22,14 +22,14 @@ function parseGrades (): ParsedGrades {
 
     const isModule = cells[0].bgColor === '#DDDDDD'
 
-    const entitiyNumber = Number.parseInt(cells[0].textContent.trim())
+    const entitiyNumber = Number.parseInt(cells[0].textContent?.trim() || '')
     if (Number.isNaN(entitiyNumber)) continue
 
-    const entityGrade = Number.parseFloat(cells[3].textContent.trim().replace(',', '.'))
+    const entityGrade = Number.parseFloat(cells[3].textContent?.trim().replace(',', '.') || '')
     if (Number.isNaN(entityGrade)) continue
 
     if (isModule) {
-      const cp = Number.parseInt(cells[7].textContent.trim()) || 0
+      const cp = Number.parseInt(cells[7].textContent?.trim() || '') || 0
       moduleGrades[entitiyNumber] = { grade: entityGrade, cp }
     } else {
       if (examGrades[entitiyNumber]) {
@@ -74,7 +74,7 @@ function getWeightedAverage (grades: ModuleGrades): number {
 
   const canvas = document.createElement('canvas')
 
-  const statistik = []
+  const statistik: HTMLParagraphElement[] = []
   for (let i = 0; i < 3; i++) {
     const p = document.createElement('p')
     p.className = 'info'
@@ -88,6 +88,7 @@ function getWeightedAverage (grades: ModuleGrades): number {
   container.append(canvas, ...statistik)
 
   const ctx = canvas.getContext('2d')
+  if (!ctx) return
   ctx.canvas.width = 500
   ctx.canvas.height = 250
   // eslint-disable-next-line no-unused-vars

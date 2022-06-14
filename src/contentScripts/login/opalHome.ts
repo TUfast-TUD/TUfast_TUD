@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, LoginFields } from './common'
+import type { CookieSettings, UserData, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -10,7 +10,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class OpalLogin extends common.Login {
@@ -47,7 +47,7 @@ const cookieSettings: CookieSettings = {
       return false
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       // The title actually isn't translated when using Opal in Englisch. But for the future it's here.
       return [document.querySelector('a[title="Abmelden"]'), document.querySelector('a[title="Logout"]')]
     }

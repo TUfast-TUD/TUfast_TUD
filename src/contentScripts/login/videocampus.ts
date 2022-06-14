@@ -1,4 +1,4 @@
-import type { CookieSettings, UserData, LoginFields } from './common'
+import type { CookieSettings, UserData, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -9,7 +9,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class VideocampusLogin extends common.Login {
@@ -29,7 +29,8 @@ const cookieSettings: CookieSettings = {
 
       // Get all options and find TU Dresden
       const optionsArr = Array.from((select as HTMLSelectElement).options)
-      const idpValue = optionsArr.find((option) => option.innerText === 'TU Dresden' || option.innerText === 'Technische Universität Dresden').value;
+      const idpValue = optionsArr.find((option) => option.innerText === 'TU Dresden' || option.innerText === 'Technische Universität Dresden')?.value
+      if (typeof idpValue === 'undefined') return
       (select as HTMLSelectElement).value = idpValue;
 
       // We need to trigger the onchange event manually
@@ -44,7 +45,7 @@ const cookieSettings: CookieSettings = {
       return false
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       return [document.querySelector('a.dropdown-item[href="/logout"]')]
     }
 

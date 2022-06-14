@@ -4,7 +4,7 @@
   "description": "Browser Extension for higher productivity with TU Dresden IT-Services 🚀",
   "main": "index.js",
   "scripts": {
-    "lint": "npx eslint --fix .",
+    "lint": "npx eslint --ext .ts --ext .js --fix .",
     "test": "npm run lint && npm run build",
     "dev": "snowpack build --watch",
     "build": "snowpack build"

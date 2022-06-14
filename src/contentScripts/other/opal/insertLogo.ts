@@ -11,6 +11,7 @@ function colorStep (noOfSteps: number = 10) {
 
   // Else we will step through the color wheel
   const hsl = color.trim().match(/^hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)$/)?.slice(1).map((n) => parseInt(n, 10))
+  if (hsl?.length !== 3) return
   hsl[0] += Math.round(360 / noOfSteps) % 360 // 10 would be red again but 10 are the rockets so no +1 here
   document.documentElement.style.setProperty('--counter-color', `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`)
 }
@@ -39,7 +40,13 @@ function resetColor () {
   const iconURL = chrome.runtime.getURL(iconPath)
 
   // Using an object because the values are mutable and we don't need 10 global mutable values
-  const onClickSettings = {
+  const onClickSettings: {
+    counter: number
+    screenOverlayTimeout: any // NodeJS.Timeout and number do not work, so idc
+    blocker: boolean
+    timeUp: boolean
+    overlay: HTMLDivElement | undefined
+  } = {
     counter: 0,
     screenOverlayTimeout: undefined,
     blocker: false,
@@ -77,7 +84,7 @@ function resetColor () {
       document.body.prepend(onClickSettings.overlay)
     } else {
       // remove existing timeout
-      clearTimeout(onClickSettings.screenOverlayTimeout)
+      if (onClickSettings.screenOverlayTimeout) clearTimeout(onClickSettings.screenOverlayTimeout)
     }
 
     colorStep()
@@ -101,13 +108,13 @@ function resetColor () {
       onClickSettings.overlay.style.fontSize = '150px'
       timeout = 1000
       onClickSettings.blocker = false
-      onClickSettings.overlay.innerHTML = onClickSettings.counter
+      onClickSettings.overlay.innerHTML = onClickSettings.counter.toString()
     }
 
     onClickSettings.timeUp = false
 
     onClickSettings.screenOverlayTimeout = setTimeout(() => {
-      document.body.removeChild(onClickSettings.overlay)
+      if (onClickSettings.overlay) document.body.removeChild(onClickSettings.overlay)
       onClickSettings.overlay = undefined
       onClickSettings.counter = 0
       onClickSettings.timeUp = true

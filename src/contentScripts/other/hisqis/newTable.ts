@@ -56,7 +56,7 @@ import { DataTable } from 'simple-datatables'
       case cells[0].bgColor === '#DDDDDD':
         newRow.className = 'module'
         break
-      case Number.parseFloat(cells[3].textContent.trim().replace(',', '.')) === 5:
+      case Number.parseFloat(cells[3].textContent?.trim().replace(',', '.') || '') === 5:
         newRow.className = 'exam-nopass'
         break
       default:
@@ -72,7 +72,7 @@ import { DataTable } from 'simple-datatables'
   if (hisqisPimpedTable) oldTable.style.display = 'none'
   else newTable.style.display = 'none' */
 
-  oldTable.parentNode.insertBefore(newTable, oldTable)
+  oldTable.parentNode?.insertBefore(newTable, oldTable)
 
   // eslint-disable-next-line no-unused-vars
   const dataTable = new DataTable(newTable, {

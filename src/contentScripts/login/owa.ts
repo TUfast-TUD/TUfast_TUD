@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, LoginFields } from './common'
+import type { CookieSettings, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -9,7 +9,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class OWALogin extends common.Login {
@@ -21,7 +21,7 @@ const cookieSettings: CookieSettings = {
 
     async additionalFunctionsPostCheck (): Promise<void> { }
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element| null> {
       return document.getElementById('signInErrorDiv')
     }
 
@@ -31,11 +31,11 @@ const cookieSettings: CookieSettings = {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
-        submitButton: submit && (submit.innerText === 'Anmelden' || submit.innerText === 'Login') ? submit : null
+        submitButton: submit && (submit.innerText === 'Anmelden' || submit.innerText === 'Login') ? submit : undefined
       }
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       // Light Version, we need more advanced stuff for the others
       return [document.getElementById('lo')]
     }

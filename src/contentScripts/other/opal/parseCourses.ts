@@ -84,7 +84,7 @@ interface Course {
       await new Promise<void>((resolve) => chrome.storage.local.set(updateObj, resolve))
     }
 
-    if (firstTime) {
+    if (firstTime && updateObj.meine_kurse) {
       // TODO
       // Show banner
     } else if (coursesChanged || favouritesChanged) {

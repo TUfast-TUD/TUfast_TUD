@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, LoginFields } from './common'
+import type { CookieSettings, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -9,7 +9,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class CloudstoreLogin extends common.Login {
@@ -33,7 +33,7 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       return [document.querySelector('[data-id="logout"] > a')]
     }
   }

@@ -1,7 +1,7 @@
 (async () => {
   const form = document.getElementsByTagName('form')[0]
   const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')
-  const afterTable = table.nextElementSibling
+  const afterTable = table?.nextElementSibling
   if (!form || !table || !afterTable) return
 
   form.insertBefore(document.createElement('p'), afterTable) // Spacer
@@ -35,6 +35,8 @@
   tableScript.addEventListener('load', async () => {
     const newTable = document.getElementById('gradeTable')
     const oldTable = document.getElementById('oldGradeTable') // This is set in the other script for convinience
+
+    if (!newTable || !oldTable) return
 
     const { hisqisPimpedTable } = await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
 

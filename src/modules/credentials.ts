@@ -1,7 +1,7 @@
 // info: user = username | pass = password
 export interface UserData {
-    user: string;
-    pass: string;
+    user: string | undefined;
+    pass: string | undefined;
 }
 
 interface UserDataStore {
@@ -28,7 +28,7 @@ async function getKeyBuffer () {
       sysInfo += window.navigator.hardwareConcurrency
     } else {
       // chrome, edge and everything else
-      chrome.system.cpu.getInfo((info) => {
+      chrome.system.cpu.getInfo((info: any) => {
         delete info.processors
         if (info.temperatures) delete info.temperatures // Chrome OS only
         sysInfo += JSON.stringify(info)
@@ -123,7 +123,7 @@ export const loginDataExists = (platform = 'zih') => userDataExists(platform)
 // return {user: string, pass: string}
 // decrypt and return user data
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format
-export async function getUserData (platform: string = 'zih') {
+export async function getUserData (platform: string = 'zih'): Promise<UserData> {
   // get required data for decryption
   const keyBuffer = await getKeyBuffer()
   // Promisified until usage of Manifest V3
@@ -137,10 +137,12 @@ export async function getUserData (platform: string = 'zih') {
   // local function so it's not easily called from elsewhere
   const decode = async (encoded: string) => {
     if (!encoded) return undefined
-    const ivArr = encoded.slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
+    const ivArr = encoded.slice(0, 32).match(/.{2}/g)?.map(byte => parseInt(byte, 16))
+    if (!ivArr) return undefined
     const iv = new Uint8Array(ivArr)
     const dataEncryptedStr = atob(encoded.slice(32))
-    const dataEncrypted = new Uint8Array(dataEncryptedStr.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
+    const dataEncrypted = new Uint8Array(dataEncryptedStr.match(/[\s\S]/g)?.map(ch => ch.charCodeAt(0)) || [])
+    if (dataEncrypted.length === 0) return undefined
 
     // decrypt
     const decoded = await crypto.subtle.decrypt(
@@ -167,7 +169,7 @@ export async function getUserData (platform: string = 'zih') {
 
 // return {user: string, pass: string}
 // This is the old method to get the user data. It will be preserved until probably every installation uses the new format
-export async function getUserDataLagacy () {
+export async function getUserDataLagacy (): Promise<UserData> {
   // get required data for decryption
   const keyBuffer = await getKeyBuffer()
   // async fetch of user data
@@ -176,12 +178,15 @@ export async function getUserDataLagacy () {
 
   // check if Data exists, else return
   if (data === undefined || data === 'undefined') {
-    return ({ asdf: undefined, fdsa: undefined })
+    return ({ user: undefined, pass: undefined })
   }
-  const ivSlice = data.slice(0, 32).match(/.{2}/g).map(byte => parseInt(byte, 16))
+  const ivSlice = data.slice(0, 32).match(/.{2}/g)?.map(byte => parseInt(byte, 16))
+  if (!ivSlice) return ({ user: undefined, pass: undefined })
+
   const iv = new Uint8Array(ivSlice)
   const userDataEncryptedStr = atob(data.slice(32))
-  const userDataEncrypted = new Uint8Array(userDataEncryptedStr.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)))
+  const userDataEncrypted = new Uint8Array(userDataEncryptedStr.match(/[\s\S]/g)?.map(ch => ch.charCodeAt(0)) || [])
+  if (userDataEncrypted.length === 0) return ({ user: undefined, pass: undefined })
 
   // decrypt
   let userData = await crypto.subtle.decrypt(
@@ -196,5 +201,5 @@ export async function getUserDataLagacy () {
   // adjust to useable format
   userData = new TextDecoder().decode(userData)
   userData = userData.split('@@@@@')
-  return ({ asdf: userData[0], fdsa: userData[1] })
+  return ({ user: userData[0], pass: userData[1] })
 }

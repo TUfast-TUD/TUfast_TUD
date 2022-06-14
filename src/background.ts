@@ -72,7 +72,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             break
           }
           case 2: {
-            const { asdf: user, fdsa: pass } = await credentials.getUserDataLagacy()
+            const { user, pass } = await credentials.getUserDataLagacy()
             await credentials.setUserData({ user, pass }, 'zih')
             // Delete old user data
             // Promisified until usage of Manifest V3
@@ -381,7 +381,7 @@ async function logoutIdp (logoutDuration: number = 5) {
   // Set the logout cookie for idp
   const date = new Date()
   date.setMinutes(date.getMinutes() + logoutDuration)
-  await new Promise<chrome.cookies.Cookie>((resolve) => chrome.cookies.set({
+  await new Promise<chrome.cookies.Cookie|null>((resolve) => chrome.cookies.set({
     url: 'https://idp.tu-dresden.de',
     name: 'idpLoggedOut',
     value: 'true',
@@ -395,7 +395,7 @@ async function logoutIdp (logoutDuration: number = 5) {
   if (!idpLogoutEnabled) return
 
   // get session cookie
-  const sessionCookie = await new Promise<chrome.cookies.Cookie>((resolve) => chrome.cookies.get({
+  const sessionCookie = await new Promise<chrome.cookies.Cookie|null>((resolve) => chrome.cookies.get({
     url: 'https://idp.tu-dresden.de',
     name: 'JSESSIONID'
   }, resolve))

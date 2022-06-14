@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, LoginFields } from './common'
+import type { CookieSettings, UserData, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -9,7 +9,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class MatrixLogin extends common.Login {
@@ -27,7 +27,7 @@ const cookieSettings: CookieSettings = {
       (document.querySelector('a[href="#/login"]') as HTMLAnchorElement|null)?.click()
     }
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
       return document.getElementsByClassName('mx_Login_error')[0]
     }
 
@@ -42,7 +42,7 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       return [document.getElementsByClassName('mx_UserMenu_iconSignOut')[0]?.parentElement]
     }
 

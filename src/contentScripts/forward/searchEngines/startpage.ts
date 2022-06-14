@@ -30,7 +30,7 @@ function shouldAct (): boolean {
     common.forward(sb.value).then((forwarded:boolean) => {
       if (!forwarded) {
         // When we didn't forward, the user still wants to search
-        e.target.removeEventListener('submit', onSubmit);
+        e.target?.removeEventListener('submit', onSubmit);
         (e.target as HTMLFormElement).submit()
       }
     })

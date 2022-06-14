@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, LoginFields } from './common'
+import type { CookieSettings, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -9,7 +9,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class IdpLogin extends common.Login {
@@ -40,7 +40,7 @@ const cookieSettings: CookieSettings = {
       // We don't know where the user tried to login, so we can't jsut redirect to Opal/etc
     }
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
+    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
       return document.querySelector('.content p font[color="red"]')
     }
 
@@ -52,7 +52,7 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<HTMLElement[]> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       return null
     }
   }

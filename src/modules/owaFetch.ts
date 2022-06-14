@@ -144,7 +144,7 @@ export async function owaIsOpened () {
   const uri = 'msx.tu-dresden.de'
   const tabs = await getAllChromeTabs()
   // Find element with msx in uri, -1 if none found
-  if (tabs.findIndex((element) => element.url.includes(uri)) >= 0) {
+  if (tabs.findIndex((element) => element.url?.includes(uri)) >= 0) {
     // console.log('currently opened owa')
     return true
   } else return false
@@ -207,6 +207,7 @@ export async function owaFetch () {
 
   // get user data
   const { user, pass } = await getUserData('zih')
+  if (!user || !pass) return
   // call fetch
   const mailInfoJson = await fetchOWA(user, pass, logout).catch(() => {})
   if (!mailInfoJson) return

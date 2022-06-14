@@ -52,7 +52,7 @@ export abstract class Login {
   abstract loginFieldsAvailable(): Promise<boolean | LoginFields>
   // This function should return all candidates for logout buttons.
   // An onClick listener will be added to set a "loggedOut" cookie
-  abstract findLogoutButtons(): Promise<HTMLElement[] | NodeList | null>
+  abstract findLogoutButtons(): Promise<(HTMLElement|Element|null)[] | NodeList | null>
 
   // The following methods should be implemented where necessery or possible.
   // The actual login function. It has access to credentials and - if the function above returns them - the input fields.
@@ -85,7 +85,7 @@ export abstract class Login {
     this.registerLogoutButtonsListener(buttons)
   }
 
-  registerLogoutButtonsListener (buttons: (HTMLElement | Element)[] | NodeList) {
+  registerLogoutButtonsListener (buttons: (HTMLElement|Element|null)[] | NodeList | null) {
     if (buttons) {
       for (const button of buttons) {
         if (button) button.addEventListener('click', this.setLoggedOutCookie.bind(this))
@@ -215,4 +215,8 @@ export abstract class Login {
     // Set value again
     input.value = value
   }
+}
+
+export interface LoginNamespace {
+  Login: typeof Login;
 }

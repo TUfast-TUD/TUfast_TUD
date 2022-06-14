@@ -1,5 +1,5 @@
 // Although we can't use the ESM import statements in content scripts we can import types.
-import type { CookieSettings, UserData, LoginFields } from './common'
+import type { CookieSettings, UserData, LoginFields, LoginNamespace } from './common'
 
 // "Quicksettings"
 const platform = 'zih'
@@ -10,7 +10,7 @@ const cookieSettings: CookieSettings = {
 };
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
+  const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class MedLogin extends common.Login {
@@ -33,7 +33,7 @@ const cookieSettings: CookieSettings = {
       return false
     }
 
-    async findLogoutButtons (): Promise<NodeList> {
+    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
       return document.querySelectorAll('a[href*="moodle/login/logout.php"]')
     }
 

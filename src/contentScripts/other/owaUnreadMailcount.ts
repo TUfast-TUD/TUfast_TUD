@@ -13,7 +13,7 @@ function findUnreadCount (): HTMLDivElement | null {
 }
 
 function onCharacterChanged (mutationRecord: MutationRecord[], _observer: MutationObserver) {
-  const count = Number.parseInt(mutationRecord[0].target.textContent) || 0
+  const count = Number.parseInt(mutationRecord[0]?.target?.textContent || '') || 0
   chrome.runtime.sendMessage({ cmd: 'read_mail_owa', nrOfUnreadMail: count })
 }
 

@@ -5,7 +5,11 @@
   // Promisified until usage of Manifest V3
   const { flakeState } = await new Promise<any>((resolve) => chrome.storage.local.get(['flakeState'], resolve))
 
-  const snowflakeSettings = {
+  const snowflakeSettings: {
+    container: HTMLDivElement | undefined
+    switch: HTMLHeadingElement | undefined
+    currentState: boolean
+  } = {
     container: undefined,
     switch: undefined,
     currentState: flakeState
@@ -17,7 +21,8 @@
   function removeFlakes () {
     if (!snowflakeSettings.container) return
     try {
-      document.body.removeChild(document.getElementById('snowflakes'))
+      const sf = document.getElementById('snowflakes')
+      if (sf) document.body.removeChild(sf)
       snowflakeSettings.container = undefined
     } catch (e) {}
   }
