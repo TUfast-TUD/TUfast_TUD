@@ -31,3 +31,8 @@ export async function forward (query: string): Promise<boolean> {
   }
   return false
 }
+
+export interface SENamespace {
+  fwdEnabled: typeof fwdEnabled
+  forward: typeof forward
+}

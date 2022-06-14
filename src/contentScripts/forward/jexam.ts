@@ -1,4 +1,6 @@
+import type { SENamespace } from "./searchEngines/common"
+
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
+  const common: SENamespace = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
   common.forward('jexam')
 })()

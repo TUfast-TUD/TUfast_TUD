@@ -1,3 +1,5 @@
+import type { SENamespace } from "./common"
+
 // See if we have a query param - if so we don't want to do anything here
 function shouldAct (): boolean {
   const params = new URLSearchParams(window.location.search)
@@ -6,7 +8,7 @@ function shouldAct (): boolean {
 }
 
 (async () => {
-  const common = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
+  const common: SENamespace = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
 
   // If we have GET query or no fwdEnabled, do nothing
   if (!shouldAct() || !(await common.fwdEnabled())) return
