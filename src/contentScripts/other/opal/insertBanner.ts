@@ -32,7 +32,7 @@
   }
 
   switch (true) {
-    case !bannerArr.includes('mailCount') && savedClickCounter > 50 && !enabledOWAFetch: {
+    /*case !bannerArr.includes('mailCount') && savedClickCounter > 50 && !enabledOWAFetch: {
       const text = document.createTextNode('Mit TUfast verpasst du keine Mails aus deinem TU Dresden Postfach! ')
       const interact = document.createElement('span')
       interact.className = 'interactLink'
@@ -66,7 +66,7 @@
       })
       insertBanner('customizeOpal', 'Wie du willst:', [text, interact])
       break
-    }
+    }*/
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
       const text = document.createElement('span')
       text.innerHTML = 'TUfast empfehlen und neue Icons freischalten! '
