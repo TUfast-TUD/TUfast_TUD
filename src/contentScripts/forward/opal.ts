@@ -1,4 +1,4 @@
-import type { SENamespace } from "./searchEngines/common"
+import type { SENamespace } from './searchEngines/common'
 
 (async () => {
   if (location.href.includes('exam')) return // No exam.opal domains

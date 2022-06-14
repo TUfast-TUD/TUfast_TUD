@@ -1,4 +1,4 @@
-import type { SENamespace } from "./common"
+import type { SENamespace } from './common'
 
 // See if we have a query param - if so we don't want to do anything here
 function shouldAct (): boolean {
