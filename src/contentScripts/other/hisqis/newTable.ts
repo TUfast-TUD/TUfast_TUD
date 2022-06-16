@@ -111,7 +111,7 @@ import { DataTable } from 'simple-datatables'
 
   oldTable.parentNode?.insertBefore(newTable, oldTable)
 
-  new DataTable(newTable, {
+  const _dataTable = new DataTable(newTable, {
     sortable: true,
     searchable: false,
     paging: false,
