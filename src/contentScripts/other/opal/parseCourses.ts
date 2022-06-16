@@ -3,6 +3,62 @@ interface Course {
   link: string;
 }
 
+interface ParseResult {
+  courses: Course[];
+  favorites: Course[];
+}
+
+function parseTable (tbody: HTMLTableSectionElement): ParseResult {
+  if (!tbody) throw new Error('Cannot parse table')
+
+  // Get the current courses
+  const favorites: Course[] = []
+  const courses: Course[] = []
+
+  const tableRows: HTMLCollection = tbody.getElementsByTagName('tr')
+  for (const row of tableRows) {
+    const linkElement: HTMLAnchorElement = row.getElementsByTagName('a')[0] as HTMLAnchorElement
+
+    if (!linkElement || !linkElement.href || !linkElement.textContent) continue
+    if (linkElement.textContent.trim().endsWith('[beendet]') || linkElement.textContent.trim().endsWith('[finished]')) continue // Course is finished
+
+    const c = {
+      link: linkElement.href,
+      name: linkElement.textContent
+    }
+    courses.push(c)
+
+    if (row.getElementsByClassName('icon-star-filled').length > 0) favorites.push(c)
+  }
+
+  return { courses, favorites }
+}
+
+function parseList (previewContainer: HTMLDivElement): ParseResult {
+  const courses: Course[] = []
+  const favorites: Course[] = []
+
+  const listItems: HTMLCollection = previewContainer.getElementsByClassName('content-preview')
+
+  for (const item of listItems) {
+    const linkElement: HTMLAnchorElement = item.querySelector('.content-preview > a') as HTMLAnchorElement
+    const titleElement = item.querySelector('.content-preview-main .content-preview-title') as HTMLHeadingElement
+
+    if (!linkElement || !linkElement.href || !titleElement || !titleElement.textContent) continue
+    if (titleElement.textContent.trim().endsWith('[beendet]') || titleElement.textContent.trim().endsWith('[finished]')) continue // Course is finished
+
+    const c = {
+      link: linkElement.href,
+      name: titleElement.textContent
+    }
+    courses.push(c)
+
+    if (item.getElementsByClassName('icon-star-filled').length > 0) favorites.push(c)
+  }
+
+  return { courses, favorites }
+}
+
 (async () => {
   const mainFunction = async () => {
     // We are only interested in these two pages
@@ -19,27 +75,17 @@ interface Course {
       return
     }
 
-    // Get the current courses
-    const favorites: Course[] = []
-    const courses: Course[] = []
+    const tablePanel = document.getElementsByClassName('table-panel')[0]
+    if (!tablePanel) return
 
-    const tableRows: NodeList = document.querySelectorAll('.table-panel tbody tr');
-    (Array.from(tableRows) as HTMLTableRowElement[]).forEach(row => {
-      const link: HTMLAnchorElement = row.children[2]?.children[0] as HTMLAnchorElement
-      if (!link || !link.href || !link.textContent) return
-      const c = {
-        link: link.href,
-        name: link.textContent
-      }
-      courses.push(c)
+    const previewContainer = tablePanel.getElementsByClassName('content-preview-container')[0]
 
-      if (row.children[0].getElementsByClassName('icon-star-filled').length > 0) {
-        favorites.push(c)
-      }
-    })
+    const { courses, favorites } = previewContainer ? parseList(tablePanel.getElementsByClassName('content-preview-container')[0] as HTMLDivElement) : parseTable(tablePanel.getElementsByTagName('tbody')[0])
 
-    // If the user has no courses and favorites - nothing to do here anymore
-    if (courses.length < 1 && favorites.length) return
+    // If the user has no courses - nothing to do here anymore (favorites can only be a subset of courses, so no check needed)
+    if (courses.length === 0) return
+
+    // Sort them by name
     courses.sort((a, b) => a.name.localeCompare(b.name))
 
     // Get the old data to check if something changed
