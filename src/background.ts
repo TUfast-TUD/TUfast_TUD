@@ -212,15 +212,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'get_user_data':
       // Asynchronous response
       credentials.getUserData(request.platform || 'zih').then(sendResponse)
-      break
+      return true // required for async sendResponse
     case 'set_user_data':
       // Asynchronous response
       credentials.setUserData(request.userData, request.platform || 'zih').then(() => sendResponse(true))
-      break
+      return true // required for async sendResponse
     case 'check_user_data':
       // Asynchronous response
       credentials.userDataExists(request.platform).then(sendResponse)
-      break
+      return true // required for async sendResponse
     case 'read_mail_owa':
       owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
       break
@@ -266,7 +266,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       console.log(`Cmd not found "${request.cmd}"!`)
       break
   }
-  return true // required for async sendResponse
+  return false // no async sendResponse will be fired
 })
 
 /**
