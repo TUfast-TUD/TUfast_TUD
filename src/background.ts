@@ -3,7 +3,7 @@ import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
 
 // eslint-disable-next-line no-unused-vars
-const isFirefox = !!(typeof browser !== 'undefined' && browser.runtime && browser.runtime.getBrowserInfo)
+const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {

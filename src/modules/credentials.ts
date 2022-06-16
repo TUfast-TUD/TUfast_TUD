@@ -8,7 +8,7 @@ interface UserDataStore {
     [platform: string]: UserData;
 }
 
-const isFirefox = typeof browser !== 'undefined' && browser.runtime && browser.runtime.getBrowserInfo
+const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
 
 // create hash from input-string (can also be json of course)
 // output hash is always of same length and is of type buffer

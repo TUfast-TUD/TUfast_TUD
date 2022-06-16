@@ -86,7 +86,7 @@
       interact.className = 'interactLink'
       interact.textContent = 'Hier geht\'s lang!'
       interact.addEventListener('click', async () => {
-        const isFirefox = !!(typeof browser !== 'undefined' && browser.runtime && browser.runtime.getBrowserInfo)
+        const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
         const webstoreLink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
         window.open(webstoreLink, '_blank')
         await new Promise<void>((resolve) => chrome.storage.local.set({ mostLikelySubmittedReview: true }, resolve))
