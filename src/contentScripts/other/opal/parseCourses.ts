@@ -80,7 +80,7 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
 
     const previewContainer = tablePanel.getElementsByClassName('content-preview-container')[0]
 
-    const { courses, favorites } = previewContainer ? parseList(tablePanel.getElementsByClassName('content-preview-container')[0] as HTMLDivElement) : parseTable(tablePanel.getElementsByTagName('tbody')[0])
+    const { courses, favorites } = previewContainer ? parseList(previewContainer as HTMLDivElement) : parseTable(tablePanel.getElementsByTagName('tbody')[0])
 
     // If the user has no courses - nothing to do here anymore (favorites can only be a subset of courses, so no check needed)
     if (courses.length === 0) return
