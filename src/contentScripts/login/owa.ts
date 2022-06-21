@@ -31,7 +31,7 @@ const cookieSettings: CookieSettings = {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
-        submitButton: submit && (submit.innerText === 'Anmelden' || submit.innerText === 'Login') ? submit : undefined
+        submitButton: submit || undefined
       }
     }
 
@@ -45,7 +45,7 @@ const cookieSettings: CookieSettings = {
   await login.start()
 
   // As the logout button is injected dynmically we need to wait for it to be available
-  const oberserver = new MutationObserver((_records, _observer) => {
+  const observer = new MutationObserver((_records, _observer) => {
     // old owa version
     const oldBtn = document.querySelector('[aria-label="Abmelden"]')
 
@@ -56,5 +56,5 @@ const cookieSettings: CookieSettings = {
     login.registerLogoutButtonsListener([...newBtns, oldBtn])
   })
 
-  oberserver.observe(document.body, { subtree: true, childList: true })
+  observer.observe(document.body, { subtree: true, childList: true })
 })()
