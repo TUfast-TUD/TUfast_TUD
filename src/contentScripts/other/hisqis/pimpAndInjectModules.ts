@@ -48,6 +48,7 @@
     p.className = 'info'
 
     const changeLink = document.createElement('a')
+    changeLink.style.cursor = "pointer"
     changeLink.innerText = hisqisPimpedTable ? 'langweiligen, alten Tabelle...' : 'neuen, coolen TUfast-Tabelle 🔥'
     changeLink.addEventListener('click', async () => {
       const hisqisPimpedTable = !(newTable.style.display === 'table') // We toggle
