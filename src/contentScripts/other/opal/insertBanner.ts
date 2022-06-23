@@ -15,7 +15,7 @@
     const titleE = document.createElement('b')
     titleE.innerText = ` ${title} `
 
-    banner.append(...otherElements)
+    banner.append(titleE, ...otherElements)
 
     const closeLink = document.createElement('span')
     closeLink.className = 'closeLink'
@@ -67,6 +67,16 @@
       insertBanner('customizeOpal', 'Wie du willst:', [text, interact])
       break
     } */
+    case !bannerArr.includes('helpWanted'): {
+      const text = document.createElement('span')
+      text.innerHTML = 'Du hast Bock TUfast weiterzuentwickeln? '
+      const interact = document.createElement('span')
+      interact.className = 'interactLink'
+      interact.textContent = 'Wir suchen dich!'
+      interact.addEventListener('click', () => window.open('https://tu-fast.de/jobs', '_blank'))
+      insertBanner('helpWanted', 'Verstärkung gesucht:', [text, interact])
+      break
+    }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
       const text = document.createElement('span')
       text.innerHTML = 'TUfast empfehlen und neue Icons freischalten! '

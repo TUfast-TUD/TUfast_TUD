@@ -3,6 +3,8 @@
     min-height: 55px;
     line-height: 55px;
     text-align: center;
+    padding: 10px;
+    padding-right: 30px;
     /*background: red;
     z-index: 5000;*/
 }
