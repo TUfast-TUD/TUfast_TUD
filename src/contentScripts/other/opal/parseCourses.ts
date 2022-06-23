@@ -1,3 +1,5 @@
+import type { NotificationNamespace } from '../notification'
+
 interface Course {
   name: string;
   link: string;
@@ -60,6 +62,8 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
 }
 
 (async () => {
+  const notification: NotificationNamespace = await import(chrome.runtime.getURL('contentScripts/other/notification.js'))
+
   const mainFunction = async () => {
     // We are only interested in these two pages
     if (window.location.pathname !== '/opal/auth/resource/courses' && window.location.pathname !== '/opal/auth/resource/favorites') return
@@ -131,9 +135,9 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     }
 
     if (firstTime && updateObj.meine_kurse) {
-      notify('Kurse wurden erfolgreich in TUfast gespeichert!\nDrücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd> um deine Kurse zu sehen!')
+      notification.notify('Kurse wurden erfolgreich in TUfast gespeichert! Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd> um deine Kurse zu sehen!')
     } else if (coursesChanged || favouritesChanged) {
-      notify('Deine Kurse wurden erfolgreich in TUfast geupdatet!')
+      notification.notify('Deine Kurse wurden erfolgreich in TUfast geupdatet!')
     }
   }
 

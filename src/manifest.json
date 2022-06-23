@@ -201,8 +201,7 @@
     },
     {
       "js": [
-        "contentScripts/other/opal/parseCourses.js",
-        "contentScripts/other/notification.js"
+        "contentScripts/other/opal/parseCourses.js"
       ],
       "css" : [
         "styles/components/notification.css"
@@ -304,6 +303,7 @@
     "contentScripts/forward/searchEngines/common.js",
     "contentScripts/login/common.js",
     "contentScripts/other/hisqis/*",
+    "contentScripts/other/notification.js",
     "snowpack/pkg/*"
   ],
   "manifest_version": 2,

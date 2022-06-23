@@ -36,3 +36,7 @@ export const notify = (msg: string) => {
     setTimeout(() => notification.remove(), 500)
   }, 50000)
 }
+
+export interface NotificationNamespace {
+  notify: typeof notify;
+}
