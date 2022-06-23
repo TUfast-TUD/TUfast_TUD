@@ -186,11 +186,11 @@ chrome.storage.local.get(['pdfInNewTab'], (result) => {
   }
 })
 
-//  reset banner for gOPAL
+// reset banner for gOPAL
+// This is not optimal for now as it's not possible to dismiss the banner on the set date.
+// Also the extension/chrome has to be used on this exact date to work.
 const d = new Date()
-const month = d.getMonth() + 1 // starts at 0
-const day = d.getDate()
-if (month === 10 && day > 20) {
+if (d.getMonth() + 1 === 10 && d.getDate() > 20) {
   chrome.storage.local.set({ closedMsg1: false })
 }
 
@@ -202,7 +202,7 @@ chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
 })
 
 // command listener
-// this listener behaves weirdly with an async function so it just calls async functions and returns true
+// This listener can send async responses. If this is desired it must return true.
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   switch (request.cmd) {
     case 'save_clicks':
@@ -224,17 +224,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'read_mail_owa':
       owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
       break
-    case 'logged_out':
-      loggedOut(request.portal)
-      break
     case 'disable_owa_fetch':
       owaFetch.disableOwaFetch()
       break
     case 'reload_extension':
       chrome.runtime.reload()
-      break
-    case 'save_courses':
-      saveCourses(request.course_list)
       break
     case 'open_settings_page':
       openSettingsPage(request.params)
@@ -272,9 +266,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 /**
  * enable or disable the header listener
  * modify http header from opal, to view pdf in browser without the need to download it
- * @param {true} enabled flag to enable/ disable listener
+ * @param {boolean} enabled flag to enable/ disable listener
  */
-function enableHeaderListener (enabled) {
+function enableHeaderListener (enabled: boolean) {
   if (enabled) {
     chrome.webRequest.onHeadersReceived.addListener(
       headerListenerFunc,
@@ -291,11 +285,12 @@ function enableHeaderListener (enabled) {
   }
 }
 
-function headerListenerFunc (details) {
+function headerListenerFunc (details: chrome.webRequest.WebResponseHeadersDetails) {
+  if (!details.responseHeaders) return
   const header = details.responseHeaders.find(
     e => e.name.toLowerCase() === 'content-disposition'
   )
-  if (!header?.value.includes('.pdf')) return // only for pdf
+  if (!header?.value?.includes('.pdf')) return // only for pdf
   header.value = 'inline'
   return { responseHeaders: details.responseHeaders }
 }
@@ -313,17 +308,6 @@ async function openSettingsPage (params?: string) {
 async function openSharePage () {
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.tabs.create({ url: 'share.html' }, resolve))
-}
-
-// timeout is 2000 default
-async function loggedOut (portal) {
-  const timeout = portal === 'loggedOutCloudstore' ? 7000 : 2000
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({ [portal]: true }, resolve))
-  setTimeout(async () => {
-    // Promisified until usage of Manifest V3
-    await new Promise<void>((resolve) => chrome.storage.local.set({ [portal]: false }, resolve))
-  }, timeout)
 }
 
 // save_click_counter
@@ -344,32 +328,6 @@ async function saveClicks (counter: number) {
   if (savedClickCounter > 2500 && !availableRockets.includes('RI5')) availableRockets.push('RI5')
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ availableRockets }, resolve))
-}
-
-// save parsed courses
-interface Course {
-  link: string
-  name: string
-}
-interface CourseList {
-  type: string
-  list: Course[]
-}
-
-async function saveCourses (courseList: CourseList) {
-  courseList.list.sort((a, b) => (a.name > b.name) ? 1 : -1)
-  switch (courseList.type) {
-    case 'favoriten':
-      // Promisified until usage of Manifest V3
-      await new Promise<void>((resolve) => chrome.storage.local.set({ favoriten: JSON.stringify(courseList.list) }, resolve))
-      console.log('Saved Favoriten in TUfast')
-      break
-    case 'meine_kurse':
-      // Promisified until usage of Manifest V3
-      await new Promise<void>((resolve) => chrome.storage.local.set({ meine_kurse: JSON.stringify(courseList.list) }, resolve))
-      console.log('Saved Meine Kurse in TUfast')
-      break
-  }
 }
 
 // logout function for idp
