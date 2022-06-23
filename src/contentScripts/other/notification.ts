@@ -4,7 +4,7 @@ notificationContainer.classList.add("notifications")
 
 document.body.append(notificationContainer)
 
-export const notify = (msg: string) => {
+const notify = (msg: string) => {
   // create a notification element, a close button and TUfast logo
   const notification = document.createElement("div")
   const closeButton = document.createElement("div")
@@ -12,7 +12,7 @@ export const notify = (msg: string) => {
 
   // configure notification
   notification.classList.add("notifications__notification")
-  notification.innerHTML = msg
+  notification.innerHTML = `<span>${msg}</span>`
 
   // configure close button
   closeButton.classList.add("notifications__close-button")
@@ -35,6 +35,6 @@ export const notify = (msg: string) => {
     notification.classList.add("fade-out")
     console.log("added fade-out")
     setTimeout(() => notification.remove(), 500)
-  }, 5000)
+  }, 50000)
 }
 
