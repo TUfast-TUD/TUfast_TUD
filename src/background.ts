@@ -186,13 +186,16 @@ chrome.storage.local.get(['pdfInNewTab'], (result) => {
   }
 })
 
-// reset banner for gOPAL
-// This is not optimal for now as it's not possible to dismiss the banner on the set date.
-// Also the extension/chrome has to be used on this exact date to work.
-const d = new Date()
-if (d.getMonth() + 1 === 10 && d.getDate() > 20) {
-  chrome.storage.local.set({ closedMsg1: false })
-}
+// reset banner for gOPAL on 20. 10.
+const d = new Date(new Date().getFullYear(), 10, 20)
+if (d.getTime() - Date.now() < 0) d.setFullYear(d.getFullYear() + 1)
+chrome.alarms.create('resetGOpalBanner', { when: d.getTime() })
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === 'resetGOpalBanner') {
+    // Promisified until usage of Manifest V3
+    await new Promise<void>((resolve) => chrome.storage.local.set({ closedMsg1: false }, resolve))
+  }
+})
 
 // DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
