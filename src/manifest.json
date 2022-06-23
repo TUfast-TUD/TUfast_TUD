@@ -201,7 +201,11 @@
     },
     {
       "js": [
-        "contentScripts/other/opal/parseCourses.js"
+        "contentScripts/other/opal/parseCourses.js",
+        "contentScripts/other/notification.js"
+      ],
+      "css" : [
+        "styles/components/notification.css"
       ],
       "run_at": "document_idle",
       "matches": [

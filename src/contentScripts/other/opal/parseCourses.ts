@@ -1,3 +1,5 @@
+import { notify } from "../notification"
+
 interface Course {
   name: string;
   link: string;
@@ -131,11 +133,10 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     }
 
     if (firstTime && updateObj.meine_kurse) {
-      // TODO
-      // Show banner
+      notify("Kurse wurden erfolgreich in TUfast gespeichert!\
+Drücke jetzt <kbd>Strg</kbd> + <kbd>Q</kbd> um deine Kurse zu sehen!")
     } else if (coursesChanged || favouritesChanged) {
-      // TODO
-      // Show other banner
+      notify("Deine Kurse wurden erfolgreich in TUfast geupdatet!")
     }
   }
 
