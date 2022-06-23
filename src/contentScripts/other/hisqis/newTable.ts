@@ -20,32 +20,31 @@ import { DataTable } from 'simple-datatables'
   // Header for our new table
   const caption = document.createElement('caption')
   const tableHeader = document.createElement('div')
-  tableHeader.classList.add("table-header")
+  tableHeader.classList.add('table-header')
   caption.append(tableHeader)
 
   // title element
   const title = document.createElement('h3')
-  title.classList.add("table-header__title")
+  title.classList.add('table-header__title')
   title.innerText = 'Deine Notenübersicht'
 
   // flex div to display small color helpers
   const colorHelpers = document.createElement('div')
-  colorHelpers.classList.add("table-header__helpers")
+  colorHelpers.classList.add('table-header__helpers')
 
   // create small color helpers
-  for (const [i, descriptor] of 
-  ["Modul", "Bestandene Prüfung", "Verhauene Prüfung"].entries()) {
+  for (const [i, descriptor] of ['Modul', 'Bestandene Prüfung', 'Verhauene Prüfung'].entries()) {
     const colorHelper = document.createElement('div')
-    colorHelper.classList.add("table-header__helper")
+    colorHelper.classList.add('table-header__helper')
     colorHelper.classList.add(`table-header__helper--${i}`)
 
     const color = document.createElement('div')
-    color.classList.add("table-header__color")
+    color.classList.add('table-header__color')
     color.classList.add(`table-header__color--${i}`)
     colorHelper.append(color)
 
     const colorText = document.createElement('div')
-    colorText.classList.add("table-header__color-text")
+    colorText.classList.add('table-header__color-text')
     colorText.classList.add(`table-header__color-text--${i}`)
     colorText.innerText = descriptor
     colorHelper.append(colorText)
@@ -54,7 +53,6 @@ import { DataTable } from 'simple-datatables'
   }
 
   tableHeader.append(title, colorHelpers)
-
 
   // Header for the new table
   const newTableHead = document.createElement('thead')
@@ -85,9 +83,9 @@ import { DataTable } from 'simple-datatables'
     }
 
     const computedStyleCell = window.getComputedStyle(cells[0])
-    const backgroundColorCell = computedStyleCell.getPropertyValue("background-color")
+    const backgroundColorCell = computedStyleCell.getPropertyValue('background-color')
     switch (true) {
-      case backgroundColorCell === "rgb(173, 173, 173)":
+      case backgroundColorCell === 'rgb(173, 173, 173)':
         newRow.className = 'meta'
         break
       case backgroundColorCell === 'rgb(221, 221, 221)':
@@ -111,6 +109,7 @@ import { DataTable } from 'simple-datatables'
 
   oldTable.parentNode?.insertBefore(newTable, oldTable)
 
+  // eslint-disable-next-line no-unused-vars
   const _dataTable = new DataTable(newTable, {
     sortable: true,
     searchable: false,
