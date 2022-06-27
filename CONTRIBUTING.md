@@ -9,7 +9,9 @@ Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-T
 
 ## How to contribute code (as a non-TUfast-member)
 We are using gitflow-workflow (simple [Tutorial](
-https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly
+https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly.
+
+You can use [GitHub CodeSpaces](https://github.com/features/codespaces) for easy contribution.
 
 Steps to contribute a feature (as a non-TUfast-member):
 1. Create a fork from this repo.
