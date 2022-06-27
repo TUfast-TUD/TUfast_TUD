@@ -1,19 +1,17 @@
 # Becoming a TUfast Developer
-Trage zu TUfast bei und verbessere den Alltag der Studierenden und Mitarbeiter der TU Dresden! 🌟
-
-Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1). Dort findest du ToDos - erhalten durch eigene Ziele und Nutzerfeedback. Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen!
+Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1). Dort findest du ToDos - erhalten durch eigene Ziele und Nutzerfeedback. Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen! **Achtung**: Das Project-board ist nicht immer aktuell.
 
 ## Kommunikation
 **Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Raum](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden. Ansonsten auch gerne Issues nutzen.
 
 
 ## How to contribute code (as a non-TUfast-member)
-We are using gitflow-workflow (simple [Tutorial](
+We are using the standard gitflow-workflow (simple [Tutorial](
 https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In you fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly.
 
 You can use [GitHub CodeSpaces](https://github.com/features/codespaces) for easy contribution.
 
-Steps to contribute a feature (as a non-TUfast-member):
+Steps to contribute a feature (as a non-TUfast-teammember):
 1. Create a fork from this repo.
 2. Create a local clone of your fork `git clone <url-of-your-repo>`
 3. Checkout develop branch `git checkout develop`
