@@ -31,7 +31,7 @@ Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/cont
 
 ## Zum Projekt beitragen (Contributing)
 - before you implement any changes or features, communicate with us via [Matrix](https://matrix.to/#/#tu-fast:tu-dresden.de) or GitHub
-- use `npm run test` and fix any linting before submitting a pull request
+- We use automated code-checking via GitHub Action. Please use `npm run test` locally and fix any linting before pushing
 - commit any pull requests against the develop-branch
 - hotfixes can be committed to main-branch
 - consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for further information
