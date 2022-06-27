@@ -25,15 +25,13 @@ Die Anwendung sammelt keine Informationen über die Nutzer. Daten werden nur lok
 Siehe auch [Datenschutzerklärung](https://tu-fast.de/datenschutz).
 
 ## Das Projekt unterstützen❤️
-Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden!
-
-[Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Entwicklerteam mit einem kleinen Snack unterstützen.
+Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Entwicklerteam mit einem kleinen Snack unterstützen.
 
 ## Zum Projekt beitragen (Contributing)
-- before you implement any changes or features, communicate with us via [Matrix](https://matrix.to/#/#tu-fast:tu-dresden.de) or GitHub
-- We use automated code-checking via GitHub Action. Please use `npm run test` locally and fix any linting before pushing
-- commit any pull requests against the develop-branch
-- hotfixes can be committed to main-branch
+- before implementing a feature communicate with us via [Matrix](https://matrix.to/#/#tu-fast:tu-dresden.de) or GitHub
+- we use automated code-checking via GitHub Action. Please use `npm run test` locally and fix any linting before pushing
+- commit any feature containting pull requests against the develop-branch
+- commit any hotfixes against main-branch
 - consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for further information
 
 ## Roadmap
