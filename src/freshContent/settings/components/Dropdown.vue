@@ -10,11 +10,12 @@
         </div>
         <transition-group @mouseleave="clicked=false" v-if="clicked" tag="div" class="dropdown-list">
             <div
-                v-for="(study, index) in studies"
+                v-for="(study, key, index) in studies"
                 :key="index"
-                :class="`dropdown-list__item ${selectedStudy === study.name ? 'dropdown-list__item--selected' : ''}`"
-                @click="setStudySubject(study.name)"
+                :class="`dropdown-list__item ${selectedStudy === key ? 'dropdown-list__item--selected' : ''}`"
+                @click="setStudySubject(key)"
             >
+
                 <ph-caret-double-right class="dropdown-list__arrow" />
                 <img v-if="study.fsr_icon" class="dropdown-list__image" :src="study.fsr_icon" :alt="`Das Icon des Studiengangs ${study.name}`">
                 <h3 class="dropdown-list__title">{{ study.name }}</h3>
@@ -44,7 +45,7 @@ export default defineComponent({
         chrome.storage.local.get("studiengang", (res) => selectedStudy.value = res.studiengang)
 
         const setStudySubject = (studiengang: string) => {
-            if (studiengang === "+ Studiengang hinzufügen...") {
+            if (studiengang === "addStudiengang") {
                 window.location.href = "mailto:frage@tu-fast.de?Subject=Vorschlag Studiengang"
                 return
             }
