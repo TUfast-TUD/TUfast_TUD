@@ -21,7 +21,7 @@ import { time } from '../utilities'
 export default defineComponent({
     setup() {
         const counter = ref<number>(0)
-        chrome.storage.local.get(["saved_click_counter"], (clicks) => counter.value = clicks.saved_click_counter ?? 0)
+        chrome.storage.local.get(["savedClickCounter"], (clicks) => counter.value = clicks.savedClickCounter ?? 0)
 
         return {
             counter,
