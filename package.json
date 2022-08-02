@@ -42,6 +42,7 @@
     "@types/simple-datatables": "^3.2.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "@snowpack/plugin-vue": "^2.6.2",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.2",
@@ -53,6 +54,9 @@
   },
   "dependencies": {
     "chart.js": "^3.8.0",
-    "simple-datatables": "^3.2.0"
+    "simple-datatables": "^3.2.0",
+    "@lottiefiles/lottie-player": "^1.5.2",
+    "phosphor-vue": "^4.3.1",
+    "vue": "^3.2.22"
   }
 }

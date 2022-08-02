@@ -1,0 +1,53 @@
+[
+    {
+      "name": "Geowissenschaften",
+      "fsr_icon": "../../assets/icons/FSRIcons/fsr_geo.png",
+      "fsr_link": "https://tu-dresden.de/bu/umwelt/geo/fsr",
+      "fsr_icon_2": "../../assets/icons/OPAL.png",
+      "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605",
+      "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "geoportal"]
+    },
+    {
+      "name": "Maschinenwesen",
+      "fsr_icon": "../../assets/icons/FSRIcons/fsr_mw.png",
+      "fsr_link": "https://tu-dresden.de/ing/maschinenwesen/fsr",
+      "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"]
+    },
+    {
+      "name": "Mathematik",
+      "fsr_icon": "../../assets/icons/FSRIcons/fsr_mathe.png",
+      "fsr_link": "https://myfsr.de/dokuwiki/doku.php?id=start",
+      "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "je", "swdd"]
+    },
+    {
+      "name": "Medizin",
+      "fsr_icon": "../../assets/icons/FSRIcons/fsr_medi_small.png",
+      "fsr_link": "https://www.medforum-dresden.de/",
+      "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"]
+    },
+    {
+      "name": "Psychologie",
+      "fsr_icon": "../../assets/icons/FSRIcons/fsr_psy.png",
+      "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+      "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "orsee"]
+    },
+    {
+      "name": "Wirtschaftswissenschaften",
+      "fsr_icon": "../../assets/icons/FSRIcons/fsr_wiwi.png",
+      "fsr_link": "https://fsrwiwi.de",
+      "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"]
+    },
+    {
+      "name": "Elektrotechnik",
+      "fsr_icon": "../../assets/icons/FSRIcons/FSR_ET.png",
+      "fsr_link": "https://fsret.de",
+      "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"]
+    },
+    {
+      "name": "Standardeinstellungen",
+      "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"]
+    },
+    {
+      "name": "+ Studiengang hinzufügen..."
+    }
+]

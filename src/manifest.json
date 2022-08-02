@@ -294,7 +294,7 @@
     "default_popup": "freshContent/popup/popup.html"
   },
   "options_ui": {
-    "page": "freshContent/settings/settings.html",
+    "page": "freshContent/settings/index.html",
     "open_in_tab": true
   },
   "web_accessible_resources": [

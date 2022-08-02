@@ -1,0 +1,48 @@
+[
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/default_128px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/default_grey_128px.png",
+        "beforeUnlock": "Standard. Hat jeder.",
+        "unlocked": "Standard. Hat jeder."
+    },
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/4_103px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/4_grey_103px.png",
+        "beforeUnlock": "Spare mehr als 250 Klicks.",
+        "unlocked": "Mehr als 250 Klicks gespart. TUfast scheint nützlich zu sein!"
+    },
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/13_128px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/13_grey_128px.png",
+        "beforeUnlock": "Spare mehr als 2500 Klicks. Du bist Profi!",
+        "unlocked": "Mehr als 2500 Klicks gespart. TUfast ist nützlich!"
+    },
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/7_128px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/7_grey_128px.png",
+        "beforeUnlock": "Finde das Easteregg!",
+        "unlocked": "Easteregg gefunden :)"
+    },
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/2_128px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/2_grey_128px.png",
+        "beforeUnlock": "Du findest TUfast nützlich? Erzähle es zwei Leuten per E-Mail, um diese schicke Rakete freizuschalten!",
+        "unlocked": "Diese Rakete hast du dir verdient! Per E-Mail empfohlen.",
+        "link": "mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"
+    },
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/6_128px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/6_grey_128px.png",
+        "beforeUnlock": "Gefällt dir TUfast? Oder hast du Anmerkdungen? Dann hinterlasse eine Bewertung im Webstore!",
+        "unlocked": "Danke für deine Bewertung im Webstore!",
+        "linkFirefox": "https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search",
+        "linkChromium": "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de"
+    },
+    {
+        "iconPathUnlocked": "../../../assets/icons/RocketIcons/1_128px.png",
+        "iconPathBeforeUnlock": "../../../assets/icons/RocketIcons/1_grey_128px.png",
+        "beforeUnlock": "Coole Dinge teilen ist dein Ding? Teile TUfast mit zwei Freunden auf WhatsApp und sammle diese tolle Rakete!",
+        "unlocked": "Danke für deine Unterstützung! Mit WhatsApp empfohlen.",
+        "link": "https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%3A%20www.tu-fast.de%20%F0%9F%96%90"
+    }
+]

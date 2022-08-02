@@ -5,9 +5,12 @@ module.exports = {
     webextensions: true,
     jquery: true
   },
-  extends: ['standard'],
   parser: '@typescript-eslint/parser',
   plugins: ['promise', '@typescript-eslint'],
+  extends: [
+    'standard',
+    'plugin:vue/vue3-recommended',
+  ],
   rules: {
     'prefer-arrow-callback': 'warn',
     'no-unused-vars': 'warn', // This should be no error!

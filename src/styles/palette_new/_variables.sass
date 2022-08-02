@@ -1,0 +1,19 @@
+// Colours - HSL values
+html, html.dark
+    --clr-primary: 131, 46%, 51%
+    --clr-grey: 215, 15%, 15%
+    --clr-black: 216, 28%, 7%
+    --clr-alert: 3, 93%, 63%
+    --clr-warning: 42, 74%, 57%
+    --clr-white: 0, 0%, 98%
+
+    --brd-rad: 40px
+
+    &.light
+        --clr-black: 215, 15%, 15%
+        --clr-grey: 0, 0%, 98%
+
+    @media (prefers-color-scheme: light)
+        --clr-black: 215, 15%, 15%
+        --clr-grey: 0, 0%, 98%
+    
