@@ -249,3 +249,13 @@ export async function owaFetch () {
   await new Promise<void>((resolve) => chrome.storage.local.set({ numberOfUnreadMails }, resolve))
   await setBadgeUnreadMails(numberOfUnreadMails)
 }
+
+export function registerNotificationClickListener() {
+  // register listener for owaFetch notifications
+  chrome.notifications.onClicked.addListener(async (id) => {
+    if (id === 'tuFastNewEmailNotification') {
+      // Promisified until usage of Manifest V3
+      await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
+    }
+  })
+}

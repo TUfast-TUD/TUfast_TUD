@@ -50,17 +50,18 @@ export default defineComponent({
             if (!autoLoginActive.value) return
 
             if (!OWAFetchActive.value) {
-                chrome.runtime.sendMessage({ cmd: "enable_owa_fetch" }, () => {})
+                chrome.runtime.sendMessage({ cmd: "enable_owa_fetch" })
                 chrome.storage.local.set({ enabledOWAFetch: true })
                 // reload extension
-                alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen übernommen werden!")
-                chrome.runtime.sendMessage({ cmd: "reload_extension" }, () => {})
+                //alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen übernommen werden!")
+                //chrome.runtime.sendMessage({ cmd: "reload_extension" }, () => {})
             }
             if (OWAFetchActive.value) {
                 chrome.runtime.sendMessage({ cmd: "disable_owa_fetch" })
                 chrome.storage.local.set({ enabledOWAFetch: false })
                 chrome.storage.local.set({ additionalNotificationOnNewMail: false })
                 OWAFetchActive.value = !OWAFetchActive.value
+                notificationOnNewEmailActive.value = false;
             }
         }
 
@@ -68,13 +69,22 @@ export default defineComponent({
             if (!autoLoginActive.value || !OWAFetchActive.value) return
 
             if (!notificationOnNewEmailActive.value) {
-                console.log("activated")
-                chrome.storage.local.set({ additionalNotificationOnNewMail : true })
+                //console.log("activated")
+                chrome.permissions.request({ permissions: ["notifications"] }, (granted) => {
+                    if (granted) {
+                        chrome.runtime.sendMessage({ cmd: "owa_notifications_enabled" })
+                        chrome.storage.local.set({ additionalNotificationOnNewMail : true })
+                    } else {
+                        alert('Du musst die Erlaubnis erteilen, um diese Funktion nutzen zu können!')
+                        return
+                    }
+                })
+            } else {
+                //console.log("disactivated")
+                chrome.storage.local.remove(['additionalNotificationOnNewMail'])
             }
-            if (notificationOnNewEmailActive.value) {
-                console.log("disactivated")
-                chrome.storage.local.set({ additionalNotificationOnNewMail : false })
-            }
+
+            notificationOnNewEmailActive.value = !notificationOnNewEmailActive.value;
         }
 
         return {

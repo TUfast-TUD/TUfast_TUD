@@ -165,19 +165,12 @@ chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalN
   if (await credentials.userDataExists('zih') && result.enabledOWAFetch) {
     await owaFetch.enableOWAFetch()
   }
+
+  // When no notifications are enabled, there is nothing to do anymore
+  if (!result.additionalNotificationOnNewMail) return
   // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, (granted: boolean) => {
-    if (granted && result.additionalNotificationOnNewMail) {
-      // register listener for owaFetch notifications
-      chrome.notifications.onClicked.addListener(async (id) => {
-        if (id === 'tuFastNewEmailNotification') {
-          // Promisified until usage of Manifest V3
-          await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
-        }
-      })
-    }
-    resolve()
-  }))
+  const notificationAccess = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, resolve))
+  if (notificationAccess) owaFetch.registerNotificationClickListener()
 })
 
 // Register header listener
@@ -228,9 +221,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'read_mail_owa':
       owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
       break
+    case 'enable_owa_fetch':
+      owaFetch.enableOWAFetch()
+      break;
     case 'disable_owa_fetch':
       owaFetch.disableOwaFetch()
       break
+    case 'owa_notifications_enabled':
+      owaFetch.registerNotificationClickListener()
+      break;
     case 'reload_extension':
       chrome.runtime.reload()
       break
