@@ -1,5 +1,5 @@
 <template>
-    <p class="max-line">Finde alle deine OPAL-Kurse direkt im Dashboard. öffne das Dashboard oben rechts oder mit Alt+Q.</p>
+    <p class="max-line">Finde alle deine OPAL-Kurse direkt im Dashboard. Öffne das Dashboard oben rechts oder mit Alt+Q.</p>
 
     <Link @click="openShortcutSettings()" txt="Hier kannst du die Shortcuts ändern" />
    

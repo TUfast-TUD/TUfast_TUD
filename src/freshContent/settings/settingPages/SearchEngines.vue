@@ -8,14 +8,15 @@
 
     <p class="search-terms">
         tumail → Outlook Web App<br />
-        OPAL → OPAL<br />
+        opal → OPAL<br />
         tucloud → Cloudstore TU Dresden<br />
         hisqis → Hisqis TU Dresden<br />
         selma → selma TU Dresden<br />
         jexam → jExam<br />
         tumatrix → Matrix-Chat TU Dresden<br />
-        magma → Magma TU Dresden<br />
-        tumed → eportal.med.tu-dresden
+        tumed → eportal.med.tu-dresden<br />
+        slub → SLUB Dresden<br />
+        videocampus → Videocampus Sachsen
     </p>
 </template>
 
