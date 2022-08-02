@@ -148,8 +148,9 @@ chrome.commands.onCommand.addListener(async (command) => {
 chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
   try {
     const r = JSON.parse(resp.selectedRocketIcon)
+    if(!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
     chrome.browserAction.setIcon({
-      path: r.link
+      path: r.iconPathUnlocked || 'assets/icons/RocketIcons/default_128px.png'
     })
   } catch (e) {
     console.log(`Cannot parse rocket icon: ${resp}`)

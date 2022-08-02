@@ -7,7 +7,7 @@
         />
         <div class="rocket-select__rockets">
             <div v-for="(rocket, index) in rockets" :key="index" class="rocket-select__rocket">
-                <img @click="select(index, rocket.iconPathUnlocked)" :class="`rocket-select__image ${index === 0 ? 'rocket-select__image--invert' : ''}`" :src="rocket.iconPathUnlocked">
+                <img @click="select(index)" :class="`rocket-select__image ${index === 0 ? 'rocket-select__image--invert' : ''}`" :src="rocket.iconPathUnlocked">
                 <Link v-if="rocket.link" :href="rocket.link" target="_blank" :txt="rocket.unlocked" />
                 <Link v-else-if="isFirefox" :href="rocket.linkFirefox" target="_blank" :txt="rocket.unlocked" />
                 <Link v-else-if="rocket.linkChromium" :href="rocket.linkChromium" target="_blank" :txt="rocket.unlocked" />
@@ -33,12 +33,13 @@ export default defineComponent({
 
         const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
 
-        const select = (index : number, iconPath : string) => {
+        const select = (index : number) => {
             pos.value = 100 * index
 
-            chrome.storage.local.set({ selectedRocketIcon: `{ "id": 1, link: "${iconPath}" }` }, () => {})
-            chrome.storage.local.set({ selectedRocketId : index }, () => {})
-            chrome.browserAction.setIcon({ path: iconPath })
+            const rocket = rockets[index]
+            chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) })
+            //chrome.storage.local.set({ selectedRocketId : index }, () => {})
+            chrome.browserAction.setIcon({ path: rocket.iconPathUnlocked })
         }
 
         onMounted(() => chrome.storage.local.get("selectedRocketId", (res) => { pos.value = 100 * res.selectedRocketId }))
