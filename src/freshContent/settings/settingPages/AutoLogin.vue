@@ -55,9 +55,9 @@ export default defineComponent({
             
             if (target.disabled) return
 
-            chrome.storage.local.set({ isEnabled: true }, () => {}) // activate auto login feature
-            chrome.runtime.sendMessage({ cmd: "clear_badge" })
-            chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { asdf: username.value, fdsa: password.value } })
+            chrome.storage.local.set({ isEnabled: true }) // activate auto login feature
+            //chrome.runtime.sendMessage({ cmd: "clear_badge" })
+            chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user: username.value, pass: password.value } }, () => {})
             username.value = ""
             password.value = ""
             autoLoginActive.value = true
