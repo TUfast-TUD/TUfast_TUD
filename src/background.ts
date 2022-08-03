@@ -1,6 +1,7 @@
 'use strict'
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
+import rockets from "./freshContent/rockets.json"
 
 // eslint-disable-next-line no-unused-vars
 const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
@@ -15,8 +16,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         dashboardDisplay: 'favoriten',
         fwdEnabled: true,
         encryptionLevel: 3,
-        availableRockets: ['RI_default'],
-        selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}',
+        availableRockets: ['default'],
+        selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
         studiengang: 'general'
       })
@@ -94,15 +95,32 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       }
 
       // Upgrading availableRockets
-      const avRockets = currentSettings.availableRockets || ['RI_default']
-      if (savedClicks > 250 && !avRockets.includes('RI4')) avRockets.push('RI4')
-      if (savedClicks > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5')
-      if (currentSettings.Rocket === 'colorful' && currentSettings.foundEasteregg === undefined) {
-        updateObj.foundEasteregg = true
-        updateObj.selectedRocketIcon = '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}'
-        avRockets.push('RI3')
+      let avRockets: string[] = currentSettings.availableRockets || ['default']
+      // Renaming the rockets
+      avRockets = avRockets.map(rocket => {
+        switch (rocket) {
+          case 'RI_default': return 'default'
+          case 'RI1': return 'whatsapp'
+          case 'RI2': return 'email'
+          case 'RI3': return 'easteregg'
+          case 'RI4': return '250clicks'
+          case 'RI5': return '2500clicks'
+          case 'RI6': return 'webstore'
+          default: return rocket
+        }
+      })
+      // Making things unique
+      avRockets = avRockets.filter((value, index, array) => array.indexOf(value) === index)
+
+      if (savedClicks >= 250 && !avRockets.includes('250clicks')) avRockets.push('250clicks')
+      if (savedClicks >= 2500 && !avRockets.includes('2500clicks')) avRockets.push('2500clicks')
+      if (currentSettings.Rocket === 'colorful') {
+        if (!currentSettings.foundEasteregg) updateObj.foundEasteregg = true
+
+        if (!avRockets.includes('easteregg')) avRockets.push('easteregg')
+        updateObj.selectedRocketIcon = rockets.easteregg
         // Promisified until usage of Manifest V3
-        await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_128px.png' }, resolve))
+        await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rockets.easteregg.iconPathUnlocked }, resolve))
         // Promisified until usage of Manifest V3
         await new Promise<void>((resolve) => chrome.storage.local.remove(['Rocket'], resolve))
       }
@@ -149,14 +167,10 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
   try {
     const r = JSON.parse(resp.selectedRocketIcon)
     if(!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
-    chrome.browserAction.setIcon({
-      path: r.iconPathUnlocked || 'assets/icons/RocketIcons/default_128px.png'
-    })
+    chrome.browserAction.setIcon({ path: r.iconPathUnlocked || rockets.default.iconPathUnlocked })
   } catch (e) {
     console.log(`Cannot parse rocket icon: ${resp}`)
-    chrome.browserAction.setIcon({
-      path: 'assets/icons/RocketIcons/default_128px.png'
-    })
+    chrome.browserAction.setIcon({ path: rockets.default.iconPathUnlocked })
   }
 })
 
@@ -327,8 +341,8 @@ async function saveClicks (counter: number) {
   // make rocketIcons available if appropriate
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
-  if (savedClickCounter > 250 && !availableRockets.includes('RI4')) availableRockets.push('RI4')
-  if (savedClickCounter > 2500 && !availableRockets.includes('RI5')) availableRockets.push('RI5')
+  if (savedClickCounter >= 250 && !availableRockets.includes('250clicks')) availableRockets.push('250clicks')
+  if (savedClickCounter >= 2500 && !availableRockets.includes('2500clicks')) availableRockets.push('2500clicks')
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ availableRockets }, resolve))
 }

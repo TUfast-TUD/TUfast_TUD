@@ -6,12 +6,10 @@
             :style="`--pos: ${pos}%`"
         />
         <div class="rocket-select__rockets">
-            <div v-for="(rocket, index) in rockets" :key="index" class="rocket-select__rocket">
-                <img @click="select(index)" :class="`rocket-select__image ${index === 0 ? 'rocket-select__image--invert' : ''}`" :src="rocket.iconPathUnlocked">
-                <Link v-if="rocket.link" :href="rocket.link" target="_blank" :txt="rocket.unlocked" />
-                <Link v-else-if="isFirefox" :href="rocket.linkFirefox" target="_blank" :txt="rocket.unlocked" />
-                <Link v-else-if="rocket.linkChromium" :href="rocket.linkChromium" target="_blank" :txt="rocket.unlocked" />
-                <p v-else class="rocket-select__text">{{ rocket.unlocked }}</p>
+            <div v-for="(rocket, key, index) in rockets" :key="index" class="rocket-select__rocket">
+                <img @click="select(rocket, index)" :class="`rocket-select__image ${index === 0 ? 'rocket-select__image--invert' : ''}`" :src="getIcon(rocket)">
+                <Link v-if="getLink(rocket)" :href="getLink(rocket)" @click="unlockRocket(key)" target="_blank" :txt="getText(rocket)" />
+                <p v-else class="rocket-select__text">{{ getText(rocket) }}</p>
             </div>
         </div>
     </div>
@@ -20,7 +18,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 
-import rockets from "../rockets.json"
+import rockets from "../../rockets.json"
 
 import Link from './Link.vue'
 
@@ -30,27 +28,75 @@ export default defineComponent({
     },
     setup() {
         const pos = ref(0)
+        const availableRockets = ref(['default'])
+        const selectedId = ref('default')
 
-        const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
+        const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo) // attention: no failsave browser detection    
 
-        const select = (index : number) => {
-            pos.value = 100 * index
+        onMounted(async () => {
+            // Load rockets
+            // Promisified until usage of Manifest V3
+            const {availableRockets: av, selectedRocketIcon} = await new Promise<any>((resolve) => chrome.storage.local.get(['selectedRocketIcon', 'availableRockets'], resolve))
+            
+            availableRockets.value = [...av] || ['default']
+            // No exceptions pls
+            selectedId.value = (() => {
+                try {
+                    return JSON.parse(selectedRocketIcon).id
+                } catch {
+                    return 'default'
+                }
+            })()
 
-            const rocket = rockets[index]
-            chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) })
-            //chrome.storage.local.set({ selectedRocketId : index }, () => {})
-            chrome.browserAction.setIcon({ path: rocket.iconPathUnlocked })
+            pos.value = 100 * Object.keys(rockets).indexOf(selectedId.value) 
+        })
+
+        const isUnlocked = (rocketObj: any) => {
+            if (!rocketObj || !rocketObj.id) return false
+            else return availableRockets.value.includes(rocketObj.id)
         }
 
-        onMounted(() => chrome.storage.local.get("selectedRocketId", (res) => { pos.value = 100 * res.selectedRocketId }))
+        const select = (rocketObj: any, index: number) => {
+            if (!isUnlocked(rocketObj)) return
+
+            pos.value = 100 * index
+
+            chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocketObj) })
+            chrome.browserAction.setIcon({ path: rocketObj.iconPathUnlocked })
+        }
+
+        const getIcon = (rocketObj: any) => {
+            return chrome.runtime.getURL(isUnlocked(rocketObj) ? rocketObj.iconPathUnlocked : rocketObj.iconPathBeforeUnlock)
+        }
+
+        const getLink = (rocketObj: any): string|undefined => {
+            return rocketObj.link || (isFirefox ? rocketObj.linkFirefox : rocketObj.linkChromium)
+        }
+
+        const getText = (rocketObj: any) => {
+            return isUnlocked(rocketObj) ? rocketObj.unlocked : rocketObj.beforeUnlock
+        }
+
+        const unlockRocket = (rocketId: string) => {
+            if (availableRockets.value.includes(rocketId)) return
+            availableRockets.value.push(rocketId)
+
+            const update: any = { availableRockets: [...availableRockets.value] }
+            if (rocketId === 'webstore') update.mostLikelySubmittedReview = true
+            chrome.storage.local.set(update)
+        }
 
         return {
             rockets,
             pos,
             select,
-            isFirefox,
+            getLink,
+            getText,
+            getIcon,
+            isUnlocked,
+            unlockRocket
         }
-    },
+    }
 })
 </script>
 

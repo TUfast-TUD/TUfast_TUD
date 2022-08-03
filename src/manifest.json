@@ -299,7 +299,6 @@
   },
   "web_accessible_resources": [
     "assets/*",
-    "assets/icons/RocketIcons/default_128px.png",
     "contentScripts/forward/searchEngines/common.js",
     "contentScripts/login/common.js",
     "contentScripts/other/hisqis/*",
