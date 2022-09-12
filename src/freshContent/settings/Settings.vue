@@ -49,7 +49,7 @@ import Toggle from './components/Toggle.vue'
 
 // Settings Data (Names and Icons)
 import settings from './settings.json'
-// Temporary fix: We need to import the Componentes for the icons manually as no global usage is possible
+// Temporary fix: We need to import the Components for the icons manually as no global usage is possible
 // But we need to do this in SettingsTile.
 
 type setting = {
