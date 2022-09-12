@@ -25,20 +25,23 @@
             :error-message="currentLogin.passwordError"
         />
 
-        <Button @click="saveUserData" title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" />
-        <Button @click="deleteUserData" title="Daten löschen" class="button--secondary" />
+        <Button @click="submitSave" title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" />
+        <Button @click="submitDelete" title="Daten löschen" class="button--secondary" />
     </div>
 </template>
 
 <script lang="ts">
 import { ref, defineComponent, watchEffect } from 'vue'
 
+// components
 import Input from '../components/Input.vue'
 import Button from "../components/Button.vue"
 import LoginTabs from '../components/LoginTabs.vue'
 
+// composables
 import { useLogins } from '../composables/logins'
 import { useChrome } from '../composables/chrome'
+import { useUserData } from '../composables/user-data'
 
 export default defineComponent({
     components: {
@@ -48,10 +51,9 @@ export default defineComponent({
     },
     setup() {
         const { logins } = useLogins()
-        const {
-            setChromeLocalStorage,
-            sendChromeRuntimeMessage,
-        } = useChrome()
+        const { sendChromeRuntimeMessage } = useChrome()
+        const { saveUserData, deleteUserData } = useUserData()
+
         const currentLogin = ref(logins[0])
 
         const username = ref("")
@@ -69,34 +71,27 @@ export default defineComponent({
             }) as boolean
         )
 
-        const saveUserData = ($event : MouseEvent) => {
+        const submitSave = async ($event : MouseEvent) => {
             const target = $event.target as HTMLButtonElement
             
             if (target.disabled) return
 
-            setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
-            sendChromeRuntimeMessage({
-                cmd: "set_user_data",
-                userData: { user: username.value, pass: password.value },
-                platform: currentLogin.value.id
-            })
+            // await this one to get back the new value in last line, otherwise could run too late
+            await saveUserData(username.value, password.value, currentLogin.value.id)
+
+            // reset values
             username.value = ""
             password.value = ""
-            currentLogin.value.state = true
+            currentLogin.value.state =
+            await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: currentLogin.value.id }) as boolean
 
         }
 
-        const deleteUserData = () => {
-            sendChromeRuntimeMessage({ cmd: "clear_badge" })
-            sendChromeRuntimeMessage({ cmd: "delete_user_data", platform: currentLogin.value.id })
-
-            // deactivate owa fetch
-            if (currentLogin.value.id === 'zih') {
-                sendChromeRuntimeMessage({ cmd: "disable_owa_fetch" })
-                setChromeLocalStorage({ enabledOWAFetch: false })
-                setChromeLocalStorage({ additionalNotificationOnNewMail: false })
-            }
-            currentLogin.value.state = false
+        const submitDelete = async () => {
+            // await this one to get back the new value in last line, otherwise could run too late
+            await deleteUserData(currentLogin.value.id)
+            currentLogin.value.state = 
+            await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: currentLogin.value.id }) as boolean
         }
 
         return {
@@ -107,8 +102,8 @@ export default defineComponent({
             usernameValid,
             passwordValid,
             autoLoginActive,
-            saveUserData, 
-            deleteUserData,
+            submitSave, 
+            submitDelete,
         }
         
     },

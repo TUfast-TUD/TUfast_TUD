@@ -29,7 +29,6 @@ export default defineComponent({
         }
 
         const click = (e : Event) => {
-            console.log("clicked!")
             let target = e.target as HTMLElement
             if(target.parentElement?.classList.contains("settings-tile"))
                 target = target.parentElement

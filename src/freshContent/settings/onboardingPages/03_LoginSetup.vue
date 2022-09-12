@@ -20,7 +20,6 @@ export default defineComponent({
       const accept = ref(false)
 
       const emitAccept = () => {
-          console.log(accept.value)
           emit("accept", { value: accept.value })
       }
 

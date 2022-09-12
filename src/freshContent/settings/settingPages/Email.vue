@@ -69,7 +69,6 @@ export default defineComponent({
             if (!autoLoginActive.value || !OWAFetchActive.value) return
 
             if (!notificationOnNewEmailActive.value) {
-                //console.log("activated")
                 chrome.permissions.request({ permissions: ["notifications"] }, (granted) => {
                     if (granted) {
                         chrome.runtime.sendMessage({ cmd: "owa_notifications_enabled" })
@@ -80,7 +79,6 @@ export default defineComponent({
                     }
                 })
             } else {
-                //console.log("disactivated")
                 chrome.storage.local.remove(['additionalNotificationOnNewMail'])
             }
 

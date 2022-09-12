@@ -25,17 +25,19 @@ import { defineComponent, ref } from '@vue/runtime-core'
 import Onboarding from '../components/Onboarding.vue'
 import Setting from '../components/Setting.vue'
 
+import { useChrome } from '../composables/chrome'
+
 export default defineComponent({
     components: {
     Onboarding,
     Setting,
 },
     setup() {
+        const { setChromeLocalStorage } = useChrome()
+
         const searchEngineActive = ref(true)
-        // chrome.storage.local.get(['fwdEnabled'], (res) => searchEngineActive.value = res.fwdEnabled)
-        const searchEngine = () => chrome.storage.local.set({ fwdEnabled: !searchEngineActive.value }, () => {})
+        const searchEngine = () => setChromeLocalStorage({ fwdEnabled: !searchEngineActive.value })
         searchEngine()
-        console.log(searchEngineActive.value)
 
         return { searchEngine, searchEngineActive }
 

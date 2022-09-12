@@ -25,9 +25,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/runtime-core'
+import { defineComponent, ref, computed, watch } from '@vue/runtime-core'
+
+// components
 import Onboarding from '../components/Onboarding.vue'
 import Input from '../components/Input.vue'
+
+// composables
+import { useUserData } from '../composables/user-data'
 
 export default defineComponent({
     components: {
@@ -35,10 +40,18 @@ export default defineComponent({
     Input,
 },
     setup() {
+        const { saveUserData, } = useUserData()
         const username = ref("")
         const password = ref("")
         const usernameValid = ref(false)
         const passwordValid = ref(false)
+
+        const ready = computed(() => usernameValid.value && passwordValid.value)
+
+        watch(ready, async () => {
+            if (ready.value === true)
+                await saveUserData(username.value, password.value, 'zih') 
+        }) 
 
         return { username, password, usernameValid, passwordValid }
     },
