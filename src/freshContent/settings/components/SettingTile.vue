@@ -107,7 +107,6 @@ export default defineComponent({
         filter: brightness(1)
 
     &--unfocus
-        transform: scale(0.95)
         filter: brightness(.6)
 
     &--animate
