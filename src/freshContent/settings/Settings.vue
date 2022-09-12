@@ -123,7 +123,7 @@ export default defineComponent({
           }
 
         const handleSignup = (state : { value : boolean }) => {
-            stepWidth.value = state.value === true ? 1 : 2;
+            stepWidth.value = state.value === true ? 1 : 3;
         }
 
         const html = document.documentElement

@@ -1,5 +1,8 @@
 <template>
-    <div :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`" @click="emitState()">
+    <div
+        :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`"
+        @click="emitState()"
+    >
         <PhCheck v-show="toggled" class="toggle__icon" />    
     </div>    
 </template>
@@ -20,7 +23,7 @@ export default defineComponent({
         },
     },
     setup(props, { emit }) {
-        const toggled = ref(false)
+        const toggled = ref(props.modelValue)
 
         watch(props, () => toggled.value = props.modelValue)
 

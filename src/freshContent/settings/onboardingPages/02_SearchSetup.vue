@@ -36,11 +36,10 @@ export default defineComponent({
         const { setChromeLocalStorage } = useChrome()
 
         const searchEngineActive = ref(true)
-        const searchEngine = () => setChromeLocalStorage({ fwdEnabled: !searchEngineActive.value })
+        const searchEngine = () => setChromeLocalStorage({ fwdEnabled: searchEngineActive.value })
         searchEngine()
 
         return { searchEngine, searchEngineActive }
-
     },
 })
 
