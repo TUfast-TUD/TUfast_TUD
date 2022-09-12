@@ -15,13 +15,12 @@
     </div>
     <span
       :style="`opacity: ${!valid && modelValue.length > 0 ? 1 : 0}`"
-      class="error-message"
     >{{ errorMessage }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed, onMounted } from 'vue'
+import { defineComponent, ref, PropType, computed, onMounted, watchEffect } from 'vue'
 import { PhXCircle, PhCheckCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
@@ -68,15 +67,17 @@ export default defineComponent({
       const target = $event.target as HTMLInputElement
       emit('update:modelValue', target.value)
       emit('update:valid', correctPattern.value)
+    }
 
+    const correctPattern = computed(() => props.pattern.test(props.modelValue))
+
+    watchEffect(() => {
       if (props.modelValue.length > 0) {
         state.value = correctPattern.value ? 'input--correct' : 'input--false'
         statusIcon.value = correctPattern.value ? 'PhCheckCircle' : 'PhXCircle'
         emit('update:valid', correctPattern.value)
       } else { state.value = '' }
-    }
-
-    const correctPattern = computed(() => props.pattern.test(props.modelValue))
+    })
 
     onMounted(() => {
       if (props.column) { document.querySelectorAll('.input-container')?.forEach((el) => el.classList.add('input-container--column')) }
