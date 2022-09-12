@@ -42,6 +42,7 @@
     <CustomButton
       title="Daten löschen"
       class="button--secondary"
+      :disabled="!currentLogin.state"
       @click="submitDelete"
     />
   </div>
@@ -99,6 +100,8 @@ export default defineComponent({
       // reset values
       username.value = ''
       password.value = ''
+      usernameValid.value = false
+      passwordValid.value = false
       currentLogin.value.state =
             await sendChromeRuntimeMessage({ cmd: 'check_user_data', platform: currentLogin.value.id }) as boolean
     }

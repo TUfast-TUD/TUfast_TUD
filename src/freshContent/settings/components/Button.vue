@@ -47,14 +47,19 @@ export default defineComponent({
         transform: scale(.95)
         outline-offset: .25rem
 
-    &--secondary
-        background-color: hsl(var(--clr-grey), .8 )
-        &:hover
-            outline: none
-
     &:disabled
         background-color: hsl(var(--clr-primary), .5)
         cursor: not-allowed
         &:hover
             outline: none
+
+    &--secondary
+        background-color: hsl(var(--clr-grey), .8 )
+        &:hover
+            outline: none
+
+        &:disabled
+          background-color: hsl(var(--clr-grey), .6)
+
+
 </style>
