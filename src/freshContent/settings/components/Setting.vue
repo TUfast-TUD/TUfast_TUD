@@ -4,7 +4,7 @@
       v-model="toggleState"
       :disabled="disabled"
       class="setting__toggle"
-      @click="$emit('changedSetting')"
+      @click="$emit('changed-setting')"
     />
     <span class="max-line">{{ txt }}</span>
   </div>
@@ -37,7 +37,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['update:modelValue', 'changedSetting'],
+  emits: ['update:modelValue', 'changed-setting'],
   setup (props, { emit }) {
     const toggleState = ref(props.modelValue)
 
