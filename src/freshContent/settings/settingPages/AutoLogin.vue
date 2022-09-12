@@ -1,7 +1,8 @@
 <template>
-    <h2>Werde in alle Online-Portale der TU Dresden automatisch angemeldet.</h2>
-    <h2 :class="`state ${autoLoginActive ? 'state--active' : 'state--inactive'}`">{{ autoLoginActive ? "aktiv" : "nicht aktiviert" }}</h2>
-    <p class="max-line p-margin">Dafür müssen deine selma Login-Daten sicher auf diesem PC gespeichert werden.
+    <LoginTabs v-model="currentLogin" :options="logins" />
+    <h2>{{ currentLogin.title }}</h2>
+    <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">{{ currentLogin.state ? "aktiv" : "nicht aktiviert" }}</h2>
+    <p class="max-line p-margin">Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden.
         Die Daten werden nur lokal und verschlüsselt gespeichert.
         Du kannst sie jederzeit löschen.</p>
 
@@ -9,19 +10,19 @@
     <div class="form">
         <Input
             v-model="username"
-            :pattern="/^(([s]{1}\d{7})|([a-z]{2,6}\d{3}[a-z]{1}))$/"
-            placeholder="Nutzername (selma-Login)"
+            :pattern="currentLogin.usernamePattern"
+            :placeholder="currentLogin.usernamePlaceholder"
             v-model:valid="usernameValid"
-            errorMessage="Ohne @mailbox.tu-dresden.de, also z.B. 's3276763' oder 'luka075d'"
+            :error-message="currentLogin.usernameError"
         />
 
         <Input
             v-model="password"
-            :pattern="/.{5,}/"
-            placeholder="Passwort (selma-Login)"
+            :pattern="currentLogin.passwordPattern"
+            :placeholder="currentLogin.passwordPlaceholder"
             type="password"
             v-model:valid="passwordValid"
-            errorMessage="Das Passwort muss mindestens 5 Zeichen haben!"
+            :error-message="currentLogin.passwordError"
         />
 
         <Button @click="saveUserData" title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" />
@@ -30,17 +31,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, watchEffect } from 'vue'
 
 import Input from '../components/Input.vue'
 import Button from "../components/Button.vue"
+import LoginTabs from '../components/LoginTabs.vue'
+
+import { useLogins } from '../composables/logins'
+import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
     components: {
         Input,
         Button,
+        LoginTabs,
     },
     setup() {
+        const { logins } = useLogins()
+        const {
+            setChromeLocalStorage,
+            getChromeLocalStorage,
+            sendChromeRuntimeMessage,
+        } = useChrome()
+        const currentLogin = ref(logins[0])
+
         const username = ref("")
         const password = ref("")
         const usernameValid = ref(false)
@@ -48,43 +62,53 @@ export default defineComponent({
 
         const autoLoginActive = ref(false)
 
-        onMounted(() => { chrome.storage.local.get(["isEnabled"], (res) => autoLoginActive.value = res.isEnabled) })
+        // get state of login
+        // watchEffect(async () => currentLogin.value.state = await getChromeLocalStorage("isEnabled") as boolean)
+        // watchEffect(async () => console.log(await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: 'selma' })))
+        watchEffect(async () =>  {
+            const res = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: currentLogin.value.state }, (res) => resolve(res)))
+            console.log(res)
+        })
 
         const saveUserData = ($event : MouseEvent) => {
             const target = $event.target as HTMLButtonElement
             
             if (target.disabled) return
 
-            chrome.storage.local.set({ isEnabled: true }) // activate auto login feature
-            //chrome.runtime.sendMessage({ cmd: "clear_badge" })
-            chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user: username.value, pass: password.value } }, () => {})
+            setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
+            sendChromeRuntimeMessage({ cmd: "clear_badge" })
+            sendChromeRuntimeMessage({ cmd: "set_user_data", userData: { asdf: username.value, fdsa: password.value } })
             username.value = ""
             password.value = ""
-            autoLoginActive.value = true
+            currentLogin.value.state = true
 
         }
 
         const deleteUserData = () => {
-            chrome.runtime.sendMessage({ cmd: "clear_badge" })
-            chrome.storage.local.set({ Data: "undefined" }, function () { }) // delete user data
-            chrome.storage.local.set({ isEnabled: false }, function () { }) // deactivate auto login feature
+            sendChromeRuntimeMessage({ cmd: "clear_badge" })
+            setChromeLocalStorage({ Data: "undefined" }) // delete user data
+            setChromeLocalStorage({ isEnabled: false }) // deactivate auto login feature
+
             // delete courses in dashboard
-            chrome.storage.local.set({ meine_kurse: false }, function () { })
-            chrome.storage.local.set({ favoriten: false }, function () { })
+            setChromeLocalStorage({ meine_kurse: false })
+            setChromeLocalStorage({ favoriten: false })
+
             // deactivate owa fetch
-            chrome.runtime.sendMessage({ cmd: "disable_owa_fetch" })
-            chrome.storage.local.set({ enabledOWAFetch: false })
-            chrome.storage.local.set({ additionalNotificationOnNewMail: false })
-            autoLoginActive.value = false
+            sendChromeRuntimeMessage({ cmd: "disable_owa_fetch" })
+            setChromeLocalStorage({ enabledOWAFetch: false })
+            setChromeLocalStorage({ additionalNotificationOnNewMail: false })
+            currentLogin.value.state = false
         }
 
         return {
+            logins, 
+            currentLogin,
             username,
             password,
             usernameValid,
             passwordValid,
             autoLoginActive,
-            saveUserData,
+            saveUserData, 
             deleteUserData,
         }
         
@@ -111,4 +135,7 @@ export default defineComponent({
         color: hsl(var(--clr-primary))
     &--inactive
         color: hsl(var(--clr-alert))
+
+.tabs
+    display: flex
 </style>

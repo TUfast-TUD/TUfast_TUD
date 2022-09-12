@@ -49,9 +49,10 @@ export default defineComponent({
         background-color: hsl(var(--clr-grey), .8 )
         &:hover
             outline: none
-
+        
     &:disabled
         background-color: hsl(var(--clr-primary), .5)
+        cursor: not-allowed
         &:hover
             outline: none
 </style>
