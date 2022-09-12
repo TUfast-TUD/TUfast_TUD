@@ -63,13 +63,13 @@ export default defineComponent({
     const statusIcon = ref('PhCheckCircle')
     const state = ref('')
 
+    const correctPattern = computed(() => props.pattern.test(props.modelValue))
+
     const emitState = ($event : Event) => {
       const target = $event.target as HTMLInputElement
       emit('update:modelValue', target.value)
       emit('update:valid', correctPattern.value)
     }
-
-    const correctPattern = computed(() => props.pattern.test(props.modelValue))
 
     watchEffect(() => {
       if (props.modelValue.length > 0) {

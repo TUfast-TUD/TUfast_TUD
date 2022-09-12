@@ -10,7 +10,7 @@
       v-model="username"
       v-model:valid="usernameValid"
       placeholder="Nutzername (selma-Login)"
-      :pattern="/^(([s]{1}\d{7})|([a-z]{2,6}\d{3}[a-z]{1}))$/"
+      :pattern="/^(s{1}\d{7}|[a-z]{4}\d{3}[a-z])$/i"
       error-message="Ohne @mailbox.tu-dresden.de, also z.B. 's3276763' oder 'luka075d'"
       :column="true"
     />

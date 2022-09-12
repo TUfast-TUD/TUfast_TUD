@@ -11,7 +11,7 @@ const logins: Login[] = [
     name: 'Selma',
     state: false,
     usernamePlaceholder: 'Nutzername (selma-Login)',
-    usernamePattern: /^(([s]{1}\d{7})|([a-z]{2,6}\d{3}[a-z]{1}))$/,
+    usernamePattern: /^(s{1}\d{7}|[a-z]{4}\d{3}[a-z])$/,
     usernameError: "Ohne @mailbox.tu-dresden.de, also z.B. 's3276763' oder 'luka075d'",
     passwordPlaceholder: 'Passwort (selma-Login)',
     passwordPattern: /.{5,}/,
