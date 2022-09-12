@@ -240,14 +240,20 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
       break
     case 'enable_owa_fetch':
-      owaFetch.enableOWAFetch()
-      break
+      owaFetch.enableOWAFetch().then(sendResponse)
+      return true
     case 'disable_owa_fetch':
       owaFetch.disableOwaFetch()
       break
-    case 'owa_notifications_enabled':
-      owaFetch.registerNotificationClickListener()
+    case 'enable_owa_notification':
+      owaFetch.enableOWANotifications().then(sendResponse)
+      return true
+    case 'disable_owa_notification':
+      owaFetch.disableOWANotifications()
       break
+    case 'check_owa_status':
+      owaFetch.checkOWAStatus().then(sendResponse)
+      return true
     case 'reload_extension':
       chrome.runtime.reload()
       break

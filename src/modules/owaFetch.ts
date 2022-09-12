@@ -156,22 +156,37 @@ function getAllChromeTabs (): Promise<chrome.tabs.Tab[]> {
 }
 
 // start OWA fetch funtion based on interval
-export async function enableOWAFetch () {
+export async function enableOWAFetch (): Promise<boolean> {
   // console.log('starting to fetch from owa...');
+
+  // Promisified until usage of Manifest V3
+  const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['tabs'] }, resolve))
+  if (granted) {
+    await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: true }, resolve))
+  } else {
+    // Promisified until usage of Manifest V3
+    await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
+    alert("TUfast braucht diese Berechtigung, um regelm\u00e4ssig alle Mails abzurufen. Bitte dr\u00fccke auf 'Erlauben'.")
+    return false
+  }
+
   await owaFetch()
   chrome.alarms.create('fetchOWAAlarm', { delayInMinutes: 1, periodInMinutes: 5 })
   chrome.alarms.onAlarm.addListener(async (alarm) => {
     if (alarm.name === 'fetchOWAAlarm') await owaFetch()
   })
+  return true
 }
 
 export async function disableOwaFetch () {
   // console.log('stopped owa connection')
+  await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
+
   await setBadgeUnreadMails(0)
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.alarms.clear('fetchOWAAlarm', resolve))
   // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.remove(['numberOfUnreadMails'], resolve))
+  await new Promise<void>((resolve) => chrome.storage.local.remove(['numberOfUnreadMails', 'additionalNotificationOnNewMail'], resolve))
 }
 
 export async function readMailOWA (numberOfUnreadMails: number) {
@@ -250,6 +265,26 @@ export async function owaFetch () {
   await setBadgeUnreadMails(numberOfUnreadMails)
 }
 
+export async function enableOWANotifications (): Promise<boolean> {
+  // Promisified until usage of Manifest V3
+  const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['notifications'] }, resolve))
+  if (granted) {
+    await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: true }, resolve))
+  } else {
+    // Promisified until usage of Manifest V3
+    await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
+    alert("TUfast braucht diese Berechtigung, um dir zus\u00e4tzliche Benachrichtigungen zu senden. Bitte dr\u00fccke auf 'Erlauben'.")
+    return false
+  }
+
+  registerNotificationClickListener()
+  return true
+}
+
+export async function disableOWANotifications () {
+  await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
+}
+
 export function registerNotificationClickListener () {
   // register listener for owaFetch notifications
   chrome.notifications.onClicked.addListener(async (id) => {
@@ -258,4 +293,13 @@ export function registerNotificationClickListener () {
       await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
     }
   })
+}
+
+export async function checkOWAStatus (): Promise<{fetch: boolean, notification: boolean}> {
+  // Promisified until usage of Manifest V3
+  const result = await new Promise<any>((resolve) => chrome.storage.local.get(['enabledOWAFetch', 'additionalNotificationOnNewMail'], resolve))
+  return {
+    fetch: !!result.fetchOWA,
+    notification: !!result.additionalNotificationOnNewMail
+  }
 }
