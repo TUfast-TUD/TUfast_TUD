@@ -4,14 +4,14 @@
             <svg class="onboarding-btn__progress" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="45" :style="`--done: ${(percentDone/100) * 280}`" />
             </svg>
-            <ph-arrow-right class="onboarding-btn__arrow" />
+            <PhArrowRight class="onboarding-btn__arrow" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core"
-
+import { PhArrowRight } from "@dnlsndr/vue-phosphor-icons"
 
 export default defineComponent({
     props: {
@@ -19,6 +19,9 @@ export default defineComponent({
             type: Number as PropType<number>,
             required: true,
         },
+    },
+    components: {
+        PhArrowRight,
     },
 })
     

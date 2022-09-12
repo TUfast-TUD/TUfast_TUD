@@ -2,7 +2,7 @@
     <div class="dropdown">
         <div class="dropdown__dropdown">
             <span @click="clicked = !clicked" class="dropdown__title txt-bold">Studiengang</span>
-            <ph-caret-down
+            <PhCaretDown
                 @click="clicked = !clicked"
                 class="dropdown__arrow"
                 color="hsl(var(--clr-primary) )"
@@ -16,7 +16,7 @@
                 @click="setStudySubject(key)"
             >
 
-                <ph-caret-double-right class="dropdown-list__arrow" />
+                <PhCaretDoubleRight class="dropdown-list__arrow" />
                 <img v-if="study.fsr_icon" class="dropdown-list__image" :src="study.fsr_icon" :alt="`Das Icon des Studiengangs ${study.name}`">
                 <h3 class="dropdown-list__title">{{ study.name }}</h3>
             </div>
@@ -28,6 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
+import { PhCaretDown, PhCaretDoubleRight } from '@dnlsndr/vue-phosphor-icons'
 
 import studies from "../../studies.json"
 
@@ -60,6 +61,10 @@ export default defineComponent({
             selectedStudy,
         }
     },
+    components: {
+        PhCaretDown,
+        PhCaretDoubleRight,
+    }
 })
 </script>
 

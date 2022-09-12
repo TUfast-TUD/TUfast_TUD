@@ -3,7 +3,7 @@
     <div tabindex="0" @keydown.esc="close()" class="card">
             <div class="card__header">
                 <h1 class="card__title upper">{{ title }}</h1>
-                <ph-x class="card__close" @click="close()"></ph-x>
+                <PhX class="card__close" @click="close()" />
             </div>
             <div class="card__body">
                 <slot>Body</slot>
@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType } from 'vue'
+import { PhX } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
     props: {
@@ -43,6 +44,9 @@ export default defineComponent({
             close,
         }
     },
+    components: {
+        PhX,
+    }
 })
 </script>
 

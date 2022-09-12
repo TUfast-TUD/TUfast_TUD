@@ -1,7 +1,7 @@
 <template>
     <div class="hide-bg">
         <div class="onboarding onboarding--opening">
-            <ph-x v-if="currentStep !== steps" class="onboarding__close" @click="close()" />
+            <PhX v-if="currentStep !== steps" class="onboarding__close" @click="close()" />
             <div class="onboarding__main">
                 <slot/>
             </div>
@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from '@vue/runtime-core'
+import { PhX } from '@dnlsndr/vue-phosphor-icons'
 import Stepper from './Stepper.vue'
 import OnboardingButton from './OnboardingButton.vue'
 
@@ -27,6 +28,7 @@ export default defineComponent({
     components: {
         Stepper,
         OnboardingButton,
+        PhX,
     },
     props: {
         h1: {

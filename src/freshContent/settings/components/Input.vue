@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, PropType, computed, watchEffect, onMounted } from 'vue'
+import { PhXCircle, PhCheckCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
     props: {
@@ -43,11 +44,11 @@ export default defineComponent({
         }
     },
     setup(props, { emit }) {
-        const statusIcon = ref("ph-check-circle")
+        const statusIcon = ref("PhCheckCircle")
         const state = ref("")
 
         const emitState = (eventName : string, $event : Event) => {
-            const target = <HTMLInputElement>$event.target
+            const target = $event.target as HTMLInputElement
             emit(eventName, target.value)
         }
 
@@ -61,7 +62,7 @@ export default defineComponent({
         watchEffect(() => {
             if (props.modelValue.length > 0) {
                 state.value = correctPattern.value ? "input--correct" : "input--false"
-                statusIcon.value = correctPattern.value ? "ph-check-circle" : "ph-x-circle"
+                statusIcon.value = correctPattern.value ? "PhCheckCircle" : "PhXCircle"
                 emit("update:valid", correctPattern.value)
             }
             else
@@ -76,6 +77,10 @@ export default defineComponent({
         }
         
     },
+    components: {
+        PhXCircle,
+        PhCheckCircle,
+    }
 })
 </script>
 

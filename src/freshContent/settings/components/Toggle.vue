@@ -1,11 +1,12 @@
 <template>
     <div :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`" @click="emitState()">
-        <ph-check v-show="toggled" class="toggle__icon" />    
+        <PhCheck v-show="toggled" class="toggle__icon" />    
     </div>    
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from 'vue'
+import { PhCheck } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
     props: {
@@ -35,6 +36,9 @@ export default defineComponent({
             emitState,
         }        
     },
+    components: {
+        PhCheck,
+    }
 })
 </script>
 

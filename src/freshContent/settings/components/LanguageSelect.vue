@@ -1,6 +1,6 @@
 <template>
     <div class="language-select" disabled>
-        <ph-caret-double-right
+        <PhCaretDoubleRight
             class="language-select__selector"
             :class="selectorClass"
             @click.capture="switchSel($event)" />
@@ -14,6 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { PhCaretDoubleRight } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
     setup() {
@@ -51,10 +52,12 @@ export default defineComponent({
         return {
             switchSel,
             selectorClass,
-            languages
-        }
-        
+            languages,
+        }        
     },
+    components: {
+        PhCaretDoubleRight,
+    }
 })
 </script>
 

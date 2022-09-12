@@ -1,42 +1,42 @@
 [
     {
         "title": "Automatisches Anmelden",
-        "icon": "ph-lock-key",
+        "icon": "PhLockKey",
         "settingsPage": "AutoLogin"
     },
     {
         "title": "E-Mail Benachrichtigungen",
-        "icon": "ph-notification",
+        "icon": "PhNotification",
         "settingsPage": "Email"
     },
     {
         "title": "Opalkurse im Dashboard",
-        "icon": "ph-list-dashes",
+        "icon": "PhListDashes",
         "settingsPage": "OpalCourses"
     },
     {
         "title": "Opal personaliseren und verbessern",
-        "icon": "ph-sparkle",
+        "icon": "PhSparkle",
         "settingsPage": "ImproveOpal"
     },
     {
         "title": "Shortcuts",
-        "icon": "ph-gauge",
+        "icon": "PhGauge",
         "settingsPage": "Shortcuts"
     },
     {
         "title": "Abkürzungen in Suchmaschinen",
-        "icon": "ph-google-logo",
+        "icon": "PhGoogleLogo",
         "settingsPage": "SearchEngines"
     },
     {
         "title": "Raketen sammeln",
-        "icon": "ph-rocket",
+        "icon": "PhRocket",
         "settingsPage": "Rockets"
     },
     {
         "title": "Weiteres & Kontakt",
-        "icon": "ph-envelope-open",
+        "icon": "PhEnvelopeOpen",
         "settingsPage": "Contact"
     }
 ]

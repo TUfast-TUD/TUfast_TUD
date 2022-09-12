@@ -2,12 +2,12 @@
     <div class="statistics">
         <p class="txt-bold">Bereits gespart</p>
         <div class="statistics__clicks">
-                <ph-cursor />
+                <PhCursor />
                 <span class="txt-bold">{{ counter }}</span>
                 <span>{{ counter === 1 ? "Click" : "Clicks" }}</span>
         </div>
         <div class="statistics__minutes">
-            <ph-timer />
+            <PhTimer />
             <span class="txt-bold">{{ time.getMinutes(counter) }}min</span>
             <span>{{ time.getSeconds(counter) }}s</span>
         </div>
@@ -17,7 +17,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { PhCursor, PhTimer } from '@dnlsndr/vue-phosphor-icons'
 import { time } from '../utilities'
+
 export default defineComponent({
     setup() {
         const counter = ref<number>(0)
@@ -29,6 +31,10 @@ export default defineComponent({
         }
         
     },
+    components: {
+        PhCursor,
+        PhTimer,
+    }
 })
 </script>
 
