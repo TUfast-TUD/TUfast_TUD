@@ -23,7 +23,7 @@ const logins: Login[] = [
     name: "Slub",
     state: false,
     usernamePlaceholder: "Benutzernummer (SLUB-Login)",
-    usernamePattern: /[a-zA-Z]*/,
+    usernamePattern: /^[0-9]{7}$/,
     usernameError: "die Nutzernummer findest du u.a. auf deiner SLUB-Karte",
     passwordPlaceholder: "Passwort (SLUB-Login)",
     passwordPattern: /.{5,}/,

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watchEffect } from 'vue'
+import { ref, defineComponent, watchEffect } from 'vue'
 
 import Input from '../components/Input.vue'
 import Button from "../components/Button.vue"
@@ -50,7 +50,6 @@ export default defineComponent({
         const { logins } = useLogins()
         const {
             setChromeLocalStorage,
-            getChromeLocalStorage,
             sendChromeRuntimeMessage,
         } = useChrome()
         const currentLogin = ref(logins[0])
@@ -63,12 +62,12 @@ export default defineComponent({
         const autoLoginActive = ref(false)
 
         // get state of login
-        // watchEffect(async () => currentLogin.value.state = await getChromeLocalStorage("isEnabled") as boolean)
-        // watchEffect(async () => console.log(await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: 'selma' })))
-        watchEffect(async () =>  {
-            const res = await new Promise((resolve) => chrome.runtime.sendMessage({ cmd: 'check_user_data', platform: currentLogin.value.state }, (res) => resolve(res)))
-            console.log(res)
-        })
+        watchEffect(async () =>
+            currentLogin.value.state = await sendChromeRuntimeMessage({
+                cmd: "check_user_data",
+                platform: currentLogin.value.id
+            }) as boolean
+        )
 
         const saveUserData = ($event : MouseEvent) => {
             const target = $event.target as HTMLButtonElement
@@ -76,8 +75,11 @@ export default defineComponent({
             if (target.disabled) return
 
             setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
-            sendChromeRuntimeMessage({ cmd: "clear_badge" })
-            sendChromeRuntimeMessage({ cmd: "set_user_data", userData: { asdf: username.value, fdsa: password.value } })
+            sendChromeRuntimeMessage({
+                cmd: "set_user_data",
+                userData: { user: username.value, pass: password.value },
+                platform: currentLogin.value.id
+            })
             username.value = ""
             password.value = ""
             currentLogin.value.state = true
@@ -86,17 +88,14 @@ export default defineComponent({
 
         const deleteUserData = () => {
             sendChromeRuntimeMessage({ cmd: "clear_badge" })
-            setChromeLocalStorage({ Data: "undefined" }) // delete user data
-            setChromeLocalStorage({ isEnabled: false }) // deactivate auto login feature
-
-            // delete courses in dashboard
-            setChromeLocalStorage({ meine_kurse: false })
-            setChromeLocalStorage({ favoriten: false })
+            sendChromeRuntimeMessage({ cmd: "delete_user_data", platform: currentLogin.value.id })
 
             // deactivate owa fetch
-            sendChromeRuntimeMessage({ cmd: "disable_owa_fetch" })
-            setChromeLocalStorage({ enabledOWAFetch: false })
-            setChromeLocalStorage({ additionalNotificationOnNewMail: false })
+            if (currentLogin.value.id === 'zih') {
+                sendChromeRuntimeMessage({ cmd: "disable_owa_fetch" })
+                setChromeLocalStorage({ enabledOWAFetch: false })
+                setChromeLocalStorage({ additionalNotificationOnNewMail: false })
+            }
             currentLogin.value.state = false
         }
 
