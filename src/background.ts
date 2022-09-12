@@ -232,6 +232,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // Asynchronous response
       credentials.userDataExists(request.platform).then(sendResponse)
       return true // required for async sendResponse
+    case 'delete_user_data':
+      // Asynchronous response
+      credentials.deleteUserData(request.platform).then(sendResponse) // Response can probably be ignored
+      return true // required for async sendResponse
     case 'read_mail_owa':
       owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
       break
