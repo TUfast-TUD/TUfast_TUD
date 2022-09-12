@@ -11,7 +11,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core"
+<<<<<<< HEAD
 import { PhArrowRight } from "@dnlsndr/vue-phosphor-icons"
+=======
+>>>>>>> 7c23cf9cc81e96509fc1cc89852cc0820fdf04ee
 
 export default defineComponent({
     props: {

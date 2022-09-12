@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 // Components
 import ColorSwitch from "./components/ColorSwitch.vue"
@@ -70,13 +70,13 @@ import Contact from './settingPages/Contact.vue'
 
 // Onboarding Page Components
 import onboardingSteps from "./onboarding.json"
-import Welcome from "./onboardingPages/Welcome.vue"
-import SearchSetup from "./onboardingPages/SearchSetup.vue"
-import LoginSetup from './onboardingPages/LoginSetup.vue'
-import LoginAccept from './onboardingPages/LoginAccept.vue'
-import EMailSetup from './onboardingPages/EMailSetup.vue'
-import OpalSetup from './onboardingPages/OpalSetup.vue'
-import DoneSetup from './onboardingPages/DoneSetup.vue'
+import Welcome from "./onboardingPages/01_Welcome.vue"
+import SearchSetup from "./onboardingPages/02_SearchSetup.vue"
+import LoginSetup from './onboardingPages/03_LoginSetup.vue'
+import LoginAccept from './onboardingPages/04_LoginAccept.vue'
+import EMailSetup from './onboardingPages/05_EMailSetup.vue'
+import OpalSetup from './onboardingPages/06_OpalSetup.vue'
+import DoneSetup from './onboardingPages/07_DoneSetup.vue'
 
 export default defineComponent({
     components: {
@@ -111,10 +111,6 @@ export default defineComponent({
         const currentSetting = ref(settings[0])
         const stepWidth = ref(1)
         const animState = ref<"dark" | "light">("dark")
-
-        const test =  chrome.storage.local.get("hideWelcome", (res) => {
-            hideWelcome.value = res.hideWelcome
-        })
 
         const disableWelcome = () => {
             chrome.storage.local.set({ hideWelcome: true });
