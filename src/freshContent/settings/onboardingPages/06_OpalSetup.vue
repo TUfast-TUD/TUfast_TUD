@@ -1,24 +1,32 @@
 <template>
-        <h1 class="upper">Opal verbessern</h1>
-        <div class="info">
-            <Setting txt="PDF-Dokumente im Browser öffnen" :column="true" />
-            <Setting txt="PDF-Dokumente in neuem Tab öffnen" :column="true" />
-        </div>
+  <h1 class="upper">
+    Opal verbessern
+  </h1>
+  <div class="info">
+    <Setting
+      txt="PDF-Dokumente im Browser öffnen"
+      :column="true"
+    />
+    <Setting
+      txt="PDF-Dokumente in neuem Tab öffnen"
+      :column="true"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core'
-import Onboarding from '../components/Onboarding.vue'
+import { defineComponent } from 'vue'
+// import Onboarding from '../components/Onboarding.vue'
 import Setting from '../components/Setting.vue'
 
 export default defineComponent({
-    components: {
-    Onboarding,
-    Setting,
-},
-    setup() {
+  components: {
+    //    Onboarding,
+    Setting
+  },
+  setup () {
 
-    },
+  }
 })
 
 </script>

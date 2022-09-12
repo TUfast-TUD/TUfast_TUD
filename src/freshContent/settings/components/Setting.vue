@@ -1,13 +1,13 @@
 <template>
-    <div class="setting">
-        <Toggle
-            @click="$emit('changedSetting')"
-            v-model="toggleState"
-            :disabled="disabled"
-            class="setting__toggle" 
-        />
-            <span class="max-line">{{ txt }}</span>
-    </div>
+  <div class="setting">
+    <Toggle
+      v-model="toggleState"
+      :disabled="disabled"
+      class="setting__toggle"
+      @click="$emit('changedSetting')"
+    />
+    <span class="max-line">{{ txt }}</span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -16,45 +16,43 @@ import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import Toggle from './Toggle.vue'
 
 export default defineComponent({
-    components: {
-        Toggle,
+  components: {
+    Toggle
+  },
+  props: {
+    txt: {
+      type: String as PropType<string>,
+      required: true
     },
-    props: {
-        txt: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        modelValue: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        },
-        disabled: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        },
-        column: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        },
+    modelValue: {
+      type: Boolean as PropType<boolean>,
+      default: false
     },
-    setup(props, { emit }) {
-        const toggleState = ref(props.modelValue)
-
-        watch(props, () => toggleState.value = props.modelValue)
-
-        watch(toggleState, () => emit("update:modelValue", toggleState.value))
-
-        onMounted(() => {
-            if (props.column)
-                document.querySelectorAll(".setting")?.forEach((el) => el.classList.add("setting--column"))
-        })
-
-
-        return { toggleState }
+    disabled: {
+      type: Boolean as PropType<boolean>,
+      default: false
     },
+    column: {
+      type: Boolean as PropType<boolean>,
+      default: false
+    }
+  },
+  emits: ['update:modelValue', 'changedSetting'],
+  setup (props, { emit }) {
+    const toggleState = ref(props.modelValue)
+
+    watch(props, () => { toggleState.value = props.modelValue })
+
+    watch(toggleState, () => emit('update:modelValue', toggleState.value))
+
+    onMounted(() => {
+      if (props.column) { document.querySelectorAll('.setting')?.forEach((el) => el.classList.add('setting--column')) }
+    })
+
+    return { toggleState }
+  }
 })
 </script>
-
 
 <style lang="sass" scoped>
 .setting
@@ -63,7 +61,7 @@ export default defineComponent({
     gap: 1.5rem
 
     &__toggle
-      margin-right: 1rem 
+      margin-right: 1rem
 
     &--column
         flex-direction: column

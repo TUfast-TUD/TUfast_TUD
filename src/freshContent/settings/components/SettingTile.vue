@@ -1,8 +1,19 @@
 <template>
-    <div class="settings-tile" @mouseenter="toggleFocus()" @mouseleave="toggleFocus()" @click="click($event)">
-        <component :is="icon" color="hsl(var(--clr-primary) )" class="settings-tile__icon" />
-        <h2 class="settings-tile__title">{{ title }}</h2>    
-    </div>    
+  <div
+    class="settings-tile"
+    @mouseenter="toggleFocus()"
+    @mouseleave="toggleFocus()"
+    @click="click($event)"
+  >
+    <component
+      :is="icon"
+      color="hsl(var(--clr-primary) )"
+      class="settings-tile__icon"
+    />
+    <h2 class="settings-tile__title">
+      {{ title }}
+    </h2>
+  </div>
 </template>
 
 <script lang="ts">
@@ -11,49 +22,46 @@ import { defineComponent, PropType } from 'vue'
 import { PhLockKey, PhNotification, PhListDashes, PhSparkle, PhGauge, PhGoogleLogo, PhRocket, PhEnvelopeOpen } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    props: {
-        icon: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        title: {
-            type: String as PropType<string>,
-            required: true,
-        },
+  components: {
+    PhLockKey,
+    PhNotification,
+    PhListDashes,
+    PhSparkle,
+    PhGauge,
+    PhGoogleLogo,
+    PhRocket,
+    PhEnvelopeOpen
+  },
+  props: {
+    icon: {
+      type: String as PropType<string>,
+      required: true
     },
-    setup() {
-
-        const toggleFocus = () => {
-            const tiles = [...document.querySelectorAll(".settings-tile")]
-            for (const tile of tiles) {
-                    tile.classList.toggle("settings-tile--unfocus")
-            }
-        }
-
-        const click = (e : Event) => {
-            let target = e.target as HTMLElement
-            if(target.parentElement?.classList.contains("settings-tile"))
-                target = target.parentElement
-            target.classList.add("settings-tile--animate")
-            setTimeout(() => target.classList.remove("settings-tile--animate"), 1000);
-        }
-
-        return {
-            toggleFocus,
-            click,
-        }
-
-    },
-    components: {
-        PhLockKey,
-        PhNotification,
-        PhListDashes,
-        PhSparkle,
-        PhGauge,
-        PhGoogleLogo,
-        PhRocket,
-        PhEnvelopeOpen,
+    title: {
+      type: String as PropType<string>,
+      required: true
     }
+  },
+  setup () {
+    const toggleFocus = () => {
+      const tiles = [...document.querySelectorAll('.settings-tile')]
+      for (const tile of tiles) {
+        tile.classList.toggle('settings-tile--unfocus')
+      }
+    }
+
+    const click = (e : Event) => {
+      let target = e.target as HTMLElement
+      if (target.parentElement?.classList.contains('settings-tile')) { target = target.parentElement }
+      target.classList.add('settings-tile--animate')
+      setTimeout(() => target.classList.remove('settings-tile--animate'), 1000)
+    }
+
+    return {
+      toggleFocus,
+      click
+    }
+  }
 })
 </script>
 

@@ -1,30 +1,38 @@
 <template>
-    <div class="onboarding-btn">
-        <div class="onboarding-btn__inner">
-            <svg class="onboarding-btn__progress" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="45" :style="`--done: ${(percentDone/100) * 280}`" />
-            </svg>
-            <PhArrowRight class="onboarding-btn__arrow" />
-        </div>
+  <div class="onboarding-btn">
+    <div class="onboarding-btn__inner">
+      <svg
+        class="onboarding-btn__progress"
+        viewBox="0 0 100 100"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="45"
+          :style="`--done: ${(percentDone/100) * 280}`"
+        />
+      </svg>
+      <PhArrowRight class="onboarding-btn__arrow" />
     </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core"
-import { PhArrowRight } from "@dnlsndr/vue-phosphor-icons"
+import { defineComponent, PropType } from 'vue'
+import { PhArrowRight } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    props: {
-        percentDone: {
-            type: Number as PropType<number>,
-            required: true,
-        },
-    },
-    components: {
-        PhArrowRight,
-    },
+  components: {
+    PhArrowRight
+  },
+  props: {
+    percentDone: {
+      type: Number as PropType<number>,
+      required: true
+    }
+  }
 })
-    
+
 </script>
 
 <style lang="sass">

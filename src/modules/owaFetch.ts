@@ -250,7 +250,7 @@ export async function owaFetch () {
   await setBadgeUnreadMails(numberOfUnreadMails)
 }
 
-export function registerNotificationClickListener() {
+export function registerNotificationClickListener () {
   // register listener for owaFetch notifications
   chrome.notifications.onClicked.addListener(async (id) => {
     if (id === 'tuFastNewEmailNotification') {

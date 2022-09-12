@@ -1,70 +1,83 @@
 <template>
-    <div class="dropdown">
-        <div class="dropdown__dropdown">
-            <span @click="clicked = !clicked" class="dropdown__title txt-bold">Studiengang</span>
-            <PhCaretDown
-                @click="clicked = !clicked"
-                class="dropdown__arrow"
-                color="hsl(var(--clr-primary) )"
-                size="2rem" />
-        </div>
-        <transition-group @mouseleave="clicked=false" v-if="clicked" tag="div" class="dropdown-list">
-            <div
-                v-for="(study, key, index) in studies"
-                :key="index"
-                :class="`dropdown-list__item ${selectedStudy === key ? 'dropdown-list__item--selected' : ''}`"
-                @click="setStudySubject(key)"
-            >
-
-                <PhCaretDoubleRight class="dropdown-list__arrow" />
-                <img v-if="study.fsr_icon" class="dropdown-list__image" :src="study.fsr_icon" :alt="`Das Icon des Studiengangs ${study.name}`">
-                <h3 class="dropdown-list__title">{{ study.name }}</h3>
-            </div>
-        </transition-group>
+  <div class="dropdown">
+    <div class="dropdown__dropdown">
+      <span
+        class="dropdown__title txt-bold"
+        @click="clicked = !clicked"
+      >Studiengang</span>
+      <PhCaretDown
+        class="dropdown__arrow"
+        color="hsl(var(--clr-primary) )"
+        size="2rem"
+        @click="clicked = !clicked"
+      />
     </div>
-    
-    
+    <transition-group
+      v-if="clicked"
+      tag="div"
+      class="dropdown-list"
+      @mouseleave="clicked=false"
+    >
+      <div
+        v-for="(study, key, index) in studies"
+        :key="index"
+        :class="`dropdown-list__item ${selectedStudy === key ? 'dropdown-list__item--selected' : ''}`"
+        @click="setStudySubject(key)"
+      >
+        <PhCaretDoubleRight class="dropdown-list__arrow" />
+        <img
+          v-if="study.fsr_icon"
+          class="dropdown-list__image"
+          :src="study.fsr_icon"
+          :alt="`Das Icon des Studiengangs ${study.name}`"
+        >
+        <h3 class="dropdown-list__title">
+          {{ study.name }}
+        </h3>
+      </div>
+    </transition-group>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
 import { PhCaretDown, PhCaretDoubleRight } from '@dnlsndr/vue-phosphor-icons'
 
-import studies from "../../studies.json"
+import studies from '../../studies.json'
 
 export default defineComponent({
-    props: {
-        title: {
-            type: String as PropType<string>,
-            default: "Platzhalter"
-        }
-    },
-    setup() {
-        const clicked = ref(false)
-        const selectedStudy = ref("Standardeinstellungen")
- 
-        chrome.storage.local.get("studiengang", (res) => selectedStudy.value = res.studiengang)
-
-        const setStudySubject = (studiengang: string) => {
-            if (studiengang === "addStudiengang") {
-                window.location.href = "mailto:frage@tu-fast.de?Subject=Vorschlag Studiengang"
-                return
-            }
-            chrome.storage.local.set({ studiengang })
-            selectedStudy.value = studiengang
-        }
-
-        return {
-            studies,
-            clicked,
-            setStudySubject,
-            selectedStudy,
-        }
-    },
-    components: {
-        PhCaretDown,
-        PhCaretDoubleRight,
+  components: {
+    PhCaretDown,
+    PhCaretDoubleRight
+  },
+  props: {
+    title: {
+      type: String as PropType<string>,
+      default: 'Platzhalter'
     }
+  },
+  setup () {
+    const clicked = ref(false)
+    const selectedStudy = ref('Standardeinstellungen')
+
+    chrome.storage.local.get('studiengang', (res) => { selectedStudy.value = res.studiengang || 'Standardeinstellungen' })
+
+    const setStudySubject = (studiengang: string) => {
+      if (studiengang === 'addStudiengang') {
+        window.location.href = 'mailto:frage@tu-fast.de?Subject=Vorschlag Studiengang'
+        return
+      }
+      chrome.storage.local.set({ studiengang })
+      selectedStudy.value = studiengang
+    }
+
+    return {
+      studies,
+      clicked,
+      setStudySubject,
+      selectedStudy
+    }
+  }
 })
 </script>
 
@@ -77,7 +90,6 @@ export default defineComponent({
         align-items: center
         height: min-content
         cursor: pointer
-
 
     &__dropdown:hover &__title
         text-decoration: underline
@@ -125,7 +137,6 @@ export default defineComponent({
 
     &__title
         margin-left: .8rem
-
 
     &__arrow
         position: absolute

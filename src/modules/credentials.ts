@@ -167,7 +167,7 @@ export async function getUserData (platform: string = 'zih'): Promise<UserData> 
   }
 }
 
-export async function deleteUserData(platform: string): Promise<boolean> {
+export async function deleteUserData (platform: string): Promise<boolean> {
   if (!platform) return false
   // Promisified until usage of Manifest V3
   const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
@@ -185,7 +185,6 @@ export async function deleteUserData(platform: string): Promise<boolean> {
     // Should happen if the JSON is broken
     return false
   }
-
 }
 
 // return {user: string, pass: string}

@@ -1,23 +1,29 @@
 <template>
-    <div class="stepper">
-        <div
-            v-for="step of steps"
-            :key="step"
-            :class="`stepper__step ${step === currentStep ? 'stepper__step--current' : ''}`"
-        />
-    </div>
+  <div class="stepper">
+    <div
+      v-for="step of steps"
+      :key="step"
+      :class="`stepper__step ${step === currentStep ? 'stepper__step--current' : ''}`"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-import { PropType, ref, defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 
 export default defineComponent({
-    props: {
-        steps: Number as PropType<number>,
-        currentStep: Number as PropType<number>,
+  props: {
+    steps: {
+      type: Number as PropType<number>,
+      required: true
     },
-    setup() {
+    currentStep: {
+      type: Number as PropType<number>,
+      required: true
     }
+  },
+  setup () {
+  }
 })
 </script>
 

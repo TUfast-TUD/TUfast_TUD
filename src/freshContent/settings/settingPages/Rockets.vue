@@ -1,28 +1,25 @@
 <template>
-    <h2>Schalte neue Raketen frei und gestalte damit OPAL und deinen Browser!</h2>
-    <p>Damit unterstützt du auch das TUfast-Projekt und das hilft uns sehr 🙂</p>
+  <h2>Schalte neue Raketen frei und gestalte damit OPAL und deinen Browser!</h2>
+  <p>Damit unterstützt du auch das TUfast-Projekt und das hilft uns sehr 🙂</p>
 
-    <RocketSelect />
-    
+  <RocketSelect />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import Setting from '../components/Setting.vue'
+// import Setting from '../components/Setting.vue'
 import RocketSelect from '../components/RocketSelect.vue'
 
 export default defineComponent({
-    components: {
-        Setting,
-        RocketSelect,
-    },
-    setup() {
-        
-
-        return {
-        }
-    },
+  components: {
+    //    Setting,
+    RocketSelect
+  },
+  setup () {
+    return {
+    }
+  }
 })
 </script>
 

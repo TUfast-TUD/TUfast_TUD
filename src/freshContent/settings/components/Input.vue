@@ -1,97 +1,94 @@
 <template>
-    <div class="input-container">
-        <div :class="`input ${state}`">
-            <input
-                @input="emitState"
-                :value="modelValue"
-                class="input__input"
-                :type="type"
-                :placeholder="placeholder"
-            >
-            <component
-                :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`"
-                :is="statusIcon"
-            />
-        </div>
-        <span
-            :style="`opacity: ${!valid && modelValue.length > 0 ? 1 : 0}`"
-            class="error-message"
-        >{{ errorMessage }}</span>
+  <div class="input-container">
+    <div :class="`input ${state}`">
+      <input
+        :value="modelValue"
+        class="input__input"
+        :type="type"
+        :placeholder="placeholder"
+        @input="emitState"
+      >
+      <component
+        :is="statusIcon"
+        :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`"
+      />
     </div>
+    <span
+      :style="`opacity: ${!valid && modelValue.length > 0 ? 1 : 0}`"
+      class="error-message"
+    >{{ errorMessage }}</span>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed, onMounted, watchEffect, nextTick } from 'vue'
+import { defineComponent, ref, PropType, computed, onMounted } from 'vue'
 import { PhXCircle, PhCheckCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    props: {
-        type: {
-            type: String as PropType<string>,
-            default: "text"
-        },
-        placeholder: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        pattern: {
-            type: Object as PropType<RegExp>,
-            default: null,
-        },
-        modelValue: {
-            type: String as PropType<string>,
-            default: "",
-        },
-        valid: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        },
-        errorMessage: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        column: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        }
+  components: {
+    PhXCircle,
+    PhCheckCircle
+  },
+  props: {
+    type: {
+      type: String as PropType<string>,
+      default: 'text'
     },
-    setup(props, { emit }) {
-        const statusIcon = ref("PhCheckCircle")
-        const state = ref("")
-
-        const emitState = ($event : Event) => {
-            const target = $event.target as HTMLInputElement
-            emit("update:modelValue", target.value)
-            emit("update:valid", correctPattern.value)
-
-            if (props.modelValue.length > 0) {
-                state.value = correctPattern.value ? "input--correct" : "input--false"
-                statusIcon.value = correctPattern.value ? "PhCheckCircle" : "PhXCircle"
-                emit("update:valid", correctPattern.value)
-            }
-            else
-                state.value = ""
-        }
-
-        const correctPattern = computed(() => props.pattern.test(props.modelValue))
-
-        onMounted(() => {
-            if(props.column)
-                document.querySelectorAll(".input-container")?.forEach((el) => el.classList.add("input-container--column"))
-        })
-    
-        return {
-            statusIcon,
-            correctPattern,
-            emitState,
-            state
-        }
-        
+    placeholder: {
+      type: String as PropType<string>,
+      required: true
     },
-    components: {
-        PhXCircle,
-        PhCheckCircle,
+    pattern: {
+      type: Object as PropType<RegExp>,
+      default: null
+    },
+    modelValue: {
+      type: String as PropType<string>,
+      default: ''
+    },
+    valid: {
+      type: Boolean as PropType<boolean>,
+      default: false
+    },
+    errorMessage: {
+      type: String as PropType<string>,
+      required: true
+    },
+    column: {
+      type: Boolean as PropType<boolean>,
+      default: false
     }
+  },
+  emits: ['update:modelValue', 'update:valid'],
+  setup (props, { emit }) {
+    const statusIcon = ref('PhCheckCircle')
+    const state = ref('')
+
+    const emitState = ($event : Event) => {
+      const target = $event.target as HTMLInputElement
+      emit('update:modelValue', target.value)
+      emit('update:valid', correctPattern.value)
+
+      if (props.modelValue.length > 0) {
+        state.value = correctPattern.value ? 'input--correct' : 'input--false'
+        statusIcon.value = correctPattern.value ? 'PhCheckCircle' : 'PhXCircle'
+        emit('update:valid', correctPattern.value)
+      } else { state.value = '' }
+    }
+
+    const correctPattern = computed(() => props.pattern.test(props.modelValue))
+
+    onMounted(() => {
+      if (props.column) { document.querySelectorAll('.input-container')?.forEach((el) => el.classList.add('input-container--column')) }
+    })
+
+    return {
+      statusIcon,
+      correctPattern,
+      emitState,
+      state
+    }
+  }
 })
 </script>
 
@@ -113,7 +110,6 @@ html:not(.light) .input-container--column
                 color: hsl(var(--clr-black) )
                 &::placeholder
                     color: hsl(var(--clr-black), .5)
-
 
 .input
     display: flex

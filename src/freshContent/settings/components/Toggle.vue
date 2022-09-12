@@ -1,10 +1,13 @@
 <template>
-    <div
-        :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`"
-        @click="emitState()"
-    >
-        <PhCheck v-show="toggled" class="toggle__icon" />    
-    </div>    
+  <div
+    :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`"
+    @click="emitState()"
+  >
+    <PhCheck
+      v-show="toggled"
+      class="toggle__icon"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,36 +15,37 @@ import { defineComponent, PropType, ref, watch } from 'vue'
 import { PhCheck } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    props: {
-        modelValue: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        },
-        disabled: {
-            type: Boolean as PropType<boolean>,
-            default: false,
-        },
+  components: {
+    PhCheck
+  },
+  props: {
+    modelValue: {
+      type: Boolean as PropType<boolean>,
+      default: false
     },
-    setup(props, { emit }) {
-        const toggled = ref(props.modelValue)
-
-        watch(props, () => toggled.value = props.modelValue)
-
-        const emitState = () => {
-            if(!props.disabled) {
-                toggled.value = !toggled.value
-                emit("update:modelValue", toggled.value)
-            }
-        }
-
-        return {
-            toggled,
-            emitState,
-        }        
-    },
-    components: {
-        PhCheck,
+    disabled: {
+      type: Boolean as PropType<boolean>,
+      default: false
     }
+  },
+  emits: ['update:modelValue'],
+  setup (props, { emit }) {
+    const toggled = ref(props.modelValue)
+
+    watch(props, () => { toggled.value = props.modelValue })
+
+    const emitState = () => {
+      if (!props.disabled) {
+        toggled.value = !toggled.value
+        emit('update:modelValue', toggled.value)
+      }
+    }
+
+    return {
+      toggled,
+      emitState
+    }
+  }
 })
 </script>
 

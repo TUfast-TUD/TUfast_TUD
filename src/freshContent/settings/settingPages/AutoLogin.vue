@@ -1,33 +1,50 @@
 <template>
-    <LoginTabs v-model="currentLogin" :options="logins" />
-    <h2>{{ currentLogin.title }}</h2>
-    <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">{{ currentLogin.state ? "aktiv" : "nicht aktiviert" }}</h2>
-    <p class="max-line p-margin">Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden.
-        Die Daten werden nur lokal und verschlüsselt gespeichert.
-        Du kannst sie jederzeit löschen.</p>
+  <LoginTabs
+    v-model="currentLogin"
+    :options="logins"
+  />
+  <h2>{{ currentLogin.title }}</h2>
+  <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">
+    {{ currentLogin.state ? "aktiv" : "nicht aktiviert" }}
+  </h2>
+  <p class="max-line p-margin">
+    Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden.
+    Die Daten werden nur lokal und verschlüsselt gespeichert.
+    Du kannst sie jederzeit löschen.
+  </p>
 
-    <p class="p-margin important">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</p>
-    <div class="form">
-        <Input
-            v-model="username"
-            :pattern="currentLogin.usernamePattern"
-            :placeholder="currentLogin.usernamePlaceholder"
-            v-model:valid="usernameValid"
-            :error-message="currentLogin.usernameError"
-        />
+  <p class="p-margin important">
+    TUfast nimmt dir auch alle Klicks beim Anmelden ab!
+  </p>
+  <div class="form">
+    <CustomInput
+      v-model="username"
+      v-model:valid="usernameValid"
+      :pattern="currentLogin.usernamePattern"
+      :placeholder="currentLogin.usernamePlaceholder"
+      :error-message="currentLogin.usernameError"
+    />
 
-        <Input
-            v-model="password"
-            :pattern="currentLogin.passwordPattern"
-            :placeholder="currentLogin.passwordPlaceholder"
-            type="password"
-            v-model:valid="passwordValid"
-            :error-message="currentLogin.passwordError"
-        />
+    <CustomInput
+      v-model="password"
+      v-model:valid="passwordValid"
+      :pattern="currentLogin.passwordPattern"
+      :placeholder="currentLogin.passwordPlaceholder"
+      type="password"
+      :error-message="currentLogin.passwordError"
+    />
 
-        <Button @click="submitSave" title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" />
-        <Button @click="submitDelete" title="Daten löschen" class="button--secondary" />
-    </div>
+    <CustomButton
+      title="Lokal speichern"
+      :disabled="!(passwordValid && usernameValid)"
+      @click="submitSave"
+    />
+    <CustomButton
+      title="Daten löschen"
+      class="button--secondary"
+      @click="submitDelete"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -35,7 +52,7 @@ import { ref, defineComponent, watchEffect } from 'vue'
 
 // components
 import Input from '../components/Input.vue'
-import Button from "../components/Button.vue"
+import Button from '../components/Button.vue'
 import LoginTabs from '../components/LoginTabs.vue'
 
 // composables
@@ -44,69 +61,67 @@ import { useChrome } from '../composables/chrome'
 import { useUserData } from '../composables/user-data'
 
 export default defineComponent({
-    components: {
-        Input,
-        Button,
-        LoginTabs,
-    },
-    setup() {
-        const { logins } = useLogins()
-        const { sendChromeRuntimeMessage } = useChrome()
-        const { saveUserData, deleteUserData } = useUserData()
+  components: {
+    CustomInput: Input,
+    CustomButton: Button,
+    LoginTabs
+  },
+  setup () {
+    const { logins } = useLogins()
+    const { sendChromeRuntimeMessage } = useChrome()
+    const { saveUserData, deleteUserData } = useUserData()
 
-        const currentLogin = ref(logins[0])
+    const currentLogin = ref(logins[0])
 
-        const username = ref("")
-        const password = ref("")
-        const usernameValid = ref(false)
-        const passwordValid = ref(false)
+    const username = ref('')
+    const password = ref('')
+    const usernameValid = ref(false)
+    const passwordValid = ref(false)
 
-        const autoLoginActive = ref(false)
+    const autoLoginActive = ref(false)
 
-        // get state of login
-        watchEffect(async () =>
-            currentLogin.value.state = await sendChromeRuntimeMessage({
-                cmd: "check_user_data",
-                platform: currentLogin.value.id
-            }) as boolean
-        )
+    // get state of login
+    watchEffect(async () => {
+      currentLogin.value.state = await sendChromeRuntimeMessage({
+        cmd: 'check_user_data',
+        platform: currentLogin.value.id
+      }) as boolean
+    })
 
-        const submitSave = async ($event : MouseEvent) => {
-            const target = $event.target as HTMLButtonElement
-            
-            if (target.disabled) return
+    const submitSave = async ($event : MouseEvent) => {
+      const target = $event.target as HTMLButtonElement
 
-            // await this one to get back the new value in last line, otherwise could run too late
-            await saveUserData(username.value, password.value, currentLogin.value.id)
+      if (target.disabled) return
 
-            // reset values
-            username.value = ""
-            password.value = ""
-            currentLogin.value.state =
-            await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: currentLogin.value.id }) as boolean
+      // await this one to get back the new value in last line, otherwise could run too late
+      await saveUserData(username.value, password.value, currentLogin.value.id)
 
-        }
+      // reset values
+      username.value = ''
+      password.value = ''
+      currentLogin.value.state =
+            await sendChromeRuntimeMessage({ cmd: 'check_user_data', platform: currentLogin.value.id }) as boolean
+    }
 
-        const submitDelete = async () => {
-            // await this one to get back the new value in last line, otherwise could run too late
-            await deleteUserData(currentLogin.value.id)
-            currentLogin.value.state = 
-            await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: currentLogin.value.id }) as boolean
-        }
+    const submitDelete = async () => {
+      // await this one to get back the new value in last line, otherwise could run too late
+      await deleteUserData(currentLogin.value.id)
+      currentLogin.value.state =
+            await sendChromeRuntimeMessage({ cmd: 'check_user_data', platform: currentLogin.value.id }) as boolean
+    }
 
-        return {
-            logins, 
-            currentLogin,
-            username,
-            password,
-            usernameValid,
-            passwordValid,
-            autoLoginActive,
-            submitSave, 
-            submitDelete,
-        }
-        
-    },
+    return {
+      logins,
+      currentLogin,
+      username,
+      password,
+      usernameValid,
+      passwordValid,
+      autoLoginActive,
+      submitSave,
+      submitDelete
+    }
+  }
 })
 </script>
 
@@ -115,7 +130,7 @@ export default defineComponent({
     width: 300px
     display: flex
     flex-direction: column
-    justify-content: space-between   
+    justify-content: space-between
     gap: 1rem
     margin-left: 1rem
 

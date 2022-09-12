@@ -1,8 +1,8 @@
 <template>
-    <a class="link">
-        <span class="link__text">{{ txt }}</span>
-        <PhArrowRight class="link__arrow" />
-    </a>
+  <a class="link">
+    <span class="link__text">{{ txt }}</span>
+    <PhArrowRight class="link__arrow" />
+  </a>
 </template>
 
 <script lang="ts">
@@ -10,21 +10,20 @@ import { defineComponent, PropType } from 'vue'
 import { PhArrowRight } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    props: {
-        txt: {
-            type: String as PropType<string>,
-            required: true,
-        },
-    },
-    setup() {
-        
-    },
-    components: {
-        PhArrowRight,
+  components: {
+    PhArrowRight
+  },
+  props: {
+    txt: {
+      type: String as PropType<string>,
+      required: true
     }
+  },
+  setup () {
+
+  }
 })
 </script>
-
 
 <style lang="sass" scoped>
 .link

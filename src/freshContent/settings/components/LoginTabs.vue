@@ -1,11 +1,17 @@
 <template>
-  <div ref="container" class="container">
-    <button 
+  <div
+    ref="container"
+    class="container"
+  >
+    <button
       v-for="(option, i) in options"
-      @click="switchTab(option)"
       :id="option.id"
+      :key="i"
       :class="`${i === 0 ? 'tab--selected' : ''} tab`"
-    >{{ option.name }}</button>
+      @click="switchTab(option)"
+    >
+      {{ option.name }}
+    </button>
   </div>
 </template>
 
@@ -17,10 +23,17 @@ export default defineComponent({
   components: {
   },
   props: {
-    options: [] as PropType<Login[]>,
-    modelValue: {} as PropType<Login>,
+    options: {
+      type: [] as PropType<Login[]>,
+      required: true
+    },
+    modelValue: {
+      type: {} as PropType<Login>,
+      required: true
+    }
   },
-  setup(_, { emit }) {
+  emits: ['update:modelValue'],
+  setup (_, { emit }) {
     const container = ref<HTMLDivElement | null>(null)
 
     const switchTab = (option: Login) => {
@@ -28,25 +41,23 @@ export default defineComponent({
       const children = container.value.children
 
       for (const child of [...children]) {
-        child.classList.remove("tab--selected")
-        if (child.id === option.id)
-          child.classList.add("tab--selected")
-      } 
+        child.classList.remove('tab--selected')
+        if (child.id === option.id) { child.classList.add('tab--selected') }
+      }
 
-      emit("update:modelValue", option)
+      emit('update:modelValue', option)
     }
 
     return {
       switchTab,
-      container,
+      container
     }
-
-  },
+  }
 })
 </script>
 
 <style lang="sass" scoped>
-.container 
+.container
   display: flex
   align-items: start
   height: 50px
@@ -60,4 +71,3 @@ export default defineComponent({
   &--selected
     border-bottom: 2px solid hsl(var(--clr-primary))
 </style>
-

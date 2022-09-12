@@ -1,20 +1,22 @@
 <template>
-    <button class="button">{{ title }}</button>
+  <button class="button">
+    {{ title }}
+  </button>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
-    props: {
-        title: {
-            type: String as PropType<string>,
-            required: true,
-        },
-    },
-    setup() {
+  props: {
+    title: {
+      type: String as PropType<string>,
+      required: true
+    }
+  },
+  setup () {
 
-    },
+  }
 })
 </script>
 
@@ -49,7 +51,7 @@ export default defineComponent({
         background-color: hsl(var(--clr-grey), .8 )
         &:hover
             outline: none
-        
+
     &:disabled
         background-color: hsl(var(--clr-primary), .5)
         cursor: not-allowed

@@ -1,15 +1,34 @@
 <template>
-    <div class="language-select" disabled>
-        <PhCaretDoubleRight
-            class="language-select__selector"
-            :class="selectorClass"
-            @click.capture="switchSel($event)" />
-        <div class="language-select__languages" ref="languages">
-            <p class="language-select__german language-select__languages--selected" @click="switchSel($event)">Deutsch</p>
-            <p class="language-select__english" @click="switchSel($event)">English</p>
-        </div>
-        <p class="soon">Bald!<br />Soon!</p>
+  <div
+    class="language-select"
+    disabled
+  >
+    <PhCaretDoubleRight
+      class="language-select__selector"
+      :class="selectorClass"
+      @click.capture="switchSel($event)"
+    />
+    <div
+      ref="languages"
+      class="language-select__languages"
+    >
+      <p
+        class="language-select__german language-select__languages--selected"
+        @click="switchSel($event)"
+      >
+        Deutsch
+      </p>
+      <p
+        class="language-select__english"
+        @click="switchSel($event)"
+      >
+        English
+      </p>
     </div>
+    <p class="soon">
+      Bald!<br>Soon!
+    </p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -17,47 +36,47 @@ import { defineComponent, ref, computed } from 'vue'
 import { PhCaretDoubleRight } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    setup() {
-        enum Selected {
-            German = "German",
-            English = "English"
-        }
-
-        const languages = ref<null | HTMLElement>(null)
-        const selected = ref(Selected.German)
-        const selectorClass = computed(() => selected.value === Selected.German ? "language-select__selector--german" : "language-select__selector--english")
-
-
-
-        const switchSel = (e : MouseEvent) => {
-                const target = e.target as HTMLParagraphElement
-            if (target.classList.contains("language-select__languages--selected"))  
-                return
-
-            // disabled for now until someone translated the app to english ;)
-            return
-
-            switch (selected.value) {
-                case Selected.German:
-                    selected.value = Selected.English
-                    break
-                case Selected.English:
-                    selected.value = Selected.German
-                    break
-            }
-                for (const language of languages.value!.children)
-                    language.classList.toggle("language-select__languages--selected")    
-        }   
-
-        return {
-            switchSel,
-            selectorClass,
-            languages,
-        }        
-    },
-    components: {
-        PhCaretDoubleRight,
+  components: {
+    PhCaretDoubleRight
+  },
+  setup () {
+    /* eslint-disable no-unused-vars */
+    enum Selected {
+        German = 'German',
+        English = 'English'
     }
+    /* eslint-enable no-unused-vars */
+
+    const languages = ref<null | HTMLElement>(null)
+    const selected = ref(Selected.German)
+    const selectorClass = computed(() => selected.value === Selected.German ? 'language-select__selector--german' : 'language-select__selector--english')
+
+    const switchSel = (e : MouseEvent) => {
+      const target = e.target as HTMLParagraphElement
+      if (target.classList.contains('language-select__languages--selected')) { return }
+
+      // disabled for now until someone translated the app to english ;)
+      return
+
+      /* eslint-disable no-unreachable */
+      switch (selected.value) {
+        case Selected.German:
+          selected.value = Selected.English
+          break
+        case Selected.English:
+          selected.value = Selected.German
+          break
+      }
+      for (const language of languages.value!.children) { language.classList.toggle('language-select__languages--selected') }
+      /* eslint-enable no-unreachable */
+    }
+
+    return {
+      switchSel,
+      selectorClass,
+      languages
+    }
+  }
 })
 </script>
 
@@ -69,7 +88,7 @@ export default defineComponent({
     height: min-content
     min-width: min-content
     width: 125px
-    
+
     &__selector
         transition: all 200ms ease-out
         cursor: pointer

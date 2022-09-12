@@ -1,23 +1,25 @@
 <template>
-    <Setting
-        @changedSetting="searchEngine()"
-        v-model="searchEngineActive"
-        txt="Suchmaschinen Superpower aktivieren"
-    />
-    <p class="max-line p-margin">Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!</p>
+  <Setting
+    v-model="searchEngineActive"
+    txt="Suchmaschinen Superpower aktivieren"
+    @changed-setting="searchEngine()"
+  />
+  <p class="max-line p-margin">
+    Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!
+  </p>
 
-    <p class="search-terms">
-        tumail → Outlook Web App<br />
-        opal → OPAL<br />
-        tucloud → Cloudstore TU Dresden<br />
-        hisqis → Hisqis TU Dresden<br />
-        selma → selma TU Dresden<br />
-        jexam → jExam<br />
-        tumatrix → Matrix-Chat TU Dresden<br />
-        tumed → eportal.med.tu-dresden<br />
-        slub → SLUB Dresden<br />
-        videocampus → Videocampus Sachsen
-    </p>
+  <p class="search-terms">
+    tumail → Outlook Web App<br>
+    opal → OPAL<br>
+    tucloud → Cloudstore TU Dresden<br>
+    hisqis → Hisqis TU Dresden<br>
+    selma → selma TU Dresden<br>
+    jexam → jExam<br>
+    tumatrix → Matrix-Chat TU Dresden<br>
+    tumed → eportal.med.tu-dresden<br>
+    slub → SLUB Dresden<br>
+    videocampus → Videocampus Sachsen
+  </p>
 </template>
 
 <script lang="ts">
@@ -26,19 +28,19 @@ import { defineComponent, ref } from 'vue'
 import Setting from '../components/Setting.vue'
 
 export default defineComponent({
-    components: {
-        Setting,
-    },
-    setup() {
-        const searchEngineActive = ref(false)
-        chrome.storage.local.get(['fwdEnabled'], (res) => searchEngineActive.value = res.fwdEnabled)
-        const searchEngine = () => chrome.storage.local.set({ fwdEnabled: !searchEngineActive.value }, () => {})
+  components: {
+    Setting
+  },
+  setup () {
+    const searchEngineActive = ref(false)
+    chrome.storage.local.get(['fwdEnabled'], (res) => { searchEngineActive.value = res.fwdEnabled })
+    const searchEngine = () => chrome.storage.local.set({ fwdEnabled: !searchEngineActive.value }, () => {})
 
-        return {
-            searchEngine,
-            searchEngineActive,
-        }
-    },
+    return {
+      searchEngine,
+      searchEngineActive
+    }
+  }
 })
 </script>
 

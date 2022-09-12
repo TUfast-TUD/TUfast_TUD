@@ -1,72 +1,91 @@
 <template>
-    <div class="hide-bg">
-        <div class="onboarding onboarding--opening">
-            <PhX v-if="currentStep !== steps" class="onboarding__close" @click="close()" />
-            <div class="onboarding__main">
-                <slot/>
-            </div>
-            
-            <Stepper class="onboarding__stepper" :steps="steps" :currentStep="currentStep" />
-            <div :class="`onboarding__footer ${currentStep === steps ? 'onboarding__footer--center' : ''}`">
-                <div v-if="currentStep !== steps" class="footer-text">
-                    <h2 class="footer-text__title">{{ h1 }}</h2>
-                    <h3 class="footer-text__subtitle max-line">{{ h2 }}</h3>
-                </div>
-                <OnboardingButton :percentDone="percentDone" @click="next()" :class="`onboarding__main-btn ${currentStep === steps ? 'onboarding__main-btn--turned' : ''}`" />
-            </div>
+  <div class="hide-bg">
+    <div class="onboarding onboarding--opening">
+      <PhX
+        v-if="currentStep !== steps"
+        class="onboarding__close"
+        @click="close()"
+      />
+      <div class="onboarding__main">
+        <slot />
+      </div>
+
+      <Stepper
+        class="onboarding__stepper"
+        :steps="steps"
+        :current-step="currentStep"
+      />
+      <div :class="`onboarding__footer ${currentStep === steps ? 'onboarding__footer--center' : ''}`">
+        <div
+          v-if="currentStep !== steps"
+          class="footer-text"
+        >
+          <h2 class="footer-text__title">
+            {{ h1 }}
+          </h2>
+          <h3 class="footer-text__subtitle max-line">
+            {{ h2 }}
+          </h3>
         </div>
+        <OnboardingButton
+          :percent-done="percentDone"
+          :class="`onboarding__main-btn ${currentStep === steps ? 'onboarding__main-btn--turned' : ''}`"
+          @click="next()"
+        />
+      </div>
     </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from '@vue/runtime-core'
+import { defineComponent, PropType, ref } from 'vue'
 import { PhX } from '@dnlsndr/vue-phosphor-icons'
 import Stepper from './Stepper.vue'
 import OnboardingButton from './OnboardingButton.vue'
 
 export default defineComponent({
-    components: {
-        Stepper,
-        OnboardingButton,
-        PhX,
+  components: {
+    Stepper,
+    OnboardingButton,
+    PhX
+  },
+  props: {
+    h1: {
+      type: String as PropType<string>,
+      required: true
     },
-    props: {
-        h1: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        h2: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        currentStep: {
-            type: Number as PropType<number>,
-            required: true,
-        },
+    h2: {
+      type: String as PropType<string>,
+      required: true
     },
-    setup(props, { emit }) {
-        const percentDone = ref(0)
-        const steps = ref(7)
-
-        const close = () => {
-            document.querySelector(".onboarding")?.classList.add("onboarding--closing")
-            setTimeout(() => emit("close-me"), 650);
-        }
-
-        const next = () => {
-            if (props.currentStep < steps.value) {
-                emit("next")
-                percentDone.value = (props.currentStep / (steps.value - 1)) * 100
-            } else
-                close()
-        }
-
-        setTimeout(() => {
-            document.querySelector(".onboarding")?.classList.remove("onboarding--opening")
-        }, 800);
-
-        return { percentDone, steps, close, next }
+    currentStep: {
+      type: Number as PropType<number>,
+      required: true
     }
+  },
+  emits: ['close-me', 'next'],
+  setup (props, { emit }) {
+    const percentDone = ref(0)
+    const steps = ref(7)
+
+    const close = () => {
+      document.querySelector('.onboarding')?.classList.add('onboarding--closing')
+      setTimeout(() => emit('close-me'), 650)
+    }
+
+    const next = () => {
+      if (props.currentStep < steps.value) {
+        emit('next')
+        percentDone.value = (props.currentStep / (steps.value - 1)) * 100
+      } else { close() }
+    }
+
+    setTimeout(() => {
+      document.querySelector('.onboarding')?.classList.remove('onboarding--opening')
+    }, 800)
+
+    return { percentDone, steps, close, next }
+  }
 
 })
 </script>

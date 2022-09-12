@@ -1,32 +1,32 @@
-import { useChrome } from "./chrome"
+import { useChrome } from './chrome'
 
 const {
   setChromeLocalStorage,
-  sendChromeRuntimeMessage,
+  sendChromeRuntimeMessage
 } = useChrome()
 
 export const useUserData = () => ({
   saveUserData,
-  deleteUserData,
+  deleteUserData
 })
 
 const saveUserData = async (uname: string, pwd: string, platform: string) => {
-    setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
-    await sendChromeRuntimeMessage({
-        cmd: "set_user_data",
-        userData: { user: uname, pass: pwd },
-        platform: platform
-    })
+  setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
+  await sendChromeRuntimeMessage({
+    cmd: 'set_user_data',
+    userData: { user: uname, pass: pwd },
+    platform: platform
+  })
 }
 
 const deleteUserData = async (platform: string) => {
-  await sendChromeRuntimeMessage({ cmd: "clear_badge" })
-  await sendChromeRuntimeMessage({ cmd: "delete_user_data", platform: platform })
+  await sendChromeRuntimeMessage({ cmd: 'clear_badge' })
+  await sendChromeRuntimeMessage({ cmd: 'delete_user_data', platform: platform })
 
   // deactivate owa fetch
   if (platform === 'zih') {
-      sendChromeRuntimeMessage({ cmd: "disable_owa_fetch" })
-      setChromeLocalStorage({ enabledOWAFetch: false })
-      setChromeLocalStorage({ additionalNotificationOnNewMail: false })
+    sendChromeRuntimeMessage({ cmd: 'disable_owa_fetch' })
+    setChromeLocalStorage({ enabledOWAFetch: false })
+    setChromeLocalStorage({ additionalNotificationOnNewMail: false })
   }
 }

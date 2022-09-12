@@ -1,7 +1,7 @@
 'use strict'
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
-import rockets from "./freshContent/rockets.json"
+import rockets from './freshContent/rockets.json'
 
 // eslint-disable-next-line no-unused-vars
 const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
@@ -166,7 +166,7 @@ chrome.commands.onCommand.addListener(async (command) => {
 chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
   try {
     const r = JSON.parse(resp.selectedRocketIcon)
-    if(!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
+    if (!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
     chrome.browserAction.setIcon({ path: r.iconPathUnlocked || rockets.default.iconPathUnlocked })
   } catch (e) {
     console.log(`Cannot parse rocket icon: ${resp}`)
@@ -241,13 +241,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       break
     case 'enable_owa_fetch':
       owaFetch.enableOWAFetch()
-      break;
+      break
     case 'disable_owa_fetch':
       owaFetch.disableOwaFetch()
       break
     case 'owa_notifications_enabled':
       owaFetch.registerNotificationClickListener()
-      break;
+      break
     case 'reload_extension':
       chrome.runtime.reload()
       break

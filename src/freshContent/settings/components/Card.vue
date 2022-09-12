@@ -1,14 +1,26 @@
 <template>
-    <div class="card-bg" @click="close()" />
-    <div tabindex="0" @keydown.esc="close()" class="card">
-            <div class="card__header">
-                <h1 class="card__title upper">{{ title }}</h1>
-                <PhX class="card__close" @click="close()" />
-            </div>
-            <div class="card__body">
-                <slot>Body</slot>
-            </div>
+  <div
+    class="card-bg"
+    @click="close()"
+  />
+  <div
+    tabindex="0"
+    class="card"
+    @keydown.esc="close()"
+  >
+    <div class="card__header">
+      <h1 class="card__title upper">
+        {{ title }}
+      </h1>
+      <PhX
+        class="card__close"
+        @click="close()"
+      />
     </div>
+    <div class="card__body">
+      <slot>Body</slot>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -16,37 +28,37 @@ import { defineComponent, onMounted, PropType } from 'vue'
 import { PhX } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-    props: {
-        title: {
-            type: String as PropType<string>,
-            default: ""
-        },
-    },
-    setup(_, { emit }) {
-
-        const close = () => {
-            document.querySelector(".card")?.classList.add("card--closing")
-            setTimeout(() => emit("close-me"), 650);
-        }
-
-        const open = () => {
-            const card = document.querySelector(".card") as HTMLDivElement
-            card?.classList.add("card--opening")
-            setTimeout(() => {
-                card?.classList.remove("card--opening")
-                card.focus()
-            }, 850)
-        }
-
-        onMounted(() => open())
-        
-        return {
-            close,
-        }
-    },
-    components: {
-        PhX,
+  components: {
+    PhX
+  },
+  props: {
+    title: {
+      type: String as PropType<string>,
+      default: ''
     }
+  },
+  emits: ['close-me'],
+  setup (_, { emit }) {
+    const close = () => {
+      document.querySelector('.card')?.classList.add('card--closing')
+      setTimeout(() => emit('close-me'), 650)
+    }
+
+    const open = () => {
+      const card = document.querySelector('.card') as HTMLDivElement
+      card?.classList.add('card--opening')
+      setTimeout(() => {
+        card?.classList.remove('card--opening')
+        card.focus()
+      }, 850)
+    }
+
+    onMounted(() => open())
+
+    return {
+      close
+    }
+  }
 })
 </script>
 
@@ -98,7 +110,7 @@ export default defineComponent({
         animation: enter 500ms ease
         animation-fill-mode: backwards
         animation-delay: 350ms
-    
+
     &--closing
         animation: enter 500ms ease
         animation-direction: reverse
