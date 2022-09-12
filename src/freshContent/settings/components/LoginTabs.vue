@@ -60,14 +60,24 @@ export default defineComponent({
 .container
   display: flex
   align-items: start
+  gap: .2rem
   height: 50px
+  font-size: 1.4rem
 
 .tab
   border: none
-  background-color: hsl(var(--clr-secondary), 0.8)
+  background-color: hsl(var(--clr-secondary), .8)
   color: white
   cursor: pointer
+  border-bottom: 1px solid hsl(var(--clr-secondary), .5)
+  opacity: .6
+
+  &:hover
+    opacity: .8
+    background-color: hsl(var(--clr-primary), .1)
 
   &--selected
     border-bottom: 2px solid hsl(var(--clr-primary))
+    opacity: 1
+
 </style>
