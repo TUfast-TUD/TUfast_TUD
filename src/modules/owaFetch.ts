@@ -181,6 +181,7 @@ export async function enableOWAFetch (): Promise<boolean> {
 export async function disableOwaFetch () {
   // console.log('stopped owa connection')
   await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['tabs'] }, resolve))
 
   await setBadgeUnreadMails(0)
   // Promisified until usage of Manifest V3
@@ -282,6 +283,7 @@ export async function enableOWANotifications (): Promise<boolean> {
 }
 
 export async function disableOWANotifications () {
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['notifications'] }, resolve))
   await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
 }
 
