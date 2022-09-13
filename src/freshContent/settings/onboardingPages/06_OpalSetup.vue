@@ -4,13 +4,13 @@
   </h1>
   <div class="info">
     <Setting
-      txt="PDF-Dokumente im Browser öffnen"
       v-model="inlineActive"
+      txt="PDF-Dokumente im Browser öffnen"
       :column="true"
     />
     <Setting
-      txt="PDF-Dokumente in neuem Tab öffnen"
       v-model="newTabActive"
+      txt="PDF-Dokumente in neuem Tab öffnen"
       :column="true"
     />
   </div>
@@ -35,19 +35,14 @@ export default defineComponent({
     const newTabActive = ref(false)
 
     const inline = async () => {
-      if(inlineActive.value)
-        inlineActive.value = await opalPdf("enable", "inline") as boolean
-      else {
-        opalPdf("disable", "inline")
+      if (inlineActive.value) { inlineActive.value = await opalPdf('enable', 'inline') as boolean } else {
+        opalPdf('disable', 'inline')
         newTabActive.value = false
       }
     }
 
     const newtab = async () => {
-      if(newTabActive.value)
-        newTabActive.value = await opalPdf("enable", "newtab") as boolean
-      else
-        opalPdf("disable", "newtab")
+      if (newTabActive.value) { newTabActive.value = await opalPdf('enable', 'newtab') as boolean } else { opalPdf('disable', 'newtab') }
     }
 
     watch(inlineActive, inline, { immediate: true })
@@ -57,7 +52,7 @@ export default defineComponent({
       inlineActive,
       newTabActive,
       inline,
-      newtab,
+      newtab
     }
   }
 })

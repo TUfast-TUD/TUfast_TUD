@@ -76,7 +76,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       const { fetch, notification } =
-      await owa("check") as ResponseOWA
+      await owa('check') as ResponseOWA
 
       console.log(fetch)
 
@@ -86,30 +86,24 @@ export default defineComponent({
       watch(owaFetchActive, fetchUpdate)
       watch(notificationOnNewEmailActive, notificationsUpdate)
 
-
-      autoLoginActive.value = await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: "zih" }) as boolean
+      autoLoginActive.value = await sendChromeRuntimeMessage({ cmd: 'check_user_data', platform: 'zih' }) as boolean
     })
 
     const fetchUpdate = async () => {
-      if(owaFetchActive.value)
-        owaFetchActive.value = await owa("enable", "fetch") as boolean
-      else {
-        owa("disable", "fetch")
+      if (owaFetchActive.value) { owaFetchActive.value = await owa('enable', 'fetch') as boolean } else {
+        owa('disable', 'fetch')
         notificationOnNewEmailActive.value = false
       }
     }
 
     const notificationsUpdate = async () => {
-      if(notificationOnNewEmailActive.value)
-        notificationOnNewEmailActive.value = await owa("enable", "notification") as boolean
-      else
-        owa("disable", "notification")
+      if (notificationOnNewEmailActive.value) { notificationOnNewEmailActive.value = await owa('enable', 'notification') as boolean } else { owa('disable', 'notification') }
     }
 
     return {
       owaFetchActive,
       notificationOnNewEmailActive,
-      autoLoginActive,
+      autoLoginActive
     }
   }
 })

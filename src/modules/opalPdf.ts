@@ -26,7 +26,7 @@ export async function enableOpalPdfInline (): Promise<boolean> {
 
 // disable the header listener
 export async function disableOpalPdfInline () {
-    await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ pdfInInline: false, pdfInNewTab: false }, resolve))
   chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)

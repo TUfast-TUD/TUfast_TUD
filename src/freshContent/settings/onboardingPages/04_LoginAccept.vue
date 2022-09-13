@@ -51,8 +51,7 @@ export default defineComponent({
     const ready = computed(() => usernameValid.value && passwordValid.value)
 
     watch(ready, async () => {
-      if (ready.value === true)
-        await saveUserData(username.value, password.value, 'zih')
+      if (ready.value === true) { await saveUserData(username.value, password.value, 'zih') }
     })
 
     return { username, password, usernameValid, passwordValid }
