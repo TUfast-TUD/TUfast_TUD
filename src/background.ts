@@ -1,6 +1,7 @@
 'use strict'
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
+import * as opalPdf from './modules/opalPdf'
 import rockets from './freshContent/rockets.json'
 
 // eslint-disable-next-line no-unused-vars
@@ -188,9 +189,11 @@ chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalN
 })
 
 // Register header listener
-chrome.storage.local.get(['pdfInNewTab'], (result) => {
-  if (result.pdfInNewTab) {
-    enableHeaderListener(true)
+chrome.storage.local.get(['pdfInInline'], async (result) => {
+  if (result.pdfInInline) {
+    const webRequestAccess = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['webRequest', 'webRequestBlocking'] }, resolve))
+    if (webRequestAccess) opalPdf.enableOpalPdfInline()
+    else opalPdf.disableOpalPdfInline()
   }
 })
 
@@ -220,6 +223,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // The first one is legacy and should not be used anymore
       saveClicks(request.click_count || request.clickCount)
       break
+    /*********************
+     * Settings commands *
+     *********************/
+    /* User data */
     case 'get_user_data':
       // Asynchronous response
       credentials.getUserData(request.platform || 'zih').then(sendResponse)
@@ -236,24 +243,43 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // Asynchronous response
       credentials.deleteUserData(request.platform).then(sendResponse) // Response can probably be ignored
       return true // required for async sendResponse
-    case 'read_mail_owa':
-      owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
-      break
+    /* OWA */
     case 'enable_owa_fetch':
       owaFetch.enableOWAFetch().then(sendResponse)
-      return true
+      return true // required for async sendResponse
     case 'disable_owa_fetch':
       owaFetch.disableOwaFetch()
       break
     case 'enable_owa_notification':
       owaFetch.enableOWANotifications().then(sendResponse)
-      return true
+      return true // required for async sendResponse
     case 'disable_owa_notification':
       owaFetch.disableOWANotifications()
       break
     case 'check_owa_status':
       owaFetch.checkOWAStatus().then(sendResponse)
-      return true
+      return true // required for async sendResponse
+    /* Opal PDF */
+    case 'enable_opalpdf_inline':
+      opalPdf.enableOpalPdfInline().then(sendResponse)
+      return true // required for async sendResponse
+    case 'disable_opalpdf_inline':
+      opalPdf.disableOpalPdfInline()
+      break
+    case 'enable_opalpdf_newtab':
+      opalPdf.enableOpalPdfNewTab().then(sendResponse)
+      return true // required for async sendResponse
+    case 'disable_opalpdf_newtab':
+      opalPdf.disableOpalPdfNewTab()
+      break
+    case 'check_opalpdf_status':
+      opalPdf.checkOpalPdfStatus().then(sendResponse)
+      return true // required for async sendResponse
+    /* End of settings function */
+    // Command for OWA MutationObserver when site is opened
+    case 'read_mail_owa':
+      owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
+      break
     case 'reload_extension':
       chrome.runtime.reload()
       break
@@ -271,9 +297,6 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
       }
       break
-    case 'toggle_pdf_inline_setting':
-      enableHeaderListener(request.enabled)
-      break
     case 'update_rocket_logo_easteregg':
       chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
       break
@@ -289,38 +312,6 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   }
   return false // no async sendResponse will be fired
 })
-
-/**
- * enable or disable the header listener
- * modify http header from opal, to view pdf in browser without the need to download it
- * @param {boolean} enabled flag to enable/ disable listener
- */
-function enableHeaderListener (enabled: boolean) {
-  if (enabled) {
-    chrome.webRequest.onHeadersReceived.addListener(
-      headerListenerFunc,
-      {
-        urls: [
-          'https://bildungsportal.sachsen.de/opal/downloadering*',
-          'https://bildungsportal.sachsen.de/opal/*.pdf'
-        ]
-      },
-      ['blocking', 'responseHeaders']
-    )
-  } else {
-    chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
-  }
-}
-
-function headerListenerFunc (details: chrome.webRequest.WebResponseHeadersDetails) {
-  if (!details.responseHeaders) return
-  const header = details.responseHeaders.find(
-    e => e.name.toLowerCase() === 'content-disposition'
-  )
-  if (!header?.value?.includes('.pdf')) return // only for pdf
-  header.value = 'inline'
-  return { responseHeaders: details.responseHeaders }
-}
 
 // open settings (=options) page, if required set params
 async function openSettingsPage (params?: string) {
