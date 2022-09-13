@@ -10,72 +10,67 @@
     v-model="pdfInlineActive"
     txt="PDF-Dokumente aus OPAL direkt im Browser öffnen, anstatt sie herunterzuladen."
     class="setting"
-    @changed-setting="pdfInline()"
   />
   <Setting
     v-model="pdfNewTabActive"
     :disabled="!pdfInlineActive"
     txt="PDF-Dokumente in neuem Tab öffnen (empfohlen!)"
     class="setting"
-    @changed-setting="pdfNewTab()"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-// import Toggle from '../components/Toggle.vue'
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+
+// types
+import type { ResponseOpalPdf } from '../types/SettingHandler'
+
+// components
 import Setting from '../components/Setting.vue'
+
+// composables
+import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
     Setting
-    //    Toggle
   },
   setup () {
+    const { opalPdf } = useSettingHandler()
     const pdfInlineActive = ref(false)
     const pdfNewTabActive = ref(false)
 
-    chrome.storage.local.get(['pdfInInline', 'pdfInNewTab'], (res) => {
-      pdfInlineActive.value = res.pdfInInline
-      pdfNewTabActive.value = res.pdfInNewTab
+    onBeforeMount(async () => {
+      const { inline, newtab } =
+      await opalPdf("check") as ResponseOpalPdf
+
+      pdfInlineActive.value = inline
+      pdfNewTabActive.value = newtab
+
+      watch(pdfInlineActive, inlineUpdate)
+      watch(pdfNewTabActive, newtabUpdate)
     })
 
-    const pdfInline = () => {
-      chrome.storage.local.set({ pdfInInline: !pdfInlineActive.value }, () => {})
-      if (!pdfInlineActive.value) {
-        chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, (granted) => {
-          if (granted) {
-            chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: true })
-            if (navigator.userAgent.includes('Firefox/')) {
-              alert('Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen übernommen werden!')
-              chrome.storage.local.set({ openSettingsPageParam: 'opalCustomize', openSettingsOnReload: true }, () => {})
-              chrome.runtime.sendMessage({ cmd: 'reload_extension' }, () => {})
-            }
-          } else {
-            // permission granting failed :( -> revert checkbox settings
-            chrome.storage.local.set({ pdfInInline: false })
-            pdfInlineActive.value = false
-            alert('TUfast braucht diese Berechtigung, um die PDFs im Browser anzeigen zu können. Versuche es erneut.')
-          }
-        })
-      }
-      if (pdfInlineActive.value) {
-        // disable "pdf in new tab" setting since it doesn't make any sense without inline pdf
-        chrome.storage.local.set({ pdfInNewTab: false })
-        chrome.runtime.sendMessage({ cmd: 'toggle_pdf_inline_setting', enabled: false })
+
+    const inlineUpdate = async () => {
+      if(pdfInlineActive.value)
+        pdfInlineActive.value = await opalPdf("enable", "inline") as boolean
+      else {
+        opalPdf("disable", "inline")
         pdfNewTabActive.value = false
       }
     }
 
-    const pdfNewTab = () => {
-      chrome.storage.local.set({ pdfInNewTab: !pdfNewTabActive.value }, () => {})
+    const newtabUpdate = async () => {
+      if(pdfNewTabActive.value)
+        pdfNewTabActive.value = await opalPdf("enable", "newtab") as boolean
+      else
+        opalPdf("disable", "newtab")
     }
 
     return {
       pdfInlineActive,
       pdfNewTabActive,
-      pdfInline,
-      pdfNewTab
     }
   }
 })

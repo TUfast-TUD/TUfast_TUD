@@ -5,27 +5,60 @@
   <div class="info">
     <Setting
       txt="PDF-Dokumente im Browser öffnen"
+      v-model="inlineActive"
       :column="true"
     />
     <Setting
       txt="PDF-Dokumente in neuem Tab öffnen"
+      v-model="newTabActive"
       :column="true"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-// import Onboarding from '../components/Onboarding.vue'
+import { defineComponent, ref, watch } from 'vue'
+
+// components
 import Setting from '../components/Setting.vue'
+
+// composables
+import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
-    //    Onboarding,
     Setting
   },
   setup () {
+    const { opalPdf } = useSettingHandler()
+    const inlineActive = ref(false)
+    const newTabActive = ref(false)
 
+    const inline = async () => {
+      if(inlineActive.value)
+        inlineActive.value = await opalPdf("enable", "inline") as boolean
+      else {
+        opalPdf("disable", "inline")
+        newTabActive.value = false
+      }
+    }
+
+    const newtab = async () => {
+      if(newTabActive.value)
+        newTabActive.value = await opalPdf("enable", "newtab") as boolean
+      else
+        opalPdf("disable", "newtab")
+    }
+
+    watch(inlineActive, inline, { immediate: true })
+    watch(newTabActive, newtab, { immediate: true })
+
+    return {
+      inlineActive,
+      newTabActive,
+      inline,
+      newtab,
+    }
   }
 })
 

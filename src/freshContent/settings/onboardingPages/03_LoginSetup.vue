@@ -38,7 +38,6 @@ export default defineComponent({
     return { accept, emitAccept }
   }
 })
-
 </script>
 
 <style lang="sass" scoped>

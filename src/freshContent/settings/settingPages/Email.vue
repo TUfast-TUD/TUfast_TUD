@@ -6,10 +6,9 @@
     Du musst im Reiter "Automatisches Anmelden" deinen Login hinterlegt haben, um diese Funktion nutzen zu können.
   </p>
   <Setting
-    v-model="OWAFetchActive"
+    v-model="owaFetchActive"
     :disabled="!autoLoginActive"
     txt="TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben der Rakete an."
-    @changed-setting="updateOWAFetch()"
   />
   <div class="example-row">
     <img
@@ -32,7 +31,7 @@
 
   <p
     class="max-line"
-    @click="OWAFetchActive = !OWAFetchActive"
+    @click="owaFetchActive = !owaFetchActive"
   >
     Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern.
     Weil TUfast dafür eine spezielle Berechtigung braucht, drücke bitte auf "Erlauben" im folgenden Pop-Up.
@@ -40,9 +39,8 @@
 
   <Setting
     v-model="notificationOnNewEmailActive"
-    :disabled="!autoLoginActive || !OWAFetchActive"
+    :disabled="!autoLoginActive || !owaFetchActive"
     txt="Zusätzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail erhalten."
-    @changed-setting="updateAdditionalNotification()"
   />
 
   <p class="max-line">
@@ -53,68 +51,65 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+
+// types
+import type { ResponseOWA } from '../types/SettingHandler'
+
+// components
 import Setting from '../components/Setting.vue'
+
+// composables
+import { useChrome } from '../composables/chrome'
+import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
     Setting
   },
   setup () {
-    const OWAFetchActive = ref(false)
+    const { sendChromeRuntimeMessage } = useChrome()
+    const { owa } = useSettingHandler()
+    const owaFetchActive = ref(false)
     const notificationOnNewEmailActive = ref(false)
     const autoLoginActive = ref(false)
 
-    chrome.storage.local.get(['enabledOWAFetch', 'additionalNotificationOnNewMail'], (res) => {
-      OWAFetchActive.value = res.enabledOWAFetch
-      notificationOnNewEmailActive.value = res.additionalNotificationOnNewMail
+    onBeforeMount(async () => {
+      const { fetch, notification } =
+      await owa("check") as ResponseOWA
+
+      console.log(fetch)
+
+      owaFetchActive.value = fetch
+      notificationOnNewEmailActive.value = notification
+
+      watch(owaFetchActive, fetchUpdate)
+      watch(notificationOnNewEmailActive, notificationsUpdate)
+
+
+      autoLoginActive.value = await sendChromeRuntimeMessage({ cmd: "check_user_data", platform: "zih" }) as boolean
     })
-    chrome.storage.local.get(['isEnabled'], (res) => { autoLoginActive.value = res.isEnabled })
 
-    const updateOWAFetch = () => {
-      if (!autoLoginActive.value) return
-
-      if (!OWAFetchActive.value) {
-        chrome.runtime.sendMessage({ cmd: 'enable_owa_fetch' })
-        chrome.storage.local.set({ enabledOWAFetch: true })
-        // reload extension
-        // alert("Perfekt! Bitte starte den Browser einmal neu, damit die Einstellungen übernommen werden!")
-        // chrome.runtime.sendMessage({ cmd: "reload_extension" }, () => {})
-      }
-      if (OWAFetchActive.value) {
-        chrome.runtime.sendMessage({ cmd: 'disable_owa_fetch' })
-        chrome.storage.local.set({ enabledOWAFetch: false })
-        chrome.storage.local.set({ additionalNotificationOnNewMail: false })
-        OWAFetchActive.value = !OWAFetchActive.value
+    const fetchUpdate = async () => {
+      if(owaFetchActive.value)
+        owaFetchActive.value = await owa("enable", "fetch") as boolean
+      else {
+        owa("disable", "fetch")
         notificationOnNewEmailActive.value = false
       }
     }
 
-    const updateAdditionalNotification = () => {
-      if (!autoLoginActive.value || !OWAFetchActive.value) return
-
-      if (!notificationOnNewEmailActive.value) {
-        chrome.permissions.request({ permissions: ['notifications'] }, (granted) => {
-          if (granted) {
-            chrome.runtime.sendMessage({ cmd: 'owa_notifications_enabled' })
-            chrome.storage.local.set({ additionalNotificationOnNewMail: true })
-          } else {
-            alert('Du musst die Erlaubnis erteilen, um diese Funktion nutzen zu können!')
-          }
-        })
-      } else {
-        chrome.storage.local.remove(['additionalNotificationOnNewMail'])
-      }
-
-      notificationOnNewEmailActive.value = !notificationOnNewEmailActive.value
+    const notificationsUpdate = async () => {
+      if(notificationOnNewEmailActive.value)
+        notificationOnNewEmailActive.value = await owa("enable", "notification") as boolean
+      else
+        owa("disable", "notification")
     }
 
     return {
-      OWAFetchActive,
+      owaFetchActive,
       notificationOnNewEmailActive,
       autoLoginActive,
-      updateOWAFetch,
-      updateAdditionalNotification
     }
   }
 })
