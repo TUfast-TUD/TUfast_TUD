@@ -110,12 +110,12 @@ export abstract class Login {
     else return userData
   }
 
-  // The if the platformLoggedOut cookie is set
+  // The if the tuFast_platform_loggedOut cookie is set
   isLoggedOutCookie (): boolean {
-    return document.cookie.includes(`${this.cookieSettings.portalName}LoggedOut`)
+    return document.cookie.includes(`tuFast_${this.cookieSettings.portalName}_loggedOut`)
   }
 
-  // Function to set the platformLoggedOut cookie
+  // Function to set the tuFast_platform_loggedOut cookie
   setLoggedOutCookie (): void {
     if (!this.cookieSettings.domain) return
 
@@ -126,7 +126,7 @@ export abstract class Login {
     const date = new Date()
     date.setMinutes(date.getMinutes() + logoutDuration)
     const domain = this.cookieSettings.domain.startsWith('.') ? this.cookieSettings.domain : `.${this.cookieSettings.domain}`
-    document.cookie = `${this.cookieSettings.portalName}LoggedOut=true; expires=${date.toUTCString()}; path=/; domain=${domain}; secure`
+    document.cookie = `tuFast_${this.cookieSettings.portalName}_loggedOut=true; expires=${date.toUTCString()}; path=/; domain=${domain}; secure`
 
     // If we use IDP we need to logout we can ask the backgroundscript to log us out of there too
     if (this.cookieSettings.usesIdp) chrome.runtime.sendMessage({ cmd: 'logout_idp', logoutDuration })

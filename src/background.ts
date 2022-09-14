@@ -377,7 +377,7 @@ async function logoutIdp (logoutDuration: number = 5) {
   date.setMinutes(date.getMinutes() + logoutDuration)
   await new Promise<chrome.cookies.Cookie|null>((resolve) => chrome.cookies.set({
     url: 'https://idp.tu-dresden.de',
-    name: 'idpLoggedOut',
+    name: 'tuFast_idp_loggedOut',
     value: 'true',
     secure: true,
     expirationDate: date.getTime() / 1000
