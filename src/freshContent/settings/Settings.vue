@@ -216,7 +216,7 @@ export default defineComponent({
 .main-grid
     display: grid
     grid-template-columns: 40% 20% 40%
-    grid-template-rows: max-content auto
+    grid-template-rows: max-content 1fr
     max-height: 100vh
     margin: 20px
 
@@ -230,7 +230,6 @@ export default defineComponent({
         width: 80%
 
     &__settings
-        margin-top: 4rem
         grid-column: span 3
         display: grid
         grid-template-columns: repeat(4, 1fr)
@@ -240,6 +239,8 @@ export default defineComponent({
         align-self: stretch
         justify-items: center
         align-items: start
+        overflow: auto
+        padding: 4rem 2rem 4rem
 
         @media screen and (max-width: 600px)
             grid-template-columns: repeat(2, 1fr)
@@ -248,4 +249,30 @@ export default defineComponent({
 .light
     & .main-grid__header, & .main-grid__menues, & .main-grid__color-select
         color: hsl(var(--clr-black) )
+</style>
+
+<style lang="sass">
+body
+  scrollbar-color: hsl(var(--clr-primary))
+  scrollbar-width: thin
+
+*,
+*::before,
+*::after
+  scrollbar-color: inherit
+  scrollbar-width: inherit
+
+::-webkit-scrollbar
+  width: .4rem
+
+::-webkit-scrollbar-track
+  background-color: none
+
+::-webkit-scrollbar-thumb
+  background-color: hsl(var(--clr-primary))
+  border-radius: .4rem
+
+  &:hover
+    background-color: hsl(var(--clr-primary), .8)
+    cursor: pointer
 </style>
