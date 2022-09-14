@@ -401,7 +401,7 @@ async function logoutIdp (logoutDuration: number = 5) {
 async function eastereggFound () {
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
-  availableRockets.push('RI3')
+  if (!availableRockets.includes('RI3')) availableRockets.push('RI3')
 
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({
