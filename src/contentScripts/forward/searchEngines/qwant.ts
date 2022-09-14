@@ -1,44 +1,37 @@
 import type { SENamespace } from './common'
 
-// See if we have a query param - if so we don't want to do anything here
-function shouldAct (): boolean {
+function getQuery (): string|false {
   const params = new URLSearchParams(window.location.search)
-  const hasQuery = params.has('q') || params.has('query')
-  return !hasQuery
+  if (!params.has('q')) return false
+  else return params.get('q') || false
 }
+
+// OK. This should not be as hard as it is.
+// The better way would be to use webNavigation-API,
+// but this would disable the extension on update, or we have to ask every time...
+
+// Also the "window" property seems to be shared but only parts of it.
+// For example we can not register a proxy for history.pushState().
+
+// There are three options:
+// 1. A mutation observer that listens for every change in DOM and then checks the URL
+// 2. Injecting a script-Tag into the page that listens for changes in the URL
+// 3. setInterval and look for changes in the URL
+
+// 2. seems to be hard as we want to do not any stuff but use functions from the extension
+// 3. is not really nice, but it works
+// This means we should probably go with 1?
 
 (async () => {
   const common: SENamespace = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
 
-  // If we have GET query or no fwdEnabled, do nothing
-  if (!shouldAct() || !(await common.fwdEnabled())) return
+  // If we dont have fwdEnabled, do nothing
+  if (!await common.fwdEnabled()) return
 
-  // Check the searchbox first, if there's something in there
-  const sb = document.querySelector('input[name="q"][type="search"]') as HTMLInputElement
-  // If there's no searchbox thats weird, but we can't do anything about it
-  if (!sb) return
-
-  // Check the content of the box
-  if (await common.forward(sb.value)) return
-
-  // If we get here, the searchquery was useless but that could change so we register a listener
-  // First get the search form
-  const sf = document.querySelector('form[data-testid="mainSearchBar"]') as HTMLFormElement
-
-  // Create a listener function
-  const onSubmit = (e: Event) => {
-    console.log('submit')
-    e.preventDefault() // We want to do our own stuff
-    // Call the forward function
-    common.forward(sb.value).then((forwarded:boolean) => {
-      if (!forwarded) {
-        // When we didn't forward, the user still wants to search
-        e.target?.removeEventListener('submit', onSubmit);
-        (e.target as HTMLFormElement).submit()
-      }
-    })
-  }
-
-  // Register the listener
-  sf.addEventListener('submit', onSubmit)
+  // Else we will register a MutationObserver that will listen to any change
+  // If any change happens we see if we can forward to a location
+  new MutationObserver(async (_mutations) => {
+    const query = getQuery()
+    if (query) await common.forward(query)
+  }).observe(document, { subtree: true, childList: true })
 })()
