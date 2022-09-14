@@ -174,7 +174,7 @@ export async function enableOWAFetch (): Promise<boolean> {
 }
 
 export function enableOWAAlarm () {
-  chrome.permissions.request({ permissions: ['tabs'] }, (granted) => {
+  chrome.permissions.contains({ permissions: ['tabs'] }, (granted) => {
     if (!granted) return
 
     chrome.alarms.create('fetchOWAAlarm', { delayInMinutes: 1, periodInMinutes: 5 })
