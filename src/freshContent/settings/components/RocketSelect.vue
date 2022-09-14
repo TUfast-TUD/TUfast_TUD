@@ -40,12 +40,15 @@ import { defineComponent, onMounted, ref } from 'vue'
 import rockets from '../../rockets.json'
 
 import Link from './Link.vue'
+import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
   components: {
     CustomLink: Link
   },
   setup () {
+    const { sendChromeRuntimeMessage } = useChrome()
+
     const pos = ref(0)
     const availableRockets = ref(['default'])
     const selectedId = ref('default')
@@ -54,14 +57,13 @@ export default defineComponent({
 
     onMounted(async () => {
       // Load rockets
-      // Promisified until usage of Manifest V3
-      const { availableRockets: av, selectedRocketIcon } = await new Promise<any>((resolve) => chrome.storage.local.get(['selectedRocketIcon', 'availableRockets'], resolve))
+      const { available, selected } = await sendChromeRuntimeMessage({ cmd: 'check_rocket_status' }) as { selected: string, available: string[]}
 
-      availableRockets.value = [...av] || ['default']
+      availableRockets.value = [...available] || ['default']
       // No exceptions pls
       selectedId.value = (() => {
         try {
-          return JSON.parse(selectedRocketIcon).id
+          return JSON.parse(selected).id
         } catch {
           return 'default'
         }
@@ -75,13 +77,12 @@ export default defineComponent({
       else return availableRockets.value.includes(rocketObj.id)
     }
 
-    const select = (rocketObj: any, index: number) => {
+    const select = async (rocketObj: any, index: number) => {
       if (!isUnlocked(rocketObj)) return
 
       pos.value = 100 * index
 
-      chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocketObj) })
-      chrome.browserAction.setIcon({ path: rocketObj.iconPathUnlocked })
+      await sendChromeRuntimeMessage({ cmd: 'set_rocket_icon', rocketId: rocketObj.id })
     }
 
     const getIcon = (rocketObj: any) => {
@@ -96,13 +97,9 @@ export default defineComponent({
       return isUnlocked(rocketObj) ? rocketObj.unlocked : rocketObj.beforeUnlock
     }
 
-    const unlockRocket = (rocketId: string) => {
-      if (availableRockets.value.includes(rocketId)) return
+    const unlockRocket = async (rocketId: string) => {
+      await sendChromeRuntimeMessage({ cmd: 'unlock_rocket_icon', rocketId })
       availableRockets.value.push(rocketId)
-
-      const update: any = { availableRockets: [...availableRockets.value] }
-      if (rocketId === 'webstore') update.mostLikelySubmittedReview = true
-      chrome.storage.local.set(update)
     }
 
     return {

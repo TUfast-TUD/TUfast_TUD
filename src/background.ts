@@ -283,6 +283,16 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'check_se_status':
       chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
       return true
+    /* Rocket functions */
+    case 'set_rocket_icon':
+      setRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
+      return true
+    case 'unlock_rocket_icon':
+      unlockRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
+      return true
+    case 'check_rocket_status':
+      chrome.storage.local.get(['selectedRocketIcon', 'availableRockets'], (result) => sendResponse({ selected: result.selectedRocketIcon, available: result.availableRockets }))
+      return true
     /* End of settings function */
     // Command for OWA MutationObserver when site is opened
     case 'read_mail_owa':
@@ -400,16 +410,30 @@ async function logoutIdp (logoutDuration: number = 5) {
 
 // Function called when the easteregg is found
 async function eastereggFound () {
+  await unlockRocketIcon('easteregg')
+  await setRocketIcon('easteregg')
+
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.storage.local.set({ foundEasteregg: true }, resolve))
+}
+
+async function setRocketIcon (rocketId: string): Promise<void> {
+  const rocket = rockets[rocketId] || rockets.default
+
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) }, resolve))
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rocket.iconPathUnlocked }, resolve))
+}
+
+async function unlockRocketIcon (rocketId: string): Promise<void> {
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
-  if (!availableRockets.includes('easteregg')) availableRockets.push('easteregg')
+  if (!availableRockets.includes(rocketId)) availableRockets.push(rocketId)
+
+  const update: any = { availableRockets }
+  if (rocketId === 'webstore') update.mostLikelySubmittedReview = true
 
   // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({
-    foundEasteregg: true,
-    selectedRocketIcon: rockets.easteregg ?? '{"id": "easteregg", "iconPathUnlocked": "/assets/icons/RocketIcons/7_128px.png"}',
-    availableRockets
-  }, resolve))
-
-  chrome.browserAction.setIcon({ path: rockets.easteregg.iconPathUnlocked ?? '/assets/icons/RocketIcons/7_128px.png' })
+  await new Promise<void>((resolve) => chrome.storage.local.set(update, resolve))
 }
