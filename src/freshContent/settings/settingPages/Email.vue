@@ -78,8 +78,6 @@ export default defineComponent({
       const { fetch, notification } =
       await owa('check') as ResponseOWA
 
-      console.log(fetch)
-
       owaFetchActive.value = fetch
       notificationOnNewEmailActive.value = notification
 
