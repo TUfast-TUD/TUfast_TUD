@@ -43,6 +43,7 @@
 import { defineComponent, PropType, ref } from 'vue'
 import { PhCaretDown, PhCaretDoubleRight } from '@dnlsndr/vue-phosphor-icons'
 
+import { useChrome } from '../composables/chrome'
 import studies from '../../studies.json'
 
 export default defineComponent({
@@ -57,18 +58,21 @@ export default defineComponent({
     }
   },
   setup () {
+    const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
     const clicked = ref(false)
     const selectedStudy = ref('Standardeinstellungen')
 
-    chrome.storage.local.get('studiengang', (res) => { selectedStudy.value = res.studiengang || 'Standardeinstellungen' })
+    getChromeLocalStorage('studiengang').then(studiengang => {
+      selectedStudy.value = studiengang as string|undefined || 'Standardeinstellungen'
+    })
 
-    const setStudySubject = (studiengang: string) => {
+    const setStudySubject = async (studiengang: string) => {
       if (studiengang === 'addStudiengang') {
         window.location.href = 'mailto:frage@tu-fast.de?Subject=Vorschlag Studiengang'
         return
       }
-      chrome.storage.local.set({ studiengang })
       selectedStudy.value = studiengang
+      await setChromeLocalStorage({ studiengang })
     }
 
     return {

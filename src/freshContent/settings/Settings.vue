@@ -133,7 +133,7 @@ export default defineComponent({
     DoneSetup
   },
   setup () {
-    const { getChromeLocalStorage } = useChrome()
+    const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
     const hideWelcome = ref(false)
     const onboardingStep = ref(1)
     const showCard = ref(false)
@@ -145,9 +145,9 @@ export default defineComponent({
       hideWelcome.value = await getChromeLocalStorage('hideWelcome') as boolean
     })
 
-    const disableWelcome = () => {
-      chrome.storage.local.set({ hideWelcome: true })
+    const disableWelcome = async () => {
       hideWelcome.value = true
+      await setChromeLocalStorage({ hideWelcome: true })
     }
 
     const forward = () => {
@@ -160,37 +160,34 @@ export default defineComponent({
     }
 
     const html = document.documentElement
-
-    if (window.matchMedia('(prefers-color-scheme: light').matches) { chrome.storage.local.set({ theme: 'light' }) } else { chrome.storage.local.set({ theme: 'dark' }) }
+    const useLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches
+    setChromeLocalStorage({ theme: useLightTheme ? 'light' : 'dark' })
 
     const openSetting = (setting : setting) => {
       showCard.value = true
       currentSetting.value = setting
     }
 
-    const toggleTheme = () => {
-      chrome.storage.local.get(['theme'], (res) => {
-        if (res.theme === 'dark') { chrome.storage.local.set({ theme: 'light' }) }
-        if (res.theme === 'light') { chrome.storage.local.set({ theme: 'dark' }) }
+    const toggleTheme = async () => {
+      const theme = await getChromeLocalStorage('theme') as 'light' | 'dark'
+      if (theme === 'dark') { await setChromeLocalStorage({ theme: 'light' }) }
+      if (theme === 'light') { await setChromeLocalStorage({ theme: 'dark' }) }
 
-        updateTheme()
-      })
+      updateTheme(theme === 'dark' ? 'light' : 'dark')
     }
 
-    const updateTheme = () => {
-      chrome.storage.local.get(['theme'], (res) => {
-        if (res.theme === 'dark') {
-          animState.value = 'dark'
-          html.classList.add('dark')
-          html.classList.remove('light')
-        } else if (res.theme === 'light') {
-          animState.value = 'light'
-          html.classList.add('light')
-          html.classList.remove('dark')
-        }
-      })
+    const updateTheme = (theme: string) => {
+      if (theme === 'dark') {
+        animState.value = 'dark'
+        html.classList.add('dark')
+        html.classList.remove('light')
+      } else if (theme === 'light') {
+        animState.value = 'light'
+        html.classList.add('light')
+        html.classList.remove('dark')
+      }
     }
-    updateTheme()
+    updateTheme(useLightTheme ? 'light' : 'dark')
 
     return {
       hideWelcome,

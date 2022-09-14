@@ -20,6 +20,7 @@
 import { defineComponent, ref } from 'vue'
 import { PhCursor, PhTimer } from '@dnlsndr/vue-phosphor-icons'
 import { time } from '../utilities'
+import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
   components: {
@@ -27,8 +28,12 @@ export default defineComponent({
     PhTimer
   },
   setup () {
+    const { getChromeLocalStorage } = useChrome()
     const counter = ref<number>(0)
-    chrome.storage.local.get(['savedClickCounter'], (clicks) => { counter.value = clicks.savedClickCounter ?? 0 })
+
+    getChromeLocalStorage('savedClickCounter').then(clicks => {
+      counter.value = typeof clicks === 'number' ? clicks : (Number.parseInt(clicks as string) || 0)
+    })
 
     return {
       counter,

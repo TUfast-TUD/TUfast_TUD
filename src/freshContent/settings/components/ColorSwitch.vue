@@ -30,6 +30,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, PropType } from 'vue'
 import '@lottiefiles/lottie-player'
+import { useChrome } from '../composables/chrome'
 import animation from '../../../assets/settings/theme_lottie.json'
 
 export default defineComponent({
@@ -40,6 +41,7 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const { getChromeLocalStorage } = useChrome()
     const anim : any = ref()
 
     const direction = ref(-1)
@@ -56,22 +58,17 @@ export default defineComponent({
       anim.value.play()
     }
 
-    const setAnimationDirection = () => {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get(['theme'], (res) => {
-          if (res.theme === 'dark') {
-            direction.value = -1
-            animSeek.value = 99
-          }
-          if (res.theme === 'light') {
-            direction.value = 1
-            animSeek.value = 0
-          }
-          anim.value.setDirection(direction.value)
-          anim.value.seek(`${animSeek.value}%`)
-          resolve()
-        })
-      })
+    const setAnimationDirection = async () => {
+      const theme = await getChromeLocalStorage('theme')
+      if (theme === 'dark') {
+        direction.value = -1
+        animSeek.value = 99
+      } else if (theme === 'light') {
+        direction.value = 1
+        animSeek.value = 0
+      }
+      anim.value.setDirection(direction.value)
+      anim.value.seek(`${animSeek.value}%`)
     }
 
     return {
