@@ -1,6 +1,6 @@
 <template>
   <h1 class="upper">
-    Abkürzungen
+    Suchmaschinen-Superkräfte
   </h1>
   <div class="info">
     <p class="search-terms">

@@ -7,27 +7,27 @@
     {
         "title": "SearchSetup",
         "h1": "Möchtest du Superkräfte für deine Suchmaschine?",
-        "h2": "TUFast kann dir Abkürzungen (siehe oben) für deine Suchmaschine bereitstellen. Wenn du diese Abkürzungen in Google, Ecosia & Co. eingibst, kommst du schnellstens zur richtigen TU-Seite!"
+        "h2": "TUFast stellt dir Abkürzungen für deine Suchmaschine bereit (siehe oben). Wenn du diese Abkürzungen in Google, Ecosia & Co. eingibst, kommst du schnellstens zur richtigen Seite der TU Dresden!"
     },
     {
         "title": "LoginSetup",
         "h1": "Was macht diese Funktion?",
-        "h2": "TUFast kann deine TU-Dresden Logindaten speichern, sodass du automatisch auf Opal, Selma & Co. eingeloggt wirst. Deine Daten werden lokal auf deinem Computer & verschlüsselt gespeichert und können nicht von uns eingesehen werden."
+        "h2": "TUFast kann dich automatisch in alle Online-Portale der TU Dresden (Opal, Selma & Co.) einloggen. Wenn du diese Funktion aktivierst, musst du deine Selma-Login-Daten im nächsten Schritt lokal und verschlüsselt auf diesem Computer speichern. Diese Daten können von uns nicht eingesehen werden."
     },
     {
         "title": "LoginAccept",
-        "h1": "Lass uns dir nur schnell bei der Einrichtung helfen!",
-        "h2": "Möchtest du automatisch auf Opal und Co. angemeldet werden? Dann gib oben deinen Nutzernamen und Passwort an! (Diese werden nur lokal auf deinem Rechner und verschlüsselt gespeichert)"
+        "h1": "Lass uns dir schnell bei der Einrichtung helfen!",
+        "h2": "Gib' hier deine Selma-Login-Daten ein. Diese Daten werden nur lokal und verschlüsselt auf diesem Computer gespeichert und können von uns nicht eingesehen werden."
     },
     {
         "title": "EMailSetup",
         "h1": "Möchtest du E-Mail-Benachrichtigungen erhalten?",
-        "h2": "TUFast kann dir anzeigen, wie viele neue Nachrichten du in deinem Postfach hast. Aktiviere diese Funktion mit der linken Checkbox. Du kannst auch über neue E-Mails benachrichtigt werden. Aktiviere dafür die rechte Checkbox."
+        "h2": "TUFast kann dir anzeigen, wie viele neue Nachrichten du in deinem TU Dresden Postfach hast (linke Checkbox). Du kannst auch über neue E-Mails benachrichtigt werden (rechte Checkbox)."
     },
     {
         "title": "OpalSetup",
         "h1": "Möchtest du diese Zusatzfunktionen für Opal?",
-        "h2": "TUFast kann PDF-Dokumente auf Opal für dich direkt im Browser öffnen anstatt sie herunterzuladen. Aktiviere diese Funktion mit der linken Checkbox. Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf Opal bist."
+        "h2": "TUFast kann PDF-Dokumente auf Opal für dich direkt im Browser öffnen anstatt sie herunterzuladen (linke Checkbox). Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf Opal bist (rechte Checkbox)."
     },
     {
         "title": "DoneSetup",

@@ -1,6 +1,6 @@
 <template>
   <p class="p-margin">
-    Hey, ich bin Oli, Begründer von TUFast 🙂<br>
+    Hey, wir sind dein TUfast-Team 🙂<br>
     TUfast ist ein quelloffenes und studentisches Projekt.<br>
     Fragen und Feedback gern an <a
       class="link"
@@ -26,7 +26,12 @@
   </p>
 
   <p class="p-margin">
-    Danke an die großartigen Mitentwickler:
+    TUfast wird aktuell hauptsächlich entwickelt von:
+    <a
+      class="link"
+      href="https://github.com/C0ntroller"
+      target="_blank"
+    >Daniel</a>,
     <a
       class="link"
       href="https://github.com/Noxdor"
@@ -34,19 +39,14 @@
     >Noxdor</a>,
     <a
       class="link"
-      href="https://github.com/peterkappelt"
-      target="_blank"
-    >peterkappelt</a>,
-    <a
-      class="link"
       href="https://github.com/FugiMuffi"
       target="_blank"
     >Lucas</a>,
     <a
       class="link"
-      href="https://github.com/C0ntroller"
+      href="https://github.com/OliEfr"
       target="_blank"
-    >Daniel</a>!
+    >Oli</a>!
   </p>
 
   <h3 class="heading">

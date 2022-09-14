@@ -7,7 +7,7 @@
   </div>
   <Setting
     v-model="accept"
-    txt="Dafür Login zu Opal und co. verschlüsselt & lokal speichern?"
+    txt="Autologin aktivieren"
     :column="true"
     @click="emitAccept()"
   />

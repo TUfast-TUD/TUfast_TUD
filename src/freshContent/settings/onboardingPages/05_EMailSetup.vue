@@ -1,16 +1,16 @@
 <template>
   <h1 class="upper">
-    E-Mail
+    TU Dresden E-Mail
   </h1>
   <div class="info">
     <Setting
       v-model="messagesActive"
-      txt="Anzeigen Anzahl Nachrichten"
+      txt="Anzahl neuer Nachrichten anzeigen"
       :column="true"
     />
     <Setting
       v-model="notificationsActive"
-      txt="E-Mail-Benachrichtigungen"
+      txt="Benachrichtigung bei neuer E-Mail"
       :column="true"
     />
   </div>
