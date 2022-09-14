@@ -275,6 +275,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'check_opalpdf_status':
       opalPdf.checkOpalPdfStatus().then(sendResponse)
       return true // required for async sendResponse
+    case 'enable_se_redirect':
+      chrome.storage.local.set({ fwdEnabled: true }, () => sendResponse(true))
+      return true
+    case 'disable_se_redirect':
+      chrome.storage.local.set({ fwdEnabled: false })
+      break
+    case 'check_se_status':
+      chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
+      return true
     /* End of settings function */
     // Command for OWA MutationObserver when site is opened
     case 'read_mail_owa':
