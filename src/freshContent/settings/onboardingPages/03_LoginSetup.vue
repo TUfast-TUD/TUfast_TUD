@@ -25,7 +25,7 @@ export default defineComponent({
   },
   emits: ['accept'],
   setup (_, { emit }) {
-    const accept = ref(false)
+    const accept = ref(true)
 
     const emitAccept = () => {
       emit('accept', { value: accept.value })

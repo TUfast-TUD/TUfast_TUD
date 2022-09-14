@@ -10,6 +10,7 @@
     />
     <Setting
       v-model="newTabActive"
+      :disabled="!inlineActive"
       txt="PDF-Dokumente in neuem Tab öffnen"
       :column="true"
     />

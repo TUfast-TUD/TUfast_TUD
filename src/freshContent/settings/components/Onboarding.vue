@@ -173,6 +173,10 @@ export default defineComponent({
         animation-delay: 300ms
         animation-fill-mode: backwards
 
+.footer-text
+  text-align: justify
+  margin-right: 2rem
+
 .light
     & .onboarding
         &__main, &__footer, &__close:not(:hover)

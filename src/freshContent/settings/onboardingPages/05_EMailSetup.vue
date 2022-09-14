@@ -10,6 +10,7 @@
     />
     <Setting
       v-model="notificationsActive"
+      :disabled="!messagesActive"
       txt="Benachrichtigung bei neuer E-Mail"
       :column="true"
     />
