@@ -56,20 +56,26 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .setting
-    display: flex
-    align-items: center
-    gap: 1.5rem
+  display: flex
+  align-items: center
+  gap: 1.5rem
 
-    &__toggle
-      margin-right: 1rem
+  &__toggle
+    margin-right: 1rem
 
-    &--column
-        flex-direction: column
-        font-size: 1.4rem
+  &--column
+    flex-direction: column
+    font-size: 1.4rem
 
-    &--column &__toggle
-        width: 80px
-        height: 80px
+  &--column &__toggle
+    margin-right: 0
+    width: 80px
+    height: 80px
+
+  &--column span
+    text-align: center
+        
+
 .light
     & .setting--column .setting__toggle
         background-color: hsl(var(--clr-black), )
