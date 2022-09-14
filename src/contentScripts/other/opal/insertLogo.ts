@@ -31,9 +31,9 @@ function resetColor () {
   const iconPath = (() => {
     try {
       const parsed = JSON.parse(selectedRocketIcon)
-      return parsed && parsed.link ? parsed.link : 'RocketIcons/default_128px'
+      return parsed && parsed.iconPathUnlocked ? parsed.iconPathUnlocked : '/assets/icons/RocketIcons/default_128px.png'
     } catch (e) {
-      return 'RocketIcons/default_128px'
+      return '/assets/icons/RocketIcons/default_128px.png'
     }
   })()
 
