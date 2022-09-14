@@ -258,6 +258,24 @@
     },
     {
       "js": [
+        "contentScripts/login/gitlabInfSE.js"
+      ],
+      "run_at": "document_idle",
+      "matches": [
+        "https://se-gitlab.inf.tu-dresden.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/login/gitlabInfIMLD.js"
+      ],
+      "run_at": "document_idle",
+      "matches": [
+        "https://git.imld.de/*"
+      ]
+    },
+    {
+      "js": [
         "contentScripts/login/slub.js"
       ],
       "run_at": "document_idle",

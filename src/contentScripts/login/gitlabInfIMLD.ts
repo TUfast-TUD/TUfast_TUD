@@ -4,24 +4,24 @@ import type { CookieSettings, UserData, LoginFields, LoginNamespace } from './co
 // "Quicksettings"
 const platform = 'zih'
 const cookieSettings: CookieSettings = {
-  portalName: 'gitlabMn',
-  domain: 'gitlab.mn.tu-dresden.de'
+  portalName: 'gitlabInfIMLD',
+  domain: 'git.imld.de'
 };
 
 (async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
-  class GlMnLogin extends common.Login {
+  class GlInfIMLDLogin extends common.Login {
     constructor () {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> {
+    async additionalFunctionsPreCheck (): Promise<void> { }
+
+    async additionalFunctionsPostCheck (): Promise<void> {
       (document.querySelector('a[data-qa-selector="ldap_tab"][role="tab"]') as HTMLAnchorElement|null)?.click()
     }
-
-    async additionalFunctionsPostCheck (): Promise<void> { }
 
     async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
       return document.querySelector('.flash-alert[data-testid="alert-danger"]')
@@ -49,5 +49,5 @@ const cookieSettings: CookieSettings = {
     }
   }
 
-  await (new GlMnLogin()).start()
+  await (new GlInfIMLDLogin()).start()
 })()
