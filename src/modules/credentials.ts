@@ -58,7 +58,7 @@ export async function setUserData (userData: UserData, platform = 'zih') {
     const iv = crypto.getRandomValues(new Uint8Array(16))
 
     // encrypt
-    let dataEnc = await crypto.subtle.encrypt(
+    let dataEnc: any = await crypto.subtle.encrypt(
       {
         name: 'AES-CBC',
         iv: iv
@@ -167,6 +167,26 @@ export async function getUserData (platform: string = 'zih'): Promise<UserData> 
   }
 }
 
+export async function deleteUserData (platform: string): Promise<boolean> {
+  if (!platform) return false
+  // Promisified until usage of Manifest V3
+  const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
+  // Field is wrong -> false
+  if (typeof data !== 'string') return false
+
+  try {
+    const dataJson = JSON.parse(data)
+    if (!dataJson[platform]) return false // no data available
+    delete dataJson[platform]
+    // Promisified until usage of Manifest V3
+    await new Promise<void>((resolve) => chrome.storage.local.set({ udata: JSON.stringify(dataJson) }, resolve))
+    return true
+  } catch {
+    // Should happen if the JSON is broken
+    return false
+  }
+}
+
 // return {user: string, pass: string}
 // This is the old method to get the user data. It will be preserved until probably every installation uses the new format
 export async function getUserDataLagacy (): Promise<UserData> {
@@ -189,7 +209,7 @@ export async function getUserDataLagacy (): Promise<UserData> {
   if (userDataEncrypted.length === 0) return ({ user: undefined, pass: undefined })
 
   // decrypt
-  let userData = await crypto.subtle.decrypt(
+  let userData: any = await crypto.subtle.decrypt(
     {
       name: 'AES-CBC',
       iv: iv

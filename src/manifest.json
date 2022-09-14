@@ -1,6 +1,6 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "6.2.0.0",
+  "version": "7.0.0.0",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage",
@@ -294,12 +294,11 @@
     "default_popup": "freshContent/popup/popup.html"
   },
   "options_ui": {
-    "page": "freshContent/settings/settings.html",
+    "page": "freshContent/settings/index.html",
     "open_in_tab": true
   },
   "web_accessible_resources": [
     "assets/*",
-    "assets/icons/RocketIcons/default_128px.png",
     "contentScripts/forward/searchEngines/common.js",
     "contentScripts/login/common.js",
     "contentScripts/other/hisqis/*",

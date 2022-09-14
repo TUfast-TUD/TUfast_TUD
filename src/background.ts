@@ -1,6 +1,8 @@
 'use strict'
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
+import * as opalPdf from './modules/opalPdf'
+import rockets from './freshContent/rockets.json'
 
 // eslint-disable-next-line no-unused-vars
 const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
@@ -15,8 +17,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         dashboardDisplay: 'favoriten',
         fwdEnabled: true,
         encryptionLevel: 3,
-        availableRockets: ['RI_default'],
-        selectedRocketIcon: '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}',
+        availableRockets: ['default'],
+        selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
         studiengang: 'general'
       })
@@ -55,7 +57,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
-      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}'
+      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "/assets/icons/RocketIcons/default_128px.png"}'
 
       // Upgrading encryption
       // Currently "encryptionLevel" can't be lower than 3, but "encryption_level" can
@@ -94,15 +96,32 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       }
 
       // Upgrading availableRockets
-      const avRockets = currentSettings.availableRockets || ['RI_default']
-      if (savedClicks > 250 && !avRockets.includes('RI4')) avRockets.push('RI4')
-      if (savedClicks > 2500 && !avRockets.includes('RI5')) avRockets.push('RI5')
-      if (currentSettings.Rocket === 'colorful' && currentSettings.foundEasteregg === undefined) {
-        updateObj.foundEasteregg = true
-        updateObj.selectedRocketIcon = '{"id": "RI3", "link": "assets/icons/RocketIcons/3_120px.png"}'
-        avRockets.push('RI3')
+      let avRockets: string[] = currentSettings.availableRockets || ['default']
+      // Renaming the rockets
+      avRockets = avRockets.map(rocket => {
+        switch (rocket) {
+          case 'RI_default': return 'default'
+          case 'RI1': return 'whatsapp'
+          case 'RI2': return 'email'
+          case 'RI3': return 'easteregg'
+          case 'RI4': return '250clicks'
+          case 'RI5': return '2500clicks'
+          case 'RI6': return 'webstore'
+          default: return rocket
+        }
+      })
+      // Making things unique
+      avRockets = avRockets.filter((value, index, array) => array.indexOf(value) === index)
+
+      if (savedClicks >= 250 && !avRockets.includes('250clicks')) avRockets.push('250clicks')
+      if (savedClicks >= 2500 && !avRockets.includes('2500clicks')) avRockets.push('2500clicks')
+      if (currentSettings.Rocket === 'colorful') {
+        if (!currentSettings.foundEasteregg) updateObj.foundEasteregg = true
+
+        if (!avRockets.includes('easteregg')) avRockets.push('easteregg')
+        updateObj.selectedRocketIcon = rockets.easteregg
         // Promisified until usage of Manifest V3
-        await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_128px.png' }, resolve))
+        await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rockets.easteregg.iconPathUnlocked }, resolve))
         // Promisified until usage of Manifest V3
         await new Promise<void>((resolve) => chrome.storage.local.remove(['Rocket'], resolve))
       }
@@ -148,41 +167,31 @@ chrome.commands.onCommand.addListener(async (command) => {
 chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
   try {
     const r = JSON.parse(resp.selectedRocketIcon)
-    chrome.browserAction.setIcon({
-      path: r.link
-    })
+    if (!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
+    chrome.browserAction.setIcon({ path: r.iconPathUnlocked || rockets.default.iconPathUnlocked })
   } catch (e) {
     console.log(`Cannot parse rocket icon: ${resp}`)
-    chrome.browserAction.setIcon({
-      path: 'assets/icons/RocketIcons/default_128px.png'
-    })
+    chrome.browserAction.setIcon({ path: rockets.default.iconPathUnlocked })
   }
 })
 
 // start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail'], async (result: any) => {
   if (await credentials.userDataExists('zih') && result.enabledOWAFetch) {
-    await owaFetch.enableOWAFetch()
+    await owaFetch.enableOWAAlarm()
   }
+
+  // When no notifications are enabled, there is nothing to do anymore
+  if (!result.additionalNotificationOnNewMail) return
   // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, (granted: boolean) => {
-    if (granted && result.additionalNotificationOnNewMail) {
-      // register listener for owaFetch notifications
-      chrome.notifications.onClicked.addListener(async (id) => {
-        if (id === 'tuFastNewEmailNotification') {
-          // Promisified until usage of Manifest V3
-          await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
-        }
-      })
-    }
-    resolve()
-  }))
+  const notificationAccess = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, resolve))
+  if (notificationAccess) owaFetch.registerNotificationClickListener()
 })
 
 // Register header listener
-chrome.storage.local.get(['pdfInNewTab'], (result) => {
-  if (result.pdfInNewTab) {
-    enableHeaderListener(true)
+chrome.storage.local.get(['pdfInInline'], async (result) => {
+  if (result.pdfInInline) {
+    opalPdf.enableOpalPdfHeaderListener()
   }
 })
 
@@ -212,6 +221,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // The first one is legacy and should not be used anymore
       saveClicks(request.click_count || request.clickCount)
       break
+    /*********************
+     * Settings commands *
+     *********************/
+    /* User data */
     case 'get_user_data':
       // Asynchronous response
       credentials.getUserData(request.platform || 'zih').then(sendResponse)
@@ -224,11 +237,66 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // Asynchronous response
       credentials.userDataExists(request.platform).then(sendResponse)
       return true // required for async sendResponse
+    case 'delete_user_data':
+      // Asynchronous response
+      credentials.deleteUserData(request.platform).then(sendResponse) // Response can probably be ignored
+      return true // required for async sendResponse
+    /* OWA */
+    case 'enable_owa_fetch':
+      owaFetch.enableOWAFetch().then(sendResponse)
+      return true // required for async sendResponse
+    case 'disable_owa_fetch':
+      owaFetch.disableOWAFetch()
+      break
+    case 'enable_owa_notification':
+      owaFetch.enableOWANotifications().then(sendResponse)
+      return true // required for async sendResponse
+    case 'disable_owa_notification':
+      owaFetch.disableOWANotifications().then(() => sendResponse(true))
+      return true
+    case 'check_owa_status':
+      owaFetch.checkOWAStatus().then(sendResponse)
+      return true // required for async sendResponse
+    /* Opal PDF */
+    case 'enable_opalpdf_inline':
+      opalPdf.enableOpalPdfInline().then(sendResponse)
+      return true // required for async sendResponse
+    case 'disable_opalpdf_inline':
+      opalPdf.disableOpalPdfInline().then(() => sendResponse(true))
+      return true
+    case 'enable_opalpdf_newtab':
+      opalPdf.enableOpalPdfNewTab().then(sendResponse)
+      return true // required for async sendResponse
+    case 'disable_opalpdf_newtab':
+      opalPdf.disableOpalPdfNewTab().then(() => sendResponse(true))
+      return true
+    case 'check_opalpdf_status':
+      opalPdf.checkOpalPdfStatus().then(sendResponse)
+      return true // required for async sendResponse
+    /* SE Redirects */
+    case 'enable_se_redirect':
+      chrome.storage.local.set({ fwdEnabled: true }, () => sendResponse(true))
+      return true
+    case 'disable_se_redirect':
+      chrome.storage.local.set({ fwdEnabled: false }, () => sendResponse(true))
+      return true
+    case 'check_se_status':
+      chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
+      return true
+    /* Rocket functions */
+    case 'set_rocket_icon':
+      setRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
+      return true
+    case 'unlock_rocket_icon':
+      unlockRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
+      return true
+    case 'check_rocket_status':
+      chrome.storage.local.get(['selectedRocketIcon', 'availableRockets'], (result) => sendResponse({ selected: result.selectedRocketIcon, available: result.availableRockets }))
+      return true
+    /* End of settings function */
+    // Command for OWA MutationObserver when site is opened
     case 'read_mail_owa':
       owaFetch.readMailOWA(request.nrOfUnreadMail || 0)
-      break
-    case 'disable_owa_fetch':
-      owaFetch.disableOwaFetch()
       break
     case 'reload_extension':
       chrome.runtime.reload()
@@ -247,9 +315,6 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
       }
       break
-    case 'toggle_pdf_inline_setting':
-      enableHeaderListener(request.enabled)
-      break
     case 'update_rocket_logo_easteregg':
       chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
       break
@@ -265,38 +330,6 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   }
   return false // no async sendResponse will be fired
 })
-
-/**
- * enable or disable the header listener
- * modify http header from opal, to view pdf in browser without the need to download it
- * @param {boolean} enabled flag to enable/ disable listener
- */
-function enableHeaderListener (enabled: boolean) {
-  if (enabled) {
-    chrome.webRequest.onHeadersReceived.addListener(
-      headerListenerFunc,
-      {
-        urls: [
-          'https://bildungsportal.sachsen.de/opal/downloadering*',
-          'https://bildungsportal.sachsen.de/opal/*.pdf'
-        ]
-      },
-      ['blocking', 'responseHeaders']
-    )
-  } else {
-    chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
-  }
-}
-
-function headerListenerFunc (details: chrome.webRequest.WebResponseHeadersDetails) {
-  if (!details.responseHeaders) return
-  const header = details.responseHeaders.find(
-    e => e.name.toLowerCase() === 'content-disposition'
-  )
-  if (!header?.value?.includes('.pdf')) return // only for pdf
-  header.value = 'inline'
-  return { responseHeaders: details.responseHeaders }
-}
 
 // open settings (=options) page, if required set params
 async function openSettingsPage (params?: string) {
@@ -327,8 +360,8 @@ async function saveClicks (counter: number) {
   // make rocketIcons available if appropriate
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
-  if (savedClickCounter > 250 && !availableRockets.includes('RI4')) availableRockets.push('RI4')
-  if (savedClickCounter > 2500 && !availableRockets.includes('RI5')) availableRockets.push('RI5')
+  if (savedClickCounter >= 250 && !availableRockets.includes('250clicks')) availableRockets.push('250clicks')
+  if (savedClickCounter >= 2500 && !availableRockets.includes('2500clicks')) availableRockets.push('2500clicks')
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ availableRockets }, resolve))
 }
@@ -377,16 +410,30 @@ async function logoutIdp (logoutDuration: number = 5) {
 
 // Function called when the easteregg is found
 async function eastereggFound () {
+  await unlockRocketIcon('easteregg')
+  await setRocketIcon('easteregg')
+
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.storage.local.set({ foundEasteregg: true }, resolve))
+}
+
+async function setRocketIcon (rocketId: string): Promise<void> {
+  const rocket = rockets[rocketId] || rockets.default
+
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) }, resolve))
+  // Promisified until usage of Manifest V3
+  await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rocket.iconPathUnlocked }, resolve))
+}
+
+async function unlockRocketIcon (rocketId: string): Promise<void> {
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
-  availableRockets.push('RI3')
+  if (!availableRockets.includes(rocketId)) availableRockets.push(rocketId)
+
+  const update: any = { availableRockets }
+  if (rocketId === 'webstore') update.mostLikelySubmittedReview = true
 
   // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({
-    foundEasteregg: true,
-    selectedRocketIcon: '{"id": "RI3", "link": "/assets/icons/RocketIcons/7_128px.png"}',
-    availableRockets
-  }, resolve))
-
-  chrome.browserAction.setIcon({ path: '/assets/icons/RocketIcons/7_128px.png' })
+  await new Promise<void>((resolve) => chrome.storage.local.set(update, resolve))
 }

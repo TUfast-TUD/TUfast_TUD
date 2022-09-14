@@ -20,7 +20,7 @@ export async function fwdEnabled () {
 }
 
 export async function forward (query: string): Promise<boolean> {
-  if (!fwdEnabled() || !query) return false
+  if (!(await fwdEnabled()) || !query) return false
 
   const url = sites[query.toLowerCase()]
   if (url) {

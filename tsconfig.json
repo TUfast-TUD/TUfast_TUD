@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+      "downlevelIteration": true,
+      "strict": true,
+      "noImplicitAny": false,
+      "noImplicitThis": false,
+      "noImplicitReturns": false,
+      "jsx": "preserve",
+      "importHelpers": true,
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "lib": [
+        "esnext",
+        "dom",
+        "dom.iterable",
+        "scripthost",
+      ],
+      "types": [
+        "chrome"
+      ]
+    },
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.d.ts",
+      "src/**/*.tsx",
+      "src/**/*.vue"],
+    "exclude": [
+      "node_modules"
+    ]
+  }
