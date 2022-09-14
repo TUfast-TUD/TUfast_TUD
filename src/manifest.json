@@ -80,7 +80,6 @@
         "contentScripts/other/hisqis/pimpAndInjectModules.js"
       ],
       "css": [
-        "thirdParty/vuesax.css",
         "styles/components/gradeTable.css",
         "styles/contentScripts/hisqis.css"
       ],
@@ -272,6 +271,15 @@
       "run_at": "document_idle",
       "matches": [
         "https://git.imld.de/*"
+      ]
+    },
+    {
+      "js": [
+        "contentScripts/login/gitlabTUC.js"
+      ],
+      "run_at": "document_idle",
+      "matches": [
+        "https://gitlab.hrz.tu-chemnitz.de/*"
       ]
     },
     {
