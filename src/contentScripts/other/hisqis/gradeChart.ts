@@ -1,4 +1,5 @@
-import Chart from 'chart.js/auto'
+import { Chart, LinearScale, BarController, CategoryScale, BarElement } from 'chart.js'
+Chart.register(LinearScale, BarController, CategoryScale, BarElement)
 
 type ExamGrades = Record<number, number>
 type ModuleGrades = Record<number, { grade: number, cp: number }>
