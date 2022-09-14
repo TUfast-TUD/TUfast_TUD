@@ -2,7 +2,6 @@
   <Setting
     v-model="searchEngineActive"
     txt="Suchmaschinen Superpower aktivieren"
-    @changed-setting="searchEngine()"
   />
   <p class="max-line p-margin">
     Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!
@@ -23,22 +22,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
 
+// types
+import type { ResponseSE } from '../types/SettingHandler'
+
+// components
 import Setting from '../components/Setting.vue'
+
+// composables
+import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
     Setting
   },
   setup () {
+    const { se } = useSettingHandler()
     const searchEngineActive = ref(false)
-    chrome.storage.local.get(['fwdEnabled'], (res) => { searchEngineActive.value = res.fwdEnabled })
-    const searchEngine = () => chrome.storage.local.set({ fwdEnabled: !searchEngineActive.value }, () => {})
+
+    onBeforeMount(async () => {
+      const { redirect } = await se("check", "redirect") as ResponseSE
+
+      searchEngineActive.value = redirect
+
+      watch(searchEngineActive, seUpdate)
+    })
+
+    const seUpdate = async () => {
+      if (searchEngineActive.value)
+        searchEngineActive.value = await se('enable', 'redirect') as boolean
+      else
+        se('disable', 'redirect')
+    }
 
     return {
-      searchEngine,
-      searchEngineActive
+      searchEngineActive,
     }
   }
 })

@@ -20,19 +20,22 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+// components
 import Link from '../components/Link.vue'
+
+// composables
+import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
   components: {
     CustomLink: Link
   },
   setup () {
-    const openShortcutSettings = () => {
-      chrome.runtime.sendMessage({ cmd: 'open_shortcut_settings' }, (result) => { })
-    }
+    const { sendChromeRuntimeMessage } = useChrome()
+    const openShortcutSettings = () => sendChromeRuntimeMessage({ cmd: 'open_shortcut_settings' })
 
     return {
-      openShortcutSettings
+      openShortcutSettings,
     }
   }
 })

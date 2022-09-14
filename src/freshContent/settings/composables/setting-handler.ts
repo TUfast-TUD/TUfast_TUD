@@ -4,14 +4,17 @@ import type {
   OptionsOpalPdf,
   ResponseOpalPdf,
   OptionsOWA,
-  ResponseOWA
+  ResponseOWA,
+  OptionsSE,
+  ResponseSE,
 } from '../types/SettingHandler'
 
 const { sendChromeRuntimeMessage } = useChrome()
 
 export const useSettingHandler = () => ({
   opalPdf,
-  owa
+  owa,
+  se
 })
 
 const opalPdf = async (verb: Verbs, option?: OptionsOpalPdf): Promise<ResponseOpalPdf | boolean> => {
@@ -26,4 +29,11 @@ const owa = async (verb: Verbs, option?: OptionsOWA): Promise<ResponseOWA | bool
     return await sendChromeRuntimeMessage({ cmd: `${verb}_owa_status` }) as ResponseOWA
   else
     return await sendChromeRuntimeMessage({ cmd: `${verb}_owa_${option}` }) as boolean
+}
+
+const se = async (verb: Verbs, option?: OptionsSE): Promise<ResponseSE | boolean> => {
+  if (verb === 'check') 
+    return await sendChromeRuntimeMessage({ cmd: `${verb}_se_status` }) as ResponseSE
+  else
+    return await sendChromeRuntimeMessage({ cmd: `${verb}_se_${option}` }) as boolean
 }

@@ -18,17 +18,18 @@
       v-model="searchEngineActive"
       txt="Abkürzungen aktivieren"
       :column="true"
-      @changed-setting="searchEngine()"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-// import Onboarding from '../components/Onboarding.vue'
+import { defineComponent, ref, watch } from 'vue'
+
+// components
 import Setting from '../components/Setting.vue'
 
-import { useChrome } from '../composables/chrome'
+// composables
+import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
@@ -36,13 +37,21 @@ export default defineComponent({
     Setting
   },
   setup () {
-    const { setChromeLocalStorage } = useChrome()
+    const { se } = useSettingHandler()
 
     const searchEngineActive = ref(true)
-    const searchEngine = () => setChromeLocalStorage({ fwdEnabled: searchEngineActive.value })
-    searchEngine()
 
-    return { searchEngine, searchEngineActive }
+    const seUpdate = async () => {
+      if (searchEngineActive.value)
+        searchEngineActive.value = await se('enable', 'redirect') as boolean
+      else
+        se('disable', 'redirect')
+    }
+
+    watch(searchEngineActive, seUpdate, { immediate: true })
+
+
+    return { searchEngineActive }
   }
 })
 
