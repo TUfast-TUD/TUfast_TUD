@@ -164,22 +164,27 @@ export async function enableOWAFetch (): Promise<boolean> {
   if (granted) {
     await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: true }, resolve))
   } else {
-    // Promisified until usage of Manifest V3
-    await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
     alert("TUfast braucht diese Berechtigung, um regelm\u00e4ssig alle Mails abzurufen. Bitte dr\u00fccke auf 'Erlauben'.")
+    disableOWAFetch()
     return false
   }
 
-  // I don't think we need immeadiate action here
-  // await owaFetch()
-  chrome.alarms.create('fetchOWAAlarm', { delayInMinutes: 1, periodInMinutes: 5 })
-  chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm.name === 'fetchOWAAlarm') await owaFetch()
-  })
+  enableOWAAlarm()
   return true
 }
 
-export async function disableOwaFetch () {
+export function enableOWAAlarm () {
+  chrome.permissions.request({ permissions: ['tabs'] }, (granted) => {
+    if (!granted) return
+
+    chrome.alarms.create('fetchOWAAlarm', { delayInMinutes: 1, periodInMinutes: 5 })
+    chrome.alarms.onAlarm.addListener(async (alarm) => {
+      if (alarm.name === 'fetchOWAAlarm') await owaFetch()
+    })
+  })
+}
+
+export async function disableOWAFetch () {
   // console.log('stopped owa connection')
   await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
   await new Promise((resolve) => chrome.permissions.remove({ permissions: ['tabs'] }, resolve))
@@ -247,7 +252,7 @@ export async function owaFetch () {
           type: 'basic',
           message: `Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1 ? 's' : ''}`,
           title: 'Neue E-Mails',
-          iconUrl: 'assets/icons/RocketIcons/default_128px.png'
+          iconUrl: '/assets/icons/RocketIcons/default_128px.png'
         },
         (_id) => resolve(undefined)
       ))
@@ -284,7 +289,7 @@ export async function enableOWANotifications (): Promise<boolean> {
 }
 
 export async function disableOWANotifications () {
-  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['notifications'] }, resolve))
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['notifications'] }, resolve)).catch(() => { /* ignore */ })
   await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
 }
 

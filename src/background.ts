@@ -57,7 +57,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
-      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "assets/icons/RocketIcons/default_128px.png"}'
+      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "/assets/icons/RocketIcons/default_128px.png"}'
 
       // Upgrading encryption
       // Currently "encryptionLevel" can't be lower than 3, but "encryption_level" can
@@ -178,7 +178,7 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
 // start fetchOWA if activated and user data exists
 chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail'], async (result: any) => {
   if (await credentials.userDataExists('zih') && result.enabledOWAFetch) {
-    await owaFetch.enableOWAFetch()
+    await owaFetch.enableOWAAlarm()
   }
 
   // When no notifications are enabled, there is nothing to do anymore
@@ -191,9 +191,7 @@ chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalN
 // Register header listener
 chrome.storage.local.get(['pdfInInline'], async (result) => {
   if (result.pdfInInline) {
-    const webRequestAccess = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['webRequest', 'webRequestBlocking'] }, resolve))
-    if (webRequestAccess) opalPdf.enableOpalPdfInline()
-    else opalPdf.disableOpalPdfInline()
+    opalPdf.enableOpalPdfHeaderListener()
   }
 })
 
@@ -248,7 +246,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       owaFetch.enableOWAFetch().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_owa_fetch':
-      owaFetch.disableOwaFetch()
+      owaFetch.disableOWAFetch()
       break
     case 'enable_owa_notification':
       owaFetch.enableOWANotifications().then(sendResponse)

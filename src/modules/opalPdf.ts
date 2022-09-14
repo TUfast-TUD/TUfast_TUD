@@ -11,22 +11,29 @@ export async function enableOpalPdfInline (): Promise<boolean> {
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ pdfInInline: true }, resolve))
 
-  chrome.webRequest.onHeadersReceived.addListener(
-    headerListenerFunc,
-    {
-      urls: [
-        'https://bildungsportal.sachsen.de/opal/downloadering*',
-        'https://bildungsportal.sachsen.de/opal/*.pdf'
-      ]
-    },
-    ['blocking', 'responseHeaders']
-  )
+  enableOpalPdfHeaderListener()
   return true
+}
+
+export function enableOpalPdfHeaderListener () {
+  chrome.permissions.contains({ permissions: ['webRequest', 'webRequestBlocking'] }, (granted) => {
+    if (!granted) return
+    chrome.webRequest.onHeadersReceived.addListener(
+      headerListenerFunc,
+      {
+        urls: [
+          'https://bildungsportal.sachsen.de/opal/downloadering*',
+          'https://bildungsportal.sachsen.de/opal/*.pdf'
+        ]
+      },
+      ['blocking', 'responseHeaders']
+    )
+  })
 }
 
 // disable the header listener
 export async function disableOpalPdfInline () {
-  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve)).catch(() => { /* ignore */ })
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ pdfInInline: false, pdfInNewTab: false }, resolve))
   chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
