@@ -401,14 +401,14 @@ async function logoutIdp (logoutDuration: number = 5) {
 async function eastereggFound () {
   // Promisified until usage of Manifest V3
   const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
-  if (!availableRockets.includes('RI3')) availableRockets.push('RI3')
+  if (!availableRockets.includes('easteregg')) availableRockets.push('easteregg')
 
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({
     foundEasteregg: true,
-    selectedRocketIcon: '{"id": "RI3", "link": "/assets/icons/RocketIcons/7_128px.png"}',
+    selectedRocketIcon: rockets.easteregg ?? '{"id": "easteregg", "iconPathUnlocked": "/assets/icons/RocketIcons/7_128px.png"}',
     availableRockets
   }, resolve))
 
-  chrome.browserAction.setIcon({ path: '/assets/icons/RocketIcons/7_128px.png' })
+  chrome.browserAction.setIcon({ path: rockets.easteregg.iconPathUnlocked ?? '/assets/icons/RocketIcons/7_128px.png' })
 }
