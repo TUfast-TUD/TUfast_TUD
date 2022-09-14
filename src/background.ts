@@ -252,8 +252,8 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       owaFetch.enableOWANotifications().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_owa_notification':
-      owaFetch.disableOWANotifications()
-      break
+      owaFetch.disableOWANotifications().then(() => sendResponse(true))
+      return true
     case 'check_owa_status':
       owaFetch.checkOWAStatus().then(sendResponse)
       return true // required for async sendResponse
@@ -262,23 +262,24 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       opalPdf.enableOpalPdfInline().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_opalpdf_inline':
-      opalPdf.disableOpalPdfInline()
-      break
+      opalPdf.disableOpalPdfInline().then(() => sendResponse(true))
+      return true
     case 'enable_opalpdf_newtab':
       opalPdf.enableOpalPdfNewTab().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_opalpdf_newtab':
-      opalPdf.disableOpalPdfNewTab()
-      break
+      opalPdf.disableOpalPdfNewTab().then(() => sendResponse(true))
+      return true
     case 'check_opalpdf_status':
       opalPdf.checkOpalPdfStatus().then(sendResponse)
       return true // required for async sendResponse
+    /* SE Redirects */
     case 'enable_se_redirect':
       chrome.storage.local.set({ fwdEnabled: true }, () => sendResponse(true))
       return true
     case 'disable_se_redirect':
-      chrome.storage.local.set({ fwdEnabled: false })
-      break
+      chrome.storage.local.set({ fwdEnabled: false }, () => sendResponse(true))
+      return true
     case 'check_se_status':
       chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
       return true
