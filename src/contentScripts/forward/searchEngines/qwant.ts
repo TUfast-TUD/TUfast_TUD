@@ -27,6 +27,7 @@ function shouldAct (): boolean {
 
   // Create a listener function
   const onSubmit = (e: Event) => {
+    console.log('submit')
     e.preventDefault() // We want to do our own stuff
     // Call the forward function
     common.forward(sb.value).then((forwarded:boolean) => {

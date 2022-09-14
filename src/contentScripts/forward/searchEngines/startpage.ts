@@ -14,7 +14,7 @@ function shouldAct (): boolean {
   if (!shouldAct() || !(await common.fwdEnabled())) return
 
   // Check the searchbox first, if there's something in there
-  const sb = document.getElementById('q') as HTMLInputElement
+  const sb = document.querySelector('form[action="/sp/search"] input[name="query"]') as HTMLInputElement
   // If there's no searchbox thats weird, but we can't do anything about it
   if (!sb) return
 
@@ -23,7 +23,7 @@ function shouldAct (): boolean {
 
   // If we get here, the searchquery was useless but that could change so we register a listener
   // First get the search form
-  const sf = document.getElementById('search') as HTMLFormElement
+  const sf = document.querySelector('form[action="/sp/search"]') as HTMLFormElement
 
   // Create a listener function
   const onSubmit = (e: Event) => {
@@ -31,7 +31,7 @@ function shouldAct (): boolean {
     // Call the forward function
     common.forward(sb.value).then((forwarded:boolean) => {
       if (!forwarded) {
-        // When we didn't forward, the user still wants to search
+        // When we didn't forward, the user still wants to search, so resubmit the form
         e.target?.removeEventListener('submit', onSubmit);
         (e.target as HTMLFormElement).submit()
       }
