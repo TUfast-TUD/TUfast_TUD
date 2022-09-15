@@ -2,7 +2,7 @@
   <div class="main-grid">
     <header class="main-grid__header">
       <h1 class="upper txt-bold main-grid__title">
-        Willkommen bei TUFast 🚀
+        Willkommen bei TUfast 🚀
       </h1>
       <h3 class="txt-bold main-grid__subtitle">
         Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.

@@ -1,6 +1,6 @@
 <template>
   <h1 class="upper">
-    Opal verbessern
+    OPAL verbessern
   </h1>
   <div class="info">
     <Setting

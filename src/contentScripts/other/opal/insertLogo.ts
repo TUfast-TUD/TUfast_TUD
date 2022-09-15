@@ -58,7 +58,7 @@ function resetColor () {
   const logo = document.createElement('img')
   logo.src = iconURL
   logo.id = 'TUfastIcon'
-  logo.title = 'Powered by TUFast. Enjoy :)'
+  logo.title = 'Powered by TUfast. Enjoy :)'
   document.getElementsByClassName('page-header')[0]?.appendChild(document.createElement('h1')).appendChild(logo)
 
   // What to do onclick

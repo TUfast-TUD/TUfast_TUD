@@ -4,9 +4,9 @@
       Geschafft!
     </h1>
     <h2>
-      TUFast ist vollständig für dich eingerichtet.
+      TUfast ist vollständig für dich eingerichtet.
       Ab jetzt kannst du loslegen und Klicks & Zeit sparen.<br>
-      Viel Erfolg im Studium! Wenn du Fragen oder Ideen zu TUFast hast, schreib uns gerne, du findest unseren Kontakt auf der nächsten Seite!
+      Viel Erfolg im Studium! Wenn du Fragen oder Ideen zu TUfast hast, schreib uns gerne, du findest unseren Kontakt auf der nächsten Seite!
     </h2>
   </div>
 </template>
