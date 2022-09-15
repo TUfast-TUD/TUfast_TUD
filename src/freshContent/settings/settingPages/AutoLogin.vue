@@ -5,7 +5,7 @@
   />
   <h2>{{ currentLogin.title }}</h2>
   <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">
-    {{ currentLogin.state ? "aktiv" : "nicht aktiviert" }}
+    {{ currentLogin.state ? "Aktuell gespeichert" : "Nicht gespeichert" }}
   </h2>
   <p class="max-line p-margin">
     Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden.
