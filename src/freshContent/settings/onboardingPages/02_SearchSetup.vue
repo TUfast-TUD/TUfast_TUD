@@ -11,8 +11,10 @@
       selma → selma TU Dresden<br>
       jexam → jExam<br>
       tumatrix → Matrix-Chat TU Dresden<br>
+      tumed → eportal.med.tu-dresden<br>
+      slub → SLUB Dresden<br>
       magma → Magma TU Dresden<br>
-      tumed → eportal.med.tu-dresden
+      videocampus → Videocampus Sachsen
     </p>
     <Setting
       v-model="searchEngineActive"

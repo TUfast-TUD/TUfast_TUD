@@ -17,6 +17,7 @@
     tumatrix → Matrix-Chat TU Dresden<br>
     tumed → eportal.med.tu-dresden<br>
     slub → SLUB Dresden<br>
+    magma → Magma TU Dresden<br>
     videocampus → Videocampus Sachsen
   </p>
 </template>
