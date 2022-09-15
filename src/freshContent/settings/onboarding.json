@@ -7,12 +7,12 @@
     {
         "title": "SearchSetup",
         "h1": "Möchtest du Superkräfte für deine Suchmaschine?",
-        "h2": "TUFast stellt dir Abkürzungen für deine Suchmaschine bereit (siehe oben). Wenn du diese Abkürzungen in Google, Ecosia & Co. eingibst, kommst du schnellstens zur richtigen Seite der TU Dresden!"
+        "h2": "TUfast stellt dir Abkürzungen für deine Suchmaschine bereit (siehe oben). Wenn du diese Abkürzungen in Google, Ecosia & Co. eingibst, kommst du schnellstens zur richtigen Seite der TU Dresden!"
     },
     {
         "title": "LoginSetup",
         "h1": "Was macht diese Funktion?",
-        "h2": "TUFast kann dich automatisch in alle Online-Portale der TU Dresden (Opal, Selma & Co.) einloggen. Wenn du diese Funktion aktivierst, musst du deine Selma-Login-Daten im nächsten Schritt lokal und verschlüsselt auf diesem Computer speichern. Diese Daten können von uns nicht eingesehen werden."
+        "h2": "TUfast kann dich automatisch in alle Online-Portale der TU Dresden (Opal, Selma & Co.) einloggen. Wenn du diese Funktion aktivierst, musst du deine Selma-Login-Daten im nächsten Schritt lokal und verschlüsselt auf diesem Computer speichern. Diese Daten können von uns nicht eingesehen werden."
     },
     {
         "title": "LoginAccept",
@@ -22,12 +22,12 @@
     {
         "title": "EMailSetup",
         "h1": "Möchtest du E-Mail-Benachrichtigungen erhalten?",
-        "h2": "TUFast kann dir anzeigen, wie viele neue Nachrichten du in deinem TU Dresden Postfach hast (linke Checkbox). Du kannst auch über neue E-Mails benachrichtigt werden (rechte Checkbox)."
+        "h2": "TUfast kann dir anzeigen, wie viele neue Nachrichten du in deinem TU Dresden Postfach hast (linke Checkbox). Du kannst auch über neue E-Mails benachrichtigt werden (rechte Checkbox)."
     },
     {
         "title": "OpalSetup",
         "h1": "Möchtest du diese Zusatzfunktionen für Opal?",
-        "h2": "TUFast kann PDF-Dokumente auf Opal für dich direkt im Browser öffnen anstatt sie herunterzuladen (linke Checkbox). Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf Opal bist (rechte Checkbox)."
+        "h2": "TUfast kann PDF-Dokumente auf Opal für dich direkt im Browser öffnen anstatt sie herunterzuladen (linke Checkbox). Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf Opal bist (rechte Checkbox)."
     },
     {
         "title": "DoneSetup",
