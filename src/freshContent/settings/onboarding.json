@@ -12,7 +12,7 @@
     {
         "title": "LoginSetup",
         "h1": "Was macht diese Funktion?",
-        "h2": "TUfast kann dich automatisch in alle Online-Portale der TU Dresden (Opal, Selma & Co.) einloggen. Wenn du diese Funktion aktivierst, musst du deine Selma-Login-Daten im nächsten Schritt lokal und verschlüsselt auf diesem Computer speichern. Diese Daten können von uns nicht eingesehen werden."
+        "h2": "TUfast kann dich automatisch in alle Online-Portale der TU Dresden (OPAL, Selma & Co.) einloggen. Wenn du diese Funktion aktivierst, musst du deine Selma-Login-Daten im nächsten Schritt lokal und verschlüsselt auf diesem Computer speichern. Diese Daten können von uns nicht eingesehen werden."
     },
     {
         "title": "LoginAccept",

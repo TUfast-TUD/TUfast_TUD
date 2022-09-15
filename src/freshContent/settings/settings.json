@@ -10,12 +10,12 @@
         "settingsPage": "Email"
     },
     {
-        "title": "Opalkurse im Dashboard",
+        "title": "OPAL-Kurse im Dashboard",
         "icon": "PhListDashes",
         "settingsPage": "OpalCourses"
     },
     {
-        "title": "Opal personalisieren und verbessern",
+        "title": "OPAL personalisieren und verbessern",
         "icon": "PhSparkle",
         "settingsPage": "ImproveOpal"
     },

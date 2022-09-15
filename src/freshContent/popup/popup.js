@@ -324,12 +324,12 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
   switch (type) {
     case 'favoriten':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites'
-      name = 'Klicke, um deine Opal-Kurse zu importieren'
+      name = 'Klicke, um deine OPAL-Kurse zu importieren'
       imgSrc = '../../assets/icons/star.png'
       break
     case 'meine_kurse':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
-      name = 'Klicke, um deine Opal-Kurse zu importieren'
+      name = 'Klicke, um deine OPAL-Kurse zu importieren'
       imgSrc = '../../assets/icons/CoursesOpalIcon.png'
       break
     default:
@@ -460,7 +460,7 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
     } else {
       isRated = ratedCourses.includes(element.name)
     }
-    if (!(element.name === 'Diese Kursliste jetzt aktualisieren...' || element.name === 'Klicke, um deine Opal-Kurse zu importieren' || isRated) && ratingEnabledFlag) listEntrywrapper.appendChild(rateEntryWrapper)
+    if (!(element.name === 'Diese Kursliste jetzt aktualisieren...' || element.name === 'Klicke, um deine OPAL-Kurse zu importieren' || isRated) && ratingEnabledFlag) listEntrywrapper.appendChild(rateEntryWrapper)
     htmlList.appendChild(listEntrywrapper)
   })
 
