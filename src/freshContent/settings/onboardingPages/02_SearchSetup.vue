@@ -5,7 +5,7 @@
   <div class="info">
     <p class="search-terms">
       tumail → Outlook Web App<br>
-      OPAL → OPAL<br>
+      opal → OPAL<br>
       tucloud → Cloudstore TU Dresden<br>
       hisqis → Hisqis TU Dresden<br>
       selma → selma TU Dresden<br>
