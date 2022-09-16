@@ -41,8 +41,7 @@ export default defineComponent({
     const pdfNewTabActive = ref(false)
 
     onBeforeMount(async () => {
-      const { inline, newtab } =
-      await opalPdf('check') as ResponseOpalPdf
+      const { inline, newtab } = await opalPdf('check') as ResponseOpalPdf
 
       pdfInlineActive.value = inline
       pdfNewTabActive.value = newtab
@@ -52,14 +51,20 @@ export default defineComponent({
     })
 
     const inlineUpdate = async () => {
-      if (pdfInlineActive.value) { pdfInlineActive.value = await opalPdf('enable', 'inline') as boolean } else {
-        opalPdf('disable', 'inline')
+      if (pdfInlineActive.value) {
+        pdfInlineActive.value = await opalPdf('enable', 'inline') as boolean
+      } else {
+        await opalPdf('disable', 'inline')
         pdfNewTabActive.value = false
       }
     }
 
     const newtabUpdate = async () => {
-      if (pdfNewTabActive.value) { pdfNewTabActive.value = await opalPdf('enable', 'newtab') as boolean } else { opalPdf('disable', 'newtab') }
+      if (pdfNewTabActive.value) {
+        pdfNewTabActive.value = await opalPdf('enable', 'newtab') as boolean
+      } else {
+        await opalPdf('disable', 'newtab')
+      }
     }
 
     return {

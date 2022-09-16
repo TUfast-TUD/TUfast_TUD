@@ -88,14 +88,20 @@ export default defineComponent({
     })
 
     const fetchUpdate = async () => {
-      if (owaFetchActive.value) { owaFetchActive.value = await owa('enable', 'fetch') as boolean } else {
-        owa('disable', 'fetch')
+      if (owaFetchActive.value) {
+        owaFetchActive.value = await owa('enable', 'fetch') as boolean
+      } else {
+        await owa('disable', 'fetch')
         notificationOnNewEmailActive.value = false
       }
     }
 
     const notificationsUpdate = async () => {
-      if (notificationOnNewEmailActive.value) { notificationOnNewEmailActive.value = await owa('enable', 'notification') as boolean } else { owa('disable', 'notification') }
+      if (notificationOnNewEmailActive.value) {
+        notificationOnNewEmailActive.value = await owa('enable', 'notification') as boolean
+      } else {
+        await owa('disable', 'notification')
+      }
     }
 
     return {

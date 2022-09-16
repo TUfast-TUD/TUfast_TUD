@@ -36,14 +36,20 @@ export default defineComponent({
     const newTabActive = ref(false)
 
     const inline = async () => {
-      if (inlineActive.value) { inlineActive.value = await opalPdf('enable', 'inline') as boolean } else {
-        opalPdf('disable', 'inline')
+      if (inlineActive.value) {
+        inlineActive.value = await opalPdf('enable', 'inline') as boolean
+      } else {
+        await opalPdf('disable', 'inline')
         newTabActive.value = false
       }
     }
 
     const newtab = async () => {
-      if (newTabActive.value) { newTabActive.value = await opalPdf('enable', 'newtab') as boolean } else { opalPdf('disable', 'newtab') }
+      if (newTabActive.value) {
+        newTabActive.value = await opalPdf('enable', 'newtab') as boolean
+      } else {
+        await opalPdf('disable', 'newtab')
+      }
     }
 
     watch(inlineActive, inline, { immediate: true })

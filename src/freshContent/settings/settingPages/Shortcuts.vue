@@ -35,7 +35,7 @@ export default defineComponent({
     const openShortcutSettings = () => sendChromeRuntimeMessage({ cmd: 'open_shortcut_settings' })
 
     return {
-      openShortcutSettings,
+      openShortcutSettings
     }
   }
 })
