@@ -326,6 +326,7 @@
   "web_accessible_resources": [
     "assets/*",
     "contentScripts/forward/searchEngines/common.js",
+    "contentScripts/forward/searchEngines/sites.json*",
     "contentScripts/login/common.js",
     "contentScripts/other/hisqis/*",
     "contentScripts/other/notification.js",

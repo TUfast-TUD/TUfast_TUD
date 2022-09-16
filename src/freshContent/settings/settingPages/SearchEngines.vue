@@ -8,17 +8,12 @@
   </p>
 
   <p class="search-terms">
-    tumail → Outlook Web App<br>
-    opal → OPAL<br>
-    tucloud → Cloudstore TU Dresden<br>
-    hisqis → Hisqis TU Dresden<br>
-    selma → selma TU Dresden<br>
-    jexam → jExam<br>
-    tumatrix → Matrix-Chat TU Dresden<br>
-    tumed → eportal.med.tu-dresden<br>
-    slub → SLUB Dresden<br>
-    magma → Magma TU Dresden<br>
-    videocampus → Videocampus Sachsen
+    <template
+      v-for="site in uniqueSites"
+      :key="site"
+    >
+      {{ site[0] }} → {{ site[1].name }}<br>
+    </template>
   </p>
 </template>
 
@@ -34,6 +29,9 @@ import Setting from '../components/Setting.vue'
 // composables
 import { useSettingHandler } from '../composables/setting-handler'
 
+// the actual sites
+import sites from '../../../contentScripts/forward/searchEngines/sites.json'
+
 export default defineComponent({
   components: {
     Setting
@@ -42,8 +40,14 @@ export default defineComponent({
     const { se } = useSettingHandler()
     const searchEngineActive = ref(false)
 
+    const uniqueSites = Object.entries(sites).filter(([_, site], idx, arr) => {
+      return arr.findIndex(([_, site2]) => site2.url === site.url) === idx
+    }).sort((a, b) => a[0].localeCompare(b[0]))
+
+    console.log(uniqueSites)
+
     onBeforeMount(async () => {
-      const { redirect } = await se("check", "redirect") as ResponseSE
+      const { redirect } = await se('check', 'redirect') as ResponseSE
 
       searchEngineActive.value = redirect
 
@@ -51,14 +55,13 @@ export default defineComponent({
     })
 
     const seUpdate = async () => {
-      if (searchEngineActive.value)
-        searchEngineActive.value = await se('enable', 'redirect') as boolean
-      else
-        se('disable', 'redirect')
+      if (searchEngineActive.value) searchEngineActive.value = await se('enable', 'redirect') as boolean
+      else await se('disable', 'redirect')
     }
 
     return {
       searchEngineActive,
+      uniqueSites
     }
   }
 })
