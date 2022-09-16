@@ -159,10 +159,6 @@ export default defineComponent({
       stepWidth.value = state.value === true ? 1 : 3
     }
 
-    const html = document.documentElement
-    const useLightTheme = window.matchMedia('(prefers-color-scheme: light)').matches
-    setChromeLocalStorage({ theme: useLightTheme ? 'light' : 'dark' })
-
     const openSetting = (setting : setting) => {
       showCard.value = true
       currentSetting.value = setting
@@ -170,12 +166,13 @@ export default defineComponent({
 
     const toggleTheme = async () => {
       const theme = await getChromeLocalStorage('theme') as 'light' | 'dark'
-      if (theme === 'dark') { await setChromeLocalStorage({ theme: 'light' }) }
-      if (theme === 'light') { await setChromeLocalStorage({ theme: 'dark' }) }
+      if (animState.value === 'dark') { await setChromeLocalStorage({ theme: 'light' }) }
+      if (animState.value === 'light') { await setChromeLocalStorage({ theme: 'dark' }) }
 
       updateTheme(theme === 'dark' ? 'light' : 'dark')
     }
 
+    const html = document.documentElement
     const updateTheme = (theme: string) => {
       if (theme === 'dark') {
         animState.value = 'dark'
@@ -187,7 +184,15 @@ export default defineComponent({
         html.classList.remove('dark')
       }
     }
-    updateTheme(useLightTheme ? 'light' : 'dark')
+
+    const themeSetup = async () => {
+      let selectedTheme = await getChromeLocalStorage('theme') as 'dark' | 'light' | undefined
+      if (!selectedTheme) {
+        selectedTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+      }
+      updateTheme(selectedTheme)
+    }
+    themeSetup()
 
     return {
       hideWelcome,
