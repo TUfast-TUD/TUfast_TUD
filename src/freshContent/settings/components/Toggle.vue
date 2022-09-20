@@ -83,9 +83,12 @@ export default defineComponent({
             background-color: hsl(var(--clr-primary), .8)
 
     &--disabled
+        background-color: hsl(var(--clr-white), .5)
         cursor: not-allowed !important
         &:hover
-            background-color: hsl(var(--clr-white) )
+            &::before
+              opacity: 0 !important
+              transform: none !important
 
     &__icon
         width: 80%
