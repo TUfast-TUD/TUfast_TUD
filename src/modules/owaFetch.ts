@@ -187,13 +187,13 @@ export function enableOWAAlarm () {
 export async function disableOWAFetch () {
   // console.log('stopped owa connection')
   await new Promise<void>((resolve) => chrome.storage.local.set({ enabledOWAFetch: false }, resolve))
-  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['tabs'] }, resolve))
 
   await setBadgeUnreadMails(0)
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.alarms.clear('fetchOWAAlarm', resolve))
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.remove(['numberOfUnreadMails', 'additionalNotificationOnNewMail'], resolve))
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['tabs'] }, resolve))
 }
 
 export async function readMailOWA (numberOfUnreadMails: number) {
@@ -289,18 +289,21 @@ export async function enableOWANotifications (): Promise<boolean> {
 }
 
 export async function disableOWANotifications () {
-  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['notifications'] }, resolve)).catch(() => { /* ignore */ })
   await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
+  chrome.notifications.onClicked.removeListener(notificationListener)
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['notifications'] }, resolve)).catch(() => { /* ignore */ })
 }
 
 export function registerNotificationClickListener () {
   // register listener for owaFetch notifications
-  chrome.notifications.onClicked.addListener(async (id) => {
-    if (id === 'tuFastNewEmailNotification') {
-      // Promisified until usage of Manifest V3
-      await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
-    }
-  })
+  chrome.notifications.onClicked.addListener(notificationListener)
+}
+
+async function notificationListener (id: string) {
+  if (id === 'tuFastNewEmailNotification') {
+    // Promisified until usage of Manifest V3
+    await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
+  }
 }
 
 export async function checkOWAStatus (): Promise<{fetch: boolean, notification: boolean}> {
