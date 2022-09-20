@@ -98,6 +98,7 @@ export default defineComponent({
         margin: 2rem 2.5rem
         height: 100%
         overflow: auto
+        padding-bottom: 2rem
 
     &__close
         width: 4rem

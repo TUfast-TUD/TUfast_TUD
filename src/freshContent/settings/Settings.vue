@@ -264,6 +264,7 @@ body
 
 ::-webkit-scrollbar
   width: .4rem
+  height: .4rem
 
 ::-webkit-scrollbar-track
   background-color: none
