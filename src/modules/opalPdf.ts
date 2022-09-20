@@ -36,7 +36,7 @@ export async function disableOpalPdfInline () {
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ pdfInInline: false, pdfInNewTab: false }, resolve))
   chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
-  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve)).catch(() => { /* ignore */ })
+  await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'] }, resolve)).catch(() => { /* ignore */ })
 }
 
 // function that is called when pdf in opal is opened
