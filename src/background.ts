@@ -246,10 +246,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       owaFetch.enableOWAFetch().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_owa_fetch':
-      owaFetch.disableOWAFetch()
-      break
+      owaFetch.disableOWAFetch().then(sendResponse)
+      return true
     case 'enable_owa_notification':
-      owaFetch.enableOWANotifications().then(sendResponse)
+      owaFetch.enableOWANotifications().then(() => sendResponse(true))
       return true // required for async sendResponse
     case 'disable_owa_notification':
       owaFetch.disableOWANotifications().then(() => sendResponse(true))
