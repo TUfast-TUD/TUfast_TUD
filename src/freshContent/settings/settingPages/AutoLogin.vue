@@ -41,7 +41,7 @@
     />
     <CustomButton
       title="Daten löschen"
-      class="button--secondary"
+      class="button--warn"
       :disabled="!currentLogin.state"
       @click="submitDelete"
     />
