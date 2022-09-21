@@ -10,7 +10,7 @@
     </header>
     <ColorSwitch
       class="main-grid__color-select"
-      :anim-state="animState"
+      :anim-state="activeTheme"
       @click="toggleTheme()"
     />
     <div class="main-grid__menues">
@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue'
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
 
 // Components
 import ColorSwitch from './components/ColorSwitch.vue'
@@ -139,10 +139,19 @@ export default defineComponent({
     const showCard = ref(false)
     const currentSetting = ref(settings[0])
     const stepWidth = ref(1)
-    const animState = ref<'dark' | 'light'>('dark')
+    const activeTheme = ref<'dark' | 'light'>('dark')
 
     onBeforeMount(async () => {
       hideWelcome.value = await getChromeLocalStorage('hideWelcome') as boolean
+      const theme = await getChromeLocalStorage('theme') as 'light' | 'dark' | 'system'
+      activeTheme.value = theme !== 'system' && theme ? 
+        theme : 
+        window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+    })
+
+    watch(activeTheme, (newTheme, oldTheme) => {
+      console.log(newTheme)
+      updateTheme(newTheme, oldTheme)
     })
 
     const disableWelcome = async () => {
@@ -165,34 +174,24 @@ export default defineComponent({
     }
 
     const toggleTheme = async () => {
-      const theme = await getChromeLocalStorage('theme') as 'light' | 'dark'
-      if (animState.value === 'dark') { await setChromeLocalStorage({ theme: 'light' }) }
-      if (animState.value === 'light') { await setChromeLocalStorage({ theme: 'dark' }) }
-
-      updateTheme(theme === 'dark' ? 'light' : 'dark')
-    }
-
-    const html = document.documentElement
-    const updateTheme = (theme: string) => {
-      if (theme === 'dark') {
-        animState.value = 'dark'
-        html.classList.add('dark')
-        html.classList.remove('light')
-      } else if (theme === 'light') {
-        animState.value = 'light'
-        html.classList.add('light')
-        html.classList.remove('dark')
+      if (activeTheme.value === 'dark') {
+        activeTheme.value = 'light'
+        return
+      }
+      if (activeTheme.value === 'light') {
+        activeTheme.value = 'dark'
+        return
       }
     }
 
-    const themeSetup = async () => {
-      let selectedTheme = await getChromeLocalStorage('theme') as 'dark' | 'light' | undefined
-      if (!selectedTheme) {
-        selectedTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-      }
-      updateTheme(selectedTheme)
+    const updateTheme = async (newTheme: string, oldTheme: string) => {
+      const html = document.documentElement
+
+      await setChromeLocalStorage({ theme: newTheme })
+
+      html.classList.add(newTheme)
+      html.classList.remove(oldTheme)
     }
-    themeSetup()
 
     return {
       hideWelcome,
@@ -206,7 +205,7 @@ export default defineComponent({
       currentSetting,
       openSetting,
       toggleTheme,
-      animState
+      activeTheme,
     }
   }
 })
@@ -214,7 +213,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-
 .main-grid
     display: grid
     grid-template-columns: 40% 20% 40%
@@ -263,19 +261,4 @@ body
 *::after
   scrollbar-color: inherit
   scrollbar-width: inherit
-
-::-webkit-scrollbar
-  width: .4rem
-  height: .4rem
-
-::-webkit-scrollbar-track
-  background-color: none
-
-::-webkit-scrollbar-thumb
-  background-color: hsl(var(--clr-primary))
-  border-radius: .4rem
-
-  &:hover
-    background-color: hsl(var(--clr-primary), .8)
-    cursor: pointer
 </style>

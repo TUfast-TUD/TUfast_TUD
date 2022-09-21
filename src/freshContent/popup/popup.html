@@ -12,106 +12,98 @@
 </head>
 
 <body>
-  <div class="headline">TU Dresden Dashboard</div>
+  <div id="banana"></div>
 
+  <header class="header">
 
-  <div class="list custom-scrollbar" id="list">
-    <div style="display: flex; margin-top: 4px;">
-      <input class="list-search" type="text" id="searchListInput" placeholder="Kurs suchen..." autofocus>
-      <a href="" target="_blank" class="" style="flex: 1" id="fsr_link_2">
-        <img class="studiengang-img" id="fsr_icon_2" src="">
-      </a>
-      <a href="" target="_blank" class="" style="flex: 1" id="fsr_link">
-        <img class="studiengang-img" id="fsr_icon" src="">
-      </a>
-      <div class="select_studiengang_dropdown" id ="select_studiengang_dropdown_id">
-        <img id="select_studiengang_btn" class="select_studiengang_btn" src="../../assets/icons/arrow_down.png">
-        <div id="select_studiengang_dropdown_content" class="select_studiengang_dropdown_content  custom-scrollbar">
-          <!-- items will be dynamically added based on config in popup.js-->
-        </div>
+    <input id="searchListInput" class="header__search" type="text" placeholder="Kurs suchen..." autofocus>
+
+    <a id="fsr-link-2" class="header__icon-2" target="_blank">
+      <img id="fsr-icon-2">
+    </a>
+
+    <a id="fsr-link-1" class="header__icon-1" target="_blank">
+      <img id="fsr-icon-1">
+    </a>
+
+    <div class="dropdown">
+      <button id="btn-studiengang" class="dropdown__btn">
+        <img src="../../assets/icons/arrow_down.png">
+      </button>
+      <div id="dropdown-studiengang" class="dropdown__content">
+        <!-- items will be dynamically added based on config in popup.js-->
       </div>
     </div>
-    <div id="banana"></div>
-    <!-- here come list entries; injected via js -->
-  </div>
-  <div class="settings-footer">
-    <div class="settings-footer-bar" id="settings-footer-bar-icons">
-      <!--div class="settings-section" style="flex: 7.5">
-        <div class="settings-text">Weiterleitung der Google-Suche</div>
-        <label class="switch settings-icon">
-          <input type="checkbox" id="switch">
-          <span class="slider round"></span>
-        </label>
-        </div-->
-      <a href="https://selma.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="selma">
+
+  </header>
+
+  <main id="list" class="list">
+    <!-- list entries are being injected here dynamically with js  -->
+  </main>
+
+  <footer class="footer">
+    <div id="settings-footer-bar-icons" class="footer__links">
+      <a id="selma" class="footer__link" href="https://selma.tu-dresden.de/" target="_blank">
         <img class="settings-img" src="../../assets/icons/selma.png">
       </a>
-      <a href="https://eportal.med.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1; display: none" id="eportal">
+      <a id="eportal" class="footer__link" href="https://eportal.med.tu-dresden.de/" target="_blank">
         <img class="settings-img" src="../../assets/icons/ePortal.png">
       </a>
-      <a href="https://elearning.med.tu-dresden.de/moodle/my/" target="_blank" class="settings-section-icon" style="flex: 1; display: none" id="moodle">
+      <a id="moodle" class="footer__link" href="https://elearning.med.tu-dresden.de/moodle/my/" target="_blank">
         <img class="settings-img" src="../../assets/icons/moodle.png">
       </a>
-      <a href="https://bildungsportal.sachsen.de/opal/" target="_blank" class="settings-section-icon" style="flex: 1" id="opal">
+      <a id="opal" class="footer__link" href="https://bildungsportal.sachsen.de/opal/" target="_blank">
         <img class="settings-img" src="../../assets/icons/OPAL.png">
       </a>
-      <a href="https://qis.dez.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="qis">
+      <a id="qis" class="footer__link" href="https://qis.dez.tu-dresden.de/" target="_blank">
         <img class="settings-img invert" src="../../assets/icons/his.png">
       </a>
-      <a href="https://matrix.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="matrix">
+      <a id="matrix" class="footer__link" href="https://matrix.tu-dresden.de/" target="_blank">
         <img class="settings-img" src="../../assets/icons/element.svg">
       </a>
-      <a href="https://msx.tu-dresden.de/owa/#path=/mail" target="_blank" class="settings-section-icon" style="flex: 1" id="msx">
+      <a id="msx" class="footer__link" href="https://msx.tu-dresden.de/owa/#path=/mail" target="_blank">
         <img class="settings-img" src="../../assets/icons/owa.png">
       </a>
-      <a href="https://cloudstore.zih.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="cloud">
+      <a id="cloud" class="footer__link" href="https://cloudstore.zih.tu-dresden.de/" target="_blank">
         <img class="settings-img invert" src="../../assets/icons/cloud.png">
       </a>
-      <a href="https://jexam.inf.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="je">
+      <a id="je" class="footer__link" href="https://jexam.inf.tu-dresden.de/" target="_blank">
         <img class="settings-img invert" src="../../assets/icons/jE.png">
       </a>
-      <a href="https://gitlab.mn.tu-dresden.de" target="_blank" class="settings-section-icon" style="flex: 1" id="gitlab">
+      <a id="gitlab" class="footer__link" href="https://gitlab.mn.tu-dresden.de" target="_blank">
         <img class="settings-img" src="../../assets/icons/gitlab.png">
       </a>
-      <a href="https://zep.psych.tu-dresden.de/orsee/public/index.php" target="_blank" class="settings-section-icon"
-        style="flex: 1" id="orsee">
+      <a id="orsee" class="footer__link" href="https://zep.psych.tu-dresden.de/orsee/public/index.php" target="_blank">
         <img class="settings-img invert" src="../../assets/icons/TUD_1.png">
       </a>
-      <a href="https://geoportal.sachsen.de/cps/karte.html?showmap=true" target="_blank" class="settings-section-icon"
-        style="flex: 1" id="geoportal">
+      <a id="geoportal" class="footer__link" href="https://geoportal.sachsen.de/cps/karte.html?showmap=true" target="_blank">
         <img class="settings-img" src="../../assets/icons/sachsenatlas.ico">
       </a>
-      <a href="https://www.studentenwerk-dresden.de/mensen/speiseplan/" target="_blank" class="settings-section-icon"
-        style="flex: 1" id="swdd">
+      <a id="swdd" class="footer__link" href="https://www.studentenwerk-dresden.de/mensen/speiseplan/" target="_blank">
         <img class="settings-img" src="../../assets/icons/mensa.png">
       </a>
     </div>
-    <div class="settings-footer-bar">
-      <div class="settings-section" style="flex: 7; justify-content: center;">
-        <div id="saved_clicks" class="settings-text" style="font-size: 15px;padding-bottom: 2px"></div>
+    <div class="footer__bar bar">
+      <div id="saved_clicks" class="bar__statistics">
       </div>
-      <div class="settings-section" style="flex: 5; padding-left: 15px; padding-right: 15px;">
-        <div class="settings-text" style="font-size: 14px;padding-bottom: 2px;">AutoLogin</div>
+
+      <div class="bar__auto-login">
+        <p>AutoLogin</p>
         <label class="switch settings-icon">
           <input type="checkbox" id="switch">
           <span class="slider round"></span>
         </label>
       </div>
-      <div class="settings-section" style="flex: 1">
-        <a class="settings-section-icon" href="javascript:void(0)" id="share" style="flex: 1; margin: 0px">
-          <img class="list-img" style="height: 20px;" src="../../assets/icons/share.png">
+
+        <a id="share" class="bar__share">
+          <img class="list-img" src="../../assets/icons/share.png">
         </a>
-      </div>
-      <div class="settings-section" style="flex: 1">
-        <a class="settings-section-icon" href="javascript:void(0)" id="settings"
-          style="flex: 1; margin: 0px">
-          <img class="list-img" style="height: 20px;" src="../../assets/icons/cog.png">
+
+        <a id="settings" class="bar__settings">
+          <img class="list-img" src="../../assets/icons/cog.png">
         </a>
-      </div>
     </div>
 
-  </div>
-  </div>
+  </footer>
 </body>
-
 </html>

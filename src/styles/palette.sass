@@ -1,6 +1,5 @@
-@forward "variables"
-@forward "typo"
-@forward "reset"
+@forward "abstract"
+@forward "base"
 
 body
     background-image: url(/assets/settings/background_dark.svg)
@@ -13,5 +12,5 @@ body
     @media (prefers-color-scheme: light)
         background-image: url(/assets/settings/background_light.svg)
 
-.light body
+.light body, [data-theme="light"] body
     background-image: url(/assets/settings/background_light.svg)

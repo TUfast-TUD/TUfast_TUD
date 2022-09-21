@@ -1,4 +1,4 @@
-@use '../palette.scss';
+@use '../palette';
 
 /* The switch - the box around the slider */
 .switch {
@@ -30,7 +30,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--color-btn-switch-bg);
+  // background-color: var(--color-btn-switch-bg);
+  background-color: hsl(var(--clr-black));
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -48,11 +49,12 @@
 }
 
 input:checked + .slider {
-  background-color: var(--color-btn-accept-bg);
+  // background-color: var(--color-btn-accept-bg);
+  background-color: hsl(var(--clr-primary));
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px var(--color-btn-accept-bg);
+  box-shadow: 0 0 1px hsl(var(--clr-primary));
 }
 
 input:checked + .slider:before {

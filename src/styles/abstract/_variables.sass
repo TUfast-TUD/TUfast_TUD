@@ -6,13 +6,15 @@ html, html.dark
     --clr-alert: 3, 93%, 63%
     --clr-warning: 42, 74%, 57%
     --clr-white: 0, 0%, 98%
+    --clr-info: 200, 100%, 94%
 
     --brd-rad: 40px
 
-    &.light
-        --clr-black: 215, 15%, 15%
-        --clr-grey: 0, 0%, 98%
+html.light, html[data-theme="light"]
+    --clr-black: 215, 15%, 15%
+    --clr-grey: 0, 0%, 98%
 
+html
     @media (prefers-color-scheme: light)
         --clr-black: 215, 15%, 15%
         --clr-grey: 0, 0%, 98%

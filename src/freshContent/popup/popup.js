@@ -64,7 +64,7 @@ window.onload = async () => {
   // display courses
   const dashboardDisplay = result.dashboardDisplay
   const courseList = await loadCourses(dashboardDisplay)
-  const htmlList = document.getElementsByClassName('list')[0]
+  const htmlList = document.getElementById("list")
   displayCourseList(courseList, htmlList, dashboardDisplay, result.closedIntro1, result.ratedCourses, result.closedOutro1, result.ratingEnabledFlag, result.closedMsg1)
   if (document.getElementById('intro')) {
     document.getElementById('intro').onclick = removeIntro
@@ -81,7 +81,7 @@ window.onload = async () => {
 
   // display saved clicks
   const time = clicksToTime(result.savedClickCounter || 0)
-  document.getElementById('saved_clicks').innerHTML = `<text><font color='green'>${result.savedClickCounter || 0} Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>${time}</a></text>`
+  document.getElementById('saved_clicks').innerHTML = `<p><span id="clicks">${result.savedClickCounter || 0} Klicks</span> gespart: <a id='time' target='_blank'>${time}</a></p>`
   document.getElementById('time').onclick = openSettingsTimeSection
 
   // display banana at each end of semester for two weeks!
@@ -110,7 +110,7 @@ window.onload = async () => {
   await displayEnabled()
 
   // bind enter key --> when enter key is pressed the first course in list is clicked
-  document.getElementById('list').addEventListener('keyup', (event) => {
+  document.getElementById('dropdown-studiengang').addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
       // Cancel the default action, if needed
       // event.preventDefault();
@@ -128,18 +128,20 @@ window.onload = async () => {
   // set custom dropdown styles and js for studiengang selection
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = (event) => {
-    if (!event.target.matches('.select_studiengang_btn')) {
-      const dropdowns = document.getElementsByClassName('select_studiengang_dropdown_content')
-      for (const dropdown of dropdowns) {
-        if (dropdown.classList.contains('show')) {
-          dropdown.classList.remove('show')
-        }
-      }
+    if (!event.target.matches('#studiengang-btn')) {
+      // const dropdowns = document.getElementsByClassName('dropdown-studiengang')
+      const dropdown = document.getElementById("dropdown-studiengang")
+      if (dropdown.classList.contains('show')) dropdown.classList.remove('show')
+      // for (const dropdown of dropdowns) {
+      //   if (dropdown.classList.contains('show')) {
+      //     dropdown.classList.remove('show')
+      //   }
+      // }
     }
   }
 
   // studiengang selection drop-down
-  document.getElementById('select_studiengang_btn').onclick = selectStudiengangDropdown
+  document.getElementById('btn-studiengang').onclick = selectStudiengangDropdown
   addDropdownOptions()
 
   // highlight studiengang selection (only once)
@@ -152,7 +154,7 @@ window.onload = async () => {
   // we need to set dropdown selection max-height, in case the dashboard is small
   // before wait XXXms because everything needs to be loaded first
   await new Promise(resolve => setTimeout(resolve, 200))
-  document.getElementById('select_studiengang_dropdown_content').style.maxHeight = (document.body.offsetHeight - 45).toString() + 'px'
+  document.getElementById('dropdown-studiengang').style.maxHeight = (document.body.offsetHeight - 45).toString() + 'px'
 
   // show star rating
   // eslint-disable-next-line no-undef
@@ -175,27 +177,27 @@ async function changeStudiengangSelection () {
 }
 
 function addDropdownOptions () {
-  const dropdownContent = document.getElementById('select_studiengang_dropdown_content')
+  const dropdownContent = document.getElementById('dropdown-studiengang')
 
   // set footer icons
   Object.keys(studiengangConfig).forEach((key) => {
     const listEntry = document.createElement('p')
-    listEntry.style = 'display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;'
+    listEntry.classList.add("dropdown__content")
     listEntry.onclick = changeStudiengangSelection
     listEntry.setAttribute('studiengang', key)
 
-    const listTxt = document.createElement('text')
-    listTxt.style = 'flex:10'
-    listTxt.innerHTML = studiengangConfig[key].name
+    const listTxt = document.createElement('span')
+    listTxt.classList.add("dropdown__text")
+    listTxt.innerText = studiengangConfig[key].name
 
     listEntry.appendChild(listTxt)
 
     if (studiengangConfig[key].fsr_icon) {
       const listImg = document.createElement('img')
-      listImg.style = 'flex: 1;height: 30px; width: auto; vertical-align:middle'
+      listImg.classList.add("dropdown__image")
       listImg.src = studiengangConfig[key].fsr_icon
       if (studiengangConfig[key].invert_icon_dark_theme) {
-        listImg.className += ' invert'
+        listImg.classList.add("invert")
       }
 
       listEntry.appendChild(listImg)
@@ -230,37 +232,37 @@ function customizeForStudiengang (studiengang) {
 
   // set fsr icon
   if (studiengangConfig[studiengang].fsr_icon) {
-    document.getElementById('fsr_icon').src = studiengangConfig[studiengang].fsr_icon
-    document.getElementById('fsr_icon').style = studiengangConfig[studiengang].fsr_icon_dashboard_style
+    document.getElementById('fsr-icon-1').src = studiengangConfig[studiengang].fsr_icon
+    document.getElementById('fsr-icon-1').style = studiengangConfig[studiengang].fsr_icon_dashboard_style
     if (studiengangConfig[studiengang].invert_icon_dark_theme) {
-      document.getElementById('fsr_icon').className += ' invert'
+      document.getElementById('fsr-icon-1').className += ' invert'
     }
   } else {
-    document.getElementById('fsr_icon').style.display = 'none'
+    document.getElementById('fsr-icon-1').style.display = 'none'
   }
 
   // set fsr icon 2
   if (studiengangConfig[studiengang].fsr_icon_2) {
-    document.getElementById('fsr_icon_2').src = studiengangConfig[studiengang].fsr_icon_2
-    document.getElementById('fsr_icon_2').style = studiengangConfig[studiengang].fsr_icon_dashboard_style_2
+    document.getElementById('fsr-icon-2').src = studiengangConfig[studiengang].fsr_icon_2
+    document.getElementById('fsr-icon-2').style = studiengangConfig[studiengang].fsr_icon_dashboard_style_2
   } else {
-    document.getElementById('fsr_icon_2').style.display = 'none'
+    document.getElementById('fsr-icon-2').style.display = 'none'
   }
 
   // set fsr link
   if (studiengangConfig[studiengang].fsr_link) {
-    document.getElementById('fsr_link').href = studiengangConfig[studiengang].fsr_link
-    document.getElementById('fsr_link').style.display = 'unset'
+    document.getElementById('fsr-link-1').href = studiengangConfig[studiengang].fsr_link
+    document.getElementById('fsr-link-1').style.display = 'unset'
   } else {
-    document.getElementById('fsr_link').style.display = 'none'
+    document.getElementById('fsr-link-1').style.display = 'none'
   }
 
   // set fsr link 2
   if (studiengangConfig[studiengang].fsr_link_2) {
-    document.getElementById('fsr_link_2').href = studiengangConfig[studiengang].fsr_link_2
-    document.getElementById('fsr_link_2').style.display = 'unset'
+    document.getElementById('fsr-link-2').href = studiengangConfig[studiengang].fsr_link_2
+    document.getElementById('fsr-link-2').style.display = 'unset'
   } else {
-    document.getElementById('fsr_link_2').style.display = 'none'
+    document.getElementById('fsr-link-2').style.display = 'none'
   }
 }
 
@@ -279,7 +281,7 @@ async function openSettings () {
 }
 
 async function openShare () {
-  document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
+  document.getElementById('dropdown-studiengang').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
   await new Promise(resolve => setTimeout(resolve, 500))
   document.getElementById('rewards_link').addEventListener('click', async (e) => { // click handler needs to be set this way
     chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' }) // for some reason I need to pass empty param - else it wont work in ff
@@ -298,7 +300,7 @@ async function openSettingsTimeSection () {
 
 function listSearchFunction () {
   const filter = document.getElementById('searchListInput').value.toLowerCase()
-  const listEntries = document.querySelectorAll('#list .list-entry-wrapper')
+  const listEntries = document.querySelectorAll('#list .list__entry')
 
   for (const entry of listEntries) {
     try {
@@ -394,30 +396,31 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
   }
 
   courseList.forEach(element => {
-    const listEntrywrapper = document.createElement('div')
     const listEntry = document.createElement('a')
-    const listImg = document.createElement('div')
-    const listText = document.createElement('div')
+    listEntry.classList.add("list__entry")
+
     const img = document.createElement('img')
+
+    const listText = document.createElement('span')
+
+
     const rateEntryWrapper = document.createElement('div')
+    rateEntryWrapper.classList.add("list__rate-wrapper")
+    rateEntryWrapper.id = element.name + ' Wrapper'
+
+
     const rateEntry = document.createElement('div')
     const confirmEntry = document.createElement('div')
     const confirmEntryLink = document.createElement('a')
 
-    listEntrywrapper.className = 'list-entry-wrapper'
 
-    rateEntryWrapper.style.display = 'flex'
-    rateEntryWrapper.style.alignItems = 'center'
-    rateEntryWrapper.style.marginBottom = '7px'
-    rateEntryWrapper.id = element.name + ' Wrapper'
-    rateEntry.style.flex = 1
-    rateEntry.style.marginLeft = '150px'
+
     confirmEntry.style.flex = 2
 
     confirmEntryLink.setAttribute('courseRef', element.name)
-    confirmEntryLink.style.fontSize = '15px'
+    confirmEntryLink.classList.add("list__confirm-link")
     confirmEntryLink.href = '#'
-    confirmEntryLink.innerHTML = "Fertig <text style='font-size:14px'>✅</text>"
+    confirmEntryLink.innerHTML = "Fertig <span style='font-size:14px'>✅</span>"
     confirmEntryLink.onclick = sendRating
     confirmEntry.appendChild(confirmEntryLink)
 
@@ -430,17 +433,14 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
     rateEntryInner1.appendChild(rateEntryInner2)
     rateEntry.appendChild(rateEntryInner1)
 
-    listEntry.className = 'list-entry'
     listEntry.href = element.link
     listEntry.target = '_blank'
     listEntry.onclick = saveTwoClicks
 
-    listImg.className = 'list-entry-img'
+    listText.classList.add("list__entry-text")
+    listText.innerText = element.name
 
-    listText.className = 'list-entry-text'
-    listText.innerHTML = element.name
-
-    img.className = 'list-img'
+    img.className = 'list__entry-image'
     img.src = imgSrc
 
     if (element.img === '../../assets/icons/reload.png') {
@@ -448,10 +448,8 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
       img.className += ' invert'
     }
 
-    listImg.appendChild(img)
-    if (!(element.img === false)) { listEntry.appendChild(listImg) }
     listEntry.appendChild(listText)
-    listEntrywrapper.appendChild(listEntry)
+    if (!(element.img === false)) { listEntry.appendChild(img) }
     rateEntryWrapper.appendChild(rateEntry)
     rateEntryWrapper.appendChild(confirmEntry)
     let isRated = false
@@ -460,36 +458,32 @@ function displayCourseList (courseList, htmlList, type, closedIntro1, ratedCours
     } else {
       isRated = ratedCourses.includes(element.name)
     }
-    if (!(element.name === 'Diese Kursliste jetzt aktualisieren...' || element.name === 'Klicke, um deine OPAL-Kurse zu importieren' || isRated) && ratingEnabledFlag) listEntrywrapper.appendChild(rateEntryWrapper)
-    htmlList.appendChild(listEntrywrapper)
+    if (!(element.name === 'Diese Kursliste jetzt aktualisieren...' || element.name === 'Klicke, um deine OPAL-Kurse zu importieren' || isRated) && ratingEnabledFlag) listEntryWrapper.appendChild(rateEntryWrapper)
+    htmlList.appendChild(listEntry)
   })
 
   // Create button so switch courses <> favorites
   const listEntry = document.createElement('a')
-  const listImg = document.createElement('div')
-  const listText = document.createElement('div')
+  const listText = document.createElement('span')
   const img = document.createElement('img')
 
-  listImg.className = 'list-entry-img'
-
-  listEntry.className = 'list-entry'
+  listEntry.className = 'list__entry'
   listEntry.href = 'javascript:void(0)'
   listEntry.onclick = switchCoursesToShow
 
-  listText.className = 'list-entry-text'
+  listText.className = 'list__entry-text'
 
-  img.className = 'list-img'
+  img.className = 'list__entry-image'
 
   if (type === 'favoriten') img.src = '../../assets/icons/CoursesOpalIcon.png'
   if (type === 'meine_kurse') img.src = '../../assets/icons/star.png'
 
-  listImg.appendChild(img)
-  listEntry.appendChild(listImg)
 
   if (type === 'favoriten') listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
   if (type === 'meine_kurse') listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
 
   listEntry.appendChild(listText)
+  listEntry.appendChild(img)
   htmlList.appendChild(listEntry)
 }
 
@@ -544,8 +538,8 @@ async function loadCourses (type) {
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 async function selectStudiengangDropdown () {
-  document.getElementById('select_studiengang_dropdown_content').classList.toggle('show')
-  document.getElementById('select_studiengang_dropdown_id').style.border = 'none'
+  document.getElementById('dropdown-studiengang').classList.toggle('show')
+  // document.getElementById('select_studiengang_dropdown_id').style.border = 'none'
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.set({ updateCustomizeStudiengang: dropdownUpdateId }, resolve))
 }
