@@ -244,7 +244,7 @@ export async function owaFetch () {
   // Promisified until usage of Manifest V3
   const notificationGranted = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, resolve))
 
-  if (notificationGranted && result.additionalNotificationOnNewMail && result.numberOfUnreadMails < numberOfUnreadMails) {
+  if (notificationGranted && result.additionalNotificationOnNewMail && oldUnread < numberOfUnreadMails) {
     // Promissified notification
     await new Promise<void>((resolve) => chrome.notifications.create(
       'tuFastNewEmailNotification',

@@ -170,7 +170,7 @@ chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
     if (!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
     chrome.browserAction.setIcon({ path: r.iconPathUnlocked || rockets.default.iconPathUnlocked })
   } catch (e) {
-    console.log(`Cannot parse rocket icon: ${resp}`)
+    console.log(`Cannot parse rocket icon: ${JSON.stringify(resp.selectedRocketIcon)}`)
     chrome.browserAction.setIcon({ path: rockets.default.iconPathUnlocked })
   }
 })
