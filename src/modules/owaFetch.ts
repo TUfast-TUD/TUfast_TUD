@@ -37,7 +37,7 @@ export async function fetchOWA (username: string, password: string, logout: bool
     referrer:
             'https://msx.tu-dresden.de/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmsx.tu-dresden.de%2fowa%2f%23authRedirect%3dtrue',
     referrerPolicy: 'strict-origin-when-cross-origin',
-    body: `destination=https%3A%2F%2Fmsx.tu-dresden.de%2Fowa%2F%23authRedirect%3Dtrue&flags=4&forcedownlevel=0&username=${username}%40msx.tu-dresden.de&password=${password}&passwordText=&isUtf8=1`,
+    body: `destination=https%3A%2F%2Fmsx.tu-dresden.de%2Fowa%2F%23authRedirect%3Dtrue&flags=4&forcedownlevel=0&username=${username}&password=${password}&passwordText=&isUtf8=1`,
     method: 'POST',
     mode: 'no-cors',
     credentials: 'include'
