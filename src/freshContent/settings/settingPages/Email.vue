@@ -31,7 +31,6 @@
 
   <p
     class="max-line"
-    @click="owaFetchActive = !owaFetchActive"
   >
     Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern.
     Weil TUfast dafür eine spezielle Berechtigung braucht, drücke bitte auf "Erlauben" im folgenden Pop-Up.

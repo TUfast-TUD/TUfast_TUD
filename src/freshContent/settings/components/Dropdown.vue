@@ -94,6 +94,7 @@ export default defineComponent({
         align-items: center
         height: min-content
         cursor: pointer
+        user-select: none
 
     &__dropdown:hover &__title
         text-decoration: underline
