@@ -57,7 +57,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
-      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = '{"id": "RI_default", "link": "/assets/icons/RocketIcons/default_128px.png"}'
+      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
 
       // Upgrading encryption
       // Currently "encryptionLevel" can't be lower than 3, but "encryption_level" can
@@ -119,7 +119,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         if (!currentSettings.foundEasteregg) updateObj.foundEasteregg = true
 
         if (!avRockets.includes('easteregg')) avRockets.push('easteregg')
-        updateObj.selectedRocketIcon = rockets.easteregg
+        updateObj.selectedRocketIcon = JSON.stringify(rockets.easteregg)
         // Promisified until usage of Manifest V3
         await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rockets.easteregg.iconPathUnlocked }, resolve))
         // Promisified until usage of Manifest V3

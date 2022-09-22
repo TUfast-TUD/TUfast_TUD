@@ -35,7 +35,7 @@ export function enableOpalPdfHeaderListener () {
 export async function disableOpalPdfInline () {
   // Promisified until usage of Manifest V3
   await new Promise<void>((resolve) => chrome.storage.local.set({ pdfInInline: false, pdfInNewTab: false }, resolve))
-  chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
+  if (chrome.webRequest) chrome.webRequest.onHeadersReceived.removeListener(headerListenerFunc)
   await new Promise((resolve) => chrome.permissions.remove({ permissions: ['webRequest', 'webRequestBlocking'] }, resolve)).catch(() => { /* ignore */ })
 }
 

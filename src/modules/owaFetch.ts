@@ -240,30 +240,22 @@ export async function owaFetch () {
   // alert on new Mail
   // Promisified until usage of Manifest V3
   const result = await new Promise<any>((resolve) => chrome.storage.local.get(['numberOfUnreadMails', 'additionalNotificationOnNewMail'], resolve))
+  const oldUnread = result.numberOfUnreadMails || 0
   // Promisified until usage of Manifest V3
   const notificationGranted = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, resolve))
 
-  if (result.additionalNotificationOnNewMail && typeof result.numberOfUnreadMails !== 'undefined' && result.numberOfUnreadMails < numberOfUnreadMails) {
-    if (notificationGranted) {
-      // Promissified notification
-      await new Promise<void>((resolve) => chrome.notifications.create(
-        'tuFastNewEmailNotification',
-        {
-          type: 'basic',
-          message: `Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1 ? 's' : ''}`,
-          title: 'Neue E-Mails',
-          iconUrl: '/assets/icons/RocketIcons/default_128px.png'
-        },
-        (_id) => resolve(undefined)
-      ))
-    } else {
-      // Fallback
-      // Maybe we should keep it for compatibility?
-      if (confirm(`Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1 ? 's' : ''} in deinem TU Dresden Postfach!\nDr\u00FCcke 'Ok' um OWA zu \u00F6ffnen.`)) {
-        // Promisified until usage of Manifest V3
-        await new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url: 'https://msx.tu-dresden.de/owa/' }, resolve))
-      }
-    }
+  if (notificationGranted && result.additionalNotificationOnNewMail && result.numberOfUnreadMails < numberOfUnreadMails) {
+    // Promissified notification
+    await new Promise<void>((resolve) => chrome.notifications.create(
+      'tuFastNewEmailNotification',
+      {
+        type: 'basic',
+        message: `Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1 ? 's' : ''}`,
+        title: 'Neue E-Mails',
+        iconUrl: '/assets/icons/RocketIcons/default_128px.png'
+      },
+      (_id) => resolve(undefined)
+    ))
   }
 
   // set badge and local storage
@@ -290,7 +282,7 @@ export async function enableOWANotifications (): Promise<boolean> {
 
 export async function disableOWANotifications () {
   await new Promise<void>((resolve) => chrome.storage.local.set({ additionalNotificationOnNewMail: false }, resolve))
-  chrome.notifications.onClicked.removeListener(notificationListener)
+  if (chrome.notifications) chrome.notifications.onClicked.removeListener(notificationListener)
   await new Promise((resolve) => chrome.permissions.remove({ permissions: ['notifications'] }, resolve)).catch(() => { /* ignore */ })
 }
 
