@@ -217,7 +217,8 @@ function customizeForStudiengang (studiengang) {
 
     // set visible icons
     studiengangConfig[studiengang].footer_icons_display.forEach(element => {
-      document.getElementById(element).style.display = 'flex'
+      const icon = document.getElementById(element)
+      if (icon) icon.style.display = 'flex'
     })
   }
 
