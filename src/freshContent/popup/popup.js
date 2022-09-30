@@ -262,6 +262,11 @@ function customizeForStudiengang (studiengang) {
   } else {
     document.getElementById('fsr_link_2').style.display = 'none'
   }
+
+  // set pa link
+  if (studiengangConfig[studiengang].pa_link) {
+    document.getElementById('pa').href = studiengangConfig[studiengang].pa_link
+  }
 }
 
 function clicksToTime (clicks) {
