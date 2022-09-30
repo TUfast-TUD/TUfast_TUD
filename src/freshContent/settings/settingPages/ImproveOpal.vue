@@ -17,6 +17,9 @@
     txt="PDF-Dokumente in neuem Tab öffnen (empfohlen!)"
     class="setting"
   />
+  <p class="max-line p-margin">
+    Hinweis: Diese Funktion funktioniert unter Firefox leider nicht stabil.
+  </p>
 </template>
 
 <script lang="ts">

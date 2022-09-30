@@ -45,7 +45,7 @@
   <p class="max-line">
     Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab.
     Zum Anmelden werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher.
-    Es funktioniert genauso, als würdest du deine Mails über den Browser abrufen.
+    Es funktioniert genauso, als würdest du deine Mails über den Browser abrufen. Die Benachrichtigungen kommen über die Windows-API. Beachte, dass du unter Windows die entsprechende Funktion aktiviert haben musst.
   </p>
 </template>
 
