@@ -62,6 +62,9 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue'
 
+// types
+import type { Setting } from './types/Setting'
+
 // Components
 import ColorSwitch from './components/ColorSwitch.vue'
 import LanguageSelect from './components/LanguageSelect.vue'
@@ -71,9 +74,6 @@ import SettingTile from './components/SettingTile.vue'
 import Onboarding from './components/Onboarding.vue'
 import Card from './components/Card.vue'
 import Toggle from './components/Toggle.vue'
-
-// Settings Data (Names and Icons)
-import settings from './settings.json'
 
 // Settings Page Components
 import AutoLogin from './settingPages/AutoLogin.vue'
@@ -86,7 +86,6 @@ import Rockets from './settingPages/Rockets.vue'
 import Contact from './settingPages/Contact.vue'
 
 // Onboarding Page Components
-import onboardingSteps from './onboarding.json'
 import Welcome from './onboardingPages/01_Welcome.vue'
 import SearchSetup from './onboardingPages/02_SearchSetup.vue'
 import LoginSetup from './onboardingPages/03_LoginSetup.vue'
@@ -95,16 +94,14 @@ import EMailSetup from './onboardingPages/05_EMailSetup.vue'
 import OpalSetup from './onboardingPages/06_OpalSetup.vue'
 import DoneSetup from './onboardingPages/07_DoneSetup.vue'
 
+// configurations
+import settings from './settings.json'
+import onboardingSteps from './onboarding.json'
+
 // composables
 import { useChrome } from './composables/chrome'
 // Temporary fix: We need to import the Components for the icons manually as no global usage is possible
 // But we need to do this in SettingsTile.
-
-type setting = {
-    title: string,
-    icon: string,
-    settingsPage: string,
-}
 
 export default defineComponent({
   components: {
@@ -141,29 +138,32 @@ export default defineComponent({
     const stepWidth = ref(1)
     const animState = ref<'dark' | 'light'>('dark')
 
-    onBeforeMount(async () => {
-      hideWelcome.value = await getChromeLocalStorage('hideWelcome') as boolean
-    })
-
+    // disables the welcome message once the user
+    // did the onboarding once (or canceled it)
     const disableWelcome = async () => {
-      hideWelcome.value = true
       await setChromeLocalStorage({ hideWelcome: true })
+      hideWelcome.value = true
     }
 
+    // moves to the next onboarding step
     const forward = () => {
       onboardingStep.value += stepWidth.value
       stepWidth.value = 1
     }
 
+    // jumps over certain onboarding steps if the user
+    // didn't want to provide login details
     const handleSignup = (state : { value : boolean }) => {
       stepWidth.value = state.value === true ? 1 : 3
     }
 
-    const openSetting = (setting : setting) => {
+    // handles the opening of a setting card
+    const openSetting = (setting : Setting) => {
       showCard.value = true
       currentSetting.value = setting
     }
 
+    // toggles the theme setting inside local storage
     const toggleTheme = async () => {
       const theme = await getChromeLocalStorage('theme') as 'light' | 'dark'
       if (animState.value === 'dark') { await setChromeLocalStorage({ theme: 'light' }) }
@@ -172,27 +172,38 @@ export default defineComponent({
       updateTheme(theme === 'dark' ? 'light' : 'dark')
     }
 
-    const html = document.documentElement
+    // updates the theme classes on the <html> element
     const updateTheme = (theme: string) => {
+      // shortening the rest of the logic
+      const setClass = (className: string) => document.documentElement.classList.add(className)
+      const unsetClass = (className: string) => document.documentElement.classList.remove(className)
       if (theme === 'dark') {
         animState.value = 'dark'
-        html.classList.add('dark')
-        html.classList.remove('light')
+        setClass('dark')
+        unsetClass('light')
       } else if (theme === 'light') {
         animState.value = 'light'
-        html.classList.add('light')
-        html.classList.remove('dark')
+        setClass('light')
+        unsetClass('dark')
       }
     }
 
+    // sets the right theme on initial load
     const themeSetup = async () => {
-      let selectedTheme = await getChromeLocalStorage('theme') as 'dark' | 'light' | undefined
-      if (!selectedTheme) {
+      let selectedTheme = await getChromeLocalStorage('theme') as 'dark' | 'light' | 'system'
+      if (selectedTheme === 'system') {
+        // check if user prefers some color theme
         selectedTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        await setChromeLocalStorage({ theme: selectedTheme })
       }
       updateTheme(selectedTheme)
     }
-    themeSetup()
+
+    // lifecycle hook - runs some startup logic before load of settings page
+    onBeforeMount(async () => {
+      hideWelcome.value = await getChromeLocalStorage('hideWelcome') as boolean
+      themeSetup()
+    })
 
     return {
       hideWelcome,
@@ -210,11 +221,9 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="sass" scoped>
-
 .main-grid
     display: grid
     grid-template-columns: 40% 20% 40%
@@ -255,8 +264,12 @@ export default defineComponent({
 
 <style lang="sass">
 body
+  background-image: url(/assets/settings/background_dark.svg)
   scrollbar-color: hsl(var(--clr-primary))
   scrollbar-width: thin
+
+  .light &
+    background-image: url(/assets/settings/background_light.svg)
 
 *,
 *::before,

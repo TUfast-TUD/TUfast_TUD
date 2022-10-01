@@ -89,6 +89,9 @@ export default defineComponent({
     min-width: min-content
     width: 125px
 
+    .light & &__languages
+      color: hsl(var(--clr-black))
+
     &__selector
         transition: all 200ms ease-out
         cursor: pointer
@@ -113,7 +116,7 @@ export default defineComponent({
 .soon
   position: absolute
   left: 30%
-  top: 20%
+  top: 15%
   transform: rotate(-45deg)
   font-weight: 800
   color: hsl(var(--clr-white) )
