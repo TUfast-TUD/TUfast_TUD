@@ -9,14 +9,18 @@
     v-model="accept"
     txt="Autologin aktivieren"
     :column="true"
-    @click="emitAccept()"
+    @click="setStepWidth()"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-// import Onboarding from '../components/Onboarding.vue'
+import { defineComponent, ref } from 'vue'
+
+// components
 import Setting from '../components/Setting.vue'
+
+// composables
+import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
   components: {
@@ -24,18 +28,19 @@ export default defineComponent({
     Setting
   },
   emits: ['accept'],
-  setup (_, { emit }) {
+  setup (_) {
+    const { stepWidth } = useStepper()
+    
     const accept = ref(true)
 
-    const emitAccept = () => {
-      emit('accept', { value: accept.value })
+    const setStepWidth = () => {
+      if (accept.value)
+        stepWidth.value = 1
+      else
+        stepWidth.value = 3
     }
 
-    onMounted(() => {
-      emit('accept', { value: accept.value })
-    })
-
-    return { accept, emitAccept }
+    return { accept, setStepWidth }
   }
 })
 </script>

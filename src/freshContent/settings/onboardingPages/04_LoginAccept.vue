@@ -30,11 +30,11 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 
 // components
-// import Onboarding from '../components/Onboarding.vue'
 import Input from '../components/Input.vue'
 
 // composables
 import { useUserData } from '../composables/user-data'
+import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
   components: {
@@ -42,16 +42,27 @@ export default defineComponent({
     CustomInput: Input
   },
   setup () {
+    const {
+      stepWidth,
+    }  = useStepper()
     const { saveUserData } = useUserData()
     const username = ref('')
     const password = ref('')
     const usernameValid = ref(false)
     const passwordValid = ref(false)
 
+    // jump next step if ready was never set to true
+    stepWidth.value = 2
+
     const ready = computed(() => usernameValid.value && passwordValid.value)
 
     watch(ready, async () => {
-      if (ready.value === true) { await saveUserData(username.value, password.value, 'zih') }
+      if (ready.value === true) {
+        await saveUserData(username.value, password.value, 'zih')
+        stepWidth.value = 1
+      } else {
+        stepWidth.value = 2
+      }
     })
 
     return { username, password, usernameValid, passwordValid }

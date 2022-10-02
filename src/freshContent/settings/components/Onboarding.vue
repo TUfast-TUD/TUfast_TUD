@@ -2,7 +2,7 @@
   <div class="hide-bg">
     <div class="onboarding onboarding--opening">
       <PhX
-        v-if="currentStep !== steps"
+        v-if="currentStep !== stepsCount"
         class="onboarding__close"
         @click="close()"
       />
@@ -12,12 +12,12 @@
 
       <Stepper
         class="onboarding__stepper"
-        :steps="steps"
+        :steps="stepsCount"
         :current-step="currentStep"
       />
-      <div :class="`onboarding__footer ${currentStep === steps ? 'onboarding__footer--center' : ''}`">
+      <div :class="`onboarding__footer ${currentStep === stepsCount ? 'onboarding__footer--center' : ''}`">
         <div
-          v-if="currentStep !== steps"
+          v-if="currentStep !== stepsCount"
           class="footer-text"
         >
           <h2 class="footer-text__title">
@@ -28,9 +28,7 @@
           </h3>
         </div>
         <OnboardingButton
-          :percent-done="percentDone"
-          :class="`onboarding__main-btn ${currentStep === steps ? 'onboarding__main-btn--turned' : ''}`"
-          @click="next()"
+          :class="`onboarding__main-btn ${currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''}`"
         />
       </div>
     </div>
@@ -38,10 +36,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType } from 'vue'
+
+// components
 import { PhX } from '@dnlsndr/vue-phosphor-icons'
 import Stepper from './Stepper.vue'
 import OnboardingButton from './OnboardingButton.vue'
+
+// composables
+import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
   components: {
@@ -64,27 +67,25 @@ export default defineComponent({
     }
   },
   emits: ['close-me', 'next'],
-  setup (props, { emit }) {
-    const percentDone = ref(0)
-    const steps = ref(7)
+  setup (_, { emit }) {
+    const {
+      stepsCount,
+    } = useStepper()
 
     const close = () => {
       document.querySelector('.onboarding')?.classList.add('onboarding--closing')
       setTimeout(() => emit('close-me'), 650)
     }
 
-    const next = () => {
-      if (props.currentStep < steps.value) {
-        emit('next')
-        percentDone.value = (props.currentStep / (steps.value - 1)) * 100
-      } else { close() }
-    }
-
     setTimeout(() => {
       document.querySelector('.onboarding')?.classList.remove('onboarding--opening')
     }, 800)
 
-    return { percentDone, steps, close, next }
+
+    return {
+      stepsCount,
+      close,
+    }
   }
 
 })

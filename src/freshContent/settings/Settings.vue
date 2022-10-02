@@ -43,15 +43,14 @@
     to="body"
   >
     <Onboarding
-      :current-step="onboardingStep"
-      :h1="onboardingSteps[onboardingStep - 1].h1"
-      :h2="onboardingSteps[onboardingStep - 1].h2"
-      @next="forward()"
+      :current-step="currentOnboardingStep"
+      :h1="onboardingSteps[currentOnboardingStep - 1].h1"
+      :h2="onboardingSteps[currentOnboardingStep - 1].h2"
       @close-me="disableWelcome()"
     >
       <template #default>
         <component
-          :is="onboardingSteps[onboardingStep - 1].title"
+          :is="onboardingSteps[currentOnboardingStep - 1].title"
           @accept="handleSignup($event)"
         />
       </template>
@@ -100,6 +99,7 @@ import onboardingSteps from './onboarding.json'
 
 // composables
 import { useChrome } from './composables/chrome'
+import { useStepper } from './composables/stepper'
 // Temporary fix: We need to import the Components for the icons manually as no global usage is possible
 // But we need to do this in SettingsTile.
 
@@ -131,11 +131,10 @@ export default defineComponent({
   },
   setup () {
     const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
+    const { stepWidth, currentOnboardingStep } = useStepper()
     const hideWelcome = ref(false)
-    const onboardingStep = ref(1)
     const showCard = ref(false)
     const currentSetting = ref(settings[0])
-    const stepWidth = ref(1)
     const animState = ref<'dark' | 'light'>('dark')
 
     // disables the welcome message once the user
@@ -143,12 +142,6 @@ export default defineComponent({
     const disableWelcome = async () => {
       await setChromeLocalStorage({ hideWelcome: true })
       hideWelcome.value = true
-    }
-
-    // moves to the next onboarding step
-    const forward = () => {
-      onboardingStep.value += stepWidth.value
-      stepWidth.value = 1
     }
 
     // jumps over certain onboarding steps if the user
@@ -208,10 +201,9 @@ export default defineComponent({
     return {
       hideWelcome,
       disableWelcome,
-      forward,
       handleSignup,
       onboardingSteps,
-      onboardingStep,
+      currentOnboardingStep,
       showCard,
       settings,
       currentSetting,

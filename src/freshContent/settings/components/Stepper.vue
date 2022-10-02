@@ -1,28 +1,35 @@
 <template>
   <div class="stepper">
     <div
-      v-for="step of steps"
+      v-for="step of stepsCount"
       :key="step"
-      :class="`stepper__step ${step === currentStep ? 'stepper__step--current' : ''}`"
+      :class="`stepper__step ${step === currentOnboardingStep ? 'stepper__step--current' : ''}`"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
+
+// types
+import type { PropType } from 'vue'
+
+// composables
+import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
-  props: {
-    steps: {
-      type: Number as PropType<number>,
-      required: true
-    },
-    currentStep: {
-      type: Number as PropType<number>,
-      required: true
-    }
-  },
   setup () {
+    const {
+      stepsCount,
+      currentOnboardingStep,
+    } = useStepper()
+
+    console.log(currentOnboardingStep.value, stepsCount.value)
+
+    return {
+      stepsCount,
+      currentOnboardingStep,
+    }
   }
 })
 </script>
