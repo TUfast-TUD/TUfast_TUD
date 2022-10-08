@@ -1,9 +1,7 @@
 <template>
   <div class="main-grid">
     <header class="main-grid__header">
-      <h1 class="upper txt-bold main-grid__title">
-        Willkommen bei TUfast 🚀
-      </h1>
+      <h1 class="upper txt-bold main-grid__title">Willkommen bei TUfast 🚀</h1>
       <h3 class="txt-bold main-grid__subtitle">
         Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.
       </h3>
@@ -32,74 +30,67 @@
   <Card
     v-if="showCard"
     :title="currentSetting.title"
-    @close-me="showCard=false"
+    @close-me="showCard = false"
   >
     <template #default>
       <component :is="currentSetting.settingsPage" />
     </template>
   </Card>
-  <teleport
-    v-if="!hideWelcome"
-    to="body"
-  >
+  <teleport v-if="!hideWelcome" to="body">
     <Onboarding
       :current-step="currentOnboardingStep"
       :h1="onboardingSteps[currentOnboardingStep - 1].h1"
       :h2="onboardingSteps[currentOnboardingStep - 1].h2"
-      @close-me="disableWelcome()"
     >
       <template #default>
-        <component
-          :is="onboardingSteps[currentOnboardingStep - 1].title"
-          @accept="handleSignup($event)"
-        />
+        <component :is="onboardingSteps[currentOnboardingStep - 1].title" />
       </template>
     </Onboarding>
   </teleport>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue'
+import { defineComponent, onBeforeMount, ref } from "vue";
 
 // types
-import type { Setting } from './types/Setting'
+import type { Setting } from "./types/Setting";
 
 // Components
-import ColorSwitch from './components/ColorSwitch.vue'
-import LanguageSelect from './components/LanguageSelect.vue'
-import Statistics from './components/Statistics.vue'
-import Dropdown from './components/Dropdown.vue'
-import SettingTile from './components/SettingTile.vue'
-import Onboarding from './components/Onboarding.vue'
-import Card from './components/Card.vue'
-import Toggle from './components/Toggle.vue'
+import ColorSwitch from "./components/ColorSwitch.vue";
+import LanguageSelect from "./components/LanguageSelect.vue";
+import Statistics from "./components/Statistics.vue";
+import Dropdown from "./components/Dropdown.vue";
+import SettingTile from "./components/SettingTile.vue";
+import Onboarding from "./components/Onboarding.vue";
+import Card from "./components/Card.vue";
+import Toggle from "./components/Toggle.vue";
 
 // Settings Page Components
-import AutoLogin from './settingPages/AutoLogin.vue'
-import Email from './settingPages/Email.vue'
-import OpalCourses from './settingPages/OpalCourses.vue'
-import ImproveOpal from './settingPages/ImproveOpal.vue'
-import Shortcuts from './settingPages/Shortcuts.vue'
-import SearchEngines from './settingPages/SearchEngines.vue'
-import Rockets from './settingPages/Rockets.vue'
-import Contact from './settingPages/Contact.vue'
+import AutoLogin from "./settingPages/AutoLogin.vue";
+import Email from "./settingPages/Email.vue";
+import OpalCourses from "./settingPages/OpalCourses.vue";
+import ImproveOpal from "./settingPages/ImproveOpal.vue";
+import Shortcuts from "./settingPages/Shortcuts.vue";
+import SearchEngines from "./settingPages/SearchEngines.vue";
+import Rockets from "./settingPages/Rockets.vue";
+import Contact from "./settingPages/Contact.vue";
 
 // Onboarding Page Components
-import Welcome from './onboardingPages/01_Welcome.vue'
-import SearchSetup from './onboardingPages/02_SearchSetup.vue'
-import LoginSetup from './onboardingPages/03_LoginSetup.vue'
-import LoginAccept from './onboardingPages/04_LoginAccept.vue'
-import EMailSetup from './onboardingPages/05_EMailSetup.vue'
-import OpalSetup from './onboardingPages/06_OpalSetup.vue'
-import DoneSetup from './onboardingPages/07_DoneSetup.vue'
+import Welcome from "./onboardingPages/01_Welcome.vue";
+import SearchSetup from "./onboardingPages/02_SearchSetup.vue";
+import LoginSetup from "./onboardingPages/03_LoginSetup.vue";
+import LoginAccept from "./onboardingPages/04_LoginAccept.vue";
+import EMailSetup from "./onboardingPages/05_EMailSetup.vue";
+import OpalSetup from "./onboardingPages/06_OpalSetup.vue";
+import DoneSetup from "./onboardingPages/07_DoneSetup.vue";
 
 // configurations
-import settings from './settings.json'
-import onboardingSteps from './onboarding.json'
+import settings from "./settings.json";
+import onboardingSteps from "./onboarding.json";
 
 // composables
-import { useChrome } from './composables/chrome'
-import { useStepper } from './composables/stepper'
+import { useChrome } from "./composables/chrome";
+import { useStepper } from "./composables/stepper";
 // Temporary fix: We need to import the Components for the icons manually as no global usage is possible
 // But we need to do this in SettingsTile.
 
@@ -127,81 +118,79 @@ export default defineComponent({
     LoginAccept,
     EMailSetup,
     OpalSetup,
-    DoneSetup
+    DoneSetup,
   },
-  setup () {
-    const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
-    const { stepWidth, currentOnboardingStep } = useStepper()
-    const hideWelcome = ref(false)
-    const showCard = ref(false)
-    const currentSetting = ref(settings[0])
-    const animState = ref<'dark' | 'light'>('dark')
-
-    // disables the welcome message once the user
-    // did the onboarding once (or canceled it)
-    const disableWelcome = async () => {
-      await setChromeLocalStorage({ hideWelcome: true })
-      hideWelcome.value = true
-    }
-
-    // jumps over certain onboarding steps if the user
-    // didn't want to provide login details
-    const handleSignup = (state : { value : boolean }) => {
-      stepWidth.value = state.value === true ? 1 : 3
-    }
+  setup() {
+    const { getChromeLocalStorage, setChromeLocalStorage } = useChrome();
+    const { hideWelcome, currentOnboardingStep } = useStepper();
+    const showCard = ref(false);
+    const currentSetting = ref(settings[0]);
+    const animState = ref<"dark" | "light">("dark");
 
     // handles the opening of a setting card
-    const openSetting = (setting : Setting) => {
-      showCard.value = true
-      currentSetting.value = setting
-    }
+    const openSetting = (setting: Setting) => {
+      showCard.value = true;
+      currentSetting.value = setting;
+    };
 
     // toggles the theme setting inside local storage
     const toggleTheme = async () => {
-      const theme = await getChromeLocalStorage('theme') as 'light' | 'dark'
-      if (animState.value === 'dark') { await setChromeLocalStorage({ theme: 'light' }) }
-      if (animState.value === 'light') { await setChromeLocalStorage({ theme: 'dark' }) }
+      const theme = (await getChromeLocalStorage("theme")) as "light" | "dark";
+      if (animState.value === "dark") {
+        await setChromeLocalStorage({ theme: "light" });
+      }
+      if (animState.value === "light") {
+        await setChromeLocalStorage({ theme: "dark" });
+      }
 
-      updateTheme(theme === 'dark' ? 'light' : 'dark')
-    }
+      updateTheme(theme === "dark" ? "light" : "dark");
+    };
 
     // updates the theme classes on the <html> element
     const updateTheme = (theme: string) => {
       // shortening the rest of the logic
-      const setClass = (className: string) => document.documentElement.classList.add(className)
-      const unsetClass = (className: string) => document.documentElement.classList.remove(className)
-      if (theme === 'dark') {
-        animState.value = 'dark'
-        setClass('dark')
-        unsetClass('light')
-      } else if (theme === 'light') {
-        animState.value = 'light'
-        setClass('light')
-        unsetClass('dark')
+      const setClass = (className: string) =>
+        document.documentElement.classList.add(className);
+      const unsetClass = (className: string) =>
+        document.documentElement.classList.remove(className);
+      if (theme === "dark") {
+        animState.value = "dark";
+        setClass("dark");
+        unsetClass("light");
+      } else if (theme === "light") {
+        animState.value = "light";
+        setClass("light");
+        unsetClass("dark");
       }
-    }
+    };
 
     // sets the right theme on initial load
     const themeSetup = async () => {
-      let selectedTheme = await getChromeLocalStorage('theme') as 'dark' | 'light' | 'system'
-      if (selectedTheme === 'system') {
+      let selectedTheme = (await getChromeLocalStorage("theme")) as
+        | "dark"
+        | "light"
+        | "system";
+      if (selectedTheme === "system") {
         // check if user prefers some color theme
-        selectedTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-        await setChromeLocalStorage({ theme: selectedTheme })
+        selectedTheme = window.matchMedia("(prefers-color-scheme: light)")
+          .matches
+          ? "light"
+          : "dark";
+        await setChromeLocalStorage({ theme: selectedTheme });
       }
-      updateTheme(selectedTheme)
-    }
+      updateTheme(selectedTheme);
+    };
 
     // lifecycle hook - runs some startup logic before load of settings page
     onBeforeMount(async () => {
-      hideWelcome.value = await getChromeLocalStorage('hideWelcome') as boolean
-      themeSetup()
-    })
+      hideWelcome.value = (await getChromeLocalStorage(
+        "hideWelcome"
+      )) as boolean;
+      themeSetup();
+    });
 
     return {
       hideWelcome,
-      disableWelcome,
-      handleSignup,
       onboardingSteps,
       currentOnboardingStep,
       showCard,
@@ -209,10 +198,10 @@ export default defineComponent({
       currentSetting,
       openSetting,
       toggleTheme,
-      animState
-    }
-  }
-})
+      animState,
+    };
+  },
+});
 </script>
 
 <style lang="sass" scoped>

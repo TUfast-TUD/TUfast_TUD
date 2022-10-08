@@ -1,16 +1,8 @@
 <template>
   <div class="onboarding-btn" @click="next()">
     <div class="onboarding-btn__inner">
-      <svg
-        class="onboarding-btn__progress"
-        viewBox="0 0 100 100"
-      >
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          :style="`--done: ${(percentDone/100) * 280}`"
-        />
+      <svg class="onboarding-btn__progress" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" :style="`--done: ${(percentDone / 100) * 280}`" />
       </svg>
       <PhArrowRight class="onboarding-btn__arrow" />
     </div>
@@ -18,41 +10,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from "vue";
 
 // components
-import { PhArrowRight } from '@dnlsndr/vue-phosphor-icons'
+import { PhArrowRight } from "@dnlsndr/vue-phosphor-icons";
 
 // composables
-import { useStepper } from '../composables/stepper'
+import { useStepper } from "../composables/stepper";
 
 export default defineComponent({
   components: {
-    PhArrowRight
+    PhArrowRight,
   },
   setup() {
-    const {
-      currentOnboardingStep,
-      stepsCount,
-      stepWidth,
-    } = useStepper()
-
-    const percentDone = ref(0)
-
-    const next = () => {
-      if (currentOnboardingStep.value < stepsCount.value) {
-        currentOnboardingStep.value += stepWidth.value
-        percentDone.value = (currentOnboardingStep.value / (stepsCount.value - 1)) * 100
-      } else { close() }
-    }
+    const { next, percentDone } = useStepper();
 
     return {
       next,
       percentDone,
-    }
-  }
-})
-
+    };
+  },
+});
 </script>
 
 <style lang="sass">
