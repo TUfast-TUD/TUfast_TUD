@@ -1,0 +1,275 @@
+@use 'palette.scss';
+
+/* list */
+.list {
+  max-height: 450px;
+  overflow: auto;
+  margin-bottom: 3px;
+  overflow-x: hidden;
+}
+
+.list-entry {
+  display: flex;
+  padding: 9px;
+  margin: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.list-entry-wrapper {
+  border-bottom: 1.5px solid var(--color-border-primary);
+}
+
+.list-intro {
+  border-radius: 3px;
+  background-color: var(--color-bg-info);
+  margin: 5px 15px 5px 15px;
+  margin: 2px;
+  margin-left: 5px;
+  padding: 9px;
+  margin-bottom: 5px;
+}
+
+.list-outro {
+  border-radius: 3px;
+  background-color: var(--color-bg-success);
+  margin: 5px 15px 5px 15px;
+  margin: 2px;
+  margin-left: 5px;
+  padding: 9px;
+  margin-bottom: 5px;
+}
+
+.studiengang-img {
+  flex: 1;
+  padding-right: 3px;
+  padding-left: 3px;
+  max-height: 35px;
+  width: auto;
+}
+
+.list-search {
+  flex: 100;
+  margin-left: 7px;
+  margin-right: 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1.5px solid var(--color-border-input);
+  background-image: url("../../assets/icons/searchicon.png"); /* Add a search icon to input */
+  background-position: 12px 7px; /* Position the search icon */
+  background-size: 19px;
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  padding: 9px 0px 9px 40px; /* Add some padding */
+
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.list-search::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.list-search:focus::placeholder {
+  opacity: 0;
+}
+
+.list-entry-text {
+  flex: 9;
+  justify-self: center;
+  align-self: center;
+  overflow: hidden; /* One-line text and crop */
+  white-space: nowrap; /* One-line text and crop */
+  text-overflow: ellipsis; /* One-line text and crop */
+}
+
+.list-entry-img {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.list-img {
+  object-fit: contain;
+  width: 32px;
+  height: 16px;
+}
+
+body {
+  border: solid 2px var(--color-border-popup);
+  background-color: var(--color-bg-overlay);
+  color: var(--color-text-primary);
+  border-radius: 4px;
+  max-width: 510px; /*limit by chrome: 789px*/
+  min-width: 510px; /*limit by chrome: 789px*/
+  max-height: 590px; /*limit by chrome: 590px*/
+  margin: 0px;
+  font-size: 12px;
+  font-family: Helvetica, sans-serif;
+}
+
+/* Footer */
+.settings-footer {
+  background-color: var(--color-bg-tertiary);
+  box-shadow: 0px -3px 3px rgba(68, 68, 68, 0.3); /* offset-x | offset-y | blur-radius | spread-radius | color */
+}
+
+.settings-footer-bar {
+  display: flex;
+  height: 30px;
+  border-top: solid 2px var(--color-border-popup);
+  border-radius: 0px;
+}
+
+.settings-footer-bar:first-child {
+  border-radius: 3px;
+}
+
+.settings-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly; /*start*/
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.settings-section:not(:last-child) {
+  border-right: solid 2px var(--color-border-popup);
+}
+
+.settings-section-icon {
+  display: flex;
+  border: none;
+  height: 100%;
+  align-items: center; /*space-between*/
+  justify-content: center;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-radius: 3px;
+}
+
+.settings-text {
+  float: left;
+}
+
+.settings-icon {
+  float: right;
+  margin-left: 15px;
+}
+
+.settings-img {
+  object-fit: contain;
+  width: 32px;
+  height: 17px;
+}
+
+/* headline */
+.headline {
+  display: none;
+}
+
+/* scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  border-radius: 10px;
+  background-color: var(--color-bg-scrollbar);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--color-bg-scrollbar);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  box-shadow: inset 0 0 6px rgba(68, 68, 68, 0.3);
+  background-color: var(--color-bg-scrollbar-thumb);
+}
+
+.list-entry:hover,
+.settings-section-icon:hover,
+.select_studiengang_dropdown:hover {
+  background-color: var(--color-btn-active-bg);
+}
+
+/* Dropdown Button */
+.select_studiengang_btn {
+  width: 15px;
+  padding: 13px 4px 4px 4px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.select_studiengang_dropdown {
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.select_studiengang_dropdown_content {
+  display: none;
+  position: absolute;
+  min-width: 180px;
+  background-color: var(--color-bg-overlay);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  right: 14px;
+  border-radius: 3px;
+  overflow-y: auto;
+}
+
+/* Links inside the dropdown */
+.select_studiengang_dropdown_content p {
+  padding: 3px;
+  display: block;
+  margin: 0;
+}
+
+/* Change color of dropdown links on hover */
+.select_studiengang_dropdown_content p:hover {
+  background-color: var(--color-btn-hover-bg);
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+  display: block;
+}
+
+/*custom cursor for star rating*/
+.starRatingContainer {
+  cursor: pointer;
+}
+
+#time {
+  color: var(--color-text-purple);
+}
+
+a {
+  color: var(--color-text-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .invert {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .emptyStarRating {
+    filter: invert(0.8)
+  }
+
+  :root {
+    /* chrome, webkit */
+    color-scheme: dark;
+    /* firefox */
+    scrollbar-color: #737373 #38383D;
+  }
+}

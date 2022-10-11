@@ -1,0 +1,38 @@
+#TUfastBanner {
+    font-size: 22px; 
+    min-height: 55px;
+    line-height: 55px;
+    text-align: center;
+    padding: 10px;
+    padding-right: 30px;
+    /*background: red;
+    z-index: 5000;*/
+}
+
+#TUfastBanner img {
+    position: relative;
+    right: 2px;
+    height: 33px;
+}
+
+#TUfastBanner .closeLink {
+    position: absolute;
+    right: 10px;
+    font-size: 30px;
+    color: #888;
+    z-index: 10;
+    cursor: pointer;
+}
+
+#TUfastBanner .interactLink {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#TUfastBanner .interactLink::before {
+    content: "> ";
+}
+
+#TUfastBanner .interactLink::after {
+    content: " <";
+}

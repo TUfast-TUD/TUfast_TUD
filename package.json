@@ -1,13 +1,13 @@
 {
   "name": "tufast_tud",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Browser Extension for higher productivity with TU Dresden IT-Services 🚀",
   "main": "index.js",
   "scripts": {
-    "lint": "npx eslint --fix .",
+    "lint": "npx eslint --ext .js,.ts,.vue --fix .",
     "test": "npm run lint && npm run build",
-    "dev": "sass --watch src/scss:src/css",
-    "build": "sass src/scss:src/css --style=compressed"
+    "dev": "snowpack build --watch",
+    "build": "snowpack build"
   },
   "repository": {
     "type": "git",
@@ -35,16 +35,29 @@
   },
   "homepage": "https://github.com/TUfast-TUD/TUfast_TUD#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.31.2",
-    "@typescript-eslint/parser": "^4.31.2",
+    "@snowpack/plugin-sass": "^1.4.0",
+    "@snowpack/plugin-vue": "^2.6.2",
+    "@types/chart.js": "^2.9.37",
+    "@types/chrome": "^0.0.184",
+    "@types/firefox": "^0.0.31",
+    "@types/simple-datatables": "^3.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "sass": "^1.42.1"
+    "eslint-plugin-vue": "^9.4.0",
+    "sass": "^1.42.1",
+    "snowpack": "^3.8.8",
+    "typescript": "^4.4.3"
   },
   "dependencies": {
-    "typescript": "^4.4.3"
+    "@dnlsndr/vue-phosphor-icons": "^1.16.2",
+    "@lottiefiles/lottie-player": "^1.5.2",
+    "chart.js": "^3.8.0",
+    "simple-datatables": "^3.2.0",
+    "vue": "^3.2.22"
   }
 }

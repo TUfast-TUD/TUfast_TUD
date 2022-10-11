@@ -5,12 +5,23 @@ module.exports = {
     webextensions: true,
     jquery: true
   },
-  extends: ['standard'],
-  parser: '@typescript-eslint/parser',
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    ecmaVersion: 12,
-    sourceType: 'module'
+    parser: '@typescript-eslint/parser'
   },
-  plugins: ['@typescript-eslint'],
-  rules: {}
+  plugins: ['promise', '@typescript-eslint'],
+  extends: [
+    'standard',
+    'plugin:vue/vue3-recommended'
+  ],
+  rules: {
+    'prefer-arrow-callback': 'warn',
+    'no-unused-vars': 'warn', // This should be no error!
+    semi: ['warn', 'never'],
+    quotes: ['warn', 'single', { avoidEscape: true }],
+    'spaced-comment': 'warn',
+    'no-multiple-empty-lines': 'warn',
+    'eol-last': 'warn',
+    'vue/multi-word-component-names': 'off'
+  }
 }

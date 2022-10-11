@@ -1,0 +1,119 @@
+{
+  "geowissenschaften": {
+    "name": "Geowissenschaften",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_geo.png",
+    "fsr_link": "https://tu-dresden.de/bu/umwelt/geo/fsr",
+    "fsr_icon_2": "../../assets/icons/OPAL.png",
+    "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/15833497605",
+    "fsr_icon_dashboard_style": "",
+    "fsr_icon_dashboard_style_2": "max-height: 20px; margin-top: 10px; padding-right:10px",
+    "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "geoportal"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "maschinenbau": {
+    "name": "Maschinenwesen",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_mw.png",
+    "fsr_icon_dashboard_style": "max-height: 32px;",
+    "fsr_link": "https://tu-dresden.de/ing/maschinenwesen/fsr",
+    "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "informatik": {
+    "name": "Informatik",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_info.svg",
+    "fsr_icon_dashboard_style": "max-height: 32px;",
+    "fsr_link": "https://www.ifsr.de/",
+    "footer_icons_display": ["selma", "opal", "je", "matrix", "msx", "slub", "cloud", "swdd", "info_discord"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "mathematik": {
+    "name": "Mathematik",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_mathe.png",
+    "fsr_icon_dashboard_style": "max-height: 32px;",
+    "fsr_link": "https://myfsr.de/dokuwiki/doku.php?id=start",
+    "footer_icons_display": ["selma", "opal", "matrix", "msx", "cloud", "gitlab", "je", "swdd"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "medizin": {
+    "name": "Medizin",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_medi_small.png",
+    "fsr_link": "https://www.medforum-dresden.de/",
+    "fsr_icon_dashboard_style": "",
+    "footer_icons_display": ["selma", "opal", "moodle", "eportal", "msx", "cloud", "swdd"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensologie.html"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "psychologie": {
+    "name": "Psychologie",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_psy.png",
+    "fsr_link": "https://tu-dresden.de/mn/psychologie/fsrpsy",
+    "fsr_icon_dashboard_style": "",
+    "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd", "orsee"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-siedepunkt.html"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "wirtschaftswissenschaften": {
+    "name": "Wirtschaftswissenschaften",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_wiwi.png",
+    "fsr_icon_dashboard_style": "max-height: 32px;",
+    "fsr_link": "https://fsrwiwi.de",
+    "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "elektrotechnik": {
+    "name": "Elektrotechnik",
+    "fsr_icon": "../../assets/icons/FSRIcons/FSR_ET.png",
+    "fsr_icon_dashboard_style": "max-height: 32px;",
+    "fsr_link": "https://fsret.de",
+    "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "swdd"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": true
+  },
+
+  "bauingenieurwesen": {
+    "name": "Bauingenieurwesen",
+    "fsr_icon": "../../assets/icons/FSRIcons/fsr_bauing.png",
+    "fsr_icon_dashboard_style": "max-height: 32px;",
+    "fsr_link": "https://www.tud-fsrbiw.de/",
+    "pa_link": "https://tu-dresden.de/bu/bauingenieurwesen/studium/infos-fuer-aktuell-studierende/pruefungsamt",
+    "footer_icons_display": ["selma", "opal", "matrix", "msx", "slub", "pa", "cloud", "swdd", "perinorm"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "general": {
+    "name": "Standardeinstellungen",
+    "fsr_icon": "",
+    "fsr_link": "",
+    "footer_icons_display": ["selma", "opal", "qis", "matrix", "msx", "cloud", "je", "swdd"],
+    "footer_icons_links": {
+      "swdd": "https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+    },
+    "invert_icon_dark_theme": false
+  },
+  "addStudiengang": {
+    "name": "+ Studiengang hinzufügen..."
+  }
+}
