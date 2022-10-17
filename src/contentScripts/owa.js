@@ -1,9 +1,9 @@
-chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function (result) {
+chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], (result) => {
   if (result.isEnabled && !result.loggedOutOwa) {
     if (document.readyState !== 'loading') {
       loginOWA(result.loggedOutOwa)
     } else {
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('DOMContentLoaded', () => {
         loginOWA(result.loggedOutOwa)
       })
     }
@@ -19,26 +19,26 @@ chrome.storage.local.get(['isEnabled', 'loggedOutOwa'], function (result) {
 })
 
 // detecting logout
-document.addEventListener('DOMNodeInserted', function (e) {
+document.addEventListener('DOMNodeInserted', (e) => {
   // old owa version
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
-      console.log("OLD LOGOUT DETECTED")
+    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', () => {
+      console.log('OLD LOGOUT DETECTED')
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
   // new owa version
   if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
-    document.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', function () {
-      console.log("LOGOUT DETECTED")
+    document.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', () => {
+      console.log('LOGOUT DETECTED')
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
 }, false)
 
-function loginOWA(loggedOutOwa) {
+function loginOWA (loggedOutOwa) {
   if (document.getElementById('username') && document.getElementById('password') && !loggedOutOwa) {
-    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, function (result) {
+    chrome.runtime.sendMessage({ cmd: 'get_user_data' }, (result) => {
       if (!(result.asdf === undefined || result.fdsa === undefined)) {
         chrome.runtime.sendMessage({ cmd: 'show_ok_badge', timeout: 2000 })
         chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 })
@@ -55,16 +55,16 @@ function loginOWA(loggedOutOwa) {
   // detecting logout
   // old owa version
   if (document.querySelectorAll('[aria-label="Abmelden"]')[0]) {
-    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', function () {
-      console.log("OLD LOGOUT DETECTED")
+    document.querySelectorAll('[aria-label="Abmelden"]')[0].addEventListener('click', () => {
+      console.log('OLD LOGOUT DETECTED')
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
     })
   }
   // new owa version
   if (document.querySelectorAll("[autoid='_ho2_2']")[1] && document.querySelectorAll("[autoid='_ho2_2']")[1].innerHTML === 'Abmelden') {
-    document.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', function () {
+    document.querySelectorAll("[autoid='_ho2_2']")[1].addEventListener('click', () => {
       chrome.runtime.sendMessage({ cmd: 'logged_out', portal: 'loggedOutOwa' })
-      console.log("LOGOUT DETECTED")
+      console.log('LOGOUT DETECTED')
     })
   }
 }
@@ -85,7 +85,7 @@ window.onload = function () {
   })
 }
 
-function readMailObserver() {
+function readMailObserver () {
   // use mutation observer to detect page changes
   const config = { attributes: true, childList: true, subtree: true, characterData: true }
   let nrUnreadMails

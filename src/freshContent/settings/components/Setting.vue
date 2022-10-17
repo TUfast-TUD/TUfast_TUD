@@ -74,7 +74,6 @@ export default defineComponent({
 
   &--column span
     text-align: center
-        
 
 .light
     & .setting--column .setting__toggle

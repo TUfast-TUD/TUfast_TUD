@@ -3,7 +3,9 @@
     <div
       v-for="step of stepsCount"
       :key="step"
-      :class="`stepper__step ${step === currentOnboardingStep ? 'stepper__step--current' : ''}`"
+      :class="`stepper__step ${
+        step === currentOnboardingStep ? 'stepper__step--current' : ''
+      }`"
     />
   </div>
 </template>
@@ -12,21 +14,17 @@
 import { defineComponent } from 'vue'
 
 // types
-import type { PropType } from 'vue'
 
 // composables
 import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
   setup () {
-    const {
-      stepsCount,
-      currentOnboardingStep,
-    } = useStepper()
+    const { stepsCount, currentOnboardingStep } = useStepper()
 
     return {
       stepsCount,
-      currentOnboardingStep,
+      currentOnboardingStep
     }
   }
 })
