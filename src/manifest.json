@@ -1,13 +1,8 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "7.0.0.1",
+  "version": "7.0.0.2",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
-  "permissions": [
-    "storage",
-    "system.cpu",
-    "alarms",
-    "*://*/"
-  ],
+  "permissions": ["storage", "system.cpu", "alarms", "*://*/"],
   "optional_permissions": [
     "tabs",
     "webRequest",
@@ -21,37 +16,22 @@
   },
   "content_scripts": [
     {
-      "js": [
-        "contentScripts/login/medELearning.js"
-      ],
+      "js": ["contentScripts/login/medELearning.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://elearning.med.tu-dresden.de/*"
-      ]
+      "matches": ["https://elearning.med.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/idp.js"
-      ],
+      "js": ["contentScripts/login/idp.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://idp.tu-dresden.de/*",
-        "https://idp2.tu-dresden.de/*"
-      ]
+      "matches": ["https://idp.tu-dresden.de/*", "https://idp2.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/forward/jexam.js"
-      ],
+      "js": ["contentScripts/forward/jexam.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://jexam.inf.tu-dresden.de/"
-      ]
+      "matches": ["https://jexam.inf.tu-dresden.de/"]
     },
     {
-      "js": [
-        "contentScripts/forward/searchEngines/generic.js"
-      ],
+      "js": ["contentScripts/forward/searchEngines/generic.js"],
       "run_at": "document_start",
       "matches": [
         "https://www.google.de/search?*q=*",
@@ -66,34 +46,24 @@
       ]
     },
     {
-      "js": [
-        "contentScripts/login/jexam.js"
-      ],
+      "js": ["contentScripts/login/jexam.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://jexam.inf.tu-dresden.de/*"
-      ]
+      "matches": ["https://jexam.inf.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/other/hisqis/pimpAndInjectModules.js"
-      ],
+      "js": ["contentScripts/other/hisqis/pimpAndInjectModules.js"],
       "css": [
         "styles/components/gradeTable.css",
         "styles/contentScripts/hisqis.css"
       ],
       "run_at": "document_idle",
-      "matches": [
-        "https://qis.dez.tu-dresden.de/qisserver/servlet/*"
-      ],
+      "matches": ["https://qis.dez.tu-dresden.de/qisserver/servlet/*"],
       "include_globs": [
         "*state=notenspiegelStudent*&next=list.vm&nextdir=qispos/notenspiegel/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum*expand=0*"
       ]
     },
     {
-      "js": [
-        "contentScripts/forward/opal.js"
-      ],
+      "js": ["contentScripts/forward/opal.js"],
       "run_at": "document_start",
       "matches": [
         "*://opal.de/*",
@@ -101,27 +71,17 @@
       ]
     },
     {
-      "js": [
-        "contentScripts/login/selma.js"
-      ],
+      "js": ["contentScripts/login/selma.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://selma.tu-dresden.de/*"
-      ]
+      "matches": ["https://selma.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/qis.js"
-      ],
+      "js": ["contentScripts/login/qis.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://qis.dez.tu-dresden.de/qisserver/servlet*"
-      ]
+      "matches": ["https://qis.dez.tu-dresden.de/qisserver/servlet*"]
     },
     {
-      "js": [
-        "contentScripts/login/opalHome.js"
-      ],
+      "js": ["contentScripts/login/opalHome.js"],
       "run_at": "document_idle",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/resource*",
@@ -130,18 +90,10 @@
       ]
     },
     {
-      "js": [
-        "contentScripts/login/matrix.js"
-      ],
+      "js": ["contentScripts/login/matrix.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://matrix.tu-dresden.de/*"
-      ],
-      "include_globs": [
-        "*/welcome",
-        "*/login",
-        "*://matrix.tu-dresden.de/"
-      ]
+      "matches": ["https://matrix.tu-dresden.de/*"],
+      "include_globs": ["*/welcome", "*/login", "*://matrix.tu-dresden.de/"]
     },
     {
       "js": [
@@ -149,23 +101,15 @@
         "contentScripts/login/owa.js"
       ],
       "run_at": "document_idle",
-      "matches": [
-        "https://msx.tu-dresden.de/*"
-      ]
+      "matches": ["https://msx.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/cloudstore.js"
-      ],
+      "js": ["contentScripts/login/cloudstore.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://cloudstore.zih.tu-dresden.de/*"
-      ]
+      "matches": ["https://cloudstore.zih.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/opalMain.js"
-      ],
+      "js": ["contentScripts/login/opalMain.js"],
       "run_at": "document_idle",
       "matches": [
         "https://bildungsportal.sachsen.de/opal/shiblogin*",
@@ -184,129 +128,73 @@
         "styles/contentScripts/opal/banner.css"
       ],
       "run_at": "document_idle",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/*"
-      ]
+      "matches": ["https://bildungsportal.sachsen.de/opal/*"]
     },
     {
-      "js": [
-        "contentScripts/other/opal/viewPdfInNewTab.js"
-      ],
+      "js": ["contentScripts/other/opal/viewPdfInNewTab.js"],
       "run_at": "document_start",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/*"
-      ]
+      "matches": ["https://bildungsportal.sachsen.de/opal/*"]
     },
     {
-      "js": [
-        "contentScripts/other/opal/parseCourses.js"
-      ],
-      "css": [
-        "styles/components/notification.css"
-      ],
+      "js": ["contentScripts/other/opal/parseCourses.js"],
+      "css": ["styles/components/notification.css"],
       "run_at": "document_idle",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/auth/resource/*"
-      ]
+      "matches": ["https://bildungsportal.sachsen.de/opal/auth/resource/*"]
     },
     {
-      "js": [
-        "contentScripts/login/medEPortal.js"
-      ],
+      "js": ["contentScripts/login/medEPortal.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://eportal.med.tu-dresden.de/*"
-      ]
+      "matches": ["https://eportal.med.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/lskonline.js"
-      ],
+      "js": ["contentScripts/login/lskonline.js"],
       "run_at": "document_start",
-      "matches": [
-        "https://lskonline.tu-dresden.de/*"
-      ]
+      "matches": ["https://lskonline.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/tex.js"
-      ],
+      "js": ["contentScripts/login/tex.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://tex.zih.tu-dresden.de/*"
-      ]
+      "matches": ["https://tex.zih.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/videocampus.js"
-      ],
+      "js": ["contentScripts/login/videocampus.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://videocampus.sachsen.de/*"
-      ]
+      "matches": ["https://videocampus.sachsen.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/gitlabMN.js"
-      ],
+      "js": ["contentScripts/login/gitlabMN.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://gitlab.mn.tu-dresden.de/*"
-      ]
+      "matches": ["https://gitlab.mn.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/gitlabInfSE.js"
-      ],
+      "js": ["contentScripts/login/gitlabInfSE.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://se-gitlab.inf.tu-dresden.de/*"
-      ]
+      "matches": ["https://se-gitlab.inf.tu-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/gitlabInfIMLD.js"
-      ],
+      "js": ["contentScripts/login/gitlabInfIMLD.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://git.imld.de/*"
-      ]
+      "matches": ["https://git.imld.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/gitlabTUC.js"
-      ],
+      "js": ["contentScripts/login/gitlabTUC.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://gitlab.hrz.tu-chemnitz.de/*"
-      ]
+      "matches": ["https://gitlab.hrz.tu-chemnitz.de/*"]
     },
     {
-      "js": [
-        "contentScripts/login/slub.js"
-      ],
+      "js": ["contentScripts/login/slub.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://*.slub-dresden.de/*"
-      ]
+      "matches": ["https://*.slub-dresden.de/*"]
     },
     {
-      "js": [
-        "contentScripts/forward/searchEngines/qwant.js"
-      ],
+      "js": ["contentScripts/forward/searchEngines/qwant.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://www.qwant.com/*"
-      ]
+      "matches": ["https://www.qwant.com/*"]
     },
     {
-      "js": [
-        "contentScripts/forward/searchEngines/startpage.js"
-      ],
+      "js": ["contentScripts/forward/searchEngines/startpage.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://www.startpage.com/*"
-      ]
+      "matches": ["https://www.startpage.com/*"]
     }
   ],
   "icons": {
