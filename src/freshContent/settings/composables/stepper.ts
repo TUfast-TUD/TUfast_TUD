@@ -12,6 +12,7 @@ export const useStepper = () => ({
   next,
   hideWelcome,
   percentDone,
+  close,
 });
 
 const stepWidth = ref(1);

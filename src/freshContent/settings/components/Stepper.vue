@@ -24,8 +24,6 @@ export default defineComponent({
       currentOnboardingStep,
     } = useStepper()
 
-    console.log(currentOnboardingStep.value, stepsCount.value)
-
     return {
       stepsCount,
       currentOnboardingStep,

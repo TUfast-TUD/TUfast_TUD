@@ -15,11 +15,12 @@
         :steps="stepsCount"
         :current-step="currentStep"
       />
-      <div :class="`onboarding__footer ${currentStep === stepsCount ? 'onboarding__footer--center' : ''}`">
-        <div
-          v-if="currentStep !== stepsCount"
-          class="footer-text"
-        >
+      <div
+        :class="`onboarding__footer ${
+          currentStep === stepsCount ? 'onboarding__footer--center' : ''
+        }`"
+      >
+        <div v-if="currentStep !== stepsCount" class="footer-text">
           <h2 class="footer-text__title">
             {{ h1 }}
           </h2>
@@ -28,7 +29,9 @@
           </h3>
         </div>
         <OnboardingButton
-          :class="`onboarding__main-btn ${currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''}`"
+          :class="`onboarding__main-btn ${
+            currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''
+          }`"
         />
       </div>
     </div>
@@ -36,59 +39,52 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType } from "vue";
 
 // components
-import { PhX } from '@dnlsndr/vue-phosphor-icons'
-import Stepper from './Stepper.vue'
-import OnboardingButton from './OnboardingButton.vue'
+import { PhX } from "@dnlsndr/vue-phosphor-icons";
+import Stepper from "./Stepper.vue";
+import OnboardingButton from "./OnboardingButton.vue";
 
 // composables
-import { useStepper } from '../composables/stepper'
+import { useStepper } from "../composables/stepper";
 
 export default defineComponent({
   components: {
     Stepper,
     OnboardingButton,
-    PhX
+    PhX,
   },
   props: {
     h1: {
       type: String as PropType<string>,
-      required: true
+      required: true,
     },
     h2: {
       type: String as PropType<string>,
-      required: true
+      required: true,
     },
     currentStep: {
       type: Number as PropType<number>,
-      required: true
-    }
+      required: true,
+    },
   },
-  emits: ['close-me', 'next'],
-  setup (_, { emit }) {
-    const {
-      stepsCount,
-    } = useStepper()
-
-    const close = () => {
-      document.querySelector('.onboarding')?.classList.add('onboarding--closing')
-      setTimeout(() => emit('close-me'), 650)
-    }
+  emits: ["close-me", "next"],
+  setup() {
+    const { stepsCount, close } = useStepper();
 
     setTimeout(() => {
-      document.querySelector('.onboarding')?.classList.remove('onboarding--opening')
-    }, 800)
-
+      document
+        .querySelector(".onboarding")
+        ?.classList.remove("onboarding--opening");
+    }, 800);
 
     return {
       stepsCount,
       close,
-    }
-  }
-
-})
+    };
+  },
+});
 </script>
 
 <style lang="sass">
