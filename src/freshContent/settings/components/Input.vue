@@ -10,23 +10,37 @@
       >
       <component
         :is="statusIcon"
-        :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`"
+        :class="`input__icon ${
+          modelValue.length > 0 ? 'input__icon--visible' : ''
+        }`"
       />
     </div>
     <span
-      :style="`opacity: ${!valid && modelValue.length > 0 ? 1 : 0}`"
+      :style="`opacity: ${!correctPattern && modelValue.length > 0 ? 1 : 0}`"
     >{{ errorMessage }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed, onMounted, watchEffect } from 'vue'
-import { PhXCircle, PhCheckCircle } from '@dnlsndr/vue-phosphor-icons'
+import {
+  defineComponent,
+  ref,
+  PropType,
+  computed,
+  onMounted,
+  watchEffect
+} from 'vue'
+import {
+  PhXCircle,
+  PhCheckCircle,
+  PhWarningCircle
+} from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
   components: {
     PhXCircle,
-    PhCheckCircle
+    PhCheckCircle,
+    PhWarningCircle
   },
   props: {
     type: {
@@ -56,6 +70,10 @@ export default defineComponent({
     column: {
       type: Boolean as PropType<boolean>,
       default: false
+    },
+    warn: {
+      type: Boolean as PropType<boolean>,
+      default: false
     }
   },
   emits: ['update:modelValue', 'update:valid'],
@@ -65,22 +83,36 @@ export default defineComponent({
 
     const correctPattern = computed(() => props.pattern.test(props.modelValue))
 
-    const emitState = ($event : Event) => {
+    const emitState = ($event: Event) => {
       const target = $event.target as HTMLInputElement
       emit('update:modelValue', target.value)
-      emit('update:valid', correctPattern.value)
+      emit('update:valid', correctPattern.value || props.warn)
     }
 
     watchEffect(() => {
       if (props.modelValue.length > 0) {
-        state.value = correctPattern.value ? 'input--correct' : 'input--false'
-        statusIcon.value = correctPattern.value ? 'PhCheckCircle' : 'PhXCircle'
-        emit('update:valid', correctPattern.value)
-      } else { state.value = '' }
+        state.value = correctPattern.value
+          ? 'input--correct'
+          : props.warn
+            ? 'input--warn'
+            : 'input--false'
+        statusIcon.value = correctPattern.value
+          ? 'PhCheckCircle'
+          : props.warn
+            ? 'PhWarningCircle'
+            : 'PhXCircle'
+        emit('update:valid', correctPattern.value || props.warn)
+      } else {
+        state.value = ''
+      }
     })
 
     onMounted(() => {
-      if (props.column) { document.querySelectorAll('.input-container')?.forEach((el) => el.classList.add('input-container--column')) }
+      if (props.column) {
+        document
+          .querySelectorAll('.input-container')
+          ?.forEach((el) => el.classList.add('input-container--column'))
+      }
     })
 
     return {
@@ -102,6 +134,7 @@ export default defineComponent({
 
     &--column
         flex-direction: column
+        max-width: 100%
 
 html:not(.light) .input-container--column
         & .input
@@ -124,6 +157,8 @@ html:not(.light) .input-container--column
 
     &--correct
         --clr-state: var(--clr-primary)
+    &--warn
+        --clr-state: var(--clr-warning)
     &--false
         --clr-state: var(--clr-alert)
 

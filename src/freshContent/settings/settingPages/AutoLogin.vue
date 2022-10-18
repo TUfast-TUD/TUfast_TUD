@@ -4,13 +4,15 @@
     :options="logins"
   />
   <h2>{{ currentLogin.title }}</h2>
-  <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">
+  <h2
+    :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`"
+  >
     {{ currentLogin.state ? "Aktuell gespeichert" : "Nicht gespeichert" }}
   </h2>
   <p class="max-line p-margin">
-    Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden.
-    Die Daten werden nur lokal und verschlüsselt gespeichert.
-    Du kannst sie jederzeit löschen.
+    Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC
+    gespeichert werden. Die Daten werden nur lokal und verschlüsselt
+    gespeichert. Du kannst sie jederzeit löschen.
   </p>
 
   <p class="p-margin important">
@@ -23,6 +25,7 @@
       :pattern="currentLogin.usernamePattern"
       :placeholder="currentLogin.usernamePlaceholder"
       :error-message="currentLogin.usernameError"
+      warn
     />
 
     <CustomInput
@@ -83,13 +86,13 @@ export default defineComponent({
 
     // get state of login
     watchEffect(async () => {
-      currentLogin.value.state = await sendChromeRuntimeMessage({
+      currentLogin.value.state = (await sendChromeRuntimeMessage({
         cmd: 'check_user_data',
         platform: currentLogin.value.id
-      }) as boolean
+      })) as boolean
     })
 
-    const submitSave = async ($event : MouseEvent) => {
+    const submitSave = async ($event: MouseEvent) => {
       const target = $event.target as HTMLButtonElement
 
       if (target.disabled) return
@@ -102,15 +105,19 @@ export default defineComponent({
       password.value = ''
       usernameValid.value = false
       passwordValid.value = false
-      currentLogin.value.state =
-            await sendChromeRuntimeMessage({ cmd: 'check_user_data', platform: currentLogin.value.id }) as boolean
+      currentLogin.value.state = (await sendChromeRuntimeMessage({
+        cmd: 'check_user_data',
+        platform: currentLogin.value.id
+      })) as boolean
     }
 
     const submitDelete = async () => {
       // await this one to get back the new value in last line, otherwise could run too late
       await deleteUserData(currentLogin.value.id)
-      currentLogin.value.state =
-            await sendChromeRuntimeMessage({ cmd: 'check_user_data', platform: currentLogin.value.id }) as boolean
+      currentLogin.value.state = (await sendChromeRuntimeMessage({
+        cmd: 'check_user_data',
+        platform: currentLogin.value.id
+      })) as boolean
     }
 
     return {

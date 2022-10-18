@@ -9,18 +9,19 @@
     <CustomInput
       v-model="username"
       v-model:valid="usernameValid"
-      placeholder="Nutzername (selma-Login)"
-      :pattern="/^(s{1}\d{7}|[a-z]{4}\d{3}[a-z])$/i"
-      error-message="Ohne @mailbox.tu-dresden.de, also z.B. 's3276763' oder 'luka075d'"
+      :placeholder="zihLogin.usernamePlaceholder"
+      :pattern="zihLogin.usernamePattern"
+      :error-message="zihLogin.usernameError"
       :column="true"
+      warn
     />
     <CustomInput
       v-model="password"
       v-model:valid="passwordValid"
-      placeholder="Password (selma-Login)"
-      :pattern="/.{5,}/"
+      :pattern="zihLogin.passwordPattern"
+      :placeholder="zihLogin.passwordPlaceholder"
       type="password"
-      error-message="Das Passwort muss mindestens 5 Zeichen haben!"
+      :error-message="zihLogin.passwordError"
       :column="true"
     />
   </div>
@@ -35,6 +36,7 @@ import Input from '../components/Input.vue'
 // composables
 import { useUserData } from '../composables/user-data'
 import { useStepper } from '../composables/stepper'
+import { useLogins } from '../composables/logins'
 
 export default defineComponent({
   components: {
@@ -42,10 +44,10 @@ export default defineComponent({
     CustomInput: Input
   },
   setup () {
-    const {
-      stepWidth,
-    }  = useStepper()
+    const { stepWidth } = useStepper()
     const { saveUserData } = useUserData()
+    const { logins } = useLogins()
+    const zihLogin = logins[0]
     const username = ref('')
     const password = ref('')
     const usernameValid = ref(false)
@@ -65,10 +67,9 @@ export default defineComponent({
       }
     })
 
-    return { username, password, usernameValid, passwordValid }
+    return { username, password, usernameValid, passwordValid, zihLogin }
   }
 })
-
 </script>
 
 <style lang="sass" scoped>
@@ -81,6 +82,8 @@ export default defineComponent({
     flex-direction: column
     align-items: center
     gap: .8rem
+    max-width: 90%
+
 .info
     margin-top: .8rem
     width: 70%

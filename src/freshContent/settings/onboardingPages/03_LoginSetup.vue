@@ -30,14 +30,11 @@ export default defineComponent({
   emits: ['accept'],
   setup (_) {
     const { stepWidth } = useStepper()
-    
+
     const accept = ref(true)
 
     const setStepWidth = () => {
-      if (accept.value)
-        stepWidth.value = 1
-      else
-        stepWidth.value = 3
+      if (accept.value) { stepWidth.value = 1 } else { stepWidth.value = 3 }
     }
 
     return { accept, setStepWidth }
