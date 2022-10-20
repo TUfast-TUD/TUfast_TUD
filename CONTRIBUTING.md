@@ -1,6 +1,6 @@
 # Contributing
 
-Wir sammeln Aufgaben im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1).Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen! **Achtung**: Das Project-board ist nicht immer aktuell.
+Wir sammeln Aufgaben im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1). Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen! **Achtung**: Das Project-board ist nicht immer aktuell.
 
 **Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Space](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden.
 
