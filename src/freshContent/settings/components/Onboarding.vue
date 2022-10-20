@@ -15,79 +15,72 @@
         :steps="stepsCount"
         :current-step="currentStep"
       />
-      <div
-        :class="`onboarding__footer ${
-          currentStep === stepsCount ? 'onboarding__footer--center' : ''
-        }`"
-      >
-        <div
-          v-if="currentStep !== stepsCount"
-          class="footer-text"
-        >
-          <h2 class="footer-text__title">
-            {{ h1 }}
-          </h2>
-          <h3 class="footer-text__subtitle max-line">
-            {{ h2 }}
-          </h3>
-        </div>
-        <OnboardingButton
-          :class="`onboarding__main-btn ${
-            currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''
-          }`"
-        />
+
+      <div v-if="currentStep !== stepsCount" class="onboarding__text">
+        <h2 class="footer-text__title">
+          {{ h1 }}
+        </h2>
+        <h3 class="footer-text__subtitle max-line">
+          {{ h2 }}
+        </h3>
       </div>
+
+      <OnboardingButton
+        :class="`onboarding__main-btn ${
+          currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''
+        }`"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType } from "vue";
 
 // components
-import { PhX } from '@dnlsndr/vue-phosphor-icons'
-import Stepper from './Stepper.vue'
-import OnboardingButton from './OnboardingButton.vue'
+import { PhX } from "@dnlsndr/vue-phosphor-icons";
+import Stepper from "./Stepper.vue";
+import OnboardingButton from "./OnboardingButton.vue";
 
 // composables
-import { useStepper } from '../composables/stepper'
+import { useStepper } from "../composables/stepper";
 
 export default defineComponent({
   components: {
     Stepper,
     OnboardingButton,
-    PhX
+    PhX,
   },
   props: {
     h1: {
       type: String as PropType<string>,
-      required: true
+      required: true,
     },
     h2: {
       type: String as PropType<string>,
-      required: true
+      required: true,
     },
     currentStep: {
       type: Number as PropType<number>,
-      required: true
-    }
+      required: true,
+    },
   },
-  emits: ['close-me', 'next'],
-  setup () {
-    const { stepsCount, close } = useStepper()
+  emits: ["close-me", "next"],
+  setup() {
+    const { stepsCount, close } = useStepper();
 
     setTimeout(() => {
       document
-        .querySelector('.onboarding')
-        ?.classList.remove('onboarding--opening')
-    }, 800)
+        .querySelector(".onboarding")
+        ?.classList.remove("onboarding--opening");
+    }, 800);
 
     return {
       stepsCount,
-      close
-    }
-  }
-})
+      close,
+    };
+  },
+});
 </script>
 
 <style lang="sass">
@@ -105,21 +98,24 @@ export default defineComponent({
 
 .onboarding
     position: relative
-    display: flex
-    flex-direction: column
+    display: grid
+    /* width: close, main, button */
+    grid-template-columns: 5rem 1fr 8rem
+    /* heights: close, main, stepper, text1, text2 & button */
+    grid-template-rows: 5rem calc(100% - 5rem - 20px - 180px) 20px calc(180px - 8rem) 8rem
     align-items: center
+    justify-items: center
     width: 50vw
-    height: 70vh
-    min-height: 70vh
+    height: 80vh
+    max-height: 90vh
     background-color: hsl(var(--clr-grey), )
     border-radius: var(--brd-rad)
-    padding-bottom: .5rem
+    padding-bottom: 2rem
+    padding-right: 2rem
 
     &__close
-        position: absolute
-        z-index: 1
-        top: .5rem
-        left: .5rem
+        grid-row: 1
+        grid-column: 1
         width: 4rem
         height: 4rem
         cursor: pointer
@@ -128,39 +124,45 @@ export default defineComponent({
             color: hsl(var(--clr-alert) )
 
     &__main
-        height: 70%
-        max-height: 75%
+        grid-row: 1 / 3
+        grid-column: 2
         width: 100%
-        z-index: 0
+        height: 100%
+        max-height: 100%
         color: hsl(var(--clr-white), )
+        padding-top: 2rem
         display: flex
         flex-direction: column
         align-items: center
-        justify-content: space-evenly
+        gap: 2rem
+        overflow-y: auto
 
     &__stepper
+        grid-row: 3
+        grid-column: 2
         flex: 0 0 auto
         width: 20%
 
-    &__footer
-        flex: 1 1 auto
-        padding: 1rem 0 0
-        display: flex
-        justify-content: space-between
-        align-items: center
-        color: hsl(var(--clr-white), )
-        font-weight: 800
-        width: 90%
-
-        &--center
-            justify-content: center
+    &__text
+      grid-row: 4 / 6
+      grid-column: 2
+      color: hsl(var(--clr-white), )
+      font-weight: 800
+      max-height: 100%
+      text-align: justify
+      margin-right: 2rem
+      overflow-y: auto
+      padding-right: .5rem
 
     &__main-btn
+        grid-row: 5
+        grid-column: 3
         color: hsl(var(--clr-white), )
         transition: transform 300ms ease
 
         &--turned
             transform: rotate(90deg)
+            grid-column: 2
 
     &--closing
         animation: enter 500ms ease
@@ -172,10 +174,6 @@ export default defineComponent({
         animation: enter 500ms ease
         animation-delay: 300ms
         animation-fill-mode: backwards
-
-.footer-text
-  text-align: justify
-  margin-right: 2rem
 
 .light
     & .onboarding
