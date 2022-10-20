@@ -16,7 +16,10 @@
         :current-step="currentStep"
       />
 
-      <div v-if="currentStep !== stepsCount" class="onboarding__text">
+      <div
+        v-if="currentStep !== stepsCount"
+        class="onboarding__text"
+      >
         <h2 class="footer-text__title">
           {{ h1 }}
         </h2>
@@ -35,52 +38,52 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType } from 'vue'
 
 // components
-import { PhX } from "@dnlsndr/vue-phosphor-icons";
-import Stepper from "./Stepper.vue";
-import OnboardingButton from "./OnboardingButton.vue";
+import { PhX } from '@dnlsndr/vue-phosphor-icons'
+import Stepper from './Stepper.vue'
+import OnboardingButton from './OnboardingButton.vue'
 
 // composables
-import { useStepper } from "../composables/stepper";
+import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
   components: {
     Stepper,
     OnboardingButton,
-    PhX,
+    PhX
   },
   props: {
     h1: {
       type: String as PropType<string>,
-      required: true,
+      required: true
     },
     h2: {
       type: String as PropType<string>,
-      required: true,
+      required: true
     },
     currentStep: {
       type: Number as PropType<number>,
-      required: true,
-    },
+      required: true
+    }
   },
-  emits: ["close-me", "next"],
-  setup() {
-    const { stepsCount, close } = useStepper();
+  emits: ['close-me', 'next'],
+  setup () {
+    const { stepsCount, close } = useStepper()
 
     setTimeout(() => {
       document
-        .querySelector(".onboarding")
-        ?.classList.remove("onboarding--opening");
-    }, 800);
+        .querySelector('.onboarding')
+        ?.classList.remove('onboarding--opening')
+    }, 800)
 
     return {
       stepsCount,
-      close,
-    };
-  },
-});
+      close
+    }
+  }
+})
 </script>
 
 <style lang="sass">

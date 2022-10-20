@@ -8,15 +8,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 // import Onboarding from '../components/Onboarding.vue'
 
 export default defineComponent({
   components: {
     // Onboarding
   },
-  setup() {},
-});
+  setup () {}
+})
 </script>
 
 <style lang="sass" scoped>
