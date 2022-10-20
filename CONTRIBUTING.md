@@ -1,4 +1,4 @@
-# Becoming a TUfast Developer
+# Contributing
 
 Wir sammeln Aufgaben im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1).Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen! **Achtung**: Das Project-board ist nicht immer aktuell.
 
@@ -8,7 +8,7 @@ Wir sammeln Aufgaben im [Project-Board](https://github.com/orgs/TUfast-TUD/proje
 
 #### Developing browser extensions
 
-If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/mv2/getstarted/) by google. Currently we are still using manifest v2, but we plan to switch to v3 in proximate future. Alternatively you can use the instructions from [mozilla](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension).When reading, ake sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging.
+If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/mv2/getstarted/). Currently we are still using manifest v2, but we plan to switch to v3 in proximate future. Alternatively you can use the instructions from [mozilla](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension). Make sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging.
 
 #### Working with this repo
 
@@ -26,7 +26,7 @@ Everything related to the browser extension can be found in `/src`: `manifest.js
 
 ## How to contribute code (as a non-TUfastTeam-member)
 
-We are using gitflow-workflow (simple [Tutorial](https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)). In short: Create a fork. In your fork, create a feature-branch from the develop-branch. Implement your code there. If you are done, create a PR on the develop-branch of this upstream repository. Hotfixes should be committed to main-branch directly.
+We are using the standard gitflow-workflow (simple [Tutorial](https://www.atlassian.com/de/git/tutorials/comparing-workflows/gitflow-workflow)).
 
 You can use [GitHub CodeSpaces](https://github.com/features/codespaces) for easy contribution.
 
@@ -41,8 +41,6 @@ Steps to contribute a feature (as a non-TUfast-teammember):
 7. Load the ./build directory as an unpacked extension in your browser and --> Implement your Code <--
 8. **run tests locally** before contributing code: `npm run test`
 9. Create a PR on develop branch
-
-**One common issue** is, that the upstreams develop-branch gets updated while you implemented you feature. In this case, you need to update your feature branch with the latest changes from develop-branch. See this [guide](https://akrabat.com/the-beginners-guide-to-rebasing-your-pr/). (Upstream repo is the parent/original repo. So in this case, it is the one located at https://github.com/TUfast-TUD/TUfast_TUD.)
 
 **Note:** as a member of the TUfast-Team you can work in this repo directly, e.g. you can create branches and push to them, making the contribution process easier.
 
