@@ -1,18 +1,18 @@
 # Becoming a TUfast Developer
 
-Wir Organisieren das Projekt im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1). Dort findest du ToDos - erhalten durch eigene Ziele und Nutzerfeedback. Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen! **Achtung**: Das Project-board ist nicht immer aktuell.
+Wir sammeln Aufgaben im [Project-Board](https://github.com/orgs/TUfast-TUD/projects/1).Alternativ kannst du auch eigene Features Vorschlagen - wir freuen uns über kreative Ideen! **Achtung**: Das Project-board ist nicht immer aktuell.
 
-**Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Space](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden. Ansonsten auch gerne Issues nutzen.
+**Bitte sprich mit uns ab, bevor du neue Features implementierst**. Wir kommunizieren über einen [Matrix-Space](https://matrix.to/#/#tu-fast:tu-dresden.de). Dort kannst du dich über dein TU-Login anmelden.
 
 ## Getting started
 
 #### Developing browser extensions
 
-If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/mv2/getstarted/) by google (note that we are using manifest-version v2!). Alternatively you can use the instructions from [mozilla](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension). You should read most chapters in this tutorial. Espacially make sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging. If you go through this tutorial, you should understand how TUfast works.
+If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/mv2/getstarted/) by google. Currently we are still using manifest v2, but we plan to switch to v3 in proximate future. Alternatively you can use the instructions from [mozilla](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension).When reading, ake sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging.
 
 #### Working with this repo
 
-Everything related to the browser extension can be found in `/src`. There you will find the `manifest.json` and background-script (`background.js`) directly. Content scripts are in `/src/contentScripts`. In `/src/freshContent` you can find newly created webcontent that is used in TUfast, e.g. the popup or settings-page.
+Everything related to the browser extension can be found in `/src`: `manifest.json`, background-script (`background.js`) and so on. Content scripts are in `/src/contentScripts`. In `/src/freshContent` you can find newly created webcontent that is used in TUfast, e.g. the popup or settings-page.
 
 #### Used frameworks
 
