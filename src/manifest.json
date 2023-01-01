@@ -2,7 +2,7 @@
   "name": "TUfast TU Dresden",
   "version": "7.0.0.2",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
-  "permissions": ["storage", "system.cpu", "alarms", "*://*/"],
+  "permissions": ["storage", "system.cpu", "alarms"],
   "optional_permissions": [
     "tabs",
     "webRequest",
@@ -10,9 +10,12 @@
     "notifications",
     "cookies"
   ],
+  "host_permissions": [
+    "*://*/"
+  ],
   "background": {
-    "page": "background.html",
-    "persistent": true
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -203,23 +206,25 @@
     "48": "./assets/images/tufast48.png",
     "128": "./assets/images/tufast128.png"
   },
-  "browser_action": {
+  "action": {
     "default_popup": "freshContent/popup/popup.html"
   },
   "options_ui": {
     "page": "freshContent/settings/index.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": [
-    "assets/*",
-    "contentScripts/forward/searchEngines/common.js",
-    "contentScripts/forward/searchEngines/sites.json*",
-    "contentScripts/login/common.js",
-    "contentScripts/other/hisqis/*",
-    "contentScripts/other/notification.js",
-    "snowpack/pkg/*"
-  ],
-  "manifest_version": 2,
+  "web_accessible_resources": [{
+    "resources": [
+      "assets/*",
+      "contentScripts/forward/searchEngines/common.js",
+      "contentScripts/forward/searchEngines/sites.json*",
+      "contentScripts/login/common.js",
+      "contentScripts/other/hisqis/*",
+      "contentScripts/other/notification.js",
+      "snowpack/pkg/*"
+    ]
+  }],
+  "manifest_version": 3,
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
