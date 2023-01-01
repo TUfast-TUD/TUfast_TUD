@@ -99,12 +99,12 @@ export abstract class Login {
 
     // Check if auto login is enabled
     // Promisified until usage of Manifest V3
-    const { isEnabled } = await new Promise<any>((resolve) => chrome.storage.local.get('isEnabled', resolve))
+    const { isEnabled } = await chrome.storage.local.get('isEnabled')
     if (!isEnabled) return false
 
     // Promissified fetch of userdata
     // Chances are this also has to be used in Manifest V3
-    const userData: UserData = await new Promise<UserData>((resolve) => chrome.runtime.sendMessage({ cmd: 'get_user_data', platform: this.platform }, resolve))
+    const userData: UserData = await chrome.runtime.sendMessage({ cmd: 'get_user_data', platform: this.platform })
 
     if (!userData || !userData.user || !userData.pass) return false
     else return userData
