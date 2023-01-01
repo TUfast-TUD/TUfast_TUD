@@ -38,7 +38,7 @@
 
     if (!newTable || !oldTable) return
 
-    const { hisqisPimpedTable } = await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
+    const { hisqisPimpedTable } = await chrome.storage.local.get(['hisqisPimpedTable'])
 
     newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
     oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
@@ -55,7 +55,7 @@
       newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
       oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
       changeLink.innerText = hisqisPimpedTable ? 'langweiligen, alten Tabelle...' : 'neuen, coolen TUfast-Tabelle 🔥'
-      await new Promise<void>((resolve) => chrome.storage.local.set({ hisqisPimpedTable }, resolve))
+      await chrome.storage.local.set({ hisqisPimpedTable })
     })
 
     p.append(document.createTextNode(' Weiter zur '), changeLink)
