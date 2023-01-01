@@ -1,8 +1,6 @@
 (async () => {
   // All december is christmas time
   if ((new Date()).getMonth() !== 11) return
-
-  // Promisified until usage of Manifest V3
   const { flakeState } = await chrome.storage.local.get(['flakeState'])
 
   const snowflakeSettings: {

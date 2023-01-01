@@ -239,7 +239,7 @@ export async function owaFetch () {
   const notificationGranted = await (chrome.permissions as any).contains({ permissions: ['notifications'] })
 
   if (notificationGranted && result.additionalNotificationOnNewMail && oldUnread < numberOfUnreadMails) {
-    // Promissified notification, currently no async support https://developer.chrome.com/docs/extensions/reference/notifications/#method-create
+    // Promisified notification, currently no async support https://developer.chrome.com/docs/extensions/reference/notifications/#method-create
     await new Promise<void>((resolve) => chrome.notifications.create(
       'tuFastNewEmailNotification',
       {
