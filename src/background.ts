@@ -20,7 +20,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
-        studiengang: 'general'
+        studiengang: 'general',
+        hisqisPimpedTable: true
       })
       await openSettingsPage('first_visit')
       break
