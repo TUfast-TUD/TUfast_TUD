@@ -1,6 +1,6 @@
 
 (async () => {
-  const { bannersShown, savedClickCounter, /* enabledOWAFetch, */ mostLikelySubmittedReview } = await new Promise<any>((resolve) => chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'enabledOWAFetch', 'mostLikelySubmittedReview'], resolve))
+  const { bannersShown, savedClickCounter, /* enabledOWAFetch, */ mostLikelySubmittedReview } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'enabledOWAFetch', 'mostLikelySubmittedReview'])
 
   const bannerArr = Array.isArray(bannersShown) ? bannersShown : []
 
@@ -23,7 +23,7 @@
     closeLink.addEventListener('click', async () => {
       document.body.removeChild(banner)
       bannerArr.push(bannerName)
-      await new Promise<void>((resolve) => chrome.storage.local.set({ bannersShown: bannerArr }, resolve))
+      await chrome.storage.local.set({ bannersShown: bannerArr })
     })
 
     banner.appendChild(closeLink)
@@ -99,7 +99,7 @@
         const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
         const webstoreLink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
         window.open(webstoreLink, '_blank')
-        await new Promise<void>((resolve) => chrome.storage.local.set({ mostLikelySubmittedReview: true }, resolve))
+        await chrome.storage.local.set({ mostLikelySubmittedReview: true })
       })
       insertBanner('submitReview', 'Gefällt\'s dir?', [text, interact])
       break

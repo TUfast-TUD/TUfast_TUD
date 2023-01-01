@@ -93,7 +93,7 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     courses.sort((a, b) => a.name.localeCompare(b.name))
 
     // Get the old data to check if something changed
-    const { meine_kurse: currentCoursesStr, favoriten: currentFavouritesStr } = await new Promise<any>((resolve) => chrome.storage.local.get(['meine_kurse', 'favoriten'], resolve))
+    const { meine_kurse: currentCoursesStr, favoriten: currentFavouritesStr } = await chrome.storage.local.get(['meine_kurse', 'favoriten'])
     // Make an object out of it but in a scoped function so we can handle the error better
     const parseJson = (input: string) => {
       try {
@@ -131,7 +131,7 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     if (favouritesChanged) updateObj.favoriten = JSON.stringify(favorites)
 
     if (Object.keys(updateObj).length > 0) {
-      await new Promise<void>((resolve) => chrome.storage.local.set(updateObj, resolve))
+      await chrome.storage.local.set(updateObj)
     }
 
     if (firstTime && updateObj.meine_kurse) {

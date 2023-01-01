@@ -3,7 +3,7 @@
   if ((new Date()).getMonth() !== 11) return
 
   // Promisified until usage of Manifest V3
-  const { flakeState } = await new Promise<any>((resolve) => chrome.storage.local.get(['flakeState'], resolve))
+  const { flakeState } = await chrome.storage.local.get(['flakeState'])
 
   const snowflakeSettings: {
     container: HTMLDivElement | undefined
@@ -50,8 +50,7 @@
   async function flakesSwitchOnClick (e: MouseEvent) {
     snowflakeSettings.currentState = !snowflakeSettings.currentState
 
-    // Promisified until usage of Manifest V3
-    await new Promise<void>((resolve) => chrome.storage.local.set({ flakeState: snowflakeSettings.currentState }, resolve))
+    await chrome.storage.local.set({ flakeState: snowflakeSettings.currentState })
 
     if (snowflakeSettings.currentState) {
       (e.target as HTMLHeadingElement).style.color = 'black'
