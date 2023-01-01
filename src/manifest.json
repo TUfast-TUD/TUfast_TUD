@@ -216,13 +216,43 @@
   "web_accessible_resources": [{
     "resources": [
       "assets/*",
-      "contentScripts/forward/searchEngines/common.js",
-      "contentScripts/forward/searchEngines/sites.json*",
-      "contentScripts/login/common.js",
-      "contentScripts/other/hisqis/*",
-      "contentScripts/other/notification.js",
-      "snowpack/pkg/*"
+      "contentScripts/other/notification.js"
+    ],
+    "matches": ["<all_urls>"]
+  },
+  {
+    "resources": ["contentScripts/login/common.js"],
+    "matches": [
+      "https://*.tu-dresden.de/*",
+      "https://bildungsportal.sachsen.de/*",
+      "https://videocampus.sachsen.de/*",
+      "https://git.imld.de/*",
+      "https://gitlab.hrz.tu-chemnitz.de/*",
+      "https://*.slub-dresden.de/*"
     ]
+  },
+  {
+    "resources": [
+      "contentScripts/forward/searchEngines/common.js",
+      "contentScripts/forward/searchEngines/sites.json*"
+    ],
+    "matches": [
+      "https://www.startpage.com/*",
+      "https://www.qwant.com/*",
+      "https://www.google.de/*",
+      "https://www.google.com/*",
+      "https://duckduckgo.com/*",
+      "https://www.ecosia.org/*",
+      "https://www.bing.com/*",
+      "https://search.brave.com/*"
+    ]
+  },
+  {
+    "resources": [
+      "contentScripts/other/hisqis/*",
+      "snowpack/pkg/*"
+    ],
+    "matches": ["https://qis.dez.tu-dresden.de/*"]
   }],
   "manifest_version": 3,
   "commands": {
