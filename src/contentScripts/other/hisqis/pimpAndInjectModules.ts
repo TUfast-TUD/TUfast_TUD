@@ -23,12 +23,12 @@
   // Insert grade script
   const gradeScript = document.createElement('script')
   gradeScript.type = 'module'
-  gradeScript.src = chrome.extension.getURL('/contentScripts/other/hisqis/gradeChart.js')
+  gradeScript.src = chrome.runtime.getURL('/contentScripts/other/hisqis/gradeChart.js')
 
   // Insert table script
   const tableScript = document.createElement('script')
   tableScript.type = 'module'
-  tableScript.src = chrome.extension.getURL('/contentScripts/other/hisqis/newTable.js')
+  tableScript.src = chrome.runtime.getURL('/contentScripts/other/hisqis/newTable.js')
 
   // Because the table script needs access to the storage we need to add the toggle here.
   // We also need to set the initial state to the script.
