@@ -6,19 +6,17 @@ export const useChrome = () => ({
   sendChromeRuntimeMessage
 })
 
-const setChromeLocalStorage = async (keys: Record<string, unknown>) =>
-  await new Promise((resolve) => chrome.storage.local.set(keys, resolve as () => {}))
+const setChromeLocalStorage = chrome.storage.local.set
 
 const getChromeLocalStorage = async (keys: string | string[]) => {
   if (typeof keys === 'string') {
-    return await new Promise((resolve) => chrome.storage.local.get(keys, (res) => resolve(res[keys])))
+    const { [keys]: response } = await chrome.storage.local.get(keys)
+    return response
   } else {
-    return await new Promise((resolve) => chrome.storage.local.get(keys, resolve))
+    return await chrome.storage.local.get(keys)
   }
 }
 
-const removeChromeLocalStorage = async (keys: string | string[]) =>
-  await new Promise((resolve) => chrome.storage.local.remove(keys, resolve as () => {}))
+const removeChromeLocalStorage = chrome.storage.local.remove
 
-const sendChromeRuntimeMessage = async (keys: Record<string | number | symbol, unknown>) =>
-  await new Promise((resolve) => chrome.runtime.sendMessage(keys, resolve))
+const sendChromeRuntimeMessage = chrome.runtime.sendMessage
