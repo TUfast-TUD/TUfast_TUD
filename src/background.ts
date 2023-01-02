@@ -1,7 +1,7 @@
 'use strict'
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
-import * as opalPdf from './modules/opalPdf'
+import * as opalInline from './modules/opalInline'
 import rockets from './freshContent/rockets.json'
 
 // eslint-disable-next-line no-unused-vars
@@ -184,7 +184,7 @@ chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalN
 // Register header listener
 chrome.storage.local.get(['pdfInInline'], async (result) => {
   if (result.pdfInInline) {
-    await opalPdf.enableOpalPdfHeaderListener()
+    await opalInline.enableOpalHeaderListener()
   }
 })
 
@@ -250,19 +250,19 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true // required for async sendResponse
     /* Opal PDF */
     case 'enable_opalpdf_inline':
-      opalPdf.enableOpalPdfInline().then(sendResponse)
+      opalInline.enableOpalInline().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_opalpdf_inline':
-      opalPdf.disableOpalPdfInline().then(() => sendResponse(true))
+      opalInline.disableOpalInline().then(() => sendResponse(true))
       return true
     case 'enable_opalpdf_newtab':
-      opalPdf.enableOpalPdfNewTab().then(sendResponse)
+      opalInline.enableOpalFileNewTab().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_opalpdf_newtab':
-      opalPdf.disableOpalPdfNewTab().then(() => sendResponse(true))
+      opalInline.disableOpalFileNewTab().then(() => sendResponse(true))
       return true
     case 'check_opalpdf_status':
-      opalPdf.checkOpalPdfStatus().then(sendResponse)
+      opalInline.checkOpalFileStatus().then(sendResponse)
       return true // required for async sendResponse
     /* SE Redirects */
     case 'enable_se_redirect':

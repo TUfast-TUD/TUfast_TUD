@@ -2,13 +2,16 @@
   "name": "TUfast TU Dresden",
   "version": "7.0.0.2",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
-  "permissions": ["storage", "system.cpu", "alarms"],
+  "permissions": [
+    "storage",
+    "system.cpu",
+    "alarms"
+  ],
   "optional_permissions": [
     "tabs",
-    "webRequest",
-    "webRequestBlocking",
     "notifications",
-    "cookies"
+    "cookies",
+    "declarativeNetRequestWithHostAccess"
   ],
   "host_permissions": [
     "*://*/"
