@@ -18,7 +18,10 @@
       <Statistics />
       <LanguageSelect />
     </div>
-    <div class="main-grid__settings">
+    <div
+      class="main-grid__settings"
+      :class="{ 'main-grid__settings--no-overflow': showCard }"
+    >
       <SettingTile
         v-for="(setting, index) in settings"
         :key="index"
@@ -238,6 +241,10 @@ export default defineComponent({
         align-items: start
         overflow: auto
         padding: 4rem 2rem 4rem
+        scrollbar-gutter: stable
+
+        &--no-overflow
+          overflow: hidden
 
         @media screen and (max-width: 600px)
             grid-template-columns: repeat(2, 1fr)
