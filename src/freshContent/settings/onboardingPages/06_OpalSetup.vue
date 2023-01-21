@@ -5,13 +5,13 @@
   <div class="info">
     <Setting
       v-model="inlineActive"
-      txt="PDF-Dokumente im Browser öffnen"
+      txt="Dokumente im Browser öffnen"
       :column="true"
     />
     <Setting
       v-model="newTabActive"
       :disabled="!inlineActive"
-      txt="PDF-Dokumente in neuem Tab öffnen"
+      txt="Dokumente in neuem Tab öffnen"
       :column="true"
     />
   </div>
