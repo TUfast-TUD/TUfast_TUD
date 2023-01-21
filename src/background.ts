@@ -60,29 +60,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
 
-      // Upgrading encryption
-      // Currently "encryptionLevel" can't be lower than 3, but "encryption_level" can
-      if (currentSettings.encryption_level !== 3) {
-        switch (currentSettings.encryption_level) {
-          case 1: {
-            // This branch probably/hopefully will not be called anymore...
-            console.log('Upgrading encryption standard from level 1 to level 3...')
-            const userData = await chrome.storage.local.get(['asdf', 'fdsa'])
-            await credentials.setUserData({ user: atob(userData.asdf), pass: atob(userData.fdsa) }, 'zih')
-            await chrome.storage.local.remove(['asdf', 'fdsa'])
-            break
-          }
-          case 2: {
-            const { user, pass } = await credentials.getUserDataLagacy()
-            await credentials.setUserData({ user, pass }, 'zih')
-            // Delete old user data
-            await chrome.storage.local.remove(['Data'])
-            break
-          }
-        }
-        updateObj.encryptionLevel = 3
+      // Upgrade encryption variable
+      if (typeof currentSettings.encryption_level !== 'undefined') {
+        updateObj.encryptionLevel = currentSettings.encryptionLevel ?? currentSettings.encryption_level
+        currentSettings.encryptionLevel = currentSettings.encryptionLevel ?? currentSettings.encryption_level
         await chrome.storage.local.remove(['encryption_level'])
       }
+
+      // Upgrading encryption
+      updateObj.encryptionLevel = await credentials.upgradeUserData(currentSettings.encryptionLevel)
 
       // Upgrading saved_clicks_counter to savedClicksCounter
       const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter

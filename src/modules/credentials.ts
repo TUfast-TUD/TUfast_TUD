@@ -115,9 +115,9 @@ export const loginDataExists = (platform = 'zih') => userDataExists(platform)
 // return {user: string, pass: string}
 // decrypt and return user data
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format
-export async function getUserData (platform: string = 'zih'): Promise<UserData> {
+export async function getUserData (platform: string = 'zih', providedKeyBuffer?: CryptoKey): Promise<UserData> {
   // get required data for decryption
-  const keyBuffer = await getKeyBuffer()
+  const keyBuffer = providedKeyBuffer ?? await getKeyBuffer()
   const { udata } = await chrome.storage.local.get(['udata'])
 
   // check if data exists, else return
@@ -210,4 +210,48 @@ export async function getUserDataLagacy (): Promise<UserData> {
   userData = new TextDecoder().decode(userData)
   userData = userData.split('@@@@@')
   return ({ user: userData[0], pass: userData[1] })
+}
+
+export async function upgradeUserData (encryptionLevel: number) {
+  const highestEncryptionLevel = 4
+
+  if (encryptionLevel >= highestEncryptionLevel) return highestEncryptionLevel
+
+  const getKeyBufferLvl3 = async () => {
+    // Lets build our own old keybuffer
+    // It misses the hardware info for chrome
+    let sysInfo: string = ''
+    if (isFirefox) sysInfo += window.navigator.hardwareConcurrency
+    const platformInfo = await (chrome.runtime as any).getPlatformInfo()
+    sysInfo += JSON.stringify(platformInfo)
+    return await crypto.subtle.importKey('raw', await hashDigest(sysInfo),
+      { name: 'AES-CBC' },
+      false,
+      ['encrypt', 'decrypt'])
+  }
+
+  switch (encryptionLevel) {
+    case 1: {
+      // This branch probably/hopefully will not be called anymore...
+      const userData = await chrome.storage.local.get(['asdf', 'fdsa'])
+      await setUserData({ user: atob(userData.asdf), pass: atob(userData.fdsa) }, 'zih')
+      await chrome.storage.local.remove(['asdf', 'fdsa'])
+      break
+    }
+    case 2: {
+      const { user, pass } = await getUserDataLagacy()
+      await setUserData({ user, pass }, 'zih')
+      // Delete old user data
+      await chrome.storage.local.remove(['Data'])
+      break
+    }
+    case 3: {
+      const legacyKeyBuffer = await getKeyBufferLvl3()
+      await setUserData(await getUserData('zih', legacyKeyBuffer), 'zih')
+      await setUserData(await getUserData('slub', legacyKeyBuffer), 'slub')
+      break
+    }
+  }
+
+  return highestEncryptionLevel
 }
