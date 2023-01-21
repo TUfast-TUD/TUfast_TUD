@@ -38,13 +38,12 @@ const rules = [{
 }]
 
 // Enable the module
-export async function enableOpalInline (fromUpdate: boolean = false): Promise<boolean> {
+export async function enableOpalInline (): Promise<boolean> {
   // Chrome typings are deprecated, we cast so no error is shown
   // As declarativeNetRequest is not supported as optional permission in Manifest V3, we don't need to ask for it
   const granted = await (chrome.permissions as any).request({ permissions: ['declarativeNetRequestWithHostAccess'] })
   if (!granted) {
-    if (!fromUpdate) alert("TUfast braucht diese Berechtigung, um Dateien ohne Download zu \u00f6ffnen. Bitte dr\u00fccke auf 'Erlauben'.")
-    else alert('Das \u00d6ffnen von PDFs in Opal im Browser braucht diese Berechtigung. Es wurde erstmal deaktiviert, du kannst es jederzeit in den Einstellungen wieder aktivieren.')
+    alert("TUfast braucht diese Berechtigung, um Dateien ohne Download zu \u00f6ffnen. Bitte dr\u00fccke auf 'Erlauben'.")
     disableOpalInline()
     return false
   }
