@@ -46,7 +46,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'removedUnlockRocketsBanner',
         'showedOpalCustomizeBanner',
         'removedReviewBanner',
-        'showedKeyboardBanner2'
+        'showedKeyboardBanner2',
+        'pdfInInline'
       ])
 
       const updateObj: any = {}
@@ -128,6 +129,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (currentSettings.removedReviewBanner && !bannersShown.includes('submitReview')) bannersShown.push('submitReview')
       if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts')) bannersShown.push('keyboardShortcuts')
       updateObj.bannersShown = bannersShown
+
+      // After migrating to declarativeNetRequest (MV3) the permissions have changed
+      // If pdfInInline is activated we need to request the permission
+      if (currentSettings.pdfInInline) await opalInline.enableOpalInline(true)
 
       // Write back to storage
       await chrome.storage.local.set(updateObj)
