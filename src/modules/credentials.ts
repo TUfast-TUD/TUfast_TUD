@@ -247,8 +247,11 @@ export async function upgradeUserData (encryptionLevel: number) {
     }
     case 3: {
       const legacyKeyBuffer = await getKeyBufferLvl3()
-      await setUserData(await getUserData('zih', legacyKeyBuffer), 'zih')
-      await setUserData(await getUserData('slub', legacyKeyBuffer), 'slub')
+      for (const platform of ['zih', 'slub']) {
+        const oldData = await getUserData(platform, legacyKeyBuffer)
+        if (!oldData.user || !oldData.pass) continue
+        await setUserData(oldData, platform)
+      }
       break
     }
   }
