@@ -2,10 +2,8 @@
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
+import { isFirefox } from './modules/firefoxCheck'
 import rockets from './freshContent/rockets.json'
-
-// eslint-disable-next-line no-unused-vars
-const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -285,14 +283,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'open_share_page':
       openSharePage()
       break
-    case 'open_shortcut_settings':
-      if (isFirefox) {
+    case 'open_shortcut_settings': {
+      if (isFirefox()) {
         chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' })
       } else {
         // for chrome and everything else
         chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
       }
       break
+    }
     case 'update_rocket_logo_easteregg':
       chrome.action.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
       break

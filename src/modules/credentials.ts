@@ -1,3 +1,5 @@
+import { isFirefox } from './firefoxCheck'
+
 // info: user = username | pass = password
 export interface UserData {
     user: string | undefined;
@@ -7,8 +9,6 @@ export interface UserData {
 interface UserDataStore {
     [platform: string]: UserData;
 }
-
-const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
 
 // create hash from input-string (can also be json of course)
 // output hash is always of same length and is of type buffer
@@ -22,7 +22,7 @@ async function getKeyBuffer () {
   let sysInfo: string = ''
 
   // key differs between browsers, because different APIs
-  if (isFirefox) {
+  if (isFirefox()) {
     sysInfo += window.navigator.hardwareConcurrency
   } else {
     // chrome, edge and everything else
@@ -221,7 +221,7 @@ export async function upgradeUserData (encryptionLevel: number) {
     // Lets build our own old keybuffer
     // It misses the hardware info for chrome
     let sysInfo: string = ''
-    if (isFirefox) sysInfo += window.navigator.hardwareConcurrency
+    if (isFirefox()) sysInfo += window.navigator.hardwareConcurrency
     const platformInfo = await (chrome.runtime as any).getPlatformInfo()
     sysInfo += JSON.stringify(platformInfo)
     return await crypto.subtle.importKey('raw', await hashDigest(sysInfo),
