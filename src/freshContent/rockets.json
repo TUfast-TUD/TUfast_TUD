@@ -41,8 +41,8 @@
         "iconPathBeforeUnlock": "/assets/icons/RocketIcons/6_grey_128px.png",
         "beforeUnlock": "Gefällt dir TUfast? Oder hast du Anmerkungen? Dann hinterlasse eine Bewertung im Webstore!",
         "unlocked": "Danke für deine Bewertung im Webstore!",
-        "linkFirefox": "https://addons.mozilla.org/de/firefox/addon/tufast/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search",
-        "linkChromium": "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk?hl=de"
+        "linkFirefox": "https://addons.mozilla.org/de/firefox/addon/tufast/",
+        "linkChromium": "https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk"
     },
     "whatsapp": {
         "id": "whatsapp",
