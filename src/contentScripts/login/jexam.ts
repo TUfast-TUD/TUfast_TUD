@@ -23,7 +23,7 @@ const cookieSettings: CookieSettings = {
 
     async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
       const params = new URLSearchParams(window.location.search)
-      return params.get('error') === 'badcredentials'
+      return params.get('error') === 'badcredentials' || params.get('error') === 'concurrentsession'
     }
 
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {
