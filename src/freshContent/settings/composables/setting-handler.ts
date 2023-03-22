@@ -9,6 +9,9 @@ import type {
   ResponseSE
 } from '../types/SettingHandler'
 
+import * as owaModule from '../../../modules/owaFetch'
+import * as opalModule from '../../../modules/opalPdf'
+
 const { sendChromeRuntimeMessage } = useChrome()
 
 export const useSettingHandler = () => ({
@@ -18,13 +21,27 @@ export const useSettingHandler = () => ({
 })
 
 const opalPdf = async (verb: Verbs, option?: OptionsOpalPdf): Promise<ResponseOpalPdf | boolean> => {
-  if (verb === 'check') return await sendChromeRuntimeMessage({ cmd: `${verb}_opalpdf_status` }) as ResponseOpalPdf
-  else return await sendChromeRuntimeMessage({ cmd: `${verb}_opalpdf_${option}` }) as boolean
+  switch (verb) {
+    case 'check': return await opalModule.checkOpalPdfStatus() as ResponseOpalPdf
+    case 'enable': return await (option === 'inline' ? opalModule.enableOpalPdfInline() : opalModule.enableOpalPdfNewTab())
+    case 'disable':
+      await (option === 'inline' ? opalModule.disableOpalPdfInline() : opalModule.disableOpalPdfNewTab())
+      return true
+  }
+
+  return false
 }
 
 const owa = async (verb: Verbs, option?: OptionsOWA): Promise<ResponseOWA | boolean> => {
-  if (verb === 'check') return await sendChromeRuntimeMessage({ cmd: `${verb}_owa_status` }) as ResponseOWA
-  else return await sendChromeRuntimeMessage({ cmd: `${verb}_owa_${option}` }) as boolean
+  switch (verb) {
+    case 'check': return await owaModule.checkOWAStatus() as ResponseOWA
+    case 'enable': return await (option === 'fetch' ? owaModule.enableOWAFetch() : owaModule.enableOWANotifications())
+    case 'disable':
+      await (option === 'fetch' ? owaModule.disableOWAFetch : owaModule.disableOWANotifications())
+      return true
+  }
+
+  return false
 }
 
 const se = async (verb: Verbs, option?: OptionsSE): Promise<ResponseSE | boolean> => {
