@@ -8,8 +8,8 @@
     "test": "npm run lint && npm run build",
     "dev": "snowpack build --watch",
     "build": "snowpack build",
-    "useChrome": "cp manifest.chrome.json manifest.json",
-    "useFF": "cp manifest.firefox.json manifest.json"
+    "useChrome": "cp src/manifest.chrome.json src/manifest.json",
+    "useFF": "cp src/manifest.firefox.json src/manifest.json"
   },
   "repository": {
     "type": "git",
