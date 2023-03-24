@@ -259,7 +259,7 @@
   }],
   "manifest_version": 3,
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Alt+Q",
         "windows": "Alt+Q",
