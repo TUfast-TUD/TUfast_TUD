@@ -7,7 +7,7 @@
   </p>
   <Setting
     v-model="owaFetchActive"
-    :disabled="!autoLoginActive"
+    :disabled="!autoLoginActive || owaCbDisabled"
     txt="TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben der Rakete an."
   />
   <div class="example-row">
@@ -38,7 +38,7 @@
 
   <Setting
     v-model="notificationOnNewEmailActive"
-    :disabled="!autoLoginActive || !owaFetchActive"
+    :disabled="!autoLoginActive || !owaFetchActive || notificationsCbDisabled"
     txt="Zusätzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail erhalten."
   />
 
@@ -70,7 +70,9 @@ export default defineComponent({
     const { sendChromeRuntimeMessage } = useChrome()
     const { owa } = useSettingHandler()
     const owaFetchActive = ref(false)
+    const owaCbDisabled = ref(false)
     const notificationOnNewEmailActive = ref(false)
+    const notificationsCbDisabled = ref(false)
     const autoLoginActive = ref(false)
 
     onBeforeMount(async () => {
@@ -88,7 +90,11 @@ export default defineComponent({
 
     const fetchUpdate = async () => {
       if (owaFetchActive.value) {
+        owaCbDisabled.value = true
+        notificationsCbDisabled.value = true
         owaFetchActive.value = await owa('enable', 'fetch') as boolean
+        owaCbDisabled.value = false
+        notificationsCbDisabled.value = false
       } else {
         await owa('disable', 'fetch')
         notificationOnNewEmailActive.value = false
@@ -97,7 +103,11 @@ export default defineComponent({
 
     const notificationsUpdate = async () => {
       if (notificationOnNewEmailActive.value) {
+        owaCbDisabled.value = true
+        notificationsCbDisabled.value = true
         notificationOnNewEmailActive.value = await owa('enable', 'notification') as boolean
+        owaCbDisabled.value = false
+        notificationsCbDisabled.value = false
       } else {
         await owa('disable', 'notification')
       }
@@ -105,7 +115,9 @@ export default defineComponent({
 
     return {
       owaFetchActive,
+      owaCbDisabled,
       notificationOnNewEmailActive,
+      notificationsCbDisabled,
       autoLoginActive
     }
   }
