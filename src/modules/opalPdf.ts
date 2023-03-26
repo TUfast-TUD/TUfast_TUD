@@ -1,7 +1,7 @@
 // enable the header listener
 // modify http header from opal, to view pdf in browser without the need to download it
 export async function enableOpalPdfInline (): Promise<boolean> {
-  const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'], origins: ['https://bildungsportal.sachsen.de/opal/*'] }, resolve))
+  const granted = await new Promise((resolve) => chrome.permissions.request({ permissions: ['webRequest', 'webRequestBlocking'] }, resolve))
   if (!granted) {
     alert("TUfast braucht diese Berechtigung, um PDFs ohne Download zu \u00f6ffnen. Bitte dr\u00fccke auf 'Erlauben'.")
     disableOpalPdfInline()

@@ -5,12 +5,13 @@
   <div class="info">
     <Setting
       v-model="messagesActive"
+      :disabled="messageCbDisabled"
       txt="Anzahl neuer Nachrichten anzeigen"
       :column="true"
     />
     <Setting
       v-model="notificationsActive"
-      :disabled="!messagesActive"
+      :disabled="!messagesActive || notificationsCbDisabled"
       txt="Benachrichtigung bei neuer E-Mail"
       :column="true"
     />
@@ -34,11 +35,17 @@ export default defineComponent({
   setup () {
     const { owa } = useSettingHandler()
     const messagesActive = ref(false)
+    const messageCbDisabled = ref(false)
     const notificationsActive = ref(false)
+    const notificationsCbDisabled = ref(false)
 
     const messages = async () => {
       if (messagesActive.value) {
+        messageCbDisabled.value = true
+        notificationsCbDisabled.value = true
         messagesActive.value = await owa('enable', 'fetch') as boolean
+        messageCbDisabled.value = false
+        notificationsCbDisabled.value = false
       } else {
         await owa('disable', 'fetch')
         notificationsActive.value = false
@@ -47,7 +54,11 @@ export default defineComponent({
 
     const notifications = async () => {
       if (notificationsActive.value) {
-        messagesActive.value = await owa('enable', 'notification') as boolean
+        messageCbDisabled.value = true
+        notificationsCbDisabled.value = true
+        notificationsActive.value = await owa('enable', 'notification') as boolean
+        messageCbDisabled.value = false
+        notificationsCbDisabled.value = false
       } else {
         await owa('disable', 'notification')
       }
@@ -58,7 +69,9 @@ export default defineComponent({
 
     return {
       messagesActive,
+      messageCbDisabled,
       notificationsActive,
+      notificationsCbDisabled,
       messages,
       notifications
     }
