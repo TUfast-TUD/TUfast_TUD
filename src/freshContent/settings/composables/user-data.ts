@@ -11,7 +11,7 @@ export const useUserData = () => ({
 })
 
 const saveUserData = async (uname: string, pwd: string, platform: string) => {
-  setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
+  await setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
   await sendChromeRuntimeMessage({
     cmd: 'set_user_data',
     userData: { user: uname, pass: pwd },
@@ -22,11 +22,12 @@ const saveUserData = async (uname: string, pwd: string, platform: string) => {
 const deleteUserData = async (platform: string) => {
   await sendChromeRuntimeMessage({ cmd: 'clear_badge' })
   await sendChromeRuntimeMessage({ cmd: 'delete_user_data', platform: platform })
+  await setChromeLocalStorage({ isEnabled: false }) // deactivate auto login feature
 
   // deactivate owa fetch
   if (platform === 'zih') {
-    sendChromeRuntimeMessage({ cmd: 'disable_owa_fetch' })
-    setChromeLocalStorage({ enabledOWAFetch: false })
-    setChromeLocalStorage({ additionalNotificationOnNewMail: false })
+    await sendChromeRuntimeMessage({ cmd: 'disable_owa_fetch' })
+    await setChromeLocalStorage({ enabledOWAFetch: false })
+    await setChromeLocalStorage({ additionalNotificationOnNewMail: false })
   }
 }
