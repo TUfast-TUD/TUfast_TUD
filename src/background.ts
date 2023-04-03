@@ -45,7 +45,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'showedOpalCustomizeBanner',
         'removedReviewBanner',
         'showedKeyboardBanner2',
-        'pdfInInline'
+        'pdfInInline',
+        'pdfInNewTab'
       ])
 
       const updateObj: any = {}
@@ -113,6 +114,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (currentSettings.removedReviewBanner && !bannersShown.includes('submitReview')) bannersShown.push('submitReview')
       if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts')) bannersShown.push('keyboardShortcuts')
       updateObj.bannersShown = bannersShown
+
+      if (currentSettings.pdfInInline && !(await opalInline.permissionsGrantedWebRequest())) {
+        await opalInline.disableOpalInline()
+      }
 
       // Write back to storage
       await chrome.storage.local.set(updateObj)
@@ -278,8 +283,8 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       chrome.runtime.reload()
       break
     case 'open_settings_page':
-      openSettingsPage(request.params)
-      break
+      openSettingsPage(request.params).then(() => sendResponse(true))
+      return true
     case 'open_share_page':
       openSharePage()
       break

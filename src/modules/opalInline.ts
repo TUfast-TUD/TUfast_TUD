@@ -40,6 +40,10 @@ const rules = [{
   }
 }]
 
+export async function permissionsGrantedWebRequest (): Promise<boolean> {
+  return await (chrome.permissions as any).contains({ permissions: getBrowserPermissions() })
+}
+
 // Enable the module
 export async function enableOpalInline (): Promise<boolean> {
   // Chrome typings are deprecated, we cast so no error is shown
