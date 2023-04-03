@@ -37,7 +37,7 @@ const owa = async (verb: Verbs, option?: OptionsOWA): Promise<ResponseOWA | bool
     case 'check': return await owaModule.checkOWAStatus() as ResponseOWA
     case 'enable': return await (option === 'fetch' ? owaModule.enableOWAFetch() : owaModule.enableOWANotifications())
     case 'disable':
-      await (option === 'fetch' ? owaModule.disableOWAFetch : owaModule.disableOWANotifications())
+      await (option === 'fetch' ? owaModule.disableOWAFetch() : owaModule.disableOWANotifications())
       return true
   }
 
