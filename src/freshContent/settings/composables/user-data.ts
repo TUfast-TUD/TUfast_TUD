@@ -26,8 +26,8 @@ const deleteUserData = async (platform: string) => {
 
   // deactivate owa fetch
   if (platform === 'zih') {
-    sendChromeRuntimeMessage({ cmd: 'disable_owa_fetch' })
-    setChromeLocalStorage({ enabledOWAFetch: false })
-    setChromeLocalStorage({ additionalNotificationOnNewMail: false })
+    await sendChromeRuntimeMessage({ cmd: 'disable_owa_fetch' })
+    await setChromeLocalStorage({ enabledOWAFetch: false })
+    await setChromeLocalStorage({ additionalNotificationOnNewMail: false })
   }
 }
