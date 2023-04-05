@@ -212,7 +212,7 @@ export async function getUserDataLagacy (): Promise<UserData> {
   return ({ user: userData[0], pass: userData[1] })
 }
 
-export async function upgradeUserData (encryptionLevel: number) {
+export async function upgradeUserData (encryptionLevel: number): Promise<number> {
   const highestEncryptionLevel = 4
 
   if (encryptionLevel >= highestEncryptionLevel) return highestEncryptionLevel

@@ -69,6 +69,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       // Upgrading encryption
       updateObj.encryptionLevel = await credentials.upgradeUserData(currentSettings.encryptionLevel)
 
+      // If a user has encryptionLevel below 4 he is from the before MV3 update
+      if (currentSettings.encryptionLevel && currentSettings.encryptionLevel < 4) {
+        updateObj.mv2User = true
+      }
+
       // Upgrading saved_clicks_counter to savedClicksCounter
       const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter
       if (typeof currentSettings.savedClickCounter === 'undefined' && typeof currentSettings.saved_click_counter !== 'undefined') {
