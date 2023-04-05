@@ -88,9 +88,9 @@
       text.innerHTML = 'Leider muss die Inline-Ansicht von PDFs wieder von dir aktiviert werden (wenn du magst). '
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = 'Hier kannst du es wieder aktivieren!'
-      interact.addEventListener('click', () => {
-        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
+      interact.textContent = 'Hier aktivieren! (Opal personalisieren)'
+      interact.addEventListener('click', async () => {
+        await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
       })
       insertBanner('customizeRockets', 'Großes TUfast Update!', [text, interact])
       break
