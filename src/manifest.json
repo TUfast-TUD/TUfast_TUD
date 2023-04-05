@@ -4,20 +4,21 @@
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": [
     "storage",
+    "system.cpu",
     "alarms"
   ],
   "optional_permissions": [
     "tabs",
     "notifications",
     "cookies",
-    "webRequest",
-    "webRequestBlocking"
+    "declarativeNetRequestWithHostAccess"
   ],
   "host_permissions": [
     "*://*/"
   ],
   "background": {
-    "page": "background.html"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -260,7 +261,7 @@
   }],
   "manifest_version": 3,
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Alt+Q",
         "windows": "Alt+Q",
