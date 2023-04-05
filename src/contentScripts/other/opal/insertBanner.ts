@@ -1,6 +1,12 @@
 
 (async () => {
-  const { bannersShown, savedClickCounter, /* enabledOWAFetch, */ mostLikelySubmittedReview } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'enabledOWAFetch', 'mostLikelySubmittedReview'])
+  const {
+    bannersShown,
+    savedClickCounter,
+    /* enabledOWAFetch, */
+    mostLikelySubmittedReview,
+    pdfInInline
+  } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'pdfInInline', 'mostLikelySubmittedReview'])
 
   const bannerArr = Array.isArray(bannersShown) ? bannersShown : []
 
@@ -75,6 +81,18 @@
       interact.textContent = 'Wir suchen dich!'
       interact.addEventListener('click', () => window.open('https://tu-fast.de/jobs', '_blank'))
       insertBanner('helpWanted', 'Verstärkung gesucht:', [text, interact])
+      break
+    }
+    case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
+      const text = document.createElement('span')
+      text.innerHTML = 'Leider muss die Inline-Ansicht von PDFs wieder von dir aktiviert werden (wenn du magst). '
+      const interact = document.createElement('span')
+      interact.className = 'interactLink'
+      interact.textContent = 'Hier kannst du es wieder aktivieren!'
+      interact.addEventListener('click', () => {
+        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
+      })
+      insertBanner('customizeRockets', 'Großes TUfast Update!', [text, interact])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
