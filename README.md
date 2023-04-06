@@ -28,11 +28,7 @@ Siehe auch [Datenschutzerklärung](https://tu-fast.de/datenschutz).
 Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) und Unterstützer. Das ist großartige Arbeit für die Studierenden und die TU Dresden! [Hier](https://www.buymeacoffee.com/olihausdoerfer) kannst du das Entwicklerteam mit einem kleinen Snack unterstützen.
 
 ## Zum Projekt beitragen (Contributing)
-- before implementing a feature communicate with us via [Matrix](https://matrix.to/#/#tu-fast:tu-dresden.de) or GitHub
-- we use automated code-checking via GitHub Action. Please use `npm run test` locally and fix any linting before pushing
-- commit any feature containting pull requests against the develop-branch
-- commit any hotfixes against main-branch
-- consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for further information
+Consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for information.
 
 ## Roadmap
 Wir entwickeln stetig an TUfast, um es noch besser und für mehr Studierende verfügbar zu machen. Das Projekt wird im [Projekt-Board](https://github.com/orgs/TUfast-TUD/projects/1) organisiert.
