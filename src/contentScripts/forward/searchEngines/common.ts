@@ -16,8 +16,7 @@ import sites from './sites.json'
 } */
 
 export async function fwdEnabled () {
-  // Promisified until usage of Manifest V3
-  const { fwdEnabled } = await new Promise<any>((resolve) => chrome.storage.local.get(['fwdEnabled'], resolve))
+  const { fwdEnabled } = await chrome.storage.local.get(['fwdEnabled'])
   return !!fwdEnabled
 }
 

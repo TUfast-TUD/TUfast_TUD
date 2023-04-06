@@ -27,7 +27,7 @@
     {
         "title": "OpalSetup",
         "h1": "Möchtest du diese Zusatzfunktionen für OPAL?",
-        "h2": "TUfast kann PDF-Dokumente auf OPAL für dich direkt im Browser öffnen anstatt sie herunterzuladen (linke Checkbox). Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf OPAL bist (rechte Checkbox)."
+        "h2": "TUfast kann PDF-und Textdokumente auf OPAL für dich direkt im Browser öffnen anstatt sie herunterzuladen (linke Checkbox). Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf OPAL bist (rechte Checkbox)."
     },
     {
         "title": "DoneSetup",

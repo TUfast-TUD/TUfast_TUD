@@ -1,3 +1,5 @@
+import { isFirefox } from './firefoxCheck'
+
 // info: user = username | pass = password
 export interface UserData {
     user: string | undefined;
@@ -8,8 +10,6 @@ interface UserDataStore {
     [platform: string]: UserData;
 }
 
-const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
-
 // create hash from input-string (can also be json of course)
 // output hash is always of same length and is of type buffer
 async function hashDigest (str: string) {
@@ -19,27 +19,22 @@ async function hashDigest (str: string) {
 // get key for encryption
 async function getKeyBuffer () {
   // async fetch of system information
-  // Promisified until usage of Manifest V3
-  const sysInfo = await new Promise<string>((resolve) => {
-    let sysInfo: string = ''
+  let sysInfo: string = ''
 
-    // key differs between browsers, because different APIs
-    if (isFirefox) {
-      sysInfo += window.navigator.hardwareConcurrency
-    } else {
-      // chrome, edge and everything else
-      chrome.system.cpu.getInfo((info: any) => {
-        delete info.processors
-        if (info.temperatures) delete info.temperatures // Chrome OS only
-        sysInfo += JSON.stringify(info)
-      })
-    }
+  // key differs between browsers, because different APIs
+  if (isFirefox()) {
+    sysInfo += window.navigator.hardwareConcurrency
+  } else {
+    // chrome, edge and everything else
+    const info: any = await chrome.system.cpu.getInfo()
+    delete info.processors
+    if (info.temperatures) delete info.temperatures // Chrome OS only
+    sysInfo += JSON.stringify(info)
+  }
 
-    chrome.runtime.getPlatformInfo((info) => {
-      sysInfo += JSON.stringify(info)
-      resolve(sysInfo)
-    })
-  })
+  // Chrome types seem to be broken, casting so no error is shown, https://developer.chrome.com/docs/extensions/reference/runtime/#method-getPlatformInfo
+  const platformInfo = await (chrome.runtime as any).getPlatformInfo()
+  sysInfo += JSON.stringify(platformInfo)
 
   // create key
   return await crypto.subtle.importKey('raw', await hashDigest(sysInfo),
@@ -80,17 +75,15 @@ export async function setUserData (userData: UserData, platform = 'zih') {
 
   let dataObj: UserDataStore
   try {
-    // Promisified until usage of Manifest V3
-    const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
-    if (typeof data !== 'string') throw Error()
-    dataObj = JSON.parse(data)
+    const { udata } = await chrome.storage.local.get(['udata'])
+    if (typeof udata !== 'string') throw Error()
+    dataObj = JSON.parse(udata)
   } catch {
     // data field is undefined or broken -> reset it
     dataObj = {}
   }
   dataObj[platform] = { user, pass }
 
-  // Promisified until usage of Manifest V3
   await chrome.storage.local.set({ udata: JSON.stringify(dataObj) })
 }
 
@@ -102,12 +95,11 @@ export async function userDataExists (platform: string | undefined) {
     return !!(user && pass)
   } else {
     // Query for any platform
-    // Promisified until usage of Manifest V3
-    const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
-    if (typeof data !== 'string') return false
+    const { udata } = await chrome.storage.local.get(['udata'])
+    if (typeof udata !== 'string') return false
 
     try {
-      const dataJson = JSON.parse(data)
+      const dataJson = JSON.parse(udata)
       for (const platform of Object.keys(dataJson)) {
         const { user, pass } = await getUserData(platform)
         if (user && pass) return true
@@ -123,14 +115,13 @@ export const loginDataExists = (platform = 'zih') => userDataExists(platform)
 // return {user: string, pass: string}
 // decrypt and return user data
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format
-export async function getUserData (platform: string = 'zih'): Promise<UserData> {
+export async function getUserData (platform: string = 'zih', providedKeyBuffer?: CryptoKey): Promise<UserData> {
   // get required data for decryption
-  const keyBuffer = await getKeyBuffer()
-  // Promisified until usage of Manifest V3
-  const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
+  const keyBuffer = providedKeyBuffer ?? await getKeyBuffer()
+  const { udata } = await chrome.storage.local.get(['udata'])
 
   // check if data exists, else return
-  if (typeof data !== 'string' || !platform) {
+  if (typeof udata !== 'string' || !platform) {
     return ({ user: undefined, pass: undefined })
   }
 
@@ -159,7 +150,7 @@ export async function getUserData (platform: string = 'zih'): Promise<UserData> 
   }
 
   try {
-    const userDataJson = JSON.parse(data)
+    const userDataJson = JSON.parse(udata)
     const { user: encUser, pass: encPass } = userDataJson[platform]
     return { user: await decode(encUser), pass: await decode(encPass) }
   } catch {
@@ -169,17 +160,15 @@ export async function getUserData (platform: string = 'zih'): Promise<UserData> 
 
 export async function deleteUserData (platform: string): Promise<boolean> {
   if (!platform) return false
-  // Promisified until usage of Manifest V3
-  const data = await new Promise((resolve) => chrome.storage.local.get(['udata'], (data) => resolve(data.udata)))
+  const { udata } = await chrome.storage.local.get(['udata'])
   // Field is wrong -> false
-  if (typeof data !== 'string') return false
+  if (typeof udata !== 'string') return false
 
   try {
-    const dataJson = JSON.parse(data)
+    const dataJson = JSON.parse(udata)
     if (!dataJson[platform]) return false // no data available
     delete dataJson[platform]
-    // Promisified until usage of Manifest V3
-    await new Promise<void>((resolve) => chrome.storage.local.set({ udata: JSON.stringify(dataJson) }, resolve))
+    await chrome.storage.local.set({ udata: JSON.stringify(dataJson) })
     return true
   } catch {
     // Should happen if the JSON is broken
@@ -193,8 +182,7 @@ export async function getUserDataLagacy (): Promise<UserData> {
   // get required data for decryption
   const keyBuffer = await getKeyBuffer()
   // async fetch of user data
-  // Promisified until usage of Manifest V3
-  const data = await new Promise<string|undefined>((resolve) => chrome.storage.local.get(['Data'], (data) => resolve(data.Data)))
+  const { Data: data } = await chrome.storage.local.get(['Data'])
 
   // check if Data exists, else return
   if (data === undefined || data === 'undefined') {
@@ -222,4 +210,51 @@ export async function getUserDataLagacy (): Promise<UserData> {
   userData = new TextDecoder().decode(userData)
   userData = userData.split('@@@@@')
   return ({ user: userData[0], pass: userData[1] })
+}
+
+export async function upgradeUserData (encryptionLevel: number): Promise<number> {
+  const highestEncryptionLevel = 4
+
+  if (encryptionLevel >= highestEncryptionLevel) return highestEncryptionLevel
+
+  const getKeyBufferLvl3 = async () => {
+    // Lets build our own old keybuffer
+    // It misses the hardware info for chrome
+    let sysInfo: string = ''
+    if (isFirefox()) sysInfo += window.navigator.hardwareConcurrency
+    const platformInfo = await (chrome.runtime as any).getPlatformInfo()
+    sysInfo += JSON.stringify(platformInfo)
+    return await crypto.subtle.importKey('raw', await hashDigest(sysInfo),
+      { name: 'AES-CBC' },
+      false,
+      ['encrypt', 'decrypt'])
+  }
+
+  switch (encryptionLevel) {
+    case 1: {
+      // This branch probably/hopefully will not be called anymore...
+      const userData = await chrome.storage.local.get(['asdf', 'fdsa'])
+      await setUserData({ user: atob(userData.asdf), pass: atob(userData.fdsa) }, 'zih')
+      await chrome.storage.local.remove(['asdf', 'fdsa'])
+      break
+    }
+    case 2: {
+      const { user, pass } = await getUserDataLagacy()
+      await setUserData({ user, pass }, 'zih')
+      // Delete old user data
+      await chrome.storage.local.remove(['Data'])
+      break
+    }
+    case 3: {
+      const legacyKeyBuffer = await getKeyBufferLvl3()
+      for (const platform of ['zih', 'slub']) {
+        const oldData = await getUserData(platform, legacyKeyBuffer)
+        if (!oldData.user || !oldData.pass) continue
+        await setUserData(oldData, platform)
+      }
+      break
+    }
+  }
+
+  return highestEncryptionLevel
 }

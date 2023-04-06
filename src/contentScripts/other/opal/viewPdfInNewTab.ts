@@ -10,7 +10,7 @@ function reloadInNewTab () {
 }
 
 (async () => {
-  const { pdfInNewTab } = await new Promise<any>((resolve) => chrome.storage.local.get(['pdfInNewTab'], resolve))
+  const { pdfInNewTab } = await chrome.storage.local.get(['pdfInNewTab'])
   if (!pdfInNewTab) return
 
   // If we get loaded on a pdf we open it in a new tab

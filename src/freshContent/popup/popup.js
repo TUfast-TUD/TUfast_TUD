@@ -642,17 +642,16 @@ async function saveEnabled () {
   const userDataAvail = await new Promise((resolve) =>
     chrome.runtime.sendMessage({ cmd: 'check_user_data' }, resolve)
   )
-  await userDataAvail
   if (userDataAvail) {
     // Promisified until usage of Manifest V3
     await new Promise((resolve) =>
       chrome.storage.local.set({ isEnabled: !isEnabled.isEnabled }, resolve)
     )
   } else {
-    chrome.runtime.sendMessage({
+    await new Promise(resolve => chrome.runtime.sendMessage({
       cmd: 'open_settings_page',
       params: 'auto_login_settings'
-    })
+    }, resolve))
     window.close()
   }
 }

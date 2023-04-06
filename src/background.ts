@@ -1,11 +1,9 @@
 'use strict'
 import * as credentials from './modules/credentials'
 import * as owaFetch from './modules/owaFetch'
-import * as opalPdf from './modules/opalPdf'
+import * as opalInline from './modules/opalInline'
+import { isFirefox } from './modules/firefoxCheck'
 import rockets from './freshContent/rockets.json'
-
-// eslint-disable-next-line no-unused-vars
-const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo)
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -16,17 +14,18 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.local.set({
         dashboardDisplay: 'favoriten',
         fwdEnabled: true,
-        encryptionLevel: 3,
+        encryptionLevel: 4,
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
-        studiengang: 'general'
+        studiengang: 'general',
+        hisqisPimpedTable: true,
+        bannersShown: ['mv3UpdateNotice']
       })
       await openSettingsPage('first_visit')
       break
     case 'update': {
-      // Promisified until usage of Manifest V3
-      const currentSettings = await new Promise<any>((resolve) => chrome.storage.local.get([
+      const currentSettings = await chrome.storage.local.get([
         'dashboardDisplay',
         'fwdEnabled',
         'encryptionLevel',
@@ -46,8 +45,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'removedUnlockRocketsBanner',
         'showedOpalCustomizeBanner',
         'removedReviewBanner',
-        'showedKeyboardBanner2'
-      ], resolve))
+        'showedKeyboardBanner2',
+        'pdfInInline',
+        'pdfInNewTab'
+      ])
 
       const updateObj: any = {}
 
@@ -59,40 +60,21 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
 
-      // Upgrading encryption
-      // Currently "encryptionLevel" can't be lower than 3, but "encryption_level" can
-      if (currentSettings.encryption_level !== 3) {
-        switch (currentSettings.encryption_level) {
-          case 1: {
-            // This branch probably/hopefully will not be called anymore...
-            console.log('Upgrading encryption standard from level 1 to level 3...')
-            // Promisified until usage of Manifest V3
-            const userData = await new Promise<any>((resolve) => chrome.storage.local.get(['asdf', 'fdsa'], resolve))
-            await credentials.setUserData({ user: atob(userData.asdf), pass: atob(userData.fdsa) }, 'zih')
-            // Promisified until usage of Manifest V3
-            await new Promise<void>((resolve) => chrome.storage.local.remove(['asdf', 'fdsa'], resolve))
-            break
-          }
-          case 2: {
-            const { user, pass } = await credentials.getUserDataLagacy()
-            await credentials.setUserData({ user, pass }, 'zih')
-            // Delete old user data
-            // Promisified until usage of Manifest V3
-            await new Promise<void>((resolve) => chrome.storage.local.remove(['Data'], resolve))
-            break
-          }
-        }
-        updateObj.encryptionLevel = 3
-        // Promisified until usage of Manifest V3
-        await new Promise<void>((resolve) => chrome.storage.local.remove(['encryption_level'], resolve))
+      // Upgrade encryption variable
+      if (typeof currentSettings.encryption_level !== 'undefined') {
+        updateObj.encryptionLevel = currentSettings.encryptionLevel ?? currentSettings.encryption_level
+        currentSettings.encryptionLevel = currentSettings.encryptionLevel ?? currentSettings.encryption_level
+        await chrome.storage.local.remove(['encryption_level'])
       }
+
+      // Upgrading encryption
+      updateObj.encryptionLevel = await credentials.upgradeUserData(currentSettings.encryptionLevel)
 
       // Upgrading saved_clicks_counter to savedClicksCounter
       const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter
       if (typeof currentSettings.savedClickCounter === 'undefined' && typeof currentSettings.saved_click_counter !== 'undefined') {
         updateObj.savedClickCounter = savedClicks
-        // Promisified until usage of Manifest V3
-        await new Promise<void>((resolve) => chrome.storage.local.remove(['saved_click_counter'], resolve))
+        await chrome.storage.local.remove(['saved_click_counter'])
       }
 
       // Upgrading availableRockets
@@ -120,10 +102,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
         if (!avRockets.includes('easteregg')) avRockets.push('easteregg')
         updateObj.selectedRocketIcon = JSON.stringify(rockets.easteregg)
-        // Promisified until usage of Manifest V3
-        await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rockets.easteregg.iconPathUnlocked }, resolve))
-        // Promisified until usage of Manifest V3
-        await new Promise<void>((resolve) => chrome.storage.local.remove(['Rocket'], resolve))
+        await chrome.action.setIcon({ path: rockets.easteregg.iconPathUnlocked })
+        await chrome.storage.local.remove(['Rocket'])
       }
       updateObj.availableRockets = avRockets
 
@@ -136,9 +116,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts')) bannersShown.push('keyboardShortcuts')
       updateObj.bannersShown = bannersShown
 
+      // Migrating pdf settings
+      // If the browser implicitly grants us the permsission, it's fine. Otherwise we disable it.
+      if (currentSettings.pdfInInline && !(await opalInline.permissionsGrantedWebRequest())) {
+        await opalInline.disableOpalInline()
+      }
+
       // Write back to storage
-      // Promisified until usage of Manifest V3
-      await new Promise<void>((resolve) => chrome.storage.local.set(updateObj, resolve))
+      await chrome.storage.local.set(updateObj)
       break
     }
   }
@@ -149,29 +134,29 @@ chrome.commands.onCommand.addListener(async (command) => {
   console.log('Detected command: ' + command)
   switch (command) {
     case 'open_opal_hotkey':
-      chrome.tabs.update({ url: 'https://bildungsportal.sachsen.de/opal/home/' })
+      await chrome.tabs.update({ url: 'https://bildungsportal.sachsen.de/opal/home/' })
       await saveClicks(2)
       break
     case 'open_owa_hotkey':
-      chrome.tabs.update({ url: 'https://msx.tu-dresden.de/owa/' })
+      await chrome.tabs.update({ url: 'https://msx.tu-dresden.de/owa/' })
       await saveClicks(2)
       break
     case 'open_jexam_hotkey':
-      chrome.tabs.update({ url: 'https://jexam.inf.tu-dresden.de/' })
+      await chrome.tabs.update({ url: 'https://jexam.inf.tu-dresden.de/' })
       await saveClicks(2)
       break
   }
 })
 
 // Set icon on startup
-chrome.storage.local.get(['selectedRocketIcon'], (resp) => {
+chrome.storage.local.get(['selectedRocketIcon'], async (resp) => {
   try {
     const r = JSON.parse(resp.selectedRocketIcon)
     if (!r.iconPathUnlocked) console.warn('Rocket icon has no attribute "iconPathUnlocked", fallback to default icon.')
-    chrome.browserAction.setIcon({ path: r.iconPathUnlocked || rockets.default.iconPathUnlocked })
+    await chrome.action.setIcon({ path: r.iconPathUnlocked || rockets.default.iconPathUnlocked })
   } catch (e) {
     console.log(`Cannot parse rocket icon: ${JSON.stringify(resp.selectedRocketIcon)}`)
-    chrome.browserAction.setIcon({ path: rockets.default.iconPathUnlocked })
+    await chrome.action.setIcon({ path: rockets.default.iconPathUnlocked })
   }
 })
 
@@ -183,15 +168,16 @@ chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalN
 
   // When no notifications are enabled, there is nothing to do anymore
   if (!result.additionalNotificationOnNewMail) return
-  // Promisified until usage of Manifest V3
-  const notificationAccess = await new Promise<boolean>((resolve) => chrome.permissions.contains({ permissions: ['notifications'] }, resolve))
+  // Chrome types seem to be deprecated, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-contains
+  // Casting so no error is shown
+  const notificationAccess: boolean = await (chrome.permissions as any).contains({ permissions: ['notifications'] }) as boolean
   if (notificationAccess) owaFetch.registerNotificationClickListener()
 })
 
 // Register header listener
 chrome.storage.local.get(['pdfInInline'], async (result) => {
   if (result.pdfInInline) {
-    opalPdf.enableOpalPdfHeaderListener()
+    await opalInline.enableOpalHeaderListener()
   }
 })
 
@@ -201,16 +187,14 @@ if (d.getTime() - Date.now() < 0) d.setFullYear(d.getFullYear() + 1)
 chrome.alarms.create('resetGOpalBanner', { when: d.getTime() })
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === 'resetGOpalBanner') {
-    // Promisified until usage of Manifest V3
-    await new Promise<void>((resolve) => chrome.storage.local.set({ closedMsg1: false }, resolve))
+    await chrome.storage.local.set({ closedMsg1: false })
   }
 })
 
 // DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
   if (resp.openSettingsOnReload) await openSettingsPage()
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({ openSettingsOnReload: false }, resolve))
+  await chrome.storage.local.set({ openSettingsOnReload: false })
 })
 
 // command listener
@@ -259,19 +243,19 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true // required for async sendResponse
     /* Opal PDF */
     case 'enable_opalpdf_inline':
-      opalPdf.enableOpalPdfInline().then(sendResponse)
+      opalInline.enableOpalInline().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_opalpdf_inline':
-      opalPdf.disableOpalPdfInline().then(() => sendResponse(true))
+      opalInline.disableOpalInline().then(() => sendResponse(true))
       return true
     case 'enable_opalpdf_newtab':
-      opalPdf.enableOpalPdfNewTab().then(sendResponse)
+      opalInline.enableOpalFileNewTab().then(sendResponse)
       return true // required for async sendResponse
     case 'disable_opalpdf_newtab':
-      opalPdf.disableOpalPdfNewTab().then(() => sendResponse(true))
+      opalInline.disableOpalFileNewTab().then(() => sendResponse(true))
       return true
     case 'check_opalpdf_status':
-      opalPdf.checkOpalPdfStatus().then(sendResponse)
+      opalInline.checkOpalFileStatus().then(sendResponse)
       return true // required for async sendResponse
     /* SE Redirects */
     case 'enable_se_redirect':
@@ -302,21 +286,22 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       chrome.runtime.reload()
       break
     case 'open_settings_page':
-      openSettingsPage(request.params)
-      break
+      openSettingsPage(request.params).then(() => sendResponse(true))
+      return true
     case 'open_share_page':
       openSharePage()
       break
-    case 'open_shortcut_settings':
-      if (isFirefox) {
+    case 'open_shortcut_settings': {
+      if (isFirefox()) {
         chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' })
       } else {
         // for chrome and everything else
         chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
       }
       break
+    }
     case 'update_rocket_logo_easteregg':
-      chrome.browserAction.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
+      chrome.action.setIcon({ path: 'assets/icons/RocketIcons/3_120px.png' })
       break
     case 'logout_idp':
       logoutIdp(request.logoutDuration)
@@ -334,65 +319,55 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 // open settings (=options) page, if required set params
 async function openSettingsPage (params?: string) {
   if (params) {
-    // Promisified until usage of Manifest V3
-    await new Promise<void>((resolve) => chrome.storage.local.set({ openSettingsPageParam: params }, resolve))
+    await chrome.storage.local.set({ openSettingsPageParam: params })
   }
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.runtime.openOptionsPage(resolve))
+  await chrome.runtime.openOptionsPage()
 }
 
 async function openSharePage () {
-  // Promisified until usage of Manifest V3
-  await new Promise((resolve) => chrome.tabs.create({ url: 'share.html' }, resolve))
+  await chrome.tabs.create({ url: 'share.html' })
 }
 
 // save_click_counter
 async function saveClicks (counter: number) {
   // load number of saved clicks and add counter!
-  // Promisified until usage of Manifest V3
-  const result = await new Promise<any>((resolve) => chrome.storage.local.get(['savedClickCounter'], resolve))
+  const result = await chrome.storage.local.get(['savedClickCounter'])
   const savedClickCounter = (typeof result.savedClickCounter === 'undefined') ? counter : result.savedClickCounter + counter
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({ savedClickCounter }, () => {
-    console.log('Saved ' + counter + ' clicks!')
-    resolve()
-  }))
+  await chrome.storage.local.set({ savedClickCounter })
+  console.log('Saved ' + counter + ' clicks!')
   // make rocketIcons available if appropriate
-  // Promisified until usage of Manifest V3
-  const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
+  const { availableRockets } = await chrome.storage.local.get(['availableRockets'])
   if (savedClickCounter >= 250 && !availableRockets.includes('250clicks')) availableRockets.push('250clicks')
   if (savedClickCounter >= 2500 && !availableRockets.includes('2500clicks')) availableRockets.push('2500clicks')
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({ availableRockets }, resolve))
+  await chrome.storage.local.set({ availableRockets })
 }
 
 // logout function for idp
 async function logoutIdp (logoutDuration: number = 5) {
-  // Promisified until usage of Manifest V3
-  const granted = await new Promise<boolean>((resolve) => chrome.permissions.request({ permissions: ['cookies'] }, resolve))
+  // Chrome types are wrong, so we need to cast them, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-request
+  const granted = await chrome.permissions.request({ permissions: ['cookies'] }) as unknown as boolean
   if (!granted) return
 
   // Set the logout cookie for idp
   const date = new Date()
   date.setMinutes(date.getMinutes() + logoutDuration)
-  await new Promise<chrome.cookies.Cookie|null>((resolve) => chrome.cookies.set({
+  await chrome.cookies.set({
     url: 'https://idp.tu-dresden.de',
     name: 'tuFast_idp_loggedOut',
     value: 'true',
     secure: true,
     expirationDate: date.getTime() / 1000
-  }, resolve))
+  })
 
   // Log out
-  // Promisified until usage of Manifest V3
-  const { idpLogoutEnabled } = await new Promise<any>((resolve) => chrome.storage.local.get(['idpLogoutEnabled'], resolve))
+  const { idpLogoutEnabled } = await chrome.storage.local.get(['idpLogoutEnabled'])
   if (!idpLogoutEnabled) return
 
   // get session cookie
-  const sessionCookie = await new Promise<chrome.cookies.Cookie|null>((resolve) => chrome.cookies.get({
+  const sessionCookie = await chrome.cookies.get({
     url: 'https://idp.tu-dresden.de',
     name: 'JSESSIONID'
-  }, resolve))
+  })
   if (!sessionCookie) return
 
   const redirect = await fetch('https://idp.tu-dresden.de/idp/profile/Logout', {
@@ -413,27 +388,22 @@ async function eastereggFound () {
   await unlockRocketIcon('easteregg')
   await setRocketIcon('easteregg')
 
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({ foundEasteregg: true }, resolve))
+  await chrome.storage.local.set({ foundEasteregg: true })
 }
 
 async function setRocketIcon (rocketId: string): Promise<void> {
   const rocket = rockets[rocketId] || rockets.default
 
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) }, resolve))
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.browserAction.setIcon({ path: rocket.iconPathUnlocked }, resolve))
+  await chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) })
+  await chrome.action.setIcon({ path: rocket.iconPathUnlocked })
 }
 
 async function unlockRocketIcon (rocketId: string): Promise<void> {
-  // Promisified until usage of Manifest V3
-  const { availableRockets } = await new Promise<any>((resolve) => chrome.storage.local.get(['availableRockets'], resolve))
+  const { availableRockets } = await chrome.storage.local.get(['availableRockets'])
   if (!availableRockets.includes(rocketId)) availableRockets.push(rocketId)
 
   const update: any = { availableRockets }
   if (rocketId === 'webstore') update.mostLikelySubmittedReview = true
 
-  // Promisified until usage of Manifest V3
-  await new Promise<void>((resolve) => chrome.storage.local.set(update, resolve))
+  await chrome.storage.local.set(update)
 }

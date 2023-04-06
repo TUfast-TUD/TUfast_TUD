@@ -23,12 +23,12 @@
   // Insert grade script
   const gradeScript = document.createElement('script')
   gradeScript.type = 'module'
-  gradeScript.src = chrome.extension.getURL('/contentScripts/other/hisqis/gradeChart.js')
+  gradeScript.src = chrome.runtime.getURL('/contentScripts/other/hisqis/gradeChart.js')
 
   // Insert table script
   const tableScript = document.createElement('script')
   tableScript.type = 'module'
-  tableScript.src = chrome.extension.getURL('/contentScripts/other/hisqis/newTable.js')
+  tableScript.src = chrome.runtime.getURL('/contentScripts/other/hisqis/newTable.js')
 
   // Because the table script needs access to the storage we need to add the toggle here.
   // We also need to set the initial state to the script.
@@ -38,7 +38,7 @@
 
     if (!newTable || !oldTable) return
 
-    const { hisqisPimpedTable } = await new Promise<any>((resolve) => chrome.storage.local.get(['hisqisPimpedTable'], resolve))
+    const { hisqisPimpedTable } = await chrome.storage.local.get(['hisqisPimpedTable'])
 
     newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
     oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
@@ -55,7 +55,7 @@
       newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
       oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
       changeLink.innerText = hisqisPimpedTable ? 'langweiligen, alten Tabelle...' : 'neuen, coolen TUfast-Tabelle 🔥'
-      await new Promise<void>((resolve) => chrome.storage.local.set({ hisqisPimpedTable }, resolve))
+      await chrome.storage.local.set({ hisqisPimpedTable })
     })
 
     p.append(document.createTextNode(' Weiter zur '), changeLink)

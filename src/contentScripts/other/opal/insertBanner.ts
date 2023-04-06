@@ -1,6 +1,12 @@
 
 (async () => {
-  const { bannersShown, savedClickCounter, /* enabledOWAFetch, */ mostLikelySubmittedReview } = await new Promise<any>((resolve) => chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'enabledOWAFetch', 'mostLikelySubmittedReview'], resolve))
+  const {
+    bannersShown,
+    savedClickCounter,
+    /* enabledOWAFetch, */
+    mostLikelySubmittedReview,
+    pdfInInline
+  } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'pdfInInline', 'mostLikelySubmittedReview'])
 
   const bannerArr = Array.isArray(bannersShown) ? bannersShown : []
 
@@ -23,7 +29,7 @@
     closeLink.addEventListener('click', async () => {
       document.body.removeChild(banner)
       bannerArr.push(bannerName)
-      await new Promise<void>((resolve) => chrome.storage.local.set({ bannersShown: bannerArr }, resolve))
+      await chrome.storage.local.set({ bannersShown: bannerArr })
     })
 
     banner.appendChild(closeLink)
@@ -67,7 +73,7 @@
       insertBanner('customizeOpal', 'Wie du willst:', [text, interact])
       break
     } */
-    case !bannerArr.includes('helpWanted'): {
+    case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
       const text = document.createElement('span')
       text.innerHTML = 'Du hast Bock TUfast weiterzuentwickeln? '
       const interact = document.createElement('span')
@@ -75,6 +81,18 @@
       interact.textContent = 'Wir suchen dich!'
       interact.addEventListener('click', () => window.open('https://tu-fast.de/jobs', '_blank'))
       insertBanner('helpWanted', 'Verstärkung gesucht:', [text, interact])
+      break
+    }
+    case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
+      const text = document.createElement('span')
+      text.innerHTML = 'Die Opal-Personalisierung muss von dir leider erneut aktiviert werden(, wenn du magst). '
+      const interact = document.createElement('span')
+      interact.className = 'interactLink'
+      interact.textContent = 'Hier aktivieren'
+      interact.addEventListener('click', async () => {
+        await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
+      })
+      insertBanner('mv3UpdateNotice', 'Großes TUfast Update!', [text, interact])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
@@ -99,7 +117,7 @@
         const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
         const webstoreLink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
         window.open(webstoreLink, '_blank')
-        await new Promise<void>((resolve) => chrome.storage.local.set({ mostLikelySubmittedReview: true }, resolve))
+        await chrome.storage.local.set({ mostLikelySubmittedReview: true })
       })
       insertBanner('submitReview', 'Gefällt\'s dir?', [text, interact])
       break
