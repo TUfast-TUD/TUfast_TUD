@@ -5,9 +5,8 @@
     savedClickCounter,
     /* enabledOWAFetch, */
     mostLikelySubmittedReview,
-    pdfInInline,
-    mv2User
-  } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'pdfInInline', 'mostLikelySubmittedReview', 'mv2User'])
+    pdfInInline
+  } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'pdfInInline', 'mostLikelySubmittedReview'])
 
   const bannerArr = Array.isArray(bannersShown) ? bannersShown : []
 
@@ -84,7 +83,7 @@
       insertBanner('helpWanted', 'Verstärkung gesucht:', [text, interact])
       break
     }
-    case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline && mv2User: {
+    case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
       const text = document.createElement('span')
       text.innerHTML = 'Leider muss die Inline-Ansicht von PDFs wieder von dir aktiviert werden (wenn du magst). '
       const interact = document.createElement('span')

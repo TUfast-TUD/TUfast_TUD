@@ -14,12 +14,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.local.set({
         dashboardDisplay: 'favoriten',
         fwdEnabled: true,
-        encryptionLevel: 3,
+        encryptionLevel: 4,
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
         studiengang: 'general',
-        hisqisPimpedTable: true
+        hisqisPimpedTable: true,
+        bannersShown: ['mv3UpdateNotice']
       })
       await openSettingsPage('first_visit')
       break
@@ -69,11 +70,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       // Upgrading encryption
       updateObj.encryptionLevel = await credentials.upgradeUserData(currentSettings.encryptionLevel)
 
-      // If a user has encryptionLevel below 4 he is from the before MV3 update
-      if (currentSettings.encryptionLevel && currentSettings.encryptionLevel < 4) {
-        updateObj.mv2User = true
-      }
-
       // Upgrading saved_clicks_counter to savedClicksCounter
       const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter
       if (typeof currentSettings.savedClickCounter === 'undefined' && typeof currentSettings.saved_click_counter !== 'undefined') {
@@ -120,6 +116,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts')) bannersShown.push('keyboardShortcuts')
       updateObj.bannersShown = bannersShown
 
+      // Migrating pdf settings
+      // If the browser implicitly grants us the permsission, it's fine. Otherwise we disable it.
       if (currentSettings.pdfInInline && !(await opalInline.permissionsGrantedWebRequest())) {
         await opalInline.disableOpalInline()
       }
