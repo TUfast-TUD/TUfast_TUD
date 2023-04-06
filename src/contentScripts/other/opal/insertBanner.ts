@@ -92,7 +92,7 @@
       interact.addEventListener('click', async () => {
         await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
       })
-      insertBanner('customizeRockets', 'Großes TUfast Update!', [text, interact])
+      insertBanner('mv3UpdateNotice', 'Großes TUfast Update!', [text, interact])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
