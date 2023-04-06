@@ -85,7 +85,7 @@
     }
     case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
       const text = document.createElement('span')
-      text.innerHTML = 'Die Opal-Personalisierung muss von dir leider erneut aktiviert werden (, wenn du magst). '
+      text.innerHTML = 'Die Opal-Personalisierung muss von dir leider erneut aktiviert werden(, wenn du magst). '
       const interact = document.createElement('span')
       interact.className = 'interactLink'
       interact.textContent = 'Hier aktivieren'
