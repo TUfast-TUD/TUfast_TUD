@@ -34,7 +34,6 @@ jobs:
       - run: npm run build
       - run: cd build && zip -r ../TUfast_TUD_chrome.zip *
 
-      - run: cd..
       - run: npm run useFF
       - run: npm run build
       - run: cd build && zip -r ../TUfast_TUD_firefox.zip *
