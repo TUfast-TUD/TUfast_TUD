@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx eslint --ext .js,.ts,.vue --fix .",
-    "test": "npm run lint && npm run build",
+    "test": "npm run lint && npm run useChrome && npm run build",
     "dev": "snowpack build --watch",
     "build": "snowpack build",
     "useChrome": "cp src/manifest.chrome.json src/manifest.json",
