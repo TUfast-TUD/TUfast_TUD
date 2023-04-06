@@ -73,7 +73,7 @@
       insertBanner('customizeOpal', 'Wie du willst:', [text, interact])
       break
     } */
-    case !bannerArr.includes('helpWanted'): {
+    case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
       const text = document.createElement('span')
       text.innerHTML = 'Du hast Bock TUfast weiterzuentwickeln? '
       const interact = document.createElement('span')
@@ -92,7 +92,7 @@
       interact.addEventListener('click', async () => {
         await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
       })
-      insertBanner('customizeRockets', 'Großes TUfast Update!', [text, interact])
+      insertBanner('mv3UpdateNotice', 'Großes TUfast Update!', [text, interact])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
