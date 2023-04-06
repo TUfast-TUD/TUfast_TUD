@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
+import { isFirefox } from '../../../modules/firefoxCheck'
 
 import rockets from '../../rockets.json'
 
@@ -52,8 +53,6 @@ export default defineComponent({
     const pos = ref(0)
     const availableRockets = ref(['default'])
     const selectedId = ref('default')
-
-    const isFirefox = !!(typeof globalThis.browser !== 'undefined' && globalThis.browser.runtime && globalThis.browser.runtime.getBrowserInfo) // attention: no failsave browser detection
 
     onMounted(async () => {
       // Load rockets
@@ -90,7 +89,7 @@ export default defineComponent({
     }
 
     const getLink = (rocketObj: any): string|undefined => {
-      return rocketObj.link || (isFirefox ? rocketObj.linkFirefox : rocketObj.linkChromium)
+      return rocketObj.link || (isFirefox() ? rocketObj.linkFirefox : rocketObj.linkChromium)
     }
 
     const getText = (rocketObj: any) => {

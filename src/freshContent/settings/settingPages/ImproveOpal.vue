@@ -8,13 +8,13 @@
 
   <Setting
     v-model="pdfInlineActive"
-    txt="PDF-Dokumente aus OPAL direkt im Browser öffnen, anstatt sie herunterzuladen."
+    txt="PDF- und Textdokumente aus OPAL direkt im Browser öffnen, anstatt sie herunterzuladen."
     class="setting"
   />
   <Setting
     v-model="pdfNewTabActive"
     :disabled="!pdfInlineActive"
-    txt="PDF-Dokumente in neuem Tab öffnen (empfohlen!)"
+    txt="PDF- und Textdokumente in neuem Tab öffnen (empfohlen!)"
     class="setting"
   />
   <p class="max-line p-margin">

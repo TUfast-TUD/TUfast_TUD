@@ -23,8 +23,7 @@ function resetColor () {
 // Main function
 (async () => {
   // Get initial values
-  // Promisified until usage of Manifest V3
-  const { selectedRocketIcon, isEnabled, fwdEnabled, foundEasteregg } = await new Promise<any>((resolve) => chrome.storage.local.get(['selectedRocketIcon', 'isEnabled', 'fwdEnabled', 'foundEasteregg'], resolve))
+  const { selectedRocketIcon, isEnabled, fwdEnabled, foundEasteregg } = await chrome.storage.local.get(['selectedRocketIcon', 'isEnabled', 'fwdEnabled', 'foundEasteregg'])
   if (!isEnabled && !fwdEnabled) return
 
   // Looks weird but I like this more than having everything in a try/catch block

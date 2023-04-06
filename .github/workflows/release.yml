@@ -30,12 +30,17 @@ jobs:
       # Runs a single command using the runners shell
       - run: npm ci
       #- run: npm run test
+      - run: npm run useChrome
       - run: npm run build
-      - run: cd build && zip -r ../TUfast_TUD.zip *
+      - run: zip -r ../TUfast_TUD_chrome.zip build/*
+
+      - run: npm run useFF
+      - run: npm run build
+      - run: zip -r ../TUfast_TUD_firefox.zip build/*
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "TUfast_TUD.zip"
+          artifacts: "TUfast_TUD_chrome.zip,TUfast_TUD_firefox.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.version }}
           body: ${{ github.event.inputs.description }}
