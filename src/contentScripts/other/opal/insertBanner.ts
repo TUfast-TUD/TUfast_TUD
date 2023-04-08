@@ -1,4 +1,3 @@
-
 (async () => {
   const {
     bannersShown,
@@ -6,11 +5,20 @@
     /* enabledOWAFetch, */
     mostLikelySubmittedReview,
     pdfInInline
-  } = await chrome.storage.local.get(['bannersShown', 'savedClickCounter', 'pdfInInline', 'mostLikelySubmittedReview'])
+  } = await chrome.storage.local.get([
+    'bannersShown',
+    'savedClickCounter',
+    'pdfInInline',
+    'mostLikelySubmittedReview'
+  ])
 
   const bannerArr = Array.isArray(bannersShown) ? bannersShown : []
 
-  function insertBanner (bannerName: string, title: string, otherElements: Node[]) {
+  function insertBanner (
+    bannerName: string,
+    title: string,
+    otherElements: Node[]
+  ) {
     const banner = document.createElement('div')
     banner.id = 'TUfastBanner'
 
@@ -73,26 +81,42 @@
       insertBanner('customizeOpal', 'Wie du willst:', [text, interact])
       break
     } */
-    case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
+    case true: {
+      // case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
       const text = document.createElement('span')
       text.innerHTML = 'Du hast Bock TUfast weiterzuentwickeln? '
       const interact = document.createElement('span')
       interact.className = 'interactLink'
       interact.textContent = 'Wir suchen dich!'
-      interact.addEventListener('click', () => window.open('https://tu-fast.de/jobs', '_blank'))
+      interact.addEventListener('click', () => {
+        // test url for tracking user interaction
+        chrome.runtime.sendMessage({
+          cmd: 'monitor',
+          target: 'banner'
+        })
+        // fetch('https://cosmic-sunflower-c94bed.netlify.app/api/banner')
+        window.open('https://tu-fast.de/jobs', '_blank')
+      })
       insertBanner('helpWanted', 'Verstärkung gesucht:', [text, interact])
       break
     }
     case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
       const text = document.createElement('span')
-      text.innerHTML = 'Die Opal-Personalisierung muss von dir leider erneut aktiviert werden(, wenn du magst). '
+      text.innerHTML =
+        'Die Opal-Personalisierung muss von dir leider erneut aktiviert werden(, wenn du magst). '
       const interact = document.createElement('span')
       interact.className = 'interactLink'
       interact.textContent = 'Hier aktivieren'
       interact.addEventListener('click', async () => {
-        await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
+        await chrome.runtime.sendMessage({
+          cmd: 'open_settings_page',
+          params: 'opal_inline_settings'
+        })
       })
-      insertBanner('mv3UpdateNotice', 'Großes TUfast Update!', [text, interact])
+      insertBanner('mv3UpdateNotice', 'Großes TUfast Update!', [
+        text,
+        interact
+      ])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
@@ -102,24 +126,34 @@
       interact.className = 'interactLink'
       interact.textContent = 'Los gehts!'
       interact.addEventListener('click', () => {
-        chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
+        chrome.runtime.sendMessage({
+          cmd: 'open_settings_page',
+          params: 'rocket_icons_settings'
+        })
       })
-      insertBanner('customizeRockets', 'Schnapp\' sie dir alle!', [text, interact])
+      insertBanner('customizeRockets', "Schnapp' sie dir alle!", [
+        text,
+        interact
+      ])
       break
     }
-    case !bannerArr.includes('submitReview') && !mostLikelySubmittedReview && savedClickCounter > 500: {
+    case !bannerArr.includes('submitReview') &&
+      !mostLikelySubmittedReview &&
+      savedClickCounter > 500: {
       const text = document.createElement('span')
-      text.innerHTML = 'Dann hau\' mal ne gute Bewertung im Store raus! '
+      text.innerHTML = "Dann hau' mal ne gute Bewertung im Store raus! "
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = 'Hier geht\'s lang!'
+      interact.textContent = "Hier geht's lang!"
       interact.addEventListener('click', async () => {
         const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
-        const webstoreLink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
+        const webstoreLink = isFirefox
+          ? 'https://addons.mozilla.org/de/firefox/addon/tufast/'
+          : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
         window.open(webstoreLink, '_blank')
         await chrome.storage.local.set({ mostLikelySubmittedReview: true })
       })
-      insertBanner('submitReview', 'Gefällt\'s dir?', [text, interact])
+      insertBanner('submitReview', "Gefällt's dir?", [text, interact])
       break
     }
   }

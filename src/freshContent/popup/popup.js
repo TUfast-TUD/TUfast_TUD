@@ -99,8 +99,9 @@ window.onload = async () => {
   const time = clicksToTime(result.savedClickCounter || 0)
   document.getElementById(
     'saved_clicks'
-  ).innerHTML = `<text><font color='green'>${result.savedClickCounter || 0
-    } Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>${time}</a></text>`
+  ).innerHTML = `<text><font color='green'>${
+    result.savedClickCounter || 0
+  } Klicks</font> gespart: <a href='javascript:void(0)' id='time' target='_blank'>${time}</a></text>`
   document.getElementById('time').onclick = openSettingsTimeSection
 
   // display banana at each end of semester for two weeks!
@@ -575,7 +576,9 @@ function displayCourseList (
         isRated
       ) &&
       ratingEnabledFlag
-    ) { listEntrywrapper.appendChild(rateEntryWrapper) }
+    ) {
+      listEntrywrapper.appendChild(rateEntryWrapper)
+    }
     htmlList.appendChild(listEntrywrapper)
   })
 
@@ -601,8 +604,12 @@ function displayCourseList (
   listImg.appendChild(img)
   listEntry.appendChild(listImg)
 
-  if (type === 'favoriten') { listText.innerHTML = 'Wechsel zu "Meine Kurse" ... ' }
-  if (type === 'meine_kurse') { listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...' }
+  if (type === 'favoriten') {
+    listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
+  }
+  if (type === 'meine_kurse') {
+    listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
+  }
 
   listEntry.appendChild(listText)
   htmlList.appendChild(listEntry)
@@ -627,7 +634,7 @@ async function switchCoursesToShow () {
 }
 
 async function saveTwoClicks () {
-  chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 2 })
+  chrome.runtime.sendMessage({ cmd: 'save_clicks', clickCount: 2 })
 }
 
 // changeIsEnabledState
@@ -648,10 +655,15 @@ async function saveEnabled () {
       chrome.storage.local.set({ isEnabled: !isEnabled.isEnabled }, resolve)
     )
   } else {
-    await new Promise(resolve => chrome.runtime.sendMessage({
-      cmd: 'open_settings_page',
-      params: 'auto_login_settings'
-    }, resolve))
+    await new Promise((resolve) =>
+      chrome.runtime.sendMessage(
+        {
+          cmd: 'open_settings_page',
+          params: 'auto_login_settings'
+        },
+        resolve
+      )
+    )
     window.close()
   }
 }

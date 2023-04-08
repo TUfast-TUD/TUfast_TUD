@@ -26,7 +26,7 @@ export async function forward (query: string): Promise<boolean> {
   const url = sites[query.toLowerCase()]?.url
   if (url) {
     console.log(`Forwarding to ${query} (${url})`)
-    chrome.runtime.sendMessage({ cmd: 'save_clicks', click_count: 1 }) // We don't need to wait for any (useless) response
+    chrome.runtime.sendMessage({ cmd: 'save_clicks', clickCount: 1 }) // We don't need to wait for any (useless) response
     window.location.replace(url)
     return true // This probably will never be reached, but we can use it
   }
@@ -34,6 +34,6 @@ export async function forward (query: string): Promise<boolean> {
 }
 
 export interface SENamespace {
-  fwdEnabled: typeof fwdEnabled
-  forward: typeof forward
+  fwdEnabled: typeof fwdEnabled;
+  forward: typeof forward;
 }
