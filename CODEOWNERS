@@ -6,5 +6,4 @@
 # the repo. Unless a later match takes precedence.
 *                   @TUfast-TUD/coreteam
 # dot-files should be handled by creators and lead
-.*                  @OliEfr @FugiMuffi
-snowpack.config.js  @FugiMuffi
+.*                  @OliEfr
