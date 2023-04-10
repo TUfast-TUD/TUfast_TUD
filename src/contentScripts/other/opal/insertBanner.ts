@@ -81,8 +81,7 @@
       insertBanner('customizeOpal', 'Wie du willst:', [text, interact])
       break
     } */
-    case true: {
-      // case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
+    case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
       const text = document.createElement('span')
       text.innerHTML = 'Du hast Bock TUfast weiterzuentwickeln? '
       const interact = document.createElement('span')
