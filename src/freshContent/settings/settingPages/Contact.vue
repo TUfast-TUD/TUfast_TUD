@@ -39,11 +39,6 @@
     >Noxdor</a>,
     <a
       class="link"
-      href="https://github.com/FugiMuffi"
-      target="_blank"
-    >Lucas</a>,
-    <a
-      class="link"
       href="https://github.com/OliEfr"
       target="_blank"
     >Oli</a>!
