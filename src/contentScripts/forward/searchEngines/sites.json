@@ -21,7 +21,7 @@
     },
     "tucloud": {
         "name": "Cloudstore TU Dresden",
-        "url": "https://cloudstore.zih.tu-dresden.de/index.php/login"
+        "url": "https://datashare.tu-dresden.de/n"
     },
     "tudmail": {
         "name": "Outlook Web App",
@@ -41,7 +41,7 @@
     },
     "tustore": {
         "name": "Cloudstore TU Dresden",
-        "url": "https://cloudstore.zih.tu-dresden.de/index.php/login"
+        "url": "https://datashare.tu-dresden.de/"
     },
     "videocampus": {
         "name": "Videocampus Sachsen",

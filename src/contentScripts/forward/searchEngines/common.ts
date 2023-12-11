@@ -6,12 +6,12 @@ import sites from './sites.json'
   opal: 'https://bildungsportal.sachsen.de/opal/shiblogin?0',
   selma: 'https://selma.tu-dresden.de/APP/EXTERNALPAGES/-N000000000000001,-N000155,-AEXT_willkommen',
   slub: 'https://www.slub-dresden.de/',
-  tucloud: 'https://cloudstore.zih.tu-dresden.de/index.php/login',
+  tucloud: 'https://datashare.tu-dresden.de/',
   tudmail: 'https://msx.tu-dresden.de/owa/#path=/mail',
   tumail: 'https://msx.tu-dresden.de/owa/#path=/mail',
   tumatrix: 'https://matrix.tu-dresden.de/#/',
   tumed: 'https://eportal.med.tu-dresden.de/login',
-  tustore: 'https://cloudstore.zih.tu-dresden.de/index.php/login',
+  tustore: 'hhttps://datashare.tu-dresden.de/n',
   videocampus: 'https://videocampus.sachsen.de/'
 } */
 
