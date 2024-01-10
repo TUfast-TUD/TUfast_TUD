@@ -203,6 +203,11 @@
       "js": ["contentScripts/forward/searchEngines/startpage.js"],
       "run_at": "document_idle",
       "matches": ["https://www.startpage.com/*"]
+    },
+    {
+      "js": ["contentScripts/other/otpSnatcher.js"],
+      "run_at": "document_idle",
+      "matches": ["https://selfservice.tu-dresden.de/services/idm/token/create"]
     }
   ],
   "icons": {

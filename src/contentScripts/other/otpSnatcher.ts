@@ -1,12 +1,13 @@
 const qrAvailable = !!document.getElementById('qr-code')
-const seedLink = document.querySelector('#seed-link a[href="otpauth://totp/"]')
+const seedLink = document.querySelector('#seed-link a[href^="otpauth://totp/"]')
 
 const indexedAvailable = document.getElementById('indexed-secret')
 
 if (qrAvailable && seedLink && showWarning()) {
   const seed = seedLink.getAttribute('href');
   if (seed) {
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user: "totp", pass: seed }, platform: "zih-totp" })
+    const secret = new URL(seed).searchParams.get('secret')
+    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user: "totp", pass: secret }, platform: "zih-totp" })
   }
 } else if (!!indexedAvailable && showWarning()) {
   const cols = indexedAvailable.querySelectorAll('tr:nth-of-type(2) td') as NodeListOf<HTMLTableCellElement>

@@ -1,5 +1,6 @@
 'use strict'
 import * as credentials from './modules/credentials'
+import * as otp from './modules/otp'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
@@ -225,6 +226,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // Asynchronous response
       credentials.deleteUserData(request.platform).then(sendResponse) // Response can probably be ignored
       return true // required for async sendResponse
+    case 'get_totp':
+      // Asynchronous response
+      otp.getTOTP(request.platform).then(sendResponse)
+      return true // required for async sendResponse
+    case 'get_iotp':
+        // Asynchronous response
+        if (!request.indexes) return sendResponse(undefined)
+        otp.getIOTP(request.platform, ...request.indexes).then(sendResponse)
+        return true // required for async sendResponse
     /* OWA */
     case 'enable_owa_fetch':
       owaFetch.enableOWAFetch().then(sendResponse)
