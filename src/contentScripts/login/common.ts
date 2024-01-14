@@ -17,18 +17,18 @@ export interface CookieSettings {
   usesIdp?: boolean;
 }
 
-export interface LoginFields {
-  usernameField: HTMLInputElement;
-  passwordField: HTMLInputElement;
-  submitButton?: HTMLElement;
-  otpSettings?: OTPSettings;
-}
-
 interface OTPSettings {
   input: HTMLInputElement | null;
   submitButton?: HTMLElement | null;
   type: 'totp' | 'iotp';
   indexes?: number[];
+}
+
+export interface LoginFields {
+  usernameField: HTMLInputElement;
+  passwordField: HTMLInputElement;
+  submitButton?: HTMLElement;
+  otpSettings?: OTPSettings;
 }
 
 // This is the default lifetime for the logout cookie in minutes.
@@ -165,15 +165,15 @@ export abstract class Login {
     await this.login(userData, loginFields)
   }
 
-  async fillOtp(otpSettings: OTPSettings): Promise<boolean> {
+  async fillOtp (otpSettings: OTPSettings): Promise<boolean> {
     if (!otpSettings.input) return false
 
-    let otp: string | undefined = undefined;
+    let otp: string | undefined
     if (otpSettings.type === 'totp') {
       otp = await chrome.runtime.sendMessage({ cmd: 'get_totp', platform: this.platform })
     } else if (otpSettings.type === 'iotp') {
       otp = await chrome.runtime.sendMessage({ cmd: 'get_iotp', platform: this.platform, indexes: otpSettings.indexes })
-    } 
+    }
 
     if (!otp || otp.length === 0) return false
 
