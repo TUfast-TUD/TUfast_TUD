@@ -231,10 +231,29 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       otp.getTOTP(request.platform).then(sendResponse)
       return true // required for async sendResponse
     case 'get_iotp':
-        // Asynchronous response
-        if (!request.indexes) return sendResponse(undefined)
-        otp.getIOTP(request.platform, ...request.indexes).then(sendResponse)
-        return true // required for async sendResponse
+      // Asynchronous response
+      if (!request.indexes) return sendResponse(undefined)
+      otp.getIOTP(request.platform, ...request.indexes).then(sendResponse)
+      return true // required for async sendResponse
+    case 'set_otp':
+      // Asynchronous response
+      switch (request.otpType) {
+        case 'totp': 
+          if (!request.secret) return sendResponse(false)
+          credentials.setUserData({user: 'totp', pass: request.secret}, (request.platform ?? 'zih') + '-totp').then(() => {
+            credentials.deleteUserData((request.platform ?? 'zih') + '-iotp').then(() => sendResponse(true))
+          })
+          return true // required for async sendResponse
+        
+        case 'iotp':
+          if (!request.secret) return sendResponse(false)
+          credentials.setUserData({user: 'iotp', pass: request.secret}, (request.platform ?? 'zih') + '-iotp').then(() => {
+            credentials.deleteUserData((request.platform ?? 'zih') + '-totp').then(() => sendResponse(true))
+          })
+          return true // required for async sendResponse
+        
+        default: return sendResponse(false)
+      }
     /* OWA */
     case 'enable_owa_fetch':
       owaFetch.enableOWAFetch().then(sendResponse)

@@ -7,7 +7,7 @@ if (qrAvailable && seedLink && showWarning()) {
   const seed = seedLink.getAttribute('href');
   if (seed) {
     const secret = new URL(seed).searchParams.get('secret')
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user: "totp", pass: secret }, platform: "zih-totp" })
+    chrome.runtime.sendMessage({ cmd: 'set_otp', otpType: 'totp', secret, platform: "zih" })
   }
 } else if (!!indexedAvailable && showWarning()) {
   const cols = indexedAvailable.querySelectorAll('tr:nth-of-type(2) td') as NodeListOf<HTMLTableCellElement>
@@ -15,7 +15,7 @@ if (qrAvailable && seedLink && showWarning()) {
   // Update it here!
   if (cols.length === 25) {
     const secret = Array.from(cols).map((col) => col.innerText).reduce((acc, cur) => acc + cur, '')
-    chrome.runtime.sendMessage({ cmd: 'set_user_data', userData: { user: "iotp", pass: secret }, platform: "zih-iotp" })
+    chrome.runtime.sendMessage({ cmd: 'set_otp', otpType: 'iotp', secret, platform: "zih" })
   }
 }
 
