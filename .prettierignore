@@ -1,0 +1,5 @@
+# Ignore artifacts:
+build
+
+# Exceptions
+src/freshContent/starRating.js
