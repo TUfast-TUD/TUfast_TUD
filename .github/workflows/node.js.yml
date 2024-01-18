@@ -26,6 +26,6 @@ jobs:
       # Install dependencies
       - run: npm ci
       # Use chrome manifest
-      - run: npm useChrome
+      - run: npm run useChrome
       # Run tests
       - run: npm run test
