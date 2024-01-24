@@ -109,6 +109,10 @@ import { DataTable } from 'simple-datatables'
 
   oldTable.parentNode?.insertBefore(newTable, oldTable)
 
+  // If "TS2578: Unused '@ts-expect-error' directive" appears then they probably fixxed their typescript
+  // definition and the following @ts-expect-error directive should be removed.
+  // See: https://fiduswriter.github.io/simple-datatables/documentation/Getting-Started#browser
+  // @ts-expect-error
   // eslint-disable-next-line no-unused-vars
   const _dataTable = new DataTable(newTable, {
     sortable: true,
