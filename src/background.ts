@@ -254,6 +254,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
         default: return sendResponse(false)
       }
+    case 'delete_otp':
+      credentials.deleteUserData((request.platform ?? 'zih') + '-totp')
+        .then(() => credentials.deleteUserData((request.platform ?? 'zih') + '-iotp'))
+        .then(() => sendResponse(true))
+      return true
     /* OWA */
     case 'enable_owa_fetch':
       owaFetch.enableOWAFetch().then(sendResponse)

@@ -42,6 +42,33 @@
       :disabled="!(passwordValid && usernameValid)"
       @click="submitSave"
     />
+  </div>
+
+  <div v-if="currentLogin2FA">
+    <p class="max-line p-margin">
+      Hier kannst du deinen TOTP Secret-Key speichern, sodass dein Second-Factor beim Login automatisch eingetragen wird.
+      Der Key ist Base32 enkodiert und sieht bspw. so aus: <br>
+      MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP
+    </p>
+    <div class="form">
+      <CustomInput
+        v-model="totpSecret"
+        v-model:valid="totpSecretValid"
+        :pattern="currentLogin2FA.totpSecretPattern"
+        :placeholder="currentLogin2FA.totpSecretPlaceholder"
+        :error-message="currentLogin2FA.totpSecretError"
+        warn
+      />
+      <CustomButton
+        title="TOTP Key lokal speichern"
+        :disabled="!totpSecretValid"
+        @click="submitSaveTotp"
+      />
+    </div>
+  </div>
+  <br>
+
+  <div class="form">
     <CustomButton
       title="Daten löschen"
       class="button--warn"
@@ -52,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, watchEffect } from 'vue'
+import { ref, defineComponent, watchEffect, computed } from 'vue'
 
 // components
 import Input from '../components/Input.vue'
@@ -63,6 +90,12 @@ import LoginTabs from '../components/LoginTabs.vue'
 import { useLogins } from '../composables/logins'
 import { useChrome } from '../composables/chrome'
 import { useUserData } from '../composables/user-data'
+
+import type { Login, Login2FA } from '../types/Login'
+
+function isLogin2FA (login: Login | Login2FA): login is Login2FA {
+  return 'totpSecretPattern' in login
+}
 
 export default defineComponent({
   components: {
@@ -81,6 +114,8 @@ export default defineComponent({
     const password = ref('')
     const usernameValid = ref(false)
     const passwordValid = ref(false)
+    const totpSecret = ref('')
+    const totpSecretValid = ref(false)
 
     const autoLoginActive = ref(false)
 
@@ -111,9 +146,29 @@ export default defineComponent({
       })) as boolean
     }
 
+    const submitSaveTotp = async () => {
+      const secret = totpSecret.value
+      await sendChromeRuntimeMessage({
+        cmd: 'set_otp',
+        otpType: 'totp',
+        secret,
+        platform: currentLogin.value.id
+      })
+      totpSecret.value = ''
+      totpSecretValid.value = false
+    }
+
+    const currentLogin2FA = computed(() => {
+      return isLogin2FA(currentLogin.value) ? currentLogin.value as Login2FA : null
+    })
+
     const submitDelete = async () => {
       // await this one to get back the new value in last line, otherwise could run too late
       await deleteUserData(currentLogin.value.id)
+      await sendChromeRuntimeMessage({
+        cmd: 'delete_otp',
+        platform: currentLogin.value.id
+      })
       currentLogin.value.state = (await sendChromeRuntimeMessage({
         cmd: 'check_user_data',
         platform: currentLogin.value.id
@@ -128,8 +183,12 @@ export default defineComponent({
       usernameValid,
       passwordValid,
       autoLoginActive,
+      currentLogin2FA,
+      totpSecret,
+      totpSecretValid,
       submitSave,
-      submitDelete
+      submitDelete,
+      submitSaveTotp
     }
   }
 })
