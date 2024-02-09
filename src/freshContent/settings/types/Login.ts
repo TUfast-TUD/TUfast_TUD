@@ -10,3 +10,9 @@ export interface Login {
   passwordPattern: RegExp,
   passwordError: string,
 }
+
+export interface Login2FA extends Login{
+  totpSecretPlaceholder: string,
+  totpSecretPattern: RegExp
+  totpSecretError: string
+}

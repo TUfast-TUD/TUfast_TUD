@@ -1,4 +1,4 @@
-import type { Login } from '../types/Login'
+import type { Login, Login2FA } from '../types/Login'
 
 export const useLogins = () => ({
   logins
@@ -17,8 +17,12 @@ const logins: Login[] = [
       "Der Nutzername hat die Form 's3276763' oder 'luka075d'. Speichere deine aktuelle Eingabe nur, wenn du dir sicher bist.",
     passwordPlaceholder: 'Passwort (selma-Login)',
     passwordPattern: /.{5,}/,
-    passwordError: 'Das Passwort muss mindestens 5 Zeichen lang sein!'
-  },
+    passwordError: 'Das Passwort muss mindestens 5 Zeichen lang sein!',
+    totpSecretPlaceholder: 'TOTP Secret-Key in Base32',
+    totpSecretPattern: /^[A-Z2-7]{32}$/, // Base32 encoded
+    totpSecretError:
+      'Der TOTP Secret-Key besteht aus Großbuchstaben (A bis Z) und Ziffern (2 bis 7) und ist 32 Zeichen lang.'
+  } as Login2FA,
   {
     id: 'slub',
     title: 'Werde automatisch auf der SLUB-Seite angemeldet.',
