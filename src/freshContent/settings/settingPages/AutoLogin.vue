@@ -156,6 +156,10 @@ export default defineComponent({
       })
       totpSecret.value = ''
       totpSecretValid.value = false
+      currentLogin.value.state = (await sendChromeRuntimeMessage({
+        cmd: 'check_user_data',
+        platform: currentLogin.value.id
+      })) as boolean
     }
 
     const currentLogin2FA = computed(() => {

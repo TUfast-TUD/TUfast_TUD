@@ -220,7 +220,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true // required for async sendResponse
     case 'check_user_data':
       // Asynchronous response
-      credentials.userDataExists(request.platform).then(sendResponse)
+      Promise.all([
+        credentials.userDataExists(request.platform),
+        credentials.userDataExists(request.platform + "-totp"),
+        credentials.userDataExists(request.platform + "-iotp")
+      ]).then(([loginExists, totpExists, iotpExists]) => {
+        sendResponse(loginExists || totpExists || iotpExists)
+      });
       return true // required for async sendResponse
     case 'delete_user_data':
       // Asynchronous response
