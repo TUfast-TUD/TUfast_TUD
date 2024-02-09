@@ -48,7 +48,8 @@
     <p class="max-line p-margin">
       Hier kannst du deinen TOTP Secret-Key speichern, sodass dein Second-Factor beim Login automatisch eingetragen wird.
       Der Key ist Base32 enkodiert und sieht bspw. so aus: <br>
-      MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP
+      MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP <br>
+      Für mehr Informationen zu TOTP und woher du deinen Secret-Key bekommst siehe <a href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md">hier</a>.
     </p>
     <div class="form">
       <CustomInput
