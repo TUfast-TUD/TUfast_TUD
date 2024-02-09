@@ -46,10 +46,10 @@
 
   <div v-if="currentLogin2FA">
     <p class="max-line p-margin">
-      Hier kannst du deinen TOTP Secret-Key speichern, sodass dein Second-Factor beim Login automatisch eingetragen wird.
+      Zwei-Faktor-Authentisierung (2FA): Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen TOTP Secret-Key speichern.
       Der Key ist Base32 enkodiert und sieht bspw. so aus: <br>
       MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP <br>
-      Für mehr Informationen zu TOTP und woher du deinen Secret-Key bekommst siehe <a href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md">hier</a>.
+      Hier findest du <a style="color:white" href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md">mehr Informationen und eine vollständige Anleitung zur Einrichtung</a>.
     </p>
     <div class="form">
       <CustomInput
