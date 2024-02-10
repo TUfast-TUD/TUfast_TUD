@@ -30,9 +30,6 @@ Danke an alle [Contributor](https://github.com/TUfast-TUD/TUfast_TUD/graphs/cont
 ## Zum Projekt beitragen (Contributing)
 Consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for information.
 
-## Roadmap
-Wir entwickeln stetig an TUfast, um es noch besser und für mehr Studierende verfügbar zu machen. Das Projekt wird im [Projekt-Board](https://github.com/orgs/TUfast-TUD/projects/1) organisiert.
-
 ## Kontakt, Support und Feedback
 Sende eine Mail an frage@tu-fast.de oder eröffne einen Issue.
 
