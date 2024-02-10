@@ -6,7 +6,7 @@
 
 ## Getting started with browser extensions
 
-If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/mv2/getstarted/). We are working with manifest v3 already. Alternatively you can use the instructions from [mozilla](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension). Make sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging.
+If you never worked with browser extensions before, you should read this very [nice tutorial](https://developer.chrome.com/docs/extensions/get-started). Alternatively you can use the instructions from [mozilla](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension). Make sure you understand the difference between content- and background-scripts, their scopes and how they can exchange information with messaging.
 
 ## Working with this repo
 
