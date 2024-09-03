@@ -61,7 +61,9 @@ const cookieSettings: CookieSettings = {
 
       const otpInput = document.getElementById('fudis_otp_input') as HTMLInputElement | null
       if (otpInput) {
-        const indexesText = otpInput.parentElement?.parentElement?.querySelector('td:first-of-type')?.textContent?.trim()
+        const indexesText = otpInput.parentElement?.parentElement?.parentElement
+          ?.querySelector('div:first-of-type')
+          ?.textContent?.trim()
         //                            find number & number | remove whole match | to numbers | to zero based (first index is 0)
         const indexes = indexesText?.match(/(\d+) & (\d+)/)?.slice(1, 3).map((x) => Number.parseInt(x, 10) - 1)
 
