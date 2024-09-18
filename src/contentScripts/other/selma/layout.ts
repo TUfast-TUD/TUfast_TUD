@@ -139,7 +139,10 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
         `;
       }
 
+      // Remove the inline vertical alignment
       elm.setAttribute("style", "vertical-align: middle;");
+
+      // Present the bar chart
       elm.innerHTML = `
         <svg
           viewBox="0 0 ${width} ${height}"
@@ -148,7 +151,21 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
         </svg>
       `;
 
+      // Insert placeholder element for proper spacing
+      // elm.parentElement!.append(document.createElement("td"));
+
       console.log(coarseValues);
     }
+
+    // Remove the inline style that sets a width on the top right table cell
+    const tableHeadRow = document.querySelector("thead>tr")!;
+
+    tableHeadRow.children.item(3)!.setAttribute("style", "");
+    // Add spacing element
+    /*
+    const spacer = document.createElement("th");
+    spacer.style.width = "2rem";
+    tableHeadRow.append(spacer);
+     */
   })();
 }

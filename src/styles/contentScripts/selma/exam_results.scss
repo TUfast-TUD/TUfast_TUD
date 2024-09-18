@@ -11,7 +11,7 @@ tbody > tr > th {
 tbody > tr > td {
   background: unset;
   border-bottom: 1px solid #ccc;
-  padding-top: 0.5rem;
+  // padding-top: 0.5rem;
 }
 
 tbody :nth-child(2n of tr) {
@@ -27,15 +27,20 @@ tbody > tr.tbdata > td ::first-line {
 }
 
 tbody > tr.tbdata > td > svg {
-  // width: 10rem;
+  height: 3lh;
   display: block;
-  // margin: auto;
-  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
   fill: #315584;
-  display: block;
-  max-height: 100%;
 }
 
 tbody > tr.tbdata > td :has(svg) {
   vertical-align: middle;
 }
+
+/*
+thead :nth-child(4) {
+  width: 100%;
+  padding: 0;
+}
+*/
