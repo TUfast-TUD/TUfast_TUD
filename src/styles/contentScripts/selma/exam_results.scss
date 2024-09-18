@@ -1,3 +1,7 @@
+table {
+  line-height: 1.5;
+}
+
 tbody > tr > th {
   padding-top: 2rem;
   padding-bottom: 0.5rem;
@@ -8,7 +12,6 @@ tbody > tr > td {
   background: unset;
   border-bottom: 1px solid #ccc;
   padding-top: 0.5rem;
-  padding-bottom: 2rem;
 }
 
 tbody :nth-child(2n of tr) {
@@ -21,4 +24,18 @@ tbody > tr.tbdata ::first-line {
 
 tbody > tr.tbdata > td ::first-line {
   color: #666;
+}
+
+tbody > tr.tbdata > td > svg {
+  // width: 10rem;
+  display: block;
+  // margin: auto;
+  height: 100%;
+  fill: #315584;
+  display: block;
+  max-height: 100%;
+}
+
+tbody > tr.tbdata > td :has(svg) {
+  vertical-align: middle;
 }
