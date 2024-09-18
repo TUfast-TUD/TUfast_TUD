@@ -1,0 +1,24 @@
+tbody > tr > th {
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
+  background: unset;
+}
+
+tbody > tr > td {
+  background: unset;
+  border-bottom: 1px solid #ccc;
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
+}
+
+tbody :nth-child(2n of tr) {
+  background: #e7eaf0;
+}
+
+tbody > tr.tbdata ::first-line {
+  color: black;
+}
+
+tbody > tr.tbdata > td ::first-line {
+  color: #666;
+}
