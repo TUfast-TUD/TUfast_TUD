@@ -208,13 +208,17 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
       }
     }
 
+    {
+      // Remove useless timespans
+      const dateElm = botRow.children.item(1)!;
+      dateElm.textContent = dateElm.textContent!.replaceAll("00:00-00:00", "");
+    }
+
     // Table head "Prüfungsleistung"
     document.querySelector("thead > tr > th#Name")!.textContent = "";
     // Table head "Termin"
     document.querySelector("thead > tr > th#Date")!.textContent =
       "Prüfungsleistung/Termin";
-
-    console.log(thElm);
   }
 }
 /*
