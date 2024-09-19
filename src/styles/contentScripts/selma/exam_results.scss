@@ -13,24 +13,28 @@ tbody > tr > th {
 tbody > tr > td {
   background: unset;
   border-bottom: 1px solid #ccc;
-  // padding-top: 0.5rem;
 }
 
 tbody :nth-child(2n of tr) {
   background: #e7eaf0;
 }
 
-tbody > tr.tbdata ::first-line {
-  color: black;
+tbody > tr ::first-line {
+  color: #002557;
 }
 
 // Make the bottom text gray in the "Prüfungsleistung section"
-tbody > tr.tbdata > td ::first-line {
+tbody > tr > td ::first-line {
   color: #666;
 }
 
+// Vertically center the text in all courseresult rows
+tbody > tr > td.tbdata {
+  vertical-align: middle;
+}
+
 // The diagram
-tbody > tr.tbdata > td > svg {
+tbody > tr > td > svg {
   height: 3lh;
   display: block;
   margin-left: auto;
@@ -45,17 +49,28 @@ tbody > tr.tbdata > td > svg {
   }
 }
 
-tbody > tr.tbdata > td :has(svg) {
+// Not sure if this helps
+tbody > tr > td :has(svg) {
   vertical-align: middle;
 }
 
+//Courseresults page
+tbody > tr > td.tbdata > svg {
+  height: 2lh;
+}
+
 // Date styling
+// tr.tbdata means it only applies to the Examresults page
 tbody > tr.tbdata :nth-child(2 of td) {
+  vertical-align: middle;
+}
+// td.tbdata means it only applies to the Courseresults page
+tbody > tr :nth-child(3 of td.tbdata) {
   vertical-align: middle;
 }
 
 // Grade styling
-tbody > tr.tbdata :nth-child(3 of td) {
+tbody > tr :nth-child(3 of td) {
   vertical-align: middle;
   text-align: center;
   font-size: 1.7rem;

@@ -2,7 +2,7 @@ const currentView = document.location.pathname;
 // Regex for extracting Programm name and arguments from a popup Script
 // This is used to get the URL which would be opened in a popup
 const popupScriptsRegex =
-  /Message = dl_popUp\("\/scripts\/mgrqispi\.dll\?APPNAME=CampusNet&PRGNAME=(\w+)&ARGUMENTS=([^"]+)"/;
+  /dl_popUp\("\/scripts\/mgrqispi\.dll\?APPNAME=CampusNet&PRGNAME=(\w+)&ARGUMENTS=([^"]+)"/;
 
 function scriptToURL(script: string): string {
   const matches = script.match(popupScriptsRegex)!;
@@ -28,8 +28,85 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
 
     row.removeChild(row.children.item(3)!);
 
+    // Extract script content
     const lastCol = row.children.item(3)!;
-    const scriptContent = lastCol.children.item(1)!.innerHTML;
+    const scriptElm = lastCol.children.item(1);
+    if (scriptElm === null) continue;
+
+    const scriptContent = scriptElm!.innerHTML;
+
+    const url = scriptToURL(scriptContent);
+
+    promises.push(
+      fetch(url).then(async (s) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(await s.text(), "text/html");
+
+        return { doc, elm: lastCol };
+      }),
+    );
+  }
+
+  (async () => {
+    const gradeOverviews = await Promise.all(promises);
+
+    for (let i = 0; i < gradeOverviews.length; i++) {
+      // Parse the grade distributions
+      const { doc, elm } = gradeOverviews[i];
+      const tableBody = doc.querySelector("tbody")!;
+      const values = [...tableBody.children].map((tr) => {
+        const gradeText = tr.children.item(0)!.textContent!.replace(",", ".");
+        const grade = parseFloat(gradeText);
+
+        const countText = tr.children.item(1)!.textContent!;
+        let count: number;
+        if (countText === "---") count = 0;
+        else count = parseInt(countText);
+
+        return {
+          grade,
+          count,
+        };
+      });
+      // .slice(0, -2); // Remove the 5.0 from all lists
+
+      // Present the bar chart
+      const graphSVG = Graphing.createSVGGradeDistributionGraph(values);
+      elm.innerHTML = graphSVG;
+    }
+
+    // Remove the inline style that sets a width on the top right table cell
+    const tableHeadRow = document.querySelector("thead>tr")!;
+    tableHeadRow.children.item(3)!.removeAttribute("style");
+  })();
+} else if (currentView.startsWith("/APP/COURSERESULTS/")) {
+  // Prüfungen > Ergebnisse
+
+  // Remove the "bestanden" section
+  const headRow = document.querySelector("thead>tr")!;
+  headRow.removeChild(headRow.children.item(3)!);
+
+  const body = document.querySelector("tbody")!;
+  const promises: Promise<{ doc: Document; elm: Element }>[] = [];
+  for (const row of body.children) {
+    // Remove useless inline styles which set the vertical alignment
+    for (const col of row.children) col.removeAttribute("style");
+
+    row.removeChild(row.children.item(3)!);
+
+    // Extract script content
+    const lastCol = row.children.item(4)!;
+    const scriptElm = lastCol.children.item(1);
+    if (scriptElm === null) {
+      const gradeElm = row.children.item(2)!;
+
+      // Replace text because it is too big
+      if (gradeElm.textContent!.includes("noch nicht gesetzt")) {
+        gradeElm.textContent = "/";
+      }
+      continue;
+    }
+    const scriptContent = scriptElm!.innerHTML;
 
     const url = scriptToURL(scriptContent);
 

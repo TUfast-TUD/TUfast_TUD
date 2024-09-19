@@ -94,7 +94,10 @@
     {
       "css": ["styles/contentScripts/selma/exam_results.css"],
       "run_at": "document_start",
-      "matches": ["https://selma.tu-dresden.de/APP/EXAMRESULTS/*"]
+      "matches": [
+        "https://selma.tu-dresden.de/APP/EXAMRESULTS/*",
+        "https://selma.tu-dresden.de/APP/COURSERESULTS/*"
+      ]
     },
     {
       "js": ["contentScripts/login/qis.js"],
