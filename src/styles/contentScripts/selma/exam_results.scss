@@ -1,7 +1,9 @@
+// Better spacing of the table content
 table {
   line-height: 1.5;
 }
 
+// Alternating background and separator lines
 tbody > tr > th {
   padding-top: 2rem;
   padding-bottom: 0.5rem;
@@ -22,25 +24,39 @@ tbody > tr.tbdata ::first-line {
   color: black;
 }
 
+// Make the bottom text gray in the "Prüfungsleistung section"
 tbody > tr.tbdata > td ::first-line {
   color: #666;
 }
 
+// The diagram
 tbody > tr.tbdata > td > svg {
   height: 3lh;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  fill: #315584;
+
+  .passed {
+    fill: #315584;
+  }
+
+  .failed {
+    fill: #dd272757;
+  }
 }
 
 tbody > tr.tbdata > td :has(svg) {
   vertical-align: middle;
 }
 
-/*
-thead :nth-child(4) {
-  width: 100%;
-  padding: 0;
+// Date styling
+tbody > tr.tbdata :nth-child(2 of td) {
+  vertical-align: middle;
 }
-*/
+
+// Grade styling
+tbody > tr.tbdata :nth-child(3 of td) {
+  vertical-align: middle;
+  text-align: center;
+  font-size: 1.7rem;
+}
