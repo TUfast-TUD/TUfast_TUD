@@ -83,17 +83,17 @@
     },
     {
       "css": ["styles/contentScripts/selma/base.css"],
-      "run_at": "document_start",
+      "run_at": "document_idle",
       "matches": ["https://selma.tu-dresden.de/*"]
     },
     {
       "css": ["styles/contentScripts/selma/my_exams.css"],
-      "run_at": "document_start",
+      "run_at": "document_idle",
       "matches": ["https://selma.tu-dresden.de/APP/MYEXAMS/*"]
     },
     {
       "css": ["styles/contentScripts/selma/exam_results.css"],
-      "run_at": "document_start",
+      "run_at": "document_idle",
       "matches": [
         "https://selma.tu-dresden.de/APP/EXAMRESULTS/*",
         "https://selma.tu-dresden.de/APP/COURSERESULTS/*"
