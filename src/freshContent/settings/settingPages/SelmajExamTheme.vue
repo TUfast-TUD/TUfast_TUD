@@ -13,39 +13,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, watch } from "vue";
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
 
 // components
-import Setting from "../components/Setting.vue";
+import Setting from '../components/Setting.vue'
 
 export default defineComponent({
   components: {
-    Setting,
+    Setting
   },
-  setup() {
-    const selmajExamTheme = ref(false);
+  setup () {
+    const selmajExamTheme = ref(false)
 
     onBeforeMount(async () => {
       const { selmajExamTheme: storedValue } = await chrome.storage.local.get([
-        "selmajExamTheme",
-      ]);
+        'selmajExamTheme'
+      ])
 
-      selmajExamTheme.value = storedValue ?? false;
-      watch(selmajExamTheme, valueUpdate);
-    });
+      selmajExamTheme.value = storedValue ?? false
+      watch(selmajExamTheme, valueUpdate)
+    })
 
     const valueUpdate = async () => {
       // When we got here, we have the permission
       await chrome.storage.local.set({
-        selmajExamTheme: selmajExamTheme.value,
-      });
-    };
+        selmajExamTheme: selmajExamTheme.value
+      })
+    }
 
     return {
-      selmajExamTheme,
-    };
-  },
-});
+      selmajExamTheme
+    }
+  }
+})
 </script>
 
 <style lang="sass" scoped>
