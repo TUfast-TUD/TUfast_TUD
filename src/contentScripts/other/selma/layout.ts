@@ -13,6 +13,18 @@ function scriptToURL(script: string): string {
   return `https://selma.tu-dresden.de/APP/${porgamName}/${prgArguments}`;
 }
 
+function mapGrade(gradeElm: Element) {
+  const grade = gradeElm.textContent!;
+
+  if (grade.includes("be")) {
+    gradeElm.textContent = "✔";
+    gradeElm.setAttribute("title", "Bestanden");
+  } else if (grade.includes("noch nicht gesetzt")) {
+    gradeElm.textContent = "🕓";
+    gradeElm.setAttribute("title", "Noch nicht gesetzt");
+  }
+}
+
 if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   // Prüfungen > Ergebnisse
 
@@ -107,20 +119,21 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
     // Remove useless inline styles which set the vertical alignment
     for (const col of row.children) col.removeAttribute("style");
 
+    // Remove "Status" column
     row.removeChild(row.children.item(3)!);
+
+    {
+      // Map grade descriptions to emojis
+      const gradeElm = row.children.item(2)!;
+      mapGrade(gradeElm);
+    }
 
     // Extract script content
     const lastCol = row.children.item(4)!;
     const scriptElm = lastCol.children.item(1);
-    if (scriptElm === null) {
-      const gradeElm = row.children.item(2)!;
+    // Skip courses wihtout grades
+    if (scriptElm === null) continue;
 
-      // Replace text because it is too big
-      if (gradeElm.textContent!.includes("noch nicht gesetzt")) {
-        gradeElm.textContent = "/";
-      }
-      continue;
-    }
     const scriptContent = scriptElm!.innerHTML;
 
     const url = scriptToURL(scriptContent);
@@ -343,41 +356,37 @@ namespace Graphing {
     // Drawing the Chart
     let barsSvg = "";
     const maxCount = maxGradeCount(coarseValues);
-    for (let x = 0; x < coarseValues.length - 1; x++) {
-      const { count } = coarseValues[x];
+    for (let x = 0; x < coarseValues.length; x++) {
+      const { grade, count } = coarseValues[x];
       const barHeight = (count / maxCount) * height;
+
+      // Allows styling the failed sections differently
+      let className = "passed";
+      if (grade >= 5.0) className = "failed";
 
       barsSvg += `
             <rect
-              class="passed"
+              class="${className}"
               x="${x * barWidth * (1 + spacing)}" y="${height - barHeight}"
               width="${barWidth}" height="${barHeight}"
               rx="5" ry="5"
-            />
+            >
+              <title>${grade.toFixed(2)}</title>
+            </rect>
           `;
-    }
-
-    // Color the last rect for 5.0 / failed differently
-    {
-      const x = coarseValues.length - 1;
-      const { count } = coarseValues[x];
-      const barHeight = (count / maxCount) * height;
-
-      barsSvg += `
-            <rect
-              class="failed"
-              x="${x * barWidth * (1 + spacing)}" y="${height - barHeight}"
-              width="${barWidth}" height="${barHeight}"
-              rx="5" ry="5"
-            />
-        `;
     }
 
     return `
       <svg
         viewBox="0 0 ${width} ${height}"
         xmlns="http://www.w3.org/2000/svg">
+         <!-- Allows the user to still see the detailed grade overview page -->
         <a href="${url}" target="popup">
+          <!-- Necessary so the whole chart is clickable -->
+          <rect
+            x="0" y="0" width="${width}" height="${height}"
+            fill="transparent"
+          />
           ${barsSvg}
         </a>
       </svg>
