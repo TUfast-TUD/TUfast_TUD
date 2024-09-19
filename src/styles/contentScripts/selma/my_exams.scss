@@ -1,14 +1,21 @@
-tbody > tr > th {
-  padding-top: 2rem;
-  padding-bottom: 0.5rem;
-  background: unset;
-}
+//Alternating background
+tbody > tr {
+  > th {
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
+    background: unset;
+  }
 
-tbody > tr > td {
-  background: unset;
-  border-bottom: 1px solid #ccc;
-  padding-top: 0.5rem;
-  padding-bottom: 2rem;
+  > td {
+    background: unset;
+    border-bottom: 1px solid #ccc;
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+
+    &.module-description {
+      padding-right: 2rem;
+    }
+  }
 }
 
 tbody :nth-child(4n of tr),

@@ -155,8 +155,68 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   // Remove the inline style that sets a width on the top right table cell
   const tableHeadRow = document.querySelector("thead>tr")!;
   tableHeadRow.children.item(3)!.removeAttribute("style");
-}
 
+  /*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+} else if (currentView.startsWith("/APP/MYEXAMS/")) {
+  // Prüfungen
+
+  const body = document.querySelector("tbody")!;
+  const rows = [...body.children];
+  for (let i = 0; i < rows.length; i += 2) {
+    const topRow = rows[i];
+    const botRow = rows[i + 1];
+
+    const thElm = topRow.children.item(0)!;
+    thElm.className += " module-description";
+    const [moduleCode, hyperlink, _space, _br, description] = thElm.childNodes;
+
+    {
+      // Move exam type and examinant to the right side
+      thElm.setAttribute("colspan", "2");
+      const newSpacer = document.createElement("th");
+      newSpacer.setAttribute("colspan", "2");
+      newSpacer.replaceChildren(...botRow.children.item(1)!.children);
+      topRow.appendChild(newSpacer);
+    }
+
+    {
+      // Move the description under the exam title
+      // Remove useless first element
+      botRow.removeChild(botRow.children.item(1)!);
+      const newDescriptionElm = botRow.children.item(0)!;
+      newDescriptionElm.setAttribute("colspan", "2");
+      newDescriptionElm.className += " module-description";
+
+      // Some entries do not have a description
+      if (thElm.childNodes.length === 5) {
+        newDescriptionElm.appendChild(description);
+      }
+    }
+
+    // Table head "Prüfungsleistung"
+    document.querySelector("thead > tr > th#Name")!.textContent = "";
+    // Table head "Termin"
+    document.querySelector("thead > tr > th#Date")!.textContent =
+      "Prüfungsleistung/Termin";
+
+    console.log(thElm);
+  }
+}
 /*
 
 
