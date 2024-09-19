@@ -75,3 +75,17 @@ tbody > tr :nth-child(3 of td) {
   text-align: center;
   font-size: 1.7rem;
 }
+
+// Align the Header texts
+thead > tr {
+  // "Note" / "Modulenote"
+  :nth-child(3) {
+    text-align: center;
+  }
+
+  // "Notenverteilung"
+  :nth-last-child(1),
+  :nth-last-child(2) {
+    text-align: center;
+  }
+}

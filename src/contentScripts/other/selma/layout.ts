@@ -19,6 +19,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   // Remove the "gut/befriedigend" section
   const headRow = document.querySelector("thead>tr")!;
   headRow.removeChild(headRow.children.item(3)!);
+  headRow.children.item(3)!.textContent = "Notenverteilung";
 
   const body = document.querySelector("tbody")!;
   const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = [];
@@ -91,6 +92,14 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   // Remove the "bestanden" section
   const headRow = document.querySelector("thead>tr")!;
   headRow.removeChild(headRow.children.item(3)!);
+
+  // Add "Notenverteilung" header
+  {
+    headRow.children.item(3)!.removeAttribute("colspan");
+    const newHeader = document.createElement("th");
+    newHeader.textContent = "Notenverteilung";
+    headRow.appendChild(newHeader);
+  }
 
   const body = document.querySelector("tbody")!;
   const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = [];
