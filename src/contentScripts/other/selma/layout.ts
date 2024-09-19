@@ -47,12 +47,8 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
     );
   }
 
-  (async () => {
-    const gradeOverviews = await Promise.all(promises);
-
-    for (let i = 0; i < gradeOverviews.length; i++) {
-      // Parse the grade distributions
-      const { doc, elm, url } = gradeOverviews[i];
+  promises.forEach((p) =>
+    p.then(({ doc, elm, url }) => {
       const tableBody = doc.querySelector("tbody")!;
       const values = [...tableBody.children].map((tr) => {
         const gradeText = tr.children.item(0)!.textContent!.replace(",", ".");
@@ -73,12 +69,12 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
       // Present the bar chart
       const graphSVG = Graphing.createSVGGradeDistributionGraph(values, url);
       elm.innerHTML = graphSVG;
-    }
+    }),
+  );
 
-    // Remove the inline style that sets a width on the top right table cell
-    const tableHeadRow = document.querySelector("thead>tr")!;
-    tableHeadRow.children.item(3)!.removeAttribute("style");
-  })();
+  // Remove the inline style that sets a width on the top right table cell
+  const tableHeadRow = document.querySelector("thead>tr")!;
+  tableHeadRow.children.item(3)!.removeAttribute("style");
   /*
 
 
@@ -130,12 +126,9 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
     );
   }
 
-  (async () => {
-    const gradeOverviews = await Promise.all(promises);
-
-    for (let i = 0; i < gradeOverviews.length; i++) {
+  promises.forEach((p) =>
+    p.then(({ doc, elm, url }) => {
       // Parse the grade distributions
-      const { doc, elm, url } = gradeOverviews[i];
       const tableBody = doc.querySelector("tbody")!;
       const values = [...tableBody.children].map((tr) => {
         const gradeText = tr.children.item(0)!.textContent!.replace(",", ".");
@@ -156,12 +149,12 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
       // Present the bar chart
       const graphSVG = Graphing.createSVGGradeDistributionGraph(values, url);
       elm.innerHTML = graphSVG;
-    }
+    }),
+  );
 
-    // Remove the inline style that sets a width on the top right table cell
-    const tableHeadRow = document.querySelector("thead>tr")!;
-    tableHeadRow.children.item(3)!.removeAttribute("style");
-  })();
+  // Remove the inline style that sets a width on the top right table cell
+  const tableHeadRow = document.querySelector("thead>tr")!;
+  tableHeadRow.children.item(3)!.removeAttribute("style");
 }
 
 /*
