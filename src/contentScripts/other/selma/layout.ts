@@ -21,7 +21,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   headRow.removeChild(headRow.children.item(3)!);
 
   const body = document.querySelector("tbody")!;
-  const promises: Promise<{ doc: Document; elm: Element }>[] = [];
+  const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = [];
   for (const row of body.children) {
     // Remove useless inline styles which set the vertical alignment
     for (const col of row.children) col.removeAttribute("style");
@@ -42,7 +42,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(await s.text(), "text/html");
 
-        return { doc, elm: lastCol };
+        return { doc, elm: lastCol, url };
       }),
     );
   }
@@ -52,7 +52,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
 
     for (let i = 0; i < gradeOverviews.length; i++) {
       // Parse the grade distributions
-      const { doc, elm } = gradeOverviews[i];
+      const { doc, elm, url } = gradeOverviews[i];
       const tableBody = doc.querySelector("tbody")!;
       const values = [...tableBody.children].map((tr) => {
         const gradeText = tr.children.item(0)!.textContent!.replace(",", ".");
@@ -71,7 +71,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
       // .slice(0, -2); // Remove the 5.0 from all lists
 
       // Present the bar chart
-      const graphSVG = Graphing.createSVGGradeDistributionGraph(values);
+      const graphSVG = Graphing.createSVGGradeDistributionGraph(values, url);
       elm.innerHTML = graphSVG;
     }
 
@@ -79,6 +79,16 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
     const tableHeadRow = document.querySelector("thead>tr")!;
     tableHeadRow.children.item(3)!.removeAttribute("style");
   })();
+  /*
+
+
+
+
+
+
+
+
+*/
 } else if (currentView.startsWith("/APP/COURSERESULTS/")) {
   // Prüfungen > Ergebnisse
 
@@ -87,7 +97,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   headRow.removeChild(headRow.children.item(3)!);
 
   const body = document.querySelector("tbody")!;
-  const promises: Promise<{ doc: Document; elm: Element }>[] = [];
+  const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = [];
   for (const row of body.children) {
     // Remove useless inline styles which set the vertical alignment
     for (const col of row.children) col.removeAttribute("style");
@@ -115,7 +125,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(await s.text(), "text/html");
 
-        return { doc, elm: lastCol };
+        return { doc, elm: lastCol, url };
       }),
     );
   }
@@ -125,7 +135,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
 
     for (let i = 0; i < gradeOverviews.length; i++) {
       // Parse the grade distributions
-      const { doc, elm } = gradeOverviews[i];
+      const { doc, elm, url } = gradeOverviews[i];
       const tableBody = doc.querySelector("tbody")!;
       const values = [...tableBody.children].map((tr) => {
         const gradeText = tr.children.item(0)!.textContent!.replace(",", ".");
@@ -144,7 +154,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
       // .slice(0, -2); // Remove the 5.0 from all lists
 
       // Present the bar chart
-      const graphSVG = Graphing.createSVGGradeDistributionGraph(values);
+      const graphSVG = Graphing.createSVGGradeDistributionGraph(values, url);
       elm.innerHTML = graphSVG;
     }
 
@@ -253,6 +263,7 @@ namespace Graphing {
 
   export function createSVGGradeDistributionGraph(
     values: GradeStat[],
+    url: string,
     width = 200,
     height = 100,
   ): string {
@@ -300,7 +311,9 @@ namespace Graphing {
       <svg
         viewBox="0 0 ${width} ${height}"
         xmlns="http://www.w3.org/2000/svg">
-        ${barsSvg}
+        <a href="${url}" target="popup">
+          ${barsSvg}
+        </a>
       </svg>
     `;
   }
