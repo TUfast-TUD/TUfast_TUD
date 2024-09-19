@@ -113,6 +113,7 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
     headRow.appendChild(newHeader);
   }
 
+  // Create the grade distribution graph
   const body = document.querySelector("tbody")!;
   const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = [];
   for (const row of body.children) {
@@ -177,6 +178,61 @@ if (currentView.startsWith("/APP/EXAMRESULTS/")) {
   // Remove the inline style that sets a width on the top right table cell
   const tableHeadRow = document.querySelector("thead>tr")!;
   tableHeadRow.children.item(3)!.removeAttribute("style");
+
+  // Draw try counter in the jExam style
+  for (const row of body.children) {
+    const linkElm = row.children.item(3)!;
+    const scriptElm = linkElm.children.item(1);
+    // Skip courses wihtout grades
+    if (scriptElm === null) continue;
+
+    // Extract script content
+    const scriptContent = scriptElm!.innerHTML;
+    const url = scriptToURL(scriptContent);
+
+    // Center the remaining "> Prüfung" links so it looks better after everything loaded
+    linkElm.setAttribute("style", "text-align: center;");
+
+    // Fetch data
+    fetch(url).then(async (s) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(await s.text(), "text/html");
+
+      // Extracting the grades of individual tries
+      const tableBody = doc.querySelector("tbody")!;
+      const tries: Graphing.Try[] = [];
+
+      // Search for tries
+      for (let i = 0; i < tableBody.children.length; i++) {
+        const trElm = tableBody.children.item(i)!;
+        const firstTd = trElm.querySelector("td.level02");
+
+        // Before a row with a grade there is always a row containing "Modulprüfung"
+        if (firstTd !== null && firstTd.textContent === "Modulprüfung") {
+          // Next row will contain a try with a grade
+          let nextTrElm = tableBody.children.item(i + 1)!;
+          // Sometimes there is an extra row
+          if (nextTrElm.children.length === 1) {
+            nextTrElm = tableBody.children.item(i + 2)!;
+          }
+
+          // Extract information
+          const date = nextTrElm.children.item(2)!.textContent!.trim();
+          const grade = nextTrElm.children.item(3)!.textContent!.trim();
+          tries.push({ date, grade });
+
+          i += 2;
+          continue;
+        }
+      }
+
+      // Unable to parse the grades from the tables
+      if (tries.length === 0) return;
+
+      // Replace link with a chart
+      linkElm.innerHTML = Graphing.createJExamTryCounter(tries, url);
+    });
+  }
 
   /*
 
@@ -294,7 +350,7 @@ Proabably a proper bundler config would be better
 */
 
 namespace Graphing {
-  type GradeStat = {
+  export type GradeStat = {
     grade: number;
     count: number;
   };
@@ -378,6 +434,7 @@ namespace Graphing {
 
     return `
       <svg
+        class="distribution-chart"
         viewBox="0 0 ${width} ${height}"
         xmlns="http://www.w3.org/2000/svg">
          <!-- Allows the user to still see the detailed grade overview page -->
@@ -388,6 +445,68 @@ namespace Graphing {
             fill="transparent"
           />
           ${barsSvg}
+        </a>
+      </svg>
+    `;
+  }
+
+  export type Try = { date: string; grade: string };
+
+  export function createJExamTryCounter(
+    tries: Try[],
+    url: string,
+    width = 200,
+  ): string {
+    // Spacing in percent of circle width
+    const spacing = 0.2;
+    // Stroke width in percent of radius
+    const strokeWidth = 0.12;
+
+    const filledRadius = (width * (1 - spacing)) / 6;
+    const strokedRadius = filledRadius * (1 - strokeWidth);
+    // +1 to prevent weird cut off
+    const height = Math.ceil(2 * filledRadius) + 1;
+
+    // Drawing the Chart
+    let svgContent = "";
+
+    for (let x = 0; x < 3; x++) {
+      let className = "used";
+      let tooltip = "";
+      if (x >= tries.length) {
+        // Mark open try
+        className = "open";
+      } else {
+        const { date, grade } = tries[x];
+        tooltip = `<title>${grade}\n${date}</title>`;
+      }
+
+      svgContent += `
+            <circle
+              class="${className}"
+              stroke-width="${strokeWidth * height}"
+              cx="${2 * x * filledRadius * (1 + spacing) + filledRadius}"
+              cy="${filledRadius}"
+              r="${className === "used" ? filledRadius : strokedRadius}"
+            >
+              ${tooltip}
+            </circle>
+          `;
+    }
+
+    return `
+      <svg
+        class="tries-counter"
+        viewBox="0 0 ${width} ${height}"
+        xmlns="http://www.w3.org/2000/svg">
+         <!-- Allows the user to still see the detailed grade overview page -->
+        <a href="${url}" target="popup">
+          <!-- Necessary so the whole chart is clickable -->
+          <rect
+            x="0" y="0" width="${width}" height="${height}"
+            fill="transparent"
+          />
+          ${svgContent}
         </a>
       </svg>
     `;

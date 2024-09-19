@@ -35,7 +35,6 @@ tbody > tr > td.tbdata {
 
 // The diagram
 tbody > tr > td > svg {
-  height: 3lh;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -47,6 +46,23 @@ tbody > tr > td > svg {
   .failed {
     fill: #dd272757;
   }
+
+  .used {
+    fill: #315584;
+  }
+
+  .open {
+    fill: none;
+    stroke: #315584aa;
+  }
+
+  &.distribution-chart {
+    height: 3lh;
+  }
+
+  &.tries-counter {
+    height: 1lh;
+  }
 }
 
 // Not sure if this helps
@@ -55,7 +71,7 @@ tbody > tr > td :has(svg) {
 }
 
 //Courseresults page
-tbody > tr > td.tbdata > svg {
+tbody > tr > td.tbdata > svg.distribution-chart {
   height: 2lh;
 }
 
