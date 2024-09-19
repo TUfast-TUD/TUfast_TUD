@@ -74,30 +74,14 @@
       ]
     },
     {
-      "js": [
-        "contentScripts/login/selma.js",
-        "contentScripts/other/selma/layout.js"
-      ],
+      "js": ["contentScripts/login/selma.js"],
       "run_at": "document_idle",
       "matches": ["https://selma.tu-dresden.de/*"]
     },
     {
-      "css": ["styles/contentScripts/selma/base.css"],
-      "run_at": "document_idle",
+      "js": ["contentScripts/other/selma/layout.js"],
+      "run_at": "document_start",
       "matches": ["https://selma.tu-dresden.de/*"]
-    },
-    {
-      "css": ["styles/contentScripts/selma/my_exams.css"],
-      "run_at": "document_idle",
-      "matches": ["https://selma.tu-dresden.de/APP/MYEXAMS/*"]
-    },
-    {
-      "css": ["styles/contentScripts/selma/exam_results.css"],
-      "run_at": "document_idle",
-      "matches": [
-        "https://selma.tu-dresden.de/APP/EXAMRESULTS/*",
-        "https://selma.tu-dresden.de/APP/COURSERESULTS/*"
-      ]
     },
     {
       "js": ["contentScripts/login/qis.js"],
@@ -274,6 +258,10 @@
     {
       "resources": ["contentScripts/other/hisqis/*", "snowpack/pkg/*"],
       "matches": ["https://qis.dez.tu-dresden.de/*"]
+    },
+    {
+      "resources": ["styles/contentScripts/selma/*"],
+      "matches": ["https://selma.tu-dresden.de/*"]
     }
   ],
   "manifest_version": 3,

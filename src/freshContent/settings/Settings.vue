@@ -78,6 +78,7 @@ import AutoLogin from './settingPages/AutoLogin.vue'
 import Email from './settingPages/Email.vue'
 import OpalCourses from './settingPages/OpalCourses.vue'
 import ImproveOpal from './settingPages/ImproveOpal.vue'
+import SelmajExamTheme from './settingPages/SelmajExamTheme.vue'
 import Shortcuts from './settingPages/Shortcuts.vue'
 import SearchEngines from './settingPages/SearchEngines.vue'
 import Rockets from './settingPages/Rockets.vue'
@@ -115,6 +116,7 @@ export default defineComponent({
     Email,
     OpalCourses,
     ImproveOpal,
+    SelmajExamTheme,
     Shortcuts,
     SearchEngines,
     Rockets,
