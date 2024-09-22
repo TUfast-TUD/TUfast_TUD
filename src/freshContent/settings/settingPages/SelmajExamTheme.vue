@@ -2,12 +2,18 @@
   <p class="max-line p-margin">
     Dieses feature fügt Graphen für die Notenverteilungen und Versuchstracker in
     selma hinzu. Zusätzlich wird das layout und design angepasst
-    umbenutzerfreundlicher zu sein.
+    um benutzerfreundlicher zu sein.
+    Zusätzlich kann man sich seine Note in der Notenverteilung anzeigen lassen.
   </p>
 
   <Setting
     v-model="selmajExamTheme"
     txt="Das jExam theme bei Selma benutzen"
+    class="setting"
+  />
+  <Setting
+    v-model="selmajExamThemeWG"
+    txt="Anzeigen der eigenen Note"
     class="setting"
   />
 </template>
@@ -24,6 +30,7 @@ export default defineComponent({
   },
   setup () {
     const selmajExamTheme = ref(false)
+    const selmajExamThemeWG = ref(false)
 
     onBeforeMount(async () => {
       const { selmajExamTheme: storedValue } = await chrome.storage.local.get([
@@ -32,6 +39,11 @@ export default defineComponent({
 
       selmajExamTheme.value = storedValue ?? false
       watch(selmajExamTheme, valueUpdate)
+
+      const { selmajExamThemeWG: storedValueWG } = await chrome.storage.local.get(
+        ['selmajExamThemeWG'])
+      selmajExamThemeWG.value = storedValueWG ?? false
+      watch(selmajExamThemeWG, valueUpdateWG)
     })
 
     const valueUpdate = async () => {
@@ -40,9 +52,15 @@ export default defineComponent({
         selmajExamTheme: selmajExamTheme.value
       })
     }
+    const valueUpdateWG = async () => {
+      await chrome.storage.local.set({
+        selmajExamThemeWG: selmajExamThemeWG.value
+      })
+    }
 
     return {
-      selmajExamTheme
+      selmajExamTheme,
+      selmajExamThemeWG
     }
   }
 })
