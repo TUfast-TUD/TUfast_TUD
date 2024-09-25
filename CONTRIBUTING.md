@@ -14,16 +14,17 @@ Everything related to the browser extension can be found in `/src`: `manifest.js
 
 Steps to contribute (that's standard [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)):
 
-1. Create a local clone of this repo `git clone <url-of-your-repo>`
-2. Checkout develop branch `git checkout develop`
-3. Create new feature branch from develop `git checkout -b <my_new_feature_branch>`
-4. Install dependencies `npm ci` - you need node package manager npm installed
-5. Run `npm run useChrome` or `npm run useFF` to select the browser you are developing for - this will copy the corresponding manifest.json
-6. Run `npm run dev` while developing. This is will compile sass and ts files and watch for changes in your working tree.
-7. Load the ./build directory as an unpacked extension in your browser
-8. Run tests locally before committing code `npm run test`
-9. Create a pull request against `develop`
-10. Await our review
+1. Create a local clone of this repo `git clone <url-of-your-repo>`.
+2. Checkout develop branch `git checkout develop`.
+3. Create new feature branch from develop `git checkout -b <my_new_feature_branch>`.
+4. Install dependencies `npm ci`. (You need node package manager `npm` installed.)
+5. Run `npm run useChrome` or `npm run useFF` to select the browser you are developing for - this will copy the corresponding manifest.json.
+6. Run `npm run dev` while developing. This is will compile `.sass` and `.ts` files and watch for changes in your working tree.
+7. Load the `./build` directory as an unpacked extension in your browser to test the extension.
+8. Run tests locally before committing code: `npm run test`.
+9. **Increase the version number of the package according to [SemVer](https://semver.org/).**
+10. Create a pull request against `develop`.
+11. Await our review.
 
 **Note:** as a member of TUfast you can work in this repo directly, e.g. you can create branches and push to them, making the contribution process easier.
 
