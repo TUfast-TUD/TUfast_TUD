@@ -117,7 +117,8 @@ namespace Graphing {
         }
         if (ownGrade === -1) {
           className = 'nograde'
-        }
+        } else if (ownGrade === -10) {
+          className = 'animate-loading'}
 
         barsSvg += `
             <rect
@@ -609,6 +610,9 @@ function applyChanges () {
 
           const url = scriptToURL(scriptContent)
 
+          // loading animation
+          lastCol.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -10)
+
           let ownGradeNum = 0
           const gradeElm = row.children.item(2)?.innerHTML.trim()
           if (gradeElm?.includes(',')) {
@@ -732,6 +736,8 @@ function applyChanges () {
       const scriptContent = scriptElm!.innerHTML
 
       const url = scriptToURL(scriptContent)
+      // loading animation
+      lastCol.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -10)
 
       promises.push(
         fetch(url).then(async (s) => {
