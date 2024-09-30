@@ -244,6 +244,7 @@ function createCreditsBanner () {
   disableButton.onclick = async (event) => {
     event.preventDefault()
     await chrome.storage.local.set({ improveSelma: false })
+    window.location.reload()
   }
   credits.appendChild(disableButton)
 
