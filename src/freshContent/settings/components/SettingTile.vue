@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 // Temporary fix: We need to import the Componentes for the icons manually as no global usage is possible
-import { PhLockKey, PhNotification, PhListDashes, PhSparkle, PhGauge, PhGoogleLogo, PhRocket, PhEnvelopeOpen } from '@dnlsndr/vue-phosphor-icons'
+import { PhLockKey, PhNotification, PhListDashes, PhSparkle, PhChartBar, PhGauge, PhGoogleLogo, PhRocket, PhEnvelopeOpen } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
   components: {
@@ -28,6 +28,7 @@ export default defineComponent({
     PhListDashes,
     PhSparkle,
     PhGauge,
+    PhChartBar,
     PhGoogleLogo,
     PhRocket,
     PhEnvelopeOpen
