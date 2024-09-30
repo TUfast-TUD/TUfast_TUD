@@ -36,7 +36,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'theme',
         'studiengang',
         'hisqisPimpedTable',
-        'selmajExamTheme',
+        'improveSelma',
         'savedClickCounter',
         'saved_click_counter', // legacy
         'Rocket', // legacy
@@ -58,7 +58,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.dashboardDisplay === 'undefined') updateObj.dashboardDisplay = 'favoriten'
       if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
-      if (typeof currentSettings.selmajExamTheme === 'undefined') updateObj.selmajExamTheme = true
+      if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = JSON.stringify(rockets.default)

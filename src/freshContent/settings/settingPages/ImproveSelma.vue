@@ -6,7 +6,7 @@
   </p>
 
   <Setting
-    v-model="selmajExamTheme"
+    v-model="improveSelma"
     txt="Das verbesserte layout und die Notenverteilung bei Selma benutzen"
     class="setting"
   />
@@ -23,26 +23,26 @@ export default defineComponent({
     Setting
   },
   setup () {
-    const selmajExamTheme = ref(true)
+    const improveSelma = ref(true)
 
     onBeforeMount(async () => {
-      const { selmajExamTheme: storedValue } = await chrome.storage.local.get([
-        'selmajExamTheme'
+      const { improveSelma: storedValue } = await chrome.storage.local.get([
+        'improveSelma'
       ])
 
-      selmajExamTheme.value = storedValue ?? true
-      watch(selmajExamTheme, valueUpdate)
+      improveSelma.value = storedValue ?? true
+      watch(improveSelma, valueUpdate)
     })
 
     const valueUpdate = async () => {
       // When we got here, we have the permission
       await chrome.storage.local.set({
-        selmajExamTheme: selmajExamTheme.value
+        improveSelma: improveSelma.value
       })
     }
 
     return {
-      selmajExamTheme
+      improveSelma
     }
   }
 })

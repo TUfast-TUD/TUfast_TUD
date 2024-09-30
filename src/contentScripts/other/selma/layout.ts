@@ -208,11 +208,11 @@ Actual logic
 */
 
 (async () => {
-  const { selmajExamTheme } = await chrome.storage.local.get([
-    'selmajExamTheme'
+  const { improveSelma } = await chrome.storage.local.get([
+    'improveSelma'
   ])
 
-  if (!selmajExamTheme) return
+  if (!improveSelma) return
 
   // Apply all custom changes
   document.addEventListener('DOMContentLoaded', eventListener, false)
