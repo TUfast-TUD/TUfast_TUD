@@ -209,7 +209,9 @@ Actual logic
 
 // Create a small banner that indicates the user that the site was modified
 // It also adds a small toggle to disable the table
-function createCreditsBanner () {
+async function createCreditsBanner() {
+  const { improveSelma: settingEnabled } = await chrome.storage.local.get(['improveSelma'])
+  
   const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
   const credits = document.createElement('p')
 
@@ -217,7 +219,7 @@ function createCreditsBanner () {
   credits.style.marginRight = '0'
   credits.style.color = '#002557' // Selma theme color
   credits.id = 'TUfastCredits'
-  credits.innerHTML = `Table powered by
+  credits.innerHTML = `Table ${settingEnabled ? 'powered by' : 'disabled'}
     <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
     <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
     by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>
@@ -239,11 +241,11 @@ function createCreditsBanner () {
 
   // Tooltip
   disableButton.title =
-    'Disable the "ImproveSelma" feature and reload the page to apply the change.'
-  disableButton.textContent = 'Disable'
+    'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
+  disableButton.textContent = settingEnabled ? 'Deactivate' : 'Activate'
   disableButton.onclick = async (event) => {
     event.preventDefault()
-    await chrome.storage.local.set({ improveSelma: false })
+    await chrome.storage.local.set({ improveSelma: !settingEnabled })
     window.location.reload()
   }
   credits.appendChild(disableButton)
@@ -254,13 +256,19 @@ function createCreditsBanner () {
 (async () => {
   const { improveSelma } = await chrome.storage.local.get(['improveSelma'])
 
-  if (!improveSelma) return
-
   // Apply all custom changes
-  document.addEventListener('DOMContentLoaded', eventListener)
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Add Credit banner with toggle button
+    const creditElm = await createCreditsBanner()
+    document.querySelector('.semesterChoice')!.appendChild(creditElm)
+    
+    if (!improveSelma) return
+    
+    eventListener();
+  })
 })()
 
-function eventListener () {
+async function eventListener () {
   document.removeEventListener('DOMContentLoaded', eventListener)
 
   // Inject css
@@ -273,12 +281,6 @@ function eventListener () {
   }
   if (currentView.startsWith('/APP/MYEXAMS/')) {
     injectCSS('my_exams')
-  }
-
-  // Add Credit banner
-  {
-    const creditElm = createCreditsBanner()
-    document.querySelector('.semesterChoice')!.appendChild(creditElm)
   }
 
   applyChanges()
