@@ -207,19 +207,60 @@ Actual logic
 ---
 */
 
+// Create a small banner that indicates the user that the site was modified
+// It also adds a small toggle to disable the table
+function createCreditsBanner () {
+  const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
+  const credits = document.createElement('p')
+
+  credits.style.margin = 'auto'
+  credits.style.marginRight = '0'
+  credits.style.color = '#002557' // Selma theme color
+  credits.id = 'TUfastCredits'
+  credits.innerHTML = `Table powered by
+    <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
+    <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
+    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>
+    `
+
+  const disableButton = document.createElement('button')
+  // Similiar style to logout button
+  disableButton.setAttribute(
+    'style',
+    `
+    border: 1px solid rgb(255, 255, 255);
+    color: rgb(221, 39, 39);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    margin: 0 1rem;
+    border-radius: 0px;
+    `
+  )
+
+  // Tooltip
+  disableButton.title =
+    'Disable the "ImproveSelma" feature and reload the page to apply the change.'
+  disableButton.textContent = 'Disable'
+  disableButton.onclick = async (event) => {
+    event.preventDefault()
+    await chrome.storage.local.set({ improveSelma: false })
+  }
+  credits.appendChild(disableButton)
+
+  return credits
+}
+
 (async () => {
-  const { improveSelma } = await chrome.storage.local.get([
-    'improveSelma'
-  ])
+  const { improveSelma } = await chrome.storage.local.get(['improveSelma'])
 
   if (!improveSelma) return
 
   // Apply all custom changes
-  document.addEventListener('DOMContentLoaded', eventListener, false)
+  document.addEventListener('DOMContentLoaded', eventListener)
 })()
 
 function eventListener () {
-  document.removeEventListener('DOMContentLoaded', eventListener, false)
+  document.removeEventListener('DOMContentLoaded', eventListener)
 
   // Inject css
   injectCSS('base')
@@ -231,6 +272,12 @@ function eventListener () {
   }
   if (currentView.startsWith('/APP/MYEXAMS/')) {
     injectCSS('my_exams')
+  }
+
+  // Add Credit banner
+  {
+    const creditElm = createCreditsBanner()
+    document.querySelector('.semesterChoice')!.appendChild(creditElm)
   }
 
   applyChanges()
