@@ -20,6 +20,11 @@
         "settingsPage": "ImproveOpal"
     },
     {
+        "title": "Selma verbessern",
+        "icon": "PhChartBar",
+        "settingsPage": "ImproveSelma"
+    },
+    {
         "title": "Shortcuts",
         "icon": "PhGauge",
         "settingsPage": "Shortcuts"

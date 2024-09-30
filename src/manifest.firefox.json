@@ -2,10 +2,7 @@
   "name": "TUfast TU Dresden",
   "version": "8.1.0.2",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
-  "permissions": [
-    "storage",
-    "alarms"
-  ],
+  "permissions": ["storage", "alarms"],
   "optional_permissions": [
     "tabs",
     "notifications",
@@ -13,9 +10,7 @@
     "webRequest",
     "webRequestBlocking"
   ],
-  "host_permissions": [
-    "*://*/"
-  ],
+  "host_permissions": ["*://*/"],
   "background": {
     "scripts": ["background.js"],
     "type": "module"
@@ -81,6 +76,11 @@
     {
       "js": ["contentScripts/login/selma.js"],
       "run_at": "document_idle",
+      "matches": ["https://selma.tu-dresden.de/*"]
+    },
+    {
+      "js": ["contentScripts/other/selma/layout.js"],
+      "run_at": "document_start",
       "matches": ["https://selma.tu-dresden.de/*"]
     },
     {
@@ -223,47 +223,47 @@
     "page": "freshContent/settings/index.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": [{
-    "resources": [
-      "assets/*",
-      "contentScripts/other/notification.js"
-    ],
-    "matches": ["<all_urls>"]
-  },
-  {
-    "resources": ["contentScripts/login/common.js"],
-    "matches": [
-      "https://*.tu-dresden.de/*",
-      "https://bildungsportal.sachsen.de/*",
-      "https://videocampus.sachsen.de/*",
-      "https://git.imld.de/*",
-      "https://gitlab.hrz.tu-chemnitz.de/*",
-      "https://*.slub-dresden.de/*"
-    ]
-  },
-  {
-    "resources": [
-      "contentScripts/forward/searchEngines/common.js",
-      "contentScripts/forward/searchEngines/sites.json*"
-    ],
-    "matches": [
-      "https://www.startpage.com/*",
-      "https://www.qwant.com/*",
-      "https://www.google.de/*",
-      "https://www.google.com/*",
-      "https://duckduckgo.com/*",
-      "https://www.ecosia.org/*",
-      "https://www.bing.com/*",
-      "https://search.brave.com/*"
-    ]
-  },
-  {
-    "resources": [
-      "contentScripts/other/hisqis/*",
-      "snowpack/pkg/*"
-    ],
-    "matches": ["https://qis.dez.tu-dresden.de/*"]
-  }],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*", "contentScripts/other/notification.js"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["contentScripts/login/common.js"],
+      "matches": [
+        "https://*.tu-dresden.de/*",
+        "https://bildungsportal.sachsen.de/*",
+        "https://videocampus.sachsen.de/*",
+        "https://git.imld.de/*",
+        "https://gitlab.hrz.tu-chemnitz.de/*",
+        "https://*.slub-dresden.de/*"
+      ]
+    },
+    {
+      "resources": [
+        "contentScripts/forward/searchEngines/common.js",
+        "contentScripts/forward/searchEngines/sites.json*"
+      ],
+      "matches": [
+        "https://www.startpage.com/*",
+        "https://www.qwant.com/*",
+        "https://www.google.de/*",
+        "https://www.google.com/*",
+        "https://duckduckgo.com/*",
+        "https://www.ecosia.org/*",
+        "https://www.bing.com/*",
+        "https://search.brave.com/*"
+      ]
+    },
+    {
+      "resources": ["contentScripts/other/hisqis/*", "snowpack/pkg/*"],
+      "matches": ["https://qis.dez.tu-dresden.de/*"]
+    },
+    {
+      "resources": ["styles/contentScripts/selma/*"],
+      "matches": ["https://selma.tu-dresden.de/*"]
+    }
+  ],
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {

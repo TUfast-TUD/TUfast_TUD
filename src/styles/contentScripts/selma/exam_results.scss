@@ -1,0 +1,107 @@
+// Better spacing of the table content
+table {
+  line-height: 1.5;
+}
+
+// Alternating background and separator lines
+tbody > tr > th {
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
+  background: unset;
+}
+
+tbody > tr > td {
+  background: unset;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody :nth-child(2n of tr) {
+  background: #e7eaf0;
+}
+
+tbody > tr ::first-line {
+  color: #002557;
+}
+
+// Make the bottom text gray in the "Prüfungsleistung section"
+tbody > tr > td ::first-line {
+  color: #666;
+}
+
+// Vertically center the text in all courseresult rows
+tbody > tr > td.tbdata {
+  vertical-align: middle;
+}
+
+// The diagram
+tbody > tr > td > svg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  .passed {
+    fill: #315584;
+  }
+
+  .failed {
+    fill: #dd2727aa;
+  }
+
+  .used {
+    fill: #315584;
+  }
+
+  .open {
+    fill: none;
+    stroke: #315584aa;
+  }
+
+  &.distribution-chart {
+    height: 3lh;
+  }
+
+  &.tries-counter {
+    height: 1lh;
+  }
+}
+
+// Not sure if this helps
+tbody > tr > td :has(svg) {
+  vertical-align: middle;
+}
+
+//Courseresults page
+tbody > tr > td.tbdata > svg.distribution-chart {
+  height: 2lh;
+}
+
+// Date styling
+// tr.tbdata means it only applies to the Examresults page
+tbody > tr.tbdata :nth-child(2 of td) {
+  vertical-align: middle;
+}
+// td.tbdata means it only applies to the Courseresults page
+tbody > tr :nth-child(3 of td.tbdata) {
+  vertical-align: middle;
+}
+
+// Grade styling
+tbody > tr :nth-child(3 of td) {
+  vertical-align: middle;
+  text-align: center;
+  font-size: 1.7rem;
+}
+
+// Align the Header texts
+thead > tr {
+  // "Note" / "Modulenote"
+  :nth-child(3) {
+    text-align: center;
+  }
+
+  // "Notenverteilung"
+  :nth-last-child(1),
+  :nth-last-child(2) {
+    text-align: center;
+  }
+}

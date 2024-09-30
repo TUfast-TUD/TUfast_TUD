@@ -84,6 +84,11 @@
       "matches": ["https://selma.tu-dresden.de/*"]
     },
     {
+      "js": ["contentScripts/other/selma/layout.js"],
+      "run_at": "document_start",
+      "matches": ["https://selma.tu-dresden.de/*"]
+    },
+    {
       "js": ["contentScripts/login/qis.js"],
       "run_at": "document_idle",
       "matches": ["https://qis.dez.tu-dresden.de/qisserver/servlet*"]
@@ -263,6 +268,10 @@
       "snowpack/pkg/*"
     ],
     "matches": ["https://qis.dez.tu-dresden.de/*"]
+  },
+  {
+    "resources": ["styles/contentScripts/selma/*"],
+    "matches": ["https://selma.tu-dresden.de/*"]
   }],
   "manifest_version": 3,
   "commands": {
