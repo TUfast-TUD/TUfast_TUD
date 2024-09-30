@@ -1,13 +1,13 @@
 <template>
   <p class="max-line p-margin">
-    Dieses feature fügt Graphen für die Notenverteilungen und Versuchstracker in
-    selma hinzu. Zusätzlich wird das layout und design angepasst
-    um allgemein benutzerfreundlicher zu sein.
+    Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in
+    Selma hinzu. Zusätzlich wird das Layout und Design angepasst,
+    um benutzerfreundlicher zu sein.
   </p>
 
   <Setting
     v-model="improveSelma"
-    txt="Das verbesserte layout und die Notenverteilung bei Selma benutzen"
+    txt="Das verbesserte Layout und die Notenverteilung bei Selma benutzen"
     class="setting"
   />
 </template>

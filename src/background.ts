@@ -21,7 +21,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         theme: 'system',
         studiengang: 'general',
         hisqisPimpedTable: true,
-        bannersShown: ['mv3UpdateNotice']
+        bannersShown: ['mv3UpdateNotice'],
+        improveSelma: true,
       })
       await openSettingsPage('first_visit')
       break
