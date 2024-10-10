@@ -12,7 +12,6 @@ function scriptToURL (script: string): string {
 
   return `https://selma.tu-dresden.de/APP/${porgamName}/${prgArguments}`
 }
-let selmajExamThemeShowGrade = false
 function mapGrade (gradeElm: Element) {
   const grade = gradeElm.textContent!
 
@@ -105,20 +104,20 @@ namespace Graphing {
 
         // Allows styling the failed sections differently
         let className = 'passed'
-        console.log(selmajExamThemeShowGrade)
         if (grade >= 5.0) {
-          if ((ownGrade === grade) && selmajExamThemeShowGrade) {
+          if (ownGrade === grade) {
             className = 'failedgrade'
           } else {
             className = 'failed'
           }
-        } else if ((grade === ownGrade) && selmajExamThemeShowGrade) {
+        } else if (grade === ownGrade) {
           className = 'grade'
         }
         if (ownGrade === -1) {
           className = 'nograde'
         } else if (ownGrade === -10) {
-          className = 'animate-loading'}
+          className = 'animate-loading'
+        }
 
         barsSvg += `
             <rect
@@ -228,11 +227,6 @@ Actual logic
 
   if (!selmajExamTheme) return
 
-  const { selmajExamThemeWG } = await chrome.storage.local.get([
-    'selmajExamThemeWG'
-  ])
-  if (selmajExamThemeWG) selmajExamThemeShowGrade = true
-
   // Apply all custom changes
   document.addEventListener('DOMContentLoaded', eventListener, false)
 })()
@@ -262,320 +256,40 @@ const NULL_TABLE = [
     count: 1
   },
   {
-    grade: 1.05,
-    count: 0
-  },
-  {
-    grade: 1.1,
-    count: 0
-  },
-  {
-    grade: 1.15,
-    count: 0
-  },
-  {
-    grade: 1.2,
-    count: 0
-  },
-  {
-    grade: 1.25,
-    count: 0
-  },
-  {
     grade: 1.3,
     count: 1
-  },
-  {
-    grade: 1.35,
-    count: 0
-  },
-  {
-    grade: 1.4,
-    count: 0
-  },
-  {
-    grade: 1.45,
-    count: 0
-  },
-  {
-    grade: 1.5,
-    count: 0
-  },
-  {
-    grade: 1.55,
-    count: 0
-  },
-  {
-    grade: 1.6,
-    count: 0
-  },
-  {
-    grade: 1.65,
-    count: 0
   },
   {
     grade: 1.7,
     count: 1
   },
   {
-    grade: 1.75,
-    count: 0
-  },
-  {
-    grade: 1.8,
-    count: 0
-  },
-  {
-    grade: 1.85,
-    count: 0
-  },
-  {
-    grade: 1.9,
-    count: 0
-  },
-  {
-    grade: 1.95,
-    count: 0
-  },
-  {
     grade: 2,
     count: 1
-  },
-  {
-    grade: 2.05,
-    count: 0
-  },
-  {
-    grade: 2.1,
-    count: 0
-  },
-  {
-    grade: 2.15,
-    count: 0
-  },
-  {
-    grade: 2.2,
-    count: 0
-  },
-  {
-    grade: 2.25,
-    count: 0
   },
   {
     grade: 2.3,
     count: 1
   },
   {
-    grade: 2.35,
-    count: 0
-  },
-  {
-    grade: 2.4,
-    count: 0
-  },
-  {
-    grade: 2.45,
-    count: 0
-  },
-  {
-    grade: 2.5,
-    count: 0
-  },
-  {
-    grade: 2.55,
-    count: 0
-  },
-  {
-    grade: 2.6,
-    count: 0
-  },
-  {
-    grade: 2.65,
-    count: 0
-  },
-  {
     grade: 2.7,
     count: 1
-  },
-  {
-    grade: 2.75,
-    count: 0
-  },
-  {
-    grade: 2.8,
-    count: 0
-  },
-  {
-    grade: 2.85,
-    count: 0
-  },
-  {
-    grade: 2.9,
-    count: 0
-  },
-  {
-    grade: 2.95,
-    count: 0
   },
   {
     grade: 3,
     count: 1
   },
   {
-    grade: 3.05,
-    count: 0
-  },
-  {
-    grade: 3.1,
-    count: 0
-  },
-  {
-    grade: 3.15,
-    count: 0
-  },
-  {
-    grade: 3.2,
-    count: 0
-  },
-  {
-    grade: 3.25,
-    count: 0
-  },
-  {
     grade: 3.3,
     count: 1
-  },
-  {
-    grade: 3.35,
-    count: 0
-  },
-  {
-    grade: 3.4,
-    count: 0
-  },
-  {
-    grade: 3.45,
-    count: 0
-  },
-  {
-    grade: 3.5,
-    count: 0
-  },
-  {
-    grade: 3.55,
-    count: 0
-  },
-  {
-    grade: 3.6,
-    count: 0
-  },
-  {
-    grade: 3.65,
-    count: 0
   },
   {
     grade: 3.7,
     count: 1
   },
   {
-    grade: 3.75,
-    count: 0
-  },
-  {
-    grade: 3.8,
-    count: 0
-  },
-  {
-    grade: 3.85,
-    count: 0
-  },
-  {
-    grade: 3.9,
-    count: 0
-  },
-  {
-    grade: 3.95,
-    count: 0
-  },
-  {
     grade: 4,
     count: 1
-  },
-  {
-    grade: 4.05,
-    count: 0
-  },
-  {
-    grade: 4.1,
-    count: 0
-  },
-  {
-    grade: 4.15,
-    count: 0
-  },
-  {
-    grade: 4.2,
-    count: 0
-  },
-  {
-    grade: 4.25,
-    count: 0
-  },
-  {
-    grade: 4.3,
-    count: 0
-  },
-  {
-    grade: 4.35,
-    count: 0
-  },
-  {
-    grade: 4.4,
-    count: 0
-  },
-  {
-    grade: 4.45,
-    count: 0
-  },
-  {
-    grade: 4.5,
-    count: 0
-  },
-  {
-    grade: 4.55,
-    count: 0
-  },
-  {
-    grade: 4.6,
-    count: 0
-  },
-  {
-    grade: 4.65,
-    count: 0
-  },
-  {
-    grade: 4.7,
-    count: 0
-  },
-  {
-    grade: 4.75,
-    count: 0
-  },
-  {
-    grade: 4.8,
-    count: 0
-  },
-  {
-    grade: 4.85,
-    count: 0
-  },
-  {
-    grade: 4.9,
-    count: 0
-  },
-  {
-    grade: 4.95,
-    count: 0
   },
   {
     grade: 5,
@@ -644,7 +358,7 @@ function applyChanges () {
         promises.forEach((p) =>
           p.then(({ doc, elm, url, ownGrade }) => {
             const tableBody = doc.querySelector('tbody')!
-            let graphSVG = ''
+            let graphSVG
             if (tableBody === null) {
               // No grades available
               graphSVG = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
@@ -666,6 +380,8 @@ function applyChanges () {
               graphSVG = Graphing.createSVGGradeDistributionGraph(values, url, ownGrade)
             }
             elm.innerHTML = graphSVG
+          }).catch(({ elm, url }) => {
+            elm.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
           })
         )
 
@@ -753,7 +469,7 @@ function applyChanges () {
       p.then(({ doc, elm, url, ownGrade }) => {
         // Parse the grade distributions
         const tableBody = doc.querySelector('tbody')!
-        let graphSVG = ''
+        let graphSVG
         if (tableBody === null) {
           // No grades available
           graphSVG = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
@@ -778,6 +494,8 @@ function applyChanges () {
 
         // Present the bar chart
         elm.innerHTML = graphSVG
+      }).catch(({ elm, url }) => {
+        elm.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
       })
     )
 
@@ -828,7 +546,6 @@ function applyChanges () {
                 tries.push({ date, grade })
 
                 i += 2
-                continue
               }
             }
 
