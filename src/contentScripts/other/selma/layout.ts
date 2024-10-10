@@ -236,7 +236,7 @@ async function createCreditsBanner() {
   credits.innerHTML = `Table ${settingEnabled ? 'powered by' : 'disabled'}
     <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
     <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
-    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>
+    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>, <a href="https://github.com/t0mbrn" target="_blank">Tom</a>
     `
 
   const disableButton = document.createElement('button')
@@ -355,8 +355,9 @@ function applyChanges () {
 
     // Remove the "gut/befriedigend" section
     const headRow = document.querySelector('thead>tr')!
-    headRow.removeChild(headRow.children.item(3)!)
     headRow.children.item(3)!.textContent = 'Notenverteilung'
+    headRow.removeChild(headRow.children.item(4)!)
+
 
     const body = document.querySelector('tbody')!
     const promises: Promise<{ doc: Document; elm: Element; url: string; ownGrade: number}>[] =
@@ -450,6 +451,7 @@ function applyChanges () {
     // Remove the "bestanden" section
     const headRow = document.querySelector('thead>tr')!
     headRow.removeChild(headRow.children.item(3)!)
+    headRow.children.item(3)!.textContent = 'Versuche'
 
     // Add "Notenverteilung" header
     {
