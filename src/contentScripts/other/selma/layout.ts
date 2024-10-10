@@ -12,6 +12,7 @@ function scriptToURL (script: string): string {
 
   return `https://selma.tu-dresden.de/APP/${porgamName}/${prgArguments}`
 }
+
 function mapGrade (gradeElm: Element) {
   const grade = gradeElm.textContent!
 
@@ -29,7 +30,7 @@ function injectCSS (filename: string) {
   style.rel = 'stylesheet'
   style.type = 'text/css'
   style.href = chrome.runtime.getURL(
-        `styles/contentScripts/selma/${filename}.css`
+    `styles/contentScripts/selma/${filename}.css`
   );
 
   (document.head || document.body || document.documentElement).appendChild(
@@ -46,80 +47,80 @@ Proabably a proper bundler config would be better
 */
 
 namespace Graphing {
-    export type GradeStat = {
-        grade: number;
-        count: number;
-    };
+  export type GradeStat = {
+    grade: number;
+    count: number;
+  };
 
-    function maxGradeCount (values: GradeStat[]): number {
-      let max = 0
-      for (const { count } of values) {
-        if (count > max) max = count
+  function maxGradeCount (values: GradeStat[]): number {
+    let max = 0
+    for (const { count } of values) {
+      if (count > max) max = count
+    }
+    return max
+  }
+
+  // Reduce the grade increments
+  function pickGradeSubset (values: GradeStat[]): GradeStat[] {
+    const increments = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 5]
+
+    const newValues = increments.map((inc) => ({
+      grade: inc,
+      count: 0
+    }))
+
+    let currentIncIndex = 0
+    for (const { grade, count } of values) {
+      // Skip to next increment if we reached it's lower end
+      if (currentIncIndex !== increments.length - 1) {
+        const nextIncrement = increments[currentIncIndex + 1]
+        if (grade >= nextIncrement) currentIncIndex++
       }
-      return max
+      newValues[currentIncIndex].count += count
     }
 
-    // Reduce the grade increments
-    function pickGradeSubset (values: GradeStat[]): GradeStat[] {
-      const increments = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 5]
+    return newValues
+  }
 
-      const newValues = increments.map((inc) => ({
-        grade: inc,
-        count: 0
-      }))
+  export function createSVGGradeDistributionGraph (
+    values: GradeStat[],
+    url: string,
+    ownGrade: number,
+    width = 200,
+    height = 100
+  ): string {
+    // Reduce the bar count / pick bigger intervals
+    const coarseValues = pickGradeSubset(values)
 
-      let currentIncIndex = 0
-      for (const { grade, count } of values) {
-        // Skip to next increment if we reached it's lower end
-        if (currentIncIndex !== increments.length - 1) {
-          const nextIncrement = increments[currentIncIndex + 1]
-          if (grade >= nextIncrement) currentIncIndex++
+    // Spacing in percent of bar width
+    const spacing = 0.1
+    const barWidth = (width * (1 - spacing)) / coarseValues.length
+
+    // Drawing the Chart
+    let barsSvg = ''
+    const maxCount = maxGradeCount(coarseValues)
+    for (let x = 0; x < coarseValues.length; x++) {
+      const { grade, count } = coarseValues[x]
+      const barHeight = (count / maxCount) * height
+
+      // Allows styling the failed sections differently
+      let className = 'passed'
+      if (grade >= 5.0) {
+        if (ownGrade === grade) {
+          className = 'failedgrade'
+        } else {
+          className = 'failed'
         }
-        newValues[currentIncIndex].count += count
+      } else if (grade === ownGrade) {
+        className = 'grade'
+      }
+      if (ownGrade === -1) {
+        className = 'nograde'
+      } else if (ownGrade === -10) {
+        className = 'animate-loading'
       }
 
-      return newValues
-    }
-
-    export function createSVGGradeDistributionGraph (
-      values: GradeStat[],
-      url: string,
-      ownGrade: number,
-      width = 200,
-      height = 100
-    ): string {
-      // Reduce the bar count / pick bigger intervals
-      const coarseValues = pickGradeSubset(values)
-
-      // Spacing in percent of bar width
-      const spacing = 0.1
-      const barWidth = (width * (1 - spacing)) / coarseValues.length
-
-      // Drawing the Chart
-      let barsSvg = ''
-      const maxCount = maxGradeCount(coarseValues)
-      for (let x = 0; x < coarseValues.length; x++) {
-        const { grade, count } = coarseValues[x]
-        const barHeight = (count / maxCount) * height
-
-        // Allows styling the failed sections differently
-        let className = 'passed'
-        if (grade >= 5.0) {
-          if (ownGrade === grade) {
-            className = 'failedgrade'
-          } else {
-            className = 'failed'
-          }
-        } else if (grade === ownGrade) {
-          className = 'grade'
-        }
-        if (ownGrade === -1) {
-          className = 'nograde'
-        } else if (ownGrade === -10) {
-          className = 'animate-loading'
-        }
-
-        barsSvg += `
+      barsSvg += `
             <rect
               class="${className}"
               x="${x * barWidth * (1 + spacing)}" y="${height - barHeight}"
@@ -129,9 +130,9 @@ namespace Graphing {
               <title>${grade.toFixed(2)}</title>
             </rect>
           `
-      }
+    }
 
-      return `
+    return `
       <svg
         class="distribution-chart"
         viewBox="0 0 ${width} ${height}"
@@ -147,40 +148,40 @@ namespace Graphing {
         </a>
       </svg>
     `
-    }
+  }
 
-    export type Try = { date: string; grade: string };
+  export type Try = { date: string; grade: string };
 
-    export function createJExamTryCounter (
-      tries: Try[],
-      url: string,
-      width = 200
-    ): string {
-      // Spacing in percent of circle width
-      const spacing = 0.2
-      // Stroke width in percent of radius
-      const strokeWidth = 0.12
+  export function createJExamTryCounter (
+    tries: Try[],
+    url: string,
+    width = 200
+  ): string {
+    // Spacing in percent of circle width
+    const spacing = 0.2
+    // Stroke width in percent of radius
+    const strokeWidth = 0.12
 
-      const filledRadius = (width * (1 - spacing)) / 6
-      const strokedRadius = filledRadius * (1 - strokeWidth)
-      // +1 to prevent weird cut off
-      const height = Math.ceil(2 * filledRadius) + 1
+    const filledRadius = (width * (1 - spacing)) / 6
+    const strokedRadius = filledRadius * (1 - strokeWidth)
+    // +1 to prevent weird cut off
+    const height = Math.ceil(2 * filledRadius) + 1
 
-      // Drawing the Chart
-      let svgContent = ''
+    // Drawing the Chart
+    let svgContent = ''
 
-      for (let x = 0; x < 3; x++) {
-        let className = 'used'
-        let tooltip = ''
-        if (x >= tries.length) {
-          // Mark open try
-          className = 'open'
-        } else {
-          const { date, grade } = tries[x]
-          tooltip = `<title>${grade}\n${date}</title>`
-        }
+    for (let x = 0; x < 3; x++) {
+      let className = 'used'
+      let tooltip = ''
+      if (x >= tries.length) {
+        // Mark open try
+        className = 'open'
+      } else {
+        const { date, grade } = tries[x]
+        tooltip = `<title>${grade}\n${date}</title>`
+      }
 
-        svgContent += `
+      svgContent += `
             <circle
               class="${className}"
               stroke-width="${strokeWidth * height}"
@@ -191,9 +192,9 @@ namespace Graphing {
               ${tooltip}
             </circle>
           `
-      }
+    }
 
-      return `
+    return `
       <svg
         class="tries-counter"
         viewBox="0 0 ${width} ${height}"
@@ -209,7 +210,7 @@ namespace Graphing {
         </a>
       </svg>
     `
-    }
+  }
 }
 
 /*
@@ -220,25 +221,76 @@ Actual logic
 ---
 */
 
-(async () => {
-  const { selmajExamTheme } = await chrome.storage.local.get([
-    'selmajExamTheme'
-  ])
+// Create a small banner that indicates the user that the site was modified
+// It also adds a small toggle to disable the table
+async function createCreditsBanner() {
+  const { improveSelma: settingEnabled } = await chrome.storage.local.get(['improveSelma'])
+  
+  const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
+  const credits = document.createElement('p')
 
-  if (!selmajExamTheme) return
+  credits.style.margin = 'auto'
+  credits.style.marginRight = '0'
+  credits.style.color = '#002557' // Selma theme color
+  credits.id = 'TUfastCredits'
+  credits.innerHTML = `Table ${settingEnabled ? 'powered by' : 'disabled'}
+    <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
+    <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
+    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>
+    `
+
+  const disableButton = document.createElement('button')
+  // Similiar style to logout button
+  disableButton.setAttribute(
+    'style',
+    `
+    border: 1px solid rgb(255, 255, 255);
+    color: rgb(221, 39, 39);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    margin: 0 1rem;
+    border-radius: 0px;
+    `
+  )
+
+  // Tooltip
+  disableButton.title =
+    'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
+  disableButton.textContent = settingEnabled ? 'Deactivate' : 'Activate'
+  disableButton.onclick = async (event) => {
+    event.preventDefault()
+    await chrome.storage.local.set({ improveSelma: !settingEnabled })
+    window.location.reload()
+  }
+  credits.appendChild(disableButton)
+
+  return credits
+}
+
+(async () => {
+  const { improveSelma } = await chrome.storage.local.get(['improveSelma'])
 
   // Apply all custom changes
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Add Credit banner with toggle button
+    const creditElm = await createCreditsBanner()
+    document.querySelector('.semesterChoice')!.appendChild(creditElm)
+    
+    if (!improveSelma) return
+    
+    eventListener();
+  })
   document.addEventListener('DOMContentLoaded', eventListener, false)
 })()
 
-function eventListener () {
-  document.removeEventListener('DOMContentLoaded', eventListener, false)
+async function eventListener () {
+  document.removeEventListener('DOMContentLoaded', eventListener)
 
   // Inject css
   injectCSS('base')
   if (
     currentView.startsWith('/APP/EXAMRESULTS/') ||
-        currentView.startsWith('/APP/COURSERESULTS/')
+    currentView.startsWith('/APP/COURSERESULTS/')
   ) {
     injectCSS('exam_results')
   }
@@ -304,93 +356,94 @@ function applyChanges () {
     // Remove the "gut/befriedigend" section
     const headRow = document.querySelector('thead>tr')!
     headRow.removeChild(headRow.children.item(3)!)
-        headRow.children.item(3)!.textContent = 'Notenverteilung'
+    headRow.children.item(3)!.textContent = 'Notenverteilung'
 
-        const body = document.querySelector('tbody')!
-        const promises: Promise<{ doc: Document; elm: Element; url: string; ownGrade: number}>[] =
-            []
-        for (const row of body.children) {
-          // Remove useless inline styles which set the vertical alignment
-          for (const col of row.children) col.removeAttribute('style')
+    const body = document.querySelector('tbody')!
+    const promises: Promise<{ doc: Document; elm: Element; url: string; ownGrade: number}>[] =
+        []
+    for (const row of body.children) {
+      // Remove useless inline styles which set the vertical alignment
+      for (const col of row.children) col.removeAttribute('style')
 
-          row.removeChild(row.children.item(3)!)
+      row.removeChild(row.children.item(3)!)
 
-          // Extract script content
-          const lastCol = row.children.item(3)!
-          const scriptElm = lastCol.children.item(1)
-          if (scriptElm === null) continue
+      // Extract script content
+      const lastCol = row.children.item(3)!
+      const scriptElm = lastCol.children.item(1)
+      if (scriptElm === null) continue
 
-          const scriptContent = scriptElm!.innerHTML
+      const scriptContent = scriptElm!.innerHTML
 
-          const url = scriptToURL(scriptContent)
+      const url = scriptToURL(scriptContent)
 
-          // loading animation
-          lastCol.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -10)
+      // loading animation
+      lastCol.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -10)
 
-          let ownGradeNum = 0
-          const gradeElm = row.children.item(2)?.innerHTML.trim()
-          if (gradeElm?.includes(',')) {
-            let ownGrade: string
-            const grade = (gradeElm + '').split(',')
-            let first = Number(grade[0])
-            const second = Number(grade[1])
-            if (second > 70) {
-              ownGrade = (first++).toString() + '.0'
-            } else if (second > 30) {
-              ownGrade = first.toString() + '.7'
-            } else if (second > 0) {
-              ownGrade = first.toString() + '.3'
-            } else {
-              ownGrade = first.toString() + '.0'
-            }
-            ownGradeNum = Number(ownGrade)
-          }
-
-          promises.push(
-            fetch(url).then(async (s) => {
-              const parser = new DOMParser()
-              const doc = parser.parseFromString(await s.text(), 'text/html')
-
-              return { doc, elm: lastCol, url, ownGrade: ownGradeNum }
-            })
-          )
+      let ownGradeNum = 0
+      const gradeElm = row.children.item(2)?.innerHTML.trim()
+      if (gradeElm?.includes(',')) {
+        let ownGrade: string
+        const grade = (gradeElm + '').split(',')
+        let first = Number(grade[0])
+        const second = Number(grade[1])
+        if (second > 70) {
+          ownGrade = (first++).toString() + '.0'
+        } else if (second > 30) {
+          ownGrade = first.toString() + '.7'
+        } else if (second > 0) {
+          ownGrade = first.toString() + '.3'
+        } else {
+          ownGrade = first.toString() + '.0'
         }
-        promises.forEach((p) =>
-          p.then(({ doc, elm, url, ownGrade }) => {
-            const tableBody = doc.querySelector('tbody')!
-            let graphSVG
-            if (tableBody === null) {
-              // No grades available
-              graphSVG = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
-            } else {
-              const values = [...tableBody.children].map((tr) => {
-                const gradeText = tr.children.item(0)!.textContent!.replace(',', '.')
-                const grade = parseFloat(gradeText)
+        ownGradeNum = Number(ownGrade)
+      }
 
-                const countText = tr.children.item(1)!.textContent!
-                let count: number
-                if (countText === '---') count = 0
-                else count = parseInt(countText)
+      promises.push(
+        fetch(url).then(async (s) => {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(await s.text(), 'text/html')
 
-                return {
-                  grade,
-                  count
-                }
-              })
-              graphSVG = Graphing.createSVGGradeDistributionGraph(values, url, ownGrade)
+          return { doc, elm: lastCol, url, ownGrade: ownGradeNum }
+        })
+      )
+    }
+
+    promises.forEach((p) =>
+      p.then(({ doc, elm, url, ownGrade }) => {
+        const tableBody = doc.querySelector('tbody')!
+        let graphSVG
+        if (tableBody === null) {
+          // No grades available
+          graphSVG = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
+        } else {
+          const values = [...tableBody.children].map((tr) => {
+            const gradeText = tr.children.item(0)!.textContent!.replace(',', '.')
+            const grade = parseFloat(gradeText)
+
+            const countText = tr.children.item(1)!.textContent!
+            let count: number
+            if (countText === '---') count = 0
+            else count = parseInt(countText)
+
+            return {
+              grade,
+              count
             }
-            elm.innerHTML = graphSVG
-          }).catch(({ elm, url }) => {
-            elm.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
           })
-        )
+          graphSVG = Graphing.createSVGGradeDistributionGraph(values, url, ownGrade)
+        }
+        elm.innerHTML = graphSVG
+      }).catch(({ elm, url }) => {
+        elm.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -1)
+      })
+    )
 
-        // Remove the inline style that sets a width on the top right table cell
-        const tableHeadRow = document.querySelector('thead>tr')!
-        tableHeadRow.children.item(3)!.removeAttribute('style')
-        /*
+    // Remove the inline style that sets a width on the top right table cell
+    const tableHeadRow = document.querySelector('thead>tr')!
+    tableHeadRow.children.item(3)!.removeAttribute('style')
+    /*
 
-    */
+*/
   } else if (currentView.startsWith('/APP/COURSERESULTS/')) {
     // Prüfungen > Ergebnisse
 
@@ -400,10 +453,10 @@ function applyChanges () {
 
     // Add "Notenverteilung" header
     {
-            headRow.children.item(3)!.removeAttribute('colspan')
-            const newHeader = document.createElement('th')
-            newHeader.textContent = 'Notenverteilung'
-            headRow.appendChild(newHeader)
+      headRow.children.item(3)!.removeAttribute('colspan')
+      const newHeader = document.createElement('th')
+      newHeader.textContent = 'Notenverteilung'
+      headRow.appendChild(newHeader)
     }
 
     // Create the grade distribution graph
@@ -501,65 +554,65 @@ function applyChanges () {
 
     // Remove the inline style that sets a width on the top right table cell
     const tableHeadRow = document.querySelector('thead>tr')!
-        tableHeadRow.children.item(3)!.removeAttribute('style')
+    tableHeadRow.children.item(3)!.removeAttribute('style')
 
-        // Draw try counter in the jExam style
-        for (const row of body.children) {
-          const linkElm = row.children.item(3)!
-          const scriptElm = linkElm.children.item(1)
-          // Skip courses wihtout grades
-          if (scriptElm === null) continue
+    // Draw try counter in the jExam style
+    for (const row of body.children) {
+      const linkElm = row.children.item(3)!
+      const scriptElm = linkElm.children.item(1)
+      // Skip courses wihtout grades
+      if (scriptElm === null) continue
 
-          // Extract script content
-          const scriptContent = scriptElm!.innerHTML
-          const url = scriptToURL(scriptContent)
+      // Extract script content
+      const scriptContent = scriptElm!.innerHTML
+      const url = scriptToURL(scriptContent)
 
-          // Center the remaining "> Prüfung" links so it looks better after everything loaded
-          linkElm.setAttribute('style', 'text-align: center;')
+      // Center the remaining "> Prüfung" links so it looks better after everything loaded
+      linkElm.setAttribute('style', 'text-align: center;')
 
-          // Fetch data
-          fetch(url).then(async (s) => {
-            const parser = new DOMParser()
-            const doc = parser.parseFromString(await s.text(), 'text/html')
+      // Fetch data
+      fetch(url).then(async (s) => {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(await s.text(), 'text/html')
 
-            // Extracting the grades of individual tries
-            const tableBody = doc.querySelector('tbody')!
-            const tries: Graphing.Try[] = []
+        // Extracting the grades of individual tries
+        const tableBody = doc.querySelector('tbody')!
+        const tries: Graphing.Try[] = []
 
-            // Search for tries
-            for (let i = 0; i < tableBody.children.length; i++) {
-              const trElm = tableBody.children.item(i)!
-              const firstTd = trElm.querySelector('td.level02')
+        // Search for tries
+        for (let i = 0; i < tableBody.children.length; i++) {
+          const trElm = tableBody.children.item(i)!
+          const firstTd = trElm.querySelector('td.level02')
 
-              // Before a row with a grade there is always a row containing "Modulprüfung"
-              if (firstTd !== null && firstTd.textContent === 'Modulprüfung') {
-                // Next row will contain a try with a grade
-                let nextTrElm = tableBody.children.item(i + 1)!
-                // Sometimes there is an extra row
-                if (nextTrElm.children.length === 1) {
-                  nextTrElm = tableBody.children.item(i + 2)!
-                }
-
-                // Extract information
-                const date = nextTrElm.children.item(2)!.textContent!.trim()
-                const grade = nextTrElm.children.item(3)!.textContent!.trim()
-                tries.push({ date, grade })
-
-                i += 2
-              }
+          // Before a row with a grade there is always a row containing "Modulprüfung"
+          if (firstTd !== null && firstTd.textContent === 'Modulprüfung') {
+            // Next row will contain a try with a grade
+            let nextTrElm = tableBody.children.item(i + 1)!
+            // Sometimes there is an extra row
+            if (nextTrElm.children.length === 1) {
+              nextTrElm = tableBody.children.item(i + 2)!
             }
 
-            // Unable to parse the grades from the tables
-            if (tries.length === 0) return
+            // Extract information
+            const date = nextTrElm.children.item(2)!.textContent!.trim()
+            const grade = nextTrElm.children.item(3)!.textContent!.trim()
+            tries.push({ date, grade })
 
-            // Replace link with a chart
-            linkElm.innerHTML = Graphing.createJExamTryCounter(tries, url)
-          })
+            i += 2
+          }
         }
+
+        // Unable to parse the grades from the tables
+        if (tries.length === 0) return
+
+        // Replace link with a chart
+        linkElm.innerHTML = Graphing.createJExamTryCounter(tries, url)
+      })
+    }
 
     /*
 
-    */
+*/
   } else if (currentView.startsWith('/APP/MYEXAMS/')) {
     // Prüfungen
 
@@ -606,11 +659,11 @@ function applyChanges () {
         )
       }
 
-            // Table head "Prüfungsleistung"
-            document.querySelector('thead > tr > th#Name')!.textContent = ''
-            // Table head "Termin"
-            document.querySelector('thead > tr > th#Date')!.textContent =
-                'Prüfungsleistung/Termin'
+      // Table head "Prüfungsleistung"
+      document.querySelector('thead > tr > th#Name')!.textContent = ''
+      // Table head "Termin"
+      document.querySelector('thead > tr > th#Date')!.textContent =
+        'Prüfungsleistung/Termin'
     }
   }
 }

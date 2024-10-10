@@ -7,17 +7,17 @@ Das Konzept von 2FA ist:
 - etwas, das du weißt: dein normales Passwort 
 - etwas, das du hast: bspw. dein Handy, welches dir bei jeder Anmeldung ein zusätzliches einmaliges Passwort generiert
 
-Mehr Informationen zu 2FA-Tokens und wie du dein Token erstellst findest du auf der [Seite vom ZIH](https://faq.tickets.tu-dresden.de/otrs/public.pl?Action=PublicFAQZoom;ItemID=872).
+Mehr Informationen zu 2FA-Tokens und wie du dein Token erstellst findest du auf der [Seite der TU Dresden](https://faq.tickets.tu-dresden.de/otrs/public.pl?Action=PublicFAQZoom;ItemID=872).
 
 ## 2FA mit TUfast
-**TUfast kann den AutoLogin auch mit 2FA durchführen.** Um diese Funktion zu nutzen gibt es zwei Möglichkeiten
+**TUfast kann das Automatische Anmeldne auch mit 2FA durchführen.** Um diese Funktion zu nutzen gibt es zwei Möglichkeiten
 
-1) TUfast kann (auf Nachfrage) bereits bei Einrichtung von 2FA auf der ZIH-Website deinen 2FA Token abspeichern. Falls du dem zustimmst ist die Einrichtung schon abgeschlossen.
+1) **Bei einer Neueinrichtung von 2FA über die [TU Dresden Website](https://faq.tickets.tu-dresden.de/otrs/public.pl?Action=PublicFAQZoom;ItemID=928)** fragt TUfast automatisch nach, ob der 2FA-Token in TUfast abgespeichert und damit das automatische Anmelden aktiviert werden soll. Falls du mit 'ja' bestätigst, ist die Einrichtung schon abgeschlossen.
 
-2) Möchtest du TUfast auf mehreren Rechnern verwenden oder die 2FA anmeldung aktivieren _nachdem_ du 2FA beim ZIH bereits eingerichtet hast, musst du dies manuell tun. Dafür musst du deinen TOTP-Token in TUfast hinterlegen. Wie das geht, ist im folgenden Abschnitt erklärt.
+2) **Manuelles einrichten ist ebenfall möglich**, und zum Beispiel nötig, wenn du TUfast auf mehreren Geräten verwenden möchtest oder die automatische 2FA-Anmeldung auf der Website bereits aktiviert hast. (Natürlich könntest du deine 2FA Anmeldung auch zurücksetzen und dann die automatische Einrichtung unter 1) verwenden). Dafür musst du deinen TOTP-Token in TUfast hinterlegen. Wie das geht, ist im folgenden Abschnitt erklärt.
 
-### Manuelle Einrichtung: TOTP (Time based one-time password) hinterlegen
-Das TOTP Token solltest du bei der Erstellung über einen QR-Code von der ZIH Webseite mit einer Authenticator App auf deinem Handy gescannt haben.
+### Manuelle Einrichtung: TOTP (Time based one-time password) in TUfast hinterlegen
+Das TOTP Token solltest du bei der Erstellung über einen QR-Code von der TU Dresden Webseite mit einer Authenticator-App auf deinem Handy gescannt haben.
 Im Nachfolgenden ist für eine Auswahl von Apps beschrieben, wie du das Token anzeigen kannst, um es dann in TUfast einzutragen. 
 
 ### [Aegis](https://getaegis.app/) (empfohlen)

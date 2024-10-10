@@ -20,9 +20,9 @@
         "settingsPage": "ImproveOpal"
     },
     {
-        "title": "Selma jExam Theme",
-        "icon": "PhSparkle",
-        "settingsPage": "SelmajExamTheme"
+        "title": "Selma verbessern",
+        "icon": "PhChartBar",
+        "settingsPage": "ImproveSelma"
     },
     {
         "title": "Shortcuts",
