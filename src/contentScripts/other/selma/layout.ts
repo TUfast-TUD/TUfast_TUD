@@ -119,6 +119,8 @@ namespace Graphing {
       } else if (ownGrade === -10) {
         className = 'animate-loading'
       }
+      // 99 are any unhandled grade variants
+      // add handling as needed
 
       barsSvg += `
             <rect
@@ -223,9 +225,9 @@ Actual logic
 
 // Create a small banner that indicates the user that the site was modified
 // It also adds a small toggle to disable the table
-async function createCreditsBanner() {
+async function createCreditsBanner () {
   const { improveSelma: settingEnabled } = await chrome.storage.local.get(['improveSelma'])
-  
+
   const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
   const credits = document.createElement('p')
 
@@ -275,10 +277,10 @@ async function createCreditsBanner() {
     // Add Credit banner with toggle button
     const creditElm = await createCreditsBanner()
     document.querySelector('.semesterChoice')!.appendChild(creditElm)
-    
+
     if (!improveSelma) return
-    
-    eventListener();
+
+    eventListener()
   })
   document.addEventListener('DOMContentLoaded', eventListener, false)
 })()
@@ -358,7 +360,6 @@ function applyChanges () {
     headRow.children.item(3)!.textContent = 'Notenverteilung'
     headRow.removeChild(headRow.children.item(4)!)
 
-
     const body = document.querySelector('tbody')!
     const promises: Promise<{ doc: Document; elm: Element; url: string; ownGrade: number}>[] =
         []
@@ -397,6 +398,11 @@ function applyChanges () {
           ownGrade = first.toString() + '.0'
         }
         ownGradeNum = Number(ownGrade)
+      } else if (gradeElm?.includes('be')) {
+        ownGradeNum = 1
+      } else {
+        // default exception case, maybe expand as needed
+        ownGradeNum = -99
       }
 
       promises.push(
@@ -502,6 +508,11 @@ function applyChanges () {
           ownGrade = first.toString() + '.0'
         }
         ownGradeNum = Number(ownGrade)
+      } else if (gradeElm?.includes('be')) {
+        ownGradeNum = 1
+      } else {
+        // default exception case, maybe expand as needed
+        ownGradeNum = -99
       }
 
       const scriptContent = scriptElm!.innerHTML
@@ -660,12 +671,14 @@ function applyChanges () {
           ''
         )
       }
-
-      // Table head "Prüfungsleistung"
-      document.querySelector('thead > tr > th#Name')!.textContent = ''
-      // Table head "Termin"
-      document.querySelector('thead > tr > th#Date')!.textContent =
-        'Prüfungsleistung/Termin'
     }
+    // Table head "Prüfungsleistung"
+    document.querySelector('thead > tr > th#Name')!.textContent = ''
+    // Table head "Termin"
+    document.querySelector('thead > tr > th#Date')!.textContent =
+        'Prüfungsleistung/Termin'
+    // Append extra bar to head
+    const headRow = document.querySelector('thead>tr')!
+    headRow.removeChild(headRow.children.item(3)!)
   }
 }
