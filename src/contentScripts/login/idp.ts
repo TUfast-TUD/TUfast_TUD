@@ -49,7 +49,7 @@ const cookieSettings: CookieSettings = {
     }
 
     async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
-      return document.querySelector('.content p font[color="red"]')
+      return document.querySelector(".output--error") ?? document.querySelector('.content p font[color="red"]')
     }
 
     async loginFieldsAvailable (): Promise<boolean | LoginFields> {
