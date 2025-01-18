@@ -1,0 +1,6 @@
+# Assets
+src/assets/settings/rocket_lottie.json
+src/assets/settings/theme_lottie.json
+
+# Exceptions
+src/freshContent/starRating.js
