@@ -7,21 +7,10 @@
       class="color-switch__lottie"
       @click="play()"
     />
-    <svg
-      class="color-switch__text"
-      viewBox="0 0 400 200"
-    >
-      <path
-        id="curve"
-        d="M 0 0 A 1 1 0 0 0 400 0"
-      />
+    <svg class="color-switch__text" viewBox="0 0 400 200">
+      <path id="curve" d="M 0 0 A 1 1 0 0 0 400 0" />
       <text text-anchor="middle">
-        <textPath
-          xlink:href="#curve"
-          startOffset="50%"
-        >
-          Klick Mich!
-        </textPath>
+        <textPath xlink:href="#curve" startOffset="50%">Klick Mich!</textPath>
       </text>
     </svg>
   </div>
@@ -40,9 +29,9 @@ export default defineComponent({
       default: 'dark'
     }
   },
-  setup (props) {
+  setup(props) {
     const { getChromeLocalStorage } = useChrome()
-    const anim : any = ref()
+    const anim: any = ref()
 
     const direction = ref(-1)
     const animSeek = ref(99)

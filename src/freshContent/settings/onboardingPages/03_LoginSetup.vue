@@ -1,16 +1,9 @@
 <template>
   <div class="title">
-    <h1 class="upper">
-      AutoLogin
-    </h1>
+    <h1 class="upper">AutoLogin</h1>
     <h2>in die Onlineportale der TU Dresden</h2>
   </div>
-  <Setting
-    v-model="accept"
-    txt="Autologin aktivieren"
-    :column="true"
-    @click="setStepWidth()"
-  />
+  <Setting v-model="accept" txt="Autologin aktivieren" :column="true" @click="setStepWidth()" />
 </template>
 
 <script lang="ts">
@@ -28,13 +21,17 @@ export default defineComponent({
     Setting
   },
   emits: ['accept'],
-  setup (_) {
+  setup(_) {
     const { stepWidth } = useStepper()
 
     const accept = ref(true)
 
     const setStepWidth = () => {
-      if (accept.value) { stepWidth.value = 1 } else { stepWidth.value = 3 }
+      if (accept.value) {
+        stepWidth.value = 1
+      } else {
+        stepWidth.value = 3
+      }
     }
 
     return { accept, setStepWidth }

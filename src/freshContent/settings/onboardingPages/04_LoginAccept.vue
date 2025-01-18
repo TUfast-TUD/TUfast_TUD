@@ -1,8 +1,6 @@
 <template>
   <div class="title">
-    <h1 class="upper">
-      AutoLogin
-    </h1>
+    <h1 class="upper">AutoLogin</h1>
     <h2>in die Onlineportale der TU Dresden</h2>
   </div>
   <div class="inputs">
@@ -43,7 +41,7 @@ export default defineComponent({
     //    Onboarding,
     CustomInput: Input
   },
-  setup () {
+  setup() {
     const { stepWidth } = useStepper()
     const { saveUserData } = useUserData()
     const { logins } = useLogins()

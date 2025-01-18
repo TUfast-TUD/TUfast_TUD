@@ -1,52 +1,53 @@
-#TUfastGradeContainer, #TUfastTableInfo {
-    padding-left: 10px;
+#TUfastGradeContainer,
+#TUfastTableInfo {
+  padding-left: 10px;
 
-    canvas, .info {
-        margin: 0 auto;
-    }
-    .info {
-        font-size: 1rem;
-        font-weight: bold;
-    }
-
+  canvas,
+  .info {
+    margin: 0 auto;
+  }
+  .info {
+    font-size: 1rem;
+    font-weight: bold;
+  }
 }
 
 #TUfastCredits {
-    font-size: 1rem;
-    font-weight: bold;
-    padding-left: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  padding-left: 10px;
 }
 
 #gradeTable {
-    font-size: 1rem;
-    caption-side: top;
+  font-size: 1rem;
+  caption-side: top;
 
-    thead {
-        font-weight: bold;
-        font-size: 1.2em;
+  thead {
+    font-weight: bold;
+    font-size: 1.2em;
 
-        th {
-            background: #8b8b8b;
-            padding: 10px;
-        }
+    th {
+      background: #8b8b8b;
+      padding: 10px;
     }
+  }
 
-    td {
-        padding: 10px;
-    }
+  td {
+    padding: 10px;
+  }
 
-    .meta {
-        background: #969696;
-        font-size: 1.1em;
-        font-weight: bold;
-    }
-    .module {
-        background: #3b69be;
-    }
-    .exam {
-        background: #20a32b;
-    }
-    .exam-nopass {
-        background: #eb9090;
-    }
+  .meta {
+    background: #969696;
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  .module {
+    background: #3b69be;
+  }
+  .exam {
+    background: #20a32b;
+  }
+  .exam-nopass {
+    background: #eb9090;
+  }
 }

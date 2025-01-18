@@ -6,32 +6,32 @@ const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'matrix',
   domain: 'matrix.tu-dresden.de'
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class MatrixLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> {}
 
-    async additionalFunctionsPostCheck (): Promise<void> {
+    async additionalFunctionsPostCheck(): Promise<void> {
       this.clickLogin()
     }
 
-    clickLogin () {
-      (document.querySelector('a[href="#/login"]') as HTMLAnchorElement|null)?.click()
+    clickLogin() {
+      ;(document.querySelector('a[href="#/login"]') as HTMLAnchorElement | null)?.click()
     }
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element | null> {
       return document.getElementsByClassName('mx_Login_error')[0]
     }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       const hash = window.location.hash
       if (hash !== '#/login') return false
 
@@ -42,11 +42,11 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       return [document.getElementsByClassName('mx_UserMenu_iconSignOut')[0]?.parentElement]
     }
 
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
+    async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
       if (!loginFields || !loginFields.submitButton) return
 
       // Fake the input on fields

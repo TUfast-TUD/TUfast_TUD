@@ -1,16 +1,16 @@
 import type { NotificationNamespace } from '../notification'
 
 interface Course {
-  name: string;
-  link: string;
+  name: string
+  link: string
 }
 
 interface ParseResult {
-  courses: Course[];
-  favorites: Course[];
+  courses: Course[]
+  favorites: Course[]
 }
 
-function parseTable (tbody: HTMLTableSectionElement): ParseResult {
+function parseTable(tbody: HTMLTableSectionElement): ParseResult {
   if (!tbody) throw new Error('Cannot parse table')
 
   // Get the current courses
@@ -22,7 +22,8 @@ function parseTable (tbody: HTMLTableSectionElement): ParseResult {
     const linkElement: HTMLAnchorElement = row.getElementsByTagName('a')[0] as HTMLAnchorElement
 
     if (!linkElement || !linkElement.href || !linkElement.textContent) continue
-    if (linkElement.textContent.trim().endsWith('[beendet]') || linkElement.textContent.trim().endsWith('[finished]')) continue // Course is finished
+    if (linkElement.textContent.trim().endsWith('[beendet]') || linkElement.textContent.trim().endsWith('[finished]'))
+      continue // Course is finished
 
     const c = {
       link: linkElement.href,
@@ -36,7 +37,7 @@ function parseTable (tbody: HTMLTableSectionElement): ParseResult {
   return { courses, favorites }
 }
 
-function parseList (previewContainer: HTMLDivElement): ParseResult {
+function parseList(previewContainer: HTMLDivElement): ParseResult {
   const courses: Course[] = []
   const favorites: Course[] = []
 
@@ -47,7 +48,8 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     const titleElement = item.querySelector('.content-preview-main .content-preview-title') as HTMLHeadingElement
 
     if (!linkElement || !linkElement.href || !titleElement || !titleElement.textContent) continue
-    if (titleElement.textContent.trim().endsWith('[beendet]') || titleElement.textContent.trim().endsWith('[finished]')) continue // Course is finished
+    if (titleElement.textContent.trim().endsWith('[beendet]') || titleElement.textContent.trim().endsWith('[finished]'))
+      continue // Course is finished
 
     const c = {
       link: linkElement.href,
@@ -61,12 +63,18 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
   return { courses, favorites }
 }
 
-(async () => {
-  const notification: NotificationNamespace = await import(chrome.runtime.getURL('contentScripts/other/notification.js'))
+;(async () => {
+  const notification: NotificationNamespace = await import(
+    chrome.runtime.getURL('contentScripts/other/notification.js')
+  )
 
   const mainFunction = async () => {
     // We are only interested in these two pages
-    if (window.location.pathname !== '/opal/auth/resource/courses' && window.location.pathname !== '/opal/auth/resource/favorites') return
+    if (
+      window.location.pathname !== '/opal/auth/resource/courses' &&
+      window.location.pathname !== '/opal/auth/resource/favorites'
+    )
+      return
 
     // We know one of the two pages is loaded so we only need to check which of those two
     const currentPage = window.location.pathname === '/opal/auth/resource/courses' ? 'meine_kurse' : 'favoriten'
@@ -75,7 +83,7 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     // If this is possible we don't need to do anything else because the MutationObserver will fire again
     const pages = document.querySelectorAll('li.page').length
     if (pages > 1) {
-      (document.getElementsByClassName('pager-showall')[0] as HTMLAnchorElement | undefined)?.click()
+      ;(document.getElementsByClassName('pager-showall')[0] as HTMLAnchorElement | undefined)?.click()
       return
     }
 
@@ -84,7 +92,9 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
 
     const previewContainer = tablePanel.getElementsByClassName('content-preview-container')[0]
 
-    const { courses, favorites } = previewContainer ? parseList(previewContainer as HTMLDivElement) : parseTable(tablePanel.getElementsByTagName('tbody')[0])
+    const { courses, favorites } = previewContainer
+      ? parseList(previewContainer as HTMLDivElement)
+      : parseTable(tablePanel.getElementsByTagName('tbody')[0])
 
     // If the user has no courses - nothing to do here anymore (favorites can only be a subset of courses, so no check needed)
     if (courses.length === 0) return
@@ -93,7 +103,10 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     courses.sort((a, b) => a.name.localeCompare(b.name))
 
     // Get the old data to check if something changed
-    const { meine_kurse: currentCoursesStr, favoriten: currentFavouritesStr } = await chrome.storage.local.get(['meine_kurse', 'favoriten'])
+    const { meine_kurse: currentCoursesStr, favoriten: currentFavouritesStr } = await chrome.storage.local.get([
+      'meine_kurse',
+      'favoriten'
+    ])
     // Make an object out of it but in a scoped function so we can handle the error better
     const parseJson = (input: string) => {
       try {
@@ -117,7 +130,7 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
       // We need to match every course from one list to another
       // We only need one way because we know the lists are the same size.
       return array1.every((course) => {
-        return !!array2.find(c => c.name === course.name && c.link === course.link)
+        return !!array2.find((c) => c.name === course.name && c.link === course.link)
       })
     }
 
@@ -126,7 +139,7 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     const favouritesChanged = !arraysAreSame(currentFavourites || [], favorites)
 
     // eslint-disable-next-line camelcase
-    const updateObj: {meine_kurse?: string, favoriten?: string} = {}
+    const updateObj: { meine_kurse?: string; favoriten?: string } = {}
     if (coursesChanged) updateObj.meine_kurse = JSON.stringify(courses)
     if (favouritesChanged) updateObj.favoriten = JSON.stringify(favorites)
 
@@ -135,7 +148,9 @@ function parseList (previewContainer: HTMLDivElement): ParseResult {
     }
 
     if (firstTime && updateObj.meine_kurse) {
-      notification.notify('Kurse wurden erfolgreich in TUfast gespeichert! Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd> um deine Kurse zu sehen!')
+      notification.notify(
+        'Kurse wurden erfolgreich in TUfast gespeichert! Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd> um deine Kurse zu sehen!'
+      )
     } else if (coursesChanged || favouritesChanged) {
       notification.notify('Deine Kurse wurden erfolgreich in TUfast geupdatet!')
     }

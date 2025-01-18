@@ -1,5 +1,4 @@
-
-(async () => {
+;(async () => {
   const {
     bannersShown,
     savedClickCounter,
@@ -10,7 +9,7 @@
 
   const bannerArr = Array.isArray(bannersShown) ? bannersShown : []
 
-  function insertBanner (bannerName: string, title: string, otherElements: Node[]) {
+  function insertBanner(bannerName: string, title: string, otherElements: Node[]) {
     const banner = document.createElement('div')
     banner.id = 'TUfastBanner'
 
@@ -104,22 +103,24 @@
       interact.addEventListener('click', () => {
         chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
       })
-      insertBanner('customizeRockets', 'Schnapp\' sie dir alle!', [text, interact])
+      insertBanner('customizeRockets', "Schnapp' sie dir alle!", [text, interact])
       break
     }
     case !bannerArr.includes('submitReview') && !mostLikelySubmittedReview && savedClickCounter > 500: {
       const text = document.createElement('span')
-      text.innerHTML = 'Dann hau\' mal ne gute Bewertung im Store raus! '
+      text.innerHTML = "Dann hau' mal ne gute Bewertung im Store raus! "
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = 'Hier geht\'s lang!'
+      interact.textContent = "Hier geht's lang!"
       interact.addEventListener('click', async () => {
         const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
-        const webstoreLink = isFirefox ? 'https://addons.mozilla.org/de/firefox/addon/tufast/' : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
+        const webstoreLink = isFirefox
+          ? 'https://addons.mozilla.org/de/firefox/addon/tufast/'
+          : 'https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk'
         window.open(webstoreLink, '_blank')
         await chrome.storage.local.set({ mostLikelySubmittedReview: true })
       })
-      insertBanner('submitReview', 'Gefällt\'s dir?', [text, interact])
+      insertBanner('submitReview', "Gefällt's dir?", [text, interact])
       break
     }
   }

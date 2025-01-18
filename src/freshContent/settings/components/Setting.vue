@@ -1,11 +1,6 @@
 <template>
   <div class="setting">
-    <Toggle
-      v-model="toggleState"
-      :disabled="disabled"
-      class="setting__toggle"
-      @click="$emit('changed-setting')"
-    />
+    <Toggle v-model="toggleState" :disabled="disabled" class="setting__toggle" @click="$emit('changed-setting')" />
     <span class="max-line">{{ txt }}</span>
   </div>
 </template>
@@ -38,15 +33,19 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue', 'changed-setting'],
-  setup (props, { emit }) {
+  setup(props, { emit }) {
     const toggleState = ref(props.modelValue)
 
-    watch(props, () => { toggleState.value = props.modelValue })
+    watch(props, () => {
+      toggleState.value = props.modelValue
+    })
 
     watch(toggleState, () => emit('update:modelValue', toggleState.value))
 
     onMounted(() => {
-      if (props.column) { document.querySelectorAll('.setting')?.forEach((el) => el.classList.add('setting--column')) }
+      if (props.column) {
+        document.querySelectorAll('.setting')?.forEach((el) => el.classList.add('setting--column'))
+      }
     })
 
     return { toggleState }

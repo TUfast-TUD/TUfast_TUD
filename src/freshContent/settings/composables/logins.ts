@@ -7,8 +7,7 @@ export const useLogins = () => ({
 const logins: Login[] = [
   {
     id: 'zih',
-    title:
-      'Werde in alle Online-Portale der TU Dresden automatisch angemeldet.',
+    title: 'Werde in alle Online-Portale der TU Dresden automatisch angemeldet.',
     name: 'Selma',
     state: false,
     usernamePlaceholder: 'Nutzername (selma-Login)',

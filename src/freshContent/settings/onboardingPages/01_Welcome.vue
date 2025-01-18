@@ -1,10 +1,5 @@
 <template>
-  <lottie-player
-    src="../../assets/settings/rocket_lottie.json"
-    loop
-    autoplay
-    class="max-height"
-  />
+  <lottie-player src="../../assets/settings/rocket_lottie.json" loop autoplay class="max-height" />
 </template>
 
 <script lang="ts">
@@ -15,7 +10,7 @@ export default defineComponent({
   components: {
     // Onboarding
   },
-  setup () {}
+  setup() {}
 })
 </script>
 

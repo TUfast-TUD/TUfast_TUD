@@ -6,28 +6,28 @@ const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'gitlabMn',
   domain: 'gitlab.mn.tu-dresden.de'
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class GlMnLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> {
-      (document.querySelector('a[data-qa-selector="ldap_tab"][role="tab"]') as HTMLAnchorElement|null)?.click()
+    async additionalFunctionsPreCheck(): Promise<void> {
+      ;(document.querySelector('a[data-qa-selector="ldap_tab"][role="tab"]') as HTMLAnchorElement | null)?.click()
     }
 
-    async additionalFunctionsPostCheck (): Promise<void> { }
+    async additionalFunctionsPostCheck(): Promise<void> {}
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element | null> {
       return document.querySelector('.flash-alert[data-testid="alert-danger"]')
     }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
@@ -35,19 +35,19 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       return document.querySelectorAll('a.sign-out-link')
     }
 
-    async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
+    async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
       if (!loginFields) return
 
       this.fakeInput(loginFields.usernameField, userData.user)
-      this.fakeInput(loginFields.passwordField, userData.pass);
-      (document.getElementById('remember_me') as HTMLInputElement).checked = true
+      this.fakeInput(loginFields.passwordField, userData.pass)
+      ;(document.getElementById('remember_me') as HTMLInputElement).checked = true
       loginFields.submitButton?.click()
     }
   }
 
-  await (new GlMnLogin()).start()
+  await new GlMnLogin().start()
 })()

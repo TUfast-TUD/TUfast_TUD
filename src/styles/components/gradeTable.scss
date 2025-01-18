@@ -4,68 +4,73 @@ $clr-green: rgba(56, 199, 158);
 $clr-grey: rgba(231, 220, 220);
 
 #gradeTable {
-	.table-header {
-		display: grid;
-		grid-template-columns: 2fr 1fr 2fr;
+  .table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
 
-		&__title {
-			grid-column: 2;
-			font-size: 1.2rem;
-		}
-		&__helpers {
-			grid-column: 3;
-			display: flex;
-			gap: 1rem;
-			justify-content: flex-end;
-			align-items: center;
-			margin-right: 1rem;
-		}
-		&__helper {
-			display: flex;
-			align-items: center;
-			gap: .5rem;
-		}
-		&__color {
-			height: 24px;
-			width: 24px;
-			border-radius: 4px;
-			&--0 { background-color: $clr-blue-light; }
-			&--1 { background-color: $clr-green; }
-			&--2 { background-color: $clr-grey; }
-		}
-	}
+    &__title {
+      grid-column: 2;
+      font-size: 1.2rem;
+    }
+    &__helpers {
+      grid-column: 3;
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      align-items: center;
+      margin-right: 1rem;
+    }
+    &__helper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    &__color {
+      height: 24px;
+      width: 24px;
+      border-radius: 4px;
+      &--0 {
+        background-color: $clr-blue-light;
+      }
+      &--1 {
+        background-color: $clr-green;
+      }
+      &--2 {
+        background-color: $clr-grey;
+      }
+    }
+  }
 
-	background-color: $clr-blue-dark;
-	thead tr th {
-		background-color: $clr-blue-dark;
-		.dataTable-sorter {
-			color: white;
-		}
-	}
+  background-color: $clr-blue-dark;
+  thead tr th {
+    background-color: $clr-blue-dark;
+    .dataTable-sorter {
+      color: white;
+    }
+  }
 
-	tbody {
-		.meta td {
-		background-color: $clr-blue-light;
-		color: white;
-		}
-		.module td {
-			background-color: lighten($clr-blue-light, 10%);
-			color: white;
-		}
-		.exam td {
-			background-color: $clr-green;
-			color: black;
-		}
-		.exam-nopass td {
-			background-color: $clr-grey;
-			color: black;
-		}
-	}
+  tbody {
+    .meta td {
+      background-color: $clr-blue-light;
+      color: white;
+    }
+    .module td {
+      background-color: lighten($clr-blue-light, 10%);
+      color: white;
+    }
+    .exam td {
+      background-color: $clr-green;
+      color: black;
+    }
+    .exam-nopass td {
+      background-color: $clr-grey;
+      color: black;
+    }
+  }
 }
 
 /* fix original css */
 
 #portal-footer {
-	height: inherit !important;
+  height: inherit !important;
 }
-

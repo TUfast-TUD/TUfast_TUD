@@ -6,22 +6,22 @@ const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'selma',
   domain: 'selma.tu-dresden.de'
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class SelmaLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> {}
 
-    async additionalFunctionsPostCheck (): Promise<void> { }
+    async additionalFunctionsPostCheck(): Promise<void> {}
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element | null> {
       const header = document.getElementsByTagName('h1')[0]
       if (!header) return false
 
@@ -32,7 +32,7 @@ const cookieSettings: CookieSettings = {
       return ger || eng
     }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('field_user') as HTMLInputElement,
         passwordField: document.getElementById('field_pass') as HTMLInputElement,
@@ -40,10 +40,10 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       return [document.getElementById('logOut_btn')]
     }
   }
 
-  await (new SelmaLogin()).start()
+  await new SelmaLogin().start()
 })()

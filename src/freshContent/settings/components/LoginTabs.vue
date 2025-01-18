@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="container"
-    class="container"
-  >
+  <div ref="container" class="container">
     <button
       v-for="(option, i) in options"
       :id="option.id"
@@ -20,8 +17,7 @@ import { defineComponent, PropType, ref } from 'vue'
 import type { Login } from '../types/Login'
 
 export default defineComponent({
-  components: {
-  },
+  components: {},
   props: {
     options: {
       type: [] as PropType<Login[]>,
@@ -33,7 +29,7 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue'],
-  setup (_, { emit }) {
+  setup(_, { emit }) {
     const container = ref<HTMLDivElement | null>(null)
 
     const switchTab = (option: Login) => {
@@ -42,7 +38,9 @@ export default defineComponent({
 
       for (const child of [...children]) {
         child.classList.remove('tab--selected')
-        if (child.id === option.id) { child.classList.add('tab--selected') }
+        if (child.id === option.id) {
+          child.classList.add('tab--selected')
+        }
       }
 
       emit('update:modelValue', option)
@@ -79,5 +77,4 @@ export default defineComponent({
   &--selected
     border-bottom: 2px solid hsl(var(--clr-primary))
     opacity: 1
-
 </style>

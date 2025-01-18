@@ -23,7 +23,7 @@
   --color-bg-secondary: #fafbfc;
   --color-bg-tertiary: #f6f8fa;
   --color-bg-overlay: #fff;
-  --color-bg-backdrop: rgba(27,31,35,0.5);
+  --color-bg-backdrop: rgba(27, 31, 35, 0.5);
   --color-bg-scrollbar: #dbdbdb;
   --color-bg-scrollbar-thumb: #9c9c9c;
   --color-bg-info: rgb(222 244 255);
@@ -32,14 +32,14 @@
   /* button */
   --color-btn-text: #24292e;
   --color-btn-bg: #fafbfc;
-  --color-btn-border: rgba(27,31,35,0.15);
+  --color-btn-border: rgba(27, 31, 35, 0.15);
   --color-btn-hover-bg: #f3f4f6;
-  --color-btn-hover-border: rgba(27,31,35,0.15);
+  --color-btn-hover-border: rgba(27, 31, 35, 0.15);
   --color-btn-active-bg: #ebecf0;
-  --color-btn-active-border: rgba(27,31,35,0.1);
+  --color-btn-active-border: rgba(27, 31, 35, 0.1);
   --color-btn-selected-bg: #eeeff2;
   --color-btn-focus-bg: #fafbfc;
-  --color-btn-focus-border: rgba(27,31,35,0.15);
+  --color-btn-focus-border: rgba(27, 31, 35, 0.15);
   --color-btn-accept-bg: #28933c;
   --color-btn-accept-hover-bg: #2ea043;
   --color-btn-deny-bg: #586069;
@@ -65,7 +65,7 @@
   /* chrome, webkit */
   color-scheme: dark;
   /* firefox */
-  scrollbar-color: #737373 #38383D;
+  scrollbar-color: #737373 #38383d;
 
   /* text */
   --color-text-primary: #c9d1d9;
@@ -86,11 +86,11 @@
   --color-bg-secondary: #0d1117;
   --color-bg-tertiary: #161b22;
   --color-bg-overlay: #1c2128;
-  --color-bg-backdrop: rgba(1, 4, 9, .8);
+  --color-bg-backdrop: rgba(1, 4, 9, 0.8);
   --color-bg-scrollbar: #0d1117;
   --color-bg-scrollbar-thumb: #30363d;
-  --color-bg-info: rgba(56,139,253,0.25);
-  --color-bg-success: rgba(63,185,80,0.4);
+  --color-bg-info: rgba(56, 139, 253, 0.25);
+  --color-bg-success: rgba(63, 185, 80, 0.4);
 
   /* button */
   --color-btn-text: #c9d1d9;
@@ -115,10 +115,10 @@
   --color-border-tertiary: #6e7681;
   --color-border-overlay: #30363d;
   --color-border-inverse: #f0f6fc;
-  --color-border-info: rgba(56,139,253,0.4);
-  --color-border-danger: rgba(248,81,73,0.4);
-  --color-border-success: rgba(63,185,80,0.4);
-  --color-border-warning: rgba(187,128,9,0.4);
+  --color-border-info: rgba(56, 139, 253, 0.4);
+  --color-border-danger: rgba(248, 81, 73, 0.4);
+  --color-border-success: rgba(63, 185, 80, 0.4);
+  --color-border-warning: rgba(187, 128, 9, 0.4);
   --color-border-input: #30363d;
   --color-border-radio: #21262d;
   --color-border-popup: #30363d;
@@ -148,7 +148,6 @@
   }
 }
 
-
 /* system light */
 @media not screen and (prefers-color-scheme: dark) {
   :root {
@@ -166,13 +165,13 @@
 }
 
 /* user light */
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   @include palette-light;
   @include rules-light;
 }
 
 /* user dark */
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   @include palette-dark;
   @include rules-dark;
 }

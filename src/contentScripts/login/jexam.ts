@@ -6,27 +6,27 @@ const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'jexam',
   domain: 'jexam.inf.tu-dresden.de'
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class JExamLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> {}
 
-    async additionalFunctionsPostCheck (): Promise<void> { }
+    async additionalFunctionsPostCheck(): Promise<void> {}
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element | null> {
       const params = new URLSearchParams(window.location.search)
       return params.get('error') !== null && params.get('error') !== ''
     }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
@@ -35,11 +35,11 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       // There should only be one button but let's be safe
       return document.querySelectorAll('a[href$="/logout"]')
     }
   }
 
-  await (new JExamLogin()).start()
+  await new JExamLogin().start()
 })()

@@ -3,13 +3,7 @@
   "version": "8.1.1.1",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": ["storage", "alarms"],
-  "optional_permissions": [
-    "tabs",
-    "notifications",
-    "cookies",
-    "webRequest",
-    "webRequestBlocking"
-  ],
+  "optional_permissions": ["tabs", "notifications", "cookies", "webRequest", "webRequestBlocking"],
   "host_permissions": ["*://*/"],
   "background": {
     "scripts": ["background.js"],
@@ -55,10 +49,7 @@
     },
     {
       "js": ["contentScripts/other/hisqis/pimpAndInjectModules.js"],
-      "css": [
-        "styles/components/gradeTable.css",
-        "styles/contentScripts/hisqis.css"
-      ],
+      "css": ["styles/components/gradeTable.css", "styles/contentScripts/hisqis.css"],
       "run_at": "document_idle",
       "matches": ["https://qis.dez.tu-dresden.de/qisserver/servlet/*"],
       "include_globs": [
@@ -68,10 +59,7 @@
     {
       "js": ["contentScripts/forward/opal.js"],
       "run_at": "document_start",
-      "matches": [
-        "*://opal.de/*",
-        "https://bildungsportal.sachsen.de/cgi-bin/forward.cgi"
-      ]
+      "matches": ["*://opal.de/*", "https://bildungsportal.sachsen.de/cgi-bin/forward.cgi"]
     },
     {
       "js": ["contentScripts/login/selma.js"],
@@ -104,10 +92,7 @@
       "include_globs": ["*/welcome", "*/login", "*://matrix.tu-dresden.de/"]
     },
     {
-      "js": [
-        "contentScripts/other/owaUnreadMailcount.js",
-        "contentScripts/login/owa.js"
-      ],
+      "js": ["contentScripts/other/owaUnreadMailcount.js", "contentScripts/login/owa.js"],
       "run_at": "document_idle",
       "matches": ["https://msx.tu-dresden.de/*"]
     },
@@ -119,10 +104,7 @@
     {
       "js": ["contentScripts/login/opalMain.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/shiblogin*",
-        "https://bildungsportal.sachsen.de/opal/login*"
-      ]
+      "matches": ["https://bildungsportal.sachsen.de/opal/shiblogin*", "https://bildungsportal.sachsen.de/opal/login*"]
     },
     {
       "js": [

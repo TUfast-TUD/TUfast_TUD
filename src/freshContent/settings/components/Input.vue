@@ -1,40 +1,16 @@
 <template>
   <div class="input-container">
     <div :class="`input ${state}`">
-      <input
-        :value="modelValue"
-        class="input__input"
-        :type="type"
-        :placeholder="placeholder"
-        @input="emitState"
-      >
-      <component
-        :is="statusIcon"
-        :class="`input__icon ${
-          modelValue.length > 0 ? 'input__icon--visible' : ''
-        }`"
-      />
+      <input :value="modelValue" class="input__input" :type="type" :placeholder="placeholder" @input="emitState" />
+      <component :is="statusIcon" :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`" />
     </div>
-    <span
-      :style="`opacity: ${!correctPattern && modelValue.length > 0 ? 1 : 0}`"
-    >{{ errorMessage }}</span>
+    <span :style="`opacity: ${!correctPattern && modelValue.length > 0 ? 1 : 0}`">{{ errorMessage }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  PropType,
-  computed,
-  onMounted,
-  watchEffect
-} from 'vue'
-import {
-  PhXCircle,
-  PhCheckCircle,
-  PhWarningCircle
-} from '@dnlsndr/vue-phosphor-icons'
+import { defineComponent, ref, PropType, computed, onMounted, watchEffect } from 'vue'
+import { PhXCircle, PhCheckCircle, PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
   components: {
@@ -77,7 +53,7 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue', 'update:valid'],
-  setup (props, { emit }) {
+  setup(props, { emit }) {
     const statusIcon = ref('PhCheckCircle')
     const state = ref('')
 
@@ -91,16 +67,8 @@ export default defineComponent({
 
     watchEffect(() => {
       if (props.modelValue.length > 0) {
-        state.value = correctPattern.value
-          ? 'input--correct'
-          : props.warn
-            ? 'input--warn'
-            : 'input--false'
-        statusIcon.value = correctPattern.value
-          ? 'PhCheckCircle'
-          : props.warn
-            ? 'PhWarningCircle'
-            : 'PhXCircle'
+        state.value = correctPattern.value ? 'input--correct' : props.warn ? 'input--warn' : 'input--false'
+        statusIcon.value = correctPattern.value ? 'PhCheckCircle' : props.warn ? 'PhWarningCircle' : 'PhXCircle'
         emit('update:valid', correctPattern.value || props.warn)
       } else {
         state.value = ''
@@ -109,9 +77,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (props.column) {
-        document
-          .querySelectorAll('.input-container')
-          ?.forEach((el) => el.classList.add('input-container--column'))
+        document.querySelectorAll('.input-container')?.forEach((el) => el.classList.add('input-container--column'))
       }
     })
 

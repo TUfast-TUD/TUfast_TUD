@@ -1,27 +1,18 @@
 <template>
   <div class="main-grid">
     <header class="main-grid__header">
-      <h1 class="upper txt-bold main-grid__title">
-        Willkommen bei TUfast 🚀
-      </h1>
+      <h1 class="upper txt-bold main-grid__title">Willkommen bei TUfast 🚀</h1>
       <h3 class="txt-bold main-grid__subtitle">
         Hier kannst du alle Funktionen entdecken und Einstellungen vornehmen.
       </h3>
     </header>
-    <ColorSwitch
-      class="main-grid__color-select"
-      :anim-state="animState"
-      @click="toggleTheme()"
-    />
+    <ColorSwitch class="main-grid__color-select" :anim-state="animState" @click="toggleTheme()" />
     <div class="main-grid__menues">
       <Dropdown />
       <Statistics />
       <LanguageSelect />
     </div>
-    <div
-      class="main-grid__settings"
-      :class="{ 'main-grid__settings--no-overflow': showCard }"
-    >
+    <div class="main-grid__settings" :class="{ 'main-grid__settings--no-overflow': showCard }">
       <SettingTile
         v-for="(setting, index) in settings"
         :key="index"
@@ -32,19 +23,12 @@
       />
     </div>
   </div>
-  <Card
-    v-if="showCard"
-    :title="currentSetting.title"
-    @close-me="showCard = false"
-  >
+  <Card v-if="showCard" :title="currentSetting.title" @close-me="showCard = false">
     <template #default>
       <component :is="currentSetting.settingsPage" />
     </template>
   </Card>
-  <teleport
-    v-if="!hideWelcome"
-    to="body"
-  >
+  <teleport v-if="!hideWelcome" to="body">
     <Onboarding
       :current-step="currentOnboardingStep"
       :h1="onboardingSteps[currentOnboardingStep - 1].h1"
@@ -130,7 +114,7 @@ export default defineComponent({
     OpalSetup,
     DoneSetup
   },
-  setup () {
+  setup() {
     const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
     const { hideWelcome, currentOnboardingStep } = useStepper()
     const showCard = ref(false)
@@ -159,10 +143,8 @@ export default defineComponent({
     // updates the theme classes on the <html> element
     const updateTheme = (theme: string) => {
       // shortening the rest of the logic
-      const setClass = (className: string) =>
-        document.documentElement.classList.add(className)
-      const unsetClass = (className: string) =>
-        document.documentElement.classList.remove(className)
+      const setClass = (className: string) => document.documentElement.classList.add(className)
+      const unsetClass = (className: string) => document.documentElement.classList.remove(className)
       if (theme === 'dark') {
         animState.value = 'dark'
         setClass('dark')
@@ -176,16 +158,10 @@ export default defineComponent({
 
     // sets the right theme on initial load
     const themeSetup = async () => {
-      let selectedTheme = (await getChromeLocalStorage('theme')) as
-        | 'dark'
-        | 'light'
-        | 'system'
+      let selectedTheme = (await getChromeLocalStorage('theme')) as 'dark' | 'light' | 'system'
       if (selectedTheme === 'system') {
         // check if user prefers some color theme
-        selectedTheme = window.matchMedia('(prefers-color-scheme: light)')
-          .matches
-          ? 'light'
-          : 'dark'
+        selectedTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
         await setChromeLocalStorage({ theme: selectedTheme })
       }
       updateTheme(selectedTheme)
@@ -193,9 +169,7 @@ export default defineComponent({
 
     // lifecycle hook - runs some startup logic before load of settings page
     onBeforeMount(async () => {
-      hideWelcome.value = (await getChromeLocalStorage(
-        'hideWelcome'
-      )) as boolean
+      hideWelcome.value = (await getChromeLocalStorage('hideWelcome')) as boolean
       themeSetup()
     })
 

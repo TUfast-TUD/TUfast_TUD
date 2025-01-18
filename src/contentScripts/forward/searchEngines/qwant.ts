@@ -1,6 +1,6 @@
 import type { SENamespace } from './common'
 
-function getQuery (): string|false {
+function getQuery(): string | false {
   const params = new URLSearchParams(window.location.search)
   if (!params.has('q')) return false
   else return params.get('q') || false
@@ -22,11 +22,11 @@ function getQuery (): string|false {
 // 3. is not really nice, but it works
 // This means we should probably go with 1?
 
-(async () => {
+;(async () => {
   const common: SENamespace = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
 
   // If we dont have fwdEnabled, do nothing
-  if (!await common.fwdEnabled()) return
+  if (!(await common.fwdEnabled())) return
 
   // Else we will register a MutationObserver that will listen to any change
   // If any change happens we see if we can forward to a location

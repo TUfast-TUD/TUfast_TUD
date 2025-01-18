@@ -1,15 +1,6 @@
 <template>
-  <div
-    class="settings-tile"
-    @mouseenter="toggleFocus()"
-    @mouseleave="toggleFocus()"
-    @click="click($event)"
-  >
-    <component
-      :is="icon"
-      color="hsl(var(--clr-primary) )"
-      class="settings-tile__icon"
-    />
+  <div class="settings-tile" @mouseenter="toggleFocus()" @mouseleave="toggleFocus()" @click="click($event)">
+    <component :is="icon" color="hsl(var(--clr-primary) )" class="settings-tile__icon" />
     <h2 class="settings-tile__title">
       {{ title }}
     </h2>
@@ -19,7 +10,17 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 // Temporary fix: We need to import the Componentes for the icons manually as no global usage is possible
-import { PhLockKey, PhNotification, PhListDashes, PhSparkle, PhChartBar, PhGauge, PhGoogleLogo, PhRocket, PhEnvelopeOpen } from '@dnlsndr/vue-phosphor-icons'
+import {
+  PhLockKey,
+  PhNotification,
+  PhListDashes,
+  PhSparkle,
+  PhChartBar,
+  PhGauge,
+  PhGoogleLogo,
+  PhRocket,
+  PhEnvelopeOpen
+} from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
   components: {
@@ -43,7 +44,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const toggleFocus = () => {
       const tiles = [...document.querySelectorAll('.settings-tile')]
       for (const tile of tiles) {
@@ -51,9 +52,11 @@ export default defineComponent({
       }
     }
 
-    const click = (e : Event) => {
+    const click = (e: Event) => {
       let target = e.target as HTMLElement
-      if (target.parentElement?.classList.contains('settings-tile')) { target = target.parentElement }
+      if (target.parentElement?.classList.contains('settings-tile')) {
+        target = target.parentElement
+      }
       target.classList.add('settings-tile--animate')
       setTimeout(() => target.classList.remove('settings-tile--animate'), 1000)
     }
@@ -135,5 +138,4 @@ export default defineComponent({
     100%
         transform: scale(2)
         opacity: 0
-
 </style>

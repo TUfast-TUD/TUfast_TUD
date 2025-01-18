@@ -6,52 +6,54 @@ const cookieSettings: CookieSettings = {
   portalName: 'videocampus',
   domain: 'videocampus.sachsen.de',
   usesIdp: true
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class VideocampusLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> {}
 
-    async additionalFunctionsPostCheck (): Promise<void> {
+    async additionalFunctionsPostCheck(): Promise<void> {
       this.selectIdpAndClick()
     }
 
-    selectIdpAndClick () {
+    selectIdpAndClick() {
       const [select] = document.getElementsByName('idp')
       if (!select) return
 
       // Get all options and find TU Dresden
       const optionsArr = Array.from((select as HTMLSelectElement).options)
-      const idpValue = optionsArr.find((option) => option.innerText === 'TU Dresden' || option.innerText === 'Technische Universität Dresden')?.value
+      const idpValue = optionsArr.find(
+        (option) => option.innerText === 'TU Dresden' || option.innerText === 'Technische Universität Dresden'
+      )?.value
       if (typeof idpValue === 'undefined') return
-      (select as HTMLSelectElement).value = idpValue;
+      ;(select as HTMLSelectElement).value = idpValue
 
       // We need to trigger the onchange event manually
-      (select as HTMLSelectElement).dispatchEvent(new Event('change'))
+      ;(select as HTMLSelectElement).dispatchEvent(new Event('change'))
 
       // Click the submit button
       document.getElementById('samlLogin')?.click()
     }
 
     // Login fields are never available
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       return false
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       return [document.querySelector('a.dropdown-item[href="/logout"]')]
     }
 
     // We never login but forward to the idp
-    async login (_userData: UserData, _loginFields?: LoginFields): Promise<void> { }
+    async login(_userData: UserData, _loginFields?: LoginFields): Promise<void> {}
   }
 
-  await (new VideocampusLogin()).start()
+  await new VideocampusLogin().start()
 })()

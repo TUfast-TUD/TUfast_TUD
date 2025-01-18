@@ -1,7 +1,5 @@
 <template>
-  <h1 class="upper">
-    TU Dresden E-Mail
-  </h1>
+  <h1 class="upper">TU Dresden E-Mail</h1>
   <div class="info">
     <Setting
       v-model="messagesActive"
@@ -32,7 +30,7 @@ export default defineComponent({
     //    Onboarding,
     Setting
   },
-  setup () {
+  setup() {
     const { owa } = useSettingHandler()
     const messagesActive = ref(false)
     const messageCbDisabled = ref(false)
@@ -43,7 +41,7 @@ export default defineComponent({
       if (messagesActive.value) {
         messageCbDisabled.value = true
         notificationsCbDisabled.value = true
-        messagesActive.value = await owa('enable', 'fetch') as boolean
+        messagesActive.value = (await owa('enable', 'fetch')) as boolean
         messageCbDisabled.value = false
         notificationsCbDisabled.value = false
       } else {
@@ -56,7 +54,7 @@ export default defineComponent({
       if (notificationsActive.value) {
         messageCbDisabled.value = true
         notificationsCbDisabled.value = true
-        notificationsActive.value = await owa('enable', 'notification') as boolean
+        notificationsActive.value = (await owa('enable', 'notification')) as boolean
         messageCbDisabled.value = false
         notificationsCbDisabled.value = false
       } else {
@@ -77,7 +75,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="sass" scoped>

@@ -1,4 +1,4 @@
-function reloadInNewTab () {
+function reloadInNewTab() {
   // When opening a pdf we get to ".../downloadering?fibercode=xxx"
   // We could save the fibrecode to not reopen the same document over and over
   // or we could go the simpler way and see if there even is a history for this tab.
@@ -9,7 +9,7 @@ function reloadInNewTab () {
   window.history.back()
 }
 
-(async () => {
+;(async () => {
   const { pdfInNewTab } = await chrome.storage.local.get(['pdfInNewTab'])
   if (!pdfInNewTab) return
 
