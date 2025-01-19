@@ -20,8 +20,8 @@ Steps to contribute:
 5. Run `npm run useChrome` or `npm run useFF` to select the browser you are developing for - this will copy the corresponding manifest.json.
 6. Run `npm run dev` while developing. This is will compile `.sass` and `.ts` files and watch for changes in your working tree.
 7. Load the `./build` directory as an unpacked extension in your browser to test the extension.
-8. Run `npm run test` locally before pushing code. This will also check if your code is formatted correctly. You can use [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to automatically format your code or `npm run prettier:fix`. (See also below.) Wrong formatting will result in failing CI on GitHub!
-9. **Increase the version number in the `manifest*.json` files according to [SemVer](https://semver.org/). An increase in version number is strictly required beforere releasing a new version!**
+8. Run `npm run test` locally before pushing code. This will also check if your code is formatted correctly. You can use [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to automatically format your code (recommended) or use `npm run prettier:fix`. (See also below.) Wrong formatting will result in failing CI on GitHub!
+9. **Increase the version number in the `manifest*.json` files according to [SemVer](https://semver.org/). An increase in version number is strictly required for new TUfast releases!**
 10. Create a pull request against `main`.
 11. Await our review.
 
@@ -32,7 +32,8 @@ Steps to contribute:
 - **CSS-Preprocessor**: We are using [SASS](https://sass-lang.com/).
 - **Code style and linting**: We are using ESlint and prettier. Run `npm run test` to check your code style and linting before pushing code. Wrong formatting will result in a failing CI. You should configure your editor to automatically format on save with prettier for which VSCode provides [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 
-### Known peculiarities with browser extensions
-**Error:** `Unchecked runtime.lastError: The message port closed before a response was received.` Promisifying chrome.runtime.sendMessage({...}) doesnt work, because when you define a callback (Promise.resolve) sendMessage will wait until sendResponse is called in the message handler. It just stalls execution and then dies if it's never called. **Solutions:** 1) Unpromisify sendMessage. 2) Always return a value (return true is fine).
+## Known peculiarities and bugs
+- `Unchecked runtime.lastError: The message port closed before a response was received.` Promisifying chrome.runtime.sendMessage({...}) doesnt work, because when you define a callback (Promise.resolve) sendMessage will wait until sendResponse is called in the message handler. It just stalls execution and then dies if it's never called. **Solutions:** 1) Unpromisify sendMessage. 2) Always return a value (return true is fine).
+- **Prettier in Windows**: `npm run prettier` might show warning and git might show changes, although all files are formatted correctly visually. This is due to end-of-line conventions. For information and fix see [this issue](https://github.com/TUfast-TUD/TUfast_TUD/pull/157).
 
 ## Have fun developing! 🔥
