@@ -76,7 +76,14 @@ namespace Graphing {
     return newValues
   }
 
-  export function createSVGGradeDistributionGraph(values: GradeStat[], url: string, width = 200, height = 100): string {
+  export function createSVGGradeDistributionGraph(
+    values: GradeStat[],
+    url: string,
+    ownGrade: number,
+    loadingAnimation = false,
+    width = 200,
+    height = 100
+  ): string {
     // Reduce the bar count / pick bigger intervals
     const coarseValues = pickGradeSubset(values)
 
@@ -94,6 +101,17 @@ namespace Graphing {
       // Allows styling the failed sections differently
       let className = 'passed'
       if (grade >= 5.0) className = 'failed'
+
+      if (grade === ownGrade) {
+        className = 'ownGradePassed'
+        if (grade >= 5.0) className = 'ownGradeFailed'
+      } else if (ownGrade === -1) {
+        className = 'nograde'
+      }
+
+      if (loadingAnimation) {
+        className = 'animate-loading'
+      }
 
       barsSvg += `
             <rect
@@ -150,6 +168,8 @@ namespace Graphing {
       } else {
         const { date, grade } = tries[x]
         tooltip = `<title>${grade}\n${date}</title>`
+
+        if (grade.startsWith('noch nicht gesetzt')) className = 'usedOutstanding'
       }
 
       svgContent += `
@@ -207,7 +227,7 @@ async function createCreditsBanner() {
   credits.innerHTML = `Table ${settingEnabled ? 'powered by' : 'disabled'}
     <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
     <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
-    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>
+    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>, <a href="https://github.com/t0mbrn" target="_blank">Tom</a>
     `
 
   const disableButton = document.createElement('button')
@@ -267,17 +287,23 @@ async function eventListener() {
   applyChanges()
 }
 
+// default values for Notenübersicht, when table is loading
+const NULL_TABLE: Graphing.GradeStat[] = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 5].map((g) => ({
+  grade: g,
+  count: 1
+}))
+
 function applyChanges() {
   if (currentView.startsWith('/APP/EXAMRESULTS/')) {
     // Prüfungen > Ergebnisse
 
     // Remove the "gut/befriedigend" section
     const headRow = document.querySelector('thead>tr')!
-    headRow.removeChild(headRow.children.item(3)!)
     headRow.children.item(3)!.textContent = 'Notenverteilung'
+    headRow.removeChild(headRow.children.item(4)!)
 
     const body = document.querySelector('tbody')!
-    const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = []
+    const promises: Promise<{ doc: Document; elm: Element; url: string; ownGrade: number }>[] = []
     for (const row of body.children) {
       // Remove useless inline styles which set the vertical alignment
       for (const col of row.children) col.removeAttribute('style')
@@ -293,39 +319,61 @@ function applyChanges() {
 
       const url = scriptToURL(scriptContent)
 
+      // loading animation
+      lastCol.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -10, true)
+
+      let ownGrade = 0
+      const gradeElmText = row.children.item(2)?.innerHTML.trim()
+      if (gradeElmText?.includes(',')) {
+        try {
+          ownGrade = parseFloat(gradeElmText.replace(',', '.'))
+        } catch (e) {
+          // In case the number has a weird format
+          console.error(e)
+          ownGrade = -99
+        }
+      } else if (gradeElmText?.includes('be')) {
+        ownGrade = 1
+      } else {
+        // default exception case, maybe expand as needed
+        ownGrade = -99
+      }
+
       promises.push(
         fetch(url).then(async (s) => {
           const parser = new DOMParser()
           const doc = parser.parseFromString(await s.text(), 'text/html')
 
-          return { doc, elm: lastCol, url }
+          return { doc, elm: lastCol, url, ownGrade }
         })
       )
     }
 
     promises.forEach((p) =>
-      p.then(({ doc, elm, url }) => {
-        const tableBody = doc.querySelector('tbody')!
-        const values = [...tableBody.children].map((tr) => {
-          const gradeText = tr.children.item(0)!.textContent!.replace(',', '.')
-          const grade = parseFloat(gradeText)
+      p
+        .then(({ doc, elm, url, ownGrade }) => {
+          const tableBody = doc.querySelector('tbody')!
 
-          const countText = tr.children.item(1)!.textContent!
-          let count: number
-          if (countText === '---') count = 0
-          else count = parseInt(countText)
+          const values = [...tableBody.children].map((tr) => {
+            const gradeText = tr.children.item(0)!.textContent!.replace(',', '.')
+            const grade = parseFloat(gradeText)
 
-          return {
-            grade,
-            count
-          }
+            const countText = tr.children.item(1)!.textContent!
+            let count: number
+            if (countText === '---') count = 0
+            else count = parseInt(countText)
+
+            return {
+              grade,
+              count
+            }
+          })
+
+          elm.innerHTML = Graphing.createSVGGradeDistributionGraph(values, url, ownGrade)
         })
-        // .slice(0, -2); // Remove the 5.0 from all lists
-
-        // Present the bar chart
-        const graphSVG = Graphing.createSVGGradeDistributionGraph(values, url)
-        elm.innerHTML = graphSVG
-      })
+        .catch((reason) => {
+          console.error(reason)
+        })
     )
 
     // Remove the inline style that sets a width on the top right table cell
@@ -341,6 +389,9 @@ function applyChanges() {
     const headRow = document.querySelector('thead>tr')!
     headRow.removeChild(headRow.children.item(3)!)
 
+    // Change table header
+    headRow.children.item(3)!.textContent = 'Versuche'
+
     // Add "Notenverteilung" header
     {
       headRow.children.item(3)!.removeAttribute('colspan')
@@ -351,7 +402,8 @@ function applyChanges() {
 
     // Create the grade distribution graph
     const body = document.querySelector('tbody')!
-    const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = []
+    const promises: Promise<{ doc: Document; elm: Element; url: string; ownGrade: number }>[] = []
+
     for (const row of body.children) {
       // Remove useless inline styles which set the vertical alignment
       for (const col of row.children) col.removeAttribute('style')
@@ -368,47 +420,70 @@ function applyChanges() {
       // Extract script content
       const lastCol = row.children.item(4)!
       const scriptElm = lastCol.children.item(1)
+
       // Skip courses wihtout grades
       if (scriptElm === null) continue
+
+      let ownGrade = 0
+      const gradeElmText = row.children.item(2)?.innerHTML.trim()
+      if (gradeElmText?.includes(',')) {
+        try {
+          ownGrade = parseFloat(gradeElmText.replace(',', '.'))
+        } catch (e) {
+          // In case the number has a weird format
+          console.error(e)
+          ownGrade = -99
+        }
+      } else if (gradeElmText?.includes('be')) {
+        ownGrade = 1
+      } else {
+        // default exception case, maybe expand as needed
+        ownGrade = -99
+      }
 
       const scriptContent = scriptElm!.innerHTML
 
       const url = scriptToURL(scriptContent)
+      // loading animation
+      lastCol.innerHTML = Graphing.createSVGGradeDistributionGraph(NULL_TABLE, url, -10, true)
 
       promises.push(
         fetch(url).then(async (s) => {
           const parser = new DOMParser()
           const doc = parser.parseFromString(await s.text(), 'text/html')
 
-          return { doc, elm: lastCol, url }
+          return { doc, elm: lastCol, url, ownGrade }
         })
       )
     }
 
     promises.forEach((p) =>
-      p.then(({ doc, elm, url }) => {
-        // Parse the grade distributions
-        const tableBody = doc.querySelector('tbody')!
-        const values = [...tableBody.children].map((tr) => {
-          const gradeText = tr.children.item(0)!.textContent!.replace(',', '.')
-          const grade = parseFloat(gradeText)
+      p
+        .then(({ doc, elm, url, ownGrade }) => {
+          // Parse the grade distributions
+          const tableBody = doc.querySelector('tbody')!
 
-          const countText = tr.children.item(1)!.textContent!
-          let count: number
-          if (countText === '---') count = 0
-          else count = parseInt(countText)
+          const values = [...tableBody.children].map((tr) => {
+            const gradeText = tr.children.item(0)!.textContent!.replace(',', '.')
+            const grade = parseFloat(gradeText)
 
-          return {
-            grade,
-            count
-          }
+            const countText = tr.children.item(1)!.textContent!
+            let count: number
+            if (countText === '---') count = 0
+            else count = parseInt(countText)
+
+            return {
+              grade,
+              count
+            }
+          })
+
+          // Present the bar chart
+          elm.innerHTML = Graphing.createSVGGradeDistributionGraph(values, url, ownGrade)
         })
-        // .slice(0, -2); // Remove the 5.0 from all lists
-
-        // Present the bar chart
-        const graphSVG = Graphing.createSVGGradeDistributionGraph(values, url)
-        elm.innerHTML = graphSVG
-      })
+        .catch((reason) => {
+          console.error(reason)
+        })
     )
 
     // Remove the inline style that sets a width on the top right table cell
@@ -458,7 +533,6 @@ function applyChanges() {
             tries.push({ date, grade })
 
             i += 2
-            continue
           }
         }
 
@@ -515,11 +589,10 @@ function applyChanges() {
         const dateElm = botRow.children.item(1)!
         dateElm.textContent = dateElm.textContent!.replaceAll('00:00-00:00', '')
       }
-
-      // Table head "Prüfungsleistung"
-      document.querySelector('thead > tr > th#Name')!.textContent = ''
-      // Table head "Termin"
-      document.querySelector('thead > tr > th#Date')!.textContent = 'Prüfungsleistung/Termin'
     }
+    // Table head "Prüfungsleistung"
+    document.querySelector('thead > tr > th#Name')!.textContent = ''
+    // Table head "Termin"
+    document.querySelector('thead > tr > th#Date')!.textContent = 'Prüfungsleistung/Termin'
   }
 }

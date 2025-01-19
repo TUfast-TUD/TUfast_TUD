@@ -33,7 +33,7 @@ tbody > tr > td.tbdata {
   vertical-align: middle;
 }
 
-// The diagram
+// The grade diagram
 tbody > tr > td > svg {
   display: block;
   margin-left: auto;
@@ -43,10 +43,23 @@ tbody > tr > td > svg {
     fill: #315584;
   }
 
+  .ownGradePassed {
+    fill: rgb(95, 231, 36);
+  }
+
   .failed {
     fill: #dd2727aa;
   }
 
+  .ownGradeFailed {
+    fill: rgb(111, 2, 2);
+  }
+
+  .nograde {
+    fill: rgb(147, 147, 147);
+  }
+
+  // Try counter
   .used {
     fill: #315584;
   }
@@ -56,12 +69,81 @@ tbody > tr > td > svg {
     stroke: #315584aa;
   }
 
+  .usedOutstanding {
+    fill: #31558444;
+    stroke: #315584aa;
+  }
+
   &.distribution-chart {
     height: 3lh;
   }
 
   &.tries-counter {
     height: 1lh;
+  }
+
+  @keyframes flickerAnimation {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.1;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-o-keyframes flickerAnimation {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.1;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-moz-keyframes flickerAnimation {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.1;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @-webkit-keyframes flickerAnimation {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.1;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .animate-loading {
+    fill: #315584;
+    -webkit-animation: flickerAnimation 1s infinite;
+    -moz-animation: flickerAnimation 1s infinite;
+    -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
   }
 }
 
