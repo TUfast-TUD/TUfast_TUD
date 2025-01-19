@@ -1,12 +1,6 @@
 <template>
-  <div
-    :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`"
-    @click="emitState()"
-  >
-    <PhCheck
-      v-show="toggled"
-      class="toggle__icon"
-    />
+  <div :class="`toggle ${toggled ? 'toggle--toggled' : ''} ${disabled ? 'toggle--disabled' : ''}`" @click="emitState()">
+    <PhCheck v-show="toggled" class="toggle__icon" />
   </div>
 </template>
 
@@ -29,10 +23,12 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue'],
-  setup (props, { emit }) {
+  setup(props, { emit }) {
     const toggled = ref(props.modelValue)
 
-    watch(props, () => { toggled.value = props.modelValue })
+    watch(props, () => {
+      toggled.value = props.modelValue
+    })
 
     const emitState = () => {
       if (!props.disabled) {
@@ -93,5 +89,4 @@ export default defineComponent({
     &__icon
         width: 80%
         height: 80%
-
 </style>

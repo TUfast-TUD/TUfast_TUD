@@ -1,6 +1,6 @@
-(async () => {
+;(async () => {
   // All december is christmas time
-  if ((new Date()).getMonth() !== 11) return
+  if (new Date().getMonth() !== 11) return
   const { flakeState } = await chrome.storage.local.get(['flakeState'])
 
   const snowflakeSettings: {
@@ -16,7 +16,7 @@
   // If there is undefined or something wrong in there we set it to true
   if (typeof snowflakeSettings.currentState !== 'boolean') snowflakeSettings.currentState = true
 
-  function removeFlakes () {
+  function removeFlakes() {
     if (!snowflakeSettings.container) return
     try {
       const sf = document.getElementById('snowflakes')
@@ -25,7 +25,7 @@
     } catch (e) {}
   }
 
-  function insertFlakes () {
+  function insertFlakes() {
     if (snowflakeSettings.container) return
 
     snowflakeSettings.container = document.createElement('div')
@@ -45,16 +45,16 @@
   }
 
   // toggle flake state
-  async function flakesSwitchOnClick (e: MouseEvent) {
+  async function flakesSwitchOnClick(e: MouseEvent) {
     snowflakeSettings.currentState = !snowflakeSettings.currentState
 
     await chrome.storage.local.set({ flakeState: snowflakeSettings.currentState })
 
     if (snowflakeSettings.currentState) {
-      (e.target as HTMLHeadingElement).style.color = 'black'
+      ;(e.target as HTMLHeadingElement).style.color = 'black'
       insertFlakes()
     } else {
-      (e.target as HTMLSpanElement).style.color = 'grey'
+      ;(e.target as HTMLSpanElement).style.color = 'grey'
       removeFlakes()
     }
   }

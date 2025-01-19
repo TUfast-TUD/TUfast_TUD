@@ -1,75 +1,74 @@
 @keyframes rotate {
-	from {
-		transform: rotate(0deg)
-	}
-	to {
-		transform: rotate(360deg)
-	}
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .banner {
-	position: fixed;
-	top: 25px;
-	right: 200px;
-	width: fit-content;
-	background-color: #47BB5D;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	border-radius: .5rem;
-	transition: all 200ms ease;
-	z-index: 10000000;
+  position: fixed;
+  top: 25px;
+  right: 200px;
+  width: fit-content;
+  background-color: #47bb5d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+  transition: all 200ms ease;
+  z-index: 10000000;
 }
 
 .banner:hover {
-	transform: scale(1.025);
-	box-shadow: 0.5rem 0.5rem 3rem 0.1rem rgb(0 0 0 / .5)
+  transform: scale(1.025);
+  box-shadow: 0.5rem 0.5rem 3rem 0.1rem rgb(0 0 0 / 0.5);
 }
 
 .banner::after {
-	content: "";
-	width: 40px;
-	height: 20px;
-	position: absolute;
-	background-color: inherit;
-	clip-path: polygon(50% 0%, 100% 100%, 0 100%);
-	right: 50px;
-	top: -18px;
+  content: '';
+  width: 40px;
+  height: 20px;
+  position: absolute;
+  background-color: inherit;
+  clip-path: polygon(50% 0%, 100% 100%, 0 100%);
+  right: 50px;
+  top: -18px;
 }
 
 .banner__icon {
-	height: 2rem;
-	margin-left: 1rem;
+  height: 2rem;
+  margin-left: 1rem;
 }
 
 .banner__icon:hover {
-	animation: rotate 400ms ease-in-out;
+  animation: rotate 400ms ease-in-out;
 }
 
 .banner__title {
-	margin: 1rem .5rem;
-	user-select: none;
-	color: white;
+  margin: 1rem 0.5rem;
+  user-select: none;
+  color: white;
 }
 
 .banner__close {
-	border: none;
-	background-color: transparent;
-	cursor: pointer;
-	font-size: 2rem;
-	height: 50%;
-	position: absolute;
-	top: 0;
-	right: 0;
-	line-height: 1;
-
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 2rem;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 1;
 }
 
 .banner__close:hover {
-	color: red;
+  color: red;
 }
 
 .banner strong {
-	font-size: 1.2em;
-	font-weight: 800;
+  font-size: 1.2em;
+  font-weight: 800;
 }

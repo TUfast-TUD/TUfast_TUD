@@ -1,23 +1,15 @@
 <template>
-  <LoginTabs
-    v-model="currentLogin"
-    :options="logins"
-  />
+  <LoginTabs v-model="currentLogin" :options="logins" />
   <h2>{{ currentLogin.title }}</h2>
-  <h2
-    :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`"
-  >
-    {{ currentLogin.state ? "Aktuell gespeichert" : "Nicht gespeichert" }}
+  <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">
+    {{ currentLogin.state ? 'Aktuell gespeichert' : 'Nicht gespeichert' }}
   </h2>
   <p class="max-line p-margin">
-    Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC
-    gespeichert werden. Die Daten werden nur lokal und verschlüsselt
-    gespeichert. Du kannst sie jederzeit löschen.
+    Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden. Die Daten werden nur
+    lokal und verschlüsselt gespeichert. Du kannst sie jederzeit löschen.
   </p>
 
-  <p class="p-margin important">
-    TUfast nimmt dir auch alle Klicks beim Anmelden ab!
-  </p>
+  <p class="p-margin important">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</p>
   <div class="form">
     <CustomInput
       v-model="username"
@@ -37,22 +29,18 @@
       :error-message="currentLogin.passwordError"
     />
 
-    <CustomButton
-      title="Lokal speichern"
-      :disabled="!(passwordValid && usernameValid)"
-      @click="submitSave"
-    />
+    <CustomButton title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" @click="submitSave" />
   </div>
 
   <div v-if="currentLogin2FA">
     <p class="max-line p-margin">
-      Zwei-Faktor-Authentisierung (2FA): Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen TOTP Secret-Key speichern.
-      Der Key ist Base32 enkodiert und sieht bspw. so aus: <br>
-      MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP <br>
-      Hier findest du <a
-        style="color:white"
-        href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md"
-      >mehr Informationen und eine vollständige Anleitung zur Einrichtung</a>.
+      Zwei-Faktor-Authentisierung (2FA): Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen
+      TOTP Secret-Key speichern. Der Key ist Base32 enkodiert und sieht bspw. so aus: <br />
+      MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP <br />
+      Hier findest du
+      <a style="color: white" href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md"
+        >mehr Informationen und eine vollständige Anleitung zur Einrichtung</a
+      >.
     </p>
     <div class="form">
       <CustomInput
@@ -63,22 +51,13 @@
         :error-message="currentLogin2FA.totpSecretError"
         warn
       />
-      <CustomButton
-        title="TOTP Key lokal speichern"
-        :disabled="!totpSecretValid"
-        @click="submitSaveTotp"
-      />
+      <CustomButton title="TOTP Key lokal speichern" :disabled="!totpSecretValid" @click="submitSaveTotp" />
     </div>
   </div>
-  <br>
+  <br />
 
   <div class="form">
-    <CustomButton
-      title="Daten löschen"
-      class="button--warn"
-      :disabled="!currentLogin.state"
-      @click="submitDelete"
-    />
+    <CustomButton title="Daten löschen" class="button--warn" :disabled="!currentLogin.state" @click="submitDelete" />
   </div>
 </template>
 
@@ -97,7 +76,7 @@ import { useUserData } from '../composables/user-data'
 
 import type { Login, Login2FA } from '../types/Login'
 
-function isLogin2FA (login: Login | Login2FA): login is Login2FA {
+function isLogin2FA(login: Login | Login2FA): login is Login2FA {
   return 'totpSecretPattern' in login
 }
 
@@ -107,7 +86,7 @@ export default defineComponent({
     CustomButton: Button,
     LoginTabs
   },
-  setup () {
+  setup() {
     const { logins } = useLogins()
     const { sendChromeRuntimeMessage } = useChrome()
     const { saveUserData, deleteUserData } = useUserData()
@@ -167,7 +146,7 @@ export default defineComponent({
     }
 
     const currentLogin2FA = computed(() => {
-      return isLogin2FA(currentLogin.value) ? currentLogin.value as Login2FA : null
+      return isLogin2FA(currentLogin.value) ? (currentLogin.value as Login2FA) : null
     })
 
     const submitDelete = async () => {

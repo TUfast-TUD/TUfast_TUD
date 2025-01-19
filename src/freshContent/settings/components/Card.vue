@@ -1,21 +1,11 @@
 <template>
-  <div
-    class="card-bg"
-    @click="close()"
-  />
-  <div
-    tabindex="0"
-    class="card"
-    @keydown.esc="close()"
-  >
+  <div class="card-bg" @click="close()" />
+  <div tabindex="0" class="card" @keydown.esc="close()">
     <div class="card__header">
       <h1 class="card__title upper">
         {{ title }}
       </h1>
-      <PhX
-        class="card__close"
-        @click="close()"
-      />
+      <PhX class="card__close" @click="close()" />
     </div>
     <div class="card__body">
       <slot>Body</slot>
@@ -38,7 +28,7 @@ export default defineComponent({
     }
   },
   emits: ['close-me'],
-  setup (_, { emit }) {
+  setup(_, { emit }) {
     const close = () => {
       document.querySelector('.card')?.classList.add('card--closing')
       setTimeout(() => emit('close-me'), 650)

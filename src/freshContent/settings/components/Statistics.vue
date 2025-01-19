@@ -1,12 +1,10 @@
 <template>
   <div class="statistics">
-    <p class="txt-bold">
-      Bereits gespart
-    </p>
+    <p class="txt-bold">Bereits gespart</p>
     <div class="statistics__clicks">
       <PhCursor />
       <span class="txt-bold">{{ counter }}</span>
-      <span>{{ counter === 1 ? "Click" : "Clicks" }}</span>
+      <span>{{ counter === 1 ? 'Click' : 'Clicks' }}</span>
     </div>
     <div class="statistics__minutes">
       <PhTimer />
@@ -27,12 +25,12 @@ export default defineComponent({
     PhCursor,
     PhTimer
   },
-  setup () {
+  setup() {
     const { getChromeLocalStorage } = useChrome()
     const counter = ref<number>(0)
 
-    getChromeLocalStorage('savedClickCounter').then(clicks => {
-      counter.value = typeof clicks === 'number' ? clicks : (Number.parseInt(clicks as string) || 0)
+    getChromeLocalStorage('savedClickCounter').then((clicks) => {
+      counter.value = typeof clicks === 'number' ? clicks : Number.parseInt(clicks as string) || 0
     })
 
     return {

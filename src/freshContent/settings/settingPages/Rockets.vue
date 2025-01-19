@@ -16,9 +16,8 @@ export default defineComponent({
     //    Setting,
     RocketSelect
   },
-  setup () {
-    return {
-    }
+  setup() {
+    return {}
   }
 })
 </script>

@@ -1,4 +1,4 @@
-function findUnreadCount (): HTMLDivElement | null {
+function findUnreadCount(): HTMLDivElement | null {
   const nodeList = document.querySelectorAll('div[role="treeitem"]')
   for (const node of nodeList) {
     const nameNode = node.querySelector('span[title]')
@@ -12,7 +12,7 @@ function findUnreadCount (): HTMLDivElement | null {
   return null
 }
 
-function onCharacterChanged (mutationRecord: MutationRecord[], _observer: MutationObserver) {
+function onCharacterChanged(mutationRecord: MutationRecord[], _observer: MutationObserver) {
   const count = Number.parseInt(mutationRecord[0]?.target?.textContent || '') || 0
   chrome.runtime.sendMessage({ cmd: 'read_mail_owa', nrOfUnreadMail: count })
 }

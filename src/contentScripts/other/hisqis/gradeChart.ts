@@ -2,18 +2,20 @@ import { Chart, LinearScale, BarController, CategoryScale, BarElement } from 'ch
 Chart.register(LinearScale, BarController, CategoryScale, BarElement)
 
 type ExamGrades = Record<number, number>
-type ModuleGrades = Record<number, { grade: number, cp: number }>
+type ModuleGrades = Record<number, { grade: number; cp: number }>
 
 interface ParsedGrades {
   exams: ExamGrades
   modules: ModuleGrades
 }
 
-function parseGrades (): ParsedGrades | null {
+function parseGrades(): ParsedGrades | null {
   const examGrades: ExamGrades = {}
   const moduleGrades: ModuleGrades = {}
 
-  const tableRows = document.querySelectorAll('form table:not([summary="Liste der Stammdaten des Studierenden"]) > tbody > tr')
+  const tableRows = document.querySelectorAll(
+    'form table:not([summary="Liste der Stammdaten des Studierenden"]) > tbody > tr'
+  )
   if (tableRows.length === 0) return null
 
   for (const row of tableRows) {
@@ -46,9 +48,9 @@ function parseGrades (): ParsedGrades | null {
   return { exams: examGrades, modules: moduleGrades }
 }
 
-function countGrades (grades: ExamGrades): number[] {
+function countGrades(grades: ExamGrades): number[] {
   const gradesArr = [0, 0, 0, 0, 0]
-  Object.values(grades).forEach(g => {
+  Object.values(grades).forEach((g) => {
     const grade = Math.round(g)
     gradesArr[grade - 1] += 1
   })
@@ -56,7 +58,7 @@ function countGrades (grades: ExamGrades): number[] {
   return gradesArr
 }
 
-function getWeightedAverage (grades: ModuleGrades): number {
+function getWeightedAverage(grades: ModuleGrades): number {
   let sum = 0
   let count = 0
   for (const { grade, cp } of Object.values(grades)) {
@@ -66,7 +68,7 @@ function getWeightedAverage (grades: ModuleGrades): number {
   return sum / count
 }
 
-(async () => {
+;(async () => {
   const container = document.getElementById('TUfastGradeContainer')
   if (!container) return
 
@@ -97,20 +99,14 @@ function getWeightedAverage (grades: ModuleGrades): number {
     type: 'bar',
     data: {
       labels: ['1', '2', '3', '4', 'nicht bestanden'],
-      datasets: [{
-        data: countGrades(grades.exams),
-        backgroundColor: [
-          '#0b2a51',
-          '#0b2a51',
-          '#0b2a51',
-          '#0b2a51',
-          '#0b2a51'
-        ],
-        borderColor: [
-          '#0b2a51'
-        ],
-        borderWidth: 1
-      }]
+      datasets: [
+        {
+          data: countGrades(grades.exams),
+          backgroundColor: ['#0b2a51', '#0b2a51', '#0b2a51', '#0b2a51', '#0b2a51'],
+          borderColor: ['#0b2a51'],
+          borderWidth: 1
+        }
+      ]
     },
     options: {
       responsive: false,

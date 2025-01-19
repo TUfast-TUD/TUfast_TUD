@@ -1,5 +1,5 @@
 export interface Setting {
-    title: string;
-    icon: string;
-    settingsPage: string;
+  title: string
+  icon: string
+  settingsPage: string
 }

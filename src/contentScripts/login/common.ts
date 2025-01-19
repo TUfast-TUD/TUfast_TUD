@@ -4,31 +4,31 @@
 
 // Typescript interfaces and types
 export interface UserData {
-  user: string;
-  pass: string;
+  user: string
+  pass: string
 }
 
-export type LoginCheckResponse = UserData | false;
+export type LoginCheckResponse = UserData | false
 
 export interface CookieSettings {
-  portalName: string;
-  domain?: string;
-  logoutDuration?: number;
-  usesIdp?: boolean;
+  portalName: string
+  domain?: string
+  logoutDuration?: number
+  usesIdp?: boolean
 }
 
 interface OTPSettings {
-  input: HTMLInputElement | null;
-  submitButton?: HTMLElement | null;
-  type: 'totp' | 'iotp';
-  indexes?: number[];
+  input: HTMLInputElement | null
+  submitButton?: HTMLElement | null
+  type: 'totp' | 'iotp'
+  indexes?: number[]
 }
 
 export interface LoginFields {
-  usernameField: HTMLInputElement;
-  passwordField: HTMLInputElement;
-  submitButton?: HTMLElement;
-  otpSettings?: OTPSettings;
+  usernameField: HTMLInputElement
+  passwordField: HTMLInputElement
+  submitButton?: HTMLElement
+  otpSettings?: OTPSettings
 }
 
 // This is the default lifetime for the logout cookie in minutes.
@@ -37,13 +37,13 @@ const defaultLogoutDuration = 5
 // Abstract Loginclass
 // This should be extended by the login scripts.
 export abstract class Login {
-  platform: string;
-  cookieSettings: CookieSettings;
-  savedClickCount: number;
+  platform: string
+  cookieSettings: CookieSettings
+  savedClickCount: number
 
   // Constructor
   // Nothing fancy here
-  constructor (platform: string, cookieSettings: CookieSettings, savedClickCount: number = 1) {
+  constructor(platform: string, cookieSettings: CookieSettings, savedClickCount: number = 1) {
     this.platform = platform || 'zih'
     this.cookieSettings = cookieSettings
     this.savedClickCount = savedClickCount
@@ -60,11 +60,11 @@ export abstract class Login {
   abstract loginFieldsAvailable(): Promise<boolean | LoginFields>
   // This function should return all candidates for logout buttons.
   // An onClick listener will be added to set a "loggedOut" cookie
-  abstract findLogoutButtons(): Promise<(HTMLElement|Element|null)[] | NodeList | null>
+  abstract findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null>
 
   // The following methods should be implemented where necessery or possible.
   // The actual login function. It has access to credentials and - if the function above returns them - the input fields.
-  async login (userData: UserData, loginFields?: LoginFields): Promise<void> {
+  async login(userData: UserData, loginFields?: LoginFields): Promise<void> {
     if (!loginFields || !loginFields.usernameField || !loginFields.passwordField) return
 
     this.fakeInput(loginFields.usernameField, userData.user)
@@ -75,17 +75,19 @@ export abstract class Login {
   // This function should be used to find if an error dialog is shown for invalid credentaials.
   // When the return value is not null it means that the error dialog is shown.
   // There is a default implementation here but it should be used where possible.
-  async findCredentialsError (): Promise<boolean | HTMLElement | Element | null> { return false }
+  async findCredentialsError(): Promise<boolean | HTMLElement | Element | null> {
+    return false
+  }
 
   // The main function the only only one that should be actually called from outside.
-  async start () {
+  async start() {
     // .catch(() => { }) because we don't care about user implemented errors.
-    await this.additionalFunctionsPreCheck().catch(() => { })
+    await this.additionalFunctionsPreCheck().catch(() => {})
 
     const userData = await this.loginCheckAndData()
     if (!userData) return
 
-    await this.additionalFunctionsPostCheck(userData).catch(() => { })
+    await this.additionalFunctionsPostCheck(userData).catch(() => {})
 
     await this.tryLogin(userData)
 
@@ -93,7 +95,7 @@ export abstract class Login {
     this.registerLogoutButtonsListener(buttons)
   }
 
-  registerLogoutButtonsListener (buttons: (HTMLElement|Element|null)[] | NodeList | null) {
+  registerLogoutButtonsListener(buttons: (HTMLElement | Element | null)[] | NodeList | null) {
     if (buttons) {
       for (const button of buttons) {
         if (button) button.addEventListener('click', this.setLoggedOutCookie.bind(this))
@@ -101,7 +103,7 @@ export abstract class Login {
     }
   }
 
-  async loginCheckAndData (): Promise<LoginCheckResponse> {
+  async loginCheckAndData(): Promise<LoginCheckResponse> {
     // The fastest and first check is for loggedOutCookie
     if (this.isLoggedOutCookie()) return false
 
@@ -117,12 +119,12 @@ export abstract class Login {
   }
 
   // The if the tuFast_platform_loggedOut cookie is set
-  isLoggedOutCookie (): boolean {
+  isLoggedOutCookie(): boolean {
     return document.cookie.includes(`tuFast_${this.cookieSettings.portalName}_loggedOut`)
   }
 
   // Function to set the tuFast_platform_loggedOut cookie
-  setLoggedOutCookie (): void {
+  setLoggedOutCookie(): void {
     if (!this.cookieSettings.domain) return
 
     // The next line could be confusing
@@ -131,7 +133,9 @@ export abstract class Login {
 
     const date = new Date()
     date.setMinutes(date.getMinutes() + logoutDuration)
-    const domain = this.cookieSettings.domain.startsWith('.') ? this.cookieSettings.domain : `.${this.cookieSettings.domain}`
+    const domain = this.cookieSettings.domain.startsWith('.')
+      ? this.cookieSettings.domain
+      : `.${this.cookieSettings.domain}`
     document.cookie = `tuFast_${this.cookieSettings.portalName}_loggedOut=true; expires=${date.toUTCString()}; path=/; domain=${domain}; secure`
 
     // If we use IDP we need to logout we can ask the backgroundscript to log us out of there too
@@ -141,19 +145,19 @@ export abstract class Login {
   // This function is for additional triggers that should happen on login.
   // For example we need to add a click to the savedClickCounter.
   // In future this can be used to add more functions.
-  async onLogin (): Promise<void> {
+  async onLogin(): Promise<void> {
     // I don't know if await even works but there is no reason to await any response anyway
     await chrome.runtime.sendMessage({ cmd: 'save_clicks', clickCount: this.savedClickCount })
   }
 
   // This method finds the login fields, checks for the error dialog and tries to login.
-  async tryLogin (userData: UserData) {
+  async tryLogin(userData: UserData) {
     const errorDialog = await this.findCredentialsError()
     if (errorDialog) return
 
     let loginFields: LoginFields | undefined
 
-    const avail = await this.loginFieldsAvailable().catch(() => { })
+    const avail = await this.loginFieldsAvailable().catch(() => {})
     if (typeof avail === 'boolean' && !avail) return
     if (typeof avail === 'object') loginFields = avail
 
@@ -165,7 +169,7 @@ export abstract class Login {
     await this.login(userData, loginFields)
   }
 
-  async fillOtp (otpSettings: OTPSettings): Promise<boolean> {
+  async fillOtp(otpSettings: OTPSettings): Promise<boolean> {
     if (!otpSettings.input) return false
 
     let otp: string | undefined
@@ -182,7 +186,7 @@ export abstract class Login {
     return !!otpSettings.submitButton
   }
 
-  fakeInput (input: HTMLInputElement, value: string) {
+  fakeInput(input: HTMLInputElement, value: string) {
     // Inspired by how the Bitwarden extension does it
     // https://github.com/bitwarden/clients/blob/master/apps/browser/src/content/autofill.js#L346
     input.getBoundingClientRect()
@@ -196,27 +200,33 @@ export abstract class Login {
     // Sending empty keypresses
     // Making it a local function so we can use it again later
     const sendEmptyPresses = () => {
-      input.dispatchEvent(new KeyboardEvent('keydown', {
-        bubbles: true,
-        cancelable: false,
-        charCode: 0,
-        keyCode: 0,
-        which: 0
-      }))
-      input.dispatchEvent(new KeyboardEvent('keypress', {
-        bubbles: true,
-        cancelable: false,
-        charCode: 0,
-        keyCode: 0,
-        which: 0
-      }))
-      input.dispatchEvent(new KeyboardEvent('keyup', {
-        bubbles: true,
-        cancelable: false,
-        charCode: 0,
-        keyCode: 0,
-        which: 0
-      }))
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          bubbles: true,
+          cancelable: false,
+          charCode: 0,
+          keyCode: 0,
+          which: 0
+        })
+      )
+      input.dispatchEvent(
+        new KeyboardEvent('keypress', {
+          bubbles: true,
+          cancelable: false,
+          charCode: 0,
+          keyCode: 0,
+          which: 0
+        })
+      )
+      input.dispatchEvent(
+        new KeyboardEvent('keyup', {
+          bubbles: true,
+          cancelable: false,
+          charCode: 0,
+          keyCode: 0,
+          which: 0
+        })
+      )
     }
     sendEmptyPresses()
 
@@ -242,5 +252,5 @@ export abstract class Login {
 }
 
 export interface LoginNamespace {
-  Login: typeof Login;
+  Login: typeof Login
 }

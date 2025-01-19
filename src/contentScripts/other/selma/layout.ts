@@ -1,10 +1,9 @@
 const currentView = document.location.pathname
 // Regex for extracting Programm name and arguments from a popup Script
 // This is used to get the URL which would be opened in a popup
-const popupScriptsRegex =
-  /dl_popUp\("\/scripts\/mgrqispi\.dll\?APPNAME=CampusNet&PRGNAME=(\w+)&ARGUMENTS=([^"]+)"/
+const popupScriptsRegex = /dl_popUp\("\/scripts\/mgrqispi\.dll\?APPNAME=CampusNet&PRGNAME=(\w+)&ARGUMENTS=([^"]+)"/
 
-function scriptToURL (script: string): string {
+function scriptToURL(script: string): string {
   const matches = script.match(popupScriptsRegex)!
 
   const porgamName = matches.at(1)!
@@ -13,7 +12,7 @@ function scriptToURL (script: string): string {
   return `https://selma.tu-dresden.de/APP/${porgamName}/${prgArguments}`
 }
 
-function mapGrade (gradeElm: Element) {
+function mapGrade(gradeElm: Element) {
   const grade = gradeElm.textContent!
 
   if (grade.includes('be')) {
@@ -25,17 +24,12 @@ function mapGrade (gradeElm: Element) {
   }
 }
 
-function injectCSS (filename: string) {
+function injectCSS(filename: string) {
   const style = document.createElement('link')
   style.rel = 'stylesheet'
   style.type = 'text/css'
-  style.href = chrome.runtime.getURL(
-    `styles/contentScripts/selma/${filename}.css`
-  );
-
-  (document.head || document.body || document.documentElement).appendChild(
-    style
-  )
+  style.href = chrome.runtime.getURL(`styles/contentScripts/selma/${filename}.css`)
+  ;(document.head || document.body || document.documentElement).appendChild(style)
 }
 
 /*
@@ -48,11 +42,11 @@ Proabably a proper bundler config would be better
 
 namespace Graphing {
   export type GradeStat = {
-    grade: number;
-    count: number;
-  };
+    grade: number
+    count: number
+  }
 
-  function maxGradeCount (values: GradeStat[]): number {
+  function maxGradeCount(values: GradeStat[]): number {
     let max = 0
     for (const { count } of values) {
       if (count > max) max = count
@@ -61,7 +55,7 @@ namespace Graphing {
   }
 
   // Reduce the grade increments
-  function pickGradeSubset (values: GradeStat[]): GradeStat[] {
+  function pickGradeSubset(values: GradeStat[]): GradeStat[] {
     const increments = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 5]
 
     const newValues = increments.map((inc) => ({
@@ -82,12 +76,7 @@ namespace Graphing {
     return newValues
   }
 
-  export function createSVGGradeDistributionGraph (
-    values: GradeStat[],
-    url: string,
-    width = 200,
-    height = 100
-  ): string {
+  export function createSVGGradeDistributionGraph(values: GradeStat[], url: string, width = 200, height = 100): string {
     // Reduce the bar count / pick bigger intervals
     const coarseValues = pickGradeSubset(values)
 
@@ -136,13 +125,9 @@ namespace Graphing {
     `
   }
 
-  export type Try = { date: string; grade: string };
+  export type Try = { date: string; grade: string }
 
-  export function createJExamTryCounter (
-    tries: Try[],
-    url: string,
-    width = 200
-  ): string {
+  export function createJExamTryCounter(tries: Try[], url: string, width = 200): string {
     // Spacing in percent of circle width
     const spacing = 0.2
     // Stroke width in percent of radius
@@ -211,7 +196,7 @@ Actual logic
 // It also adds a small toggle to disable the table
 async function createCreditsBanner() {
   const { improveSelma: settingEnabled } = await chrome.storage.local.get(['improveSelma'])
-  
+
   const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
   const credits = document.createElement('p')
 
@@ -240,8 +225,7 @@ async function createCreditsBanner() {
   )
 
   // Tooltip
-  disableButton.title =
-    'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
+  disableButton.title = 'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
   disableButton.textContent = settingEnabled ? 'Deactivate' : 'Activate'
   disableButton.onclick = async (event) => {
     event.preventDefault()
@@ -253,7 +237,7 @@ async function createCreditsBanner() {
   return credits
 }
 
-(async () => {
+;(async () => {
   const { improveSelma } = await chrome.storage.local.get(['improveSelma'])
 
   // Apply all custom changes
@@ -261,22 +245,19 @@ async function createCreditsBanner() {
     // Add Credit banner with toggle button
     const creditElm = await createCreditsBanner()
     document.querySelector('.semesterChoice')!.appendChild(creditElm)
-    
+
     if (!improveSelma) return
-    
-    eventListener();
+
+    eventListener()
   })
 })()
 
-async function eventListener () {
+async function eventListener() {
   document.removeEventListener('DOMContentLoaded', eventListener)
 
   // Inject css
   injectCSS('base')
-  if (
-    currentView.startsWith('/APP/EXAMRESULTS/') ||
-    currentView.startsWith('/APP/COURSERESULTS/')
-  ) {
+  if (currentView.startsWith('/APP/EXAMRESULTS/') || currentView.startsWith('/APP/COURSERESULTS/')) {
     injectCSS('exam_results')
   }
   if (currentView.startsWith('/APP/MYEXAMS/')) {
@@ -286,7 +267,7 @@ async function eventListener () {
   applyChanges()
 }
 
-function applyChanges () {
+function applyChanges() {
   if (currentView.startsWith('/APP/EXAMRESULTS/')) {
     // Prüfungen > Ergebnisse
 
@@ -296,8 +277,7 @@ function applyChanges () {
     headRow.children.item(3)!.textContent = 'Notenverteilung'
 
     const body = document.querySelector('tbody')!
-    const promises: Promise<{ doc: Document; elm: Element; url: string }>[] =
-      []
+    const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = []
     for (const row of body.children) {
       // Remove useless inline styles which set the vertical alignment
       for (const col of row.children) col.removeAttribute('style')
@@ -371,8 +351,7 @@ function applyChanges () {
 
     // Create the grade distribution graph
     const body = document.querySelector('tbody')!
-    const promises: Promise<{ doc: Document; elm: Element; url: string }>[] =
-      []
+    const promises: Promise<{ doc: Document; elm: Element; url: string }>[] = []
     for (const row of body.children) {
       // Remove useless inline styles which set the vertical alignment
       for (const col of row.children) col.removeAttribute('style')
@@ -534,17 +513,13 @@ function applyChanges () {
       {
         // Remove useless timespans
         const dateElm = botRow.children.item(1)!
-        dateElm.textContent = dateElm.textContent!.replaceAll(
-          '00:00-00:00',
-          ''
-        )
+        dateElm.textContent = dateElm.textContent!.replaceAll('00:00-00:00', '')
       }
 
       // Table head "Prüfungsleistung"
       document.querySelector('thead > tr > th#Name')!.textContent = ''
       // Table head "Termin"
-      document.querySelector('thead > tr > th#Date')!.textContent =
-        'Prüfungsleistung/Termin'
+      document.querySelector('thead > tr > th#Date')!.textContent = 'Prüfungsleistung/Termin'
     }
   }
 }

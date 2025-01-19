@@ -57,7 +57,7 @@
   border-radius: 4px;
   font-size: 12px;
   border: 1.5px solid var(--color-border-input);
-  background-image: url("../../assets/icons/searchicon.png"); /* Add a search icon to input */
+  background-image: url('../../assets/icons/searchicon.png'); /* Add a search icon to input */
   background-position: 12px 7px; /* Position the search icon */
   background-size: 19px;
   background-repeat: no-repeat; /* Do not repeat the icon image */
@@ -256,20 +256,19 @@ a:hover {
   text-decoration: underline;
 }
 
-
 @media (prefers-color-scheme: dark) {
   .invert {
     filter: invert(1) hue-rotate(180deg);
   }
 
   .emptyStarRating {
-    filter: invert(0.8)
+    filter: invert(0.8);
   }
 
   :root {
     /* chrome, webkit */
     color-scheme: dark;
     /* firefox */
-    scrollbar-color: #737373 #38383D;
+    scrollbar-color: #737373 #38383d;
   }
 }

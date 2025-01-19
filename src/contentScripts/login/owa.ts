@@ -6,26 +6,26 @@ const platform = 'zih'
 const cookieSettings: CookieSettings = {
   portalName: 'owa',
   domain: 'msx.tu-dresden.de'
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class OWALogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> {}
 
-    async additionalFunctionsPostCheck (): Promise<void> { }
+    async additionalFunctionsPostCheck(): Promise<void> {}
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element| null> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element | null> {
       return document.getElementById('signInErrorDiv')
     }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       const submit = document.querySelector('div.signInEnter div') as HTMLDivElement
 
       return {
@@ -35,7 +35,7 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       // Light Version, we need more advanced stuff for the others
       return [document.getElementById('lo')]
     }
@@ -51,7 +51,9 @@ const cookieSettings: CookieSettings = {
 
     // new owa version
     const allNewBtns = document.querySelectorAll('div[role=menu] button')
-    const newBtns = (Array.from(allNewBtns) as HTMLButtonElement[]).filter((btn) => btn.innerText === 'Abmelden' || btn.innerText === 'Logout')
+    const newBtns = (Array.from(allNewBtns) as HTMLButtonElement[]).filter(
+      (btn) => btn.innerText === 'Abmelden' || btn.innerText === 'Logout'
+    )
 
     login.registerLogoutButtonsListener([...newBtns, oldBtn])
   })

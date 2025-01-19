@@ -1,4 +1,4 @@
-(async () => {
+;(async () => {
   const form = document.getElementsByTagName('form')[0]
   const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')
   const afterTable = table?.nextElementSibling

@@ -1,20 +1,12 @@
 <template>
-  <Setting
-    v-model="searchEngineActive"
-    txt="Suchmaschinen Superpower aktivieren"
-  />
+  <Setting v-model="searchEngineActive" txt="Suchmaschinen Superpower aktivieren" />
   <p class="max-line p-margin">
-    Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu
-    kommen. Es werden die meisten Suchmaschinen unterstützt!
+    Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten
+    Suchmaschinen unterstützt!
   </p>
 
   <p class="search-terms">
-    <template
-      v-for="site in uniqueSites"
-      :key="site"
-    >
-      {{ site[0] }} → {{ site[1].name }}<br>
-    </template>
+    <template v-for="site in uniqueSites" :key="site"> {{ site[0] }} → {{ site[1].name }}<br /> </template>
   </p>
 </template>
 
@@ -37,7 +29,7 @@ export default defineComponent({
   components: {
     Setting
   },
-  setup () {
+  setup() {
     const { se } = useSettingHandler()
     const searchEngineActive = ref(false)
 
@@ -56,7 +48,9 @@ export default defineComponent({
     })
 
     const seUpdate = async () => {
-      if (searchEngineActive.value) { searchEngineActive.value = (await se('enable', 'redirect')) as boolean } else await se('disable', 'redirect')
+      if (searchEngineActive.value) {
+        searchEngineActive.value = (await se('enable', 'redirect')) as boolean
+      } else await se('disable', 'redirect')
     }
 
     return {

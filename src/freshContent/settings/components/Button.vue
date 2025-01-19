@@ -14,9 +14,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
-
-  }
+  setup() {}
 })
 </script>
 
@@ -69,5 +67,4 @@ export default defineComponent({
 
       &:disabled
         background-color: hsl(var(--clr-alert), .4)
-
 </style>

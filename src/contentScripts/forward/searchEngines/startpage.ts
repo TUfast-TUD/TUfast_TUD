@@ -1,13 +1,13 @@
 import type { SENamespace } from './common'
 
 // See if we have a query param - if so we don't want to do anything here
-function shouldAct (): boolean {
+function shouldAct(): boolean {
   const params = new URLSearchParams(window.location.search)
   const hasQuery = params.has('q') || params.has('query')
   return !hasQuery
 }
 
-(async () => {
+;(async () => {
   const common: SENamespace = await import(chrome.runtime.getURL('contentScripts/forward/searchEngines/common.js'))
 
   // If we have GET query or no fwdEnabled, do nothing
@@ -29,11 +29,11 @@ function shouldAct (): boolean {
   const onSubmit = (e: Event) => {
     e.preventDefault() // We want to do our own stuff
     // Call the forward function
-    common.forward(sb.value).then((forwarded:boolean) => {
+    common.forward(sb.value).then((forwarded: boolean) => {
       if (!forwarded) {
         // When we didn't forward, the user still wants to search, so resubmit the form
-        e.target?.removeEventListener('submit', onSubmit);
-        (e.target as HTMLFormElement).submit()
+        e.target?.removeEventListener('submit', onSubmit)
+        ;(e.target as HTMLFormElement).submit()
       }
     })
   }

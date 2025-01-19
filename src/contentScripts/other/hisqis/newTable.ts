@@ -1,6 +1,5 @@
 import { DataTable } from 'simple-datatables'
-
-(async () => {
+;(async () => {
   // Get the container for the information
   // Currently this means there's the link located for switching the tables
   const tableInfoContainer = document.getElementById('TUfastTableInfo')
@@ -118,8 +117,6 @@ import { DataTable } from 'simple-datatables'
     sortable: true,
     searchable: false,
     paging: false,
-    columns: [
-      { select: 10, type: 'date', format: 'DD.MM.YYYY' }
-    ]
+    columns: [{ select: 10, type: 'date', format: 'DD.MM.YYYY' }]
   })
 })()

@@ -1,9 +1,6 @@
 import { useChrome } from './chrome'
 
-const {
-  setChromeLocalStorage,
-  sendChromeRuntimeMessage
-} = useChrome()
+const { setChromeLocalStorage, sendChromeRuntimeMessage } = useChrome()
 
 export const useUserData = () => ({
   saveUserData,

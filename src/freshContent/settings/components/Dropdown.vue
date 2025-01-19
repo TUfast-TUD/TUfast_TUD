@@ -1,23 +1,10 @@
 <template>
   <div class="dropdown">
     <div class="dropdown__dropdown">
-      <span
-        class="dropdown__title txt-bold"
-        @click="clicked = !clicked"
-      >Studiengang</span>
-      <PhCaretDown
-        class="dropdown__arrow"
-        color="hsl(var(--clr-primary) )"
-        size="2rem"
-        @click="clicked = !clicked"
-      />
+      <span class="dropdown__title txt-bold" @click="clicked = !clicked">Studiengang</span>
+      <PhCaretDown class="dropdown__arrow" color="hsl(var(--clr-primary) )" size="2rem" @click="clicked = !clicked" />
     </div>
-    <transition-group
-      v-if="clicked"
-      tag="div"
-      class="dropdown-list"
-      @mouseleave="clicked=false"
-    >
+    <transition-group v-if="clicked" tag="div" class="dropdown-list" @mouseleave="clicked = false">
       <div
         v-for="(study, key, index) in studies"
         :key="index"
@@ -30,7 +17,7 @@
           class="dropdown-list__image"
           :src="study.fsr_icon"
           :alt="`Das Icon des Studiengangs ${study.name}`"
-        >
+        />
         <h3 class="dropdown-list__title">
           {{ study.name }}
         </h3>
@@ -57,13 +44,13 @@ export default defineComponent({
       default: 'Platzhalter'
     }
   },
-  setup () {
+  setup() {
     const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
     const clicked = ref(false)
     const selectedStudy = ref('Standardeinstellungen')
 
-    getChromeLocalStorage('studiengang').then(studiengang => {
-      selectedStudy.value = studiengang as string|undefined || 'Standardeinstellungen'
+    getChromeLocalStorage('studiengang').then((studiengang) => {
+      selectedStudy.value = (studiengang as string | undefined) || 'Standardeinstellungen'
     })
 
     const setStudySubject = async (studiengang: string) => {

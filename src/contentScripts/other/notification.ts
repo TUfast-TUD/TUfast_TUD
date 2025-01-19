@@ -38,5 +38,5 @@ export const notify = (msg: string) => {
 }
 
 export interface NotificationNamespace {
-  notify: typeof notify;
+  notify: typeof notify
 }

@@ -1,47 +1,47 @@
 [
-    {
-        "title": "Automatisches Anmelden",
-        "icon": "PhLockKey",
-        "settingsPage": "AutoLogin"
-    },
-    {
-        "title": "E-Mail Benachrichtigungen",
-        "icon": "PhNotification",
-        "settingsPage": "Email"
-    },
-    {
-        "title": "OPAL-Kurse im Dashboard",
-        "icon": "PhListDashes",
-        "settingsPage": "OpalCourses"
-    },
-    {
-        "title": "OPAL personalisieren und verbessern",
-        "icon": "PhSparkle",
-        "settingsPage": "ImproveOpal"
-    },
-    {
-        "title": "Selma verbessern",
-        "icon": "PhChartBar",
-        "settingsPage": "ImproveSelma"
-    },
-    {
-        "title": "Shortcuts",
-        "icon": "PhGauge",
-        "settingsPage": "Shortcuts"
-    },
-    {
-        "title": "Suchmaschinen Superkräfte",
-        "icon": "PhGoogleLogo",
-        "settingsPage": "SearchEngines"
-    },
-    {
-        "title": "Raketen sammeln",
-        "icon": "PhRocket",
-        "settingsPage": "Rockets"
-    },
-    {
-        "title": "Weiteres & Kontakt",
-        "icon": "PhEnvelopeOpen",
-        "settingsPage": "Contact"
-    }
+  {
+    "title": "Automatisches Anmelden",
+    "icon": "PhLockKey",
+    "settingsPage": "AutoLogin"
+  },
+  {
+    "title": "E-Mail Benachrichtigungen",
+    "icon": "PhNotification",
+    "settingsPage": "Email"
+  },
+  {
+    "title": "OPAL-Kurse im Dashboard",
+    "icon": "PhListDashes",
+    "settingsPage": "OpalCourses"
+  },
+  {
+    "title": "OPAL personalisieren und verbessern",
+    "icon": "PhSparkle",
+    "settingsPage": "ImproveOpal"
+  },
+  {
+    "title": "Selma verbessern",
+    "icon": "PhChartBar",
+    "settingsPage": "ImproveSelma"
+  },
+  {
+    "title": "Shortcuts",
+    "icon": "PhGauge",
+    "settingsPage": "Shortcuts"
+  },
+  {
+    "title": "Suchmaschinen Superkräfte",
+    "icon": "PhGoogleLogo",
+    "settingsPage": "SearchEngines"
+  },
+  {
+    "title": "Raketen sammeln",
+    "icon": "PhRocket",
+    "settingsPage": "Rockets"
+  },
+  {
+    "title": "Weiteres & Kontakt",
+    "icon": "PhEnvelopeOpen",
+    "settingsPage": "Contact"
+  }
 ]

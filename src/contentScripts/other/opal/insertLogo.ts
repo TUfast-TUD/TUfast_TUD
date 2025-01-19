@@ -1,5 +1,5 @@
 // Step through the color wheel
-function colorStep (noOfSteps: number = 10) {
+function colorStep(noOfSteps: number = 10) {
   // Get color variable
   const color = document.documentElement.style.getPropertyValue('--counter-color')
 
@@ -10,20 +10,29 @@ function colorStep (noOfSteps: number = 10) {
   }
 
   // Else we will step through the color wheel
-  const hsl = color.trim().match(/^hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)$/)?.slice(1).map((n) => parseInt(n, 10))
+  const hsl = color
+    .trim()
+    .match(/^hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)$/)
+    ?.slice(1)
+    .map((n) => parseInt(n, 10))
   if (hsl?.length !== 3) return
   hsl[0] += Math.round(360 / noOfSteps) % 360 // 10 would be red again but 10 are the rockets so no +1 here
   document.documentElement.style.setProperty('--counter-color', `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`)
 }
 
-function resetColor () {
+function resetColor() {
   document.documentElement.style.removeProperty('--counter-color')
 }
 
 // Main function
-(async () => {
+;(async () => {
   // Get initial values
-  const { selectedRocketIcon, isEnabled, fwdEnabled, foundEasteregg } = await chrome.storage.local.get(['selectedRocketIcon', 'isEnabled', 'fwdEnabled', 'foundEasteregg'])
+  const { selectedRocketIcon, isEnabled, fwdEnabled, foundEasteregg } = await chrome.storage.local.get([
+    'selectedRocketIcon',
+    'isEnabled',
+    'fwdEnabled',
+    'foundEasteregg'
+  ])
   if (!isEnabled && !fwdEnabled) return
 
   // Looks weird but I like this more than having everything in a try/catch block
@@ -62,7 +71,8 @@ function resetColor () {
 
   // What to do onclick
   const onClickWhenFound = () => {
-    if (onClickSettings.timeUp) chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
+    if (onClickSettings.timeUp)
+      chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
   }
 
   if (foundEasteregg) {

@@ -1,21 +1,13 @@
 <template>
   <div class="rocket-select p-margin">
-    <div
-      ref="sel"
-      class="rocket-select__selector"
-      :style="`--pos: ${pos}%`"
-    />
+    <div ref="sel" class="rocket-select__selector" :style="`--pos: ${pos}%`" />
     <div class="rocket-select__rockets">
-      <div
-        v-for="(rocket, key, index) in rockets"
-        :key="index"
-        class="rocket-select__rocket"
-      >
+      <div v-for="(rocket, key, index) in rockets" :key="index" class="rocket-select__rocket">
         <img
           :class="`rocket-select__image ${index === 0 ? 'rocket-select__image--invert' : ''}`"
           :src="getIcon(rocket)"
           @click="select(rocket, index)"
-        >
+        />
         <CustomLink
           v-if="getLink(rocket)"
           :href="getLink(rocket)"
@@ -23,10 +15,7 @@
           :txt="getText(rocket)"
           @click="unlockRocket(key)"
         />
-        <p
-          v-else
-          class="rocket-select__text"
-        >
+        <p v-else class="rocket-select__text">
           {{ getText(rocket) }}
         </p>
       </div>
@@ -47,7 +36,7 @@ export default defineComponent({
   components: {
     CustomLink: Link
   },
-  setup () {
+  setup() {
     const { sendChromeRuntimeMessage } = useChrome()
 
     const pos = ref(0)
@@ -56,7 +45,10 @@ export default defineComponent({
 
     onMounted(async () => {
       // Load rockets
-      const { available, selected } = await sendChromeRuntimeMessage({ cmd: 'check_rocket_status' }) as { selected: string, available: string[]}
+      const { available, selected } = (await sendChromeRuntimeMessage({ cmd: 'check_rocket_status' })) as {
+        selected: string
+        available: string[]
+      }
 
       availableRockets.value = [...available] || ['default']
       // No exceptions pls
@@ -88,7 +80,7 @@ export default defineComponent({
       return chrome.runtime.getURL(isUnlocked(rocketObj) ? rocketObj.iconPathUnlocked : rocketObj.iconPathBeforeUnlock)
     }
 
-    const getLink = (rocketObj: any): string|undefined => {
+    const getLink = (rocketObj: any): string | undefined => {
       return rocketObj.link || (isFirefox() ? rocketObj.linkFirefox : rocketObj.linkChromium)
     }
 

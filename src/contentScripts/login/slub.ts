@@ -6,26 +6,26 @@ const platform = 'slub'
 const cookieSettings: CookieSettings = {
   portalName: 'slub',
   domain: 'slub-dresden.de'
-};
+}
 
-(async () => {
+;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.
   class SlubLogin extends common.Login {
-    constructor () {
+    constructor() {
       super(platform, cookieSettings)
     }
 
-    async additionalFunctionsPreCheck (): Promise<void> { }
+    async additionalFunctionsPreCheck(): Promise<void> {}
 
-    async additionalFunctionsPostCheck (): Promise<void> {}
+    async additionalFunctionsPostCheck(): Promise<void> {}
 
-    async findCredentialsError (): Promise<boolean | HTMLElement | Element> {
+    async findCredentialsError(): Promise<boolean | HTMLElement | Element> {
       return document.getElementsByClassName('form-error')[0]
     }
 
-    async loginFieldsAvailable (): Promise<boolean | LoginFields> {
+    async loginFieldsAvailable(): Promise<boolean | LoginFields> {
       return {
         usernameField: document.getElementById('username') as HTMLInputElement,
         passwordField: document.getElementById('password') as HTMLInputElement,
@@ -33,10 +33,10 @@ const cookieSettings: CookieSettings = {
       }
     }
 
-    async findLogoutButtons (): Promise<(HTMLElement|Element|null)[] | NodeList | null> {
+    async findLogoutButtons(): Promise<(HTMLElement | Element | null)[] | NodeList | null> {
       return document.querySelectorAll('a[href^="https://www.slub-dresden.de/Shibboleth.sso/Logout"]')
     }
   }
 
-  await (new SlubLogin()).start()
+  await new SlubLogin().start()
 })()

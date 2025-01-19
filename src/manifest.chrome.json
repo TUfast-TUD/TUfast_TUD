@@ -2,20 +2,9 @@
   "name": "TUfast TU Dresden",
   "version": "8.1.1.1",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
-  "permissions": [
-    "storage",
-    "system.cpu",
-    "alarms"
-  ],
-  "optional_permissions": [
-    "tabs",
-    "notifications",
-    "cookies",
-    "declarativeNetRequestWithHostAccess"
-  ],
-  "host_permissions": [
-    "*://*/"
-  ],
+  "permissions": ["storage", "system.cpu", "alarms"],
+  "optional_permissions": ["tabs", "notifications", "cookies", "declarativeNetRequestWithHostAccess"],
+  "host_permissions": ["*://*/"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -60,10 +49,7 @@
     },
     {
       "js": ["contentScripts/other/hisqis/pimpAndInjectModules.js"],
-      "css": [
-        "styles/components/gradeTable.css",
-        "styles/contentScripts/hisqis.css"
-      ],
+      "css": ["styles/components/gradeTable.css", "styles/contentScripts/hisqis.css"],
       "run_at": "document_idle",
       "matches": ["https://qis.dez.tu-dresden.de/qisserver/servlet/*"],
       "include_globs": [
@@ -73,10 +59,7 @@
     {
       "js": ["contentScripts/forward/opal.js"],
       "run_at": "document_start",
-      "matches": [
-        "*://opal.de/*",
-        "https://bildungsportal.sachsen.de/cgi-bin/forward.cgi"
-      ]
+      "matches": ["*://opal.de/*", "https://bildungsportal.sachsen.de/cgi-bin/forward.cgi"]
     },
     {
       "js": ["contentScripts/login/selma.js"],
@@ -109,10 +92,7 @@
       "include_globs": ["*/welcome", "*/login", "*://matrix.tu-dresden.de/"]
     },
     {
-      "js": [
-        "contentScripts/other/owaUnreadMailcount.js",
-        "contentScripts/login/owa.js"
-      ],
+      "js": ["contentScripts/other/owaUnreadMailcount.js", "contentScripts/login/owa.js"],
       "run_at": "document_idle",
       "matches": ["https://msx.tu-dresden.de/*"]
     },
@@ -124,10 +104,7 @@
     {
       "js": ["contentScripts/login/opalMain.js"],
       "run_at": "document_idle",
-      "matches": [
-        "https://bildungsportal.sachsen.de/opal/shiblogin*",
-        "https://bildungsportal.sachsen.de/opal/login*"
-      ]
+      "matches": ["https://bildungsportal.sachsen.de/opal/shiblogin*", "https://bildungsportal.sachsen.de/opal/login*"]
     },
     {
       "js": [
@@ -228,51 +205,47 @@
     "page": "freshContent/settings/index.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": [{
-    "resources": [
-      "assets/*",
-      "contentScripts/other/notification.js"
-    ],
-    "matches": ["<all_urls>"]
-  },
-  {
-    "resources": ["contentScripts/login/common.js"],
-    "matches": [
-      "https://*.tu-dresden.de/*",
-      "https://bildungsportal.sachsen.de/*",
-      "https://videocampus.sachsen.de/*",
-      "https://git.imld.de/*",
-      "https://gitlab.hrz.tu-chemnitz.de/*",
-      "https://*.slub-dresden.de/*"
-    ]
-  },
-  {
-    "resources": [
-      "contentScripts/forward/searchEngines/common.js",
-      "contentScripts/forward/searchEngines/sites.json*"
-    ],
-    "matches": [
-      "https://www.startpage.com/*",
-      "https://www.qwant.com/*",
-      "https://www.google.de/*",
-      "https://www.google.com/*",
-      "https://duckduckgo.com/*",
-      "https://www.ecosia.org/*",
-      "https://www.bing.com/*",
-      "https://search.brave.com/*"
-    ]
-  },
-  {
-    "resources": [
-      "contentScripts/other/hisqis/*",
-      "snowpack/pkg/*"
-    ],
-    "matches": ["https://qis.dez.tu-dresden.de/*"]
-  },
-  {
-    "resources": ["styles/contentScripts/selma/*"],
-    "matches": ["https://selma.tu-dresden.de/*"]
-  }],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*", "contentScripts/other/notification.js"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["contentScripts/login/common.js"],
+      "matches": [
+        "https://*.tu-dresden.de/*",
+        "https://bildungsportal.sachsen.de/*",
+        "https://videocampus.sachsen.de/*",
+        "https://git.imld.de/*",
+        "https://gitlab.hrz.tu-chemnitz.de/*",
+        "https://*.slub-dresden.de/*"
+      ]
+    },
+    {
+      "resources": [
+        "contentScripts/forward/searchEngines/common.js",
+        "contentScripts/forward/searchEngines/sites.json*"
+      ],
+      "matches": [
+        "https://www.startpage.com/*",
+        "https://www.qwant.com/*",
+        "https://www.google.de/*",
+        "https://www.google.com/*",
+        "https://duckduckgo.com/*",
+        "https://www.ecosia.org/*",
+        "https://www.bing.com/*",
+        "https://search.brave.com/*"
+      ]
+    },
+    {
+      "resources": ["contentScripts/other/hisqis/*", "snowpack/pkg/*"],
+      "matches": ["https://qis.dez.tu-dresden.de/*"]
+    },
+    {
+      "resources": ["styles/contentScripts/selma/*"],
+      "matches": ["https://selma.tu-dresden.de/*"]
+    }
+  ],
   "manifest_version": 3,
   "commands": {
     "_execute_action": {

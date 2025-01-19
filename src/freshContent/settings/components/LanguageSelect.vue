@@ -1,33 +1,11 @@
 <template>
-  <div
-    class="language-select"
-    disabled
-  >
-    <PhCaretDoubleRight
-      class="language-select__selector"
-      :class="selectorClass"
-      @click.capture="switchSel($event)"
-    />
-    <div
-      ref="languages"
-      class="language-select__languages"
-    >
-      <p
-        class="language-select__german language-select__languages--selected"
-        @click="switchSel($event)"
-      >
-        Deutsch
-      </p>
-      <p
-        class="language-select__english"
-        @click="switchSel($event)"
-      >
-        English
-      </p>
+  <div class="language-select" disabled>
+    <PhCaretDoubleRight class="language-select__selector" :class="selectorClass" @click.capture="switchSel($event)" />
+    <div ref="languages" class="language-select__languages">
+      <p class="language-select__german language-select__languages--selected" @click="switchSel($event)">Deutsch</p>
+      <p class="language-select__english" @click="switchSel($event)">English</p>
     </div>
-    <p class="soon">
-      Bald!<br>Soon!
-    </p>
+    <p class="soon">Bald!<br />Soon!</p>
   </div>
 </template>
 
@@ -39,21 +17,25 @@ export default defineComponent({
   components: {
     PhCaretDoubleRight
   },
-  setup () {
+  setup() {
     /* eslint-disable no-unused-vars */
     enum Selected {
-        German = 'German',
-        English = 'English'
+      German = 'German',
+      English = 'English'
     }
     /* eslint-enable no-unused-vars */
 
     const languages = ref<null | HTMLElement>(null)
     const selected = ref(Selected.German)
-    const selectorClass = computed(() => selected.value === Selected.German ? 'language-select__selector--german' : 'language-select__selector--english')
+    const selectorClass = computed(() =>
+      selected.value === Selected.German ? 'language-select__selector--german' : 'language-select__selector--english'
+    )
 
-    const switchSel = (e : MouseEvent) => {
+    const switchSel = (e: MouseEvent) => {
       const target = e.target as HTMLParagraphElement
-      if (target.classList.contains('language-select__languages--selected')) { return }
+      if (target.classList.contains('language-select__languages--selected')) {
+        return
+      }
 
       // disabled for now until someone translated the app to english ;)
       return
@@ -67,7 +49,9 @@ export default defineComponent({
           selected.value = Selected.German
           break
       }
-      for (const language of languages.value!.children) { language.classList.toggle('language-select__languages--selected') }
+      for (const language of languages.value!.children) {
+        language.classList.toggle('language-select__languages--selected')
+      }
       /* eslint-enable no-unreachable */
     }
 

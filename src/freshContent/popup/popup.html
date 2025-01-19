@@ -1,133 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html data-preload>
+  <head>
+    <meta charset="utf-8" />
+    <script src="../starRating.js"></script>
+    <script src="popup.js" type="module"></script>
+    <link rel="stylesheet" href="/styles/popup.css" />
+    <link rel="stylesheet" href="/styles/components/switch.css" />
+    <link rel="stylesheet" href="/styles/components/share.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <script src="../starRating.js"></script>
-  <script src="popup.js" type="module"></script>
-  <link rel="stylesheet" href="/styles/popup.css">
-  <link rel="stylesheet" href="/styles/components/switch.css">
-  <link rel="stylesheet" href="/styles/components/share.css">
-</head>
+  <body>
+    <div class="headline">TU Dresden Dashboard</div>
 
-<body>
-  <div class="headline">TU Dresden Dashboard</div>
-
-
-  <div class="list custom-scrollbar" id="list">
-    <div style="display: flex; margin-top: 4px;">
-      <input class="list-search" type="text" id="searchListInput" placeholder="Kurs suchen..." autofocus>
-      <a href="" target="_blank" class="" style="flex: 1" id="fsr_link_2">
-        <img class="studiengang-img" id="fsr_icon_2" src="">
-      </a>
-      <a href="" target="_blank" class="" style="flex: 1" id="fsr_link">
-        <img class="studiengang-img" id="fsr_icon" src="">
-      </a>
-      <div class="select_studiengang_dropdown" id ="select_studiengang_dropdown_id">
-        <img id="select_studiengang_btn" class="select_studiengang_btn" src="../../assets/icons/arrow_down.png">
-        <div id="select_studiengang_dropdown_content" class="select_studiengang_dropdown_content  custom-scrollbar">
-          <!-- items will be dynamically added based on config in popup.js-->
+    <div class="list custom-scrollbar" id="list">
+      <div style="display: flex; margin-top: 4px">
+        <input class="list-search" type="text" id="searchListInput" placeholder="Kurs suchen..." autofocus />
+        <a href="" target="_blank" class="" style="flex: 1" id="fsr_link_2">
+          <img class="studiengang-img" id="fsr_icon_2" src="" />
+        </a>
+        <a href="" target="_blank" class="" style="flex: 1" id="fsr_link">
+          <img class="studiengang-img" id="fsr_icon" src="" />
+        </a>
+        <div class="select_studiengang_dropdown" id="select_studiengang_dropdown_id">
+          <img id="select_studiengang_btn" class="select_studiengang_btn" src="../../assets/icons/arrow_down.png" />
+          <div id="select_studiengang_dropdown_content" class="select_studiengang_dropdown_content custom-scrollbar">
+            <!-- items will be dynamically added based on config in popup.js-->
+          </div>
         </div>
       </div>
+      <div id="banana" tabindex="-1"></div>
+      <!-- here come list entries; injected via js -->
     </div>
-    <div id="banana" tabindex="-1"></div>
-    <!-- here come list entries; injected via js -->
-  </div>
-  <div class="settings-footer">
-    <div class="settings-footer-bar" id="settings-footer-bar-icons">
-      <!--div class="settings-section" style="flex: 7.5">
+    <div class="settings-footer">
+      <div class="settings-footer-bar" id="settings-footer-bar-icons">
+        <!--div class="settings-section" style="flex: 7.5">
         <div class="settings-text">Weiterleitung der Google-Suche</div>
         <label class="switch settings-icon">
           <input type="checkbox" id="switch">
           <span class="slider round"></span>
         </label>
         </div-->
-      <a href="https://selma.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" title="Selma" id="selma">
-        <img class="settings-img" src="../../assets/icons/selma.png">
-      </a>
-      <a href="https://eportal.med.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1; display: none" title="ePortal" id="eportal">
-        <img class="settings-img" src="../../assets/icons/ePortal.png">
-      </a>
-      <a href="https://elearning.med.tu-dresden.de/moodle/my/" target="_blank" class="settings-section-icon" style="flex: 1; display: none" title="Moodle" id="moodle">
-        <img class="settings-img" src="../../assets/icons/moodle.png">
-      </a>
-      <a href="https://bildungsportal.sachsen.de/opal/" target="_blank" class="settings-section-icon" style="flex: 1" title="OPAL" id="opal">
-        <img class="settings-img" src="../../assets/icons/OPAL.png">
-      </a>
-      <a href="https://qis.dez.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" title="QIS" id="qis">
-        <img class="settings-img invert" src="../../assets/icons/his.png">
-      </a>
-      <a href="https://matrix.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" title="Matrix Chat" id="matrix">
-        <img class="settings-img" src="../../assets/icons/element.svg">
-      </a>
-      <a href="https://msx.tu-dresden.de/owa/#path=/mail" target="_blank" class="settings-section-icon" style="flex: 1" title="TU Mail" id="msx">
-        <img class="settings-img" src="../../assets/icons/owa.png">
-      </a>
-      <a href="https://www.slub-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" title="SLUB" id="slub">
-        <img class="settings-img" style="height: 21px; width: auto;" src="../../assets/icons/slub.png">
-      </a>
-      <a href="https://datashare.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" title="Datashare" id="cloud">
-        <img class="settings-img invert" src="../../assets/icons/cloud.png">
-      </a>
-      <a href="https://jexam.inf.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" title="jExam" id="je">
-        <img class="settings-img invert" src="../../assets/icons/jE.png">
-      </a>
-      <a href="https://gitlab.mn.tu-dresden.de" target="_blank" class="settings-section-icon" style="flex: 1" title="GitLab" id="gitlab">
-        <img class="settings-img" src="../../assets/icons/gitlab.png">
-      </a>
-      <a href="https://zep.psych.tu-dresden.de/orsee/public/index.php" target="_blank" class="settings-section-icon" title="orsee" 
-        style="flex: 1" id="orsee">
-        <img class="settings-img invert" src="../../assets/icons/TUD_1.png">
-      </a>
-      <a href="https://geoportal.sachsen.de/cps/karte.html?showmap=true" target="_blank" class="settings-section-icon" title="Geoportal" 
-        style="flex: 1" id="geoportal">
-        <img class="settings-img" src="../../assets/icons/sachsenatlas.ico">
-      </a>
-      <a href="https://perinorm-com.wwwdb.dbod.de/search.aspx" target="_blank" class="settings-section-icon"
-        style="flex: 1" id="perinorm">
-        <img class="settings-img invert" style="height: 23px; width: auto;" src="../../assets/icons/perinorm_small.png">
-      </a>
-      <a href="https://wwwdb.dbod.de/login?url=https://nautos.de/O9G/login" target="_blank" class="settings-section-icon"
-        style="flex: 1" id="nautos">
-        <img class="settings-img invert" style="height: 23px; width: auto;" src="../../assets/icons/nautos.png">
-      </a>
-      <a href="https://discord.gg/5H5RxTQS4s" target="_blank" class="settings-section-icon" title="Informatik Discord" 
-        style="flex: 1" id="info_discord">
-        <img class="settings-img" src="../../assets/icons/discord.svg">
-      </a>
-      <a href="https://www.studentenwerk-dresden.de/mensen/speiseplan/" target="_blank" class="settings-section-icon" title="Mensa" 
-        style="flex: 1" id="swdd">
-        <img class="settings-img" src="../../assets/icons/mensa.png">
-      </a>
-      <a href="https://tu-dresden.de/studium/im-studium/beratung-und-service/pruefungsaemter" target="_blank" class="settings-section-icon" title="Prüfungsämter" 
-        style="flex: 1" id="pa">
-        <img class="settings-img invert" style="height: 21px; width: auto;" src="../../assets/icons/Pruefungsamt.png">
-      </a>
-    </div>
-    <div class="settings-footer-bar">
-      <div class="settings-section" style="flex: 7; justify-content: center;">
-        <div id="saved_clicks" class="settings-text" style="font-size: 15px;padding-bottom: 2px"></div>
-      </div>
-      <div class="settings-section" style="flex: 5; padding-left: 15px; padding-right: 15px;">
-        <div class="settings-text" style="font-size: 14px;padding-bottom: 2px;">AutoLogin</div>
-        <label class="switch settings-icon">
-          <input type="checkbox" id="switch">
-          <span class="slider round"></span>
-        </label>
-      </div>
-      <div class="settings-section" style="flex: 1">
-        <a class="settings-section-icon" href="javascript:void(0)" id="share" style="flex: 1; margin: 0px">
-          <img class="list-img" style="height: 20px;" src="../../assets/icons/share.png">
+        <a
+          href="https://selma.tu-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="Selma"
+          id="selma"
+        >
+          <img class="settings-img" src="../../assets/icons/selma.png" />
+        </a>
+        <a
+          href="https://eportal.med.tu-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1; display: none"
+          title="ePortal"
+          id="eportal"
+        >
+          <img class="settings-img" src="../../assets/icons/ePortal.png" />
+        </a>
+        <a
+          href="https://elearning.med.tu-dresden.de/moodle/my/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1; display: none"
+          title="Moodle"
+          id="moodle"
+        >
+          <img class="settings-img" src="../../assets/icons/moodle.png" />
+        </a>
+        <a
+          href="https://bildungsportal.sachsen.de/opal/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="OPAL"
+          id="opal"
+        >
+          <img class="settings-img" src="../../assets/icons/OPAL.png" />
+        </a>
+        <a
+          href="https://qis.dez.tu-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="QIS"
+          id="qis"
+        >
+          <img class="settings-img invert" src="../../assets/icons/his.png" />
+        </a>
+        <a
+          href="https://matrix.tu-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="Matrix Chat"
+          id="matrix"
+        >
+          <img class="settings-img" src="../../assets/icons/element.svg" />
+        </a>
+        <a
+          href="https://msx.tu-dresden.de/owa/#path=/mail"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="TU Mail"
+          id="msx"
+        >
+          <img class="settings-img" src="../../assets/icons/owa.png" />
+        </a>
+        <a
+          href="https://www.slub-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="SLUB"
+          id="slub"
+        >
+          <img class="settings-img" style="height: 21px; width: auto" src="../../assets/icons/slub.png" />
+        </a>
+        <a
+          href="https://datashare.tu-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="Datashare"
+          id="cloud"
+        >
+          <img class="settings-img invert" src="../../assets/icons/cloud.png" />
+        </a>
+        <a
+          href="https://jexam.inf.tu-dresden.de/"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="jExam"
+          id="je"
+        >
+          <img class="settings-img invert" src="../../assets/icons/jE.png" />
+        </a>
+        <a
+          href="https://gitlab.mn.tu-dresden.de"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          title="GitLab"
+          id="gitlab"
+        >
+          <img class="settings-img" src="../../assets/icons/gitlab.png" />
+        </a>
+        <a
+          href="https://zep.psych.tu-dresden.de/orsee/public/index.php"
+          target="_blank"
+          class="settings-section-icon"
+          title="orsee"
+          style="flex: 1"
+          id="orsee"
+        >
+          <img class="settings-img invert" src="../../assets/icons/TUD_1.png" />
+        </a>
+        <a
+          href="https://geoportal.sachsen.de/cps/karte.html?showmap=true"
+          target="_blank"
+          class="settings-section-icon"
+          title="Geoportal"
+          style="flex: 1"
+          id="geoportal"
+        >
+          <img class="settings-img" src="../../assets/icons/sachsenatlas.ico" />
+        </a>
+        <a
+          href="https://perinorm-com.wwwdb.dbod.de/search.aspx"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          id="perinorm"
+        >
+          <img
+            class="settings-img invert"
+            style="height: 23px; width: auto"
+            src="../../assets/icons/perinorm_small.png"
+          />
+        </a>
+        <a
+          href="https://wwwdb.dbod.de/login?url=https://nautos.de/O9G/login"
+          target="_blank"
+          class="settings-section-icon"
+          style="flex: 1"
+          id="nautos"
+        >
+          <img class="settings-img invert" style="height: 23px; width: auto" src="../../assets/icons/nautos.png" />
+        </a>
+        <a
+          href="https://discord.gg/5H5RxTQS4s"
+          target="_blank"
+          class="settings-section-icon"
+          title="Informatik Discord"
+          style="flex: 1"
+          id="info_discord"
+        >
+          <img class="settings-img" src="../../assets/icons/discord.svg" />
+        </a>
+        <a
+          href="https://www.studentenwerk-dresden.de/mensen/speiseplan/"
+          target="_blank"
+          class="settings-section-icon"
+          title="Mensa"
+          style="flex: 1"
+          id="swdd"
+        >
+          <img class="settings-img" src="../../assets/icons/mensa.png" />
+        </a>
+        <a
+          href="https://tu-dresden.de/studium/im-studium/beratung-und-service/pruefungsaemter"
+          target="_blank"
+          class="settings-section-icon"
+          title="Prüfungsämter"
+          style="flex: 1"
+          id="pa"
+        >
+          <img
+            class="settings-img invert"
+            style="height: 21px; width: auto"
+            src="../../assets/icons/Pruefungsamt.png"
+          />
         </a>
       </div>
-      <div class="settings-section" style="flex: 1">
-        <a class="settings-section-icon" href="javascript:void(0)" id="settings"
-          style="flex: 1; margin: 0px">
-          <img class="list-img" style="height: 20px;" src="../../assets/icons/cog.png">
-        </a>
+      <div class="settings-footer-bar">
+        <div class="settings-section" style="flex: 7; justify-content: center">
+          <div id="saved_clicks" class="settings-text" style="font-size: 15px; padding-bottom: 2px"></div>
+        </div>
+        <div class="settings-section" style="flex: 5; padding-left: 15px; padding-right: 15px">
+          <div class="settings-text" style="font-size: 14px; padding-bottom: 2px">AutoLogin</div>
+          <label class="switch settings-icon">
+            <input type="checkbox" id="switch" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="settings-section" style="flex: 1">
+          <a class="settings-section-icon" href="javascript:void(0)" id="share" style="flex: 1; margin: 0px">
+            <img class="list-img" style="height: 20px" src="../../assets/icons/share.png" />
+          </a>
+        </div>
+        <div class="settings-section" style="flex: 1">
+          <a class="settings-section-icon" href="javascript:void(0)" id="settings" style="flex: 1; margin: 0px">
+            <img class="list-img" style="height: 20px" src="../../assets/icons/cog.png" />
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

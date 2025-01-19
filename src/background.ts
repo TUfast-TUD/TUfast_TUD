@@ -22,7 +22,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
-        improveSelma: true,
+        improveSelma: true
       })
       await openSettingsPage('first_visit')
       break
@@ -62,7 +62,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
-      if (typeof currentSettings.selectedRocketIcon === 'undefined') updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
+      if (typeof currentSettings.selectedRocketIcon === 'undefined')
+        updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
 
       // Upgrade encryption variable
       if (typeof currentSettings.encryption_level !== 'undefined') {
@@ -76,7 +77,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
       // Upgrading saved_clicks_counter to savedClicksCounter
       const savedClicks = currentSettings.savedClickCounter || currentSettings.saved_click_counter
-      if (typeof currentSettings.savedClickCounter === 'undefined' && typeof currentSettings.saved_click_counter !== 'undefined') {
+      if (
+        typeof currentSettings.savedClickCounter === 'undefined' &&
+        typeof currentSettings.saved_click_counter !== 'undefined'
+      ) {
         updateObj.savedClickCounter = savedClicks
         await chrome.storage.local.remove(['saved_click_counter'])
       }
@@ -84,16 +88,24 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       // Upgrading availableRockets
       let avRockets: string[] = currentSettings.availableRockets || ['default']
       // Renaming the rockets
-      avRockets = avRockets.map(rocket => {
+      avRockets = avRockets.map((rocket) => {
         switch (rocket) {
-          case 'RI_default': return 'default'
-          case 'RI1': return 'whatsapp'
-          case 'RI2': return 'email'
-          case 'RI3': return 'easteregg'
-          case 'RI4': return '250clicks'
-          case 'RI5': return '2500clicks'
-          case 'RI6': return 'webstore'
-          default: return rocket
+          case 'RI_default':
+            return 'default'
+          case 'RI1':
+            return 'whatsapp'
+          case 'RI2':
+            return 'email'
+          case 'RI3':
+            return 'easteregg'
+          case 'RI4':
+            return '250clicks'
+          case 'RI5':
+            return '2500clicks'
+          case 'RI6':
+            return 'webstore'
+          default:
+            return rocket
         }
       })
       // Making things unique
@@ -113,11 +125,16 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
       // Migrating which opal banners where already shown
       const bannersShown: string[] = currentSettings.bannersShown || []
-      if (currentSettings.showedUnreadMailCounterBanner && !bannersShown.includes('mailCount')) bannersShown.push('mailCount')
-      if (currentSettings.removedUnlockRocketsBanner && !bannersShown.includes('customizeRockets')) bannersShown.push('customizeRockets')
-      if (currentSettings.showedOpalCustomizeBanner && !bannersShown.includes('customizeOpal')) bannersShown.push('customizeOpal')
-      if (currentSettings.removedReviewBanner && !bannersShown.includes('submitReview')) bannersShown.push('submitReview')
-      if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts')) bannersShown.push('keyboardShortcuts')
+      if (currentSettings.showedUnreadMailCounterBanner && !bannersShown.includes('mailCount'))
+        bannersShown.push('mailCount')
+      if (currentSettings.removedUnlockRocketsBanner && !bannersShown.includes('customizeRockets'))
+        bannersShown.push('customizeRockets')
+      if (currentSettings.showedOpalCustomizeBanner && !bannersShown.includes('customizeOpal'))
+        bannersShown.push('customizeOpal')
+      if (currentSettings.removedReviewBanner && !bannersShown.includes('submitReview'))
+        bannersShown.push('submitReview')
+      if (currentSettings.showedKeyboardBanner2 && !bannersShown.includes('keyboardShortcuts'))
+        bannersShown.push('keyboardShortcuts')
       updateObj.bannersShown = bannersShown
 
       // Migrating pdf settings
@@ -165,18 +182,23 @@ chrome.storage.local.get(['selectedRocketIcon'], async (resp) => {
 })
 
 // start fetchOWA if activated and user data exists
-chrome.storage.local.get(['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail'], async (result: any) => {
-  if (await credentials.userDataExists('zih') && result.enabledOWAFetch) {
-    await owaFetch.enableOWAAlarm()
-  }
+chrome.storage.local.get(
+  ['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail'],
+  async (result: any) => {
+    if ((await credentials.userDataExists('zih')) && result.enabledOWAFetch) {
+      await owaFetch.enableOWAAlarm()
+    }
 
-  // When no notifications are enabled, there is nothing to do anymore
-  if (!result.additionalNotificationOnNewMail) return
-  // Chrome types seem to be deprecated, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-contains
-  // Casting so no error is shown
-  const notificationAccess: boolean = await (chrome.permissions as any).contains({ permissions: ['notifications'] }) as boolean
-  if (notificationAccess) owaFetch.registerNotificationClickListener()
-})
+    // When no notifications are enabled, there is nothing to do anymore
+    if (!result.additionalNotificationOnNewMail) return
+    // Chrome types seem to be deprecated, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-contains
+    // Casting so no error is shown
+    const notificationAccess: boolean = (await (chrome.permissions as any).contains({
+      permissions: ['notifications']
+    })) as boolean
+    if (notificationAccess) owaFetch.registerNotificationClickListener()
+  }
+)
 
 // Register header listener
 chrome.storage.local.get(['pdfInInline'], async (result) => {
@@ -249,22 +271,28 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       switch (request.otpType) {
         case 'totp':
           if (!request.secret) return sendResponse(false)
-          credentials.setUserData({ user: 'totp', pass: request.secret }, (request.platform ?? 'zih') + '-totp').then(() => {
-            credentials.deleteUserData((request.platform ?? 'zih') + '-iotp').then(() => sendResponse(true))
-          })
+          credentials
+            .setUserData({ user: 'totp', pass: request.secret }, (request.platform ?? 'zih') + '-totp')
+            .then(() => {
+              credentials.deleteUserData((request.platform ?? 'zih') + '-iotp').then(() => sendResponse(true))
+            })
           return true // required for async sendResponse
 
         case 'iotp':
           if (!request.secret) return sendResponse(false)
-          credentials.setUserData({ user: 'iotp', pass: request.secret }, (request.platform ?? 'zih') + '-iotp').then(() => {
-            credentials.deleteUserData((request.platform ?? 'zih') + '-totp').then(() => sendResponse(true))
-          })
+          credentials
+            .setUserData({ user: 'iotp', pass: request.secret }, (request.platform ?? 'zih') + '-iotp')
+            .then(() => {
+              credentials.deleteUserData((request.platform ?? 'zih') + '-totp').then(() => sendResponse(true))
+            })
           return true // required for async sendResponse
 
-        default: return sendResponse(false)
+        default:
+          return sendResponse(false)
       }
     case 'delete_otp':
-      credentials.deleteUserData((request.platform ?? 'zih') + '-totp')
+      credentials
+        .deleteUserData((request.platform ?? 'zih') + '-totp')
         .then(() => credentials.deleteUserData((request.platform ?? 'zih') + '-iotp'))
         .then(() => sendResponse(true))
       return true
@@ -318,7 +346,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       unlockRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
       return true
     case 'check_rocket_status':
-      chrome.storage.local.get(['selectedRocketIcon', 'availableRockets'], (result) => sendResponse({ selected: result.selectedRocketIcon, available: result.availableRockets }))
+      chrome.storage.local.get(['selectedRocketIcon', 'availableRockets'], (result) =>
+        sendResponse({ selected: result.selectedRocketIcon, available: result.availableRockets })
+      )
       return true
     /* End of settings function */
     // Command for OWA MutationObserver when site is opened
@@ -360,22 +390,23 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 })
 
 // open settings (=options) page, if required set params
-async function openSettingsPage (params?: string) {
+async function openSettingsPage(params?: string) {
   if (params) {
     await chrome.storage.local.set({ openSettingsPageParam: params })
   }
   await chrome.runtime.openOptionsPage()
 }
 
-async function openSharePage () {
+async function openSharePage() {
   await chrome.tabs.create({ url: 'share.html' })
 }
 
 // save_click_counter
-async function saveClicks (counter: number) {
+async function saveClicks(counter: number) {
   // load number of saved clicks and add counter!
   const result = await chrome.storage.local.get(['savedClickCounter'])
-  const savedClickCounter = (typeof result.savedClickCounter === 'undefined') ? counter : result.savedClickCounter + counter
+  const savedClickCounter =
+    typeof result.savedClickCounter === 'undefined' ? counter : result.savedClickCounter + counter
   await chrome.storage.local.set({ savedClickCounter })
   console.log('Saved ' + counter + ' clicks!')
   // make rocketIcons available if appropriate
@@ -386,9 +417,9 @@ async function saveClicks (counter: number) {
 }
 
 // logout function for idp
-async function logoutIdp (logoutDuration: number = 5) {
+async function logoutIdp(logoutDuration: number = 5) {
   // Chrome types are wrong, so we need to cast them, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-request
-  const granted = await chrome.permissions.request({ permissions: ['cookies'] }) as unknown as boolean
+  const granted = (await chrome.permissions.request({ permissions: ['cookies'] })) as unknown as boolean
   if (!granted) return
 
   // Set the logout cookie for idp
@@ -427,21 +458,21 @@ async function logoutIdp (logoutDuration: number = 5) {
 }
 
 // Function called when the easteregg is found
-async function eastereggFound () {
+async function eastereggFound() {
   await unlockRocketIcon('easteregg')
   await setRocketIcon('easteregg')
 
   await chrome.storage.local.set({ foundEasteregg: true })
 }
 
-async function setRocketIcon (rocketId: string): Promise<void> {
+async function setRocketIcon(rocketId: string): Promise<void> {
   const rocket = rockets[rocketId] || rockets.default
 
   await chrome.storage.local.set({ selectedRocketIcon: JSON.stringify(rocket) })
   await chrome.action.setIcon({ path: rocket.iconPathUnlocked })
 }
 
-async function unlockRocketIcon (rocketId: string): Promise<void> {
+async function unlockRocketIcon(rocketId: string): Promise<void> {
   const { availableRockets } = await chrome.storage.local.get(['availableRockets'])
   if (!availableRockets.includes(rocketId)) availableRockets.push(rocketId)
 

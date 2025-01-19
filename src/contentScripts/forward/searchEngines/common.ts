@@ -15,12 +15,12 @@ import sites from './sites.json'
   videocampus: 'https://videocampus.sachsen.de/'
 } */
 
-export async function fwdEnabled () {
+export async function fwdEnabled() {
   const { fwdEnabled } = await chrome.storage.local.get(['fwdEnabled'])
   return !!fwdEnabled
 }
 
-export async function forward (query: string): Promise<boolean> {
+export async function forward(query: string): Promise<boolean> {
   if (!(await fwdEnabled()) || !query) return false
 
   const url = sites[query.toLowerCase()]?.url

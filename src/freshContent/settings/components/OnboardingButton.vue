@@ -1,19 +1,8 @@
 <template>
-  <div
-    class="onboarding-btn"
-    @click="next()"
-  >
+  <div class="onboarding-btn" @click="next()">
     <div class="onboarding-btn__inner">
-      <svg
-        class="onboarding-btn__progress"
-        viewBox="0 0 100 100"
-      >
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          :style="`--done: ${(percentDone / 100) * 280}`"
-        />
+      <svg class="onboarding-btn__progress" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" :style="`--done: ${(percentDone / 100) * 280}`" />
       </svg>
       <PhArrowRight class="onboarding-btn__arrow" />
     </div>
@@ -33,7 +22,7 @@ export default defineComponent({
   components: {
     PhArrowRight
   },
-  setup () {
+  setup() {
     const { next, percentDone } = useStepper()
 
     return {

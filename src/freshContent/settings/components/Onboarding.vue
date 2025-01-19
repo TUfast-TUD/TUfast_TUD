@@ -1,25 +1,14 @@
 <template>
   <div class="hide-bg">
     <div class="onboarding onboarding--opening">
-      <PhX
-        v-if="currentStep !== stepsCount"
-        class="onboarding__close"
-        @click="close()"
-      />
+      <PhX v-if="currentStep !== stepsCount" class="onboarding__close" @click="close()" />
       <div class="onboarding__main">
         <slot />
       </div>
 
-      <Stepper
-        class="onboarding__stepper"
-        :steps="stepsCount"
-        :current-step="currentStep"
-      />
+      <Stepper class="onboarding__stepper" :steps="stepsCount" :current-step="currentStep" />
 
-      <div
-        v-if="currentStep !== stepsCount"
-        class="onboarding__text"
-      >
+      <div v-if="currentStep !== stepsCount" class="onboarding__text">
         <h2 class="footer-text__title">
           {{ h1 }}
         </h2>
@@ -29,9 +18,7 @@
       </div>
 
       <OnboardingButton
-        :class="`onboarding__main-btn ${
-          currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''
-        }`"
+        :class="`onboarding__main-btn ${currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''}`"
       />
     </div>
   </div>
@@ -69,13 +56,11 @@ export default defineComponent({
     }
   },
   emits: ['close-me', 'next'],
-  setup () {
+  setup() {
     const { stepsCount, close } = useStepper()
 
     setTimeout(() => {
-      document
-        .querySelector('.onboarding')
-        ?.classList.remove('onboarding--opening')
+      document.querySelector('.onboarding')?.classList.remove('onboarding--opening')
     }, 800)
 
     return {

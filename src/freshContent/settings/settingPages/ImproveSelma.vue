@@ -1,8 +1,7 @@
 <template>
   <p class="max-line p-margin">
-    Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in
-    Selma hinzu. Zusätzlich wird das Layout und Design angepasst,
-    um benutzerfreundlicher zu sein.
+    Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in Selma hinzu. Zusätzlich wird das Layout
+    und Design angepasst, um benutzerfreundlicher zu sein.
   </p>
 
   <Setting
@@ -22,13 +21,11 @@ export default defineComponent({
   components: {
     Setting
   },
-  setup () {
+  setup() {
     const improveSelma = ref(true)
 
     onBeforeMount(async () => {
-      const { improveSelma: storedValue } = await chrome.storage.local.get([
-        'improveSelma'
-      ])
+      const { improveSelma: storedValue } = await chrome.storage.local.get(['improveSelma'])
 
       improveSelma.value = storedValue ?? true
       watch(improveSelma, valueUpdate)

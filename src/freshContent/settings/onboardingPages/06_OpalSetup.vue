@@ -1,19 +1,8 @@
 <template>
-  <h1 class="upper">
-    OPAL verbessern
-  </h1>
+  <h1 class="upper">OPAL verbessern</h1>
   <div class="info">
-    <Setting
-      v-model="inlineActive"
-      txt="Dokumente im Browser öffnen"
-      :column="true"
-    />
-    <Setting
-      v-model="newTabActive"
-      :disabled="!inlineActive"
-      txt="Dokumente in neuem Tab öffnen"
-      :column="true"
-    />
+    <Setting v-model="inlineActive" txt="Dokumente im Browser öffnen" :column="true" />
+    <Setting v-model="newTabActive" :disabled="!inlineActive" txt="Dokumente in neuem Tab öffnen" :column="true" />
   </div>
 </template>
 
@@ -30,14 +19,14 @@ export default defineComponent({
   components: {
     Setting
   },
-  setup () {
+  setup() {
     const { opalPdf } = useSettingHandler()
     const inlineActive = ref(false)
     const newTabActive = ref(false)
 
     const inline = async () => {
       if (inlineActive.value) {
-        inlineActive.value = await opalPdf('enable', 'inline') as boolean
+        inlineActive.value = (await opalPdf('enable', 'inline')) as boolean
       } else {
         await opalPdf('disable', 'inline')
         newTabActive.value = false
@@ -46,7 +35,7 @@ export default defineComponent({
 
     const newtab = async () => {
       if (newTabActive.value) {
-        newTabActive.value = await opalPdf('enable', 'newtab') as boolean
+        newTabActive.value = (await opalPdf('enable', 'newtab')) as boolean
       } else {
         await opalPdf('disable', 'newtab')
       }
@@ -63,7 +52,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="sass" scoped>

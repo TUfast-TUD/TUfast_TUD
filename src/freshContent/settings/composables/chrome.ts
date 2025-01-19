@@ -1,4 +1,3 @@
-
 export const useChrome = () => ({
   setChromeLocalStorage,
   getChromeLocalStorage,
@@ -6,7 +5,7 @@ export const useChrome = () => ({
   sendChromeRuntimeMessage
 })
 
-const setChromeLocalStorage = async (items: {[key: string]: any}) => await chrome.storage.local.set(items)
+const setChromeLocalStorage = async (items: { [key: string]: any }) => await chrome.storage.local.set(items)
 
 const getChromeLocalStorage = async (keys: string | string[]) => {
   if (typeof keys === 'string') {
@@ -17,6 +16,6 @@ const getChromeLocalStorage = async (keys: string | string[]) => {
   }
 }
 
-const removeChromeLocalStorage = async (keys: string|string[]) => await chrome.storage.local.remove(keys)
+const removeChromeLocalStorage = async (keys: string | string[]) => await chrome.storage.local.remove(keys)
 
 const sendChromeRuntimeMessage = async (cmd: any) => await chrome.runtime.sendMessage(cmd)
