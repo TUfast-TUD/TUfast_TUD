@@ -3,6 +3,11 @@ const currentView = document.location.pathname
 // This is used to get the URL which would be opened in a popup
 const popupScriptsRegex = /dl_popUp\("\/scripts\/mgrqispi\.dll\?APPNAME=CampusNet&PRGNAME=(\w+)&ARGUMENTS=([^"]+)"/
 
+// A promise that resolves to the setting value of `improveSelma`
+const improveSelmaEnabledPromise: Promise<boolean> = chrome.storage.local
+  .get(['improveSelma'])
+  .then((s) => s.improveSelma)
+
 function scriptToURL(script: string): string {
   const matches = script.match(popupScriptsRegex)!
 
@@ -195,7 +200,7 @@ Actual logic
 // Create a small banner that indicates the user that the site was modified
 // It also adds a small toggle to disable the table
 async function createCreditsBanner() {
-  const { improveSelma: settingEnabled } = await chrome.storage.local.get(['improveSelma'])
+  const settingEnabled = await improveSelmaEnabledPromise
 
   const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
   const credits = document.createElement('p')
@@ -254,7 +259,7 @@ async function eventListener() {
   const creditElm = await createCreditsBanner()
   document.querySelector('.semesterChoice')!.appendChild(creditElm)
 
-  const { improveSelma } = await chrome.storage.local.get(['improveSelma'])
+  const improveSelma = await improveSelmaEnabledPromise
   if (!improveSelma) return
 
   // Inject css
