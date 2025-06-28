@@ -278,7 +278,7 @@ async function eventListener() {
   // Add Credit banner with toggle button
   const creditElm = await createCreditsBanner()
   const table = document.querySelector('.semesterChoice') ?? document.querySelector('.pageContentHeader')
-  if (table != null) {
+  if (table !== null) {
     table.appendChild(creditElm)
   }
 
@@ -309,16 +309,14 @@ type Grade = {
 }
 
 function calculateGradePrediction(credits: number, grades: Grade[]): string {
-  let output = ''
+  if (credits === 0) {
+    return ''
+  }
   let sum = 0
   for (const grade of grades) {
     sum += grade.credits * grade.grade
   }
-  output = String((sum / credits).toPrecision(2))
-  if (output === 'NaN') {
-    return ''
-  }
-  return output
+  return (sum / credits).toPrecision(2)
 }
 
 function applyChanges() {
