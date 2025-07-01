@@ -277,9 +277,14 @@ async function eventListener() {
 
   // Add Credit banner with toggle button
   const creditElm = await createCreditsBanner()
-  const table = document.querySelector('.semesterChoice') ?? document.querySelector('.pageContentHeader')
+  let table = document.querySelector('.semesterChoice')
   if (table !== null) {
     table.appendChild(creditElm)
+  } else {
+    table = document.querySelector('.pageContentHeader')
+    if (table !== null && currentView.startsWith('/APP/STUDENT_RESULT/')) {
+      table.appendChild(creditElm)
+    }
   }
 
   const improveSelma = await improveSelmaEnabledPromise
