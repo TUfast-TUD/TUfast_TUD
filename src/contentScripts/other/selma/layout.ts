@@ -277,7 +277,15 @@ async function eventListener() {
 
   // Add Credit banner with toggle button
   const creditElm = await createCreditsBanner()
-  document.querySelector('.semesterChoice')!.appendChild(creditElm)
+  let table = document.querySelector('.semesterChoice')
+  if (table !== null) {
+    table.appendChild(creditElm)
+  } else {
+    table = document.querySelector('.pageContentHeader')
+    if (table !== null && currentView.startsWith('/APP/STUDENT_RESULT/')) {
+      table.appendChild(creditElm)
+    }
+  }
 
   const improveSelma = await improveSelmaEnabledPromise
   if (!improveSelma) return
@@ -299,6 +307,22 @@ const NULL_TABLE: Graphing.GradeStat[] = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7,
   grade: g,
   count: 1
 }))
+
+type Grade = {
+  grade: number
+  credits: number
+}
+
+function calculateGradePrediction(credits: number, grades: Grade[]): string {
+  if (credits === 0) {
+    return ''
+  }
+  let sum = 0
+  for (const grade of grades) {
+    sum += grade.credits * grade.grade
+  }
+  return (sum / credits).toPrecision(2)
+}
 
 function applyChanges() {
   if (currentView.startsWith('/APP/EXAMRESULTS/')) {
@@ -601,5 +625,58 @@ function applyChanges() {
     document.querySelector('thead > tr > th#Name')!.textContent = ''
     // Table head "Termin"
     document.querySelector('thead > tr > th#Date')!.textContent = 'Prüfungsleistung/Termin'
+  } else if (currentView.startsWith('/APP/STUDENT_RESULT/')) {
+    // Study results > Grade predictor
+    const body = document.querySelector('tbody')!
+
+    let totalCredits = 0
+    let allGrades: Grade[] = []
+    let currentCredits = 0
+    let currentGrades: Grade[] = []
+
+    for (const row of body.children) {
+      if (row.classList.contains('subhead')) {
+        continue
+      }
+      if (row.classList.contains('sum')) {
+        const gradeEl = row.lastElementChild!
+        if (gradeEl.innerHTML.trim.length === 0) {
+          let grade = ''
+          if (gradeEl.classList.contains('level00')) {
+            grade = calculateGradePrediction(totalCredits, allGrades)
+            totalCredits = 0
+            allGrades = []
+          } else {
+            grade = calculateGradePrediction(currentCredits, currentGrades)
+          }
+          currentCredits = 0
+          currentGrades = []
+
+          if (grade !== '') {
+            const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
+            gradeEl.innerHTML = `<img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
+                                        ${grade}`
+          }
+        }
+        continue
+      }
+      const children = row.children
+      if (children.length === 6) {
+        const gradeText = children.item(5)!.innerHTML
+        const creditsText = children.item(4)!.innerHTML
+        if (gradeText === '' || gradeText.startsWith('be')) {
+          continue
+        }
+
+        const grade = parseFloat(gradeText.split(' ')[0].replace(',', '.'))
+        const credits = parseFloat(creditsText.replace(',', '.'))
+
+        currentCredits += credits
+        totalCredits = currentCredits
+
+        currentGrades.push({ grade: grade, credits: credits })
+        allGrades.push({ grade: grade, credits: credits })
+      }
+    }
   }
 }
