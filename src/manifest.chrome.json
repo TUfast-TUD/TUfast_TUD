@@ -193,10 +193,10 @@
     }
   ],
   "icons": {
-    "16": "./assets/images/tufast16.png",
-    "32": "./assets/images/tufast32.png",
-    "48": "./assets/images/tufast48.png",
-    "128": "./assets/images/tufast128.png"
+    "16": "assets/images/tufast16.png",
+    "32": "assets/images/tufast32.png",
+    "48": "assets/images/tufast48.png",
+    "128": "assets/images/tufast128.png"
   },
   "action": {
     "default_popup": "freshContent/popup/popup.html"
