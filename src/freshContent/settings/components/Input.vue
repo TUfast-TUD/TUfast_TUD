@@ -1,23 +1,26 @@
 <template>
   <div class="input-container">
     <div :class="`input ${state}`">
-      <input :value="modelValue" class="input__input" :type="type" :placeholder="placeholder" @input="emitState" />
+      <input
+        :value="modelValue"
+        class="input__input"
+        :type="type"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        @input="emitState"
+      />
       <component :is="statusIcon" :class="`input__icon ${modelValue.length > 0 ? 'input__icon--visible' : ''}`" />
     </div>
-    <span :style="`opacity: ${!correctPattern && modelValue.length > 0 ? 1 : 0}`">{{ errorMessage }}</span>
+    <span :class="{ 'error-visible': !correctPattern && modelValue.length > 0 }" class="error-message">{{
+      errorMessage
+    }}</span>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, PropType, computed, onMounted, watchEffect } from 'vue'
-import { PhXCircle, PhCheckCircle, PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-  components: {
-    PhXCircle,
-    PhCheckCircle,
-    PhWarningCircle
-  },
   props: {
     type: {
       type: String as PropType<string>,
@@ -50,11 +53,15 @@ export default defineComponent({
     warn: {
       type: Boolean as PropType<boolean>,
       default: false
+    },
+    disabled: {
+      type: Boolean as PropType<boolean>,
+      default: false
     }
   },
   emits: ['update:modelValue', 'update:valid'],
   setup(props, { emit }) {
-    const statusIcon = ref('PhCheckCircle')
+    const statusIcon = ref('IconCircleCheck')
     const state = ref('')
 
     const correctPattern = computed(() => props.pattern.test(props.modelValue))
@@ -68,7 +75,7 @@ export default defineComponent({
     watchEffect(() => {
       if (props.modelValue.length > 0) {
         state.value = correctPattern.value ? 'input--correct' : props.warn ? 'input--warn' : 'input--false'
-        statusIcon.value = correctPattern.value ? 'PhCheckCircle' : props.warn ? 'PhWarningCircle' : 'PhXCircle'
+        statusIcon.value = correctPattern.value ? 'IconCircleCheck' : props.warn ? 'IconAlertCircle' : 'IconCircleX'
         emit('update:valid', correctPattern.value || props.warn)
       } else {
         state.value = ''
@@ -95,61 +102,94 @@ export default defineComponent({
 .input-container
     display: flex
     align-items: center
-    width: max-content
-    gap: .8rem
+    min-height: 64px
+    gap: 8px
+    width: 100%
+    min-width: 100%
 
     &--column
         flex-direction: column
         max-width: 100%
 
+    @media screen and (max-width: 650px)
+        flex-direction: column
+
+    & span.error-message
+        display: block
+        min-width: 100%
+        height: 0  // Default: no space
+        word-wrap: break-word
+        overflow-wrap: break-word
+        visibility: hidden
+        transition: height 200ms ease-in-out
+        overflow: hidden
+
+        &.error-visible
+            visibility: visible
+            height: fit-content  // Reserve space when visible
+
 html:not(.light) .input-container--column
         & .input
             background-color: hsl(var(--clr-white))
-            border: 1px solid hsl(var(--clr-black), .4)
+            border: 1px solid hsl(var(--clr-backgr), .4)
             &__input
-                color: hsl(var(--clr-black) )
+                color: hsl(var(--clr-backgr) )
                 &::placeholder
-                    color: hsl(var(--clr-black), .5)
+                    color: hsl(var(--clr-backgr), .5)
 
 .input
     display: flex
     justify-content: space-between
     align-items: center
     width: 300px
-    height: 60px
-    border-radius: 12px
-    background-color: hsl(var(--clr-grey) )
-    border: 1px solid hsl(var(--clr-state, var(--clr-grey)), .4)
+    height: 64px
+    border-radius: var(--brd-rad)
+    background-color: hsl(var(--clr-backgr))
+    border: 3px solid hsl(var(--clr-state, var(--clr-backgr)))
+    transition: all 200ms ease-in-out
 
     &--correct
-        --clr-state: var(--clr-primary)
+        --clr-state: var(--clr-success)
     &--warn
         --clr-state: var(--clr-warning)
     &--false
         --clr-state: var(--clr-alert)
 
-    &:hover, &:focus-within
-        border: 1px solid hsl(var(--clr-state, var(--clr-white)), .8)
+    &:hover, &:focus-within, &:focus
+        outline: 3px solid hsl(var(--clr-focus))
 
     &::before
         content: ""
-        width: 1px
+        width: 3px
         height: 50%
-        background-color: hsl(var(--clr-state, var(--clr-grey)) )
+        background-color: hsl(var(--clr-state, var(--clr-text-help)) )
         margin-left: .5rem
 
+    &:has(input:disabled)
+        border: 3px solid hsl(var(--clr-success))
+        background-color: hsl(var(--clr-success-bg))
+        outline: none
+
     &__input
-        color: hsl(var(--clr-white) )
+        color: hsl(var(--clr-text))
         background-color: inherit
         border: none
         margin: 0 .5rem
         height: 100%
+        width: 242px
 
         &:focus
             outline: none
 
         &::placeholder
-            color: hsl(var(--clr-white), .5)
+            color: (var(--clr-text-help))
+
+        &:disabled
+            cursor: not-allowed
+            color: hsl(var(--clr-success))
+            font-weight: 600
+            &::placeholder
+                color: hsl(var(--clr-success))
 
     &__icon
         height: 28px
@@ -159,8 +199,4 @@ html:not(.light) .input-container--column
         opacity: 0
         &--visible
             opacity: 1
-
-.light .input
-    background-color: hsl(var(--clr-black) )
-    color: hsl(var(--clr-white))
 </style>

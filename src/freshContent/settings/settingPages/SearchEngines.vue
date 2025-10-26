@@ -1,12 +1,15 @@
 <template>
-  <Setting v-model="searchEngineActive" txt="Suchmaschinen Superpower aktivieren" />
+  <h3 class="card-body-title">Kurzbefehle in Suchmaschinen öffnen OPAL und weitere Tools direkt</h3>
+  <Setting v-model="searchEngineActive" txt="Suchmaschinen Superkräfte aktivieren" />
   <p class="max-line p-margin">
     Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten
     Suchmaschinen unterstützt!
   </p>
 
-  <p class="search-terms">
-    <template v-for="site in uniqueSites" :key="site"> {{ site[0] }} → {{ site[1].name }}<br /> </template>
+  <p class="search-terms p-margin">
+    <template v-for="site in uniqueSites" :key="site">
+      <span class="search-terms__bg"> {{ site[0] }}</span> → {{ site[1].name }}<br />
+    </template>
   </p>
 </template>
 
@@ -63,10 +66,16 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .search-terms
-    line-height: 1.75
+    line-height: 2.5
     margin-left: 1rem
-    color: hsl(var(--clr-white), .7)
+
+    &__bg
+        margin-top: 4px
+        margin-bottom: 4px
+        padding: 4px
+        border-radius: var(--brd-rad-sm)
+        background-color: hsl(var(--clr-backgr))
 
     @media (prefers-color-scheme: light)
-        color: hsl(var(--clr-grey), .9)
+        color: var(--clr-text-help)
 </style>

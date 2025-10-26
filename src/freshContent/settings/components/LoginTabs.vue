@@ -65,16 +65,16 @@ export default defineComponent({
 .tab
   border: none
   background-color: hsl(var(--clr-secondary), .8)
-  color: white
+  color: hsl(var(--clr-text))
   cursor: pointer
   border-bottom: 1px solid hsl(var(--clr-secondary), .5)
   opacity: .6
 
   &:hover
     opacity: .8
-    background-color: hsl(var(--clr-primary), .1)
+    background-color: hsl(var(--clr-btnhov))
 
   &--selected
-    border-bottom: 2px solid hsl(var(--clr-primary))
+    border-bottom: 2px solid hsl(var(--clr-accent))
     opacity: 1
 </style>

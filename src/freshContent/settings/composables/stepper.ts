@@ -10,6 +10,7 @@ export const useStepper = () => ({
   currentOnboardingStep,
   stepsCount,
   next,
+  prev,
   hideWelcome,
   percentDone,
   close
@@ -31,9 +32,15 @@ const next = () => {
   }
 }
 
-const close = () => {
-  document.querySelector('.onboarding')?.classList.add('onboarding--closing')
-  setTimeout(disableWelcome, 650)
+const prev = () => {
+  if (currentOnboardingStep.value > 1) {
+    currentOnboardingStep.value -= 1
+    percentDone.value = (currentOnboardingStep.value / stepsCount.value) * 100
+  }
+}
+
+const close = async () => {
+  await disableWelcome()
 }
 
 // disables the welcome message once the user

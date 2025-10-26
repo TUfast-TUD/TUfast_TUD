@@ -1,63 +1,113 @@
 <template>
-  <LoginTabs v-model="currentLogin" :options="logins" />
-  <h2>{{ currentLogin.title }}</h2>
-  <h2 :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`">
-    {{ currentLogin.state ? 'Aktuell gespeichert' : 'Nicht gespeichert' }}
-  </h2>
-  <p class="max-line p-margin">
+  <LoginTabs v-model="currentLogin" :options="logins" class="onboarding-hide onboarding-hide-otp" />
+  <h3 class="onboarding-hide onboarding-hide-otp">{{ currentLogin.title }}</h3>
+  <h3 class="onboarding-hide onboarding-hide-otp" style="margin-top: 4px">
+    <span :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`"
+      >{{ currentLogin.state ? 'Aktuell gespeichert' : 'Keine Daten gespeichert' }}
+    </span>
+  </h3>
+  <p class="max-line p-margin onboarding-hide-otp" style="margin-bottom: 16px">
     Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden. Die Daten werden nur
     lokal und verschlüsselt gespeichert. Du kannst sie jederzeit löschen.
   </p>
 
-  <p class="p-margin important">TUfast nimmt dir auch alle Klicks beim Anmelden ab!</p>
-  <div class="form">
-    <CustomInput
-      v-model="username"
-      v-model:valid="usernameValid"
-      :pattern="currentLogin.usernamePattern"
-      :placeholder="currentLogin.usernamePlaceholder"
-      :error-message="currentLogin.usernameError"
-      warn
-    />
+  <div class="form onboarding-hide-otp">
+    <div>
+      <div class="label-container">
+        <p>{{ currentLogin.usernamePlaceholder }}</p>
+      </div>
+      <CustomInput
+        v-model="username"
+        v-model:valid="usernameValid"
+        :pattern="currentLogin.usernamePattern"
+        :placeholder="loginDataSaved ? 'GESPEICHERT' : currentLogin.usernamePlaceholder"
+        :error-message="currentLogin.usernameError"
+        :disabled="loginDataSaved"
+        warn
+      />
+    </div>
+    <div>
+      <div class="label-container">
+        <p>{{ currentLogin.passwordPlaceholder }}</p>
+      </div>
+      <CustomInput
+        v-model="password"
+        v-model:valid="passwordValid"
+        :pattern="currentLogin.passwordPattern"
+        :placeholder="loginDataSaved ? 'GESPEICHERT' : currentLogin.passwordPlaceholder"
+        type="password"
+        :error-message="currentLogin.passwordError"
+        :disabled="loginDataSaved"
+      />
+    </div>
 
-    <CustomInput
-      v-model="password"
-      v-model:valid="passwordValid"
-      :pattern="currentLogin.passwordPattern"
-      :placeholder="currentLogin.passwordPlaceholder"
-      type="password"
-      :error-message="currentLogin.passwordError"
+    <CustomButton
+      title="Login lokal speichern"
+      :disabled="!(passwordValid && usernameValid) || loginDataSaved"
+      @click="submitSave"
     />
-
-    <CustomButton title="Lokal speichern" :disabled="!(passwordValid && usernameValid)" @click="submitSave" />
+    <CustomButton
+      title="Login löschen"
+      class="button--warn"
+      style="min-width: 300px"
+      :disabled="!loginDataSaved"
+      @click="submitDeleteLogin"
+    />
   </div>
 
-  <div v-if="currentLogin2FA">
+  <div v-if="currentLogin2FA" class="onboarding-hide">
+    <h3 class="card-body-title onboarding-hide-otp" style="margin-top: 4rem">Zwei-Faktor-Authentifizierung (2FA)</h3>
+    <h3 class="onboarding-hide onboarding-hide-otp" style="margin-top: 4px">
+      <span :class="`state ${totpSecretSaved ? 'state--active' : 'state--inactive'}`"
+        >{{ totpSecretSaved ? 'Aktuell gespeichert' : 'Keine Daten gespeichert' }}
+      </span>
+    </h3>
+
     <p class="max-line p-margin">
-      Zwei-Faktor-Authentisierung (2FA): Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen
-      TOTP Secret-Key speichern. Der Key ist Base32 enkodiert und sieht bspw. so aus: <br />
-      MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP <br />
-      Hier findest du
-      <a style="color: white" href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md"
-        >mehr Informationen und eine vollständige Anleitung zur Einrichtung</a
-      >.
+      Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen TOTP Secret-Key speichern. Der Key ist
+      Base32 enkodiert und sieht zum Beispiel so aus:
+      <span
+        style="
+          margin-top: 8px;
+          margin-bottom: 8px;
+          padding: 4px;
+          border-radius: var(--brd-rad-sm);
+          background-color: hsl(var(--clr-btnhov));
+        "
+        >MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP</span
+      >
     </p>
+    <a href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md" target="_blank"
+      >Hier findest du mehr Informationen und eine vollständige Anleitung zur Einrichtung.</a
+    ><br /><br />
     <div class="form">
+      <div>
+        <div class="label-container">
+          <p>{{ currentLogin2FA.totpSecretPlaceholder }}</p>
+        </div>
+      </div>
       <CustomInput
         v-model="totpSecret"
         v-model:valid="totpSecretValid"
         :pattern="currentLogin2FA.totpSecretPattern"
-        :placeholder="currentLogin2FA.totpSecretPlaceholder"
+        :placeholder="totpSecretSaved ? 'GESPEICHERT' : currentLogin2FA.totpSecretPlaceholder"
         :error-message="currentLogin2FA.totpSecretError"
+        :disabled="totpSecretSaved"
         warn
       />
-      <CustomButton title="TOTP Key lokal speichern" :disabled="!totpSecretValid" @click="submitSaveTotp" />
+      <CustomButton
+        title="Key lokal speichern"
+        :disabled="!totpSecretValid || totpSecretSaved"
+        @click="submitSaveTotp"
+      />
+      <CustomButton
+        title="Key löschen"
+        class="button--warn"
+        style="min-width: 300px"
+        :disabled="!totpSecretSaved"
+        @click="submitDeleteTotp"
+      />
     </div>
-  </div>
-  <br />
-
-  <div class="form">
-    <CustomButton title="Daten löschen" class="button--warn" :disabled="!currentLogin.state" @click="submitDelete" />
   </div>
 </template>
 
@@ -100,6 +150,9 @@ export default defineComponent({
     const totpSecret = ref('')
     const totpSecretValid = ref(false)
 
+    const totpSecretSaved = ref(false)
+    const loginDataSaved = ref(false)
+
     const autoLoginActive = ref(false)
 
     // get state of login
@@ -108,6 +161,16 @@ export default defineComponent({
         cmd: 'check_user_data',
         platform: currentLogin.value.id
       })) as boolean
+
+      loginDataSaved.value = currentLogin.value.state
+
+      // Check if TOTP is saved
+      const totpExists = (await sendChromeRuntimeMessage({
+        cmd: 'check_otp',
+        platform: currentLogin.value.id
+      })) as boolean
+
+      totpSecretSaved.value = totpExists
     })
 
     const submitSave = async ($event: MouseEvent) => {
@@ -123,6 +186,7 @@ export default defineComponent({
       password.value = ''
       usernameValid.value = false
       passwordValid.value = false
+      loginDataSaved.value = true
       currentLogin.value.state = (await sendChromeRuntimeMessage({
         cmd: 'check_user_data',
         platform: currentLogin.value.id
@@ -139,8 +203,9 @@ export default defineComponent({
       })
       totpSecret.value = ''
       totpSecretValid.value = false
-      currentLogin.value.state = (await sendChromeRuntimeMessage({
-        cmd: 'check_user_data',
+      totpSecretSaved.value = true
+      totpSecretSaved.value = (await sendChromeRuntimeMessage({
+        cmd: 'check_otp',
         platform: currentLogin.value.id
       })) as boolean
     }
@@ -149,15 +214,26 @@ export default defineComponent({
       return isLogin2FA(currentLogin.value) ? (currentLogin.value as Login2FA) : null
     })
 
-    const submitDelete = async () => {
-      // await this one to get back the new value in last line, otherwise could run too late
+    const submitDeleteLogin = async () => {
       await deleteUserData(currentLogin.value.id)
+      username.value = ''
+      password.value = ''
+      loginDataSaved.value = false
+      currentLogin.value.state = (await sendChromeRuntimeMessage({
+        cmd: 'check_user_data',
+        platform: currentLogin.value.id
+      })) as boolean
+    }
+
+    const submitDeleteTotp = async () => {
       await sendChromeRuntimeMessage({
         cmd: 'delete_otp',
         platform: currentLogin.value.id
       })
+      totpSecret.value = ''
+      totpSecretSaved.value = false
       currentLogin.value.state = (await sendChromeRuntimeMessage({
-        cmd: 'check_user_data',
+        cmd: 'check_otp',
         platform: currentLogin.value.id
       })) as boolean
     }
@@ -172,10 +248,13 @@ export default defineComponent({
       autoLoginActive,
       currentLogin2FA,
       totpSecret,
+      totpSecretSaved,
       totpSecretValid,
+      loginDataSaved,
       submitSave,
-      submitDelete,
-      submitSaveTotp
+      submitSaveTotp,
+      submitDeleteLogin,
+      submitDeleteTotp
     }
   }
 })
@@ -188,19 +267,37 @@ export default defineComponent({
     flex-direction: column
     justify-content: space-between
     gap: 1rem
-    margin-left: 1rem
 
 .important
     font-weight: 600
     font-size: 1.1em
 
 .state
+    font-size: inherit
     font-weight: 600
     &--active
-        color: hsl(var(--clr-primary))
+        color: hsl(var(--clr-success))
+        background-color: hsl(var(--clr-success-bg))
+        text-wrap: auto
+        border-radius: var(--brd-rad)
+        padding: 4px 8px
     &--inactive
         color: hsl(var(--clr-alert))
+        background-color: hsl(var(--clr-alert-bg))
+        text-wrap: auto
+        border-radius: var(--brd-rad)
+        padding: 4px 8px
 
 .tabs
     display: flex
+
+a
+    color: hsla(var(--clr-text), 0.6)
+    text-decoration: underline
+
+.label-container
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 0.5rem
 </style>

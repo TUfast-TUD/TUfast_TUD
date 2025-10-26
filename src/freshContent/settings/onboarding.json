@@ -1,37 +1,58 @@
 [
   {
     "title": "Welcome",
+    "icon": "",
     "h1": "Herzlich Willkommen bei TUfast",
-    "h2": "Dein Produktivitätstool für alles rund um die TU Dresden"
+    "btnText": "Einrichtung beginnen",
+    "skipText": "Einrichtung überspringen"
   },
   {
-    "title": "SearchSetup",
-    "h1": "Möchtest du Superkräfte für deine Suchmaschine?",
-    "h2": "TUfast stellt dir Abkürzungen für deine Suchmaschine bereit (siehe oben). Wenn du diese Abkürzungen in Google, Ecosia & Co. eingibst, kommst du schnellstens zur richtigen Seite der TU Dresden!"
+    "title": "FacultySetup",
+    "icon": "IconSchool",
+    "h1": "Meine Fakultät",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
   },
   {
     "title": "LoginSetup",
-    "h1": "Was macht diese Funktion?",
-    "h2": "TUfast kann dich automatisch in alle Online-Portale der TU Dresden (OPAL, Selma & Co.) einloggen. Wenn du diese Funktion aktivierst, musst du deine Selma-Login-Daten im nächsten Schritt lokal und verschlüsselt auf diesem Computer speichern. Diese Daten können von uns nicht eingesehen werden."
+    "icon": "IconLock",
+    "h1": "Automatischer Login – Zugang",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
   },
   {
-    "title": "LoginAccept",
-    "h1": "Lass uns dir schnell bei der Einrichtung helfen!",
-    "h2": "Gib' hier deine Selma-Login-Daten ein. Diese Daten werden nur lokal und verschlüsselt auf diesem Computer gespeichert und können von uns nicht eingesehen werden."
+    "title": "OtpSetup",
+    "icon": "IconLock",
+    "h1": "Automatischer Login – 2FA",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
   },
   {
     "title": "EMailSetup",
-    "h1": "Möchtest du E-Mail-Benachrichtigungen erhalten?",
-    "h2": "TUfast kann dir anzeigen, wie viele neue Nachrichten du in deinem TU Dresden Postfach hast (linke Checkbox). Du kannst auch über neue E-Mails benachrichtigt werden (rechte Checkbox)."
+    "icon": "IconNotification",
+    "h1": "E-Mail Benachrichtigungen",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
   },
   {
-    "title": "OpalSetup",
-    "h1": "Möchtest du diese Zusatzfunktionen für OPAL?",
-    "h2": "TUfast kann PDF-und Textdokumente auf OPAL für dich direkt im Browser öffnen anstatt sie herunterzuladen (linke Checkbox). Du kannst diese auch direkt in einem neuen Tab öffnen lassen, anstatt in dem Fenster, in dem du gerade auf OPAL bist (rechte Checkbox)."
+    "title": "OpalSelmaSetup",
+    "icon": "IconAdjustments",
+    "h1": "OPAL und Selma verbessern",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
+  },
+  {
+    "title": "SearchengineSetup",
+    "icon": "IconSearch",
+    "h1": "Suchmaschinen Kurzbefehle",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
   },
   {
     "title": "DoneSetup",
-    "h1": "",
-    "h2": ""
+    "icon": "IconRocket",
+    "h1": "GESCHAFFT!",
+    "btnText": "Einrichtung abschließen",
+    "skipText": ""
   }
 ]

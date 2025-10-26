@@ -1,9 +1,16 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap")
-@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap")
+
+/* Space Grotesk */
+@font-face 
+    font-family: 'Space Grotesk'
+    src: url('/styles/fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype')
+    font-weight: 100 900
+    font-style: normal
+    font-display: swap
+
 
 html
-    --ff-heading: "Montserrat"
-    --ff-paragraph: "Open Sans"
+    --ff-heading: "Space Grotesk"
+    --ff-paragraph: "Space Grotesk"
     --max-line: 60ch
 
 h1,
@@ -11,18 +18,71 @@ h2,
 h3,
 h4,
 h5,
-h6,
+h6
+    font-weight: 600
+    color: hsl(var(--clr-text))
+
+h1
+    font-size: 32px
+
+h2
+    font-size: 24px
+
+    @media screen and (max-width: 650px)
+        font-size: 20px
+
+// Only use inside Card Body
+h3  
+    font-size: 20px
+
+    @media screen and (max-width: 650px)
+        font-size: 18px
+
+.card-body-title
+    margin-bottom: 4px
+
+h4, h5, h6
+    font-size: 18px
+
 p
+    font-size: 16
     font-weight: 400
+    color: hsl(var(--clr-text))
+
+span
+    font-size: 16
+    font-weight: 400
+    color: hsl(var(--clr-text))
+
+setting-text
+    font-size: 18
+    font-weight: 400
+    color: hsl(var(--clr-text))    
+
+.txt-help
+    color: var(--clr-text-help)
+    font-size: 16px
+
+.h3-margin
+    margin-top: 16px
+
+.msg
+    font-size: 20px
+    font-weight: 600
+    color: hsl(var(--clr-alert))
+    margin-bottom: 1rem
 
 .txt-bold
     font-weight: 600
-
-.upper
-    text-transform: uppercase
 
 .max-line
     max-width: var(--max-line)
 
 .p-margin
-    margin: 1rem 0
+    margin-top: 1rem
+
+a
+    text-decoration: underline
+
+.txt-center
+    text-align: center

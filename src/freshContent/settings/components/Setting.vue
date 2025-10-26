@@ -1,7 +1,7 @@
 <template>
   <div class="setting">
     <Toggle v-model="toggleState" :disabled="disabled" class="setting__toggle" @click="$emit('changed-setting')" />
-    <span class="max-line">{{ txt }}</span>
+    <span class="setting-text max-line">{{ txt }}</span>
   </div>
 </template>
 
@@ -57,10 +57,10 @@ export default defineComponent({
 .setting
   display: flex
   align-items: center
-  gap: 1.5rem
-
-  &__toggle
-    margin-right: 1rem
+  gap: 1rem
+  margin-top: 8px
+  margin-bottom: 8px
+  margin-left: 16px
 
   &--column
     flex-direction: column
@@ -76,5 +76,5 @@ export default defineComponent({
 
 .light
     & .setting--column .setting__toggle
-        background-color: hsl(var(--clr-black), )
+        background-color: hsl(var(--clr-backgr), )
 </style>

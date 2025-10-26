@@ -1,14 +1,16 @@
 <template>
-  <p class="max-line p-margin">
-    Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in Selma hinzu. Zusätzlich wird das Layout
-    und Design angepasst, um benutzerfreundlicher zu sein.
-  </p>
+  <h3 class="card-body-title onboarding-margin">Optimiere Layout und Notenverteilungen in Selma</h3>
 
   <Setting
     v-model="improveSelma"
-    txt="Das verbesserte Layout und die Notenverteilung bei Selma benutzen"
+    txt="Verbessertes Layout, Notenverteilung, Versuchstracker hinzufügen"
     class="setting"
   />
+
+  <p class="max-line p-margin">
+    Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in selma hinzu. Zusätzlich wird das Layout
+    und Design angepasst, um benutzerfreundlicher zu sein.
+  </p>
 </template>
 
 <script lang="ts">
@@ -44,8 +46,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="sass" scoped>
-.setting
-    margin-bottom: .8rem
-</style>

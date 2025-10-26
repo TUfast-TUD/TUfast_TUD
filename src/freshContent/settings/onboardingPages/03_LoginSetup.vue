@@ -1,30 +1,37 @@
 <template>
-  <div class="title">
-    <h1 class="upper">AutoLogin</h1>
-    <h2>in die Onlineportale der TU Dresden</h2>
+  <p class="txt-help txt-center">Werde automatisch bei allen Online Portalen der TU Dresden angemeldet</p>
+  <div class="onboarding-inner-info">
+    <AutoLogin />
   </div>
-  <Setting v-model="accept" txt="Autologin aktivieren" :column="true" @click="setStepWidth()" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 
 // components
-import Setting from '../components/Setting.vue'
+import AutoLogin from '../settingPages/AutoLogin.vue'
 
 // composables
+import { useUserData } from '../composables/user-data'
 import { useStepper } from '../composables/stepper'
+import { useLogins } from '../composables/logins'
 
 export default defineComponent({
   components: {
-    //    Onboarding,
-    Setting
+    AutoLogin
   },
   emits: ['accept'],
   setup(_) {
     const { stepWidth } = useStepper()
+    const { saveUserData } = useUserData()
+    const { logins } = useLogins()
 
+    const zihLogin = logins[0]
     const accept = ref(true)
+    const username = ref('')
+    const password = ref('')
+    const usernameValid = ref(false)
+    const passwordValid = ref(false)
 
     const setStepWidth = () => {
       if (accept.value) {
@@ -34,20 +41,32 @@ export default defineComponent({
       }
     }
 
-    return { accept, setStepWidth }
+    const ready = computed(() => usernameValid.value && passwordValid.value)
+
+    watch(ready, async () => {
+      if (ready.value === true) {
+        await saveUserData(username.value, password.value, 'zih')
+        stepWidth.value = 1
+      } else {
+        stepWidth.value = 2
+      }
+    })
+
+    return {
+      accept,
+      setStepWidth,
+      username,
+      password,
+      usernameValid,
+      passwordValid,
+      zihLogin,
+      AutoLogin
+    }
   }
 })
 </script>
 
 <style lang="sass" scoped>
-.title
-    display: flex
-    flex-direction: column
-    align-items: center
-.info
-    margin-top: .8rem
-    width: 70%
-    display: flex
-    justify-content: space-between
-    align-items: center
+:deep(.onboarding-hide)
+    display: none !important
 </style>

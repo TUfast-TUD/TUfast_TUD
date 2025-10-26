@@ -1,18 +1,7 @@
 <template>
-  <h1 class="upper">TU Dresden E-Mail</h1>
-  <div class="info">
-    <Setting
-      v-model="messagesActive"
-      :disabled="messageCbDisabled"
-      txt="Anzahl neuer Nachrichten anzeigen"
-      :column="true"
-    />
-    <Setting
-      v-model="notificationsActive"
-      :disabled="!messagesActive || notificationsCbDisabled"
-      txt="Benachrichtigung bei neuer E-Mail"
-      :column="true"
-    />
+  <p class="txt-help txt-center">Werde automatisch bei allen Online Portalen der TU Dresden angemeldet</p>
+  <div class="onboarding-inner-info">
+    <Email />
   </div>
 </template>
 
@@ -20,15 +9,14 @@
 import { defineComponent, ref, watch } from 'vue'
 
 // components
-import Setting from '../components/Setting.vue'
+import Email from '../settingPages/Email.vue'
 
 // composables
 import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
-    //    Onboarding,
-    Setting
+    Email
   },
   setup() {
     const { owa } = useSettingHandler()
@@ -71,17 +59,14 @@ export default defineComponent({
       notificationsActive,
       notificationsCbDisabled,
       messages,
-      notifications
+      notifications,
+      Email
     }
   }
 })
 </script>
 
 <style lang="sass" scoped>
-.info
-    margin-top: .8rem
-    width: 70%
-    display: flex
-    justify-content: space-between
-    align-items: center
+:deep(.onboarding-hide)
+    display: none !important
 </style>

@@ -152,7 +152,7 @@ export async function enableOWAFetch(): Promise<boolean> {
     await chrome.storage.local.set({ enabledOWAFetch: true })
   } else {
     alert(
-      "TUfast braucht diese Berechtigung, um regelm\u00e4ssig alle Mails abzurufen. Bitte dr\u00fccke auf 'Erlauben'."
+      "TUfast braucht diese Berechtigung, um regelm\u00e4\u00dfig alle Mails abzurufen. Bitte dr\u00fccke auf 'Erlauben'."
     )
     await disableOWAFetch()
     return false
