@@ -151,23 +151,25 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 })
 
 // register hotkeys
-chrome.commands.onCommand.addListener(async (command) => {
-  console.log('Detected command: ' + command)
-  switch (command) {
-    case 'open_opal_hotkey':
-      await chrome.tabs.update({ url: 'https://bildungsportal.sachsen.de/opal/home/' })
-      await saveClicks(2)
-      break
-    case 'open_owa_hotkey':
-      await chrome.tabs.update({ url: 'https://msx.tu-dresden.de/owa/' })
-      await saveClicks(2)
-      break
-    case 'open_jexam_hotkey':
-      await chrome.tabs.update({ url: 'https://jexam.inf.tu-dresden.de/' })
-      await saveClicks(2)
-      break
-  }
-})
+if (chrome.commands) {
+  chrome.commands.onCommand.addListener(async (command) => {
+    console.log('Detected command: ' + command)
+    switch (command) {
+      case 'open_opal_hotkey':
+        await chrome.tabs.update({ url: 'https://bildungsportal.sachsen.de/opal/home/' })
+        await saveClicks(2)
+        break
+      case 'open_owa_hotkey':
+        await chrome.tabs.update({ url: 'https://msx.tu-dresden.de/owa/' })
+        await saveClicks(2)
+        break
+      case 'open_jexam_hotkey':
+        await chrome.tabs.update({ url: 'https://jexam.inf.tu-dresden.de/' })
+        await saveClicks(2)
+        break
+    }
+  })
+}
 
 // Set icon on startup
 chrome.storage.local.get(['selectedRocketIcon'], async (resp) => {
