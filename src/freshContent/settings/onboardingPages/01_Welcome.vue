@@ -10,7 +10,7 @@
       autoplay
     >
     </lottie-player>
-    <h3>Weniger Klickstress</h3>
+    <h3>Dein Produktivitätstool für die TU Dresden</h3>
     <p class="txt-help">mit TUfast sparst du pro Semester<br />bis zu 90 Minuten und bis zu 2000 Klicks</p>
   </div>
 </template>

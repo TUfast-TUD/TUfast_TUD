@@ -78,7 +78,7 @@
       >
     </p>
     <a href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md" target="_blank"
-      >Hier findest du mehr Informationen und eine vollständige Anleitung zur Einrichtung.</a
+      >Hier findest du mehr Informationen und eine vollständige Anleitung zur Einrichtung. ↗</a
     ><br /><br />
     <div class="form">
       <div>
@@ -293,7 +293,7 @@ export default defineComponent({
 
 a
     color: hsla(var(--clr-text), 0.6)
-    text-decoration: underline
+    text-decoration: underline !important
 
 .label-container
     display: flex

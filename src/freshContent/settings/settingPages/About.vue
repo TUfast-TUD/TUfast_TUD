@@ -12,18 +12,23 @@
     anderen Studierenden, die Online Lehre ein Stück leichter zu machen.
     <br /><br />
     Unterstützt wird das Projekt unter anderem vom
-    <span class="txt-bold">DigitalAcceleratorProgramm des Stifterverbands</span>, der
-    <span class="txt-bold">output.dd Projektschau</span> der Informatik-Fakultät,
-    <span class="txt-bold">Fachschaftsräten</span> der TU Dresden sowie netten Sponsoren und Sponsorinnen auf
-    <a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank">BuyMeACoffee</a>. Am Ziel sind wir noch nicht:
-    Unser nächster Schritt ist es, TUfast weiter auszubauen – für die TU Dresden, für andere Hochschulen in Sachsen und
-    für alle, die in der digitalen Lehre ein bisschen mehr Struktur und Leichtigkeit brauchen. <br /><br />
+    <a href="https://www.stifterverband.org/digitalchangemaker-accelerator" target="_blank" class="txt-link"
+      >DigitalAcceleratorProgramm des Stifterverbands</a
+    >,
+    <a href="https://output-dd.de/blog/project-post/tufast-tu-dresden-2/" target="_blank" class="txt-link"
+      >output.dd Projektschau</a
+    >
+    der Informatik-Fakultät, mehreren Fachschaftsräten der TU Dresden sowie netten Sponsoren und Sponsorinnen auf
+    <a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" class="txt-link">BuyMeACoffee</a>. Am Ziel
+    sind wir noch nicht: Unser nächster Schritt ist es, TUfast weiter auszubauen – für die TU Dresden, für andere
+    Hochschulen in Sachsen und für alle, die in der digitalen Lehre ein bisschen mehr Struktur und Leichtigkeit
+    brauchen. <br /><br />
     <span class="txt-bold">Von Studierenden, für Studierende. Kostenlos und Open Source.</span>
   </p>
   <br />
   <div class="social-section">
     <a href="https://www.tu-fast.de" target="_blank" class="social-section__button">Website</a>
-    <a href="https://www.tu-fast.de/team" target="_blank" class="social-section__button">Team</a>
+    <a href="https://www.tu-fast.de/#team" target="_blank" class="social-section__button">Team</a>
     <a href="https://github.com/OliEfr/TUfast_TUD" target="_blank" class="social-section__button">GitHub</a>
   </div>
   <br />
