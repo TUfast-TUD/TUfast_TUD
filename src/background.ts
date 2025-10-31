@@ -152,38 +152,38 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 })
 
 if (chrome.commands) {
-    // register hotkeys - hotkeys now open as a new tab right next to the current tab
-    chrome.commands.onCommand.addListener(async (command) => {
-      console.log('Detected command: ' + command)
+  // register hotkeys - hotkeys now open as a new tab right next to the current tab
+  chrome.commands.onCommand.addListener(async (command) => {
+    console.log('Detected command: ' + command)
 
-      // Get the current tab to find its index
-      const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    // Get the current tab to find its index
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
 
-      switch (command) {
-        case 'open_opal_hotkey':
-          await chrome.tabs.create({
-            url: 'https://bildungsportal.sachsen.de/opal/home/',
-            index: currentTab.index + 1
-          })
-          await saveClicks(2)
-          break
-        case 'open_owa_hotkey':
-          await chrome.tabs.create({
-            url: 'https://msx.tu-dresden.de/owa/',
-            index: currentTab.index + 1
-          })
-          await saveClicks(2)
-          break
-        case 'open_jexam_hotkey':
-          await chrome.tabs.create({
-            url: 'https://jexam.inf.tu-dresden.de/',
-            index: currentTab.index + 1
-          })
-          await saveClicks(2)
-          break
-      }
-    })
-  }
+    switch (command) {
+      case 'open_opal_hotkey':
+        await chrome.tabs.create({
+          url: 'https://bildungsportal.sachsen.de/opal/home/',
+          index: currentTab.index + 1
+        })
+        await saveClicks(2)
+        break
+      case 'open_owa_hotkey':
+        await chrome.tabs.create({
+          url: 'https://msx.tu-dresden.de/owa/',
+          index: currentTab.index + 1
+        })
+        await saveClicks(2)
+        break
+      case 'open_jexam_hotkey':
+        await chrome.tabs.create({
+          url: 'https://jexam.inf.tu-dresden.de/',
+          index: currentTab.index + 1
+        })
+        await saveClicks(2)
+        break
+    }
+  })
+}
 
 // Set icon on startup
 chrome.storage.local.get(['selectedRocketIcon'], async (resp) => {
