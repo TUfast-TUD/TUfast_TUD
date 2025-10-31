@@ -1,18 +1,13 @@
 <template>
   <a class="link">
-    <span class="link__text">{{ txt }}</span>
-    <PhArrowRight class="link__arrow" />
+    <span class="link__text rocket-select__text">{{ txt }} <IconArrowRight class="link__arrow" /></span>
   </a>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { PhArrowRight } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-  components: {
-    PhArrowRight
-  },
   props: {
     txt: {
       type: String as PropType<string>,
@@ -27,23 +22,35 @@ export default defineComponent({
 .link
     display: flex
     align-items: center
-    color: hsl(var(--clr-primary) )
+    color: hsl(var(--clr-accent))
     font-weight: 600
     user-select: none
     cursor: pointer
-    width: max-content
+    width: 100%
+    max-width: 100%
     text-decoration: none
+    flex: 1
+    min-width: 0
+
+    &__text
+        word-wrap: break-word
+        overflow-wrap: break-word
+        width: 100%
+        max-width: 100%
 
     &__arrow
-        width: 28px
-        height: 28px
+        width: 16px
+        height: 16px
         margin-left: .25rem
-        transition: all 250ms ease
+        transition: all 200ms ease-in-out
+        flex-shrink: 0
 
-    &:hover &__text
-        border-bottom: 1px solid
-        border-color: currentColor
+        svg
+            top: 2px
 
     &:hover &__arrow
         margin-left: .5rem
+
+.link__text:hover
+    text-decoration: underline
 </style>

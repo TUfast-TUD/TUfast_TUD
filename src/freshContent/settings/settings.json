@@ -1,47 +1,79 @@
 [
   {
     "title": "Automatisches Anmelden",
-    "icon": "PhLockKey",
-    "settingsPage": "AutoLogin"
+    "icon": "IconLock",
+    "settingsPage": "AutoLogin",
+    "category": "function",
+    "settingType": "login"
   },
   {
     "title": "E-Mail Benachrichtigungen",
-    "icon": "PhNotification",
-    "settingsPage": "Email"
+    "icon": "IconNotification",
+    "settingsPage": "Email",
+    "category": "function",
+    "settingType": "owa"
   },
   {
-    "title": "OPAL-Kurse im Dashboard",
-    "icon": "PhListDashes",
-    "settingsPage": "OpalCourses"
-  },
-  {
-    "title": "OPAL personalisieren und verbessern",
-    "icon": "PhSparkle",
-    "settingsPage": "ImproveOpal"
+    "title": "OPAL verbessern",
+    "icon": "IconFileText",
+    "settingsPage": "ImproveOpal",
+    "category": "function",
+    "settingType": "opalPdf"
   },
   {
     "title": "Selma verbessern",
-    "icon": "PhChartBar",
-    "settingsPage": "ImproveSelma"
-  },
-  {
-    "title": "Shortcuts",
-    "icon": "PhGauge",
-    "settingsPage": "Shortcuts"
+    "icon": "IconChartBar",
+    "settingsPage": "ImproveSelma",
+    "category": "function",
+    "settingType": "selma"
   },
   {
     "title": "Suchmaschinen Superkräfte",
-    "icon": "PhGoogleLogo",
-    "settingsPage": "SearchEngines"
+    "icon": "IconSearch",
+    "settingsPage": "SearchEngines",
+    "category": "function",
+    "settingType": "searchengine"
+  },
+  {
+    "title": "Shortcuts",
+    "icon": "IconBrandSpeedtest",
+    "settingsPage": "Shortcuts",
+    "category": "function",
+    "settingType": ""
   },
   {
     "title": "Raketen sammeln",
-    "icon": "PhRocket",
-    "settingsPage": "Rockets"
+    "icon": "IconRocket",
+    "settingsPage": "Rockets",
+    "category": "function",
+    "settingType": ""
   },
   {
-    "title": "Weiteres & Kontakt",
-    "icon": "PhEnvelopeOpen",
-    "settingsPage": "Contact"
+    "title": "Über das Projekt",
+    "icon": "IconInfoCircle",
+    "settingsPage": "About",
+    "category": "information",
+    "settingType": ""
+  },
+  {
+    "title": "Hilfe & Kontakt",
+    "icon": "IconMail",
+    "settingsPage": "Contact",
+    "category": "information",
+    "settingType": ""
+  },
+  {
+    "title": "Meine Fakultät",
+    "icon": "IconSchool",
+    "settingsPage": "ChooseFaculty",
+    "category": "personalization",
+    "settingType": "faculty"
+  },
+  {
+    "title": "Sprache – Bald! Soon!",
+    "icon": "IconLanguage",
+    "settingsPage": "LanguageSelect",
+    "category": "personalization",
+    "settingType": ""
   }
 ]

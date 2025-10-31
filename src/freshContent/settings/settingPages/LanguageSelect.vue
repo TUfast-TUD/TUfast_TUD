@@ -1,22 +1,17 @@
 <template>
   <div class="language-select" disabled>
-    <PhCaretDoubleRight class="language-select__selector" :class="selectorClass" @click.capture="switchSel($event)" />
+    <!--     <IconLanguage class="language-select__selector" :class="selectorClass" @click.capture="switchSel($event)" />
     <div ref="languages" class="language-select__languages">
       <p class="language-select__german language-select__languages--selected" @click="switchSel($event)">Deutsch</p>
       <p class="language-select__english" @click="switchSel($event)">English</p>
-    </div>
-    <p class="soon">Bald!<br />Soon!</p>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { PhCaretDoubleRight } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-  components: {
-    PhCaretDoubleRight
-  },
   setup() {
     /* eslint-disable no-unused-vars */
     enum Selected {
@@ -65,6 +60,33 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+
+.tuf-dropdown-button
+  display: inline-flex
+  align-items: center
+  justify-content: space-between
+  padding: 8px 16px
+  background-color: gray
+  color: white
+  border: none
+  border-radius: var(--brd-rad)
+  cursor: pointer
+  font-size: 16px
+  width: 100%
+
+  &:hover
+    background-color: gray
+
+  &__icon
+    margin-right: 16px
+    display: flex
+    align-items: center
+
+  &__text
+    flex-grow: 1
+    display: flex
+    align-items: center
+
 .language-select
     position: relative
     display: grid
@@ -74,12 +96,12 @@ export default defineComponent({
     width: 125px
 
     .light & &__languages
-      color: hsl(var(--clr-black))
+      color: hsl(var(--clr-backgr))
 
     &__selector
-        transition: all 200ms ease-out
+        transition: all 200ms ease-in-out
         cursor: pointer
-        color: hsl(var(--clr-primary) )
+        color: hsl(var(--clr-accent) )
         width: 2rem
         height: 2rem
         &--german

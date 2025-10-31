@@ -1,24 +1,21 @@
 <template>
-  <p class="max-line">
-    Damit die Einstellungen wirksam werden, musst du OPAL einmal aktualisieren. Für Firefox funktioniert dieses Feature
-    leider nicht stabil.
-  </p>
-  <p class="max-line p-margin">
-    Möglicherweise braucht TUfast eine spezielle Berechtigung. Drücke bitte auf "Erlauben" im folgenden Pop-Up.
-  </p>
-
+  <h3 class="card-body-title">Optimiere den Umgang mit PDF und Textdokumenten in OPAL</h3>
   <Setting
     v-model="pdfInlineActive"
-    txt="PDF- und Textdokumente aus OPAL direkt im Browser öffnen, anstatt sie herunterzuladen."
+    txt="PDF- und Textdokumente direkt im Browser öffnen, anstatt sie herunterzuladen"
     class="setting"
   />
   <Setting
     v-model="pdfNewTabActive"
     :disabled="!pdfInlineActive"
-    txt="PDF- und Textdokumente in neuem Tab öffnen (empfohlen!)"
+    txt="PDF- und Textdokumente in einem neuen Tab öffnen (empfohlen)"
     class="setting"
   />
-  <p class="max-line p-margin">Hinweis: Diese Funktion funktioniert unter Firefox leider nicht stabil.</p>
+  <p class="max-line p-margin">
+    Damit die Einstellungen wirksam werden, musst du OPAL einmal aktualisieren. Möglicherweise braucht TUfast eine
+    spezielle Berechtigung. Drücke bitte auf „Erlauben“ im folgenden Pop-Up.
+  </p>
+  <p class="max-line p-margin txt-help">Diese Funktion funktioniert im Firefox Browser leider nicht stabil.</p>
 </template>
 
 <script lang="ts">
@@ -41,6 +38,13 @@ export default defineComponent({
     const { opalPdf } = useSettingHandler()
     const pdfInlineActive = ref(false)
     const pdfNewTabActive = ref(false)
+
+    // Watch pdfInlineActive and deactivate pdfNewTabActive when it's turned off
+    watch(pdfInlineActive, (newValue) => {
+      if (!newValue) {
+        pdfNewTabActive.value = false
+      }
+    })
 
     onBeforeMount(async () => {
       const { inline, newtab } = (await opalPdf('check')) as ResponseOpalPdf
@@ -76,8 +80,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="sass" scoped>
-.setting
-    margin-bottom: .8rem
-</style>

@@ -1,34 +1,30 @@
 <template>
-  <p v-show="!autoLoginActive" class="msg p-margin max-line">
-    Du musst im Reiter "Automatisches Anmelden" deinen Login hinterlegt haben, um diese Funktion nutzen zu können.
+  <p v-show="!autoLoginActive" class="msg max-line">
+    Du musst "Automatisches Anmelden" mit deinem Login einrichten, um diese Funktion nutzen zu können.
   </p>
-  <Setting
-    v-model="owaFetchActive"
-    :disabled="!autoLoginActive || owaCbDisabled"
-    txt="TUfast zeigt die Anzahl deiner ungelesenen Mails im TU-Dresden-Postfach (OWA) als kleines Icon oben rechts neben der Rakete an."
-  />
-  <div class="example-row">
-    <img class="icon" src="../../../assets/images/UnreadMails0.png" /><span>keine neuen Mails</span>
-  </div>
-  <div class="example-row">
-    <img class="icon" src="../../../assets/images/UnreadMails5.png" /><span>5 neue Mails</span>
-  </div>
-  <div class="example-row">
-    <img class="icon" src="../../../assets/images/UnreadMails16.png" /><span>16 neue Mails</span>
-  </div>
 
-  <p class="max-line">
-    Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern. Weil TUfast dafür eine spezielle
-    Berechtigung braucht, drücke bitte auf "Erlauben" im folgenden Pop-Up.
-  </p>
+  <h3 class="card-body-title onboarding-hide">Erhalte Benachrichtigungen, wenn du neue E-Mails erhältst</h3>
+  <div style="display: flex; align-items: center; gap: 8px">
+    <Setting
+      v-model="owaFetchActive"
+      :disabled="!autoLoginActive || owaCbDisabled"
+      txt="Anzahl ungelesener Mails als Notification Bubble"
+    />
+    <img class="icon" src="../../../assets/images/UnreadMails16.png" />
+  </div>
 
   <Setting
     v-model="notificationOnNewEmailActive"
     :disabled="!autoLoginActive || !owaFetchActive || notificationsCbDisabled"
-    txt="Zusätzlich eine Pop-Up Benachrichtigung beim Eingang einer neuen Mail erhalten."
+    txt="Pop-Up Benachrichtigung beim Erhalt einer neuen Mail"
   />
 
-  <p class="max-line">
+  <p class="p-margin max-line">
+    Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern. Weil TUfast dafür eine spezielle
+    Berechtigung braucht, drücke bitte auf „Erlauben“ im folgenden Pop-Up.
+  </p>
+
+  <p class="p-margin max-line txt-help">
     Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab. Zum Anmelden
     werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher. Es funktioniert genauso, als würdest
     du deine Mails über den Browser abrufen. Die Benachrichtigungen kommen über die Windows-API. Beachte, dass du unter
@@ -115,20 +111,6 @@ export default defineComponent({
     filter: invert(100%)
     display: inline-block
 
-.example-row
-    display: flex
-    align-items: center
-    margin: .5rem 0
-
-.setting
-    display: flex
-    align-items: center
-    margin: 1.5rem 0
-
-    &__toggle
-      margin-right: 1rem
-
-.msg
-    font-weight: 600
-    color: hsl(var(--clr-alert) )
+    .light &
+        filter: invert(0%)
 </style>

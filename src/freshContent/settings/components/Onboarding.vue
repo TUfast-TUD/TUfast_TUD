@@ -1,71 +1,125 @@
 <template>
   <div class="hide-bg">
-    <div class="onboarding onboarding--opening">
-      <PhX v-if="currentStep !== stepsCount" class="onboarding__close" @click="close()" />
-      <div class="onboarding__main">
+    <div class="onboarding">
+      <Stepper class="onboarding__stepper" />
+      <div class="onboarding__title">
+        <component :is="icon" v-if="icon" color="hsl(var(--clr-accent) )" size="32" />
+        <h2 class="onboarding__title-text">{{ h1 }}</h2>
+      </div>
+      <div class="onboarding__content">
         <slot />
       </div>
-
-      <Stepper class="onboarding__stepper" :steps="stepsCount" :current-step="currentStep" />
-
-      <div v-if="currentStep !== stepsCount" class="onboarding__text">
-        <h2 class="footer-text__title">
-          {{ h1 }}
-        </h2>
-        <h3 class="footer-text__subtitle max-line">
-          {{ h2 }}
-        </h3>
+      <div class="onboarding-btn-wrapper">
+        <div class="onboarding-btn" tabindex="0" @click="next()" @keyup.enter="next()" @keyup.space="next()">
+          <div class="onboarding-btn__inner txt-bold">
+            {{ btnText }}
+            <IconArrowRight class="onboarding-btn__arrow" />
+          </div>
+        </div>
+        <div class="onboarding__skip">
+          <a
+            class="onboarding__skip-text txt-help"
+            href="#"
+            tabindex="0"
+            @click="close()"
+            @keyup.enter="close()"
+            @keyup.space="close()"
+            >{{ skipText }}</a
+          >
+        </div>
       </div>
-
-      <OnboardingButton
-        :class="`onboarding__main-btn ${currentStep === stepsCount ? 'onboarding__main-btn--turned' : ''}`"
-      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, onMounted, onUnmounted } from 'vue'
 
 // components
-import { PhX } from '@dnlsndr/vue-phosphor-icons'
 import Stepper from './Stepper.vue'
-import OnboardingButton from './OnboardingButton.vue'
 
 // composables
 import { useStepper } from '../composables/stepper'
 
 export default defineComponent({
   components: {
-    Stepper,
-    OnboardingButton,
-    PhX
+    Stepper
   },
   props: {
     h1: {
       type: String as PropType<string>,
       required: true
     },
-    h2: {
+    icon: {
       type: String as PropType<string>,
       required: true
     },
     currentStep: {
       type: Number as PropType<number>,
       required: true
+    },
+    btnText: {
+      type: String as PropType<string>,
+      required: true
+    },
+    skipText: {
+      type: String as PropType<string>,
+      required: true
     }
   },
   emits: ['close-me', 'next'],
   setup() {
-    const { stepsCount, close } = useStepper()
+    const { next, close, percentDone, stepsCount } = useStepper()
 
-    setTimeout(() => {
-      document.querySelector('.onboarding')?.classList.remove('onboarding--opening')
-    }, 800)
+    // Focus trap logic
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+
+      const onboarding = document.querySelector('.onboarding')
+      if (!onboarding) return
+
+      const focusableElements = onboarding.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      const firstElement = focusableElements[0] as HTMLElement
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    onMounted(() => {
+      document.addEventListener('keydown', handleKeyDown)
+
+      setTimeout(() => {
+        const onboarding = document.querySelector('.onboarding')
+        const firstFocusable = onboarding?.querySelector(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ) as HTMLElement
+        firstFocusable?.focus()
+      }, 100)
+    })
+
+    onUnmounted(() => {
+      document.removeEventListener('keydown', handleKeyDown)
+    })
 
     return {
-      stepsCount,
-      close
+      next,
+      close,
+      percentDone,
+      stepsCount
     }
   }
 })
@@ -73,108 +127,150 @@ export default defineComponent({
 
 <style lang="sass">
 .hide-bg
-    position: absolute
+    position: fixed
     top: 0
     left: 0
     width: 100vw
     height: 100vh
-    background-color: hsl(var(--clr-black), .8)
-
+    background-color: hsl(var(--clr-backgr), .8)
+    z-index: 3
     display: flex
     justify-content: center
     align-items: center
 
 .onboarding
-    position: relative
-    display: grid
-    /* width: close, main, button */
-    grid-template-columns: 5rem 1fr 8rem
-    /* heights: close, main, stepper, text1, text2 & button */
-    grid-template-rows: 5rem calc(100% - 5rem - 20px - 180px) 20px calc(180px - 8rem) 8rem
+    display: flex
+    flex-direction: column
     align-items: center
-    justify-items: center
-    width: 50vw
-    height: 80vh
+    position: relative
+    width: 800px
+    height: 90vh
     max-height: 90vh
-    background-color: hsl(var(--clr-grey), )
+    background-color: hsl(var(--clr-btn))
     border-radius: var(--brd-rad)
-    padding-bottom: 2rem
-    padding-right: 2rem
+    padding: 1rem
+    z-index: 9999
+    gap: 1rem
 
-    &__close
-        grid-row: 1
-        grid-column: 1
-        width: 4rem
-        height: 4rem
-        cursor: pointer
-        color: hsl(var(--clr-white) )
-        &:hover
-            color: hsl(var(--clr-alert) )
-
-    &__main
-        grid-row: 1 / 3
-        grid-column: 2
-        width: 100%
-        height: 100%
-        max-height: 100%
-        color: hsl(var(--clr-white), )
-        padding-top: 2rem
+    &__title
+        flex: 0 0 auto
         display: flex
-        flex-direction: column
         align-items: center
-        gap: 2rem
-        overflow-y: auto
+        gap: 8px
+        margin-bottom: -0.5rem
+
+    &__skip
+        margin-top: 16px
+
+    &__skip-text
+        cursor: pointer
+        text-decoration: underline !important
 
     &__stepper
-        grid-row: 3
-        grid-column: 2
         flex: 0 0 auto
-        width: 20%
+        width: 100%
+        max-width: 600px
+        margin: 0 auto
 
     &__text
-      grid-row: 4 / 6
-      grid-column: 2
-      color: hsl(var(--clr-white), )
-      font-weight: 800
-      max-height: 100%
-      text-align: justify
-      margin-right: 2rem
-      overflow-y: auto
-      padding-right: .5rem
+        color: hsl(var(--clr-white))
+        font-weight: 800
+        max-height: 100%
+        text-align: justify
+        margin-right: 2rem
+        overflow-y: auto
+        padding-right: .5rem
 
     &__main-btn
-        grid-row: 5
-        grid-column: 3
-        color: hsl(var(--clr-white), )
-        transition: transform 300ms ease
+        color: hsl(var(--clr-white))
+        transition: transform 200ms ease-in-out
 
-        &--turned
-            transform: rotate(90deg)
-            grid-column: 2
+    &__content
+        flex: 1 1 auto
+        width: 90%
+        overflow-y: auto
+        overflow-x: hidden
+        min-height: 0
+        display: flex
+        flex-direction: column
 
-    &--closing
-        animation: enter 500ms ease
-        animation-direction: reverse
-        animation-fill-mode: forwards
-        animation-delay: 150ms
+        &::-webkit-scrollbar
+            width: 8px
 
-    &--opening
-        animation: enter 500ms ease
-        animation-delay: 300ms
-        animation-fill-mode: backwards
+        &::-webkit-scrollbar-track
+            background: hsl(var(--clr-btn))
+            border-radius: var(--brd-rad)
+
+        &::-webkit-scrollbar-thumb
+            background: hsl(var(--clr-text))
+            border-radius: var(--brd-rad)
+
+            &:hover
+                background: hsl(var(--clr-btnhov2))
+
+        scrollbar-color: hsl(var(--clr-text)) hsl(var(--clr-btn))
+        scrollbar-width: thin
+
+        @media screen and (max-width: 800px)
+            width: 95%
+
+    @media screen and (max-width: 800px)
+        width: 100vw
+        height: 100vh
+        max-height: 100vh
+        border-radius: 0px
 
 .light
     & .onboarding
         &__main, &__footer, &__close:not(:hover)
-            color: hsl(var(--clr-black), )
+            color: hsl(var(--clr-backgr))
 
-@keyframes enter
-    0%
-        opacity: .2
-        transform: scale(0)
-    70%
-        opacity: 1
-        transform: scale(1.1)
-    100%
-        transform: scale(1)
+.onboarding-btn-wrapper
+    flex: 0 0 auto
+    margin-top: auto
+    justify-content: center
+    align-items: center
+    display: flex
+    flex-direction: column
+    padding-bottom: 1rem
+
+.onboarding-btn
+    background-color: hsl(var(--clr-btnhov))
+    border-radius: var(--brd-rad)
+    cursor: pointer
+    display: flex
+    justify-content: center
+    align-items: center
+    width: fit-content
+    height: 64px
+    min-height: 64px
+    box-shadow: 0 0 1rem 4px hsl(var(--clr-accent), .8)
+    transition: background-color 200ms ease-in-out
+
+    &:hover
+        background-color: hsl(var(--clr-btnhov2))
+        transition: background-color 200ms ease-in-out
+
+    &__inner
+        transition: all 200ms ease-in-out
+        font-size: 20px
+        padding-left: 16px
+        padding-right: 16px
+        border-radius: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+        gap: 8px
+        z-index: 2
+        position: relative
+        color: hsl(var(--clr-text))
+
+    &__arrow
+        z-index: 2
+        color: hsl(var(--clr-text))
+
+// used inside of onboardingPages
+.onboarding-inner-info
+    margin-top: 8px
+    // Removed max-height and overflow - let parent handle scrolling
 </style>

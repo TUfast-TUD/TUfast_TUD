@@ -5,6 +5,7 @@ import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
 import rockets from './freshContent/rockets.json'
+import studies from './freshContent/studies.json'
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -150,21 +151,34 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 })
 
-// register hotkeys
 if (chrome.commands) {
+  // register hotkeys - hotkeys now open as a new tab right next to the current tab
   chrome.commands.onCommand.addListener(async (command) => {
     console.log('Detected command: ' + command)
+
+    // Get the current tab to find its index
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
     switch (command) {
       case 'open_opal_hotkey':
-        await chrome.tabs.update({ url: 'https://bildungsportal.sachsen.de/opal/home/' })
+        await chrome.tabs.create({
+          url: 'https://bildungsportal.sachsen.de/opal/home/',
+          index: currentTab.index + 1
+        })
         await saveClicks(2)
         break
       case 'open_owa_hotkey':
-        await chrome.tabs.update({ url: 'https://msx.tu-dresden.de/owa/' })
+        await chrome.tabs.create({
+          url: 'https://msx.tu-dresden.de/owa/',
+          index: currentTab.index + 1
+        })
         await saveClicks(2)
         break
       case 'open_jexam_hotkey':
-        await chrome.tabs.update({ url: 'https://jexam.inf.tu-dresden.de/' })
+        await chrome.tabs.create({
+          url: 'https://jexam.inf.tu-dresden.de/',
+          index: currentTab.index + 1
+        })
         await saveClicks(2)
         break
     }
@@ -226,7 +240,6 @@ chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
 })
 
 // command listener
-// This listener can send async responses. If this is desired it must return true.
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   switch (request.cmd) {
     case 'save_clicks':
@@ -236,6 +249,80 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     /*********************
      * Settings commands *
      *********************/
+    // Check all settings for indicator on setting tiles
+    // Only runs once on mount and when credential-related settings change (userData or otp)
+    case 'check_all_settings':
+      console.log('check_all_settings case hit!')
+      // Asynchronous response
+      Promise.all([
+        // Login Check (has login data been set? username password)
+        credentials.userDataExists(request.platform), // 0
+        credentials.userDataExists(request.platform + '-totp'), // 1
+        credentials.userDataExists(request.platform + '-iotp'), // 2
+        // 3 - Mail (has user activated notifications for OWA Mails?)
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get(['enabledOWAFetch', 'additionalNotificationOnNewMail'], (result) => {
+            resolve((result.enabledOWAFetch ?? false) || (result.additionalNotificationOnNewMail ?? false))
+          })
+        }),
+        // 4 - Opal PDF checks (has user activated Opal Open files in Browser?)
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get(['pdfInInline', 'pdfInNewTab'], (result) => {
+            resolve((result.pdfInInline ?? false) || (result.pdfInNewTab ?? false))
+          })
+        }),
+        // 5 - Selma (has user activated selma improvements?)
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get(['improveSelma'], (result) => {
+            resolve(result.improveSelma ?? false)
+          })
+        }),
+        // 6 - Searchengine (has user activated searchengine commands?)
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get(['fwdEnabled'], (result) => {
+            resolve(result.fwdEnabled ?? false)
+          })
+        }),
+        // 7 - Faculty (which faculty has user selected?)
+        new Promise<string>((resolve) => {
+          chrome.storage.local.get(['studiengang'], (result) => {
+            const studiengangId = result.studiengang ?? 'general'
+            const faculty = studies[studiengangId]
+            if (faculty && faculty.name) {
+              resolve(faculty.name)
+            } else {
+              resolve(studies.general.name)
+            }
+          })
+        }),
+        // User data check
+        credentials.userDataExists(request.platform)
+        // Language (which language has user selected?)
+        // missing - will add when language is implemented
+      ]).then(
+        ([
+          loginExists, // 0
+          totpExists, // 1
+          iotpExists, // 2
+          owaStatus, // 3
+          opalStatus, // 4
+          selmaStatus, // 5
+          seCommandsStatus, // 6
+          faculty, // 7
+          userDataExists // 8
+        ]) => {
+          sendResponse({
+            otp: totpExists || iotpExists,
+            owa: owaStatus,
+            opalPdf: opalStatus,
+            userData: userDataExists || loginExists,
+            selma: selmaStatus,
+            searchengine: seCommandsStatus,
+            faculty: faculty
+          })
+        }
+      )
+      return true // required for async sendResponse
     /* User data */
     case 'get_user_data':
       // Asynchronous response
@@ -243,8 +330,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true // required for async sendResponse
     case 'set_user_data':
       // Asynchronous response
-      credentials.setUserData(request.userData, request.platform || 'zih').then(() => sendResponse(true))
-      return true // required for async sendResponse
+      credentials.setUserData(request.userData, request.platform || 'zih').then(() => {
+        sendResponse(true)
+        // Trigger credential indicator update
+        chrome.runtime.sendMessage({ cmd: 'credentials_updated', platform: request.platform || 'zih' })
+      })
+      return true
+
     case 'check_user_data':
       // Asynchronous response
       Promise.all([
@@ -257,8 +349,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true // required for async sendResponse
     case 'delete_user_data':
       // Asynchronous response
-      credentials.deleteUserData(request.platform).then(sendResponse) // Response can probably be ignored
-      return true // required for async sendResponse
+      credentials.deleteUserData(request.platform).then(() => {
+        sendResponse(true)
+        // Trigger credential indicator update
+        chrome.runtime.sendMessage({ cmd: 'credentials_updated', platform: request.platform })
+      })
+      return true
+
     case 'get_totp':
       // Asynchronous response
       otp.getTOTP(request.platform).then(sendResponse)
@@ -268,6 +365,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       if (!request.indexes) return sendResponse(undefined)
       otp.getIOTP(request.platform, ...request.indexes).then(sendResponse)
       return true // required for async sendResponse
+    case 'check_otp': // checking if otp is saved or not
+      // Asynchronous response
+      Promise.all([
+        credentials.userDataExists(request.platform + '-totp'),
+        credentials.userDataExists(request.platform + '-iotp')
+      ]).then(([totpExists, iotpExists]) => {
+        sendResponse(totpExists || iotpExists)
+      })
+      return true // required for async sendResponse
     case 'set_otp':
       // Asynchronous response
       switch (request.otpType) {
@@ -276,18 +382,26 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           credentials
             .setUserData({ user: 'totp', pass: request.secret }, (request.platform ?? 'zih') + '-totp')
             .then(() => {
-              credentials.deleteUserData((request.platform ?? 'zih') + '-iotp').then(() => sendResponse(true))
+              credentials.deleteUserData((request.platform ?? 'zih') + '-iotp').then(() => {
+                sendResponse(true)
+                // Trigger credential indicator update
+                chrome.runtime.sendMessage({ cmd: 'credentials_updated', platform: request.platform ?? 'zih' })
+              })
             })
-          return true // required for async sendResponse
+          return true
 
         case 'iotp':
           if (!request.secret) return sendResponse(false)
           credentials
             .setUserData({ user: 'iotp', pass: request.secret }, (request.platform ?? 'zih') + '-iotp')
             .then(() => {
-              credentials.deleteUserData((request.platform ?? 'zih') + '-totp').then(() => sendResponse(true))
+              credentials.deleteUserData((request.platform ?? 'zih') + '-totp').then(() => {
+                sendResponse(true)
+                // Trigger credential indicator update
+                chrome.runtime.sendMessage({ cmd: 'credentials_updated', platform: request.platform ?? 'zih' })
+              })
             })
-          return true // required for async sendResponse
+          return true
 
         default:
           return sendResponse(false)
@@ -296,7 +410,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       credentials
         .deleteUserData((request.platform ?? 'zih') + '-totp')
         .then(() => credentials.deleteUserData((request.platform ?? 'zih') + '-iotp'))
-        .then(() => sendResponse(true))
+        .then(() => {
+          sendResponse(true)
+          // Trigger credential indicator update
+          chrome.runtime.sendMessage({ cmd: 'credentials_updated', platform: request.platform ?? 'zih' })
+        })
       return true
     /* OWA */
     case 'enable_owa_fetch':

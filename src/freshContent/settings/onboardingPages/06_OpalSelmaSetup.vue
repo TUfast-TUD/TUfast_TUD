@@ -1,8 +1,8 @@
 <template>
-  <h1 class="upper">OPAL verbessern</h1>
-  <div class="info">
-    <Setting v-model="inlineActive" txt="Dokumente im Browser öffnen" :column="true" />
-    <Setting v-model="newTabActive" :disabled="!inlineActive" txt="Dokumente in neuem Tab öffnen" :column="true" />
+  <p class="txt-help txt-center"></p>
+  <div class="onboarding-inner-info">
+    <ImproveOpal />
+    <ImproveSelma />
   </div>
 </template>
 
@@ -10,14 +10,16 @@
 import { defineComponent, ref, watch } from 'vue'
 
 // components
-import Setting from '../components/Setting.vue'
+import ImproveOpal from '../settingPages/ImproveOpal.vue'
+import ImproveSelma from '../settingPages/ImproveSelma.vue'
 
 // composables
 import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
-    Setting
+    ImproveOpal,
+    ImproveSelma
   },
   setup() {
     const { opalPdf } = useSettingHandler()
@@ -48,18 +50,18 @@ export default defineComponent({
       inlineActive,
       newTabActive,
       inline,
-      newtab
+      newtab,
+      ImproveOpal,
+      ImproveSelma
     }
   }
 })
 </script>
 
 <style lang="sass" scoped>
-.info
-    margin-top: .8rem
-    width: 70%
-    display: flex
-    justify-content: space-between
-    align-items: center
-    gap: .8rem
+:deep(.onboarding-hide)
+    display: none !important
+
+:deep(.onboarding-margin)
+    margin-top: 32px
 </style>

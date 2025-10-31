@@ -63,8 +63,8 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@dnlsndr/vue-phosphor-icons": "^1.16.2",
-    "@lottiefiles/lottie-player": "^1.5.2",
+    "@lottiefiles/lottie-player": "^2.0.12",
+    "@tabler/icons-vue": "^3.35.0",
     "chart.js": "^3.8.0",
     "simple-datatables": "^3.2.0",
     "vue": "^3.2.22"

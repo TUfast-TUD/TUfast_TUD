@@ -1,14 +1,16 @@
 <template>
-  <p>Öffne OPAL & Co. einfach mit Tastenkombinationen.</p>
-  <CustomLink txt="Hier kannst du alle Shortcuts sehen und ändern" @click="openShortcutSettings()" />
-
-  <p class="p-margin">Standardmäßig sind aktiv:</p>
+  <h3 class="card-body-title">Öffne OPAL und weitere Tools mit Tastenkombinationen</h3>
+  <p class="max-line p-margin">Standardmäßig sind aktiv:</p>
 
   <p class="shortcuts">
-    Alt+Q → Dashboard öffnen<br />
-    Alt+O → OPAL öffnen<br />
-    Alt+M → Mail (Outlook-Web-App) öffnen<br />
-    Alt+J → jExam öffnen
+    <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">Q</span> &rarr; Dashboard öffnen
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
+    <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">O</span> &rarr; OPAL öffnen
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
+    <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">M</span> &rarr; Mail (OWA) öffnen
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
+    <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">J</span> &rarr; jExam öffnen
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
   </p>
 </template>
 
@@ -16,15 +18,12 @@
 import { defineComponent } from 'vue'
 
 // components
-import Link from '../components/Link.vue'
 
 // composables
 import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
-  components: {
-    CustomLink: Link
-  },
+  components: {},
   setup() {
     const { sendChromeRuntimeMessage } = useChrome()
     const openShortcutSettings = () => sendChromeRuntimeMessage({ cmd: 'open_shortcut_settings' })
@@ -38,7 +37,13 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .shortcuts
-    line-height: 1.75
+    line-height: 2.5
     margin-left: 1rem
-    color: hsl(var(--clr-white), .7)
+
+    &__bg
+        margin-top: 4px
+        margin-bottom: 4px
+        padding: 4px
+        border-radius: var(--brd-rad-sm)
+        background-color: hsl(var(--clr-backgr))
 </style>

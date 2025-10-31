@@ -1,6 +1,6 @@
 <template>
-  <h2>Schalte neue Raketen frei und gestalte damit OPAL und deinen Browser!</h2>
-  <p>Damit unterstützt du auch das TUfast-Projekt und das hilft uns sehr 🙂</p>
+  <h3 class="card-body-title">Schalte neue Raketen frei und gestalte damit OPAL und deinen Browser!</h3>
+  <p class="p-margin">Damit unterstützt du auch das TUfast-Projekt und das hilft uns sehr 🙂</p>
 
   <RocketSelect />
 </template>
@@ -24,7 +24,10 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .rocket
-    height: 50px
+    height: 48px
     filter: invert(100%)
     margin-right: .8rem
+
+    .light &
+        filter: invert(0%)
 </style>
