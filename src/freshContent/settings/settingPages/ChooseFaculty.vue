@@ -101,6 +101,7 @@ export default defineComponent({
         height: 100%
         min-height: 64px
         min-width: 120px
+        aspect-ratio: 1.875
         object-fit: contain
         object-position: center
         background-color: hsl(var(--clr-white))
