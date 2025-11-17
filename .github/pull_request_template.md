@@ -24,7 +24,7 @@ Referenced Issue (if applicable):
 #### Testing
 We have 1500+ Users. Please test your changes thoroughly.
 - [ ] Tested my changes on Firefox
-- [ ] - [ ] Tested my changes on Firefox mobile 
+- [ ] Tested my changes on Firefox mobile 
 - [ ] Tested my changes on a Chromium-Based-Browser
 - [ ] Successfully run `npm run test` locally
 
