@@ -28,5 +28,8 @@ We have 1500+ Users. Please test your changes thoroughly.
 - [ ] Tested my changes on a Chromium-Based-Browser
 - [ ] Successfully run `npm run test` locally
 
+#### Version increase
+- [ ] I increased the version number according to [SemVer](https://semver.org/).
+
 #### Additional Information
 Add anything here, that might be important.
