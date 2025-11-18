@@ -45,6 +45,5 @@ Consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CON
 You can support the development team with a little snack [here](https://www.buymeacoffee.com/olihausdoerfer). Thanks to all the [contributors](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) and supporters! It's great work for all students at TU Dresden!  
 [![Support me on Buy Me a Coffee](https://img.shields.io/badge/Support-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee)](https://www.buymeacoffee.com/olihausdoerfer)
 
-## Kontakt, Support und Feedback
-Sende eine Mail an frage@tu-fast.de oder eröffne einen Issue.
-
+## Contact, Support, and Feedback  
+Send an email to frage@tu-fast.de or open an issue on GitHub.
