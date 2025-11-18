@@ -16,7 +16,8 @@
 <img width="2777" height="1076" alt="image" src="https://github.com/user-attachments/assets/f2071e74-4691-480c-b858-c22fd44d39b3" />
 
 
-TUfast ist ein studentisches Projekt, um die Online-Portale der TU Dresden schneller und einfacher nutzerbar zu machen. TUfast hat mittlerweile über 4000 Nutzer und kann als Browser-Erweiterung auf [www.tu-fast.de](https://www.tu-fast.de) installiert werden.
+TUfast is a student project that makes the online portals of TU Dresden faster and easier to use. TUfast has more than 4.000 users and can be installed as a browser extension at [www.tu-fast.de](http://www.tu-fast.de).
+
 
 #### Some Features
 - Automatic login (including [2FA](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md)) to OPAL, Selma, and more than 11 portals at TU Dresden
