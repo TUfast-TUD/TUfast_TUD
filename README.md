@@ -4,12 +4,12 @@
 ![Release Version](https://img.shields.io/github/v/release/TUfast-TUD/TUfast_TUD)
 ![Latest Release](https://img.shields.io/github/release-date/TUfast-TUD/TUfast_TUD)
 ![License](https://img.shields.io/github/license/TUfast-TUD/TUfast_TUD)
-[![Support me on Buy Me a Coffee](https://img.shields.io/badge/Support-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee)](https://www.buymeacoffee.com/olihausdoerfer)
 
 ![Contributors](https://img.shields.io/github/contributors/TUfast-TUD/TUfast_TUD)
 ![Last Commit](https://img.shields.io/github/last-commit/TUfast-TUD/TUfast_TUD)
 ![Commit Activity](https://img.shields.io/github/commit-activity/m/TUfast-TUD/TUfast_TUD)
 
+[![Support me on Buy Me a Coffee](https://img.shields.io/badge/Support-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee)](https://www.buymeacoffee.com/olihausdoerfer)
 
 
 # TUfast TU Dresden 🚀
@@ -19,21 +19,16 @@
 TUfast is a student project that makes the online portals of TU Dresden faster and easier to use. TUfast has more than 4.000 users and can be installed as a browser extension at [www.tu-fast.de](http://www.tu-fast.de).
 
 
-#### Some Features
+#### Many features, including...
 - Automatic login (including [2FA](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md)) to OPAL, Selma, and more than 11 portals at TU Dresden
 - Grade statistics and beautiful tables in Selma
 - Open OPAL courses and OPAL favorites via a dashboard
 - Shortcuts in Google search, e.g., "tumail" opens TU Dresden mail directly
-- Shortcuts for TU Dresden IT services, e.g., Alt+O opens OPAL directly
-- Notifications for new emails in the TU Dresden inbox
-- ... and many more can be found in TUfast :)
+- **... and many more can be found in TUfast :)**
 
 
 ## 🚀 Using TUfast
 Simply visit [www.tu-fast.de](https://www.tu-fast.de) and select your browser to be redirected to the webstore for free installation.
-
-[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-4285F4?logo=chromewebstore&logoColor=white)](https://chrome.google.com/webstore/detail/tufast-tu-dresden/aheogihliekaafikeepfjngfegbnimbk)
-[![Firefox Add-on](https://img.shields.io/badge/Firefox-Add--on-FF7139?logo=firefox-browser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/tufast/)
 
 ## 🔒 Privacy information
 TUfast does not collect any information about the users. Data is only stored locally on your PC and is encrypted. For full information, see our [Privacy Policy](https://tu-fast.de/datenschutz).
