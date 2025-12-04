@@ -26,7 +26,7 @@
 }
 
 .snowflake {
-  position: fixed;
+  position: absolute;
   top: 0;
   color: #a8cfff;
   font-size: var(--size);

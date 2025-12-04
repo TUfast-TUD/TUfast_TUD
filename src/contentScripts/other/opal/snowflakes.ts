@@ -64,7 +64,7 @@
     snowflakeSettings.container.id = 'snowflakes-container'
     snowflakeSettings.container.setAttribute('aria-hidden', 'true')
     snowflakeSettings.container.style.cssText =
-      'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden'
+      'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:9999'
 
     // Create 48 snowflakes
     for (let i = 0; i < 48; i++) {
