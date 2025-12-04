@@ -67,7 +67,13 @@ function resetColor() {
   logo.src = iconURL
   logo.id = 'TUfastIcon'
   logo.title = 'Powered by TUfast. Enjoy :)'
-  document.getElementsByClassName('page-header')[0]?.appendChild(document.createElement('h1')).appendChild(logo)
+  // Create container div and insert logo
+  const div = document.createElement('div')
+  div.className = 'tufast-opal-header'
+  div.style.cssText =
+    'display: flex; flex-direction: row; gap: 16px; align-items: center; height: 100%; padding-top: 9px;'
+  document.getElementsByClassName('page-header')[0]?.appendChild(div)
+  div.appendChild(logo)
 
   // What to do onclick
   const onClickWhenFound = () => {
