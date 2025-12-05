@@ -106,7 +106,7 @@
     "name": "Verkehrswissenschaften \"Friedrich List\"",
     "fsr_icon": "../../assets/icons/FSRIcons/fsr_verkehr.png",
     "fsr_link": "https://www.fsr-verkehr.de/",
-    "fsr_icon_2": "../../assets/icons/FSRIcons/fsr_verkehr_download.png",
+    "fsr_icon_2": "../../assets/icons/fsr_verkehr_download.png",
     "fsr_link_2": "https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/28036399111?3",
     "fsr_icon_dashboard_style": "max-height: 32px;",
     "fsr_icon_dashboard_style_2": "max-height: 32px;",
