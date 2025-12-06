@@ -250,7 +250,8 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "{7ef41014-4362-4367-9781-0a90f1317f82}"
-    }
+    },
+    "gecko_android":{}
   },
   "commands": {
     "_execute_action": {
