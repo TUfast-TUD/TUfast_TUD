@@ -233,6 +233,43 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 })
 
+// Open all course links in background (survives popup close)
+async function openAllCoursesInBackground(courseLinks: string[]) {
+  if (!courseLinks || courseLinks.length === 0) {
+    return
+  }
+
+  const openedTabIds: number[] = []
+
+  // Open each course link with a small delay
+  for (let i = 0; i < courseLinks.length; i++) {
+    const link = courseLinks[i]
+    const isLastLink = i === courseLinks.length - 1
+
+    chrome.tabs.create({ url: link, active: false }, (newTab) => {
+      if (newTab && newTab.id) {
+        openedTabIds.push(newTab.id)
+
+        // If this is the last link, close all previous tabs after a short delay
+        if (isLastLink) {
+          setTimeout(() => {
+            // Close all opened tabs except the last one
+            for (let j = 0; j < openedTabIds.length - 1; j++) {
+              chrome.tabs.remove(openedTabIds[j])
+            }
+          }, 2000) // 2 second delay before closing tabs
+        }
+      }
+    })
+
+    // Add small delay between opening tabs (100ms)
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+
+  // Save clicks: 2 clicks per opened course (equivalent to manually opening each)
+  saveClicks(2 * courseLinks.length)
+}
+
 // DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
   if (resp.openSettingsOnReload) await openSettingsPage()
@@ -245,6 +282,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'save_clicks':
       // The first one is legacy and should not be used anymore
       saveClicks(request.click_count || request.clickCount)
+      break
+    case 'open_all_courses':
+      // Open all course links in background (survives popup close)
+      openAllCoursesInBackground(request.courseLinks)
       break
     /*********************
      * Settings commands *

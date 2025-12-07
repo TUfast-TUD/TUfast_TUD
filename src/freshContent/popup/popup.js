@@ -798,37 +798,13 @@ async function openAllCourses() {
     return
   }
 
-  // Track opened tab IDs
-  const openedTabIds = []
+  // Send course links to background script to open them (survives popup close)
+  chrome.runtime.sendMessage({
+    cmd: 'open_all_courses',
+    courseLinks: courseLinks
+  })
 
-  // Open each course link with a small delay
-  for (let i = 0; i < courseLinks.length; i++) {
-    const link = courseLinks[i]
-    const isLastLink = i === courseLinks.length - 1
-
-    chrome.tabs.create({ url: link, active: false }, (newTab) => {
-      if (newTab) {
-        openedTabIds.push(newTab.id)
-
-        // If this is the last link, close all previous tabs after a short delay
-        if (isLastLink) {
-          setTimeout(() => {
-            // Close all opened tabs except the last one
-            for (let j = 0; j < openedTabIds.length - 1; j++) {
-              chrome.tabs.remove(openedTabIds[j])
-            }
-          }, 2000) // 2 second delay before closing tabs
-        }
-      }
-    })
-
-    // Add small delay between opening tabs (100ms)
-    await new Promise((resolve) => setTimeout(resolve, 100))
-  }
-
-  saveTwoClicks()
-
-  // After opening and tab-closing has been scheduled, keep the button disabled briefly
+  // Re-enable button after 5s
   try {
     const btn = document.getElementById('open_all_courses_entry')
     if (btn) {
