@@ -156,7 +156,7 @@ body {
 
 .settings-section-icon svg {
   max-height: 24px;
-  color: var(--color-text-tertiary);
+  color: var(--color-setting-icon-fill);
 }
 
 .settings-text {
@@ -177,57 +177,6 @@ body {
 /* headline */
 .headline {
   display: none;
-}
-
-/* scrollbar - using standard scrollbar-color property for better compatibility */
-.custom-scrollbar {
-  scrollbar-color: var(--color-bg-scrollbar-thumb) var(--color-bg-scrollbar);
-}
-
-/* Webkit-based browsers (Chrome, Edge, Safari) - for width and border-radius */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 10px;
-  background-color: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  border-radius: 4px;
-  background-color: var(--color-bg-scrollbar);
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: var(--color-bg-scrollbar-thumb);
-}
-
-/* Light mode scrollbar */
-@media (prefers-color-scheme: light) {
-  .custom-scrollbar {
-    scrollbar-color: #cacaca transparent;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #cacaca;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-}
-
-/* Dark mode scrollbar */
-@media (prefers-color-scheme: dark) {
-  .custom-scrollbar {
-    scrollbar-color: #30363d transparent;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #30363d;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
 }
 
 .list-entry:hover,
@@ -301,6 +250,45 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+// Custom Scrollbar Styles
+:root {
+  --scrollbar-thumb: var(--color-bg-scrollbar-thumb);
+  --scrollbar-track: var(--color-bg-scrollbar);
+}
+
+/* Explicit theme overrides (set by JS via document.documentElement.setAttribute('data-theme', 'dark'|'light')) */
+[data-theme='light'] {
+  --scrollbar-thumb: #cacaca;
+  --scrollbar-track: transparent;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --scrollbar-thumb: #30363d;
+  --scrollbar-track: transparent;
+  color-scheme: dark;
+}
+
+.custom-scrollbar {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Webkit-based browsers (Chrome, Edge, Safari) - for width and border-radius */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 4px;
+  background-color: var(--scrollbar-track);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: var(--scrollbar-thumb);
 }
 
 @media (prefers-color-scheme: dark) {

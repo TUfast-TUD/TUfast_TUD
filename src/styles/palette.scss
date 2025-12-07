@@ -45,6 +45,7 @@
   --color-btn-deny-bg: #586069;
   --color-btn-deny-hover-bg: #6a737d;
   --color-btn-switch-bg: #ccc;
+  --color-btn-switch-handle-bg: #f6f8fa;
 
   /* border */
   --color-border-primary: #e1e4e8;
@@ -59,6 +60,9 @@
   --color-border-input: #e1e4e8;
   --color-border-radio: #e1e4e8;
   --color-border-popup: #dddddd;
+
+  /* popup setting icons */
+  --color-setting-icon-fill: #919daa;
 }
 
 @mixin palette-dark {
@@ -108,6 +112,7 @@
   --color-btn-deny-bg: #21262d;
   --color-btn-deny-hover-bg: #292e34;
   --color-btn-switch-bg: #30363d;
+  --color-btn-switch-handle-bg: #161b22;
 
   /* border */
   --color-border-primary: #30363d;
@@ -122,6 +127,9 @@
   --color-border-input: #30363d;
   --color-border-radio: #21262d;
   --color-border-popup: #30363d;
+
+  /* popup setting icons */
+  --color-setting-icon-fill: #787e85;
 }
 
 @mixin rules-light {
