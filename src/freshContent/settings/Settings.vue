@@ -342,6 +342,53 @@ export default defineComponent({
       }
     }
 
+    // Neue separate Funktion zum Öffnen basierend auf Storage-Parameter
+    const openFromStorage = async () => {
+      try {
+        const result = await getChromeLocalStorage('openSettingsPageParam')
+        if (!result) return
+
+        const openParam = result
+
+        // Parameter aus Storage löschen, damit es nicht bei jedem Reload geöffnet wird
+        await setChromeLocalStorage({ openSettingsPageParam: null })
+
+        const normalized = openParam.toLowerCase()
+        const match = settings.find((s) => {
+          return (
+            (s.settingsPage && s.settingsPage.toLowerCase() === normalized) ||
+            (s.title && s.title.toLowerCase() === normalized)
+          )
+        })
+
+        if (match) {
+          // If onboarding is active, skip it
+          if (!hideWelcome.value) {
+            hideWelcome.value = true
+            await setChromeLocalStorage({ hideWelcome: true })
+          }
+
+          openSettingId.value = match.settingsPage
+
+          // Try multiple times to ensure element is ready
+          const tryScroll = (attempt = 0) => {
+            const el = document.querySelector('.card--inline') as HTMLElement | null
+
+            if (el && el.offsetHeight > 0) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            } else if (attempt < 10) {
+              setTimeout(() => tryScroll(attempt + 1), 50)
+            }
+          }
+
+          await nextTick()
+          tryScroll()
+        }
+      } catch (e) {
+        // ignore errors
+      }
+    }
+
     onBeforeMount(async () => {
       hideWelcome.value = (await getChromeLocalStorage('hideWelcome')) as boolean
       themeSetup()
@@ -398,6 +445,9 @@ export default defineComponent({
       }
       // After starfield setup, check URL (query or hash) to open specific setting
       openFromUrl()
+
+      // Check Storage too if coming from openShare
+      openFromStorage()
 
       // react to future hash changes (in-page links or history navigation)
       window.addEventListener('hashchange', openFromUrl)
