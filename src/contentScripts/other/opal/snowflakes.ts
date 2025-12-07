@@ -1,34 +1,34 @@
-;(async () => {
+// Global state to persist across SPA navigations
+const globalSnowflakeState: {
+  container: HTMLDivElement | undefined
+  currentState: boolean
+  initialized: boolean
+} = {
+  container: undefined,
+  currentState: true,
+  initialized: false
+}
+
+// Main injection logic
+async function injectSnowflakeControl() {
+  // Check if already exists
+  if (document.getElementById('flakeSwitch')) return
+
+  // Check if container exists
+  const div = document.querySelector('.tufast-opal-header') as HTMLElement
+  if (!div) return
+
   // All december is christmas time
   if (new Date().getMonth() !== 11) return
-  const { flakeState } = await chrome.storage.local.get(['flakeState'])
 
-  // Warte auf den Container
-  const waitForContainer = () => {
-    return new Promise<HTMLElement>((resolve) => {
-      const check = () => {
-        const div = document.querySelector('.tufast-opal-header')
-        if (div) {
-          resolve(div as HTMLElement)
-        } else {
-          setTimeout(check, 100)
-        }
-      }
-      check()
-    })
+  // Only load from storage once on first initialization
+  if (!globalSnowflakeState.initialized) {
+    const { flakeState } = await chrome.storage.local.get(['flakeState'])
+    if (typeof flakeState === 'boolean') {
+      globalSnowflakeState.currentState = flakeState
+    }
+    globalSnowflakeState.initialized = true
   }
-
-  const snowflakeSettings: {
-    container: HTMLDivElement | undefined
-    switch: HTMLSpanElement | undefined
-    currentState: boolean
-  } = {
-    container: undefined,
-    switch: undefined,
-    currentState: flakeState
-  }
-
-  if (typeof snowflakeSettings.currentState !== 'boolean') snowflakeSettings.currentState = true
 
   const SNOW_CHARS = ['❄', '❅']
 
@@ -64,63 +64,96 @@
   }
 
   function removeFlakes() {
-    if (!snowflakeSettings.container) return
     try {
       const container = document.getElementById('snowflakes-container')
-      if (container) document.body.removeChild(container)
-      snowflakeSettings.container = undefined
+      if (container) {
+        document.body.removeChild(container)
+      }
+      globalSnowflakeState.container = undefined
     } catch (e) {}
   }
 
   function insertFlakes() {
-    if (snowflakeSettings.container) return
+    // Check if container already exists (from previous navigation)
+    if (globalSnowflakeState.container && document.getElementById('snowflakes-container')) {
+      return
+    }
 
-    snowflakeSettings.container = document.createElement('div')
-    snowflakeSettings.container.id = 'snowflakes-container'
-    snowflakeSettings.container.setAttribute('aria-hidden', 'true')
-    snowflakeSettings.container.style.cssText =
+    // Remove any orphaned containers first
+    removeFlakes()
+
+    globalSnowflakeState.container = document.createElement('div')
+    globalSnowflakeState.container.id = 'snowflakes-container'
+    globalSnowflakeState.container.setAttribute('aria-hidden', 'true')
+    globalSnowflakeState.container.style.cssText =
       'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:9999'
 
     // Create 48 snowflakes
     for (let i = 0; i < 48; i++) {
-      snowflakeSettings.container.appendChild(createSnowflake())
+      globalSnowflakeState.container.appendChild(createSnowflake())
     }
 
-    document.body.prepend(snowflakeSettings.container)
+    document.body.prepend(globalSnowflakeState.container)
   }
 
-  function updateButtonText() {
-    if (snowflakeSettings.switch) {
-      snowflakeSettings.switch.textContent = snowflakeSettings.currentState
-        ? 'Schnee deaktivieren'
-        : 'Schnee aktivieren'
-    }
+  function updateButtonText(switchElement: HTMLSpanElement) {
+    switchElement.textContent = globalSnowflakeState.currentState ? 'Schnee deaktivieren' : 'Schnee aktivieren'
   }
 
   async function flakesSwitchOnClick(e: MouseEvent) {
-    snowflakeSettings.currentState = !snowflakeSettings.currentState
-    await chrome.storage.local.set({ flakeState: snowflakeSettings.currentState })
-    if (snowflakeSettings.currentState) {
+    globalSnowflakeState.currentState = !globalSnowflakeState.currentState
+    await chrome.storage.local.set({ flakeState: globalSnowflakeState.currentState })
+    if (globalSnowflakeState.currentState) {
       insertFlakes()
     } else {
       removeFlakes()
     }
 
-    updateButtonText()
+    updateButtonText(e.currentTarget as HTMLSpanElement)
   }
-
-  const div = await waitForContainer()
 
   const flakeSwitch = document.createElement('span')
   flakeSwitch.id = 'flakeSwitch'
   flakeSwitch.title = 'Click me. Winter powered by TUfast.'
 
-  snowflakeSettings.switch = flakeSwitch
-  updateButtonText()
+  updateButtonText(flakeSwitch)
 
   flakeSwitch.addEventListener('click', flakesSwitchOnClick)
 
+  // Simply append - order is managed by insertLogo.ts
   div.appendChild(flakeSwitch)
 
-  snowflakeSettings.currentState ? insertFlakes() : removeFlakes()
+  // Apply current state (but don't create new snowflakes if they already exist)
+  if (globalSnowflakeState.currentState) {
+    insertFlakes()
+  } else {
+    removeFlakes()
+  }
+}
+
+// Initialize and watch for changes
+;(async () => {
+  // Wait a bit for the logo to be injected first
+  await new Promise((resolve) => setTimeout(resolve, 100))
+
+  // Initial injection
+  await injectSnowflakeControl()
+
+  // Watch for DOM changes (SPA navigation)
+  let injectionTimeout: number | undefined
+  const observer = new MutationObserver(async () => {
+    // Debounce to prevent multiple rapid injections
+    if (injectionTimeout) clearTimeout(injectionTimeout)
+
+    injectionTimeout = window.setTimeout(async () => {
+      if (document.querySelector('.tufast-opal-header') && !document.getElementById('flakeSwitch')) {
+        await injectSnowflakeControl()
+      }
+    }, 50)
+  })
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
 })()

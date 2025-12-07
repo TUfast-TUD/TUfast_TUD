@@ -1,25 +1,16 @@
-;(async () => {
-  // Warte auf den Container
-  const waitForContainer = () => {
-    return new Promise<HTMLElement>((resolve) => {
-      const check = () => {
-        const div = document.querySelector('.tufast-opal-header')
-        if (div) {
-          resolve(div as HTMLElement)
-        } else {
-          setTimeout(check, 100)
-        }
-      }
-      check()
-    })
-  }
+// Main injection logic
+async function injectCloseAllButton() {
+  // Check if already exists
+  if (document.getElementById('closeAllCourseTabsButton')) return
 
-  const div = await waitForContainer()
+  // Check if container exists
+  const div = document.querySelector('.tufast-opal-header') as HTMLElement
+  if (!div) return
 
   const closeAllCourseTabsButton = document.createElement('span')
   closeAllCourseTabsButton.id = 'closeAllCourseTabsButton'
-  closeAllCourseTabsButton.title = 'Alle Kurse schließen. Ein TUfast-Feature.'
-  closeAllCourseTabsButton.textContent = 'Alle Kurse schließen'
+  closeAllCourseTabsButton.title = 'Alle Tabs schließen. Ein TUfast-Feature.'
+  closeAllCourseTabsButton.textContent = 'Alle Tabs schließen'
 
   function closeAllTabs() {
     function clickNextCloseButton() {
@@ -38,4 +29,22 @@
   })
 
   div.appendChild(closeAllCourseTabsButton)
+}
+
+// Initialize and watch for changes
+;(async () => {
+  // Initial injection
+  await injectCloseAllButton()
+
+  // Watch for DOM changes (SPA navigation)
+  const observer = new MutationObserver(async () => {
+    if (document.querySelector('.tufast-opal-header') && !document.getElementById('closeAllCourseTabsButton')) {
+      await injectCloseAllButton()
+    }
+  })
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
 })()

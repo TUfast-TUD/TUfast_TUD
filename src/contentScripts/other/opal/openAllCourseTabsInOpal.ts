@@ -1,24 +1,58 @@
-;(async () => {
-  const waitForContainer = () => {
-    return new Promise<HTMLElement>((resolve) => {
-      const check = () => {
-        const div = document.querySelector('.tufast-opal-header')
-        if (div) {
-          resolve(div as HTMLElement)
-        } else {
-          setTimeout(check, 100)
-        }
-      }
-      check()
-    })
-  }
+// Whitelist of paths where the button should be enabled
+const ENABLED_PATHS = [
+  '/opal/auth/resource/favorites',
+  '/opal/auth/resource/courses',
+  '/opal/auth/resource/courses-active'
+]
 
-  const div = await waitForContainer()
+// Check if current page is in whitelist
+function isPageEnabled(): boolean {
+  const currentPath = window.location.pathname
+  return ENABLED_PATHS.some((path) => currentPath === path)
+}
+
+// Update button state based on current page
+function updateButtonState(button: HTMLSpanElement) {
+  const enabled = isPageEnabled()
+  const currentPath = window.location.pathname
+
+  if (enabled) {
+    button.style.opacity = '1'
+    button.style.cursor = 'pointer'
+    button.style.pointerEvents = 'auto'
+
+    // Special text for favorites page
+    if (currentPath === '/opal/auth/resource/favorites') {
+      button.textContent = 'Alle Favoriten öffnen'
+      button.title = 'Alle Favoriten öffnen. Ein TUfast-Feature.'
+    } else {
+      button.textContent = 'Alle Kurse öffnen'
+      button.title = 'Alle Kurse öffnen. Ein TUfast-Feature.'
+    }
+  } else {
+    button.style.opacity = '0.4'
+    button.style.cursor = 'default'
+    button.style.pointerEvents = 'none'
+    button.textContent = 'Alle Kurse öffnen'
+    button.title = 'Nur verfügbar auf Favoriten- und Kurs-Seiten'
+  }
+}
+
+// Main injection logic
+async function injectOpenAllButton() {
+  // Check if already exists
+  if (document.getElementById('openAllCourseTabsInOpalButton')) return
+
+  // Check if container exists
+  const div = document.querySelector('.tufast-opal-header') as HTMLElement
+  if (!div) return
 
   const openAllCourseTabsInOpalButton = document.createElement('span')
   openAllCourseTabsInOpalButton.id = 'openAllCourseTabsInOpalButton'
-  openAllCourseTabsInOpalButton.title = 'Alle Kurse öffnen. Ein TUfast-Feature.'
   openAllCourseTabsInOpalButton.textContent = 'Alle Kurse öffnen'
+
+  // Set initial state
+  updateButtonState(openAllCourseTabsInOpalButton)
 
   function getFavoriteCourseLinks(): string[] {
     const links: string[] = []
@@ -102,6 +136,9 @@
   }
 
   function openAllFavCourseTabs() {
+    // Double-check if enabled (shouldn't be possible due to pointerEvents, but just in case)
+    if (!isPageEnabled()) return
+
     const courseLinks = getFavoriteCourseLinks()
 
     if (!courseLinks || courseLinks.length === 0) {
@@ -121,4 +158,37 @@
   })
 
   div.appendChild(openAllCourseTabsInOpalButton)
+}
+
+// Initialize and watch for changes
+;(async () => {
+  // Initial injection
+  await injectOpenAllButton()
+
+  // Track last URL to detect navigation
+  let lastUrl = window.location.href
+
+  // Watch for DOM changes (SPA navigation)
+  const observer = new MutationObserver(async () => {
+    const currentUrl = window.location.href
+
+    // Check if button needs re-injection
+    if (document.querySelector('.tufast-opal-header') && !document.getElementById('openAllCourseTabsInOpalButton')) {
+      await injectOpenAllButton()
+    }
+
+    // Check if URL changed and update button state
+    if (currentUrl !== lastUrl) {
+      lastUrl = currentUrl
+      const button = document.getElementById('openAllCourseTabsInOpalButton') as HTMLSpanElement
+      if (button) {
+        updateButtonState(button)
+      }
+    }
+  })
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
 })()
