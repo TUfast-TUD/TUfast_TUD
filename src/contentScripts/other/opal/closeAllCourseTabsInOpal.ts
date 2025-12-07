@@ -1,9 +1,9 @@
-// Main injection logic
+const STORAGE_KEY = 'closeAllTabsOnLoad'
+
+// adds button
 async function injectCloseAllButton() {
-  // Check if already exists
   if (document.getElementById('closeAllCourseTabsButton')) return
 
-  // Check if container exists
   const div = document.querySelector('.tufast-opal-header') as HTMLElement
   if (!div) return
 
@@ -12,42 +12,54 @@ async function injectCloseAllButton() {
   closeAllCourseTabsButton.title = 'Alle Tabs schließen. Ein TUfast-Feature.'
   closeAllCourseTabsButton.textContent = 'Alle Tabs schließen'
 
-  function closeAllTabs() {
-    let closedCount = 0 // Zähler für geschlossene Tabs
-
-    function clickNextCloseButton() {
-      const closeButtons = document.querySelectorAll('.btn-close.icon.only')
-      if (closeButtons.length > 0) {
-        ;(closeButtons[0] as HTMLElement).click()
-        closedCount++ // Erhöhe Zähler
-        setTimeout(clickNextCloseButton, 1000)
-      } else {
-        // Alle Tabs geschlossen - sende Message an Background
-        if (closedCount > 0) {
-          chrome.runtime.sendMessage({
-            cmd: 'closeAllCourseTabsInOpal',
-            closedCount: closedCount
-          })
-        }
-      }
-    }
-    clickNextCloseButton()
-  }
-
   closeAllCourseTabsButton.addEventListener('click', (e) => {
     e.preventDefault()
-    closeAllTabs()
+
+    // set marker in localStorage to indicate tabs should be closed after reload
+    localStorage.setItem(STORAGE_KEY, 'true')
+
+    // reload the page (fixes an issue with code getting confused about what tabs are open)
+    location.reload()
   })
 
   div.appendChild(closeAllCourseTabsButton)
 }
 
-// Initialize and watch for changes
+// runs only if marker is set in localStorage
+function closeAllTabsAfterReload() {
+  if (localStorage.getItem(STORAGE_KEY) !== 'true') return
+
+  let closedCount = 0
+
+  function clickNextCloseButton() {
+    const closeButtons = document.querySelectorAll('.btn-close.icon.only')
+
+    if (closeButtons.length > 0) {
+      ;(closeButtons[0] as HTMLElement).click()
+      closedCount++
+      setTimeout(clickNextCloseButton, 1000)
+    } else {
+      if (closedCount > 0) {
+        chrome.runtime.sendMessage({
+          cmd: 'closeAllCourseTabsInOpal',
+          closedCount: closedCount
+        })
+      }
+      localStorage.removeItem(STORAGE_KEY)
+    }
+  }
+
+  setTimeout(clickNextCloseButton, 500)
+}
+
 ;(async () => {
-  // Initial injection
   await injectCloseAllButton()
 
-  // Watch for DOM changes (SPA navigation)
+  const shouldCloseTabs = localStorage.getItem(STORAGE_KEY)
+  if (shouldCloseTabs === 'true') {
+    closeAllTabsAfterReload()
+  }
+
   const observer = new MutationObserver(async () => {
     if (document.querySelector('.tufast-opal-header') && !document.getElementById('closeAllCourseTabsButton')) {
       await injectCloseAllButton()
