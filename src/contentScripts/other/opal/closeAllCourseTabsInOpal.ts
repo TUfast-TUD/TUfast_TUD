@@ -13,11 +13,22 @@ async function injectCloseAllButton() {
   closeAllCourseTabsButton.textContent = 'Alle Tabs schließen'
 
   function closeAllTabs() {
+    let closedCount = 0 // Zähler für geschlossene Tabs
+
     function clickNextCloseButton() {
       const closeButtons = document.querySelectorAll('.btn-close.icon.only')
       if (closeButtons.length > 0) {
         ;(closeButtons[0] as HTMLElement).click()
+        closedCount++ // Erhöhe Zähler
         setTimeout(clickNextCloseButton, 1000)
+      } else {
+        // Alle Tabs geschlossen - sende Message an Background
+        if (closedCount > 0) {
+          chrome.runtime.sendMessage({
+            cmd: 'closeAllCourseTabsInOpal',
+            closedCount: closedCount
+          })
+        }
       }
     }
     clickNextCloseButton()

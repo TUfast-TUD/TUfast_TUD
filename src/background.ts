@@ -324,6 +324,22 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // Open all course links in background (survives popup close)
       openAllCoursesInBackground(request.courseLinks)
       break
+    // Open All Course Tabs in Opal
+    case 'openAllCourseTabsInOpal':
+      openAllCourseTabsInOpal(request.courseLinks)
+        .then(() => sendResponse({ success: true }))
+        .catch((error) => sendResponse({ success: false, error: error.message }))
+      return true
+    // Close All Course Tabs in Opal
+    case 'closeAllCourseTabsInOpal':
+      saveClicks(request.closedCount)
+      sendResponse({ success: true })
+      return true
+    case 'closeCurrentTab':
+      if (_sender.tab?.id) {
+        chrome.tabs.remove(_sender.tab.id)
+      }
+      break
     /*********************
      * Settings commands *
      *********************/
@@ -680,16 +696,6 @@ async function unlockRocketIcon(rocketId: string): Promise<void> {
   await chrome.storage.local.set(update)
 }
 
-// Background Script - Message Listener
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'openAllCourseTabsInOpal') {
-    openAllCourseTabsInOpal(message.courseLinks)
-      .then(() => sendResponse({ success: true }))
-      .catch((error) => sendResponse({ success: false, error: error.message }))
-    return true
-  }
-})
-
 // Funktion zum Öffnen aller Kurs-Tabs in OPAL
 async function openAllCourseTabsInOpal(courseLinks: string[]) {
   if (!courseLinks || courseLinks.length === 0) return
@@ -746,4 +752,7 @@ async function openAllCourseTabsInOpal(courseLinks: string[]) {
     // Delay zwischen Tabs
     await new Promise((resolve) => setTimeout(resolve, 100))
   }
+
+  // Save clicks: 2 clicks per opened course (equivalent to manually opening each)
+  saveClicks(2 * courseLinks.length)
 }

@@ -176,6 +176,7 @@ async function injectLogo() {
       onClickSettings.overlay.style.fontSize = '150px'
       timeout = 1000
       onClickSettings.blocker = false
+      onClickSettings.overlay.style.fontWeight = 'bold'
       onClickSettings.overlay.innerHTML = onClickSettings.counter.toString()
     }
 

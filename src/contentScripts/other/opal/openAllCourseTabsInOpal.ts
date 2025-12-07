@@ -147,9 +147,17 @@ async function injectOpenAllButton() {
     }
 
     chrome.runtime.sendMessage({
-      action: 'openAllCourseTabsInOpal',
+      cmd: 'openAllCourseTabsInOpal',
       courseLinks: courseLinks
     })
+
+    // Aktuellen Tab nach kurzer Verzögerung schließen
+    // Die Verzögerung stellt sicher, dass die Tabs geöffnet werden, bevor dieser Tab geschlossen wird
+    setTimeout(() => {
+      chrome.runtime.sendMessage({
+        cmd: 'closeCurrentTab'
+      })
+    }, 500)
   }
 
   openAllCourseTabsInOpalButton.addEventListener('click', (e) => {
