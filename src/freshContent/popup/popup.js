@@ -207,7 +207,7 @@ function addDropdownOptions() {
   Object.keys(studiengangConfig).forEach((key) => {
     const listEntry = document.createElement('p')
     listEntry.style =
-      'display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;'
+      'display:flex; align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; gap: 8px'
     listEntry.onclick = changeStudiengangSelection
     listEntry.setAttribute('studiengang', key)
 
