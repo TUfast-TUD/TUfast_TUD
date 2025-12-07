@@ -241,12 +241,49 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
 
   const openedTabIds: number[] = []
 
+  // Try to open new tabs next to the current tab so they feel natural to the user
+  let startIndex: number | undefined = undefined
+  try {
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    if (currentTab && typeof (currentTab as any).index === 'number') startIndex = (currentTab as any).index + 1
+  } catch (e) {
+    // If we cannot get the current tab, proceed without index
+  }
+
   // Open each course link with a small delay
   for (let i = 0; i < courseLinks.length; i++) {
     const link = courseLinks[i]
+    // Basic sanitization: skip empty/anchor/javascript/extension urls
+    if (!link || typeof link !== 'string') {
+      console.warn('Skipping invalid course link (empty)')
+      continue
+    }
+    const trimmed = link.trim()
+    if (trimmed === '' || trimmed === '#') {
+      console.warn('Skipping anchor/empty course link:', link)
+      continue
+    }
+    if (trimmed.startsWith('javascript:') || trimmed.startsWith('chrome-extension:')) {
+      console.warn('Skipping unsafe or extension-internal link:', link)
+      continue
+    }
+
+    // Only open absolute links (with protocol) or protocol-relative (//...).
+    // This prevents creating tabs for relative anchors like '#', which can
+    // open the extension root (chrome-extension://.../#).
+    const absoluteUrlPattern = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//
+    const protocolRelativePattern = /^\/\//
+    if (!absoluteUrlPattern.test(trimmed) && !protocolRelativePattern.test(trimmed)) {
+      console.warn('Skipping non-absolute course link:', link)
+      continue
+    }
+
     const isLastLink = i === courseLinks.length - 1
 
-    chrome.tabs.create({ url: link, active: false }, (newTab) => {
+    const createProps: any = { url: trimmed, active: isLastLink }
+    if (typeof startIndex !== 'undefined') createProps.index = startIndex + i
+
+    chrome.tabs.create(createProps, (newTab) => {
       if (newTab && newTab.id) {
         openedTabIds.push(newTab.id)
 
