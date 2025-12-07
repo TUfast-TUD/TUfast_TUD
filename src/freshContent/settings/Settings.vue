@@ -162,7 +162,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { defineComponent, onBeforeMount, onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 
 // types
 import type { Setting } from './types/Setting'
@@ -294,6 +294,54 @@ export default defineComponent({
       updateTheme(selectedTheme)
     }
 
+    // opens a specific setting based on `?open=...` or `#...`
+    const openFromUrl = async () => {
+      try {
+        const params = new URLSearchParams(window.location.search)
+        let openParam = params.get('open')
+
+        if (!openParam && window.location.hash) {
+          openParam = decodeURIComponent(window.location.hash.slice(1))
+        }
+
+        if (!openParam) return
+
+        const normalized = openParam.toLowerCase()
+        const match = settings.find((s) => {
+          return (
+            (s.settingsPage && s.settingsPage.toLowerCase() === normalized) ||
+            (s.title && s.title.toLowerCase() === normalized)
+          )
+        })
+
+        if (match) {
+          // If onboarding is active, skip it
+          if (!hideWelcome.value) {
+            hideWelcome.value = true
+            await setChromeLocalStorage({ hideWelcome: true })
+          }
+
+          openSettingId.value = match.settingsPage
+
+          // Try multiple times to ensure element is ready
+          const tryScroll = (attempt = 0) => {
+            const el = document.querySelector('.card--inline') as HTMLElement | null
+
+            if (el && el.offsetHeight > 0) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            } else if (attempt < 10) {
+              setTimeout(() => tryScroll(attempt + 1), 50)
+            }
+          }
+
+          await nextTick()
+          tryScroll()
+        }
+      } catch (e) {
+        // ignore URL parsing errors
+      }
+    }
+
     onBeforeMount(async () => {
       hideWelcome.value = (await getChromeLocalStorage('hideWelcome')) as boolean
       themeSetup()
@@ -348,6 +396,17 @@ export default defineComponent({
 
         starfield.appendChild(star)
       }
+      // After starfield setup, check URL (query or hash) to open specific setting
+      openFromUrl()
+
+      // react to future hash changes (in-page links or history navigation)
+      window.addEventListener('hashchange', openFromUrl)
+      window.addEventListener('popstate', openFromUrl)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('hashchange', openFromUrl)
+      window.removeEventListener('popstate', openFromUrl)
     })
 
     return {

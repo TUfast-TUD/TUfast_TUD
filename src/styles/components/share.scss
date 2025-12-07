@@ -1,75 +1,78 @@
-@use '../palette.scss';
-
-.the-bottom {
-  padding: 0px;
-  bottom: 13%;
-  font-size: 1.3em;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  display: 'inline-block';
-}
-
-.grey_a {
-  text-decoration: underline;
-  color: var(--color-text-secondary);
-  font-weight: 100;
-}
-
-.grey {
-  color: var(--color-text-secondary);
-  font-weight: 100;
-}
-
-#download-section {
-  position: relative;
-  top: 1.3em;
-}
-
-html {
+.content {
+  max-width: 510px;
+  max-height: 410px;
+  text-align: center;
+  color: var(--color-text-primary);
   overflow: hidden;
+  margin-left: 16px;
+  margin-right: 8px; // different from margin-left because of scrollbar in list
 }
 
-.tufast_text {
-  text-align: center;
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--color-text-primary);
 }
 
-.download-link {
-  font-size: 1em;
+.subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  margin-top: 0;
+  font-size: 1rem;
 }
 
-.huge {
-  font-size: 1.5em;
-  font-weight: 800;
-  display: inline;
-  vertical-align: middle;
-  line-height: 1.4em;
+.share-section {
+  margin-top: 28px;
 }
 
-.the-middle {
-  padding: 5px;
-  top: 3%;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.9em;
-  line-height: 2em;
-  text-align: center;
+.share-title {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary);
 }
 
-.imgicon {
-  height: 1em;
-  vertical-align: middle;
+.share-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.browser_name {
-  display: inline;
-  vertical-align: middle;
-  font-size: 0.9em;
-  line-height: 0.9em;
-}
-
-a {
+.share-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--color-bg-info);
   text-decoration: none;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.share-link:hover {
+  background: var(--color-bg-secondary);
+}
+
+.share-link img {
+  height: 1.4em;
+}
+
+.footer {
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.footer a {
+  color: var(--color-text-link);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
