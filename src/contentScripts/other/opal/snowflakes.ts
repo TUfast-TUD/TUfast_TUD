@@ -3,6 +3,21 @@
   if (new Date().getMonth() !== 11) return
   const { flakeState } = await chrome.storage.local.get(['flakeState'])
 
+  // Warte auf den Container
+  const waitForContainer = () => {
+    return new Promise<HTMLElement>((resolve) => {
+      const check = () => {
+        const div = document.querySelector('.tufast-opal-header')
+        if (div) {
+          resolve(div as HTMLElement)
+        } else {
+          setTimeout(check, 100)
+        }
+      }
+      check()
+    })
+  }
+
   const snowflakeSettings: {
     container: HTMLDivElement | undefined
     switch: HTMLSpanElement | undefined
@@ -74,30 +89,38 @@
     document.body.prepend(snowflakeSettings.container)
   }
 
+  function updateButtonText() {
+    if (snowflakeSettings.switch) {
+      snowflakeSettings.switch.textContent = snowflakeSettings.currentState
+        ? 'Schnee deaktivieren'
+        : 'Schnee aktivieren'
+    }
+  }
+
   async function flakesSwitchOnClick(e: MouseEvent) {
     snowflakeSettings.currentState = !snowflakeSettings.currentState
     await chrome.storage.local.set({ flakeState: snowflakeSettings.currentState })
-
-    const target = e.target as HTMLSpanElement
     if (snowflakeSettings.currentState) {
-      target.style.color = 'black'
       insertFlakes()
     } else {
-      target.style.color = 'grey'
       removeFlakes()
     }
+
+    updateButtonText()
   }
+
+  const div = await waitForContainer()
 
   const flakeSwitch = document.createElement('span')
   flakeSwitch.id = 'flakeSwitch'
   flakeSwitch.title = 'Click me. Winter powered by TUfast.'
-  flakeSwitch.style.cssText = 'cursor:pointer; font-size: 20px'
-  flakeSwitch.style.color = snowflakeSettings.currentState ? 'black' : 'grey'
-  flakeSwitch.textContent = '❅'
+
+  snowflakeSettings.switch = flakeSwitch
+  updateButtonText()
+
   flakeSwitch.addEventListener('click', flakesSwitchOnClick)
 
-  const div = document.querySelector('.tufast-opal-header')
-  div?.appendChild(flakeSwitch)
+  div.appendChild(flakeSwitch)
 
   snowflakeSettings.currentState ? insertFlakes() : removeFlakes()
 })()

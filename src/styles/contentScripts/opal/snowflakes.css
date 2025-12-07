@@ -38,3 +38,13 @@
   animation: snowfall var(--duration) linear infinite;
   animation-delay: var(--delay);
 }
+
+#flakeSwitch {
+  display: block;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#flakeSwitch:hover {
+  text-decoration: underline;
+}

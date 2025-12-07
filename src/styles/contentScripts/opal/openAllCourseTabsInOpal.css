@@ -1,0 +1,9 @@
+#openAllCourseTabsInOpalButton {
+  display: block;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#openAllCourseTabsInOpalButton:hover {
+  text-decoration: underline;
+}

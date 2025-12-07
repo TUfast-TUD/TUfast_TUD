@@ -242,7 +242,7 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
   const openedTabIds: number[] = []
 
   // Try to open new tabs next to the current tab so they feel natural to the user
-  let startIndex: number | undefined = undefined
+  let startIndex
   try {
     const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (currentTab && typeof (currentTab as any).index === 'number') startIndex = (currentTab as any).index + 1
@@ -678,4 +678,72 @@ async function unlockRocketIcon(rocketId: string): Promise<void> {
   if (rocketId === 'webstore') update.mostLikelySubmittedReview = true
 
   await chrome.storage.local.set(update)
+}
+
+// Background Script - Message Listener
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'openAllCourseTabsInOpal') {
+    openAllCourseTabsInOpal(message.courseLinks)
+      .then(() => sendResponse({ success: true }))
+      .catch((error) => sendResponse({ success: false, error: error.message }))
+    return true
+  }
+})
+
+// Funktion zum Öffnen aller Kurs-Tabs in OPAL
+async function openAllCourseTabsInOpal(courseLinks: string[]) {
+  if (!courseLinks || courseLinks.length === 0) return
+
+  const openedTabIds: number[] = []
+  let startIndex: number | undefined
+
+  try {
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    if (currentTab && typeof currentTab.index === 'number') {
+      startIndex = currentTab.index + 1
+    }
+  } catch (e) {
+    // Tab-Index konnte nicht ermittelt werden
+  }
+
+  for (let i = 0; i < courseLinks.length; i++) {
+    const link = courseLinks[i]
+
+    if (!link || typeof link !== 'string') continue
+
+    const trimmed = link.trim()
+    if (trimmed === '' || trimmed === '#') continue
+    if (trimmed.startsWith('javascript:') || trimmed.startsWith('chrome-extension:')) continue
+
+    const absoluteUrlPattern = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//
+    const protocolRelativePattern = /^\/\//
+    if (!absoluteUrlPattern.test(trimmed) && !protocolRelativePattern.test(trimmed)) continue
+
+    const isLastLink = i === courseLinks.length - 1
+    const createProps: chrome.tabs.CreateProperties = {
+      url: trimmed,
+      active: isLastLink
+    }
+    if (typeof startIndex !== 'undefined') {
+      createProps.index = startIndex + i
+    }
+
+    // WICHTIG: Kein await hier!
+    chrome.tabs.create(createProps, (newTab) => {
+      if (newTab && newTab.id) {
+        openedTabIds.push(newTab.id)
+
+        if (isLastLink) {
+          setTimeout(() => {
+            for (let j = 0; j < openedTabIds.length - 1; j++) {
+              chrome.tabs.remove(openedTabIds[j])
+            }
+          }, 2000)
+        }
+      }
+    })
+
+    // Delay zwischen Tabs
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
 }
