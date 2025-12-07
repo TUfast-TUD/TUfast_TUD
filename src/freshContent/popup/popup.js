@@ -378,15 +378,18 @@ function displayCourseList(
       break
   }
 
+  // Speichere den Reload-Button separat, damit er später angezeigt wird
+  const reloadButton = {
+    name:
+      courseList === undefined || courseList.length === 0 || courseList === false
+        ? 'Klicke, um deine OPAL-Kurse zu importieren'
+        : 'Diese Kursliste jetzt aktualisieren...',
+    link,
+    img: '../../assets/icons/reload.png'
+  }
+
   if (courseList === undefined || courseList.length === 0 || courseList === false) {
     courseList = []
-    courseList.push({ name, link, img: '../../assets/icons/reload.png' })
-  } else {
-    courseList.push({
-      name: 'Diese Kursliste jetzt aktualisieren...',
-      link,
-      img: '../../assets/icons/reload.png'
-    })
   }
 
   // determine when to show outro and intro for course rating
@@ -446,48 +449,6 @@ function displayCourseList(
       "<b>Tipp für Erstis: Erfahre alles wichtige rund um dein Studium mit gOPAL - dem mobilen Studienassistenzsystem! Hier <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL öffnen.</a> <a id='msg1' href='#'>Schließen</a>."
     msg1.appendChild(msg1Text)
     htmlList.appendChild(msg1)
-  }
-
-  // add "Alle Kurse öffnen" button if courses have been imported
-  if (courseList.length > 1) {
-    const openAllCoursesEntry = document.createElement('a')
-    const openAllCoursesImg = document.createElement('div')
-    const openAllCoursesText = document.createElement('div')
-    const openAllCoursesIcon = document.createElement('img')
-
-    openAllCoursesEntry.className = 'list-entry'
-    openAllCoursesEntry.style.cursor = 'pointer'
-    openAllCoursesEntry.href = '#'
-    // give the entry an id so we can reference/disable it reliably
-    openAllCoursesEntry.id = 'open_all_courses_entry'
-
-    // If user has more than 25 courses, disable the button and show a hint
-    if (courseList.length > 25) {
-      openAllCoursesEntry.className += ' disabled'
-      openAllCoursesEntry.style.opacity = 0.5
-      openAllCoursesEntry.style.pointerEvents = 'none'
-      openAllCoursesEntry.title = 'Deaktiviert: mehr als 25 Kurse'
-    } else {
-      openAllCoursesEntry.onclick = openAllCourses
-    }
-
-    openAllCoursesImg.className = 'list-entry-img'
-    openAllCoursesText.className = 'list-entry-text'
-    openAllCoursesText.innerHTML = 'Alle Kurse öffnen'
-
-    // Like the reload icon, add 'invert' so the icon contrasts on dark backgrounds
-    openAllCoursesIcon.className = 'list-img invert'
-    openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
-
-    openAllCoursesImg.appendChild(openAllCoursesIcon)
-    openAllCoursesEntry.appendChild(openAllCoursesImg)
-    openAllCoursesEntry.appendChild(openAllCoursesText)
-
-    const openAllCoursesWrapper = document.createElement('div')
-    openAllCoursesWrapper.className = 'list-entry-wrapper'
-    openAllCoursesWrapper.appendChild(openAllCoursesEntry)
-
-    htmlList.appendChild(openAllCoursesWrapper)
   }
 
   courseList.forEach((element) => {
@@ -582,6 +543,93 @@ function displayCourseList(
     htmlList.appendChild(listEntrywrapper)
   })
 
+  // add "Alle Kurse/Favoriten öffnen" button if courses have been imported
+  if (courseList.length > 0) {
+    const openAllCoursesEntry = document.createElement('a')
+    const openAllCoursesImg = document.createElement('div')
+    const openAllCoursesText = document.createElement('div')
+    const openAllCoursesIcon = document.createElement('img')
+
+    openAllCoursesEntry.className = 'list-entry'
+    openAllCoursesEntry.style.cursor = 'pointer'
+    openAllCoursesEntry.href = '#'
+    // give the entry an id so we can reference/disable it reliably
+    openAllCoursesEntry.id = 'open_all_courses_entry'
+
+    // If user has more than 25 courses, disable the button and show a hint
+    if (courseList.length > 25) {
+      openAllCoursesEntry.className += ' disabled'
+      openAllCoursesEntry.style.opacity = 0.5
+      openAllCoursesEntry.style.pointerEvents = 'none'
+      openAllCoursesEntry.title = 'Deaktiviert: mehr als 25 Kurse'
+    } else {
+      openAllCoursesEntry.onclick = openAllCourses
+    }
+
+    openAllCoursesImg.className = 'list-entry-img'
+    openAllCoursesText.className = 'list-entry-text'
+
+    // Change text and icon based on current view (type)
+    if (type === 'favoriten') {
+      openAllCoursesText.innerHTML = 'Alle Favoriten öffnen'
+      openAllCoursesIcon.src = '../../assets/icons/starAll.png'
+    } else {
+      openAllCoursesText.innerHTML = 'Alle Kurse öffnen'
+      openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
+    }
+
+    // Like the reload icon, add 'invert' so the icon contrasts on dark backgrounds
+    openAllCoursesIcon.className = 'list-img invert'
+
+    openAllCoursesImg.appendChild(openAllCoursesIcon)
+    openAllCoursesEntry.appendChild(openAllCoursesImg)
+    openAllCoursesEntry.appendChild(openAllCoursesText)
+
+    const openAllCoursesWrapper = document.createElement('div')
+    openAllCoursesWrapper.className = 'list-entry-wrapper'
+    openAllCoursesWrapper.appendChild(openAllCoursesEntry)
+
+    htmlList.appendChild(openAllCoursesWrapper)
+  }
+
+  // add reload button
+  const reloadEntry = document.createElement('a')
+  const reloadImg = document.createElement('div')
+  const reloadText = document.createElement('div')
+  const reloadIcon = document.createElement('img')
+
+  reloadEntry.className = 'list-entry'
+  reloadEntry.href = reloadButton.link
+  reloadEntry.target = '_blank'
+  reloadEntry.onclick = function (event) {
+    // If Cmd/Ctrl is held, open in background tab manually
+    if (event.metaKey || event.ctrlKey) {
+      event.preventDefault()
+      chrome.tabs.create({ url: reloadButton.link, active: false })
+      saveTwoClicks()
+      return false
+    }
+    // Normal click - let it proceed naturally (popup will close)
+    saveTwoClicks()
+  }
+
+  reloadImg.className = 'list-entry-img'
+  reloadText.className = 'list-entry-text'
+  reloadText.innerHTML = reloadButton.name
+
+  reloadIcon.className = 'list-img invert'
+  reloadIcon.src = reloadButton.img
+
+  reloadImg.appendChild(reloadIcon)
+  reloadEntry.appendChild(reloadImg)
+  reloadEntry.appendChild(reloadText)
+
+  const reloadWrapper = document.createElement('div')
+  reloadWrapper.className = 'list-entry-wrapper'
+  reloadWrapper.appendChild(reloadEntry)
+
+  htmlList.appendChild(reloadWrapper)
+
   // Create button so switch courses <> favorites
   const listEntry = document.createElement('a')
   const listImg = document.createElement('div')
@@ -591,6 +639,7 @@ function displayCourseList(
   listImg.className = 'list-entry-img'
 
   listEntry.className = 'list-entry'
+  listEntry.href = '#'
   listEntry.style.cursor = 'pointer'
   listEntry.onclick = switchCoursesToShow
 
