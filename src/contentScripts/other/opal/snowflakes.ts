@@ -114,11 +114,22 @@ async function injectSnowflakeControl() {
 
   const flakeSwitch = document.createElement('span')
   flakeSwitch.id = 'flakeSwitch'
-  flakeSwitch.title = 'Click me. Winter powered by TUfast.'
+  flakeSwitch.title = 'Schnee deaktivieren. Winter-Modus von TUfast.'
 
   updateButtonText(flakeSwitch)
 
-  flakeSwitch.addEventListener('click', flakesSwitchOnClick)
+  flakeSwitch.addEventListener('click', async () => {
+    globalSnowflakeState.currentState = !globalSnowflakeState.currentState
+    await chrome.storage.local.set({ flakeState: globalSnowflakeState.currentState })
+
+    if (globalSnowflakeState.currentState) {
+      insertFlakes()
+    } else {
+      removeFlakes()
+    }
+
+    updateButtonText(flakeSwitch)
+  })
 
   // Simply append - order is managed by insertLogo.ts
   div.appendChild(flakeSwitch)
