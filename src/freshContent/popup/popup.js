@@ -3,7 +3,7 @@ import studiengangConfig from '../studies.json'
 const shareHTML =
   '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Hilf deinen Mitstudierenden</span></div><div class="tufast_text" style=position:relative;top:6px><img class="imgicon huge invert" src=../../assets/images/tufast48.png style=position:relative;top:-7px;left:0px><span class="tufasst_name huge" style=position:relative;top:-7px;left:3px>TUfast</span><span class=tufasst_name> &nbsp;zu entdecken</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link style="cursor:pointer">sammle coole Raketen</a>!</span></div><div id=download-section><div>Teilen mit</div><div class=download-link><img class=imgicon src=../../assets/icons/gmail.png> <span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank>E-Mail</a></span></div><div class=download-link><img class=imgicon src=../../assets/icons/wa2.png style=height:1.4em><span class=browser_name> <a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 von Studenten | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
 const bananaHTML =
-  '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -75px; width:240px; height: auto;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a Mate&emoji=🍾&slug=olihausdoerfer&button_colour=fbd54b&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
+  '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" style = "position: fixed; bottom: 70px; right: 26px;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>'
 
 const starRatingSettings = {
   // initial rating value
@@ -97,9 +97,8 @@ window.onload = async () => {
 
   // display saved clicks
   const time = clicksToTime(result.savedClickCounter || 0)
-  document.getElementById('saved_clicks').innerHTML = `<text><font color='green'>${
-    result.savedClickCounter || 0
-  } Klicks</font> gespart: <span id="time">${time}</span></text>`
+  document.getElementById('saved_clicks').innerHTML =
+    `<text>${result.savedClickCounter || 0} Klicks, ${time} gespart</text>`
 
   // display banana at each end of semester for two weeks!
   let bananaTime = false
@@ -313,6 +312,7 @@ async function openSettings() {
 }
 
 async function openShare() {
+  document.getElementById('list-top').style.display = 'none' // NEW
   document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
   await new Promise((resolve) => setTimeout(resolve, 500))
   document.getElementById('rewards_link').addEventListener('click', async (e) => {
@@ -325,16 +325,6 @@ async function openShare() {
     if (isFirefox) window.close()
     return false // Required for ff
   })
-}
-
-async function openSettingsTimeSection() {
-  chrome.runtime.sendMessage({
-    cmd: 'open_settings_page',
-    params: 'time_settings'
-  })
-  const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
-  if (isFirefox) window.close()
-  return false // Required for ff
 }
 
 function listSearchFunction() {
@@ -458,6 +448,48 @@ function displayCourseList(
     htmlList.appendChild(msg1)
   }
 
+  // add "Alle Kurse öffnen" button if courses have been imported
+  if (courseList.length > 1) {
+    const openAllCoursesEntry = document.createElement('a')
+    const openAllCoursesImg = document.createElement('div')
+    const openAllCoursesText = document.createElement('div')
+    const openAllCoursesIcon = document.createElement('img')
+
+    openAllCoursesEntry.className = 'list-entry'
+    openAllCoursesEntry.style.cursor = 'pointer'
+    openAllCoursesEntry.href = '#'
+    // give the entry an id so we can reference/disable it reliably
+    openAllCoursesEntry.id = 'open_all_courses_entry'
+
+    // If user has more than 25 courses, disable the button and show a hint
+    if (courseList.length > 25) {
+      openAllCoursesEntry.className += ' disabled'
+      openAllCoursesEntry.style.opacity = 0.5
+      openAllCoursesEntry.style.pointerEvents = 'none'
+      openAllCoursesEntry.title = 'Deaktiviert: mehr als 25 Kurse'
+    } else {
+      openAllCoursesEntry.onclick = openAllCourses
+    }
+
+    openAllCoursesImg.className = 'list-entry-img'
+    openAllCoursesText.className = 'list-entry-text'
+    openAllCoursesText.innerHTML = 'Alle Kurse öffnen'
+
+    // Like the reload icon, add 'invert' so the icon contrasts on dark backgrounds
+    openAllCoursesIcon.className = 'list-img invert'
+    openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
+
+    openAllCoursesImg.appendChild(openAllCoursesIcon)
+    openAllCoursesEntry.appendChild(openAllCoursesImg)
+    openAllCoursesEntry.appendChild(openAllCoursesText)
+
+    const openAllCoursesWrapper = document.createElement('div')
+    openAllCoursesWrapper.className = 'list-entry-wrapper'
+    openAllCoursesWrapper.appendChild(openAllCoursesEntry)
+
+    htmlList.appendChild(openAllCoursesWrapper)
+  }
+
   courseList.forEach((element) => {
     const listEntrywrapper = document.createElement('div')
     const listEntry = document.createElement('a')
@@ -498,7 +530,17 @@ function displayCourseList(
     listEntry.className = 'list-entry'
     listEntry.href = element.link
     listEntry.target = '_blank'
-    listEntry.onclick = saveTwoClicks
+    listEntry.onclick = function (event) {
+      // If Cmd/Ctrl is held, open in background tab manually
+      if (event.metaKey || event.ctrlKey) {
+        event.preventDefault()
+        chrome.tabs.create({ url: element.link, active: false })
+        saveTwoClicks()
+        return false
+      }
+      // Normal click - let it proceed naturally (popup will close)
+      saveTwoClicks()
+    }
 
     listImg.className = 'list-entry-img'
 
@@ -703,4 +745,98 @@ async function removeMsg1() {
   document.getElementById('msg1-wrapper').remove()
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.set({ closedMsg1: true }, resolve))
+}
+
+async function openAllCourses() {
+  // Prevent re-entrancy: if already running, ignore subsequent clicks
+  try {
+    const btn = document.getElementById('open_all_courses_entry')
+    if (btn && btn.dataset && btn.dataset.running === 'true') return
+  } catch (e) {
+    /* ignore */
+  }
+
+  // Mark as running and visually disable the button to avoid rapid repeated clicks
+  try {
+    const btn = document.getElementById('open_all_courses_entry')
+    if (btn) {
+      btn.dataset.running = 'true'
+      btn.style.pointerEvents = 'none'
+      btn.style.opacity = 0.6
+    }
+  } catch (e) {}
+
+  // Get all course links from the displayed list entries
+  const listEntries = document.querySelectorAll('#list .list-entry-wrapper .list-entry[href]')
+  const courseLinks = []
+
+  // Filter out special buttons and collect only course links
+  for (const entry of listEntries) {
+    const href = entry.getAttribute('href')
+    // Skip special buttons: reload button, switch courses/favorites button
+    if (
+      href &&
+      !entry.parentElement.textContent.includes('aktualisieren') &&
+      !entry.parentElement.textContent.includes('Wechsel')
+    ) {
+      courseLinks.push(href)
+    }
+  }
+
+  if (courseLinks.length === 0) {
+    // re-enable button after short period
+    try {
+      const btn = document.getElementById('open_all_courses_entry')
+      if (btn) {
+        setTimeout(() => {
+          btn.dataset.running = 'false'
+          btn.style.pointerEvents = ''
+          btn.style.opacity = ''
+        }, 5000)
+      }
+    } catch (e) {}
+    return
+  }
+
+  // Track opened tab IDs
+  const openedTabIds = []
+
+  // Open each course link with a small delay
+  for (let i = 0; i < courseLinks.length; i++) {
+    const link = courseLinks[i]
+    const isLastLink = i === courseLinks.length - 1
+
+    chrome.tabs.create({ url: link, active: false }, (newTab) => {
+      if (newTab) {
+        openedTabIds.push(newTab.id)
+
+        // If this is the last link, close all previous tabs after a short delay
+        if (isLastLink) {
+          setTimeout(() => {
+            // Close all opened tabs except the last one
+            for (let j = 0; j < openedTabIds.length - 1; j++) {
+              chrome.tabs.remove(openedTabIds[j])
+            }
+          }, 2000) // 2 second delay before closing tabs
+        }
+      }
+    })
+
+    // Add small delay between opening tabs (100ms)
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+
+  saveTwoClicks()
+
+  // After opening and tab-closing has been scheduled, keep the button disabled briefly
+  try {
+    const btn = document.getElementById('open_all_courses_entry')
+    if (btn) {
+      setTimeout(() => {
+        btn.dataset.running = 'false'
+        btn.style.pointerEvents = ''
+        btn.style.opacity = ''
+      }, 5000) // keep disabled for 5s to prevent rapid re-clicks
+    }
+  } catch (e) {}
 }

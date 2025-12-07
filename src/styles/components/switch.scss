@@ -12,7 +12,7 @@
 /* Outline of the focused switch */
 .switch:focus-within {
   outline: 2px solid white;
-  border-radius: 34px;
+  border-radius: 6px;
 }
 
 /* Hide default HTML checkbox */
@@ -42,7 +42,7 @@
   width: 12.5px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--color-text-tertiary);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -63,13 +63,51 @@ input:checked + .slider:before {
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+  border-radius: 6px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
+  border-radius: 4px;
 }
 
 input[type='checkbox']:checked {
   filter: hue-rotate(220deg);
+}
+
+.slider {
+  overflow: hidden;
+}
+
+.slider:before {
+  z-index: 2;
+}
+
+.slider:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(40, 147, 60, 0.4) 50%, transparent 100%);
+  animation: waveSlide 1.5s ease-in-out infinite;
+  z-index: 1;
+}
+
+input:checked + .slider:hover::after {
+  background: linear-gradient(90deg, transparent 0%, rgba(40, 147, 60, 0.5) 50%, transparent 100%);
+}
+
+@keyframes waveSlide {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
 }
