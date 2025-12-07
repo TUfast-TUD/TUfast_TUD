@@ -240,15 +240,20 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
   }
 
   const openedTabIds: number[] = []
+  let startIndex: number | undefined
 
   // Try to open new tabs next to the current tab so they feel natural to the user
-  let startIndex
   try {
     const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
-    if (currentTab && typeof (currentTab as any).index === 'number') startIndex = (currentTab as any).index + 1
+    if (currentTab && typeof currentTab.index === 'number') {
+      startIndex = currentTab.index + 1
+    }
   } catch (e) {
     // If we cannot get the current tab, proceed without index
   }
+
+  // Track how many tabs we expect to create
+  let expectedTabCount = 0
 
   // Open each course link with a small delay
   for (let i = 0; i < courseLinks.length; i++) {
@@ -269,8 +274,6 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
     }
 
     // Only open absolute links (with protocol) or protocol-relative (//...).
-    // This prevents creating tabs for relative anchors like '#', which can
-    // open the extension root (chrome-extension://.../#).
     const absoluteUrlPattern = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//
     const protocolRelativePattern = /^\/\//
     if (!absoluteUrlPattern.test(trimmed) && !protocolRelativePattern.test(trimmed)) {
@@ -278,23 +281,36 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
       continue
     }
 
+    expectedTabCount++
     const isLastLink = i === courseLinks.length - 1
 
-    const createProps: any = { url: trimmed, active: isLastLink }
-    if (typeof startIndex !== 'undefined') createProps.index = startIndex + i
+    const createProps: chrome.tabs.CreateProperties = {
+      url: trimmed,
+      active: false // Alle Tabs im Hintergrund öffnen
+    }
+    if (typeof startIndex !== 'undefined') {
+      createProps.index = startIndex + openedTabIds.length
+    }
 
+    // WICHTIG: Kein await hier!
     chrome.tabs.create(createProps, (newTab) => {
       if (newTab && newTab.id) {
         openedTabIds.push(newTab.id)
 
-        // If this is the last link, close all previous tabs after a short delay
-        if (isLastLink) {
+        // Wenn alle erwarteten Tabs erstellt wurden
+        if (openedTabIds.length === expectedTabCount) {
           setTimeout(() => {
-            // Close all opened tabs except the last one
+            // Alle Tabs außer dem letzten schließen
             for (let j = 0; j < openedTabIds.length - 1; j++) {
               chrome.tabs.remove(openedTabIds[j])
             }
-          }, 2000) // 2 second delay before closing tabs
+
+            // Den letzten Tab aktivieren (Weiterleitung)
+            const lastTabId = openedTabIds[openedTabIds.length - 1]
+            if (lastTabId) {
+              chrome.tabs.update(lastTabId, { active: true })
+            }
+          }, 2000)
         }
       }
     })
@@ -321,12 +337,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       saveClicks(request.click_count || request.clickCount)
       break
     case 'open_all_courses':
-      // Open all course links in background (survives popup close)
-      openAllCoursesInBackground(request.courseLinks)
-      break
+      openAllCoursesInBackground(request.courseLinks) // Vom Popup aufgerufen
+        .then(() => sendResponse({ success: true }))
+        .catch((error) => sendResponse({ success: false, error: error.message }))
+      return true
     // Open All Course Tabs in Opal
     case 'openAllCourseTabsInOpal':
-      openAllCourseTabsInOpal(request.courseLinks)
+      openAllCourseTabsInOpal(request.courseLinks) // Von Opal-Seite aufgerufen
         .then(() => sendResponse({ success: true }))
         .catch((error) => sendResponse({ success: false, error: error.message }))
       return true
