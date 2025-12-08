@@ -321,7 +321,7 @@ async function openShare() {
     e.preventDefault()
     chrome.runtime.sendMessage({
       cmd: 'open_settings_page',
-      params: 'Rockets' // oder 'rocket_icons_settings' - je nachdem was dein background.js erwartet
+      params: 'Rockets'
     })
     const isFirefox = navigator.userAgent.includes('Firefox/')
     if (isFirefox) window.close()
@@ -698,7 +698,7 @@ async function saveEnabled() {
       chrome.runtime.sendMessage(
         {
           cmd: 'open_settings_page',
-          params: 'auto_login_settings'
+          params: 'AutoLogin'
         },
         resolve
       )
