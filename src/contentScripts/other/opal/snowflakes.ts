@@ -100,21 +100,9 @@ async function injectSnowflakeControl() {
     switchElement.textContent = globalSnowflakeState.currentState ? 'Schnee deaktivieren' : 'Schnee aktivieren'
   }
 
-  async function flakesSwitchOnClick(e: MouseEvent) {
-    globalSnowflakeState.currentState = !globalSnowflakeState.currentState
-    await chrome.storage.local.set({ flakeState: globalSnowflakeState.currentState })
-    if (globalSnowflakeState.currentState) {
-      insertFlakes()
-    } else {
-      removeFlakes()
-    }
-
-    updateButtonText(e.currentTarget as HTMLSpanElement)
-  }
-
   const flakeSwitch = document.createElement('span')
   flakeSwitch.id = 'flakeSwitch'
-  flakeSwitch.title = 'Schnee deaktivieren. Winter-Modus von TUfast.'
+  flakeSwitch.title = 'Schnee einstellen. Winter-Modus von TUfast.'
 
   updateButtonText(flakeSwitch)
 

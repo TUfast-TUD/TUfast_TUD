@@ -282,7 +282,6 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
     }
 
     expectedTabCount++
-    const isLastLink = i === courseLinks.length - 1
 
     const createProps: chrome.tabs.CreateProperties = {
       url: trimmed,
