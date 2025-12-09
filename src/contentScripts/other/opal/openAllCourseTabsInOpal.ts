@@ -57,27 +57,7 @@ async function injectOpenAllButton() {
   function getFavoriteCourseLinks(): string[] {
     const links: string[] = []
 
-    // Strategie 1: Aus TUfast Favoriten-Liste im DOM
-    const tufastFavSelectors = [
-      '.tufast-fav-list a',
-      '.tufast-favorites a',
-      '[data-tufast-favorite] a',
-      '.tufast-course-link'
-    ]
-
-    for (const selector of tufastFavSelectors) {
-      const elements = document.querySelectorAll(selector)
-      if (elements.length > 0) {
-        elements.forEach((el) => {
-          const href = (el as HTMLAnchorElement).href
-          if (href && href.includes('RepositoryEntry')) {
-            links.push(href)
-          }
-        })
-      }
-    }
-
-    // Strategie 2: Alle OPAL Kurs-Links auf der aktuellen Seite
+    // get all opal course links from current page
     if (links.length === 0) {
       const allLinks = document.querySelectorAll('a[href*="RepositoryEntry"]')
       allLinks.forEach((el) => {
@@ -88,50 +68,7 @@ async function injectOpenAllButton() {
       })
     }
 
-    // Strategie 3: Aus Bookmark/Favoriten-Bereich in OPAL
-    if (links.length === 0) {
-      const opalBookmarkSelectors = ['.o_bookmark a', '.o_bookmark_list a', '#o_navbar_bookmarks a', '.o_favorites a']
-
-      for (const selector of opalBookmarkSelectors) {
-        const elements = document.querySelectorAll(selector)
-        if (elements.length > 0) {
-          elements.forEach((el) => {
-            const href = (el as HTMLAnchorElement).href
-            if (href && href.includes('RepositoryEntry')) {
-              links.push(href)
-            }
-          })
-        }
-      }
-    }
-
-    // Strategie 4: LocalStorage (als Fallback)
-    if (links.length === 0) {
-      try {
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i)
-          if (key && (key.includes('kurs') || key.includes('course') || key.includes('fav'))) {
-            const value = localStorage.getItem(key)
-            if (value) {
-              try {
-                const parsed = JSON.parse(value)
-                if (Array.isArray(parsed)) {
-                  parsed.forEach((item) => {
-                    if (item && item.link) links.push(item.link)
-                  })
-                }
-              } catch (e) {
-                // Kein gültiges JSON
-              }
-            }
-          }
-        }
-      } catch (e) {
-        // LocalStorage Fehler ignorieren
-      }
-    }
-
-    // Duplikate entfernen
+    // removes duplicates
     return [...new Set(links)]
   }
 
@@ -151,8 +88,8 @@ async function injectOpenAllButton() {
       courseLinks: courseLinks
     })
 
-    // Aktuellen Tab nach kurzer Verzögerung schließen
-    // Die Verzögerung stellt sicher, dass die Tabs geöffnet werden, bevor dieser Tab geschlossen wird
+    // close current tab after delay
+    // delay makes sure, that the course tabs are opened before closing this tab
     setTimeout(() => {
       chrome.runtime.sendMessage({
         cmd: 'closeCurrentTab'

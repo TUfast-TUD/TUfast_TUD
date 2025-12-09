@@ -190,7 +190,7 @@ async function changeStudiengangSelection() {
   if (studiengang === 'addStudiengang') {
     chrome.runtime.sendMessage({
       cmd: 'open_settings_page',
-      params: 'add_studiengang'
+      params: 'Contact'
     })
     return
   }
@@ -316,7 +316,7 @@ async function openShare() {
   document.getElementById('list').innerHTML = shareHTML
   await new Promise((resolve) => setTimeout(resolve, 500))
 
-  // Event Listener für Rockets Link
+  // Event Listener for Rockets Link
   document.getElementById('rockets_link').addEventListener('click', async (e) => {
     e.preventDefault()
     chrome.runtime.sendMessage({
@@ -380,7 +380,7 @@ function displayCourseList(
       break
   }
 
-  // Speichere den Reload-Button separat, damit er später angezeigt wird
+  // save reload button later, so it appears later in the list
   const reloadButton = {
     name:
       courseList === undefined || courseList.length === 0 || courseList === false

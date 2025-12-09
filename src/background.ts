@@ -233,95 +233,6 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 })
 
-// Open all course links in background (survives popup close)
-async function openAllCoursesInBackground(courseLinks: string[]) {
-  if (!courseLinks || courseLinks.length === 0) {
-    return
-  }
-
-  const openedTabIds: number[] = []
-  let startIndex: number | undefined
-
-  // Try to open new tabs next to the current tab so they feel natural to the user
-  try {
-    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
-    if (currentTab && typeof currentTab.index === 'number') {
-      startIndex = currentTab.index + 1
-    }
-  } catch (e) {
-    // If we cannot get the current tab, proceed without index
-  }
-
-  // Track how many tabs we expect to create
-  let expectedTabCount = 0
-
-  // Open each course link with a small delay
-  for (let i = 0; i < courseLinks.length; i++) {
-    const link = courseLinks[i]
-    // Basic sanitization: skip empty/anchor/javascript/extension urls
-    if (!link || typeof link !== 'string') {
-      console.warn('Skipping invalid course link (empty)')
-      continue
-    }
-    const trimmed = link.trim()
-    if (trimmed === '' || trimmed === '#') {
-      console.warn('Skipping anchor/empty course link:', link)
-      continue
-    }
-    if (trimmed.startsWith('javascript:') || trimmed.startsWith('chrome-extension:')) {
-      console.warn('Skipping unsafe or extension-internal link:', link)
-      continue
-    }
-
-    // Only open absolute links (with protocol) or protocol-relative (//...).
-    const absoluteUrlPattern = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//
-    const protocolRelativePattern = /^\/\//
-    if (!absoluteUrlPattern.test(trimmed) && !protocolRelativePattern.test(trimmed)) {
-      console.warn('Skipping non-absolute course link:', link)
-      continue
-    }
-
-    expectedTabCount++
-
-    const createProps: chrome.tabs.CreateProperties = {
-      url: trimmed,
-      active: false // Alle Tabs im Hintergrund öffnen
-    }
-    if (typeof startIndex !== 'undefined') {
-      createProps.index = startIndex + openedTabIds.length
-    }
-
-    // WICHTIG: Kein await hier!
-    chrome.tabs.create(createProps, (newTab) => {
-      if (newTab && newTab.id) {
-        openedTabIds.push(newTab.id)
-
-        // Wenn alle erwarteten Tabs erstellt wurden
-        if (openedTabIds.length === expectedTabCount) {
-          setTimeout(() => {
-            // Alle Tabs außer dem letzten schließen
-            for (let j = 0; j < openedTabIds.length - 1; j++) {
-              chrome.tabs.remove(openedTabIds[j])
-            }
-
-            // Den letzten Tab aktivieren (Weiterleitung)
-            const lastTabId = openedTabIds[openedTabIds.length - 1]
-            if (lastTabId) {
-              chrome.tabs.update(lastTabId, { active: true })
-            }
-          }, 2000)
-        }
-      }
-    })
-
-    // Add small delay between opening tabs (100ms)
-    await new Promise((resolve) => setTimeout(resolve, 100))
-  }
-
-  // Save clicks: 2 clicks per opened course (equivalent to manually opening each)
-  saveClicks(2 * courseLinks.length)
-}
-
 // DOESNT WORK IN RELEASE VERSION
 chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
   if (resp.openSettingsOnReload) await openSettingsPage()
@@ -336,13 +247,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       saveClicks(request.click_count || request.clickCount)
       break
     case 'open_all_courses':
-      openAllCoursesInBackground(request.courseLinks) // Vom Popup aufgerufen
+      openAllCoursesInBackground(request.courseLinks) // open from popup
         .then(() => sendResponse({ success: true }))
         .catch((error) => sendResponse({ success: false, error: error.message }))
       return true
     // Open All Course Tabs in Opal
     case 'openAllCourseTabsInOpal':
-      openAllCourseTabsInOpal(request.courseLinks) // Von Opal-Seite aufgerufen
+      openAllCourseTabsInOpal(request.courseLinks) // open from opal page
         .then(() => sendResponse({ success: true }))
         .catch((error) => sendResponse({ success: false, error: error.message }))
       return true
@@ -712,7 +623,96 @@ async function unlockRocketIcon(rocketId: string): Promise<void> {
   await chrome.storage.local.set(update)
 }
 
-// Funktion zum Öffnen aller Kurs-Tabs in OPAL
+// Open all course links from inside popup and in background (survives popup close)
+async function openAllCoursesInBackground(courseLinks: string[]) {
+  if (!courseLinks || courseLinks.length === 0) {
+    return
+  }
+
+  const openedTabIds: number[] = []
+  let startIndex: number | undefined
+
+  // Try to open new tabs next to the current tab so they feel natural to the user
+  try {
+    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    if (currentTab && typeof currentTab.index === 'number') {
+      startIndex = currentTab.index + 1
+    }
+  } catch (e) {
+    // If we cannot get the current tab, proceed without index
+  }
+
+  // Track how many tabs we expect to create
+  let expectedTabCount = 0
+
+  // Open each course link with a small delay
+  for (let i = 0; i < courseLinks.length; i++) {
+    const link = courseLinks[i]
+    // Basic sanitization: skip empty/anchor/javascript/extension urls
+    if (!link || typeof link !== 'string') {
+      console.warn('Skipping invalid course link (empty)')
+      continue
+    }
+    const trimmed = link.trim()
+    if (trimmed === '' || trimmed === '#') {
+      console.warn('Skipping anchor/empty course link:', link)
+      continue
+    }
+    if (trimmed.startsWith('javascript:') || trimmed.startsWith('chrome-extension:')) {
+      console.warn('Skipping unsafe or extension-internal link:', link)
+      continue
+    }
+
+    // Only open absolute links (with protocol) or protocol-relative (//...).
+    const absoluteUrlPattern = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//
+    const protocolRelativePattern = /^\/\//
+    if (!absoluteUrlPattern.test(trimmed) && !protocolRelativePattern.test(trimmed)) {
+      console.warn('Skipping non-absolute course link:', link)
+      continue
+    }
+
+    expectedTabCount++
+
+    const createProps: chrome.tabs.CreateProperties = {
+      url: trimmed,
+      active: false
+    }
+    if (typeof startIndex !== 'undefined') {
+      createProps.index = startIndex + openedTabIds.length
+    }
+
+    // IMPORTANT: Do not use await here
+    chrome.tabs.create(createProps, (newTab) => {
+      if (newTab && newTab.id) {
+        openedTabIds.push(newTab.id)
+
+        // when all tabs are opened
+        if (openedTabIds.length === expectedTabCount) {
+          setTimeout(() => {
+            // open all tabs except the last one
+            for (let j = 0; j < openedTabIds.length - 1; j++) {
+              chrome.tabs.remove(openedTabIds[j])
+            }
+
+            // make the last tab active
+            const lastTabId = openedTabIds[openedTabIds.length - 1]
+            if (lastTabId) {
+              chrome.tabs.update(lastTabId, { active: true })
+            }
+          }, 2000)
+        }
+      }
+    })
+
+    // Delay between opening tabs
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+
+  // Save clicks: 2 clicks per opened course (equivalent to manually opening each)
+  saveClicks(2 * courseLinks.length)
+}
+
+// Open all Course Tabs from inside Opal
 async function openAllCourseTabsInOpal(courseLinks: string[]) {
   if (!courseLinks || courseLinks.length === 0) return
 
@@ -725,7 +725,7 @@ async function openAllCourseTabsInOpal(courseLinks: string[]) {
       startIndex = currentTab.index + 1
     }
   } catch (e) {
-    // Tab-Index konnte nicht ermittelt werden
+    // If we cannot get the current tab, proceed without index
   }
 
   for (let i = 0; i < courseLinks.length; i++) {
@@ -750,7 +750,7 @@ async function openAllCourseTabsInOpal(courseLinks: string[]) {
       createProps.index = startIndex + i
     }
 
-    // WICHTIG: Kein await hier!
+    // IMPORTANT: Do not use await here
     chrome.tabs.create(createProps, (newTab) => {
       if (newTab && newTab.id) {
         openedTabIds.push(newTab.id)
@@ -765,7 +765,7 @@ async function openAllCourseTabsInOpal(courseLinks: string[]) {
       }
     })
 
-    // Delay zwischen Tabs
+    // Delay between opening tabs
     await new Promise((resolve) => setTimeout(resolve, 100))
   }
 
