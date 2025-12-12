@@ -1,9 +1,9 @@
-#openAllCourseTabsInOpalButton {
+#openAllFavoritesButton {
   display: block;
   font-size: 12px;
   cursor: pointer;
 }
 
-#openAllCourseTabsInOpalButton:hover {
+#openAllFavoritesButton:hover {
   text-decoration: underline;
 }

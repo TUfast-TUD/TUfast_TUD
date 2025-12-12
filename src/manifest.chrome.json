@@ -110,15 +110,17 @@
       "js": [
         "contentScripts/other/opal/insertLogo.js",
         "contentScripts/other/opal/snowflakes.js",
-        "contentScripts/other/opal/closeAllCourseTabsInOpal.js",
-        "contentScripts/other/opal/openAllCourseTabsInOpal.js",
+        "contentScripts/other/opal/closeAllTabs.js",
+        "contentScripts/other/opal/openAllCourses.js",
+        "contentScripts/other/opal/openAllFavorites.js",
         "contentScripts/other/opal/insertBanner.js"
       ],
       "css": [
         "styles/contentScripts/opal/logo.css",
         "styles/contentScripts/opal/snowflakes.css",
-        "styles/contentScripts/opal/closeAllCourseTabsInOpal.css",
-        "styles/contentScripts/opal/openAllCourseTabsInOpal.css",
+        "styles/contentScripts/opal/closeAllTabs.css",
+        "styles/contentScripts/opal/openAllCourses.css",
+        "styles/contentScripts/opal/openAllFavorites.css",
         "styles/contentScripts/opal/banner.css"
       ],
       "run_at": "document_idle",

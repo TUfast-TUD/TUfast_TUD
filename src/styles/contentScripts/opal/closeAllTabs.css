@@ -1,9 +1,9 @@
-#closeAllCourseTabsButton {
+#closeAllTabsButton {
   display: block;
   font-size: 12px;
   cursor: pointer;
 }
 
-#closeAllCourseTabsButton:hover {
+#closeAllTabsButton:hover {
   text-decoration: underline;
 }

@@ -3,15 +3,15 @@ const STORAGE_KEY = 'closeAllTabsOnLoad'
 // adds button
 async function injectCloseAllButton() {
   // create button
-  if (document.getElementById('closeAllCourseTabsButton')) return
+  if (document.getElementById('closeAllTabsButton')) return
 
   const div = document.querySelector('.tufast-opal-header') as HTMLElement
   if (!div) return
 
-  const closeAllCourseTabsButton = document.createElement('span')
-  closeAllCourseTabsButton.id = 'closeAllCourseTabsButton'
-  closeAllCourseTabsButton.title = 'Alle Tabs schließen. Ein TUfast-Feature.'
-  closeAllCourseTabsButton.textContent = 'Alle Tabs schließen'
+  const closeAllTabsButton = document.createElement('span')
+  closeAllTabsButton.id = 'closeAllTabsButton'
+  closeAllTabsButton.title = 'Alle Tabs schließen. Ein TUfast-Feature.'
+  closeAllTabsButton.textContent = 'Alle Tabs schließen'
 
   // if there are no tabs open, disable the button
   function updateButtonState() {
@@ -19,17 +19,17 @@ async function injectCloseAllButton() {
     const hasTabs = closeButtons.length > 0
 
     if (hasTabs) {
-      closeAllCourseTabsButton.style.opacity = '1'
-      closeAllCourseTabsButton.style.cursor = 'pointer'
-      closeAllCourseTabsButton.style.pointerEvents = 'auto'
+      closeAllTabsButton.style.opacity = '1'
+      closeAllTabsButton.style.cursor = 'pointer'
+      closeAllTabsButton.style.pointerEvents = 'auto'
     } else {
-      closeAllCourseTabsButton.style.opacity = '0.5'
-      closeAllCourseTabsButton.style.cursor = 'not-allowed'
-      closeAllCourseTabsButton.style.pointerEvents = 'none'
+      closeAllTabsButton.style.opacity = '0.5'
+      closeAllTabsButton.style.cursor = 'not-allowed'
+      closeAllTabsButton.style.pointerEvents = 'none'
     }
   }
 
-  closeAllCourseTabsButton.addEventListener('click', (e) => {
+  closeAllTabsButton.addEventListener('click', (e) => {
     e.preventDefault()
 
     // Check if there are tabs to close
@@ -43,7 +43,7 @@ async function injectCloseAllButton() {
     location.reload()
   })
 
-  div.appendChild(closeAllCourseTabsButton)
+  div.appendChild(closeAllTabsButton)
 
   // Initial state update
   updateButtonState()
@@ -72,7 +72,7 @@ function closeAllTabsAfterReload() {
     } else {
       if (closedCount > 0) {
         chrome.runtime.sendMessage({
-          cmd: 'closeAllCourseTabsInOpal',
+          cmd: 'closeAllTabs',
           closedCount: closedCount
         })
       }
@@ -92,7 +92,7 @@ function closeAllTabsAfterReload() {
   }
 
   const observer = new MutationObserver(async () => {
-    if (document.querySelector('.tufast-opal-header') && !document.getElementById('closeAllCourseTabsButton')) {
+    if (document.querySelector('.tufast-opal-header') && !document.getElementById('closeAllTabsButton')) {
       await injectCloseAllButton()
     }
   })

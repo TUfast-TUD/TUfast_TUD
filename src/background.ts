@@ -246,19 +246,26 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // The first one is legacy and should not be used anymore
       saveClicks(request.click_count || request.clickCount)
       break
+    // Open all courses from popup
     case 'open_all_courses':
       openAllCoursesInBackground(request.courseLinks) // open from popup
         .then(() => sendResponse({ success: true }))
         .catch((error) => sendResponse({ success: false, error: error.message }))
       return true
-    // Open All Course Tabs in Opal
-    case 'openAllCourseTabsInOpal':
-      openAllCourseTabsInOpal(request.courseLinks) // open from opal page
+    // Open All Courses in Opal
+    case 'openAllCoursesInOpal':
+      openAllCoursesInOpal(request.courseLinks) // open from opal page
         .then(() => sendResponse({ success: true }))
         .catch((error) => sendResponse({ success: false, error: error.message }))
       return true
-    // Close All Course Tabs in Opal
-    case 'closeAllCourseTabsInOpal':
+    // Open All Favorites in Opal
+    case 'openAllFavoritesInOpal':
+      openAllCoursesInOpal(request.courseLinks) // open from opal page
+        .then(() => sendResponse({ success: true }))
+        .catch((error) => sendResponse({ success: false, error: error.message }))
+      return true
+    // Close All Tabs in Opal
+    case 'closeAllTabs':
       saveClicks(request.closedCount)
       sendResponse({ success: true })
       return true
@@ -713,7 +720,7 @@ async function openAllCoursesInBackground(courseLinks: string[]) {
 }
 
 // Open all Course Tabs from inside Opal
-async function openAllCourseTabsInOpal(courseLinks: string[]) {
+async function openAllCoursesInOpal(courseLinks: string[]) {
   if (!courseLinks || courseLinks.length === 0) return
 
   const openedTabIds: number[] = []

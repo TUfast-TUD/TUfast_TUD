@@ -83,17 +83,18 @@ async function injectLogo() {
   div.appendChild(logo)
 
   // Helper function to maintain button order in header
-  // Order: Logo - Schnee - Öffnen - Schließen
+  // Order: Logo - snow - openAllCourses - openAllFavorites - closeAllTabs
   const maintainButtonOrder = () => {
     const header = document.querySelector('.tufast-opal-header')
     if (!header) return
 
     const logo = header.querySelector('#TUfastIcon')
-    const schnee = header.querySelector('#flakeSwitch')
-    const oeffnen = header.querySelector('#openAllCourseTabsInOpalButton')
-    const schliessen = header.querySelector('#closeAllCourseTabsButton')
+    const snow = header.querySelector('#flakeSwitch')
+    const openAllCourses = header.querySelector('#openAllCoursesButton')
+    const openAllFavorites = header.querySelector('#openAllFavoritesButton')
+    const closeAllTabs = header.querySelector('#closeAllTabsButton')
 
-    const desiredOrder = [logo, schnee, oeffnen, schliessen].filter(Boolean)
+    const desiredOrder = [logo, snow, openAllCourses, openAllFavorites, closeAllTabs].filter(Boolean)
 
     // Check if reordering is actually needed
     const currentOrder = Array.from(header.children)
