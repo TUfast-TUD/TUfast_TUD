@@ -2,6 +2,7 @@ const STORAGE_KEY = 'closeAllTabsOnLoad'
 
 // adds button
 async function injectCloseAllButton() {
+  // create button
   if (document.getElementById('closeAllCourseTabsButton')) return
 
   const div = document.querySelector('.tufast-opal-header') as HTMLElement
@@ -12,8 +13,28 @@ async function injectCloseAllButton() {
   closeAllCourseTabsButton.title = 'Alle Tabs schließen. Ein TUfast-Feature.'
   closeAllCourseTabsButton.textContent = 'Alle Tabs schließen'
 
+  // if there are no tabs open, disable the button
+  function updateButtonState() {
+    const closeButtons = document.querySelectorAll('.btn-close.icon.only')
+    const hasTabs = closeButtons.length > 0
+
+    if (hasTabs) {
+      closeAllCourseTabsButton.style.opacity = '1'
+      closeAllCourseTabsButton.style.cursor = 'pointer'
+      closeAllCourseTabsButton.style.pointerEvents = 'auto'
+    } else {
+      closeAllCourseTabsButton.style.opacity = '0.5'
+      closeAllCourseTabsButton.style.cursor = 'not-allowed'
+      closeAllCourseTabsButton.style.pointerEvents = 'none'
+    }
+  }
+
   closeAllCourseTabsButton.addEventListener('click', (e) => {
     e.preventDefault()
+
+    // Check if there are tabs to close
+    const closeButtons = document.querySelectorAll('.btn-close.icon.only')
+    if (closeButtons.length === 0) return
 
     // set marker in localStorage to indicate tabs should be closed after reload
     localStorage.setItem(STORAGE_KEY, 'true')
@@ -23,9 +44,19 @@ async function injectCloseAllButton() {
   })
 
   div.appendChild(closeAllCourseTabsButton)
+
+  // Initial state update
+  updateButtonState()
+
+  // Watch for changes in tabs
+  const tabObserver = new MutationObserver(updateButtonState)
+  tabObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
 }
 
-// runs only if marker is set in localStorage
+// close all tabs, runs only if marker is set in localStorage
 function closeAllTabsAfterReload() {
   if (localStorage.getItem(STORAGE_KEY) !== 'true') return
 
