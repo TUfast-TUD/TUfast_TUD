@@ -1,101 +1,109 @@
-// Update button state based on current page
-function updateButtonState(button: HTMLSpanElement) {
-  button.style.opacity = '1'
-  button.style.cursor = 'pointer'
-  button.style.pointerEvents = 'auto'
-  button.textContent = 'Alle Favoriten öffnen'
-  button.title = 'Alle Favoriten öffnen. Ein TUfast-Feature.'
-}
-
-// Get course links from the page
-function getFavoriteLinksFromPage(): string[] {
-  const links: string[] = []
-  const allLinks = document.querySelectorAll('a[href*="RepositoryEntry"]')
-
-  allLinks.forEach((el) => {
-    const href = (el as HTMLAnchorElement).href
-    if (href && !links.includes(href)) {
-      links.push(href)
-    }
-  })
-
-  return [...new Set(links)]
-}
-
-// Main injection logic
-async function injectOpenAllFavoritesButton() {
-  // Check if already exists
-  if (document.getElementById('openAllFavoritesButton')) return
-
-  // Check if container exists
-  const div = document.querySelector('.tufast-opal-header') as HTMLElement
-  if (!div) return
-
-  const openAllFavoritesButton = document.createElement('span')
-  openAllFavoritesButton.id = 'openAllFavoritesButton'
-  openAllFavoritesButton.textContent = 'Alle Favoriten öffnen'
-
-  // Set initial state
-  updateButtonState(openAllFavoritesButton)
-
-  function openAllFavoriteTabs() {
-    const courseLinks = getFavoriteLinksFromPage()
-
-    if (!courseLinks || courseLinks.length === 0) {
-      alert('Keine Favoriten-Links gefunden!')
-      return
-    }
-
-    chrome.runtime.sendMessage({
-      cmd: 'openAllFavoritesInOpal',
-      courseLinks: courseLinks
-    })
-
-    // close current tab after delay
-    setTimeout(() => {
-      chrome.runtime.sendMessage({
-        cmd: 'closeCurrentTab'
-      })
-    }, 500)
+;(function () {
+  // Update button state based on current page
+  function updateButtonState(button: HTMLSpanElement) {
+    button.style.opacity = '1'
+    button.style.cursor = 'pointer'
+    button.style.pointerEvents = 'auto'
+    button.textContent = 'Alle Favoriten öffnen'
+    button.title = 'Alle Favoriten öffnen. Ein TUfast-Feature.'
   }
 
-  openAllFavoritesButton.addEventListener('click', (e) => {
-    e.preventDefault()
-    openAllFavoriteTabs()
-  })
+  // Get favorite links from storage
+  async function getFavoriteLinksFromStorage(): Promise<string[]> {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(['favoriten'], (result) => {
+        try {
+          const favorites = JSON.parse(result.favoriten || '[]')
+          const links = favorites.map((fav: any) => fav.link).filter(Boolean)
+          resolve(links)
+        } catch (e) {
+          console.error('Error parsing favoriten:', e)
+          resolve([])
+        }
+      })
+    })
+  }
 
-  div.appendChild(openAllFavoritesButton)
-}
+  // Main injection logic
+  async function injectOpenAllFavoritesButton() {
+    // Check if already exists
+    if (document.getElementById('openAllFavoritesButton')) return
 
-// Initialize and watch for changes
-;(async () => {
-  // Initial injection
-  await injectOpenAllFavoritesButton()
+    // Check if container exists
+    const div = document.querySelector('.tufast-opal-header') as HTMLElement
+    if (!div) return
 
-  // Track last URL to detect navigation
-  let lastUrl = window.location.href
+    const openAllFavoritesButton = document.createElement('span')
+    openAllFavoritesButton.id = 'openAllFavoritesButton'
+    openAllFavoritesButton.textContent = 'Alle Favoriten öffnen'
 
-  // Watch for DOM changes (SPA navigation)
-  const observer = new MutationObserver(async () => {
-    const currentUrl = window.location.href
+    // Set initial state
+    updateButtonState(openAllFavoritesButton)
 
-    // Check if button needs re-injection
-    if (document.querySelector('.tufast-opal-header') && !document.getElementById('openAllFavoritesButton')) {
-      await injectOpenAllFavoritesButton()
-    }
+    async function openAllFavoriteTabs() {
+      const favoriteLinks = await getFavoriteLinksFromStorage()
 
-    // Check if URL changed and update button state
-    if (currentUrl !== lastUrl) {
-      lastUrl = currentUrl
-      const button = document.getElementById('openAllFavoritesButton') as HTMLSpanElement
-      if (button) {
-        updateButtonState(button)
+      if (!favoriteLinks || favoriteLinks.length === 0) {
+        alert('Keine Favoriten-Links gefunden! Bitte importiere erst deine Favoriten in der Extension.')
+        return
       }
-    }
-  })
 
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  })
+      if (favoriteLinks.length > 25) {
+        alert('Du hast mehr als 25 Favoriten. Bitte öffne sie über das Extension-Popup.')
+        return
+      }
+
+      chrome.runtime.sendMessage({
+        cmd: 'openAllFavoritesInOpal',
+        courseLinks: favoriteLinks
+      })
+
+      // close current tab after delay
+      setTimeout(() => {
+        chrome.runtime.sendMessage({
+          cmd: 'closeCurrentTab'
+        })
+      }, 500)
+    }
+
+    openAllFavoritesButton.addEventListener('click', (e) => {
+      e.preventDefault()
+      openAllFavoriteTabs()
+    })
+
+    div.appendChild(openAllFavoritesButton)
+  }
+
+  // Initialize and watch for changes
+  ;(async () => {
+    // Initial injection
+    await injectOpenAllFavoritesButton()
+
+    // Track last URL to detect navigation
+    let lastUrl = window.location.href
+
+    // Watch for DOM changes (SPA navigation)
+    const observer = new MutationObserver(async () => {
+      const currentUrl = window.location.href
+
+      // Check if button needs re-injection
+      if (document.querySelector('.tufast-opal-header') && !document.getElementById('openAllFavoritesButton')) {
+        await injectOpenAllFavoritesButton()
+      }
+
+      // Check if URL changed and update button state
+      if (currentUrl !== lastUrl) {
+        lastUrl = currentUrl
+        const button = document.getElementById('openAllFavoritesButton') as HTMLSpanElement
+        if (button) {
+          updateButtonState(button)
+        }
+      }
+    })
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    })
+  })()
 })()

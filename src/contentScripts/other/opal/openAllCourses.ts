@@ -8,19 +8,20 @@
     button.title = 'Alle Kurse öffnen. Ein TUfast-Feature.'
   }
 
-  // Get course links from the page
-  function getCourseLinksFromPage(): string[] {
-    const links: string[] = []
-    const allLinks = document.querySelectorAll('a[href*="RepositoryEntry"]')
-
-    allLinks.forEach((el) => {
-      const href = (el as HTMLAnchorElement).href
-      if (href && !links.includes(href)) {
-        links.push(href)
-      }
+  // Get course links from extension storage
+  async function getCourseLinksFromStorage(): Promise<string[]> {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(['meine_kurse'], (result) => {
+        try {
+          const courses = JSON.parse(result.meine_kurse || '[]')
+          const links = courses.map((course: any) => course.link).filter(Boolean)
+          resolve(links)
+        } catch (e) {
+          console.error('Error parsing meine_kurse:', e)
+          resolve([])
+        }
+      })
     })
-
-    return [...new Set(links)]
   }
 
   // Main injection logic
@@ -39,11 +40,16 @@
     // Set initial state
     updateButtonState(openAllCoursesButton)
 
-    function openAllCourseTabs() {
-      const courseLinks = getCourseLinksFromPage()
+    async function openAllCourseTabs() {
+      const courseLinks = await getCourseLinksFromStorage()
 
       if (!courseLinks || courseLinks.length === 0) {
-        alert('Keine Kurs-Links gefunden!')
+        alert('Keine Kurs-Links gefunden! Bitte importiere erst deine Kurse in der Extension.')
+        return
+      }
+
+      if (courseLinks.length > 25) {
+        alert('Du hast mehr als 25 Kurse. Um deinen Browser nicht zu überlasten, öffne sie bitte manuell.')
         return
       }
 
