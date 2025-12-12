@@ -239,6 +239,13 @@ chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
   await chrome.storage.local.set({ openSettingsOnReload: false })
 })
 
+// Define the openAllCourses Configuration
+type OpenCourseBehavior = 'background_load' | 'immediate_active'
+
+interface OpenCourseConfig {
+  behavior: OpenCourseBehavior
+}
+
 // command listener
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   switch (request.cmd) {
@@ -252,7 +259,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     // keep three cases for setting different opening behaviors in function
     case 'open_all_courses':
     case 'openAllCoursesInOpal':
-    case 'openAllFavoritesInOpal':
+    case 'openAllFavoritesInOpal': {
       // Basic check for required data
       if (!request.courseLinks || !Array.isArray(request.courseLinks)) {
         sendResponse({ success: false, error: 'Missing or invalid courseLinks array.' })
@@ -278,6 +285,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
       // 3 - IMPORTANT: Return true to signal that 'sendResponse' will be called asynchronously
       return true
+    }
     // Close All Tabs in Opal
     case 'closeAllTabs':
       saveClicks(request.closedCount)
@@ -653,13 +661,6 @@ async function unlockRocketIcon(rocketId: string): Promise<void> {
  * @param courseLinks An array of URL strings to open.
  * @param config Configuration object specifying the opening behavior.
  */
-
-// Define the configuration for the unified function
-type OpenCourseBehavior = 'background_load' | 'immediate_active'
-
-interface OpenCourseConfig {
-  behavior: OpenCourseBehavior
-}
 
 async function openCourseLinks(courseLinks: string[], config: OpenCourseConfig): Promise<void> {
   if (!courseLinks || courseLinks.length === 0) {
