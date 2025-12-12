@@ -22,7 +22,7 @@ export const notify = (msg: string) => {
     setTimeout(() => notification.remove(), 400)
   }
 
-  // configure icon with SVG checkmark
+  // SVG checkmark
   iconContainer.classList.add('notifications__icon')
   iconContainer.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">

@@ -313,7 +313,7 @@ async function openSettings() {
 
 async function openShare() {
   document.getElementById('list-top').style.display = 'none'
-  document.getElementById('list').innerHTML = shareHTML
+  document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
   await new Promise((resolve) => setTimeout(resolve, 500))
 
   // Event Listener for Rockets Link
@@ -800,70 +800,38 @@ async function removeMsg1() {
 
 async function openAllCourses() {
   // Prevent re-entrancy: if already running, ignore subsequent clicks
-  try {
-    const btn = document.getElementById('open_all_courses_entry')
-    if (btn && btn.dataset && btn.dataset.running === 'true') return
-  } catch (e) {
-    /* ignore */
+  const btn = document.getElementById('open_all_courses_entry')
+  if (btn?.dataset?.running === 'true') return
+
+  // Mark as running and visually disable the button
+  if (btn) {
+    btn.dataset.running = 'true'
+    btn.style.pointerEvents = 'none'
+    btn.style.opacity = 0.6
   }
 
-  // Mark as running and visually disable the button to avoid rapid repeated clicks
-  try {
-    const btn = document.getElementById('open_all_courses_entry')
-    if (btn) {
-      btn.dataset.running = 'true'
-      btn.style.pointerEvents = 'none'
-      btn.style.opacity = 0.6
-    }
-  } catch (e) {}
+  // Get current dashboard display type to determine which storage key to use
+  const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
 
-  // Get all course links from the displayed list entries
-  const listEntries = document.querySelectorAll('#list .list-entry-wrapper .list-entry[href]')
-  const courseLinks = []
+  const dashboardDisplay = result.dashboardDisplay || 'meine_kurse'
+  const storageKey = dashboardDisplay === 'favoriten' ? 'favoriten' : 'meine_kurse'
 
-  // Filter out special buttons and collect only course links
-  for (const entry of listEntries) {
-    const href = entry.getAttribute('href')
-    // Skip special buttons: reload button, switch courses/favorites button
-    if (
-      href &&
-      !entry.parentElement.textContent.includes('aktualisieren') &&
-      !entry.parentElement.textContent.includes('Wechsel')
-    ) {
-      courseLinks.push(href)
-    }
-  }
-
-  if (courseLinks.length === 0) {
-    // re-enable button after short period
-    try {
-      const btn = document.getElementById('open_all_courses_entry')
+  // Send message to background script - it handles ALL validation and opening
+  chrome.runtime.sendMessage(
+    {
+      cmd: 'open_all',
+      links: storageKey,
+      behavior: 'background_load'
+    },
+    () => {
+      // Re-enable button after operation completes
       if (btn) {
         setTimeout(() => {
           btn.dataset.running = 'false'
           btn.style.pointerEvents = ''
           btn.style.opacity = ''
-        }, 5000)
+        }, 2000)
       }
-    } catch (e) {}
-    return
-  }
-
-  // Send course links to background script to open them (survives popup close)
-  chrome.runtime.sendMessage({
-    cmd: 'open_all_courses',
-    courseLinks: courseLinks
-  })
-
-  // Re-enable button after 5s
-  try {
-    const btn = document.getElementById('open_all_courses_entry')
-    if (btn) {
-      setTimeout(() => {
-        btn.dataset.running = 'false'
-        btn.style.pointerEvents = ''
-        btn.style.opacity = ''
-      }, 5000) // keep disabled for 5s to prevent rapid re-clicks
     }
-  } catch (e) {}
+  )
 }

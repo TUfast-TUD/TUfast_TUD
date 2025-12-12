@@ -239,13 +239,6 @@ chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
   await chrome.storage.local.set({ openSettingsOnReload: false })
 })
 
-// Define the openAllCourses Configuration
-type OpenCourseBehavior = 'background_load' | 'immediate_active'
-
-interface OpenCourseConfig {
-  behavior: OpenCourseBehavior
-}
-
 // command listener
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   switch (request.cmd) {
@@ -256,30 +249,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     /********************************
      * Open all courses / favorites *
      ********************************/
-    // keep three cases for setting different opening behaviors in function
-    case 'open_all_courses':
-    case 'openAllCoursesInOpal':
-    case 'openAllFavoritesInOpal': {
-      // Basic check for required data
-      if (!request.courseLinks || !Array.isArray(request.courseLinks)) {
-        sendResponse({ success: false, error: 'Missing or invalid courseLinks array.' })
-        return false // Return false if no async response is sent (though we handle the response here)
-      }
+    case 'open_all': {
+      // 1 - receive both values
+      const links = request.links
+      const behavior = request.behavior
 
-      // 1 - determine the configuration based on the command (cmd)
-      let config: OpenCourseConfig
-
-      if (request.cmd === 'open_all_courses') {
-        // This is the old 'openAllCoursesInBackground' behavior (for the popup)
-        config = { behavior: 'background_load' }
-      } else {
-        // This covers both 'openAllCoursesInOpal' and 'openAllFavoritesInOpal'
-        // which use the old 'openAllCoursesInOpal' behavior (for the Opal page)
-        config = { behavior: 'immediate_active' }
-      }
-
-      // 2 - call the unified function
-      openCourseLinks(request.courseLinks, config)
+      // 2 - call function to open links
+      openCourseLinks(links, behavior)
         .then(() => sendResponse({ success: true }))
         .catch((error) => sendResponse({ success: false, error: error.message || 'Unknown error during tab opening' }))
 
@@ -287,11 +263,12 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true
     }
     // Close All Tabs in Opal
-    case 'closeAllTabs':
+    case 'close_all_tabs':
       saveClicks(request.closedCount)
       sendResponse({ success: true })
       return true
-    case 'closeCurrentTab':
+    // Close current chrome tab
+    case 'close_current_tab':
       if (_sender.tab?.id) {
         chrome.tabs.remove(_sender.tab.id)
       }
@@ -653,40 +630,140 @@ async function unlockRocketIcon(rocketId: string): Promise<void> {
 }
 
 /**
- * Unified function to open course links with configurable behavior
- * Enables both background loading (popup) and immediate active (opal)
+ * Open All Courses / Favorites Functionality
+ * How does this work?
+ * Buttons in popup.html and inside Opal send two params:
+ * links - What do they want to open?
+ * --> meine_kurse or
+ * --> favoriten
+ * behavior - How do they want to open it?
+ * --> background_load (users current active page stays open, used for opening from popup) or
+ * --> immediate_active (users current active page is replaced, used for opening from within opal)
  *
- * Opens a list of course links with configurable behavior (active/background and cleanup).
- *
- * @param courseLinks An array of URL strings to open.
- * @param config Configuration object specifying the opening behavior.
+ * @param links Specifies what links to get from storage
+ * @param behavior Configuration object specifying the behavior for opening links.
  */
 
-async function openCourseLinks(courseLinks: string[], config: OpenCourseConfig): Promise<void> {
-  if (!courseLinks || courseLinks.length === 0) {
+async function openCourseLinks(links: string, behavior: string): Promise<void> {
+  // Validate behavior parameter
+  if (behavior !== 'background_load' && behavior !== 'immediate_active') {
+    throw new Error(
+      `Invalid behavior parameter: "${behavior}". Must be either "background_load" or "immediate_active".`
+    )
+  }
+
+  // 1 - Get course links from storage
+  async function getLinksFromStorage(): Promise<string[]> {
+    return new Promise((resolve) => {
+      chrome.storage.local.get([links], (result) => {
+        try {
+          // Use the 'links' parameter as the key to access the stored data
+          const storedData = result[links]
+
+          // If it's already an array, use it directly
+          if (Array.isArray(storedData)) {
+            resolve(storedData.filter(Boolean))
+            return
+          }
+
+          // Otherwise try to parse it as JSON
+          const linkContent = JSON.parse(storedData || '[]')
+
+          // If the parsed content is an array of objects with 'link' property
+          if (Array.isArray(linkContent) && linkContent.length > 0 && linkContent[0].link) {
+            const extractedLinks = linkContent.map((item: any) => item.link).filter(Boolean)
+            resolve(extractedLinks)
+          } else {
+            // Otherwise assume it's an array of strings
+            resolve(linkContent.filter(Boolean))
+          }
+        } catch (e) {
+          console.error(`Error parsing ${links}:`, e)
+          resolve([])
+        }
+      })
+    })
+  }
+
+  // Actually call the function to get the links
+  const courseLinks = await getLinksFromStorage()
+
+  // 2 - Handle empty courses case
+  if (courseLinks.length === 0) {
+    console.warn(`No course links found for: ${links}`)
+
+    // Set retry flag based on what type of links were requested
+    const retryFlag = links === 'favoriten' ? 'retry_open_all_favorites' : 'retry_open_all_courses'
+
+    // We have to store a retry flag to inform the following opal page to retry opening all courses/favorites
+    await new Promise<void>((resolve) => {
+      chrome.storage.local.set({ [retryFlag]: true }, () => resolve())
+    })
+
+    if (behavior === 'immediate_active') {
+      // Redirect the current active tab (user is on OPAL page)
+      const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      if (currentTab?.id) {
+        chrome.tabs.update(currentTab.id, {
+          url: 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
+        })
+      }
+    } else {
+      // background_load: User clicked from popup, open OPAL in a new tab
+      chrome.tabs.create({
+        url: 'https://bildungsportal.sachsen.de/opal/auth/resource/courses',
+        active: true
+      })
+    }
     return
   }
 
-  const { behavior } = config
+  // 3 - Check if more than 25 courses
+  if (courseLinks.length > 25) {
+    const linkType = links === 'favoriten' ? 'Favoriten' : 'Kurse'
+
+    if (behavior === 'immediate_active') {
+      // Show alert in the current OPAL tab context
+      const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      if (currentTab?.id) {
+        chrome.scripting.executeScript({
+          target: { tabId: currentTab.id },
+          func: (message: string) => alert(message),
+          args: [`Du hast mehr als 25 ${linkType}. Um deinen Browser nicht zu überlasten, öffne sie bitte manuell.`]
+        })
+      }
+    } else {
+      // background_load: Silently fail since displayCourseList already disables the button
+      console.warn(`Too many courses (${courseLinks.length}) for background_load mode`)
+    }
+    return
+  }
+
   const isBackgroundLoad = behavior === 'background_load'
   // Delay for the cleanup operation
   const cleanupDelayMs = isBackgroundLoad ? 2000 : 1000
 
-  // 1 - determine Tab Index
+  // 4 - Determine Tab Index and capture original tab ID for immediate_active mode
   let startIndex: number | undefined
+  let originalTabId: number | undefined
   try {
     const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (currentTab && typeof currentTab.index === 'number') {
       startIndex = currentTab.index + 1
     }
+    // Capture the original tab ID before opening new tabs (for immediate_active mode)
+    if (behavior === 'immediate_active' && currentTab?.id) {
+      originalTabId = currentTab.id
+    }
   } catch (e) {
+    console.error('Cannot get current tab:', e)
     // Cannot get current tab, proceed without explicit index
   }
 
   // Use a Promise array to track the *creation* of all tabs
   const tabCreationPromises: Promise<chrome.tabs.Tab | undefined>[] = []
 
-  // 2 - Open Tabs
+  // 5 - Open Tabs
   for (let i = 0; i < courseLinks.length; i++) {
     const link = courseLinks[i]
     const isLastLink = i === courseLinks.length - 1
@@ -703,7 +780,7 @@ async function openCourseLinks(courseLinks: string[], config: OpenCourseConfig):
       trimmed.startsWith('chrome-extension:') ||
       (!absoluteUrlPattern.test(trimmed) && !protocolRelativePattern.test(trimmed))
     ) {
-      // console.warn('Skipping invalid course link:', link); // Optional: Re-add original warning
+      console.warn('Skipping invalid course link:', link)
       continue
     }
 
@@ -728,7 +805,7 @@ async function openCourseLinks(courseLinks: string[], config: OpenCourseConfig):
     await new Promise((resolve) => setTimeout(resolve, 100))
   }
 
-  // 3 - Await all tab creation to get their IDs
+  // 6 - Await all tab creation to get their IDs
   const openedTabs = await Promise.all(tabCreationPromises)
   const openedTabIds = openedTabs
     .filter((tab): tab is chrome.tabs.Tab => !!tab && typeof tab.id === 'number')
@@ -736,14 +813,25 @@ async function openCourseLinks(courseLinks: string[], config: OpenCourseConfig):
 
   const lastTabId = openedTabIds[openedTabIds.length - 1]
 
-  // 4 - cleanup and activate last tab
+  // 7 - For immediate_active mode: Close the original OPAL tab after a delay
+  // We must use the captured originalTabId because active tab switches to newly opened tabs
+  if (behavior === 'immediate_active' && originalTabId) {
+    const tabIdToClose = originalTabId // Capture the value
+    setTimeout(() => {
+      chrome.tabs.remove(tabIdToClose).catch((e) => {
+        console.error('Error closing original tab:', e)
+      })
+    }, 1000)
+  }
+
+  // 8 - Cleanup and activate last tab
   // Use setTimeout to ensure cleanup happens *after* the tabs have had a chance to load
   setTimeout(() => {
     if (openedTabIds.length === 0) {
       return // No tabs were successfully opened
     }
 
-    // Remove all tabs except the last one
+    // Remove all tabs except the last one (for BOTH modes)
     const tabsToRemove = openedTabIds.slice(0, openedTabIds.length - 1)
 
     if (tabsToRemove.length > 0) {
@@ -754,15 +842,17 @@ async function openCourseLinks(courseLinks: string[], config: OpenCourseConfig):
       })
     }
 
-    // Activate the last tab only if in 'background_load' mode
+    // For background_load mode: Activate the last tab after cleanup
     if (isBackgroundLoad && lastTabId) {
       chrome.tabs.update(lastTabId, { active: true }).catch((e) => {
         // Handle potential errors if the tab has already been closed
         console.error('Error activating last tab:', e)
       })
     }
+
+    // For immediate_active mode: Last tab is already active (set during creation)
   }, cleanupDelayMs)
 
-  // 5 - Save Clicks
+  // 9 - Save Clicks
   saveClicks(2 * courseLinks.length)
 }

@@ -89,6 +89,7 @@
   border-radius: 4px;
   font-size: 14px;
   border: 1.5px solid var(--color-border-input);
+  /* SVG Search / Magnifier Icon */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0'/%3E%3Cpath d='M21 21l-6 -6'/%3E%3C/svg%3E");
   background-position: 12px center;
   background-size: 16px;
@@ -188,6 +189,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* SVG Arrow Down Icon */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
   background-position: center;
   background-size: 16px;

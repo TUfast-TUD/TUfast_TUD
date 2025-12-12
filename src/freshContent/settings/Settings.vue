@@ -342,7 +342,7 @@ export default defineComponent({
       }
     }
 
-    // Neue separate Funktion zum Öffnen basierend auf Storage-Parameter
+    // New separate function for opening based on storage parameters
     const openFromStorage = async () => {
       try {
         const result = await getChromeLocalStorage('openSettingsPageParam')
@@ -350,7 +350,7 @@ export default defineComponent({
 
         const openParam = result
 
-        // Parameter aus Storage löschen, damit es nicht bei jedem Reload geöffnet wird
+        // Delete parameters from storage so that it is not opened every time it is reloaded
         await setChromeLocalStorage({ openSettingsPageParam: null })
 
         const normalized = openParam.toLowerCase()

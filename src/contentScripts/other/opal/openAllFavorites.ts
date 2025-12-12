@@ -1,32 +1,7 @@
 ;(function () {
-  // Update button state based on current page
-  function updateButtonState(button: HTMLSpanElement) {
-    button.style.opacity = '1'
-    button.style.cursor = 'pointer'
-    button.style.pointerEvents = 'auto'
-    button.textContent = 'Alle Favoriten öffnen'
-    button.title = 'Alle Favoriten öffnen. Ein TUfast-Feature.'
-  }
-
-  // Get favorite links from storage
-  async function getFavoriteLinksFromStorage(): Promise<string[]> {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['favoriten'], (result) => {
-        try {
-          const favorites = JSON.parse(result.favoriten || '[]')
-          const links = favorites.map((fav: any) => fav.link).filter(Boolean)
-          resolve(links)
-        } catch (e) {
-          console.error('Error parsing favoriten:', e)
-          resolve([])
-        }
-      })
-    })
-  }
-
   // Main injection logic
   async function injectOpenAllFavoritesButton() {
-    // Check if already exists
+    // Check if button already exists
     if (document.getElementById('openAllFavoritesButton')) return
 
     // Check if container exists
@@ -36,41 +11,19 @@
     const openAllFavoritesButton = document.createElement('span')
     openAllFavoritesButton.id = 'openAllFavoritesButton'
     openAllFavoritesButton.textContent = 'Alle Favoriten öffnen'
+    openAllFavoritesButton.title = 'Alle Favoriten öffnen. Ein TUfast-Feature.'
+    openAllFavoritesButton.style.opacity = '1'
+    openAllFavoritesButton.style.cursor = 'pointer'
+    openAllFavoritesButton.style.pointerEvents = 'auto'
 
-    // Set initial state
-    updateButtonState(openAllFavoritesButton)
-
-    async function openAllFavoriteTabs() {
-      const favoriteLinks = await getFavoriteLinksFromStorage()
-
-      if (!favoriteLinks || favoriteLinks.length === 0) {
-        chrome.storage.local.set({ retry_open_all_favorites: true }, () => {
-          window.location.href = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
-        })
-        return
-      }
-
-      if (favoriteLinks.length > 25) {
-        alert('Du hast mehr als 25 Favoriten. Bitte öffne sie über das Extension-Popup.')
-        return
-      }
-
-      chrome.runtime.sendMessage({
-        cmd: 'openAllFavoritesInOpal',
-        courseLinks: favoriteLinks
-      })
-
-      // close current tab after delay
-      setTimeout(() => {
-        chrome.runtime.sendMessage({
-          cmd: 'closeCurrentTab'
-        })
-      }, 1000)
-    }
-
+    // Simple click handler - background.ts handles all validation
     openAllFavoritesButton.addEventListener('click', (e) => {
       e.preventDefault()
-      openAllFavoriteTabs()
+      chrome.runtime.sendMessage({
+        cmd: 'open_all',
+        links: 'favoriten',
+        behavior: 'immediate_active'
+      })
     })
 
     div.appendChild(openAllFavoritesButton)
@@ -81,7 +34,8 @@
     // Initial injection
     await injectOpenAllFavoritesButton()
 
-    // if flag exists: automatic retry after redirect
+    // If favorite list was empty and retry flag was set:
+    // Automatic retry after redirect
     chrome.storage.local.get(['retry_open_all_favorites'], async (result) => {
       if (result.retry_open_all_favorites) {
         // delete flag
@@ -91,31 +45,19 @@
         setTimeout(() => {
           const button = document.getElementById('openAllFavoritesButton')
           if (button) {
-            button.click() // cliks button again
+            button.click() // clicks button again
           }
         }, 800)
       }
     })
 
-    // Track last URL to detect navigation
-    let lastUrl = window.location.href
-
-    // Watch for DOM changes (SPA navigation)
+    // Make sure button is always displayed
+    // Watch for DOM changes (SPA navigation) to re-inject button if needed
+    // needed for tab "Lehren & Lernen" in opal
     const observer = new MutationObserver(async () => {
-      const currentUrl = window.location.href
-
       // Check if button needs re-injection
       if (document.querySelector('.tufast-opal-header') && !document.getElementById('openAllFavoritesButton')) {
         await injectOpenAllFavoritesButton()
-      }
-
-      // Check if URL changed and update button state
-      if (currentUrl !== lastUrl) {
-        lastUrl = currentUrl
-        const button = document.getElementById('openAllFavoritesButton') as HTMLSpanElement
-        if (button) {
-          updateButtonState(button)
-        }
       }
     })
 

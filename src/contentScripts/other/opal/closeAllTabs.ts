@@ -72,7 +72,7 @@ function closeAllTabsAfterReload() {
     } else {
       if (closedCount > 0) {
         chrome.runtime.sendMessage({
-          cmd: 'closeAllTabs',
+          cmd: 'close_all_tabs',
           closedCount: closedCount
         })
       }
