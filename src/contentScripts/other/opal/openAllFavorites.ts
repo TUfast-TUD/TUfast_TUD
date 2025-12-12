@@ -44,7 +44,9 @@
       const favoriteLinks = await getFavoriteLinksFromStorage()
 
       if (!favoriteLinks || favoriteLinks.length === 0) {
-        alert('Keine Favoriten-Links gefunden! Bitte importiere erst deine Favoriten in der Extension.')
+        chrome.storage.local.set({ retry_open_all_favorites: true }, () => {
+          window.location.href = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
+        })
         return
       }
 
@@ -63,7 +65,7 @@
         chrome.runtime.sendMessage({
           cmd: 'closeCurrentTab'
         })
-      }, 500)
+      }, 1000)
     }
 
     openAllFavoritesButton.addEventListener('click', (e) => {
@@ -78,6 +80,22 @@
   ;(async () => {
     // Initial injection
     await injectOpenAllFavoritesButton()
+
+    // if flag exists: automatic retry after redirect
+    chrome.storage.local.get(['retry_open_all_favorites'], async (result) => {
+      if (result.retry_open_all_favorites) {
+        // delete flag
+        chrome.storage.local.remove(['retry_open_all_favorites'])
+
+        // wait for opal dom
+        setTimeout(() => {
+          const button = document.getElementById('openAllFavoritesButton')
+          if (button) {
+            button.click() // cliks button again
+          }
+        }, 800)
+      }
+    })
 
     // Track last URL to detect navigation
     let lastUrl = window.location.href

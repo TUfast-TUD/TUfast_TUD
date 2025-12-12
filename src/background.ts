@@ -767,7 +767,7 @@ async function openAllCoursesInOpal(courseLinks: string[]) {
             for (let j = 0; j < openedTabIds.length - 1; j++) {
               chrome.tabs.remove(openedTabIds[j])
             }
-          }, 2000)
+          }, 1000)
         }
       }
     })

@@ -68,7 +68,7 @@ function closeAllTabsAfterReload() {
     if (closeButtons.length > 0) {
       ;(closeButtons[0] as HTMLElement).click()
       closedCount++
-      setTimeout(clickNextCloseButton, 1000)
+      setTimeout(clickNextCloseButton, 500)
     } else {
       if (closedCount > 0) {
         chrome.runtime.sendMessage({

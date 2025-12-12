@@ -44,7 +44,9 @@
       const courseLinks = await getCourseLinksFromStorage()
 
       if (!courseLinks || courseLinks.length === 0) {
-        alert('Keine Kurs-Links gefunden! Bitte importiere erst deine Kurse in der Extension.')
+        chrome.storage.local.set({ retry_open_all_courses: true }, () => {
+          window.location.href = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
+        })
         return
       }
 
@@ -63,7 +65,7 @@
         chrome.runtime.sendMessage({
           cmd: 'closeCurrentTab'
         })
-      }, 500)
+      }, 1000)
     }
 
     openAllCoursesButton.addEventListener('click', (e) => {
@@ -78,6 +80,22 @@
   ;(async () => {
     // Initial injection
     await injectOpenAllCoursesButton()
+
+    // if flag exists: automatic retry after redirect
+    chrome.storage.local.get(['retry_open_all_courses'], async (result) => {
+      if (result.retry_open_all_courses) {
+        // delete flag
+        chrome.storage.local.remove(['retry_open_all_courses'])
+
+        // wait for opal dom
+        setTimeout(() => {
+          const button = document.getElementById('openAllCoursesButton')
+          if (button) {
+            button.click() // cliks button again
+          }
+        }, 800)
+      }
+    })
 
     // Track last URL to detect navigation
     let lastUrl = window.location.href
