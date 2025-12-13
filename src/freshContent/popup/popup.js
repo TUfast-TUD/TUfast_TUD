@@ -1,9 +1,9 @@
 import studiengangConfig from '../studies.json'
 
 const shareHTML =
-  '<div style=height:450px;width:510px;overflow:hidden><div class=the-middle style=white-space:nowrap;display:inline><div class=tufast_text><span class=tufasst_name>Hilf deinen Mitstudierenden</span></div><div class="tufast_text" style=position:relative;top:6px><img class="imgicon huge invert" src=../../assets/images/tufast48.png style=position:relative;top:-7px;left:0px><span class="tufasst_name huge" style=position:relative;top:-7px;left:3px>TUfast</span><span class=tufasst_name> &nbsp;zu entdecken</span></div><div class=grey><span class=tufasst_name>und <a class=grey_a id=rewards_link style="cursor:pointer">sammle coole Raketen</a>!</span></div><div id=download-section><div>Teilen mit</div><div class=download-link><img class=imgicon src=../../assets/icons/gmail.png> <span class=browser_name><a href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studenten%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90"target=_blank>E-Mail</a></span></div><div class=download-link><img class=imgicon src=../../assets/icons/wa2.png style=height:1.4em><span class=browser_name> <a href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studenten!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"target=_blank>WhatsApp</a></span></div><div class=download-link><span class=browser_name>oder <a href=https://www.tu-fast.de target=_blank>www.tu-fast.de</a></span></div></div></div><div class=the-bottom><p>Gemacht mit 🖤 von Studenten | <a href=https://github.com/TUfast-TUD/TUfast_TUD target=_blank>GitHub</a> | <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast"target=_blank>Kontakt</a></div></div>'
+  '<div class="content"><h1>Hilf deinen Mitstudierenden <br /><img class="invert" src="../../assets/images/tufast48.png" style="height:1.5em;vertical-align:middle;" /> TUfast zu entdecken</h1><p class="subtitle">und <a href="#" id="rockets_link" style="color:var(--color-text-link);text-decoration:underline;cursor:pointer;">sammle coole Raketen</a>!</p><div class="share-section"><div class="share-title">Teilen mit</div><div class="share-links"><a class="share-link" href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studierenden%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90" target="_blank"><img src="../../assets/icons/gmail.png" />E-Mail</a><a class="share-link" href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studierenden!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90" target="_blank"><img src="../../assets/icons/wa2.png" />WhatsApp</a><a class="share-link" href="https://www.tu-fast.de" target="_blank">www.tu-fast.de</a></div></div><div class="footer">Gemacht mit 💙 von Studierenden · <a href="https://github.com/TUfast-TUD/TUfast_TUD" target="_blank">GitHub</a> · <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast" target="_blank">Kontakt</a></div></div>'
 const bananaHTML =
-  '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank"style = "position: fixed; bottom: 68px; right: -75px; width:240px; height: auto;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Buy me a Mate&emoji=🍾&slug=olihausdoerfer&button_colour=fbd54b&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"></a>'
+  '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" style = "position: fixed; bottom: 70px; right: 26px;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>'
 
 const starRatingSettings = {
   // initial rating value
@@ -97,9 +97,8 @@ window.onload = async () => {
 
   // display saved clicks
   const time = clicksToTime(result.savedClickCounter || 0)
-  document.getElementById('saved_clicks').innerHTML = `<text><font color='green'>${
-    result.savedClickCounter || 0
-  } Klicks</font> gespart: <span id="time">${time}</span></text>`
+  document.getElementById('saved_clicks').innerHTML =
+    `<text>${result.savedClickCounter || 0} Klicks, ${time} gespart</text>`
 
   // display banana at each end of semester for two weeks!
   let bananaTime = false
@@ -191,7 +190,7 @@ async function changeStudiengangSelection() {
   if (studiengang === 'addStudiengang') {
     chrome.runtime.sendMessage({
       cmd: 'open_settings_page',
-      params: 'add_studiengang'
+      params: 'Contact'
     })
     return
   }
@@ -208,7 +207,7 @@ function addDropdownOptions() {
   Object.keys(studiengangConfig).forEach((key) => {
     const listEntry = document.createElement('p')
     listEntry.style =
-      'display:flex;align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; border-radius: 3px;'
+      'display:flex; align-items: center; min-height: 36px; padding-left: 10px; padding-right: 5px; gap: 8px'
     listEntry.onclick = changeStudiengangSelection
     listEntry.setAttribute('studiengang', key)
 
@@ -313,28 +312,21 @@ async function openSettings() {
 }
 
 async function openShare() {
+  document.getElementById('list-top').style.display = 'none'
   document.getElementById('list').innerHTML = shareHTML // it needs to be injected this way, else click doesnt work
   await new Promise((resolve) => setTimeout(resolve, 500))
-  document.getElementById('rewards_link').addEventListener('click', async (e) => {
-    // click handler needs to be set this way
+
+  // Event Listener for Rockets Link
+  document.getElementById('rockets_link').addEventListener('click', async (e) => {
+    e.preventDefault()
     chrome.runtime.sendMessage({
       cmd: 'open_settings_page',
-      params: 'rocket_icons_settings'
-    }) // for some reason I need to pass empty param - else it wont work in ff
-    const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
+      params: 'Rockets'
+    })
+    const isFirefox = navigator.userAgent.includes('Firefox/')
     if (isFirefox) window.close()
-    return false // Required for ff
+    return false
   })
-}
-
-async function openSettingsTimeSection() {
-  chrome.runtime.sendMessage({
-    cmd: 'open_settings_page',
-    params: 'time_settings'
-  })
-  const isFirefox = navigator.userAgent.includes('Firefox/') // attention: no failsave browser detection
-  if (isFirefox) window.close()
-  return false // Required for ff
 }
 
 function listSearchFunction() {
@@ -388,15 +380,18 @@ function displayCourseList(
       break
   }
 
+  // save reload button later, so it appears later in the list
+  const reloadButton = {
+    name:
+      courseList === undefined || courseList.length === 0 || courseList === false
+        ? name
+        : 'Diese Kursliste jetzt aktualisieren...',
+    link,
+    img: '../../assets/icons/reload.png'
+  }
+
   if (courseList === undefined || courseList.length === 0 || courseList === false) {
     courseList = []
-    courseList.push({ name, link, img: '../../assets/icons/reload.png' })
-  } else {
-    courseList.push({
-      name: 'Diese Kursliste jetzt aktualisieren...',
-      link,
-      img: '../../assets/icons/reload.png'
-    })
   }
 
   // determine when to show outro and intro for course rating
@@ -498,7 +493,17 @@ function displayCourseList(
     listEntry.className = 'list-entry'
     listEntry.href = element.link
     listEntry.target = '_blank'
-    listEntry.onclick = saveTwoClicks
+    listEntry.onclick = function (event) {
+      // If Cmd/Ctrl is held, open in background tab manually
+      if (event.metaKey || event.ctrlKey) {
+        event.preventDefault()
+        chrome.tabs.create({ url: element.link, active: false })
+        saveTwoClicks()
+        return false
+      }
+      // Normal click - let it proceed naturally (popup will close)
+      saveTwoClicks()
+    }
 
     listImg.className = 'list-entry-img'
 
@@ -540,6 +545,93 @@ function displayCourseList(
     htmlList.appendChild(listEntrywrapper)
   })
 
+  // add "Alle Kurse/Favoriten öffnen" button if courses have been imported
+  if (courseList.length > 0) {
+    const openAllCoursesEntry = document.createElement('a')
+    const openAllCoursesImg = document.createElement('div')
+    const openAllCoursesText = document.createElement('div')
+    const openAllCoursesIcon = document.createElement('img')
+
+    openAllCoursesEntry.className = 'list-entry'
+    openAllCoursesEntry.style.cursor = 'pointer'
+    openAllCoursesEntry.href = '#'
+    // give the entry an id so we can reference/disable it reliably
+    openAllCoursesEntry.id = 'open_all_courses_entry'
+
+    // If user has more than 25 courses, disable the button and show a hint
+    if (courseList.length > 25) {
+      openAllCoursesEntry.className += ' disabled'
+      openAllCoursesEntry.style.opacity = 0.5
+      openAllCoursesEntry.style.pointerEvents = 'none'
+      openAllCoursesEntry.title = 'Deaktiviert: mehr als 25 Kurse'
+    } else {
+      openAllCoursesEntry.onclick = openAllCourses
+    }
+
+    openAllCoursesImg.className = 'list-entry-img'
+    openAllCoursesText.className = 'list-entry-text'
+
+    // Change text and icon based on current view (type)
+    if (type === 'favoriten') {
+      openAllCoursesText.innerHTML = 'Alle Favoriten öffnen'
+      openAllCoursesIcon.src = '../../assets/icons/starAll.png'
+    } else {
+      openAllCoursesText.innerHTML = 'Alle Kurse öffnen'
+      openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
+    }
+
+    // Like the reload icon, add 'invert' so the icon contrasts on dark backgrounds
+    openAllCoursesIcon.className = 'list-img invert'
+
+    openAllCoursesImg.appendChild(openAllCoursesIcon)
+    openAllCoursesEntry.appendChild(openAllCoursesImg)
+    openAllCoursesEntry.appendChild(openAllCoursesText)
+
+    const openAllCoursesWrapper = document.createElement('div')
+    openAllCoursesWrapper.className = 'list-entry-wrapper'
+    openAllCoursesWrapper.appendChild(openAllCoursesEntry)
+
+    htmlList.appendChild(openAllCoursesWrapper)
+  }
+
+  // add reload button
+  const reloadEntry = document.createElement('a')
+  const reloadImg = document.createElement('div')
+  const reloadText = document.createElement('div')
+  const reloadIcon = document.createElement('img')
+
+  reloadEntry.className = 'list-entry'
+  reloadEntry.href = reloadButton.link
+  reloadEntry.target = '_blank'
+  reloadEntry.onclick = function (event) {
+    // If Cmd/Ctrl is held, open in background tab manually
+    if (event.metaKey || event.ctrlKey) {
+      event.preventDefault()
+      chrome.tabs.create({ url: reloadButton.link, active: false })
+      saveTwoClicks()
+      return false
+    }
+    // Normal click - let it proceed naturally (popup will close)
+    saveTwoClicks()
+  }
+
+  reloadImg.className = 'list-entry-img'
+  reloadText.className = 'list-entry-text'
+  reloadText.innerHTML = reloadButton.name
+
+  reloadIcon.className = 'list-img invert'
+  reloadIcon.src = reloadButton.img
+
+  reloadImg.appendChild(reloadIcon)
+  reloadEntry.appendChild(reloadImg)
+  reloadEntry.appendChild(reloadText)
+
+  const reloadWrapper = document.createElement('div')
+  reloadWrapper.className = 'list-entry-wrapper'
+  reloadWrapper.appendChild(reloadEntry)
+
+  htmlList.appendChild(reloadWrapper)
+
   // Create button so switch courses <> favorites
   const listEntry = document.createElement('a')
   const listImg = document.createElement('div')
@@ -549,6 +641,7 @@ function displayCourseList(
   listImg.className = 'list-entry-img'
 
   listEntry.className = 'list-entry'
+  listEntry.href = '#'
   listEntry.style.cursor = 'pointer'
   listEntry.onclick = switchCoursesToShow
 
@@ -605,7 +698,7 @@ async function saveEnabled() {
       chrome.runtime.sendMessage(
         {
           cmd: 'open_settings_page',
-          params: 'auto_login_settings'
+          params: 'AutoLogin'
         },
         resolve
       )
@@ -703,4 +796,42 @@ async function removeMsg1() {
   document.getElementById('msg1-wrapper').remove()
   // Promisified until usage of Manifest V3
   await new Promise((resolve) => chrome.storage.local.set({ closedMsg1: true }, resolve))
+}
+
+async function openAllCourses() {
+  // Prevent re-entrancy: if already running, ignore subsequent clicks
+  const btn = document.getElementById('open_all_courses_entry')
+  if (btn?.dataset?.running === 'true') return
+
+  // Mark as running and visually disable the button
+  if (btn) {
+    btn.dataset.running = 'true'
+    btn.style.pointerEvents = 'none'
+    btn.style.opacity = 0.6
+  }
+
+  // Get current dashboard display type to determine which storage key to use
+  const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
+
+  const dashboardDisplay = result.dashboardDisplay || 'meine_kurse'
+  const storageKey = dashboardDisplay === 'favoriten' ? 'favoriten' : 'meine_kurse'
+
+  // Send message to background script - it handles ALL validation and opening
+  chrome.runtime.sendMessage(
+    {
+      cmd: 'open_all',
+      links: storageKey,
+      behavior: 'background_load'
+    },
+    () => {
+      // Re-enable button after operation completes
+      if (btn) {
+        setTimeout(() => {
+          btn.dataset.running = 'false'
+          btn.style.pointerEvents = ''
+          btn.style.opacity = ''
+        }, 2000)
+      }
+    }
+  )
 }

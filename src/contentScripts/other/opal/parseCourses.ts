@@ -149,10 +149,10 @@ function parseList(previewContainer: HTMLDivElement): ParseResult {
 
     if (firstTime && updateObj.meine_kurse) {
       notification.notify(
-        'Kurse wurden erfolgreich in TUfast gespeichert! Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd> um deine Kurse zu sehen!'
+        'Deine Kurse wurden erfolgreich in TUfast gespeichert. Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd>, um deine Kurse zu sehen! 🚀'
       )
     } else if (coursesChanged || favouritesChanged) {
-      notification.notify('Deine Kurse wurden erfolgreich in TUfast geupdatet!')
+      notification.notify('Deine Kurse wurden erfolgreich in TUfast aktualisiert! 🚀')
     }
   }
 

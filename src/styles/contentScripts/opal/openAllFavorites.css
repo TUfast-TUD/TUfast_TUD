@@ -1,0 +1,9 @@
+#openAllFavoritesButton {
+  display: block;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#openAllFavoritesButton:hover {
+  text-decoration: underline;
+}

@@ -1,6 +1,6 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "8.2.1.3",
+  "version": "8.3.0.0",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": ["storage", "alarms"],
   "optional_permissions": ["tabs", "notifications", "cookies", "webRequest", "webRequestBlocking"],
@@ -110,11 +110,17 @@
       "js": [
         "contentScripts/other/opal/insertLogo.js",
         "contentScripts/other/opal/snowflakes.js",
+        "contentScripts/other/opal/closeAllTabs.js",
+        "contentScripts/other/opal/openAllCourses.js",
+        "contentScripts/other/opal/openAllFavorites.js",
         "contentScripts/other/opal/insertBanner.js"
       ],
       "css": [
         "styles/contentScripts/opal/logo.css",
         "styles/contentScripts/opal/snowflakes.css",
+        "styles/contentScripts/opal/closeAllTabs.css",
+        "styles/contentScripts/opal/openAllCourses.css",
+        "styles/contentScripts/opal/openAllFavorites.css",
         "styles/contentScripts/opal/banner.css"
       ],
       "run_at": "document_idle",

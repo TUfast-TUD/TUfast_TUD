@@ -1,0 +1,9 @@
+#openAllCoursesButton {
+  display: block;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#openAllCoursesButton:hover {
+  text-decoration: underline;
+}
