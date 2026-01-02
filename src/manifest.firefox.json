@@ -39,7 +39,8 @@
         "https://www.startpage.com/sp/search?*q=*",
         "https://www.startpage.com/sp/search?*query=*",
         "https://www.qwant.com/?*q=*",
-        "https://search.brave.com/search?*q=*"
+        "https://search.brave.com/search?*q=*",
+        "https://kagi.com/search?*q=*"
       ]
     },
     {
@@ -240,7 +241,8 @@
         "https://duckduckgo.com/*",
         "https://www.ecosia.org/*",
         "https://www.bing.com/*",
-        "https://search.brave.com/*"
+        "https://search.brave.com/*",
+        "https://kagi.com/*"
       ]
     },
     {
