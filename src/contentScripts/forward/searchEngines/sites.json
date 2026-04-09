@@ -46,5 +46,9 @@
   "videocampus": {
     "name": "Videocampus Sachsen",
     "url": "https://videocampus.sachsen.de/"
+  },
+  "tex": {
+    "name": "Overleaf ShareLaTex",
+    "url": "https://tex.zih.tu-dresden.de"
   }
 }
