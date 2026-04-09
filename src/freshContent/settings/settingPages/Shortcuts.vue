@@ -9,8 +9,6 @@
     <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
     <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">M</span> &rarr; Mail (OWA) öffnen
     <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
-    <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">J</span> &rarr; jExam öffnen
-    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">Bearbeiten</a><br />
   </p>
 </template>
 

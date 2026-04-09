@@ -174,13 +174,6 @@ if (chrome.commands) {
         })
         await saveClicks(2)
         break
-      case 'open_jexam_hotkey':
-        await chrome.tabs.create({
-          url: 'https://jexam.inf.tu-dresden.de/',
-          index: currentTab.index + 1
-        })
-        await saveClicks(2)
-        break
     }
   })
 }
