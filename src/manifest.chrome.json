@@ -21,11 +21,6 @@
       "matches": ["https://idp.tu-dresden.de/*", "https://idp2.tu-dresden.de/*"]
     },
     {
-      "js": ["contentScripts/forward/jexam.js"],
-      "run_at": "document_idle",
-      "matches": ["https://jexam.inf.tu-dresden.de/"]
-    },
-    {
       "js": ["contentScripts/forward/searchEngines/generic.js"],
       "run_at": "document_start",
       "matches": [
@@ -42,11 +37,6 @@
         "https://search.brave.com/search?*q=*",
         "https://kagi.com/search?*q=*"
       ]
-    },
-    {
-      "js": ["contentScripts/login/jexam.js"],
-      "run_at": "document_idle",
-      "matches": ["https://jexam.inf.tu-dresden.de/*"]
     },
     {
       "js": ["contentScripts/other/hisqis/pimpAndInjectModules.js"],
@@ -278,14 +268,6 @@
         "mac": "Alt+M"
       },
       "description": "Mail (OWA) öffnen"
-    },
-    "open_jexam_hotkey": {
-      "suggested_key": {
-        "default": "Alt+J",
-        "windows": "Alt+J",
-        "mac": "Alt+J"
-      },
-      "description": "jExam öffnen"
     }
   }
 }

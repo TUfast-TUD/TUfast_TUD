@@ -2,7 +2,6 @@ import sites from './sites.json'
 
 /* const sites = {
   hisqis: 'https://qis.dez.tu-dresden.de/qisserver/servlet/de.his.servlet.RequestDispatcherServlet?state=template&template=user/news',
-  jexam: 'https://jexam.inf.tu-dresden.de/de.jexam.web.v4.5/spring/welcome',
   opal: 'https://bildungsportal.sachsen.de/opal/shiblogin?0',
   selma: 'https://selma.tu-dresden.de/APP/EXTERNALPAGES/-N000000000000001,-N000155,-AEXT_willkommen',
   slub: 'https://www.slub-dresden.de/',
