@@ -29,7 +29,9 @@ We have 1500+ Users. Please test your changes thoroughly.
 - [ ] Successfully run `npm run test` locally
 
 #### Version increase
-- [ ] I increased the version number according to [SemVer](https://semver.org/).
+The first three digits follow [SemVer](https://semver.org/); the fourth digit is used for maintenance (e.g., content updates, minor text adjustments, build tooling, and dependency updates).
+- [ ] I increased the version number in `package.json`.
+- [ ] After that, I ran `npm test` to verify `package.json`, `manifest.chrome.json`, and `manifest.firefox.json` use the same version.
 
 #### Additional Information
 Add anything here, that might be important.
