@@ -31,7 +31,7 @@ After developing:
 **Note:** as a project member you can also directly work in this repo directly and manage PRs, making the contribution process easier.
 
 ## Used frameworks
-- **Build tool**: [Snowpack](https://www.snowpack.dev/). Run `npm run dev` to compile sass and ts files.
+- **Build tool**: [Vite](https://vite.dev/). Run `npm run dev` to compile sass and ts files.
 - **CSS-Preprocessor**: We are using [SASS](https://sass-lang.com/).
 - **Code style and linting**: We are using ESlint and prettier. Run `npm run test` to check your code style and linting before pushing code. Wrong formatting will result in a failing CI. You should configure your editor to automatically format on save with prettier for which VSCode provides [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 

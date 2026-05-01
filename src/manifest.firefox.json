@@ -236,7 +236,7 @@
       ]
     },
     {
-      "resources": ["contentScripts/other/hisqis/*", "snowpack/pkg/*"],
+      "resources": ["contentScripts/other/hisqis/*", "vite/pkg/*"],
       "matches": ["https://qis.dez.tu-dresden.de/*"]
     },
     {
