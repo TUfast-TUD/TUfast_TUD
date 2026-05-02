@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { syncManifestVersions } from './scripts/sync-version.mjs'
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 const srcDir = path.resolve(rootDir, 'src')
@@ -43,14 +44,39 @@ function copyStaticExtensionFiles() {
   return {
     name: 'copy-static-extension-files',
     writeBundle() {
+      const manifestNames = new Set(['manifest.json', 'manifest.chrome.json', 'manifest.firefox.json'])
       for (const file of walkFiles(srcDir)) {
         const relativePath = path.relative(srcDir, file)
         if (/\.(html|js|sass|scss|ts|vue)$/.test(relativePath) || relativePath.endsWith('.d.ts')) continue
 
         const target = path.join(buildDir, relativePath)
         fs.mkdirSync(path.dirname(target), { recursive: true })
+
+        if (manifestNames.has(path.basename(relativePath))) {
+          const source = fs.readFileSync(file, 'utf8')
+          try {
+            const obj = JSON.parse(source)
+            if (obj._comment) delete obj._comment
+            fs.writeFileSync(target, JSON.stringify(obj, null, 2) + '\n')
+            continue
+          } catch (err) {
+            // fallback: copy raw file
+            fs.copyFileSync(file, target)
+            continue
+          }
+        }
+
         fs.copyFileSync(file, target)
       }
+    }
+  }
+}
+
+function injectManifestVersions() {
+  return {
+    name: 'inject-manifest-versions',
+    writeBundle() {
+      syncManifestVersions({ buildDir })
     }
   }
 }
@@ -97,7 +123,7 @@ function keepContentScriptsClassic() {
 export default defineConfig({
   root: srcDir,
   publicDir: false,
-  plugins: [vue(), copyStaticExtensionFiles(), keepContentScriptsClassic()],
+  plugins: [vue(), copyStaticExtensionFiles(), injectManifestVersions(), keepContentScriptsClassic()],
   build: {
     outDir: buildDir,
     emptyOutDir: true,

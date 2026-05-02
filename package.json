@@ -11,15 +11,10 @@
     "prettier:fix": "npm run prettier -- --write",
     "test:fix": "npm run prettier:fix && npm run lint:fix",
     "test": "npm run ts-check && npm run lint && npm run prettier && npm run build",
-    "sync:manifest-version": "node scripts/sync-manifest-version.mjs",
-    "version": "npm run sync:manifest-version",
-    "predev": "npm run sync:manifest-version",
+    "syncVersion": "node scripts/sync-version.mjs",
     "dev": "vite build --watch",
-    "prebuild": "npm run sync:manifest-version",
     "build": "vite build",
-    "preuseChrome": "npm run sync:manifest-version",
     "useChrome": "cp src/manifest.chrome.json src/manifest.json",
-    "preuseFF": "npm run sync:manifest-version",
     "useFF": "cp src/manifest.firefox.json src/manifest.json"
   },
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "8.3.0.2",
+  "_comment": "The version number is populated during build time, please adjust version number in package.json",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": ["storage", "system.cpu", "alarms"],
   "optional_permissions": ["tabs", "notifications", "cookies", "declarativeNetRequestWithHostAccess"],
