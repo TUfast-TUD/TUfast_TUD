@@ -77,9 +77,17 @@ async function injectLogo() {
   // Create container div and insert logo
   const div = document.createElement('div')
   div.className = 'tufast-opal-header'
-  div.style.cssText =
-    'display: flex; flex-direction: row; gap: 16px; align-items: center; height: 100%; padding-top: 9px;'
-  pageHeader.appendChild(div)
+  div.style.cssText = 'display: flex; flex-direction: row; gap: 16px; align-items: center; height: 100%;'
+
+  // insert TUfast header between the OPAL logo and the tools
+  const headerFunctions = pageHeader.querySelector('.header-functions')
+  if (headerFunctions && headerFunctions.parentNode === pageHeader) {
+    pageHeader.insertBefore(div, headerFunctions)
+  } else {
+    // Fallback
+    pageHeader.appendChild(div)
+  }
+
   div.appendChild(logo)
 
   // Helper function to maintain button order in header
