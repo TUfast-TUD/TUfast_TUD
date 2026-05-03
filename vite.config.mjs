@@ -8,6 +8,7 @@ import { syncManifestVersions } from './scripts/sync-version.mjs'
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 const srcDir = path.resolve(rootDir, 'src')
 const buildDir = path.resolve(rootDir, 'build')
+const legacyClassicScript = path.resolve(srcDir, 'freshContent/starRating.js')
 
 function walkFiles(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true })
@@ -30,6 +31,7 @@ function buildInputs() {
     walkFiles(srcDir)
       .filter((file) => {
         if (file.endsWith('.d.ts')) return false
+        if (path.resolve(file) === legacyClassicScript) return false
         if (/\.(html|js|scss|ts)$/.test(file)) return true
         return /\.sass$/.test(file) && !path.basename(file).startsWith('_')
       })
@@ -47,6 +49,12 @@ function copyStaticExtensionFiles() {
       const manifestNames = new Set(['manifest.json', 'manifest.chrome.json', 'manifest.firefox.json'])
       for (const file of walkFiles(srcDir)) {
         const relativePath = path.relative(srcDir, file)
+        if (path.resolve(file) === legacyClassicScript) {
+          const target = path.join(buildDir, relativePath)
+          fs.mkdirSync(path.dirname(target), { recursive: true })
+          fs.copyFileSync(file, target)
+          continue
+        }
         if (/\.(html|js|sass|scss|ts|vue)$/.test(relativePath) || relativePath.endsWith('.d.ts')) continue
 
         const target = path.join(buildDir, relativePath)
