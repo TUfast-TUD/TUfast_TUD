@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import Settings from './Settings.vue'
+import '../../styles/palette_new/palette_new.sass'
 // Import needed Icons from Tabler Vue
 import {
   IconArrowUpRight,

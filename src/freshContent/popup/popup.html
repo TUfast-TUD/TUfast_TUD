@@ -2,11 +2,10 @@
 <html data-preload>
   <head>
     <meta charset="utf-8" />
+    <!-- Legacy classic script - must not be type="module" to provide global rateSystem function -->
+    <!-- See vite.config.mjs: copyStaticExtensionFiles() for build handling -->
     <script src="../starRating.js"></script>
     <script src="popup.js" type="module"></script>
-    <link rel="stylesheet" href="/styles/popup.css" />
-    <link rel="stylesheet" href="/styles/components/switch.css" />
-    <link rel="stylesheet" href="/styles/components/share.css" />
   </head>
 
   <body>
