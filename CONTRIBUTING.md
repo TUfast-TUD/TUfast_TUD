@@ -24,7 +24,7 @@ Steps to contribute:
 After developing:
 
 8. Run `npm run test` locally before pushing code. This will also check if your code is formatted correctly. You can use [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to automatically format your code (recommended) or use `npm run prettier:fix`. (See also below.) Wrong formatting will result in failing CI on GitHub!
-9. **Increase the version number in the `manifest*.json` files according to [SemVer](https://semver.org/). An increase in version number is strictly required for new TUfast releases!**
+9. **Increase the version number in `package.json` according to [SemVer](https://semver.org/). The version number will be automatically copied over to the manifest*.json file during build. An increase in version number is strictly required for new TUfast releases!**
 10. Create a pull request against `main`.
 11. Await our review.
 
