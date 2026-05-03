@@ -4,3 +4,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'lottie-web/build/player/lottie_light_canvas' {
+  const lottie: any
+  export default lottie
+}

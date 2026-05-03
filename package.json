@@ -64,9 +64,9 @@
     "vite": "^8.0.10"
   },
   "dependencies": {
-    "@lottiefiles/lottie-player": "^2.0.12",
     "@tabler/icons-vue": "^3.35.0",
     "chart.js": "^3.8.0",
+    "lottie-web": "^5.13.0",
     "simple-datatables": "^3.2.0",
     "vue": "^3.2.22"
   }

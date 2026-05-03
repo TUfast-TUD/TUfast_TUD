@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import Settings from './Settings.vue'
-import '@lottiefiles/lottie-player'
 // Import needed Icons from Tabler Vue
 import {
   IconArrowUpRight,
