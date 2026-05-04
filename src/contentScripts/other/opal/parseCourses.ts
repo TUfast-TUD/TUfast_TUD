@@ -10,8 +10,8 @@ interface ParseResult {
   favorites: Course[]
 }
 
-function parseTable(tbody: HTMLTableSectionElement): ParseResult {
-  if (!tbody) throw new Error('Cannot parse table')
+function parseTable(tbody: HTMLTableSectionElement | undefined | null): ParseResult {
+  if (!tbody) return { courses: [], favorites: [] }
 
   // Get the current courses
   const favorites: Course[] = []
@@ -37,9 +37,11 @@ function parseTable(tbody: HTMLTableSectionElement): ParseResult {
   return { courses, favorites }
 }
 
-function parseList(previewContainer: HTMLDivElement): ParseResult {
+function parseList(previewContainer: HTMLDivElement | undefined | null): ParseResult {
   const courses: Course[] = []
   const favorites: Course[] = []
+
+  if (!previewContainer) return { courses, favorites }
 
   const listItems: HTMLCollection = previewContainer.getElementsByClassName('content-preview')
 
@@ -83,17 +85,33 @@ function parseList(previewContainer: HTMLDivElement): ParseResult {
     // If this is possible we don't need to do anything else because the MutationObserver will fire again
     const pages = document.querySelectorAll('li.page').length
     if (pages > 1) {
-      ;(document.getElementsByClassName('pager-showall')[0] as HTMLAnchorElement | undefined)?.click()
-      return
+      const showAll = document.getElementsByClassName('pager-showall')[0]
+      // Inlined (no top-level helper): a minified `t()` helper collides with `sort((e,t)=>…)` and
+      // `t(e)` can call the wrong binding, so `getAttribute` runs on `undefined`.
+      if (showAll instanceof HTMLAnchorElement) {
+        const rawHref = showAll.getAttribute('href')?.trim() ?? ''
+        const safePagerHref =
+          !!rawHref &&
+          rawHref !== '#' &&
+          !rawHref.toLowerCase().startsWith('javascript:') &&
+          showAll.protocol !== 'javascript:'
+        if (safePagerHref) {
+          showAll.click()
+          return
+        }
+      }
+      // Pager uses `javascript:` or is missing: do not click (CSP) — parse the visible page instead.
     }
 
-    const tablePanel = document.getElementsByClassName('table-panel')[0]
+    const tablePanel = document.getElementsByClassName('table-panel')[0] as HTMLElement | undefined
     if (!tablePanel) return
 
-    const previewContainer = tablePanel.getElementsByClassName('content-preview-container')[0]
+    const previewContainer = tablePanel.getElementsByClassName('content-preview-container')[0] as
+      | HTMLDivElement
+      | undefined
 
     const { courses, favorites } = previewContainer
-      ? parseList(previewContainer as HTMLDivElement)
+      ? parseList(previewContainer)
       : parseTable(tablePanel.getElementsByTagName('tbody')[0])
 
     // If the user has no courses - nothing to do here anymore (favorites can only be a subset of courses, so no check needed)
