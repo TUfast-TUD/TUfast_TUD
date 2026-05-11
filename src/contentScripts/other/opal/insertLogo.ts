@@ -1,3 +1,6 @@
+// OPAL loads several content scripts in one shared isolated-world scope; other bundles
+// minify globals like `var e` and would clobber top-level helpers here (easter egg).
+;(() => {
 // Step through the color wheel
 function colorStep(noOfSteps: number = 10) {
   // Get color variable
@@ -229,4 +232,5 @@ async function injectLogo() {
       setTimeout(() => injectLogo(), 100) // Small delay to let DOM update
     }
   }).observe(document, { subtree: true, childList: true })
+})()
 })()
