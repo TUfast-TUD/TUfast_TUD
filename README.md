@@ -3,11 +3,8 @@
 ![Release](https://github.com/TUfast-TUD/TUfast_TUD/actions/workflows/release.yml/badge.svg?branch=main)
 ![Release Version](https://img.shields.io/github/v/release/TUfast-TUD/TUfast_TUD)
 ![Latest Release](https://img.shields.io/github/release-date/TUfast-TUD/TUfast_TUD)
-![License](https://img.shields.io/github/license/TUfast-TUD/TUfast_TUD)
 
-![Contributors](https://img.shields.io/github/contributors/TUfast-TUD/TUfast_TUD)
 ![Last Commit](https://img.shields.io/github/last-commit/TUfast-TUD/TUfast_TUD)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/TUfast-TUD/TUfast_TUD)
 
 [![Support me on Buy Me a Coffee](https://img.shields.io/badge/Support-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee)](https://www.buymeacoffee.com/olihausdoerfer)
 
