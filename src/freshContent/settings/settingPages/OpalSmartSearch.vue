@@ -11,7 +11,7 @@
 
   <div class="smart-search-status">
     <div>
-      <span class="smart-search-status__label">Lokale Eintraege</span>
+      <span class="smart-search-status__label">Lokale Einträge</span>
       <strong>{{ stats.count }}</strong>
     </div>
     <div>
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <button class="smart-search-clear" @click="clearIndex">Lokalen Suchindex loeschen</button>
+  <button class="smart-search-clear" @click="clearIndex">Lokalen Suchindex löschen</button>
 </template>
 
 <script lang="ts">

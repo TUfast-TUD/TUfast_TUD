@@ -8,7 +8,7 @@ const ACTIONS: OpalSearchResult[] = [
   {
     node: {
       id: '__action-open-opal-home',
-      title: 'OPAL Startseite oeffnen',
+      title: 'OPAL Startseite öffnen',
       url: 'https://bildungsportal.sachsen.de/opal/home/',
       type: 'action',
       courseId: '',
@@ -22,7 +22,7 @@ const ACTIONS: OpalSearchResult[] = [
   {
     node: {
       id: '__action-open-opal-courses',
-      title: 'Meine OPAL-Kurse oeffnen',
+      title: 'Meine OPAL-Kurse öffnen',
       url: 'https://bildungsportal.sachsen.de/opal/auth/resource/courses',
       type: 'action',
       courseId: '',
@@ -70,7 +70,7 @@ function openPalette(): void {
       <div id="tufast-smart-search-results" class="tufast-smart-search__results"></div>
       <div class="tufast-smart-search__footer">
         <span>/c Kurse · /f Dateien</span>
-        <span>Enter oeffnet · Pfeile navigieren</span>
+        <span>Enter öffnet · Pfeile navigieren</span>
       </div>
     </div>
   `
