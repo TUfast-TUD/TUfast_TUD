@@ -179,6 +179,7 @@ import Toggle from './components/Toggle.vue'
 import AutoLogin from './settingPages/AutoLogin.vue'
 import Email from './settingPages/Email.vue'
 import ImproveOpal from './settingPages/ImproveOpal.vue'
+import OpalSmartSearch from './settingPages/OpalSmartSearch.vue'
 import ImproveSelma from './settingPages/ImproveSelma.vue'
 import Shortcuts from './settingPages/Shortcuts.vue'
 import SearchEngines from './settingPages/SearchEngines.vue'
@@ -217,6 +218,7 @@ export default defineComponent({
     AutoLogin,
     Email,
     ImproveOpal,
+    OpalSmartSearch,
     ImproveSelma,
     Shortcuts,
     SearchEngines,

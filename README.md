@@ -26,6 +26,10 @@ TUfast is a student project that makes the online portals of TU Dresden faster a
 * Customize and improve your OPAL experience
 * ... and many more can be found in TUfast :)
 
+### OPAL Smart Search
+
+The OPAL Smart Search command palette indexes visited OPAL courses, folders, nested folders, and files locally in the browser. Its search and ranking design is documented in [OPAL Smart Search Logic](src/contentScripts/other/opal/smartSearch/SEARCH_LOGIC.md).
+
 ## 🚀 Using TUfast
 Simply visit [www.tu-fast.de](https://www.tu-fast.de) and select your browser to be redirected to the webstore for free installation.
 

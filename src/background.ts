@@ -4,6 +4,11 @@ import * as otp from './modules/otp'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
+import { clearOpalSearchIndex, getOpalSearchIndexStats } from './contentScripts/other/opal/smartSearch/indexDb'
+import {
+  DEFAULT_SMART_SEARCH_SETTINGS,
+  OPAL_SMART_SEARCH_SETTINGS_KEY
+} from './contentScripts/other/opal/smartSearch/settings'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
 
@@ -23,7 +28,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
-        improveSelma: true
+        improveSelma: true,
+        [OPAL_SMART_SEARCH_SETTINGS_KEY]: DEFAULT_SMART_SEARCH_SETTINGS
       })
       await openSettingsPage('first_visit')
       break
@@ -39,6 +45,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'studiengang',
         'hisqisPimpedTable',
         'improveSelma',
+        OPAL_SMART_SEARCH_SETTINGS_KEY,
         'savedClickCounter',
         'saved_click_counter', // legacy
         'Rocket', // legacy
@@ -61,6 +68,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
+      if (typeof currentSettings[OPAL_SMART_SEARCH_SETTINGS_KEY] === 'undefined') {
+        updateObj[OPAL_SMART_SEARCH_SETTINGS_KEY] = DEFAULT_SMART_SEARCH_SETTINGS
+      }
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined')
@@ -315,6 +325,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             }
           })
         }),
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get([OPAL_SMART_SEARCH_SETTINGS_KEY], (result) => {
+            resolve((result[OPAL_SMART_SEARCH_SETTINGS_KEY] ?? DEFAULT_SMART_SEARCH_SETTINGS).enabled)
+          })
+        }),
         // User data check
         credentials.userDataExists(request.platform)
         // Language (which language has user selected?)
@@ -329,7 +344,8 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           selmaStatus, // 5
           seCommandsStatus, // 6
           faculty, // 7
-          userDataExists // 8
+          smartSearchStatus, // 8
+          userDataExists // 9
         ]) => {
           sendResponse({
             otp: totpExists || iotpExists,
@@ -338,6 +354,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             userData: userDataExists || loginExists,
             selma: selmaStatus,
             searchengine: seCommandsStatus,
+            smartSearch: smartSearchStatus,
             faculty: faculty
           })
         }
@@ -477,6 +494,12 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true
     case 'check_se_status':
       chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
+      return true
+    case 'opal_smart_search_stats':
+      getOpalSearchIndexStats().then(sendResponse)
+      return true
+    case 'opal_smart_search_clear':
+      clearOpalSearchIndex().then(() => sendResponse(true))
       return true
     /* Rocket functions */
     case 'set_rocket_icon':

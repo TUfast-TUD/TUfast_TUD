@@ -21,6 +21,13 @@
     "settingType": "opalPdf"
   },
   {
+    "title": "OPAL Smart Search",
+    "icon": "IconSearch",
+    "settingsPage": "OpalSmartSearch",
+    "category": "function",
+    "settingType": "smartSearch"
+  },
+  {
     "title": "Selma verbessern",
     "icon": "IconChartBar",
     "settingsPage": "ImproveSelma",
