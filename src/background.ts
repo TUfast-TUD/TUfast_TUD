@@ -4,11 +4,19 @@ import * as otp from './modules/otp'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
-import { clearOpalSearchIndex, getOpalSearchIndexStats } from './contentScripts/other/opal/smartSearch/indexDb'
+import {
+  clearOpalSearchIndex,
+  getOpalSearchIndexStats,
+  getOpalSearchNode,
+  upsertGraphNodes
+} from './contentScripts/other/opal/smartSearch/indexDb'
+import { searchOpalNodes } from './contentScripts/other/opal/smartSearch/search'
 import {
   DEFAULT_SMART_SEARCH_SETTINGS,
   OPAL_SMART_SEARCH_SETTINGS_KEY
 } from './contentScripts/other/opal/smartSearch/settings'
+import type { OpalSearchNode } from './contentScripts/other/opal/smartSearch/types'
+import { isAllowedOpalUrl, sanitizeOpalSearchNodes } from './contentScripts/other/opal/smartSearch/urlPolicy'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
 
@@ -500,6 +508,21 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true
     case 'opal_smart_search_clear':
       clearOpalSearchIndex().then(() => sendResponse(true))
+      return true
+    case 'opal_smart_search_upsert_nodes': {
+      const nodes = Array.isArray(request.nodes) ? (request.nodes as OpalSearchNode[]) : []
+      upsertGraphNodes(sanitizeOpalSearchNodes(nodes)).then(() => sendResponse(true))
+      return true
+    }
+    case 'opal_smart_search_get_node':
+      getOpalSearchNode(String(request.id || '')).then((node) => {
+        sendResponse(node && isAllowedOpalUrl(node.url) ? node : undefined)
+      })
+      return true
+    case 'opal_smart_search_query':
+      searchOpalNodes(String(request.rawQuery || ''), String(request.courseId || ''), Number(request.limit || 8)).then(
+        (results) => sendResponse(results.filter((result) => isAllowedOpalUrl(result.node.url)))
+      )
       return true
     /* Rocket functions */
     case 'set_rocket_icon':

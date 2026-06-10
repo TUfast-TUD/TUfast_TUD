@@ -1,8 +1,8 @@
-import { getOpalSearchNode } from './indexDb'
+import { getIndexedOpalSearchNode, searchIndexedOpalNodes } from './messages'
 import { extractCourseIdFromUrl } from './opalParser'
-import { searchOpalNodes } from './search'
 import { OPAL_SMART_SEARCH_HIGHLIGHT_KEY } from './settings'
 import type { OpalSearchNode, OpalSearchResult } from './types'
+import { normalizeAllowedOpalUrl } from './urlPolicy'
 
 const ACTIONS: OpalSearchResult[] = [
   {
@@ -105,7 +105,7 @@ function openPalette(): void {
       const actions = ACTIONS.filter((action) =>
         `${action.node.title} ${action.node.searchText}`.toLowerCase().includes(query.toLowerCase())
       )
-      const searchResults = await searchOpalNodes(query, activeCourseId, 10)
+      const searchResults = await searchIndexedOpalNodes(query, activeCourseId, 10)
       results = [...actions, ...searchResults].slice(0, 10)
       selectedIndex = 0
       render()
@@ -127,17 +127,20 @@ function openPalette(): void {
     close()
 
     if (selected.node.type === 'file' && selected.node.parentId) {
-      const parent = await getOpalSearchNode(selected.node.parentId)
-      if (parent?.url) {
+      const parent = await getIndexedOpalSearchNode(selected.node.parentId)
+      const parentUrl = parent ? normalizeAllowedOpalUrl(parent.url) : null
+      const fileUrl = normalizeAllowedOpalUrl(selected.node.url)
+      if (parentUrl && fileUrl) {
         await chrome.storage.local.set({
-          [OPAL_SMART_SEARCH_HIGHLIGHT_KEY]: { title: selected.node.title, url: selected.node.url }
+          [OPAL_SMART_SEARCH_HIGHLIGHT_KEY]: { title: selected.node.title, url: fileUrl }
         })
-        location.href = parent.url
+        location.href = parentUrl
         return
       }
     }
 
-    location.href = selected.node.url
+    const targetUrl = normalizeAllowedOpalUrl(selected.node.url)
+    if (targetUrl) location.href = targetUrl
   }
 
   input.addEventListener('input', update)

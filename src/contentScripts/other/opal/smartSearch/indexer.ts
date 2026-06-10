@@ -1,4 +1,4 @@
-import { upsertGraphNodes } from './indexDb'
+import { upsertOpalSearchNodes } from './messages'
 import {
   extractCourseIdFromUrl,
   extractCourseNodeLinksFromMarkup,
@@ -11,6 +11,7 @@ import {
 } from './opalParser'
 import { loadSmartSearchSettings } from './settings'
 import type { OpalSearchNode, OpalStoredCourse } from './types'
+import { normalizeAllowedOpalUrl } from './urlPolicy'
 
 const ACTIVE_INDEX_KEY = 'opalSmartSearchActiveIndexRuns'
 const ACTIVE_INDEX_COOLDOWN_MS = 6 * 60 * 60 * 1000
@@ -27,7 +28,8 @@ interface BreadcrumbEntry {
 }
 
 export async function indexCurrentOpalPage(): Promise<void> {
-  if (!location.href.includes('/opal/')) return
+  const currentUrl = normalizeAllowedOpalUrl(location.href)
+  if (!currentUrl) return
 
   const title =
     document.title.replace(/ [-\u2013\u2014] .*$/, '').trim() || document.querySelector('h1')?.textContent?.trim() || ''
@@ -37,8 +39,8 @@ export async function indexCurrentOpalPage(): Promise<void> {
   const breadcrumbs = parseBreadcrumbs(document)
   const breadcrumbText = breadcrumbs.map((crumb) => crumb.title).join(' ')
   const courseId =
-    breadcrumbs.length > 0 ? extractCourseIdFromUrl(breadcrumbs[0].url) : extractCourseIdFromUrl(location.href)
-  const currentId = urlToOpalSearchId(location.href)
+    breadcrumbs.length > 0 ? extractCourseIdFromUrl(breadcrumbs[0].url) : extractCourseIdFromUrl(currentUrl)
+  const currentId = urlToOpalSearchId(currentUrl)
   const breadcrumbNodes = breadcrumbs.map((crumb, index): OpalSearchNode => {
     const id = urlToOpalSearchId(crumb.url)
     return {
@@ -58,18 +60,18 @@ export async function indexCurrentOpalPage(): Promise<void> {
   const currentNode: OpalSearchNode = {
     id: currentId,
     title,
-    url: location.href,
-    type: inferNodeType(location.href),
+    url: currentUrl,
+    type: inferNodeType(currentUrl),
     courseId,
     parentId: parentBreadcrumb?.id || null,
     lastVisited: Date.now(),
     visitCount: 1,
-    fileExtension: inferExtensionFromUrl(location.href),
+    fileExtension: inferExtensionFromUrl(currentUrl),
     source: 'user',
     searchText: breadcrumbText
   }
 
-  await upsertGraphNodes([...breadcrumbNodes, currentNode])
+  await upsertOpalSearchNodes([...breadcrumbNodes, currentNode])
   await indexVisibleFiles(document, currentNode, 'user')
 }
 
@@ -81,7 +83,7 @@ export async function bootstrapCoursesFromStorage(): Promise<void> {
 
   for (const course of courses) {
     const title = course.title || course.name || ''
-    const url = course.href || course.link || ''
+    const url = normalizeAllowedOpalUrl(course.href || course.link || '') || ''
     const id = urlToOpalSearchId(url)
     if (!title || !url || seen.has(id)) continue
     seen.add(id)
@@ -99,7 +101,7 @@ export async function bootstrapCoursesFromStorage(): Promise<void> {
     })
   }
 
-  await upsertGraphNodes(nodes)
+  await upsertOpalSearchNodes(nodes)
 }
 
 export async function maybeRunActiveIndexing(): Promise<void> {
@@ -136,7 +138,8 @@ export async function maybeRunActiveIndexing(): Promise<void> {
 export async function checkAndHighlightIndexedFile(): Promise<void> {
   const { opalSmartSearchHighlight } = await chrome.storage.local.get(['opalSmartSearchHighlight'])
   const intent = opalSmartSearchHighlight as { title: string; url: string } | undefined
-  if (!intent) return
+  const targetUrl = intent ? normalizeAllowedOpalUrl(intent.url) : null
+  if (!intent || !targetUrl) return
 
   await chrome.storage.local.remove(['opalSmartSearchHighlight'])
 
@@ -145,7 +148,7 @@ export async function checkAndHighlightIndexedFile(): Promise<void> {
     if (byName && applyHighlight(byName)) return true
 
     try {
-      const targetPath = new URL(intent.url).pathname
+      const targetPath = new URL(targetUrl).pathname
       for (const anchor of Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href]'))) {
         try {
           if (new URL(anchor.href).pathname === targetPath && applyHighlight(anchor)) return true
@@ -164,6 +167,9 @@ export async function checkAndHighlightIndexedFile(): Promise<void> {
 }
 
 async function indexCourseViaIframe(courseUrl: string): Promise<void> {
+  const normalizedCourseUrl = normalizeAllowedOpalUrl(courseUrl)
+  if (!normalizedCourseUrl) return
+
   const iframe = document.createElement('iframe')
   iframe.style.cssText =
     'position:fixed;width:800px;height:600px;border:0;opacity:0;pointer-events:none;left:-9999px;top:-9999px;'
@@ -172,18 +178,18 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
   document.body.appendChild(iframe)
 
   try {
-    iframe.src = courseUrl
+    iframe.src = normalizedCourseUrl
     if (!(await waitForLoad(iframe, COURSE_LOAD_TIMEOUT_MS))) return
 
     const doc = iframe.contentDocument
     if (!doc) return
 
-    const courseId = extractCourseIdFromUrl(courseUrl)
+    const courseId = extractCourseIdFromUrl(normalizedCourseUrl)
     const pageTitle = doc.title.replace(/ [-\u2013\u2014] .*$/, '').trim()
     const courseNode: OpalSearchNode = {
-      id: urlToOpalSearchId(courseUrl),
-      title: pageTitle || courseUrl,
-      url: courseUrl,
+      id: urlToOpalSearchId(normalizedCourseUrl),
+      title: pageTitle || normalizedCourseUrl,
+      url: normalizedCourseUrl,
       type: 'course',
       courseId,
       parentId: null,
@@ -192,10 +198,10 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
       source: 'active'
     }
     if (pageTitle) {
-      await upsertGraphNodes([courseNode])
+      await upsertOpalSearchNodes([courseNode])
     }
 
-    const sections = findMaterialSectionLinks(doc, courseUrl).slice(0, MAX_SECTIONS_PER_COURSE)
+    const sections = findMaterialSectionLinks(doc, normalizedCourseUrl).slice(0, MAX_SECTIONS_PER_COURSE)
     for (const section of sections) {
       iframe.src = section.url
       if (!(await waitForLoad(iframe, SECTION_LOAD_TIMEOUT_MS))) continue
@@ -214,7 +220,7 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
         searchText: pageTitle
       }
 
-      await upsertGraphNodes([sectionNode])
+      await upsertOpalSearchNodes([sectionNode])
       await indexVisibleFiles(iframe.contentDocument, sectionNode, 'active')
       await wait(300)
     }
@@ -245,8 +251,8 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
   }
 
   for (const anchor of Array.from(doc.querySelectorAll<HTMLAnchorElement>('a[data-file-name], a[href]'))) {
-    const href = anchor.href
-    if (!href || href.startsWith('javascript:')) continue
+    const href = normalizeAllowedOpalUrl(anchor.href)
+    if (!href) continue
 
     const row = anchor.closest('tr')
     const icon = row?.querySelector<HTMLElement>('span.fonticon')
@@ -291,17 +297,15 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
     })
   }
 
-  await upsertGraphNodes(nodes)
+  await upsertOpalSearchNodes(nodes)
 }
 
 function parseBreadcrumbs(doc: Document): BreadcrumbEntry[] {
   return Array.from(
     doc.querySelectorAll<HTMLAnchorElement>('.o_breadcrumb a, nav.breadcrumb a, [class*="breadcrumb"] a')
   )
-    .map((anchor) => ({ title: anchor.textContent?.trim() || '', url: anchor.href }))
-    .filter(
-      (entry) => entry.title && entry.url && !entry.url.includes('/opal/home') && !entry.url.startsWith('javascript:')
-    )
+    .map((anchor) => ({ title: anchor.textContent?.trim() || '', url: normalizeAllowedOpalUrl(anchor.href) || '' }))
+    .filter((entry) => entry.title && entry.url && !entry.url.includes('/opal/home'))
 }
 
 function findMaterialSectionLinks(doc: Document, courseUrl: string): { url: string; title: string }[] {
@@ -311,10 +315,13 @@ function findMaterialSectionLinks(doc: Document, courseUrl: string): { url: stri
   const links: { url: string; title: string }[] = []
 
   const add = (url: string, title: string) => {
-    const key = url.split('?')[0].replace(/\/$/, '')
+    const safeUrl = normalizeAllowedOpalUrl(url)
+    if (!safeUrl) return
+
+    const key = safeUrl.split('?')[0].replace(/\/$/, '')
     if (seen.has(key)) return
     seen.add(key)
-    links.push({ url, title: title || key })
+    links.push({ url: safeUrl, title: title || key })
   }
 
   for (const anchor of Array.from(doc.querySelectorAll<HTMLAnchorElement>('a[href]'))) {

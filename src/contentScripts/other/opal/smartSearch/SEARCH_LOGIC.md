@@ -12,6 +12,10 @@ The important idea is that the stored index is not just a bag of text. It rememb
 
 Passive indexing writes the current OPAL page and its breadcrumbs as a parent chain. Visible folders and files are attached below the current page node. Active indexing uses the same shape: the course is the root, visited CourseNode pages become folders, and files found inside them become children.
 
+The OPAL content script does not open the search IndexedDB directly. It sends sanitized graph nodes to the extension background script, and the background script owns IndexedDB writes, reads, search requests, stats, and clearing. This keeps the local index in the extension origin, so the settings page and the OPAL page operate on the same database.
+
+Before a node is written, TUfast validates the URL against a central OPAL allowlist. Indexed targets must be `https://bildungsportal.sachsen.de/opal/...`. The background script validates again before persisting or returning search results, and the command palette validates once more before navigation. External, `data:`, `blob:`, protocol-relative, and malformed URLs are not stored or opened by Smart Search.
+
 This means deep OPAL structures work naturally:
 
 ```text
@@ -54,4 +58,4 @@ Subject-specific aliases are generated from real indexed names. For example, `Te
 
 ## Privacy
 
-All indexed data stays in the browser's local IndexedDB. There is no backend, no server-side search, and no OPAL write operation.
+All indexed data stays in the extension-owned browser IndexedDB. There is no backend, no server-side search, and no OPAL write operation.
