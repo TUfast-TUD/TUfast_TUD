@@ -24,14 +24,14 @@ Steps to contribute:
 After developing:
 
 8. Run `npm run test` locally before pushing code. This will also check if your code is formatted correctly. You can use [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to automatically format your code (recommended) or use `npm run prettier:fix`. (See also below.) Wrong formatting will result in failing CI on GitHub!
-9. **Increase the version number in the `manifest*.json` files according to [SemVer](https://semver.org/). An increase in version number is strictly required for new TUfast releases!**
+9. **Increase the version number in `package.json` according to [SemVer](https://semver.org/). The version number will be automatically copied over to the manifest*.json file during build. An increase in version number is strictly required for new TUfast releases!**
 10. Create a pull request against `main`.
 11. Await our review.
 
 **Note:** as a project member you can also directly work in this repo directly and manage PRs, making the contribution process easier.
 
 ## Used frameworks
-- **Build tool**: [Snowpack](https://www.snowpack.dev/). Run `npm run dev` to compile sass and ts files.
+- **Build tool**: [Vite](https://vite.dev/). Run `npm run dev` to compile sass and ts files.
 - **CSS-Preprocessor**: We are using [SASS](https://sass-lang.com/).
 - **Code style and linting**: We are using ESlint and prettier. Run `npm run test` to check your code style and linting before pushing code. Wrong formatting will result in a failing CI. You should configure your editor to automatically format on save with prettier for which VSCode provides [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 

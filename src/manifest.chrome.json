@@ -1,6 +1,6 @@
 {
   "name": "TUfast TU Dresden",
-  "version": "8.3.0.1",
+  "_comment": "The version number is populated during build time, please adjust version number in package.json",
   "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
   "permissions": ["storage", "system.cpu", "alarms"],
   "optional_permissions": ["tabs", "notifications", "cookies", "declarativeNetRequestWithHostAccess"],
@@ -221,7 +221,8 @@
     {
       "resources": [
         "contentScripts/forward/searchEngines/common.js",
-        "contentScripts/forward/searchEngines/sites.json*"
+        "contentScripts/forward/searchEngines/sites.json*",
+        "vite/pkg/*"
       ],
       "matches": [
         "https://www.startpage.com/*",
@@ -236,7 +237,7 @@
       ]
     },
     {
-      "resources": ["contentScripts/other/hisqis/*", "snowpack/pkg/*"],
+      "resources": ["contentScripts/other/hisqis/*", "vite/pkg/*"],
       "matches": ["https://qis.dez.tu-dresden.de/*"]
     },
     {

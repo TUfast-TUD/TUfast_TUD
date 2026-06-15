@@ -1,4 +1,3 @@
 /src/thirdParty/
 node_modules
 build
-snowpack.config.js

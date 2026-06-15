@@ -9,6 +9,9 @@ const cookieSettings: CookieSettings = {
   usesIdp: true
 }
 
+/** Same entry as search forward (`sites.json`); avoids `javascript:` hrefs blocked by OPAL CSP. */
+const OPAL_SHIB_LOGIN_URL = 'https://bildungsportal.sachsen.de/opal/shiblogin?0'
+
 ;(async () => {
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
@@ -48,7 +51,22 @@ const cookieSettings: CookieSettings = {
     }
 
     clickLogin() {
-      ;(document.querySelector('a[title="Login"]') as HTMLAnchorElement | null)?.click()
+      const link = document.querySelector('a[title="Login"]') as HTMLAnchorElement | null
+      if (!link) return
+
+      const rawHref = link.getAttribute('href')?.trim() ?? ''
+      const isBlockedHref =
+        !rawHref ||
+        rawHref === '#' ||
+        rawHref.toLowerCase().startsWith('javascript:') ||
+        link.protocol === 'javascript:'
+
+      if (isBlockedHref) {
+        window.location.assign(OPAL_SHIB_LOGIN_URL)
+        return
+      }
+
+      window.location.assign(link.href)
     }
 
     async loginFieldsAvailable(): Promise<boolean | LoginFields> {

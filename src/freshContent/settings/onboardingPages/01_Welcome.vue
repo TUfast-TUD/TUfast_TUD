@@ -1,28 +1,44 @@
 <template>
   <div class="onboarding-inner-info">
-    <lottie-player
-      :key="lottieSrc"
-      :src="lottieSrc"
-      background="transparent"
-      speed="1"
-      style="height: 340px"
-      loop
-      autoplay
-    >
-    </lottie-player>
+    <div ref="animationContainer" class="onboarding-animation"></div>
     <h3>Dein Produktivitätstool für die TU Dresden</h3>
     <p class="txt-help">mit TUfast sparst du pro Semester<br />bis zu 90 Minuten und bis zu 2000 Klicks</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import lottie from 'lottie-web/build/player/lottie_light_canvas'
+
+import onboardingRocketDark from '../../../assets/settings/onboarding-rocket-fordark.json'
+import onboardingRocketLight from '../../../assets/settings/onboarding-rocket-forlight.json'
 
 export default defineComponent({
   setup() {
+    const animationContainer = ref<HTMLDivElement | null>(null)
     const isDarkMode = ref(!document.documentElement.classList.contains('light'))
+    const animation = ref<any>(null)
 
     let observer: MutationObserver | null = null
+
+    const renderAnimation = async () => {
+      await nextTick()
+
+      if (!animationContainer.value) return
+
+      animation.value?.destroy()
+      animation.value = lottie.loadAnimation({
+        container: animationContainer.value,
+        renderer: 'canvas',
+        loop: true,
+        autoplay: true,
+        animationData: isDarkMode.value ? onboardingRocketDark : onboardingRocketLight,
+        rendererSettings: {
+          clearCanvas: true,
+          progressiveLoad: true
+        }
+      })
+    }
 
     onMounted(() => {
       observer = new MutationObserver(() => {
@@ -34,21 +50,21 @@ export default defineComponent({
         attributes: true,
         attributeFilter: ['class']
       })
+
+      renderAnimation()
+    })
+
+    watch(isDarkMode, () => {
+      renderAnimation()
     })
 
     onUnmounted(() => {
       observer?.disconnect()
-    })
-
-    const lottieSrc = computed(() => {
-      const src = isDarkMode.value
-        ? '/assets/settings/onboarding-rocket-fordark.json'
-        : '/assets/settings/onboarding-rocket-forlight.json'
-      return src
+      animation.value?.destroy()
     })
 
     return {
-      lottieSrc
+      animationContainer
     }
   }
 })
@@ -60,4 +76,13 @@ export default defineComponent({
     display: flex
     flex-direction: column
     text-align: center
+
+.onboarding-animation
+    height: 340px
+    width: 100%
+
+    :deep(canvas)
+        display: block
+        height: 100%
+        width: 100%
 </style>

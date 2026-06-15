@@ -4,3 +4,4 @@ src/assets/settings/theme_lottie.json
 
 # Exceptions
 src/freshContent/starRating.js
+*.md

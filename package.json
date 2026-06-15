@@ -1,6 +1,6 @@
 {
   "name": "tufast_tud",
-  "version": "7.0.0",
+  "version": "8.0.3.2",
   "description": "Browser Extension for higher productivity with TU Dresden IT-Services 🚀",
   "main": "index.js",
   "scripts": {
@@ -11,10 +11,12 @@
     "prettier:fix": "npm run prettier -- --write",
     "test:fix": "npm run prettier:fix && npm run lint:fix",
     "test": "npm run ts-check && npm run lint && npm run prettier && npm run build",
-    "dev": "snowpack build --watch",
-    "build": "snowpack build",
+    "dev": "vite build --watch",
+    "build": "vite build",
     "useChrome": "cp src/manifest.chrome.json src/manifest.json",
-    "useFF": "cp src/manifest.firefox.json src/manifest.json"
+    "useFF": "cp src/manifest.firefox.json src/manifest.json",
+    "checkVersionBump": "node scripts/check-version-bump.mjs",
+    "syncVersion": "node scripts/sync-version.mjs"
   },
   "repository": {
     "type": "git",
@@ -41,14 +43,13 @@
   },
   "homepage": "https://github.com/TUfast-TUD/TUfast_TUD#readme",
   "devDependencies": {
-    "@snowpack/plugin-sass": "^1.4.0",
-    "@snowpack/plugin-vue": "^2.6.2",
     "@types/chart.js": "^2.9.37",
     "@types/chrome": "^0.0.184",
     "@types/firefox": "^0.0.31",
     "@types/simple-datatables": "^3.2.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "@vitejs/plugin-vue": "^6.0.6",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^16.0.3",
@@ -58,13 +59,14 @@
     "eslint-plugin-vue": "^9.4.0",
     "prettier": "3.2.4",
     "sass": "^1.42.1",
-    "snowpack": "^3.8.8",
-    "typescript": "^4.4.3"
+    "tslib": "^2.8.1",
+    "typescript": "^4.4.3",
+    "vite": "^8.0.10"
   },
   "dependencies": {
-    "@lottiefiles/lottie-player": "^2.0.12",
     "@tabler/icons-vue": "^3.35.0",
     "chart.js": "^3.8.0",
+    "lottie-web": "^5.13.0",
     "simple-datatables": "^3.2.0",
     "vue": "^3.2.22"
   }
