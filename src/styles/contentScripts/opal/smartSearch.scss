@@ -12,6 +12,31 @@
   font-family: Helvetica, sans-serif;
 }
 
+#tufastSmartSearchTrigger {
+  width: 230px;
+  max-width: 30vw;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border-primary, rgba(255, 255, 255, 0.24));
+  border-radius: 4px;
+  background: var(--color-bg-secondary, rgba(255, 255, 255, 0.08));
+  color: var(--color-text-primary, inherit);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  outline: 0;
+}
+
+#tufastSmartSearchTrigger:hover,
+#tufastSmartSearchTrigger:focus {
+  background: var(--color-btn-active-bg, rgba(255, 255, 255, 0.14));
+}
+
+#tufastSmartSearchTrigger::placeholder {
+  color: var(--color-text-secondary, currentColor);
+  opacity: 0.9;
+}
+
 .tufast-smart-search__panel {
   width: min(620px, 100%);
   max-height: min(620px, 76vh);
