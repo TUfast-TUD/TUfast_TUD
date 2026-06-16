@@ -77,6 +77,12 @@
       ]
     },
     {
+      "js": ["contentScripts/other/opal/smartSearch/main.js"],
+      "css": ["styles/contentScripts/opal/smartSearch.css"],
+      "run_at": "document_idle",
+      "matches": ["https://bildungsportal.sachsen.de/opal/*"]
+    },
+    {
       "js": ["contentScripts/login/matrix.js"],
       "run_at": "document_idle",
       "matches": ["https://matrix.tu-dresden.de/*"],
@@ -239,6 +245,14 @@
     {
       "resources": ["contentScripts/other/hisqis/*", "vite/pkg/*"],
       "matches": ["https://qis.dez.tu-dresden.de/*"]
+    },
+    {
+      "resources": [
+        "contentScripts/other/opal/smartSearch/*",
+        "contentScripts/other/opal/smartSearch/searchEngine/*",
+        "vite/pkg/minisearch.js"
+      ],
+      "matches": ["https://bildungsportal.sachsen.de/*"]
     },
     {
       "resources": ["styles/contentScripts/selma/*"],
