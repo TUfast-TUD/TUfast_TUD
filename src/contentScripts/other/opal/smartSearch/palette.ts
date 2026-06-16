@@ -46,7 +46,7 @@ export function bindOpalSmartSearchPalette(): void {
   document.addEventListener(
     'keydown',
     (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      if (isSmartSearchShortcut(event)) {
         event.preventDefault()
         event.stopPropagation()
         openOpalSmartSearchPalette()
@@ -56,7 +56,7 @@ export function bindOpalSmartSearchPalette(): void {
   )
 
   chrome.runtime.onMessage.addListener((request) => {
-    // Background commands open the same dialog as the header and Ctrl+K
+    // Background commands open the same dialog as the header and local shortcuts
     if (request.cmd === 'open_opal_smart_search') {
       openOpalSmartSearchPalette()
     }
@@ -73,6 +73,11 @@ export function bindOpalSmartSearchPalette(): void {
     childList: true,
     subtree: true
   })
+}
+
+function isSmartSearchShortcut(event: KeyboardEvent): boolean {
+  const key = event.key.toLowerCase()
+  return key === 'k' && (event.altKey || event.ctrlKey || event.metaKey)
 }
 
 function injectHeaderTrigger(): void {
@@ -92,7 +97,7 @@ function injectHeaderTrigger(): void {
   trigger.title = OPAL_SMART_SEARCH_STRINGS.openSearchTitle
   trigger.setAttribute('aria-label', OPAL_SMART_SEARCH_STRINGS.openSearchTitle)
 
-  // Open the same dialog as Ctrl+K
+  // Open the same dialog as the keyboard shortcuts
   const open = (event: Event) => {
     event.preventDefault()
     trigger.blur()
