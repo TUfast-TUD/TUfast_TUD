@@ -30,7 +30,7 @@ When OPAL exposes a downloadable file through a folder-like URL, Smart Search tr
 
 MiniSearch is used only to find candidate node IDs. It indexes normalized title tokens, path tokens, generated aliases, and file extensions. TUfast does not accept MiniSearch's order as final ranking.
 
-FlexSearch remains only in the standalone lab for comparison. Orama is not used in the extension.
+FlexSearch and Orama are not used in the extension.
 
 ## Ranking
 
