@@ -1,8 +1,8 @@
 import { getIndexedOpalSearchNode, searchIndexedOpalNodes } from './messages'
 import { extractCourseIdFromUrl } from './opalParser'
-import { OPAL_SMART_SEARCH_HIGHLIGHT_KEY } from './settings'
-import type { OpalSearchNode, OpalSearchResult } from './types'
-import { normalizeAllowedOpalUrl } from './urlPolicy'
+import { OPAL_SMART_SEARCH_HIGHLIGHT_KEY } from '../../../../modules/opalSmartSearch/settings'
+import type { OpalSearchNode, OpalSearchResult } from '../../../../modules/opalSmartSearch/types'
+import { normalizeAllowedOpalUrl } from '../../../../modules/opalSmartSearch/urlPolicy'
 
 const ACTIONS: OpalSearchResult[] = [
   {
@@ -38,6 +38,7 @@ const ACTIONS: OpalSearchResult[] = [
 let registered = false
 
 export function bindOpalSmartSearchPalette(): void {
+  // Register only once per OPAL page
   if (registered) return
   registered = true
 
@@ -47,16 +48,63 @@ export function bindOpalSmartSearchPalette(): void {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
         event.stopPropagation()
-        openPalette()
+        openOpalSmartSearchPalette()
       }
     },
     true
   )
+
+  injectHeaderTrigger()
+
+  // OPAL changes parts of the header without a full reload
+  const observer = new MutationObserver(() => {
+    injectHeaderTrigger()
+  })
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
 }
 
-function openPalette(): void {
+function injectHeaderTrigger(): void {
+  // Check if search trigger already exists
+  if (document.getElementById('tufastSmartSearchTrigger')) return
+
+  // Check if TUfast header exists
+  const header = document.querySelector('.tufast-opal-header')
+  if (!header) return
+
+  // Create search-looking trigger
+  const trigger = document.createElement('input')
+  trigger.id = 'tufastSmartSearchTrigger'
+  trigger.type = 'text'
+  trigger.readOnly = true
+  trigger.placeholder = '\uD83D\uDD0E TUfast Smart Search (Ctrl+K)'
+  trigger.title = 'TUfast Smart Search öffnen'
+  trigger.setAttribute('aria-label', 'TUfast Smart Search öffnen')
+
+  // Open the same dialog as Ctrl+K
+  const open = (event: Event) => {
+    event.preventDefault()
+    trigger.blur()
+    openOpalSmartSearchPalette()
+  }
+
+  trigger.addEventListener('click', open)
+  trigger.addEventListener('focus', open)
+  trigger.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') open(event)
+  })
+
+  header.appendChild(trigger)
+}
+
+export function openOpalSmartSearchPalette(): void {
+  // Check if palette is already open
   if (document.getElementById('tufast-smart-search')) return
 
+  // Create overlay
   const overlay = document.createElement('div')
   overlay.id = 'tufast-smart-search'
   overlay.innerHTML = `
@@ -77,6 +125,7 @@ function openPalette(): void {
 
   document.body.appendChild(overlay)
 
+  // Get palette elements
   const input = overlay.querySelector<HTMLInputElement>('#tufast-smart-search-input')!
   const resultsElement = overlay.querySelector<HTMLElement>('#tufast-smart-search-results')!
   const activeCourseId = extractCourseIdFromUrl(location.href)
@@ -91,6 +140,7 @@ function openPalette(): void {
   }
 
   const update = () => {
+    // Small debounce while the user is typing
     window.clearTimeout(debounce)
     debounce = window.setTimeout(async () => {
       const query = input.value.trim()
@@ -126,6 +176,7 @@ function openPalette(): void {
 
     close()
 
+    // Files are opened through their folder so OPAL can highlight them
     if (selected.node.type === 'file' && selected.node.parentId) {
       const parent = await getIndexedOpalSearchNode(selected.node.parentId)
       const parentUrl = parent ? normalizeAllowedOpalUrl(parent.url) : null

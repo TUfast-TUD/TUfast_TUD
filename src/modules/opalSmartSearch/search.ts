@@ -9,10 +9,13 @@ let cachedAdapter: CandidateAdapter | null = null
 let cachedSignature = ''
 
 export async function searchOpalNodes(rawQuery: string, courseId = '', limit = 8): Promise<OpalSearchResult[]> {
+  // Parse query and skip empty searches
   const parsed = parseOpalSearchQuery(rawQuery)
   if (!parsed.normalized && !parsed.extensionFilter) return []
 
   const nodes = await getAllOpalSearchNodes()
+
+  // MiniSearch only finds candidates. Our scorer decides the order.
   const adapter = ensureCandidateAdapter(nodes)
   const candidateIds = adapter.candidateIds(parsed)
   const results = scoreCandidates({
@@ -27,6 +30,7 @@ export async function searchOpalNodes(rawQuery: string, courseId = '', limit = 8
 }
 
 function ensureCandidateAdapter(nodes: OpalSearchNode[]): CandidateAdapter {
+  // Rebuild MiniSearch only when the local index changed
   const signature = nodes
     .map((node) => `${node.id}:${node.indexedAt || node.lastVisited || 0}`)
     .sort()

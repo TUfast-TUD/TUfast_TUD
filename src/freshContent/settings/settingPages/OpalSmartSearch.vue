@@ -8,6 +8,7 @@
     TUfast speichert Kurse, Ordner und Dateilinks nur lokal in deinem Browser. Die Suche sendet keine Daten an einen
     Server und schreibt nichts in OPAL.
   </p>
+  <p class="max-line p-margin txt-help">Entwickelt von Just8it.</p>
 
   <div class="smart-search-status">
     <div>
@@ -26,12 +27,17 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref, watch } from 'vue'
 
+// types
+import type { OpalSmartSearchSettings } from '../../../modules/opalSmartSearch/types'
+
+// components
 import Setting from '../components/Setting.vue'
-import {
-  DEFAULT_SMART_SEARCH_SETTINGS,
-  OPAL_SMART_SEARCH_SETTINGS_KEY
-} from '../../../contentScripts/other/opal/smartSearch/settings'
-import type { OpalSmartSearchSettings } from '../../../contentScripts/other/opal/smartSearch/types'
+
+const DEFAULT_SMART_SEARCH_SETTINGS: OpalSmartSearchSettings = {
+  enabled: true,
+  passiveIndexing: true,
+  activeIndexing: false
+}
 
 export default defineComponent({
   components: {
@@ -40,17 +46,17 @@ export default defineComponent({
   setup() {
     const enabled = ref(true)
     const passiveIndexing = ref(true)
-    const activeIndexing = ref(true)
+    const activeIndexing = ref(false)
     const stats = ref({ count: 0, lastIndexedAt: 0 })
     let ready = false
 
     const load = async () => {
       const stored = await chrome.storage.local.get({
-        [OPAL_SMART_SEARCH_SETTINGS_KEY]: DEFAULT_SMART_SEARCH_SETTINGS
+        opalSmartSearchSettings: DEFAULT_SMART_SEARCH_SETTINGS
       })
       const settings = {
         ...DEFAULT_SMART_SEARCH_SETTINGS,
-        ...(stored[OPAL_SMART_SEARCH_SETTINGS_KEY] as Partial<OpalSmartSearchSettings>)
+        ...(stored.opalSmartSearchSettings as Partial<OpalSmartSearchSettings>)
       }
 
       enabled.value = settings.enabled
@@ -63,7 +69,7 @@ export default defineComponent({
     const save = async () => {
       if (!ready) return
       await chrome.storage.local.set({
-        [OPAL_SMART_SEARCH_SETTINGS_KEY]: {
+        opalSmartSearchSettings: {
           enabled: enabled.value,
           passiveIndexing: passiveIndexing.value,
           activeIndexing: activeIndexing.value

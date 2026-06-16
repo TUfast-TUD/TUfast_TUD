@@ -9,14 +9,11 @@ import {
   getOpalSearchIndexStats,
   getOpalSearchNode,
   upsertGraphNodes
-} from './contentScripts/other/opal/smartSearch/indexDb'
-import { searchOpalNodes } from './contentScripts/other/opal/smartSearch/search'
-import {
-  DEFAULT_SMART_SEARCH_SETTINGS,
-  OPAL_SMART_SEARCH_SETTINGS_KEY
-} from './contentScripts/other/opal/smartSearch/settings'
-import type { OpalSearchNode } from './contentScripts/other/opal/smartSearch/types'
-import { isAllowedOpalUrl, sanitizeOpalSearchNodes } from './contentScripts/other/opal/smartSearch/urlPolicy'
+} from './modules/opalSmartSearch/indexDb'
+import { searchOpalNodes } from './modules/opalSmartSearch/search'
+import { DEFAULT_SMART_SEARCH_SETTINGS } from './modules/opalSmartSearch/settings'
+import type { OpalSearchNode } from './modules/opalSmartSearch/types'
+import { isAllowedOpalUrl, sanitizeOpalSearchNodes } from './modules/opalSmartSearch/urlPolicy'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
 
@@ -37,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
         improveSelma: true,
-        [OPAL_SMART_SEARCH_SETTINGS_KEY]: DEFAULT_SMART_SEARCH_SETTINGS
+        opalSmartSearchSettings: DEFAULT_SMART_SEARCH_SETTINGS
       })
       await openSettingsPage('first_visit')
       break
@@ -53,7 +50,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'studiengang',
         'hisqisPimpedTable',
         'improveSelma',
-        OPAL_SMART_SEARCH_SETTINGS_KEY,
+        'opalSmartSearchSettings',
         'savedClickCounter',
         'saved_click_counter', // legacy
         'Rocket', // legacy
@@ -76,8 +73,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
-      if (typeof currentSettings[OPAL_SMART_SEARCH_SETTINGS_KEY] === 'undefined') {
-        updateObj[OPAL_SMART_SEARCH_SETTINGS_KEY] = DEFAULT_SMART_SEARCH_SETTINGS
+      if (typeof currentSettings.opalSmartSearchSettings === 'undefined') {
+        updateObj.opalSmartSearchSettings = DEFAULT_SMART_SEARCH_SETTINGS
       }
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
@@ -333,13 +330,14 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             }
           })
         }),
-        new Promise<boolean>((resolve) => {
-          chrome.storage.local.get([OPAL_SMART_SEARCH_SETTINGS_KEY], (result) => {
-            resolve((result[OPAL_SMART_SEARCH_SETTINGS_KEY] ?? DEFAULT_SMART_SEARCH_SETTINGS).enabled)
-          })
-        }),
         // User data check
-        credentials.userDataExists(request.platform)
+        credentials.userDataExists(request.platform),
+        // 9 - Smart Search (has user activated OPAL Smart Search?)
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get(['opalSmartSearchSettings'], (result) => {
+            resolve((result.opalSmartSearchSettings ?? DEFAULT_SMART_SEARCH_SETTINGS).enabled)
+          })
+        })
         // Language (which language has user selected?)
         // missing - will add when language is implemented
       ]).then(
@@ -352,8 +350,8 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           selmaStatus, // 5
           seCommandsStatus, // 6
           faculty, // 7
-          smartSearchStatus, // 8
-          userDataExists // 9
+          userDataExists, // 8
+          smartSearchStatus // 9
         ]) => {
           sendResponse({
             otp: totpExists || iotpExists,

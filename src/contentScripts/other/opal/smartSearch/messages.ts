@@ -1,4 +1,4 @@
-import type { OpalSearchNode, OpalSearchResult } from './types'
+import type { OpalSearchNode, OpalSearchResult } from '../../../../modules/opalSmartSearch/types'
 
 export function upsertOpalSearchNodes(nodes: OpalSearchNode[]): Promise<boolean> {
   return chrome.runtime.sendMessage({ cmd: 'opal_smart_search_upsert_nodes', nodes })

@@ -21,6 +21,7 @@ export function scoreCandidates({
   const now = Date.now()
   const scored: OpalSearchResult[] = []
 
+  // Score all candidates found by MiniSearch
   for (const candidateId of candidates) {
     const node = nodeById.get(candidateId)
     if (!node || !matchesFilters(node, parsedQuery)) continue
@@ -40,8 +41,7 @@ export function scoreCandidates({
       const titleNumbers = node.titleNumbers || []
       const pathNumbers = node.pathNumbers || []
 
-      // OPAL folder titles often contain date ranges. Treat the first title number
-      // as the structural number, and later title numbers as weaker date-like evidence.
+      // First title number is usually the exercise/sheet number
       if (primaryTitleNumber === number) {
         score += 42
         explanation.push(`primary title number ${number} +42`)

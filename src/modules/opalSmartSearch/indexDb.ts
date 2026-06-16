@@ -8,6 +8,7 @@ const STORE_NAME = 'nodes'
 let dbPromise: Promise<IDBDatabase> | null = null
 
 export function openOpalSearchDb(): Promise<IDBDatabase> {
+  // Reuse the same db connection while the background script is alive
   if (dbPromise) return dbPromise
 
   dbPromise = new Promise((resolve, reject) => {
@@ -43,6 +44,7 @@ export async function upsertGraphNode(node: OpalSearchNode): Promise<void> {
 }
 
 export async function upsertGraphNodes(nodesToUpsert: OpalSearchNode[]): Promise<void> {
+  // Only store complete search nodes
   const validNodes = nodesToUpsert.filter((node) => node.id && node.title && node.url)
   if (validNodes.length === 0) return
 
@@ -71,8 +73,7 @@ export async function upsertGraphNodes(nodesToUpsert: OpalSearchNode[]): Promise
     byId.set(merged.id, merged)
   }
 
-  // Parent and path metadata depend on the whole local tree, so rebuild after each batch.
-  // This also repairs old v1 entries that do not yet have graph fields.
+  // Rebuild the graph after each batch
   await putAllOpalSearchNodes(rebuildGraphFields([...byId.values()]))
 }
 
@@ -82,7 +83,7 @@ export async function getOpalSearchNode(id: string): Promise<OpalSearchNode | un
 
 export async function getAllOpalSearchNodes(): Promise<OpalSearchNode[]> {
   const nodes = await withStore('readonly', (store) => store.getAll())
-  // Keep reads backward compatible with pre-graph IndexedDB entries.
+  // Repair older entries when they are read
   return rebuildGraphFields(nodes)
 }
 

@@ -1,7 +1,7 @@
 import { upsertOpalSearchNodes } from './messages'
 import {
   extractCourseIdFromUrl,
-  extractCourseNodeLinksFromMarkup,
+  extractCourseNodeLinks,
   inferExtensionFromName,
   inferExtensionFromUrl,
   inferNodeType,
@@ -9,16 +9,23 @@ import {
   readBestLinkTitle,
   urlToOpalSearchId
 } from './opalParser'
-import { loadSmartSearchSettings } from './settings'
-import type { OpalSearchNode, OpalStoredCourse } from './types'
-import { normalizeAllowedOpalUrl } from './urlPolicy'
+import { loadSmartSearchSettings } from '../../../../modules/opalSmartSearch/settings'
+import type { OpalSearchNode, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
+import {
+  isIndexableOpalTarget,
+  isOpalUiControlTarget,
+  normalizeAllowedOpalUrl
+} from '../../../../modules/opalSmartSearch/urlPolicy'
 
 const ACTIVE_INDEX_KEY = 'opalSmartSearchActiveIndexRuns'
 const ACTIVE_INDEX_COOLDOWN_MS = 6 * 60 * 60 * 1000
 const MAX_ACTIVE_COURSES_PER_RUN = 3
 const MAX_SECTIONS_PER_COURSE = 16
+const MAX_ACTIVE_DEPTH = 3
+const MAX_ACTIVE_NAVIGATIONS_PER_COURSE = 10
 const COURSE_LOAD_TIMEOUT_MS = 15000
 const SECTION_LOAD_TIMEOUT_MS = 10000
+const FRAME_SETTLE_DELAY_MS = 350
 
 let activeIndexStarted = false
 
@@ -28,11 +35,11 @@ interface BreadcrumbEntry {
 }
 
 export async function indexCurrentOpalPage(): Promise<void> {
+  // Check if current page can be indexed
   const currentUrl = normalizeAllowedOpalUrl(location.href)
   if (!currentUrl) return
 
-  const title =
-    document.title.replace(/ [-\u2013\u2014] .*$/, '').trim() || document.querySelector('h1')?.textContent?.trim() || ''
+  const title = readPageTitle(document)
 
   if (!title || location.pathname.includes('/opal/home')) return
 
@@ -57,6 +64,8 @@ export async function indexCurrentOpalPage(): Promise<void> {
     }
   })
   const parentBreadcrumb = [...breadcrumbNodes].reverse().find((crumb) => crumb.id !== currentId)
+
+  // Index current page and breadcrumb path
   const currentNode: OpalSearchNode = {
     id: currentId,
     title,
@@ -76,6 +85,7 @@ export async function indexCurrentOpalPage(): Promise<void> {
 }
 
 export async function bootstrapCoursesFromStorage(): Promise<void> {
+  // Add already known OPAL courses from the dashboard storage
   const data = await chrome.storage.local.get(['favoriten', 'meine_kurse'])
   const courses = [...readStoredCourses(data.favoriten), ...readStoredCourses(data.meine_kurse)]
   const seen = new Set<string>()
@@ -105,6 +115,7 @@ export async function bootstrapCoursesFromStorage(): Promise<void> {
 }
 
 export async function maybeRunActiveIndexing(): Promise<void> {
+  // Make sure active indexing only starts once per page
   if (activeIndexStarted) return
   activeIndexStarted = true
 
@@ -119,6 +130,7 @@ export async function maybeRunActiveIndexing(): Promise<void> {
     .filter((course) => Date.now() - (cooldowns[course.href || course.link || ''] || 0) > ACTIVE_INDEX_COOLDOWN_MS)
     .slice(0, MAX_ACTIVE_COURSES_PER_RUN)
 
+  // Crawl only a few courses per run
   for (const course of toIndex) {
     const url = course.href || course.link
     if (!url) continue
@@ -136,6 +148,7 @@ export async function maybeRunActiveIndexing(): Promise<void> {
 }
 
 export async function checkAndHighlightIndexedFile(): Promise<void> {
+  // Check if the palette asked us to highlight a file after navigation
   const { opalSmartSearchHighlight } = await chrome.storage.local.get(['opalSmartSearchHighlight'])
   const intent = opalSmartSearchHighlight as { title: string; url: string } | undefined
   const targetUrl = intent ? normalizeAllowedOpalUrl(intent.url) : null
@@ -167,6 +180,7 @@ export async function checkAndHighlightIndexedFile(): Promise<void> {
 }
 
 async function indexCourseViaIframe(courseUrl: string): Promise<void> {
+  // Load course pages in a hidden iframe, so OPAL renders its links
   const normalizedCourseUrl = normalizeAllowedOpalUrl(courseUrl)
   if (!normalizedCourseUrl) return
 
@@ -201,19 +215,44 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
       await upsertOpalSearchNodes([courseNode])
     }
 
-    const sections = findMaterialSectionLinks(doc, normalizedCourseUrl).slice(0, MAX_SECTIONS_PER_COURSE)
-    for (const section of sections) {
+    // Walk through visible course sections with hard limits
+    const queued = new Set<string>([courseNode.id])
+    const visited = new Set<string>()
+    const sectionQueue = enqueueSectionLinks(
+      findMaterialSectionLinks(doc, normalizedCourseUrl),
+      courseNode.id,
+      1,
+      queued
+    )
+    let navigations = 0
+
+    while (
+      sectionQueue.length > 0 &&
+      visited.size < MAX_SECTIONS_PER_COURSE &&
+      navigations < MAX_ACTIVE_NAVIGATIONS_PER_COURSE
+    ) {
+      const section = sectionQueue.shift()
+      if (!section) break
+      const sectionUrl = normalizeAllowedOpalUrl(section.url)
+      if (!sectionUrl) continue
+      const sectionId = urlToOpalSearchId(sectionUrl)
+      if (!sectionId || visited.has(sectionId)) continue
+      visited.add(sectionId)
+
       iframe.src = section.url
       if (!(await waitForLoad(iframe, SECTION_LOAD_TIMEOUT_MS))) continue
       if (!iframe.contentDocument) continue
+      navigations += 1
+
+      await wait(FRAME_SETTLE_DELAY_MS)
 
       const sectionNode: OpalSearchNode = {
-        id: urlToOpalSearchId(section.url),
-        title: section.title,
-        url: section.url,
+        id: sectionId,
+        title: readSectionTitle(iframe.contentDocument, section.title),
+        url: sectionUrl,
         type: 'folder',
         courseId,
-        parentId: courseNode.id,
+        parentId: section.parentId,
         lastVisited: Date.now(),
         visitCount: 1,
         source: 'active',
@@ -222,6 +261,18 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
 
       await upsertOpalSearchNodes([sectionNode])
       await indexVisibleFiles(iframe.contentDocument, sectionNode, 'active')
+
+      if (section.depth < MAX_ACTIVE_DEPTH) {
+        const childSections = enqueueSectionLinks(
+          findMaterialSectionLinks(iframe.contentDocument, normalizedCourseUrl),
+          sectionId,
+          section.depth + 1,
+          queued,
+          visited
+        ).slice(0, Math.max(0, MAX_SECTIONS_PER_COURSE - visited.size - sectionQueue.length))
+        sectionQueue.push(...childSections)
+      }
+
       await wait(300)
     }
   } finally {
@@ -230,6 +281,7 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
 }
 
 async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source: 'user' | 'active'): Promise<void> {
+  // Index visible folders first
   const courseId = pageNode.courseId || extractCourseIdFromUrl(pageNode.url)
   const parentId = pageNode.id
   const indexed = new Set<string>()
@@ -250,20 +302,10 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
     })
   }
 
+  // Then index visible files and file-like OPAL links
   for (const anchor of Array.from(doc.querySelectorAll<HTMLAnchorElement>('a[data-file-name], a[href]'))) {
     const href = normalizeAllowedOpalUrl(anchor.href)
     if (!href) continue
-
-    const row = anchor.closest('tr')
-    const icon = row?.querySelector<HTMLElement>('span.fonticon')
-    const isFolder = icon?.classList.contains('icon-folder') || href.toLowerCase().includes('coursenode')
-    const isFile = anchor.hasAttribute('data-file-name') || isDownloadUrl(href, true)
-
-    if (!isFolder && !isFile) continue
-
-    const id = urlToOpalSearchId(href)
-    if (!id || indexed.has(id)) continue
-    indexed.add(id)
 
     const title = readBestLinkTitle(
       {
@@ -276,10 +318,28 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
       href
     )
     if (!title || title.length < 2) continue
+    if (!isIndexableOpalTarget(href) || isOpalUiControlTarget(href, title)) continue
+
+    const row = anchor.closest('tr')
+    const icon = row?.querySelector<HTMLElement>('span.fonticon, i[class*="icon"], .o_icon')
+    const lowerHref = href.toLowerCase()
+    const isFolder =
+      icon?.classList.contains('icon-folder') ||
+      /folder|ordner/i.test(icon?.className || '') ||
+      lowerHref.includes('coursenode') ||
+      lowerHref.includes('/folder/') ||
+      lowerHref.includes('briefcase')
     const titleExtension = inferExtensionFromName(title)
     const fileExtension = inferExtensionFromUrl(href) || titleExtension
-    // OPAL sometimes exposes downloadable files through folder-like CourseNode links.
-    // A file-looking title is a stronger signal than the URL shape.
+    const isFile = Boolean(fileExtension) || anchor.hasAttribute('data-file-name') || isDownloadUrl(href, true)
+
+    if (!isFolder && !isFile) continue
+
+    const id = urlToOpalSearchId(href)
+    if (!id || indexed.has(id)) continue
+    indexed.add(id)
+
+    // OPAL sometimes exposes files through folder-looking URLs
     const type = fileExtension ? 'file' : isFolder ? 'folder' : 'file'
 
     nodes.push({
@@ -308,61 +368,130 @@ function parseBreadcrumbs(doc: Document): BreadcrumbEntry[] {
     .filter((entry) => entry.title && entry.url && !entry.url.includes('/opal/home'))
 }
 
-function findMaterialSectionLinks(doc: Document, courseUrl: string): { url: string; title: string }[] {
+function readPageTitle(doc: Document): string {
+  const heading = doc.querySelector('h1, .o_page_title, [class*="page-title"]')
+  return heading?.textContent?.trim() || doc.title.replace(/ [-\u2013\u2014] .*$/, '').trim() || location.pathname
+}
+
+function readSectionTitle(doc: Document, fallback: string): string {
+  const cleanFallback = cleanIndexedTitle(fallback)
+  if (cleanFallback && cleanFallback.length > 3) return cleanFallback
+
+  const crumb = doc
+    .querySelector<HTMLElement>(
+      '.o_breadcrumb li:last-child, nav.breadcrumb li:last-child, [class*="breadcrumb"] li:last-child'
+    )
+    ?.textContent?.trim()
+
+  return cleanIndexedTitle(crumb || '') || cleanFallback || readPageTitle(doc)
+}
+
+function findMaterialSectionLinks(root: Document | HTMLElement, courseUrl: string): { url: string; title: string }[] {
   const repoId = /\/RepositoryEntry\/(\d+)/i.exec(courseUrl)?.[1] || ''
   const origin = safeOrigin(courseUrl)
   const seen = new Set<string>()
   const links: { url: string; title: string }[] = []
 
+  // Add a section link if it belongs to the current course
   const add = (url: string, title: string) => {
-    const safeUrl = normalizeAllowedOpalUrl(url)
-    if (!safeUrl) return
-
-    const key = safeUrl.split('?')[0].replace(/\/$/, '')
-    if (seen.has(key)) return
-    seen.add(key)
-    links.push({ url: safeUrl, title: title || key })
-  }
-
-  for (const anchor of Array.from(doc.querySelectorAll<HTMLAnchorElement>('a[href]'))) {
-    const raw = anchor.getAttribute('href') || ''
-    if (!raw || raw.startsWith('javascript:')) continue
-
     let fullUrl = ''
     try {
-      fullUrl = new URL(raw, origin).href
+      fullUrl = new URL(url, origin).href
     } catch {
-      continue
+      return
     }
 
-    const lower = fullUrl.toLowerCase()
-    if (repoId && !fullUrl.includes(repoId)) continue
-    if (lower.includes('/folder/') || lower.includes('/briefcase') || lower.includes('coursenode')) {
-      add(fullUrl, anchor.textContent?.trim() || '')
-    }
+    const safeUrl = normalizeAllowedOpalUrl(fullUrl)
+    if (!safeUrl) return
+    if (!isIndexableOpalTarget(safeUrl)) return
+    if (repoId && !safeUrl.includes(`/RepositoryEntry/${repoId}`)) return
+    if (urlToOpalSearchId(safeUrl) === urlToOpalSearchId(courseUrl)) return
+
+    const key = urlToOpalSearchId(safeUrl)
+    if (seen.has(key)) return
+    const cleanTitle = cleanIndexedTitle(title) || key
+    if (isNavigationOnlyTitle(cleanTitle)) return
+    if (isOpalUiControlTarget(safeUrl, cleanTitle)) return
+    seen.add(key)
+    links.push({ url: safeUrl, title: cleanTitle })
   }
 
-  if (repoId) {
-    const courseNodeRe = new RegExp(`RepositoryEntry\\/${repoId}\\/CourseNode\\/(\\d+)`, 'i')
-    for (const anchor of Array.from(doc.querySelectorAll<HTMLAnchorElement>('a[href^="javascript:"]'))) {
-      const raw = anchor.getAttribute('href') || ''
-      const title = anchor.textContent?.trim() || ''
-      let decoded = raw
-      try {
-        decoded = decodeURIComponent(raw)
-      } catch {
-        decoded = raw
-      }
+  for (const anchor of Array.from(root.querySelectorAll<HTMLAnchorElement>('a[href]'))) {
+    const raw = anchor.getAttribute('href') || ''
+    const title = cleanIndexedTitle(
+      readBestLinkTitle(
+        {
+          title: anchor.getAttribute('title') || undefined,
+          'aria-label': anchor.getAttribute('aria-label') || undefined
+        },
+        anchor.textContent || '',
+        raw
+      )
+    )
+    if (!raw) continue
 
-      const match = courseNodeRe.exec(decoded)
-      if (match) add(`${origin}/opal/auth/RepositoryEntry/${repoId}/CourseNode/${match[1]}`, title)
+    if (!raw.startsWith('javascript:')) {
+      const lower = raw.toLowerCase()
+      if (lower.includes('/folder/') || lower.includes('/briefcase') || lower.includes('coursenode')) add(raw, title)
     }
+
+    let decoded = raw
+    try {
+      decoded = decodeURIComponent(raw)
+    } catch {
+      decoded = raw
+    }
+
+    const courseNodeMatch = repoId
+      ? new RegExp(`RepositoryEntry\\/${repoId}\\/CourseNode\\/(\\d+)`, 'i').exec(decoded)
+      : null
+    if (courseNodeMatch) add(`/opal/auth/RepositoryEntry/${repoId}/CourseNode/${courseNodeMatch[1]}`, title)
   }
 
-  for (const link of extractCourseNodeLinksFromMarkup(doc.documentElement.outerHTML, courseUrl))
-    add(link.url, link.title)
+  for (const link of extractCourseNodeLinks(root, courseUrl)) add(link.url, link.title)
 
   return links
+}
+
+function enqueueSectionLinks(
+  links: Array<{ url: string; title: string }>,
+  parentId: string,
+  depth: number,
+  queued: Set<string>,
+  visited = new Set<string>()
+): Array<{ url: string; title: string; parentId: string; depth: number }> {
+  const result: Array<{ url: string; title: string; parentId: string; depth: number }> = []
+
+  for (const link of links) {
+    if (result.length >= MAX_SECTIONS_PER_COURSE) break
+    const key = urlToOpalSearchId(link.url)
+    if (!key || queued.has(key) || visited.has(key)) continue
+    if (isLowValueRenderedSection(link.title, link.url)) continue
+    queued.add(key)
+    result.push({ ...link, parentId, depth })
+  }
+
+  return result
+}
+
+function cleanIndexedTitle(value: string): string {
+  return value
+    .replace(/\s+/g, ' ')
+    .replace(/^Zur Navigation\s*>\s*/i, '')
+    .replace(/^Zur Navigation$/i, '')
+    .trim()
+}
+
+function isNavigationOnlyTitle(value: string): boolean {
+  return !value || /^Zur Navigation$/i.test(value)
+}
+
+function isLowValueRenderedSection(title: string, url: string): boolean {
+  const cleanTitle = cleanIndexedTitle(title)
+  if (isNavigationOnlyTitle(cleanTitle)) return true
+  if (/^(Zum Kursmen\u00fc|Zum Inhalt|Kursmen\u00fc|Inhalt|Zum KursmenÃ¼|KursmenÃ¼)$/i.test(cleanTitle)) return true
+  if (isOpalUiControlTarget(url, cleanTitle)) return true
+  return false
 }
 
 function readStoredCourses(value: unknown): OpalStoredCourse[] {
@@ -389,15 +518,20 @@ function uniqueCourses(courses: OpalStoredCourse[]): OpalStoredCourse[] {
 
 function waitForLoad(iframe: HTMLIFrameElement, timeoutMs: number): Promise<boolean> {
   return new Promise((resolve) => {
-    const timer = window.setTimeout(() => resolve(false), timeoutMs)
-    iframe.addEventListener(
-      'load',
-      () => {
-        window.clearTimeout(timer)
-        resolve(true)
-      },
-      { once: true }
-    )
+    let settled = false
+    const finish = (value: boolean) => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timer)
+      iframe.removeEventListener('load', onLoad)
+      iframe.removeEventListener('error', onError)
+      resolve(value)
+    }
+    const onLoad = () => finish(true)
+    const onError = () => finish(false)
+    const timer = window.setTimeout(() => finish(false), timeoutMs)
+    iframe.addEventListener('load', onLoad)
+    iframe.addEventListener('error', onError)
   })
 }
 

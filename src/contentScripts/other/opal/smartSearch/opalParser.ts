@@ -14,7 +14,7 @@ export function urlToOpalSearchId(url: string): string {
 
   try {
     const parsed = new URL(url)
-    const search = /^\?\d+$/.test(parsed.search) ? '' : parsed.search
+    const search = shouldDropOpalSearch(parsed) ? '' : parsed.search
     return (parsed.pathname + search).replace(/\/$/, '') || url
   } catch {
     return url
@@ -131,6 +131,57 @@ export function extractCourseNodeLinksFromMarkup(html: string, courseUrl: string
   return links
 }
 
+export function extractCourseNodeLinks(root: Document | HTMLElement, courseUrl: string): ExtractedCourseNodeLink[] {
+  const repoId = /\/RepositoryEntry\/(\d+)/i.exec(courseUrl)?.[1]
+  if (!repoId) return []
+
+  const links: ExtractedCourseNodeLink[] = []
+  const seen = new Set<string>()
+  const origin = safeOrigin(courseUrl)
+  const courseNodeRe = new RegExp(`(?:\\/opal\\/auth)?\\/RepositoryEntry\\/${repoId}\\/CourseNode\\/(\\d+)`, 'i')
+
+  for (const anchor of Array.from(root.querySelectorAll<HTMLAnchorElement>('a'))) {
+    const payload = [
+      anchor.getAttribute('href'),
+      anchor.getAttribute('onclick'),
+      anchor.getAttribute('data-url'),
+      anchor.getAttribute('data-target'),
+      anchor.getAttribute('data-href'),
+      anchor.getAttribute('data-link')
+    ]
+      .filter(Boolean)
+      .join(' ')
+
+    let decoded = payload
+    try {
+      decoded = decodeURIComponent(payload)
+    } catch {
+      decoded = payload
+    }
+
+    const match = decoded.match(courseNodeRe)
+    if (!match) continue
+
+    const title = readBestLinkTitle(
+      {
+        title: anchor.getAttribute('title') || undefined,
+        'aria-label': anchor.getAttribute('aria-label') || undefined
+      },
+      anchor.textContent || '',
+      ''
+    )
+    addUnique(links, seen, `${origin}/opal/auth/RepositoryEntry/${repoId}/CourseNode/${match[1]}`, title)
+  }
+
+  const html =
+    root instanceof Document ? root.documentElement.outerHTML : root instanceof HTMLElement ? root.outerHTML : ''
+  if (html) {
+    for (const link of extractCourseNodeLinksFromMarkup(html, courseUrl)) addUnique(links, seen, link.url, link.title)
+  }
+
+  return links
+}
+
 function filenameFromUrl(url: string): string {
   try {
     const path = new URL(url, 'https://bildungsportal.sachsen.de').pathname
@@ -178,4 +229,19 @@ function addUnique(links: ExtractedCourseNodeLink[], seen: Set<string>, url: str
   if (seen.has(key)) return
   seen.add(key)
   links.push({ url, title: cleanLinkTitle(title) || key })
+}
+
+function shouldDropOpalSearch(parsed: URL): boolean {
+  if (/^\?\d+$/.test(parsed.search)) return true
+  if (!/\/CourseNode\//i.test(parsed.pathname)) return false
+
+  const lower = parsed.search.toLowerCase()
+  if (!lower) return true
+  if (lower.includes('assid=')) return false
+  if (lower.includes('anticache=')) return true
+  if (lower.includes('fluidcontainer')) return true
+  if (lower.includes('contentcontainer')) return true
+  if (lower.includes('tableform')) return true
+  if (lower.includes('pager-navigation')) return true
+  return false
 }
