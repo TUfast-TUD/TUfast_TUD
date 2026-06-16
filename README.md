@@ -22,13 +22,10 @@ TUfast is a student project that makes the online portals of TU Dresden faster a
 * Automatic login to all online portals (AutoLogin) (including [2FA](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md))
 * Fast-access to all online portals, and shortcuts, e.g. “Alt+M” to open email
 * Find OPAL courses quickly in the dashboard
+* Search OPAL courses, folders and files locally with TUfast Smart Search
 * Notifications for new emails in your TU OWA-inbox
 * Customize and improve your OPAL experience
 * ... and many more can be found in TUfast :)
-
-### OPAL Smart Search
-
-The OPAL Smart Search command palette indexes visited OPAL courses, folders, nested folders, and files locally in the browser. Its search and ranking design is documented in [OPAL Smart Search Logic](src/contentScripts/other/opal/smartSearch/SEARCH_LOGIC.md).
 
 ## 🚀 Using TUfast
 Simply visit [www.tu-fast.de](https://www.tu-fast.de) and select your browser to be redirected to the webstore for free installation.
