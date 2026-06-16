@@ -1,27 +1,26 @@
 <template>
   <h3 class="card-body-title">OPAL Smart Search</h3>
-  <Setting v-model="enabled" txt="Smart Search mit Strg+K aktivieren" />
-  <Setting v-model="passiveIndexing" txt="Besuchte OPAL-Seiten automatisch indexieren" />
-  <Setting v-model="activeIndexing" txt="Kurse im Hintergrund vorsichtig vorindexieren" />
+  <Setting v-model="enabled" :txt="smartSearchStrings.settingsEnable" />
+  <Setting v-model="passiveIndexing" :txt="smartSearchStrings.settingsPassiveIndexing" />
+  <Setting v-model="activeIndexing" :txt="smartSearchStrings.settingsActiveIndexing" />
 
   <p class="max-line p-margin">
-    TUfast speichert Kurse, Ordner und Dateilinks nur lokal in deinem Browser. Die Suche sendet keine Daten an einen
-    Server und schreibt nichts in OPAL.
+    {{ smartSearchStrings.settingsPrivacy }}
   </p>
-  <p class="max-line p-margin txt-help">Entwickelt von Just8it.</p>
+  <p class="max-line p-margin txt-help">{{ smartSearchStrings.settingsCredit }}</p>
 
   <div class="smart-search-status">
     <div>
-      <span class="smart-search-status__label">Lokale Einträge</span>
+      <span class="smart-search-status__label">{{ smartSearchStrings.settingsLocalEntries }}</span>
       <strong>{{ stats.count }}</strong>
     </div>
     <div>
-      <span class="smart-search-status__label">Zuletzt indexiert</span>
+      <span class="smart-search-status__label">{{ smartSearchStrings.settingsLastIndexed }}</span>
       <strong>{{ lastIndexedLabel }}</strong>
     </div>
   </div>
 
-  <button class="smart-search-clear" @click="clearIndex">Lokalen Suchindex löschen</button>
+  <button class="smart-search-clear" @click="clearIndex">{{ smartSearchStrings.settingsClearIndex }}</button>
 </template>
 
 <script lang="ts">
@@ -32,6 +31,9 @@ import type { OpalSmartSearchSettings } from '../../../modules/opalSmartSearch/t
 
 // components
 import Setting from '../components/Setting.vue'
+
+// configurations
+import { OPAL_SMART_SEARCH_STRINGS } from '../../../modules/opalSmartSearch/strings'
 
 const DEFAULT_SMART_SEARCH_SETTINGS: OpalSmartSearchSettings = {
   enabled: true,
@@ -48,6 +50,7 @@ export default defineComponent({
     const passiveIndexing = ref(true)
     const activeIndexing = ref(false)
     const stats = ref({ count: 0, lastIndexedAt: 0 })
+    const smartSearchStrings = OPAL_SMART_SEARCH_STRINGS
     let ready = false
 
     const load = async () => {
@@ -100,6 +103,7 @@ export default defineComponent({
       passiveIndexing,
       activeIndexing,
       stats,
+      smartSearchStrings,
       lastIndexedLabel,
       clearIndex
     }

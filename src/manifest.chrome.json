@@ -283,6 +283,14 @@
         "mac": "Alt+M"
       },
       "description": "Mail (OWA) öffnen"
+    },
+    "open_opal_smart_search_hotkey": {
+      "suggested_key": {
+        "default": "Alt+S",
+        "windows": "Alt+S",
+        "mac": "Alt+S"
+      },
+      "description": "OPAL Smart Search öffnen"
     }
   }
 }

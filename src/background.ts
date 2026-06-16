@@ -189,6 +189,9 @@ if (chrome.commands) {
         })
         await saveClicks(2)
         break
+      case 'open_opal_smart_search_hotkey':
+        await openOpalSmartSearch(currentTab)
+        break
     }
   })
 }
@@ -583,6 +586,24 @@ async function openSettingsPage(params?: string) {
 
 async function openSharePage() {
   await chrome.tabs.create({ url: 'share.html' })
+}
+
+async function openOpalSmartSearch(currentTab: chrome.tabs.Tab) {
+  // Open the palette in OPAL, or take the user to OPAL first
+  if (currentTab.id && currentTab.url?.startsWith('https://bildungsportal.sachsen.de/opal/')) {
+    try {
+      await chrome.tabs.sendMessage(currentTab.id, { cmd: 'open_opal_smart_search' })
+      await saveClicks(2)
+      return
+    } catch (error) {
+      console.warn('[TUfast Smart Search] Could not open palette:', error)
+    }
+  }
+
+  await chrome.tabs.create({
+    url: 'https://bildungsportal.sachsen.de/opal/home/',
+    index: typeof currentTab.index === 'number' ? currentTab.index + 1 : undefined
+  })
 }
 
 // save_click_counter

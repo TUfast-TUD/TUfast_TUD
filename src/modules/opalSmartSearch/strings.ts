@@ -1,0 +1,24 @@
+export const OPAL_SMART_SEARCH_STRINGS = {
+  actionOpenOpalHome: 'OPAL Startseite öffnen',
+  actionOpenOpalCourses: 'Meine OPAL-Kurse öffnen',
+  headerPlaceholder: '🔎 TUfast Smart Search',
+  openSearchTitle: 'TUfast Smart Search öffnen',
+  paletteLabel: 'OPAL Smart Search',
+  palettePlaceholder: 'Kurse, Ordner und Dateien suchen... (/c Kurse, /f Dateien)',
+  paletteFilterHint: '/c Kurse · /f Dateien',
+  paletteKeyboardHint: 'Enter öffnet · Pfeile navigieren',
+  emptyResults: 'Keine lokalen Treffer gefunden.',
+  typeCourse: 'Kurs',
+  typeFolder: 'Ordner',
+  typeFile: 'Datei',
+  typeAction: 'Aktion',
+  settingsEnable: 'Smart Search aktivieren',
+  settingsPassiveIndexing: 'Besuchte OPAL-Seiten automatisch indexieren',
+  settingsActiveIndexing: 'Kurse im Hintergrund vorsichtig vorindexieren',
+  settingsPrivacy:
+    'TUfast speichert Kurse, Ordner und Dateilinks nur lokal in deinem Browser. Die Suche sendet keine Daten an einen Server und schreibt nichts in OPAL.',
+  settingsCredit: 'Entwickelt von Just8it.',
+  settingsLocalEntries: 'Lokale Einträge',
+  settingsLastIndexed: 'Zuletzt indexiert',
+  settingsClearIndex: 'Lokalen Suchindex löschen'
+}

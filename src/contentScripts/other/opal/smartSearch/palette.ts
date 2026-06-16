@@ -1,6 +1,7 @@
 import { getIndexedOpalSearchNode, searchIndexedOpalNodes } from './messages'
 import { extractCourseIdFromUrl } from './opalParser'
 import { OPAL_SMART_SEARCH_HIGHLIGHT_KEY } from '../../../../modules/opalSmartSearch/settings'
+import { OPAL_SMART_SEARCH_STRINGS } from '../../../../modules/opalSmartSearch/strings'
 import type { OpalSearchNode, OpalSearchResult } from '../../../../modules/opalSmartSearch/types'
 import { normalizeAllowedOpalUrl } from '../../../../modules/opalSmartSearch/urlPolicy'
 
@@ -8,7 +9,7 @@ const ACTIONS: OpalSearchResult[] = [
   {
     node: {
       id: '__action-open-opal-home',
-      title: 'OPAL Startseite öffnen',
+      title: OPAL_SMART_SEARCH_STRINGS.actionOpenOpalHome,
       url: 'https://bildungsportal.sachsen.de/opal/home/',
       type: 'action',
       courseId: '',
@@ -22,7 +23,7 @@ const ACTIONS: OpalSearchResult[] = [
   {
     node: {
       id: '__action-open-opal-courses',
-      title: 'Meine OPAL-Kurse öffnen',
+      title: OPAL_SMART_SEARCH_STRINGS.actionOpenOpalCourses,
       url: 'https://bildungsportal.sachsen.de/opal/auth/resource/courses',
       type: 'action',
       courseId: '',
@@ -54,6 +55,13 @@ export function bindOpalSmartSearchPalette(): void {
     true
   )
 
+  chrome.runtime.onMessage.addListener((request) => {
+    // Background commands open the same dialog as the header and Ctrl+K
+    if (request.cmd === 'open_opal_smart_search') {
+      openOpalSmartSearchPalette()
+    }
+  })
+
   injectHeaderTrigger()
 
   // OPAL changes parts of the header without a full reload
@@ -80,9 +88,9 @@ function injectHeaderTrigger(): void {
   trigger.id = 'tufastSmartSearchTrigger'
   trigger.type = 'text'
   trigger.readOnly = true
-  trigger.placeholder = '\uD83D\uDD0E TUfast Smart Search (Ctrl+K)'
-  trigger.title = 'TUfast Smart Search öffnen'
-  trigger.setAttribute('aria-label', 'TUfast Smart Search öffnen')
+  trigger.placeholder = OPAL_SMART_SEARCH_STRINGS.headerPlaceholder
+  trigger.title = OPAL_SMART_SEARCH_STRINGS.openSearchTitle
+  trigger.setAttribute('aria-label', OPAL_SMART_SEARCH_STRINGS.openSearchTitle)
 
   // Open the same dialog as Ctrl+K
   const open = (event: Event) => {
@@ -108,17 +116,19 @@ export function openOpalSmartSearchPalette(): void {
   const overlay = document.createElement('div')
   overlay.id = 'tufast-smart-search'
   overlay.innerHTML = `
-    <div class="tufast-smart-search__panel" role="dialog" aria-modal="true" aria-label="OPAL Smart Search">
+    <div class="tufast-smart-search__panel" role="dialog" aria-modal="true" aria-label="${escapeAttr(
+      OPAL_SMART_SEARCH_STRINGS.paletteLabel
+    )}">
       <div class="tufast-smart-search__field">
         <span class="tufast-smart-search__lens" aria-hidden="true"></span>
         <input id="tufast-smart-search-input" type="text" autocomplete="off" spellcheck="false"
-          placeholder="Kurse, Ordner und Dateien suchen... (/c Kurse, /f Dateien)" />
+          placeholder="${escapeAttr(OPAL_SMART_SEARCH_STRINGS.palettePlaceholder)}" />
         <kbd>Esc</kbd>
       </div>
       <div id="tufast-smart-search-results" class="tufast-smart-search__results"></div>
       <div class="tufast-smart-search__footer">
-        <span>/c Kurse · /f Dateien</span>
-        <span>Enter öffnet · Pfeile navigieren</span>
+        <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.paletteFilterHint)}</span>
+        <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.paletteKeyboardHint)}</span>
       </div>
     </div>
   `
@@ -229,7 +239,7 @@ export function openOpalSmartSearchPalette(): void {
 
 function renderResults(results: OpalSearchResult[], selectedIndex: number): string {
   if (results.length === 0) {
-    return '<div class="tufast-smart-search__empty">Keine lokalen Treffer gefunden.</div>'
+    return `<div class="tufast-smart-search__empty">${escapeHtml(OPAL_SMART_SEARCH_STRINGS.emptyResults)}</div>`
   }
 
   return results.map((result, index) => renderResult(result.node, index, index === selectedIndex)).join('')
@@ -266,13 +276,13 @@ function typeLabel(type: OpalSearchNode['type']): string {
 function typeSubtitle(type: OpalSearchNode['type']): string {
   switch (type) {
     case 'course':
-      return 'Kurs'
+      return OPAL_SMART_SEARCH_STRINGS.typeCourse
     case 'folder':
-      return 'Ordner'
+      return OPAL_SMART_SEARCH_STRINGS.typeFolder
     case 'file':
-      return 'Datei'
+      return OPAL_SMART_SEARCH_STRINGS.typeFile
     default:
-      return 'Aktion'
+      return OPAL_SMART_SEARCH_STRINGS.typeAction
   }
 }
 
