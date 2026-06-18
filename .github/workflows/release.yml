@@ -36,12 +36,10 @@ jobs:
       # Runs a single command using the runners shell
       - run: npm ci
       #- run: npm run test
-      - run: npm run useChrome
-      - run: npm run build
+      - run: npm run build:chrome
       - run: cd build && zip -r ../TUfast_TUD_chrome.zip *
 
-      - run: npm run useFF
-      - run: npm run build
+      - run: npm run build:firefox
       - run: cd build && zip -r ../TUfast_TUD_firefox.zip *
 
       - uses: ncipollo/release-action@v1

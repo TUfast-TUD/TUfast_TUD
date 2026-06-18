@@ -6,7 +6,7 @@
   "optional_permissions": ["tabs", "notifications", "cookies", "webRequest"],
   "host_permissions": ["*://*/"],
   "background": {
-    "service_worker": "background.js",
+    "scripts": ["background.js"],
     "type": "module"
   },
   "content_scripts": [
@@ -77,12 +77,6 @@
       ]
     },
     {
-      "js": ["contentScripts/other/opal/smartSearch/main.js"],
-      "css": ["styles/contentScripts/opal/smartSearch.css"],
-      "run_at": "document_idle",
-      "matches": ["https://bildungsportal.sachsen.de/opal/*"]
-    },
-    {
       "js": ["contentScripts/login/matrix.js"],
       "run_at": "document_idle",
       "matches": ["https://matrix.tu-dresden.de/*"],
@@ -120,6 +114,12 @@
         "styles/contentScripts/opal/openAllFavorites.css",
         "styles/contentScripts/opal/banner.css"
       ],
+      "run_at": "document_idle",
+      "matches": ["https://bildungsportal.sachsen.de/opal/*"]
+    },
+    {
+      "js": ["contentScripts/other/opal/smartSearch/main.js"],
+      "css": ["styles/contentScripts/opal/smartSearch.css"],
       "run_at": "document_idle",
       "matches": ["https://bildungsportal.sachsen.de/opal/*"]
     },
@@ -250,7 +250,9 @@
       "resources": [
         "contentScripts/other/opal/smartSearch/*",
         "contentScripts/other/opal/smartSearch/searchEngine/*",
-        "vite/pkg/minisearch.js"
+        "modules/opalSmartSearch/*",
+        "modules/opalSmartSearch/searchEngine/*",
+        "vite/pkg/*"
       ],
       "matches": ["https://bildungsportal.sachsen.de/*"]
     },
