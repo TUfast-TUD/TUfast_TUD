@@ -3,10 +3,10 @@
   "_comment": "The version number is populated during build time, please adjust version number in package.json",
   "description": "Das Produktivitäts-Tool for TU Dresden Studierende 🚀",
   "permissions": ["storage", "alarms"],
-  "optional_permissions": ["tabs", "notifications", "cookies", "webRequest", "webRequestBlocking"],
+  "optional_permissions": ["tabs", "notifications", "cookies", "webRequest"],
   "host_permissions": ["*://*/"],
   "background": {
-    "scripts": ["background.js"],
+    "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [
