@@ -47,15 +47,8 @@ function copyStaticExtensionFiles() {
     name: 'copy-static-extension-files',
     writeBundle() {
       const manifestNames = new Set(['manifest.json', 'manifest.chrome.json', 'manifest.firefox.json'])
-      const defaultManifestSource = path.join(srcDir, 'manifest.chrome.json')
-      const defaultManifestTarget = path.join(buildDir, 'manifest.json')
-
       for (const file of walkFiles(srcDir)) {
         const relativePath = path.relative(srcDir, file)
-        const basename = path.basename(relativePath)
-
-        if (basename === 'manifest.json') continue
-
         if (path.resolve(file) === legacyClassicScript) {
           const target = path.join(buildDir, relativePath)
           fs.mkdirSync(path.dirname(target), { recursive: true })
@@ -67,7 +60,7 @@ function copyStaticExtensionFiles() {
         const target = path.join(buildDir, relativePath)
         fs.mkdirSync(path.dirname(target), { recursive: true })
 
-        if (manifestNames.has(basename)) {
+        if (manifestNames.has(path.basename(relativePath))) {
           const source = fs.readFileSync(file, 'utf8')
           try {
             const obj = JSON.parse(source)
@@ -82,13 +75,6 @@ function copyStaticExtensionFiles() {
         }
 
         fs.copyFileSync(file, target)
-      }
-
-      if (fs.existsSync(defaultManifestSource)) {
-        const source = fs.readFileSync(defaultManifestSource, 'utf8')
-        const obj = JSON.parse(source)
-        if (obj._comment) delete obj._comment
-        fs.writeFileSync(defaultManifestTarget, JSON.stringify(obj, null, 2) + '\n')
       }
     }
   }
