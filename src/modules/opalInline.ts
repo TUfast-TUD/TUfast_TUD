@@ -93,7 +93,10 @@ export async function enableOpalHeaderListener() {
       chrome.webRequest.onHeadersReceived.addListener(
         headerListenerFunc,
         {
-          urls: ['https://bildungsportal.sachsen.de/opal/downloadering*', 'https://bildungsportal.sachsen.de/opal/*.pdf']
+          urls: [
+            'https://bildungsportal.sachsen.de/opal/downloadering*',
+            'https://bildungsportal.sachsen.de/opal/*.pdf'
+          ]
         },
         ['blocking', 'responseHeaders']
       )

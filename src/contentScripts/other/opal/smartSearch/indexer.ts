@@ -15,7 +15,11 @@ import {
   OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT,
   OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY
 } from '../../../../modules/opalSmartSearch/settings'
-import type { OpalActiveIndexProgress, OpalSearchNode, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
+import type {
+  OpalActiveIndexProgress,
+  OpalSearchNode,
+  OpalStoredCourse
+} from '../../../../modules/opalSmartSearch/types'
 import {
   isIndexableOpalTarget,
   isOpalUiControlTarget,
@@ -109,17 +113,19 @@ export async function indexCurrentOpalPage(): Promise<void> {
 export async function bootstrapCoursesFromStorage(): Promise<void> {
   const data = await chrome.storage.local.get(['favoriten', 'meine_kurse'])
   const nodes = readStoredCourseTargets(data)
-    .map(({ title, url }): OpalSearchNode => ({
-      id: urlToOpalSearchId(url),
-      title,
-      url,
-      type: 'course',
-      courseId: extractCourseIdFromUrl(url),
-      parentId: null,
-      lastVisited: Date.now(),
-      visitCount: 1,
-      source: 'user'
-    }))
+    .map(
+      ({ title, url }): OpalSearchNode => ({
+        id: urlToOpalSearchId(url),
+        title,
+        url,
+        type: 'course',
+        courseId: extractCourseIdFromUrl(url),
+        parentId: null,
+        lastVisited: Date.now(),
+        visitCount: 1,
+        source: 'user'
+      })
+    )
     .filter((node) => node.id && node.title && node.url)
 
   await upsertOpalSearchNodes(nodes)
@@ -209,7 +215,10 @@ export async function checkAndHighlightIndexedFile(): Promise<void> {
   if (!tryHighlightFile(intent, targetUrl)) window.setTimeout(() => tryHighlightFile(intent, targetUrl), 800)
 }
 
-async function indexSingleCourse(course: CourseTarget, onProgress?: (addedItems: number) => Promise<void>): Promise<number> {
+async function indexSingleCourse(
+  course: CourseTarget,
+  onProgress?: (addedItems: number) => Promise<void>
+): Promise<number> {
   let indexed = 0
   const safeCourseUrl = normalizeAllowedOpalUrl(course.url)
   if (!safeCourseUrl) return indexed
@@ -243,7 +252,10 @@ async function indexSingleCourse(course: CourseTarget, onProgress?: (addedItems:
   return indexed + rendered
 }
 
-async function indexRenderedCourse(course: CourseTarget, onProgress?: (addedItems: number) => Promise<void>): Promise<number> {
+async function indexRenderedCourse(
+  course: CourseTarget,
+  onProgress?: (addedItems: number) => Promise<void>
+): Promise<number> {
   const safeCourseUrl = normalizeAllowedOpalUrl(course.url)
   if (!safeCourseUrl) return 0
 
@@ -292,7 +304,12 @@ async function indexRenderedCourse(course: CourseTarget, onProgress?: (addedItem
 
     const queued = new Set<string>([courseRootId])
     const visited = new Set<string>()
-    const sectionQueue = enqueueSectionLinks(findMaterialSectionLinks(courseDoc, safeCourseUrl), courseRootId, 1, queued)
+    const sectionQueue = enqueueSectionLinks(
+      findMaterialSectionLinks(courseDoc, safeCourseUrl),
+      courseRootId,
+      1,
+      queued
+    )
     const startedAt = Date.now()
     let renderedNavigations = 0
 
@@ -584,7 +601,10 @@ async function fetchOpalDocument(url: string): Promise<Document | null> {
 }
 
 function decodeHtmlResponse(buffer: ArrayBuffer, response: Response): string {
-  const headerCharset = response.headers.get('content-type')?.match(/charset=([^;]+)/i)?.[1]?.trim()
+  const headerCharset = response.headers
+    .get('content-type')
+    ?.match(/charset=([^;]+)/i)?.[1]
+    ?.trim()
   const initial = decodeWithCharset(buffer, headerCharset || 'utf-8')
   const metaCharset = initial.match(/<meta[^>]+charset=["']?\s*([^"'\s/>]+)/i)?.[1]?.trim()
   if (!metaCharset || metaCharset.toLowerCase() === (headerCharset || 'utf-8').toLowerCase()) return initial

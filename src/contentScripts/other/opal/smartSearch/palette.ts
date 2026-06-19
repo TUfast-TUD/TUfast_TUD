@@ -120,9 +120,7 @@ function injectHeaderTrigger(): void {
   const open = (event: Event) => {
     event.preventDefault()
     trigger.blur()
-    openOpalSmartSearchPalette().catch((error) =>
-      console.warn('[TUfast Smart Search] Could not open palette:', error)
-    )
+    openOpalSmartSearchPalette().catch((error) => console.warn('[TUfast Smart Search] Could not open palette:', error))
   }
 
   trigger.addEventListener('click', open)
@@ -344,11 +342,7 @@ async function getDefaultResults(): Promise<PaletteDefaults> {
   }
 }
 
-function renderActiveIndexPrompt(
-  element: HTMLElement,
-  visible: boolean,
-  progress?: OpalActiveIndexProgress
-): void {
+function renderActiveIndexPrompt(element: HTMLElement, visible: boolean, progress?: OpalActiveIndexProgress): void {
   element.hidden = !visible
   if (!visible) {
     element.innerHTML = ''
@@ -422,10 +416,7 @@ interface ActiveIndexPromptResult {
   progress?: OpalActiveIndexProgress
 }
 
-async function handleActiveIndexPromptAction(
-  action: string,
-  element: HTMLElement
-): Promise<ActiveIndexPromptResult> {
+async function handleActiveIndexPromptAction(action: string, element: HTMLElement): Promise<ActiveIndexPromptResult> {
   if (action === 'later') return { keepVisible: false }
 
   if (action === 'dismiss') {
