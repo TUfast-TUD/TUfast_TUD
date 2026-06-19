@@ -1,8 +1,8 @@
 import { getIndexedOpalSearchNode, searchIndexedOpalNodes } from './messages'
-import { extractCourseIdFromUrl } from './opalParser'
+import { extractCourseIdFromUrl, urlToOpalSearchId } from './opalParser'
 import { OPAL_SMART_SEARCH_HIGHLIGHT_KEY } from '../../../../modules/opalSmartSearch/settings'
 import { OPAL_SMART_SEARCH_STRINGS } from '../../../../modules/opalSmartSearch/strings'
-import type { OpalSearchNode, OpalSearchResult } from '../../../../modules/opalSmartSearch/types'
+import type { OpalSearchNode, OpalSearchResult, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
 import { normalizeAllowedOpalUrl } from '../../../../modules/opalSmartSearch/urlPolicy'
 
 const ACTIONS: OpalSearchResult[] = [
@@ -46,7 +46,9 @@ export function bindOpalSmartSearchPalette(): void {
   chrome.runtime.onMessage.addListener((request) => {
     // Background commands open the same dialog as the header trigger
     if (request.cmd === 'open_opal_smart_search') {
-      openOpalSmartSearchPalette()
+      openOpalSmartSearchPalette().catch((error) =>
+        console.warn('[TUfast Smart Search] Could not open palette:', error)
+      )
     }
   })
 
@@ -84,7 +86,9 @@ function injectHeaderTrigger(): void {
   const open = (event: Event) => {
     event.preventDefault()
     trigger.blur()
-    openOpalSmartSearchPalette()
+    openOpalSmartSearchPalette().catch((error) =>
+      console.warn('[TUfast Smart Search] Could not open palette:', error)
+    )
   }
 
   trigger.addEventListener('click', open)
@@ -96,7 +100,7 @@ function injectHeaderTrigger(): void {
   header.appendChild(trigger)
 }
 
-export function openOpalSmartSearchPalette(): void {
+export async function openOpalSmartSearchPalette(): Promise<void> {
   // Check if palette is already open
   if (document.getElementById('tufast-smart-search')) return
 
@@ -130,6 +134,7 @@ export function openOpalSmartSearchPalette(): void {
   let results: OpalSearchResult[] = []
   let selectedIndex = 0
   let debounce: number | undefined
+  const defaultResults = await getDefaultResults()
 
   const close = () => overlay.remove()
 
@@ -144,7 +149,7 @@ export function openOpalSmartSearchPalette(): void {
       const query = input.value.trim()
 
       if (!query) {
-        results = ACTIONS
+        results = defaultResults
         selectedIndex = 0
         render()
         return
@@ -220,9 +225,54 @@ export function openOpalSmartSearchPalette(): void {
     openSelected()
   })
 
-  results = ACTIONS
+  results = defaultResults
   render()
   requestAnimationFrame(() => input.focus())
+}
+
+async function getDefaultResults(): Promise<OpalSearchResult[]> {
+  const { favoriten } = await chrome.storage.local.get(['favoriten'])
+  const favorites = readStoredCourses(favoriten)
+  const favoriteResults: OpalSearchResult[] = []
+  const seen = new Set<string>()
+
+  for (const course of favorites) {
+    const title = course.title || course.name || ''
+    const url = normalizeAllowedOpalUrl(course.href || course.link || '')
+    const id = url ? urlToOpalSearchId(url) : ''
+    if (!title || !url || !id || seen.has(id)) continue
+    seen.add(id)
+
+    favoriteResults.push({
+      node: {
+        id,
+        title,
+        url,
+        type: 'course',
+        courseId: extractCourseIdFromUrl(url),
+        parentId: null,
+        lastVisited: 0,
+        visitCount: 0,
+        source: 'user',
+        searchText: 'favorit favorite kurs course'
+      },
+      score: 600
+    })
+  }
+
+  return [...favoriteResults, ...ACTIONS].slice(0, 10)
+}
+
+function readStoredCourses(value: unknown): OpalStoredCourse[] {
+  if (Array.isArray(value)) return value as OpalStoredCourse[]
+  if (typeof value !== 'string') return []
+
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
 }
 
 function renderResults(results: OpalSearchResult[], selectedIndex: number): string {
