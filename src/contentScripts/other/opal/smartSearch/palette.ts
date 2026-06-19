@@ -36,6 +36,21 @@ const ACTIONS: OpalSearchResult[] = [
   }
 ]
 
+const PRELOAD_FAVORITES_ACTION: OpalSearchResult = {
+  node: {
+    id: '__action-preload-opal-favorites',
+    title: OPAL_SMART_SEARCH_STRINGS.actionPreloadOpalFavorites,
+    url: 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites',
+    type: 'action',
+    courseId: '',
+    parentId: null,
+    lastVisited: 0,
+    visitCount: 0,
+    searchText: 'favoriten favorites vorladen importieren aktualisieren'
+  },
+  score: 700
+}
+
 let registered = false
 
 export function bindOpalSmartSearchPalette(): void {
@@ -260,7 +275,8 @@ async function getDefaultResults(): Promise<OpalSearchResult[]> {
     })
   }
 
-  return [...favoriteResults, ...ACTIONS].slice(0, 10)
+  const fallbackActions = favoriteResults.length === 0 ? [PRELOAD_FAVORITES_ACTION, ...ACTIONS] : ACTIONS
+  return [...favoriteResults, ...fallbackActions].slice(0, 10)
 }
 
 function readStoredCourses(value: unknown): OpalStoredCourse[] {

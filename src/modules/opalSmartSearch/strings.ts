@@ -1,6 +1,7 @@
 export const OPAL_SMART_SEARCH_STRINGS = {
   actionOpenOpalHome: 'OPAL Startseite öffnen',
   actionOpenOpalCourses: 'Meine OPAL-Kurse öffnen',
+  actionPreloadOpalFavorites: 'Favoriten vorladen',
   headerPlaceholder: '🔎 TUfast Smart Search',
   openSearchTitle: 'TUfast Smart Search öffnen',
   paletteLabel: 'OPAL Smart Search',
