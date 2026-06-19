@@ -383,7 +383,13 @@ function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
   const totalCourses = Math.max(0, progress.totalCourses)
   const completedCourses = Math.max(0, Math.min(progress.completedCourses, totalCourses))
   const coursePercent = totalCourses > 0 ? Math.round((completedCourses / totalCourses) * 100) : 100
-  const graphLevel = Math.max(1, Math.min(6, Math.ceil(Math.max(progress.indexedItems, 1) / 8)))
+  const completedGraphNodes =
+    progress.status === 'done'
+      ? 6
+      : totalCourses > 0
+        ? Math.min(5, Math.floor((completedCourses / totalCourses) * 6))
+        : 0
+  const pendingGraphNode = progress.status === 'running' ? Math.min(completedGraphNodes, 5) : -1
   const title =
     progress.status === 'done'
       ? OPAL_SMART_SEARCH_STRINGS.activeIndexProgressDone
@@ -394,8 +400,9 @@ function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
       )}</span>`
     : ''
   const nodes = Array.from({ length: 6 }, (_, index) => {
-    const active = index < graphLevel ? ' is-active' : ''
-    return `<span class="tufast-smart-search__graph-node${active}"></span>`
+    const active = index < completedGraphNodes ? ' is-active' : ''
+    const pending = index === pendingGraphNode ? ' is-pending' : ''
+    return `<span class="tufast-smart-search__graph-node${active}${pending}"></span>`
   }).join('')
 
   return `
@@ -405,11 +412,8 @@ function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
       <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexProgressCourses)}: ${completedCourses}/${totalCourses} · ${escapeHtml(
         OPAL_SMART_SEARCH_STRINGS.activeIndexProgressIndexed
       )}: ${progress.indexedItems}</span>
-      <div class="tufast-smart-search__progress" aria-hidden="true">
-        <span style="width: ${coursePercent}%"></span>
-      </div>
     </div>
-    <div class="tufast-smart-search__graph" aria-hidden="true">${nodes}</div>
+    <div class="tufast-smart-search__graph" style="--graph-progress: ${coursePercent}%" aria-hidden="true">${nodes}</div>
   `
 }
 

@@ -186,42 +186,51 @@
   opacity: 0.72;
 }
 
-.tufast-smart-search__progress {
-  height: 4px;
-  margin-top: 8px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.tufast-smart-search__progress span {
-  height: 100%;
-  display: block;
-  border-radius: inherit;
-  background: #3ebe89;
-  transition: width 180ms ease;
-}
-
 .tufast-smart-search__graph {
-  width: 112px;
-  height: 56px;
+  --graph-progress: 0%;
+  width: 154px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: relative;
   flex: 0 0 auto;
+  padding: 0 4px;
+  box-sizing: border-box;
 }
 
 .tufast-smart-search__graph::before {
   content: '';
   position: absolute;
-  inset: 13px 12px;
-  border-top: 1px solid rgba(62, 190, 137, 0.4);
-  border-right: 1px solid rgba(62, 190, 137, 0.28);
-  transform: skewX(-18deg);
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-50%);
+}
+
+.tufast-smart-search__graph::after {
+  content: '';
+  width: var(--graph-progress);
+  max-width: calc(100% - 16px);
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(62, 190, 137, 0.74);
+  transform: translateY(-50%);
+  transform-origin: left center;
+  transition: width 220ms ease;
 }
 
 .tufast-smart-search__graph-node {
-  width: 9px;
-  height: 9px;
-  position: absolute;
+  width: 8px;
+  height: 8px;
+  position: relative;
+  z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.12);
@@ -232,41 +241,31 @@
     transform 180ms ease;
 }
 
-.tufast-smart-search__graph-node:nth-child(1) {
-  left: 6px;
-  top: 37px;
-}
-
-.tufast-smart-search__graph-node:nth-child(2) {
-  left: 25px;
-  top: 20px;
-}
-
-.tufast-smart-search__graph-node:nth-child(3) {
-  left: 45px;
-  top: 36px;
-}
-
-.tufast-smart-search__graph-node:nth-child(4) {
-  left: 64px;
-  top: 14px;
-}
-
-.tufast-smart-search__graph-node:nth-child(5) {
-  left: 82px;
-  top: 31px;
-}
-
-.tufast-smart-search__graph-node:nth-child(6) {
-  left: 99px;
-  top: 8px;
-}
-
 .tufast-smart-search__graph-node.is-active {
   border-color: rgba(62, 190, 137, 0.9);
   background: #3ebe89;
   box-shadow: 0 0 16px rgba(62, 190, 137, 0.48);
   transform: scale(1.18);
+}
+
+.tufast-smart-search__graph-node.is-pending {
+  border-color: rgba(62, 190, 137, 0.9);
+  background: rgba(62, 190, 137, 0.22);
+  box-shadow: 0 0 0 0 rgba(62, 190, 137, 0.34);
+  animation: tufast-smart-search-graph-grow 1.1s ease-in-out infinite;
+}
+
+@keyframes tufast-smart-search-graph-grow {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(62, 190, 137, 0.34);
+  }
+
+  50% {
+    transform: scale(1.22);
+    box-shadow: 0 0 0 7px rgba(62, 190, 137, 0);
+  }
 }
 
 @media (max-width: 560px) {

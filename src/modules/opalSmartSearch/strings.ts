@@ -11,7 +11,7 @@ export const OPAL_SMART_SEARCH_STRINGS = {
   activeIndexPromptRunning: 'Vorladen läuft...',
   activeIndexProgressDone: 'Vorladen abgeschlossen',
   activeIndexProgressCourse: 'Aktueller Kurs',
-  activeIndexProgressIndexed: 'Einträge im Suchgraphen',
+  activeIndexProgressIndexed: 'verarbeitete Treffer',
   activeIndexProgressCourses: 'Kurse',
   headerPlaceholder: '🔎 TUfast Smart Search',
   openSearchTitle: 'TUfast Smart Search öffnen',
