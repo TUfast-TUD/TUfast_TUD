@@ -37,6 +37,16 @@ export interface OpalSmartSearchSettings {
   activeIndexing: boolean
 }
 
+export interface OpalActiveIndexProgress {
+  status: 'idle' | 'running' | 'done'
+  startedAt: number
+  updatedAt: number
+  totalCourses: number
+  completedCourses: number
+  indexedItems: number
+  currentCourseTitle?: string
+}
+
 export interface OpalStoredCourse {
   name?: string
   title?: string

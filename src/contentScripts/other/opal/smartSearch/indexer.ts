@@ -9,8 +9,12 @@ import {
   readBestLinkTitle,
   urlToOpalSearchId
 } from './opalParser'
-import { loadSmartSearchSettings } from '../../../../modules/opalSmartSearch/settings'
-import type { OpalSearchNode, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
+import {
+  loadSmartSearchSettings,
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT,
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY
+} from '../../../../modules/opalSmartSearch/settings'
+import type { OpalActiveIndexProgress, OpalSearchNode, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
 import {
   isIndexableOpalTarget,
   isOpalUiControlTarget,
@@ -32,6 +36,10 @@ let activeIndexStarted = false
 interface BreadcrumbEntry {
   title: string
   url: string
+}
+
+type ActiveIndexProgressUpdate = Partial<Omit<OpalActiveIndexProgress, 'startedAt' | 'updatedAt'>> & {
+  startedAt?: number
 }
 
 export async function indexCurrentOpalPage(): Promise<void> {
@@ -130,21 +138,80 @@ export async function maybeRunActiveIndexing(): Promise<void> {
     .filter((course) => Date.now() - (cooldowns[course.href || course.link || ''] || 0) > ACTIVE_INDEX_COOLDOWN_MS)
     .slice(0, MAX_ACTIVE_COURSES_PER_RUN)
 
+  const startedAt = Date.now()
+  let indexedItems = 0
+
+  if (toIndex.length === 0) {
+    await publishActiveIndexProgress({
+      status: 'done',
+      startedAt,
+      totalCourses: 0,
+      completedCourses: 0,
+      indexedItems: 0
+    })
+    return
+  }
+
+  await publishActiveIndexProgress({
+    status: 'running',
+    startedAt,
+    totalCourses: toIndex.length,
+    completedCourses: 0,
+    indexedItems
+  })
+
   // Crawl only a few courses per run
-  for (const course of toIndex) {
+  for (const [index, course] of toIndex.entries()) {
     const url = course.href || course.link
     if (!url) continue
+    const currentCourseTitle = course.title || course.name || url
+
+    await publishActiveIndexProgress({
+      status: 'running',
+      startedAt,
+      totalCourses: toIndex.length,
+      completedCourses: index,
+      indexedItems,
+      currentCourseTitle
+    })
 
     try {
-      await indexCourseViaIframe(url)
+      await indexCourseViaIframe(url, async (addedItems) => {
+        indexedItems += addedItems
+        await publishActiveIndexProgress({
+          status: 'running',
+          startedAt,
+          totalCourses: toIndex.length,
+          completedCourses: index,
+          indexedItems,
+          currentCourseTitle
+        })
+      })
       cooldowns[url] = Date.now()
       await chrome.storage.local.set({ [ACTIVE_INDEX_KEY]: cooldowns })
     } catch (error) {
       console.warn('[TUfast Smart Search] Active indexing skipped course:', error)
     }
 
+    await publishActiveIndexProgress({
+      status: 'running',
+      startedAt,
+      totalCourses: toIndex.length,
+      completedCourses: index + 1,
+      indexedItems,
+      currentCourseTitle
+    })
+
     await wait(500)
   }
+
+  await publishActiveIndexProgress({
+    status: 'done',
+    startedAt,
+    totalCourses: toIndex.length,
+    completedCourses: toIndex.length,
+    indexedItems
+  })
 }
 
 export async function checkAndHighlightIndexedFile(): Promise<void> {
@@ -179,7 +246,7 @@ export async function checkAndHighlightIndexedFile(): Promise<void> {
   if (!highlight()) setTimeout(highlight, 800)
 }
 
-async function indexCourseViaIframe(courseUrl: string): Promise<void> {
+async function indexCourseViaIframe(courseUrl: string, onIndexedItems?: (addedItems: number) => Promise<void>): Promise<void> {
   // Load course pages in a hidden iframe, so OPAL renders its links
   const normalizedCourseUrl = normalizeAllowedOpalUrl(courseUrl)
   if (!normalizedCourseUrl) return
@@ -213,6 +280,7 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
     }
     if (pageTitle) {
       await upsertOpalSearchNodes([courseNode])
+      await onIndexedItems?.(1)
     }
 
     // Walk through visible course sections with hard limits
@@ -260,7 +328,9 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
       }
 
       await upsertOpalSearchNodes([sectionNode])
-      await indexVisibleFiles(iframe.contentDocument, sectionNode, 'active')
+      await onIndexedItems?.(1)
+      const indexedFiles = await indexVisibleFiles(iframe.contentDocument, sectionNode, 'active')
+      if (indexedFiles > 0) await onIndexedItems?.(indexedFiles)
 
       if (section.depth < MAX_ACTIVE_DEPTH) {
         const childSections = enqueueSectionLinks(
@@ -280,7 +350,7 @@ async function indexCourseViaIframe(courseUrl: string): Promise<void> {
   }
 }
 
-async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source: 'user' | 'active'): Promise<void> {
+async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source: 'user' | 'active'): Promise<number> {
   // Index visible folders first
   const courseId = pageNode.courseId || extractCourseIdFromUrl(pageNode.url)
   const parentId = pageNode.id
@@ -358,6 +428,24 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
   }
 
   await upsertOpalSearchNodes(nodes)
+  return nodes.length
+}
+
+async function publishActiveIndexProgress(update: ActiveIndexProgressUpdate): Promise<void> {
+  const data = await chrome.storage.local.get([OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY])
+  const previous = data[OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY] as OpalActiveIndexProgress | undefined
+  const progress: OpalActiveIndexProgress = {
+    status: update.status || previous?.status || 'idle',
+    startedAt: update.startedAt || previous?.startedAt || Date.now(),
+    updatedAt: Date.now(),
+    totalCourses: update.totalCourses ?? previous?.totalCourses ?? 0,
+    completedCourses: update.completedCourses ?? previous?.completedCourses ?? 0,
+    indexedItems: update.indexedItems ?? previous?.indexedItems ?? 0,
+    currentCourseTitle: update.currentCourseTitle
+  }
+
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
+  window.dispatchEvent(new CustomEvent(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, { detail: progress }))
 }
 
 function parseBreadcrumbs(doc: Document): BreadcrumbEntry[] {

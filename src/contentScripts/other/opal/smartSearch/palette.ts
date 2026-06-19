@@ -4,11 +4,18 @@ import { extractCourseIdFromUrl, urlToOpalSearchId } from './opalParser'
 import {
   loadSmartSearchSettings,
   OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT,
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
   OPAL_SMART_SEARCH_HIGHLIGHT_KEY,
   saveSmartSearchSettings
 } from '../../../../modules/opalSmartSearch/settings'
 import { OPAL_SMART_SEARCH_STRINGS } from '../../../../modules/opalSmartSearch/strings'
-import type { OpalSearchNode, OpalSearchResult, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
+import type {
+  OpalActiveIndexProgress,
+  OpalSearchNode,
+  OpalSearchResult,
+  OpalStoredCourse
+} from '../../../../modules/opalSmartSearch/types'
 import { normalizeAllowedOpalUrl } from '../../../../modules/opalSmartSearch/urlPolicy'
 
 const ACTIONS: OpalSearchResult[] = [
@@ -62,6 +69,7 @@ let registered = false
 interface PaletteDefaults {
   results: OpalSearchResult[]
   showActiveIndexPrompt: boolean
+  activeIndexProgress?: OpalActiveIndexProgress
 }
 
 export function bindOpalSmartSearchPalette(): void {
@@ -163,13 +171,25 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
   let selectedIndex = 0
   let debounce: number | undefined
   let activePromptVisible = false
+  let activeIndexProgress: OpalActiveIndexProgress | undefined
   const defaults = await getDefaultResults()
   const defaultResults = defaults.results
 
-  const close = () => overlay.remove()
+  const onActiveIndexProgress = (event: Event) => {
+    activeIndexProgress = (event as CustomEvent<OpalActiveIndexProgress>).detail
+    activePromptVisible = true
+    render()
+  }
+
+  window.addEventListener(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, onActiveIndexProgress)
+
+  const close = () => {
+    window.removeEventListener(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, onActiveIndexProgress)
+    overlay.remove()
+  }
 
   const render = () => {
-    renderActiveIndexPrompt(activePromptElement, activePromptVisible)
+    renderActiveIndexPrompt(activePromptElement, activePromptVisible, activeIndexProgress)
     resultsElement.innerHTML = renderResults(results, selectedIndex)
   }
 
@@ -252,8 +272,9 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
     if (promptAction) {
       event.preventDefault()
       handleActiveIndexPromptAction(promptAction.dataset.activeIndexAction || '', activePromptElement)
-        .then((keepVisible) => {
-          activePromptVisible = keepVisible
+        .then((result) => {
+          activePromptVisible = result.keepVisible
+          activeIndexProgress = result.progress || activeIndexProgress
           render()
         })
         .catch((error) => console.warn('[TUfast Smart Search] Active indexing prompt failed:', error))
@@ -270,14 +291,20 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
 
   results = defaultResults
   activePromptVisible = defaults.showActiveIndexPrompt
+  activeIndexProgress = defaults.activeIndexProgress
   render()
   requestAnimationFrame(() => input.focus())
 }
 
 async function getDefaultResults(): Promise<PaletteDefaults> {
-  const data = await chrome.storage.local.get(['favoriten', OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  const data = await chrome.storage.local.get([
+    'favoriten',
+    OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
+    OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY
+  ])
   const settings = await loadSmartSearchSettings()
   const dismissed = Boolean(data[OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  const activeIndexProgress = readActiveIndexProgress(data[OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY])
   const favoriten = data.favoriten
   const favorites = readStoredCourses(favoriten)
   const favoriteResults: OpalSearchResult[] = []
@@ -310,14 +337,26 @@ async function getDefaultResults(): Promise<PaletteDefaults> {
   const fallbackActions = favoriteResults.length === 0 ? [PRELOAD_FAVORITES_ACTION, ...ACTIONS] : ACTIONS
   return {
     results: [...favoriteResults, ...fallbackActions].slice(0, 10),
-    showActiveIndexPrompt: favoriteResults.length > 0 && !settings.activeIndexing && !dismissed
+    showActiveIndexPrompt:
+      favoriteResults.length > 0 &&
+      ((!settings.activeIndexing && !dismissed) || activeIndexProgress?.status === 'running'),
+    activeIndexProgress
   }
 }
 
-function renderActiveIndexPrompt(element: HTMLElement, visible: boolean): void {
+function renderActiveIndexPrompt(
+  element: HTMLElement,
+  visible: boolean,
+  progress?: OpalActiveIndexProgress
+): void {
   element.hidden = !visible
   if (!visible) {
     element.innerHTML = ''
+    return
+  }
+
+  if (progress?.status === 'running' || progress?.status === 'done') {
+    element.innerHTML = renderActiveIndexProgress(progress)
     return
   }
 
@@ -340,15 +379,57 @@ function renderActiveIndexPrompt(element: HTMLElement, visible: boolean): void {
   `
 }
 
-async function handleActiveIndexPromptAction(action: string, element: HTMLElement): Promise<boolean> {
-  if (action === 'later') return false
+function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
+  const totalCourses = Math.max(0, progress.totalCourses)
+  const completedCourses = Math.max(0, Math.min(progress.completedCourses, totalCourses))
+  const coursePercent = totalCourses > 0 ? Math.round((completedCourses / totalCourses) * 100) : 100
+  const graphLevel = Math.max(1, Math.min(6, Math.ceil(Math.max(progress.indexedItems, 1) / 8)))
+  const title =
+    progress.status === 'done'
+      ? OPAL_SMART_SEARCH_STRINGS.activeIndexProgressDone
+      : OPAL_SMART_SEARCH_STRINGS.activeIndexPromptRunning
+  const currentCourse = progress.currentCourseTitle
+    ? `<span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexProgressCourse)}: ${escapeHtml(
+        progress.currentCourseTitle
+      )}</span>`
+    : ''
+  const nodes = Array.from({ length: 6 }, (_, index) => {
+    const active = index < graphLevel ? ' is-active' : ''
+    return `<span class="tufast-smart-search__graph-node${active}"></span>`
+  }).join('')
+
+  return `
+    <div class="tufast-smart-search__active-copy">
+      <strong>${escapeHtml(title)}</strong>
+      ${currentCourse}
+      <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexProgressCourses)}: ${completedCourses}/${totalCourses} · ${escapeHtml(
+        OPAL_SMART_SEARCH_STRINGS.activeIndexProgressIndexed
+      )}: ${progress.indexedItems}</span>
+      <div class="tufast-smart-search__progress" aria-hidden="true">
+        <span style="width: ${coursePercent}%"></span>
+      </div>
+    </div>
+    <div class="tufast-smart-search__graph" aria-hidden="true">${nodes}</div>
+  `
+}
+
+interface ActiveIndexPromptResult {
+  keepVisible: boolean
+  progress?: OpalActiveIndexProgress
+}
+
+async function handleActiveIndexPromptAction(
+  action: string,
+  element: HTMLElement
+): Promise<ActiveIndexPromptResult> {
+  if (action === 'later') return { keepVisible: false }
 
   if (action === 'dismiss') {
     await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY]: true })
-    return false
+    return { keepVisible: false }
   }
 
-  if (action !== 'start') return true
+  if (action !== 'start') return { keepVisible: true }
 
   element.querySelectorAll<HTMLButtonElement>('button').forEach((button) => {
     button.disabled = true
@@ -360,8 +441,34 @@ async function handleActiveIndexPromptAction(action: string, element: HTMLElemen
   await saveSmartSearchSettings({ ...settings, activeIndexing: true })
   await bootstrapCoursesFromStorage()
 
+  const progress: OpalActiveIndexProgress = {
+    status: 'running',
+    startedAt: Date.now(),
+    updatedAt: Date.now(),
+    totalCourses: 0,
+    completedCourses: 0,
+    indexedItems: 0
+  }
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
+
   maybeRunActiveIndexing().catch((error) => console.warn('[TUfast Smart Search] Active indexing failed:', error))
-  return false
+  return { keepVisible: true, progress }
+}
+
+function readActiveIndexProgress(value: unknown): OpalActiveIndexProgress | undefined {
+  if (!value || typeof value !== 'object') return undefined
+  const progress = value as Partial<OpalActiveIndexProgress>
+  if (progress.status !== 'running' && progress.status !== 'done' && progress.status !== 'idle') return undefined
+
+  return {
+    status: progress.status,
+    startedAt: Number(progress.startedAt || 0),
+    updatedAt: Number(progress.updatedAt || 0),
+    totalCourses: Number(progress.totalCourses || 0),
+    completedCourses: Number(progress.completedCourses || 0),
+    indexedItems: Number(progress.indexedItems || 0),
+    currentCourseTitle: progress.currentCourseTitle
+  }
 }
 
 function readStoredCourses(value: unknown): OpalStoredCourse[] {
