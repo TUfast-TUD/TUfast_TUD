@@ -2,6 +2,7 @@ import type { OpalSmartSearchSettings } from './types'
 
 export const OPAL_SMART_SEARCH_SETTINGS_KEY = 'opalSmartSearchSettings'
 export const OPAL_SMART_SEARCH_HIGHLIGHT_KEY = 'opalSmartSearchHighlight'
+export const OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY = 'opalSmartSearchActivePromptDismissed'
 
 export const DEFAULT_SMART_SEARCH_SETTINGS: OpalSmartSearchSettings = {
   enabled: true,

@@ -2,6 +2,13 @@ export const OPAL_SMART_SEARCH_STRINGS = {
   actionOpenOpalHome: 'OPAL Startseite öffnen',
   actionOpenOpalCourses: 'Meine OPAL-Kurse öffnen',
   actionPreloadOpalFavorites: 'Favoriten vorladen',
+  activeIndexPromptTitle: 'Kursdateien vorladen',
+  activeIndexPromptText:
+    'Dies kann bis zu 5 Minuten dauern und erlaubt dir danach, nach Dateien und Kursinhalten zu suchen.',
+  activeIndexPromptStart: 'Vorladen',
+  activeIndexPromptLater: 'Später',
+  activeIndexPromptDismiss: 'Nicht nochmal',
+  activeIndexPromptRunning: 'Vorladen läuft...',
   headerPlaceholder: '🔎 TUfast Smart Search',
   openSearchTitle: 'TUfast Smart Search öffnen',
   paletteLabel: 'OPAL Smart Search',

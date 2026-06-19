@@ -1,6 +1,12 @@
 import { getIndexedOpalSearchNode, searchIndexedOpalNodes } from './messages'
+import { bootstrapCoursesFromStorage, maybeRunActiveIndexing } from './indexer'
 import { extractCourseIdFromUrl, urlToOpalSearchId } from './opalParser'
-import { OPAL_SMART_SEARCH_HIGHLIGHT_KEY } from '../../../../modules/opalSmartSearch/settings'
+import {
+  loadSmartSearchSettings,
+  OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
+  OPAL_SMART_SEARCH_HIGHLIGHT_KEY,
+  saveSmartSearchSettings
+} from '../../../../modules/opalSmartSearch/settings'
 import { OPAL_SMART_SEARCH_STRINGS } from '../../../../modules/opalSmartSearch/strings'
 import type { OpalSearchNode, OpalSearchResult, OpalStoredCourse } from '../../../../modules/opalSmartSearch/types'
 import { normalizeAllowedOpalUrl } from '../../../../modules/opalSmartSearch/urlPolicy'
@@ -52,6 +58,11 @@ const PRELOAD_FAVORITES_ACTION: OpalSearchResult = {
 }
 
 let registered = false
+
+interface PaletteDefaults {
+  results: OpalSearchResult[]
+  showActiveIndexPrompt: boolean
+}
 
 export function bindOpalSmartSearchPalette(): void {
   // Register only once per OPAL page
@@ -132,6 +143,7 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
           placeholder="${escapeAttr(OPAL_SMART_SEARCH_STRINGS.palettePlaceholder)}" />
         <kbd>Esc</kbd>
       </div>
+      <div id="tufast-smart-search-active-prompt" class="tufast-smart-search__active-prompt" hidden></div>
       <div id="tufast-smart-search-results" class="tufast-smart-search__results"></div>
       <div class="tufast-smart-search__footer">
         <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.paletteFilterHint)}</span>
@@ -144,16 +156,20 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
 
   // Get palette elements
   const input = overlay.querySelector<HTMLInputElement>('#tufast-smart-search-input')!
+  const activePromptElement = overlay.querySelector<HTMLElement>('#tufast-smart-search-active-prompt')!
   const resultsElement = overlay.querySelector<HTMLElement>('#tufast-smart-search-results')!
   const activeCourseId = extractCourseIdFromUrl(location.href)
   let results: OpalSearchResult[] = []
   let selectedIndex = 0
   let debounce: number | undefined
-  const defaultResults = await getDefaultResults()
+  let activePromptVisible = false
+  const defaults = await getDefaultResults()
+  const defaultResults = defaults.results
 
   const close = () => overlay.remove()
 
   const render = () => {
+    renderActiveIndexPrompt(activePromptElement, activePromptVisible)
     resultsElement.innerHTML = renderResults(results, selectedIndex)
   }
 
@@ -232,6 +248,18 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
   overlay.addEventListener('click', (event) => {
     if (event.target === overlay) close()
 
+    const promptAction = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-active-index-action]')
+    if (promptAction) {
+      event.preventDefault()
+      handleActiveIndexPromptAction(promptAction.dataset.activeIndexAction || '', activePromptElement)
+        .then((keepVisible) => {
+          activePromptVisible = keepVisible
+          render()
+        })
+        .catch((error) => console.warn('[TUfast Smart Search] Active indexing prompt failed:', error))
+      return
+    }
+
     const result = (event.target as HTMLElement).closest<HTMLElement>('.tufast-smart-search__result')
     if (!result) return
 
@@ -241,12 +269,16 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
   })
 
   results = defaultResults
+  activePromptVisible = defaults.showActiveIndexPrompt
   render()
   requestAnimationFrame(() => input.focus())
 }
 
-async function getDefaultResults(): Promise<OpalSearchResult[]> {
-  const { favoriten } = await chrome.storage.local.get(['favoriten'])
+async function getDefaultResults(): Promise<PaletteDefaults> {
+  const data = await chrome.storage.local.get(['favoriten', OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  const settings = await loadSmartSearchSettings()
+  const dismissed = Boolean(data[OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  const favoriten = data.favoriten
   const favorites = readStoredCourses(favoriten)
   const favoriteResults: OpalSearchResult[] = []
   const seen = new Set<string>()
@@ -276,7 +308,60 @@ async function getDefaultResults(): Promise<OpalSearchResult[]> {
   }
 
   const fallbackActions = favoriteResults.length === 0 ? [PRELOAD_FAVORITES_ACTION, ...ACTIONS] : ACTIONS
-  return [...favoriteResults, ...fallbackActions].slice(0, 10)
+  return {
+    results: [...favoriteResults, ...fallbackActions].slice(0, 10),
+    showActiveIndexPrompt: favoriteResults.length > 0 && !settings.activeIndexing && !dismissed
+  }
+}
+
+function renderActiveIndexPrompt(element: HTMLElement, visible: boolean): void {
+  element.hidden = !visible
+  if (!visible) {
+    element.innerHTML = ''
+    return
+  }
+
+  element.innerHTML = `
+    <div>
+      <strong>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexPromptTitle)}</strong>
+      <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexPromptText)}</span>
+    </div>
+    <div class="tufast-smart-search__active-actions">
+      <button type="button" data-active-index-action="start">${escapeHtml(
+        OPAL_SMART_SEARCH_STRINGS.activeIndexPromptStart
+      )}</button>
+      <button type="button" data-active-index-action="later">${escapeHtml(
+        OPAL_SMART_SEARCH_STRINGS.activeIndexPromptLater
+      )}</button>
+      <button type="button" data-active-index-action="dismiss">${escapeHtml(
+        OPAL_SMART_SEARCH_STRINGS.activeIndexPromptDismiss
+      )}</button>
+    </div>
+  `
+}
+
+async function handleActiveIndexPromptAction(action: string, element: HTMLElement): Promise<boolean> {
+  if (action === 'later') return false
+
+  if (action === 'dismiss') {
+    await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY]: true })
+    return false
+  }
+
+  if (action !== 'start') return true
+
+  element.querySelectorAll<HTMLButtonElement>('button').forEach((button) => {
+    button.disabled = true
+  })
+  const startButton = element.querySelector<HTMLButtonElement>('[data-active-index-action="start"]')
+  if (startButton) startButton.textContent = OPAL_SMART_SEARCH_STRINGS.activeIndexPromptRunning
+
+  const settings = await loadSmartSearchSettings()
+  await saveSmartSearchSettings({ ...settings, activeIndexing: true })
+  await bootstrapCoursesFromStorage()
+
+  maybeRunActiveIndexing().catch((error) => console.warn('[TUfast Smart Search] Active indexing failed:', error))
+  return false
 }
 
 function readStoredCourses(value: unknown): OpalStoredCourse[] {
