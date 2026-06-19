@@ -1,7 +1,8 @@
-import { upsertOpalSearchNodes } from './messages'
+import { getIndexedOpalSearchNode, upsertOpalSearchNodes } from './messages'
 import {
   extractCourseIdFromUrl,
   extractCourseNodeLinks,
+  extractCourseNodeLinksFromMarkup,
   inferExtensionFromName,
   inferExtensionFromUrl,
   inferNodeType,
@@ -23,13 +24,16 @@ import {
 
 const ACTIVE_INDEX_KEY = 'opalSmartSearchActiveIndexRuns'
 const ACTIVE_INDEX_COOLDOWN_MS = 6 * 60 * 60 * 1000
-const MAX_ACTIVE_COURSES_PER_RUN = 3
+const MAX_ACTIVE_COURSES_PER_RUN = 8
 const MAX_SECTIONS_PER_COURSE = 16
 const MAX_ACTIVE_DEPTH = 3
-const MAX_ACTIVE_NAVIGATIONS_PER_COURSE = 10
-const COURSE_LOAD_TIMEOUT_MS = 15000
-const SECTION_LOAD_TIMEOUT_MS = 10000
+const MAX_ACTIVE_RENDER_NAVIGATIONS = 10
+const ACTIVE_COURSE_TIME_BUDGET_MS = 60000
+const ACTIVE_SECTION_COOLDOWN_MS = 6 * 60 * 60 * 1000
+const ACTIVE_FETCH_TIMEOUT_MS = 10000
+const ACTIVE_FRAME_LOAD_TIMEOUT_MS = 12000
 const FRAME_SETTLE_DELAY_MS = 350
+const SECTION_DELAY_MS = 80
 
 let activeIndexStarted = false
 
@@ -38,19 +42,28 @@ interface BreadcrumbEntry {
   url: string
 }
 
+interface CourseTarget {
+  title: string
+  url: string
+}
+
 type ActiveIndexProgressUpdate = Partial<Omit<OpalActiveIndexProgress, 'startedAt' | 'updatedAt'>> & {
   startedAt?: number
 }
 
+type RenderPreflight =
+  | { kind: 'html'; url: string }
+  | { kind: 'file'; url: string; title: string; fileExtension?: string }
+  | { kind: 'skip'; reason: string }
+
 export async function indexCurrentOpalPage(): Promise<void> {
-  // Check if current page can be indexed
   const currentUrl = normalizeAllowedOpalUrl(location.href)
   if (!currentUrl) return
 
   const title = readPageTitle(document)
+  if (!title || isOpalHomeUrl(currentUrl)) return
 
-  if (!title || location.pathname.includes('/opal/home')) return
-
+  const now = Date.now()
   const breadcrumbs = parseBreadcrumbs(document)
   const breadcrumbText = breadcrumbs.map((crumb) => crumb.title).join(' ')
   const courseId =
@@ -65,15 +78,13 @@ export async function indexCurrentOpalPage(): Promise<void> {
       type: index === 0 ? 'course' : inferNodeType(crumb.url),
       courseId,
       parentId: index > 0 ? urlToOpalSearchId(breadcrumbs[index - 1].url) : null,
-      lastVisited: Date.now(),
+      lastVisited: now,
       visitCount: 1,
       source: 'user',
       searchText: breadcrumbText
     }
   })
   const parentBreadcrumb = [...breadcrumbNodes].reverse().find((crumb) => crumb.id !== currentId)
-
-  // Index current page and breadcrumb path
   const currentNode: OpalSearchNode = {
     id: currentId,
     title,
@@ -81,33 +92,25 @@ export async function indexCurrentOpalPage(): Promise<void> {
     type: inferNodeType(currentUrl),
     courseId,
     parentId: parentBreadcrumb?.id || null,
-    lastVisited: Date.now(),
+    lastVisited: now,
     visitCount: 1,
     fileExtension: inferExtensionFromUrl(currentUrl),
     source: 'user',
+    lastFetchedAt: now,
+    structureHash: await computeStructureHash(document, currentUrl),
     searchText: breadcrumbText
   }
 
   await upsertOpalSearchNodes([...breadcrumbNodes, currentNode])
+  await indexCourseLinks(document, currentUrl, courseId, currentId, 'user', now)
   await indexVisibleFiles(document, currentNode, 'user')
 }
 
 export async function bootstrapCoursesFromStorage(): Promise<void> {
-  // Add already known OPAL courses from the dashboard storage
   const data = await chrome.storage.local.get(['favoriten', 'meine_kurse'])
-  const courses = [...readStoredCourses(data.favoriten), ...readStoredCourses(data.meine_kurse)]
-  const seen = new Set<string>()
-  const nodes: OpalSearchNode[] = []
-
-  for (const course of courses) {
-    const title = course.title || course.name || ''
-    const url = normalizeAllowedOpalUrl(course.href || course.link || '') || ''
-    const id = urlToOpalSearchId(url)
-    if (!title || !url || seen.has(id)) continue
-    seen.add(id)
-
-    nodes.push({
-      id,
+  const nodes = readStoredCourseTargets(data)
+    .map(({ title, url }): OpalSearchNode => ({
+      id: urlToOpalSearchId(url),
       title,
       url,
       type: 'course',
@@ -116,14 +119,13 @@ export async function bootstrapCoursesFromStorage(): Promise<void> {
       lastVisited: Date.now(),
       visitCount: 1,
       source: 'user'
-    })
-  }
+    }))
+    .filter((node) => node.id && node.title && node.url)
 
   await upsertOpalSearchNodes(nodes)
 }
 
 export async function maybeRunActiveIndexing(): Promise<void> {
-  // Make sure active indexing only starts once per page
   if (activeIndexStarted) return
   activeIndexStarted = true
 
@@ -131,52 +133,34 @@ export async function maybeRunActiveIndexing(): Promise<void> {
   if (!settings.enabled || !settings.activeIndexing) return
 
   const data = await chrome.storage.local.get(['favoriten', 'meine_kurse', ACTIVE_INDEX_KEY])
-  const courses = [...readStoredCourses(data.favoriten), ...readStoredCourses(data.meine_kurse)]
   const cooldowns = (data[ACTIVE_INDEX_KEY] || {}) as Record<string, number>
-  const toIndex = uniqueCourses(courses)
-    .filter((course) => course.href || course.link)
-    .filter((course) => Date.now() - (cooldowns[course.href || course.link || ''] || 0) > ACTIVE_INDEX_COOLDOWN_MS)
+  const toIndex = readActiveCourseTargets(data)
+    .filter((course) => Date.now() - (cooldowns[course.url] || 0) > ACTIVE_INDEX_COOLDOWN_MS)
     .slice(0, MAX_ACTIVE_COURSES_PER_RUN)
-
   const startedAt = Date.now()
   let indexedItems = 0
 
-  if (toIndex.length === 0) {
-    await publishActiveIndexProgress({
-      status: 'done',
-      startedAt,
-      totalCourses: 0,
-      completedCourses: 0,
-      indexedItems: 0
-    })
-    return
-  }
-
   await publishActiveIndexProgress({
-    status: 'running',
+    status: toIndex.length === 0 ? 'done' : 'running',
     startedAt,
     totalCourses: toIndex.length,
     completedCourses: 0,
     indexedItems
   })
 
-  // Crawl only a few courses per run
   for (const [index, course] of toIndex.entries()) {
-    const url = course.href || course.link
-    if (!url) continue
-    const currentCourseTitle = course.title || course.name || url
-
     await publishActiveIndexProgress({
       status: 'running',
       startedAt,
       totalCourses: toIndex.length,
       completedCourses: index,
       indexedItems,
-      currentCourseTitle
+      currentCourseTitle: course.title
     })
 
     try {
-      await indexCourseViaIframe(url, async (addedItems) => {
+      const courseStartItems = indexedItems
+      const courseIndexedItems = await indexSingleCourse(course, async (addedItems) => {
         indexedItems += addedItems
         await publishActiveIndexProgress({
           status: 'running',
@@ -184,10 +168,11 @@ export async function maybeRunActiveIndexing(): Promise<void> {
           totalCourses: toIndex.length,
           completedCourses: index,
           indexedItems,
-          currentCourseTitle
+          currentCourseTitle: course.title
         })
       })
-      cooldowns[url] = Date.now()
+      indexedItems = courseStartItems + courseIndexedItems
+      cooldowns[course.url] = Date.now()
       await chrome.storage.local.set({ [ACTIVE_INDEX_KEY]: cooldowns })
     } catch (error) {
       console.warn('[TUfast Smart Search] Active indexing skipped course:', error)
@@ -199,10 +184,10 @@ export async function maybeRunActiveIndexing(): Promise<void> {
       totalCourses: toIndex.length,
       completedCourses: index + 1,
       indexedItems,
-      currentCourseTitle
+      currentCourseTitle: course.title
     })
 
-    await wait(500)
+    await wait(SECTION_DELAY_MS)
   }
 
   await publishActiveIndexProgress({
@@ -215,90 +200,106 @@ export async function maybeRunActiveIndexing(): Promise<void> {
 }
 
 export async function checkAndHighlightIndexedFile(): Promise<void> {
-  // Check if the palette asked us to highlight a file after navigation
   const { opalSmartSearchHighlight } = await chrome.storage.local.get(['opalSmartSearchHighlight'])
   const intent = opalSmartSearchHighlight as { title: string; url: string } | undefined
   const targetUrl = intent ? normalizeAllowedOpalUrl(intent.url) : null
   if (!intent || !targetUrl) return
 
   await chrome.storage.local.remove(['opalSmartSearchHighlight'])
-
-  const highlight = (): boolean => {
-    const byName = document.querySelector<HTMLAnchorElement>(`a[data-file-name="${CSS.escape(intent.title)}"]`)
-    if (byName && applyHighlight(byName)) return true
-
-    try {
-      const targetPath = new URL(targetUrl).pathname
-      for (const anchor of Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href]'))) {
-        try {
-          if (new URL(anchor.href).pathname === targetPath && applyHighlight(anchor)) return true
-        } catch {
-          // Ignore malformed links.
-        }
-      }
-    } catch {
-      return false
-    }
-
-    return false
-  }
-
-  if (!highlight()) setTimeout(highlight, 800)
+  if (!tryHighlightFile(intent, targetUrl)) window.setTimeout(() => tryHighlightFile(intent, targetUrl), 800)
 }
 
-async function indexCourseViaIframe(courseUrl: string, onIndexedItems?: (addedItems: number) => Promise<void>): Promise<void> {
-  // Load course pages in a hidden iframe, so OPAL renders its links
-  const normalizedCourseUrl = normalizeAllowedOpalUrl(courseUrl)
-  if (!normalizedCourseUrl) return
+async function indexSingleCourse(course: CourseTarget, onProgress?: (addedItems: number) => Promise<void>): Promise<number> {
+  let indexed = 0
+  const safeCourseUrl = normalizeAllowedOpalUrl(course.url)
+  if (!safeCourseUrl) return indexed
 
-  const iframe = document.createElement('iframe')
-  iframe.style.cssText =
-    'position:fixed;width:800px;height:600px;border:0;opacity:0;pointer-events:none;left:-9999px;top:-9999px;'
-  iframe.tabIndex = -1
-  iframe.setAttribute('aria-hidden', 'true')
-  document.body.appendChild(iframe)
-
-  try {
-    iframe.src = normalizedCourseUrl
-    if (!(await waitForLoad(iframe, COURSE_LOAD_TIMEOUT_MS))) return
-
-    const doc = iframe.contentDocument
-    if (!doc) return
-
-    const courseId = extractCourseIdFromUrl(normalizedCourseUrl)
-    const pageTitle = doc.title.replace(/ [-\u2013\u2014] .*$/, '').trim()
+  const fetchedDoc = await fetchOpalDocument(safeCourseUrl)
+  if (fetchedDoc) {
+    const now = Date.now()
+    const courseId = extractCourseIdFromUrl(safeCourseUrl)
     const courseNode: OpalSearchNode = {
-      id: urlToOpalSearchId(normalizedCourseUrl),
-      title: pageTitle || normalizedCourseUrl,
-      url: normalizedCourseUrl,
+      id: urlToOpalSearchId(safeCourseUrl),
+      title: readDocumentTitle(fetchedDoc) || course.title || safeCourseUrl,
+      url: safeCourseUrl,
       type: 'course',
       courseId,
       parentId: null,
-      lastVisited: Date.now(),
+      lastVisited: now,
       visitCount: 1,
-      source: 'active'
-    }
-    if (pageTitle) {
-      await upsertOpalSearchNodes([courseNode])
-      await onIndexedItems?.(1)
+      source: 'active',
+      lastFetchedAt: now,
+      structureHash: await computeStructureHash(fetchedDoc, safeCourseUrl),
+      searchText: fetchedDoc.title
     }
 
-    // Walk through visible course sections with hard limits
-    const queued = new Set<string>([courseNode.id])
+    await upsertOpalSearchNodes([courseNode])
+    indexed += 1
+    indexed += await indexCourseLinks(fetchedDoc, safeCourseUrl, courseId, courseNode.id, 'active', now)
+    indexed += await indexVisibleFiles(fetchedDoc, courseNode, 'active')
+  }
+
+  const rendered = await indexRenderedCourse(course, onProgress)
+  return indexed + rendered
+}
+
+async function indexRenderedCourse(course: CourseTarget, onProgress?: (addedItems: number) => Promise<void>): Promise<number> {
+  const safeCourseUrl = normalizeAllowedOpalUrl(course.url)
+  if (!safeCourseUrl) return 0
+
+  const iframe = document.createElement('iframe')
+  iframe.dataset.tufastSmartSearchActiveIndexer = 'true'
+  iframe.setAttribute('aria-hidden', 'true')
+  iframe.tabIndex = -1
+  iframe.style.cssText =
+    'position:fixed;width:960px;height:720px;border:0;opacity:0;pointer-events:none;left:-12000px;top:-12000px;'
+  document.documentElement.appendChild(iframe)
+
+  try {
+    const coursePreflight = await preflightRenderedTarget(safeCourseUrl, course.title)
+    if (coursePreflight.kind !== 'html') return 0
+
+    const courseDoc = await loadFrameDocument(iframe, coursePreflight.url)
+    if (!courseDoc) return 0
+
+    const courseId = extractCourseIdFromUrl(safeCourseUrl)
+    const courseRootId = urlToOpalSearchId(safeCourseUrl)
+    const courseTitle = readDocumentTitle(courseDoc) || course.title || safeCourseUrl
+    let indexed = 0
+    const now = Date.now()
+    const courseNode: OpalSearchNode = {
+      id: courseRootId,
+      title: courseTitle,
+      url: safeCourseUrl,
+      type: 'course',
+      courseId,
+      parentId: null,
+      lastVisited: now,
+      visitCount: 1,
+      source: 'active',
+      lastFetchedAt: now,
+      structureHash: await computeStructureHash(courseDoc, safeCourseUrl),
+      searchText: courseDoc.title
+    }
+
+    await upsertOpalSearchNodes([courseNode])
+    indexed += 1
+    await onProgress?.(1)
+    const courseLinks = await indexCourseLinks(courseDoc, safeCourseUrl, courseId, courseRootId, 'active', now)
+    const courseFiles = await indexVisibleFiles(courseDoc, courseNode, 'active')
+    indexed += courseLinks + courseFiles
+    if (courseLinks + courseFiles > 0) await onProgress?.(courseLinks + courseFiles)
+
+    const queued = new Set<string>([courseRootId])
     const visited = new Set<string>()
-    const sectionQueue = enqueueSectionLinks(
-      findMaterialSectionLinks(doc, normalizedCourseUrl),
-      courseNode.id,
-      1,
-      queued
-    )
-    let navigations = 0
+    const sectionQueue = enqueueSectionLinks(findMaterialSectionLinks(courseDoc, safeCourseUrl), courseRootId, 1, queued)
+    const startedAt = Date.now()
+    let renderedNavigations = 0
 
-    while (
-      sectionQueue.length > 0 &&
-      visited.size < MAX_SECTIONS_PER_COURSE &&
-      navigations < MAX_ACTIVE_NAVIGATIONS_PER_COURSE
-    ) {
+    while (sectionQueue.length > 0 && visited.size < MAX_SECTIONS_PER_COURSE) {
+      if (Date.now() - startedAt > ACTIVE_COURSE_TIME_BUDGET_MS) break
+      if (renderedNavigations >= MAX_ACTIVE_RENDER_NAVIGATIONS) break
+
       const section = sectionQueue.shift()
       if (!section) break
       const sectionUrl = normalizeAllowedOpalUrl(section.url)
@@ -306,17 +307,38 @@ async function indexCourseViaIframe(courseUrl: string, onIndexedItems?: (addedIt
       const sectionId = urlToOpalSearchId(sectionUrl)
       if (!sectionId || visited.has(sectionId)) continue
       visited.add(sectionId)
+      if (await isFreshKnownSection(sectionId)) continue
 
-      iframe.src = section.url
-      if (!(await waitForLoad(iframe, SECTION_LOAD_TIMEOUT_MS))) continue
-      if (!iframe.contentDocument) continue
-      navigations += 1
+      const preflight = await preflightRenderedTarget(sectionUrl, section.title)
+      if (preflight.kind === 'file') {
+        const fileNode: OpalSearchNode = {
+          id: urlToOpalSearchId(preflight.url),
+          title: preflight.title,
+          url: preflight.url,
+          type: 'file',
+          courseId,
+          parentId: section.parentId,
+          lastVisited: Date.now(),
+          visitCount: 1,
+          fileExtension: preflight.fileExtension,
+          source: 'active',
+          searchText: courseTitle
+        }
+        await upsertOpalSearchNodes([fileNode])
+        indexed += 1
+        await onProgress?.(1)
+        continue
+      }
+      if (preflight.kind === 'skip') continue
 
-      await wait(FRAME_SETTLE_DELAY_MS)
+      const sectionDoc = await loadFrameDocument(iframe, preflight.url)
+      if (!sectionDoc) continue
+      renderedNavigations += 1
 
+      const sectionTitle = readSectionTitle(sectionDoc, section.title)
       const sectionNode: OpalSearchNode = {
         id: sectionId,
-        title: readSectionTitle(iframe.contentDocument, section.title),
+        title: sectionTitle,
         url: sectionUrl,
         type: 'folder',
         courseId,
@@ -324,57 +346,79 @@ async function indexCourseViaIframe(courseUrl: string, onIndexedItems?: (addedIt
         lastVisited: Date.now(),
         visitCount: 1,
         source: 'active',
-        searchText: pageTitle
+        lastFetchedAt: Date.now(),
+        structureHash: await computeStructureHash(sectionDoc, safeCourseUrl),
+        searchText: courseTitle
       }
 
       await upsertOpalSearchNodes([sectionNode])
-      await onIndexedItems?.(1)
-      const indexedFiles = await indexVisibleFiles(iframe.contentDocument, sectionNode, 'active')
-      if (indexedFiles > 0) await onIndexedItems?.(indexedFiles)
+      indexed += 1
+      const childLinks = await indexCourseLinks(sectionDoc, safeCourseUrl, courseId, sectionId, 'active', Date.now())
+      const fileLinks = await indexVisibleFiles(sectionDoc, sectionNode, 'active')
+      indexed += childLinks + fileLinks
+      await onProgress?.(1 + childLinks + fileLinks)
 
       if (section.depth < MAX_ACTIVE_DEPTH) {
-        const childSections = enqueueSectionLinks(
-          findMaterialSectionLinks(iframe.contentDocument, normalizedCourseUrl),
-          sectionId,
-          section.depth + 1,
-          queued,
-          visited
-        ).slice(0, Math.max(0, MAX_SECTIONS_PER_COURSE - visited.size - sectionQueue.length))
-        sectionQueue.push(...childSections)
+        sectionQueue.push(
+          ...enqueueSectionLinks(
+            findMaterialSectionLinks(sectionDoc, safeCourseUrl),
+            sectionId,
+            section.depth + 1,
+            queued,
+            visited
+          ).slice(0, Math.max(0, MAX_SECTIONS_PER_COURSE - visited.size - sectionQueue.length))
+        )
       }
 
-      await wait(300)
+      await wait(SECTION_DELAY_MS)
     }
+
+    return indexed
   } finally {
     iframe.remove()
   }
 }
 
+async function indexCourseLinks(
+  root: Document | HTMLElement,
+  courseUrl: string,
+  courseId: string,
+  parentId: string,
+  source: 'user' | 'active',
+  now: number
+): Promise<number> {
+  const nodes: OpalSearchNode[] = []
+
+  for (const link of findMaterialSectionLinks(root, courseUrl)) {
+    const href = normalizeAllowedOpalUrl(link.url)
+    if (!href || !isIndexableOpalTarget(href) || isOpalUiControlTarget(href, link.title)) continue
+    nodes.push({
+      id: urlToOpalSearchId(href),
+      title: link.title,
+      url: href,
+      type: 'folder',
+      courseId,
+      parentId,
+      lastVisited: now,
+      visitCount: 1,
+      source,
+      searchText: root instanceof Document ? root.title : document.title
+    })
+  }
+
+  await upsertOpalSearchNodes(nodes)
+  return nodes.length
+}
+
 async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source: 'user' | 'active'): Promise<number> {
-  // Index visible folders first
   const courseId = pageNode.courseId || extractCourseIdFromUrl(pageNode.url)
   const parentId = pageNode.id
   const indexed = new Set<string>()
   const nodes: OpalSearchNode[] = []
 
-  for (const section of findMaterialSectionLinks(doc, pageNode.url)) {
-    nodes.push({
-      id: urlToOpalSearchId(section.url),
-      title: section.title,
-      url: section.url,
-      type: 'folder',
-      courseId,
-      parentId,
-      lastVisited: Date.now(),
-      visitCount: 1,
-      source,
-      searchText: doc.title
-    })
-  }
-
-  // Then index visible files and file-like OPAL links
   for (const anchor of Array.from(doc.querySelectorAll<HTMLAnchorElement>('a[data-file-name], a[href]'))) {
-    const href = normalizeAllowedOpalUrl(anchor.href)
+    const rawHref = anchor.href || anchor.getAttribute('href') || ''
+    const href = normalizeAllowedOpalUrl(rawHref)
     if (!href) continue
 
     const title = readBestLinkTitle(
@@ -385,7 +429,7 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
         'aria-label': anchor.getAttribute('aria-label') || undefined
       },
       anchor.textContent || '',
-      href
+      rawHref
     )
     if (!title || title.length < 2) continue
     if (!isIndexableOpalTarget(href) || isOpalUiControlTarget(href, title)) continue
@@ -402,16 +446,13 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
     const titleExtension = inferExtensionFromName(title)
     const fileExtension = inferExtensionFromUrl(href) || titleExtension
     const isFile = Boolean(fileExtension) || anchor.hasAttribute('data-file-name') || isDownloadUrl(href, true)
-
     if (!isFolder && !isFile) continue
 
     const id = urlToOpalSearchId(href)
     if (!id || indexed.has(id)) continue
     indexed.add(id)
 
-    // OPAL sometimes exposes files through folder-looking URLs
-    const type = fileExtension ? 'file' : isFolder ? 'folder' : 'file'
-
+    const type: OpalSearchNode['type'] = isFile ? 'file' : 'folder'
     nodes.push({
       id,
       title,
@@ -431,6 +472,185 @@ async function indexVisibleFiles(doc: Document, pageNode: OpalSearchNode, source
   return nodes.length
 }
 
+async function preflightRenderedTarget(url: string, fallbackTitle: string): Promise<RenderPreflight> {
+  const safeUrl = normalizeAllowedOpalUrl(url)
+  if (!safeUrl) return { kind: 'skip', reason: 'non-OPAL URL' }
+
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), ACTIVE_FETCH_TIMEOUT_MS)
+
+  try {
+    const response = await fetch(safeUrl, {
+      credentials: 'include',
+      cache: 'no-store',
+      signal: controller.signal,
+      headers: { Accept: 'text/html,application/xhtml+xml,*/*;q=0.8' }
+    })
+    const finalUrl = normalizeAllowedOpalUrl(response.url) || safeUrl
+    const contentType = response.headers.get('content-type')?.toLowerCase() || ''
+    const disposition = response.headers.get('content-disposition') || ''
+    controller.abort()
+
+    if (!response.ok) return { kind: 'skip', reason: `preflight HTTP ${response.status}` }
+
+    const fileExtension = inferExtensionFromUrl(finalUrl) || inferExtensionFromName(fallbackTitle)
+    const isAttachment = /attachment|filename=/i.test(disposition)
+    const isHtml = contentType.includes('text/html') || contentType.includes('application/xhtml+xml')
+    const isDownload =
+      isAttachment || (fileExtension ? !/html?/i.test(fileExtension) : false) || isDownloadUrl(finalUrl, true)
+
+    if (!isHtml || isDownload) {
+      return {
+        kind: 'file',
+        url: finalUrl,
+        title: readFilenameFromDisposition(disposition) || cleanIndexedTitle(fallbackTitle) || finalUrl,
+        fileExtension
+      }
+    }
+
+    return { kind: 'html', url: finalUrl }
+  } catch (error) {
+    return { kind: 'skip', reason: `preflight failed: ${String(error)}` }
+  } finally {
+    window.clearTimeout(timeout)
+    controller.abort()
+  }
+}
+
+async function loadFrameDocument(iframe: HTMLIFrameElement, url: string): Promise<Document | null> {
+  const safeUrl = normalizeAllowedOpalUrl(url)
+  if (!safeUrl) return null
+
+  const loadedPromise = waitForLoad(iframe, ACTIVE_FRAME_LOAD_TIMEOUT_MS)
+  iframe.src = safeUrl
+  if (!(await loadedPromise)) return null
+  await wait(FRAME_SETTLE_DELAY_MS)
+
+  try {
+    return iframe.contentDocument
+  } catch {
+    return null
+  }
+}
+
+function waitForLoad(iframe: HTMLIFrameElement, timeoutMs: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    let settled = false
+    const finish = (value: boolean) => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timer)
+      iframe.removeEventListener('load', onLoad)
+      iframe.removeEventListener('error', onError)
+      resolve(value)
+    }
+    const onLoad = () => finish(true)
+    const onError = () => finish(false)
+    const timer = window.setTimeout(() => finish(false), timeoutMs)
+    iframe.addEventListener('load', onLoad)
+    iframe.addEventListener('error', onError)
+  })
+}
+
+async function fetchOpalDocument(url: string): Promise<Document | null> {
+  const safeUrl = normalizeAllowedOpalUrl(url)
+  if (!safeUrl) return null
+
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), ACTIVE_FETCH_TIMEOUT_MS)
+
+  try {
+    const response = await fetch(safeUrl, {
+      credentials: 'include',
+      cache: 'no-store',
+      signal: controller.signal
+    })
+    window.clearTimeout(timeout)
+    if (!response.ok) return null
+
+    const buffer = await response.arrayBuffer()
+    const html = decodeHtmlResponse(buffer, response)
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    const base = doc.createElement('base')
+    base.href = normalizeAllowedOpalUrl(response.url) || safeUrl
+    doc.head.prepend(base)
+    return doc
+  } catch {
+    return null
+  } finally {
+    window.clearTimeout(timeout)
+    controller.abort()
+  }
+}
+
+function decodeHtmlResponse(buffer: ArrayBuffer, response: Response): string {
+  const headerCharset = response.headers.get('content-type')?.match(/charset=([^;]+)/i)?.[1]?.trim()
+  const initial = decodeWithCharset(buffer, headerCharset || 'utf-8')
+  const metaCharset = initial.match(/<meta[^>]+charset=["']?\s*([^"'\s/>]+)/i)?.[1]?.trim()
+  if (!metaCharset || metaCharset.toLowerCase() === (headerCharset || 'utf-8').toLowerCase()) return initial
+  return decodeWithCharset(buffer, metaCharset)
+}
+
+function decodeWithCharset(buffer: ArrayBuffer, charset: string): string {
+  try {
+    return new TextDecoder(charset).decode(buffer)
+  } catch {
+    return new TextDecoder('utf-8').decode(buffer)
+  }
+}
+
+async function computeStructureHash(root: Document | HTMLElement, courseUrl: string): Promise<string> {
+  const sections = findMaterialSectionLinks(root, courseUrl).map((link) => ({
+    type: 'folder',
+    id: urlToOpalSearchId(link.url),
+    title: cleanIndexedTitle(link.title)
+  }))
+  const files = Array.from(root.querySelectorAll<HTMLAnchorElement>('a[href], a[data-file-name]'))
+    .map((anchor) => {
+      const href = normalizeAllowedOpalUrl(anchor.href)
+      if (!href) return null
+      const title = readBestLinkTitle(
+        {
+          'data-file-name': anchor.getAttribute('data-file-name') || undefined,
+          download: anchor.getAttribute('download') || undefined,
+          title: anchor.getAttribute('title') || undefined,
+          'aria-label': anchor.getAttribute('aria-label') || undefined
+        },
+        anchor.textContent || '',
+        anchor.href
+      )
+      if (!title || isOpalUiControlTarget(href, title) || !isDownloadUrl(href, true)) return null
+      return { type: 'file', id: urlToOpalSearchId(href), title: cleanIndexedTitle(title) }
+    })
+    .filter((entry): entry is { type: string; id: string; title: string } => Boolean(entry))
+
+  const stable = [...sections, ...files].sort((a, b) =>
+    `${a.type}:${a.id}:${a.title}`.localeCompare(`${b.type}:${b.id}:${b.title}`)
+  )
+  return hashString(JSON.stringify(stable))
+}
+
+async function hashString(value: string): Promise<string> {
+  if (!globalThis.crypto?.subtle) return fallbackHashString(value)
+  const bytes = new TextEncoder().encode(value)
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes)
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
+}
+
+function fallbackHashString(value: string): string {
+  let hash = 5381
+  for (let index = 0; index < value.length; index += 1) hash = ((hash << 5) + hash) ^ value.charCodeAt(index)
+  return `djb2:${(hash >>> 0).toString(16)}`
+}
+
+async function isFreshKnownSection(sectionId: string): Promise<boolean> {
+  const existing = await getIndexedOpalSearchNode(sectionId)
+  if (!existing?.lastFetchedAt || !existing.structureHash) return false
+  return Date.now() - existing.lastFetchedAt < ACTIVE_SECTION_COOLDOWN_MS
+}
+
 async function publishActiveIndexProgress(update: ActiveIndexProgressUpdate): Promise<void> {
   const data = await chrome.storage.local.get([OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY])
   const previous = data[OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY] as OpalActiveIndexProgress | undefined
@@ -448,58 +668,29 @@ async function publishActiveIndexProgress(update: ActiveIndexProgressUpdate): Pr
   window.dispatchEvent(new CustomEvent(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, { detail: progress }))
 }
 
-function parseBreadcrumbs(doc: Document): BreadcrumbEntry[] {
-  return Array.from(
-    doc.querySelectorAll<HTMLAnchorElement>('.o_breadcrumb a, nav.breadcrumb a, [class*="breadcrumb"] a')
-  )
-    .map((anchor) => ({ title: anchor.textContent?.trim() || '', url: normalizeAllowedOpalUrl(anchor.href) || '' }))
-    .filter((entry) => entry.title && entry.url && !entry.url.includes('/opal/home'))
-}
-
-function readPageTitle(doc: Document): string {
-  const heading = doc.querySelector('h1, .o_page_title, [class*="page-title"]')
-  return heading?.textContent?.trim() || doc.title.replace(/ [-\u2013\u2014] .*$/, '').trim() || location.pathname
-}
-
-function readSectionTitle(doc: Document, fallback: string): string {
-  const cleanFallback = cleanIndexedTitle(fallback)
-  if (cleanFallback && cleanFallback.length > 3) return cleanFallback
-
-  const crumb = doc
-    .querySelector<HTMLElement>(
-      '.o_breadcrumb li:last-child, nav.breadcrumb li:last-child, [class*="breadcrumb"] li:last-child'
-    )
-    ?.textContent?.trim()
-
-  return cleanIndexedTitle(crumb || '') || cleanFallback || readPageTitle(doc)
-}
-
 function findMaterialSectionLinks(root: Document | HTMLElement, courseUrl: string): { url: string; title: string }[] {
   const repoId = /\/RepositoryEntry\/(\d+)/i.exec(courseUrl)?.[1] || ''
   const origin = safeOrigin(courseUrl)
   const seen = new Set<string>()
   const links: { url: string; title: string }[] = []
 
-  // Add a section link if it belongs to the current course
-  const add = (url: string, title: string) => {
+  const add = (value: string, title: string) => {
     let fullUrl = ''
     try {
-      fullUrl = new URL(url, origin).href
+      fullUrl = new URL(value, origin).href
     } catch {
       return
     }
 
     const safeUrl = normalizeAllowedOpalUrl(fullUrl)
-    if (!safeUrl) return
-    if (!isIndexableOpalTarget(safeUrl)) return
+    if (!safeUrl || !isIndexableOpalTarget(safeUrl)) return
     if (repoId && !safeUrl.includes(`/RepositoryEntry/${repoId}`)) return
     if (urlToOpalSearchId(safeUrl) === urlToOpalSearchId(courseUrl)) return
 
     const key = urlToOpalSearchId(safeUrl)
     if (seen.has(key)) return
     const cleanTitle = cleanIndexedTitle(title) || key
-    if (isNavigationOnlyTitle(cleanTitle)) return
-    if (isOpalUiControlTarget(safeUrl, cleanTitle)) return
+    if (isNavigationOnlyTitle(cleanTitle) || isOpalUiControlTarget(safeUrl, cleanTitle)) return
     seen.add(key)
     links.push({ url: safeUrl, title: cleanTitle })
   }
@@ -537,6 +728,10 @@ function findMaterialSectionLinks(root: Document | HTMLElement, courseUrl: strin
   }
 
   for (const link of extractCourseNodeLinks(root, courseUrl)) add(link.url, link.title)
+  if (root instanceof Document || root instanceof HTMLElement) {
+    const html = root instanceof Document ? root.documentElement.outerHTML : root.outerHTML
+    for (const link of extractCourseNodeLinksFromMarkup(html, courseUrl)) add(link.url, link.title)
+  }
 
   return links
 }
@@ -562,6 +757,163 @@ function enqueueSectionLinks(
   return result
 }
 
+function parseBreadcrumbs(doc: Document): BreadcrumbEntry[] {
+  return Array.from(
+    doc.querySelectorAll<HTMLAnchorElement>('.o_breadcrumb a, nav.breadcrumb a, [class*="breadcrumb"] a')
+  )
+    .map((anchor) => ({ title: anchor.textContent?.trim() || '', url: normalizeAllowedOpalUrl(anchor.href) || '' }))
+    .filter((entry) => entry.title && entry.url && !entry.url.includes('/opal/home'))
+}
+
+function readPageTitle(doc: Document): string {
+  const heading = doc.querySelector('h1, .o_page_title, [class*="page-title"]')
+  return heading?.textContent?.trim() || doc.title.replace(/ [-\u2013\u2014] .*$/, '').trim() || location.pathname
+}
+
+function readDocumentTitle(doc: Document): string {
+  const heading = doc.querySelector('h1, .o_page_title, [class*="page-title"]')
+  return heading?.textContent?.trim() || doc.title.replace(/ [-\u2013\u2014] .*$/, '').trim()
+}
+
+function readSectionTitle(doc: Document, fallback: string): string {
+  const cleanFallback = cleanIndexedTitle(fallback)
+  if (cleanFallback && cleanFallback.length > 3) return cleanFallback
+
+  const crumb = doc
+    .querySelector<HTMLElement>(
+      '.o_breadcrumb li:last-child, nav.breadcrumb li:last-child, [class*="breadcrumb"] li:last-child'
+    )
+    ?.textContent?.trim()
+
+  return cleanIndexedTitle(crumb || '') || cleanFallback || readPageTitle(doc)
+}
+
+function readActiveCourseTargets(data: Record<string, unknown>): CourseTarget[] {
+  const currentUrl = normalizeAllowedOpalUrl(readCurrentCourseUrl())
+  const currentTarget =
+    currentUrl && !isOpalHomeUrl(currentUrl) && /\/RepositoryEntry\/\d+/i.test(currentUrl)
+      ? [{ title: readPageTitle(document), url: currentUrl }]
+      : []
+
+  return uniqueCourseTargets([...currentTarget, ...readStoredCourseTargets(data), ...readPortletCourseTargets()])
+}
+
+function readStoredCourseTargets(data: Record<string, unknown>): CourseTarget[] {
+  return [...readStoredCourses(data.favoriten), ...readStoredCourses(data.meine_kurse)]
+    .map((course) => ({
+      title: course.title || course.name || '',
+      url: normalizeAllowedOpalUrl(course.href || course.link || '') || ''
+    }))
+    .filter((course) => course.title && course.url && /\/RepositoryEntry\/\d+/i.test(course.url))
+}
+
+function readPortletCourseTargets(): CourseTarget[] {
+  const portlets = document.querySelectorAll(
+    [
+      'div[data-portlet-order="Bookmarks"]',
+      'div[data-portlet-order="RepositoryPortletStudent"]',
+      '.portlet.bookmarks',
+      '.portlet.repositoryportletstudent',
+      '.portlet.lastusedrepositoryportlet'
+    ].join(',')
+  )
+  const courses: CourseTarget[] = []
+
+  for (const portlet of Array.from(portlets)) {
+    for (const anchor of Array.from(portlet.querySelectorAll<HTMLAnchorElement>('a[href*="/RepositoryEntry/"]'))) {
+      const url = normalizeAllowedOpalUrl(anchor.href)
+      if (!url) continue
+      const title = readBestLinkTitle(
+        {
+          title: anchor.getAttribute('title') || undefined,
+          'aria-label': anchor.getAttribute('aria-label') || undefined
+        },
+        anchor.textContent || '',
+        url
+      )
+      if (title) courses.push({ title, url })
+    }
+  }
+
+  return courses
+}
+
+function readCurrentCourseUrl(): string {
+  const breadcrumbs = parseBreadcrumbs(document)
+  return breadcrumbs[0]?.url || location.href
+}
+
+function uniqueCourseTargets(courses: CourseTarget[]): CourseTarget[] {
+  const seen = new Set<string>()
+  const unique: CourseTarget[] = []
+
+  for (const course of courses) {
+    const key = urlToOpalSearchId(course.url)
+    if (!key || seen.has(key)) continue
+    seen.add(key)
+    unique.push(course)
+  }
+
+  return unique
+}
+
+function readStoredCourses(value: unknown): OpalStoredCourse[] {
+  if (Array.isArray(value)) return value as OpalStoredCourse[]
+  if (typeof value !== 'string') return []
+
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function tryHighlightFile(intent: { title: string; url: string }, targetUrl: string): boolean {
+  const escapedTitle = CSS.escape ? CSS.escape(intent.title) : intent.title.replace(/"/g, '\\"')
+  const byName = document.querySelector<HTMLAnchorElement>(`a[data-file-name="${escapedTitle}"]`)
+  if (byName && applyHighlight(byName)) return true
+
+  try {
+    const targetPath = new URL(targetUrl).pathname
+    for (const anchor of Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href]'))) {
+      try {
+        if (new URL(anchor.href).pathname === targetPath && applyHighlight(anchor)) return true
+      } catch {
+        // Ignore malformed links.
+      }
+    }
+  } catch {
+    return false
+  }
+
+  return false
+}
+
+function applyHighlight(anchor: HTMLAnchorElement): boolean {
+  const target = anchor.closest('tr') || anchor.parentElement
+  if (!target) return false
+
+  target.classList.add('tufast-smart-search-highlight')
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  window.setTimeout(() => target.classList.remove('tufast-smart-search-highlight'), 3500)
+  return true
+}
+
+function readFilenameFromDisposition(disposition: string): string {
+  const utfMatch = disposition.match(/filename\*\s*=\s*UTF-8''([^;]+)/i)
+  if (utfMatch?.[1]) {
+    try {
+      return decodeURIComponent(utfMatch[1].replace(/"/g, '').trim())
+    } catch {
+      return utfMatch[1].replace(/"/g, '').trim()
+    }
+  }
+
+  const plainMatch = disposition.match(/filename\s*=\s*"?([^";]+)"?/i)
+  return plainMatch?.[1]?.trim() || ''
+}
+
 function cleanIndexedTitle(value: string): string {
   return value
     .replace(/\s+/g, ' ')
@@ -577,60 +929,18 @@ function isNavigationOnlyTitle(value: string): boolean {
 function isLowValueRenderedSection(title: string, url: string): boolean {
   const cleanTitle = cleanIndexedTitle(title)
   if (isNavigationOnlyTitle(cleanTitle)) return true
-  if (/^(Zum Kursmen\u00fc|Zum Inhalt|Kursmen\u00fc|Inhalt|Zum KursmenÃ¼|KursmenÃ¼)$/i.test(cleanTitle)) return true
+  if (/^(Zum Kursmenü|Zum Inhalt|Kursmenü|Inhalt|Zum KursmenÃƒÂ¼|KursmenÃƒÂ¼)$/i.test(cleanTitle)) return true
   if (isOpalUiControlTarget(url, cleanTitle)) return true
   return false
 }
 
-function readStoredCourses(value: unknown): OpalStoredCourse[] {
-  if (Array.isArray(value)) return value as OpalStoredCourse[]
-  if (typeof value !== 'string') return []
-
+function isOpalHomeUrl(url: string): boolean {
   try {
-    const parsed = JSON.parse(value)
-    return Array.isArray(parsed) ? parsed : []
+    const parsed = new URL(url)
+    return parsed.pathname.replace(/\/$/, '') === '/opal/home'
   } catch {
-    return []
+    return false
   }
-}
-
-function uniqueCourses(courses: OpalStoredCourse[]): OpalStoredCourse[] {
-  const seen = new Set<string>()
-  return courses.filter((course) => {
-    const url = course.href || course.link || ''
-    if (!url || seen.has(url)) return false
-    seen.add(url)
-    return true
-  })
-}
-
-function waitForLoad(iframe: HTMLIFrameElement, timeoutMs: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    let settled = false
-    const finish = (value: boolean) => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(timer)
-      iframe.removeEventListener('load', onLoad)
-      iframe.removeEventListener('error', onError)
-      resolve(value)
-    }
-    const onLoad = () => finish(true)
-    const onError = () => finish(false)
-    const timer = window.setTimeout(() => finish(false), timeoutMs)
-    iframe.addEventListener('load', onLoad)
-    iframe.addEventListener('error', onError)
-  })
-}
-
-function applyHighlight(anchor: HTMLAnchorElement): boolean {
-  const target = anchor.closest('tr') || anchor.parentElement
-  if (!target) return false
-
-  target.classList.add('tufast-smart-search-highlight')
-  target.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  window.setTimeout(() => target.classList.remove('tufast-smart-search-highlight'), 3500)
-  return true
 }
 
 function safeOrigin(url: string): string {

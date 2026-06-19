@@ -12,6 +12,8 @@ export interface OpalSearchNode {
   fileExtension?: string
   source?: 'user' | 'active'
   indexedAt?: number
+  lastFetchedAt?: number
+  structureHash?: string
   searchText?: string
   pathIds?: string[]
   pathTitles?: string[]
