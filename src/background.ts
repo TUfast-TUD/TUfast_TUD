@@ -604,6 +604,7 @@ async function openOpalSmartSearch(currentTab: chrome.tabs.Tab) {
     url: 'https://bildungsportal.sachsen.de/opal/home/',
     index: typeof currentTab.index === 'number' ? currentTab.index + 1 : undefined
   })
+  await saveClicks(2)
 }
 
 // save_click_counter
