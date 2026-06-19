@@ -20,8 +20,10 @@
     await indexerModule.indexCurrentOpalPage()
   }
 
-  // Carefully crawl a few courses in the background if the user enabled it
-  if (settings.activeIndexing) {
+  // Resume only an explicitly started preload job
+  const data = await chrome.storage.local.get([settingsModule.OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY])
+  const activeProgress = data[settingsModule.OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]
+  if (settings.activeIndexing && activeProgress?.status === 'running') {
     window.setTimeout(() => {
       indexerModule
         .maybeRunActiveIndexing()

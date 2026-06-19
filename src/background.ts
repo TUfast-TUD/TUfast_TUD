@@ -11,8 +11,14 @@ import {
   upsertGraphNodes
 } from './modules/opalSmartSearch/indexDb'
 import { searchOpalNodes } from './modules/opalSmartSearch/search'
-import { DEFAULT_SMART_SEARCH_SETTINGS } from './modules/opalSmartSearch/settings'
-import type { OpalSearchNode } from './modules/opalSmartSearch/types'
+import {
+  DEFAULT_SMART_SEARCH_SETTINGS,
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
+  OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
+  loadSmartSearchSettings,
+  saveSmartSearchSettings
+} from './modules/opalSmartSearch/settings'
+import type { OpalActiveIndexProgress, OpalSearchNode } from './modules/opalSmartSearch/types'
 import { isAllowedOpalUrl, sanitizeOpalSearchNodes } from './modules/opalSmartSearch/urlPolicy'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
@@ -507,6 +513,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'opal_smart_search_stats':
       getOpalSearchIndexStats().then(sendResponse)
       return true
+    case 'opal_smart_search_preload_now':
+      startOpalSmartSearchPreload().then(sendResponse)
+      return true
     case 'opal_smart_search_clear':
       clearOpalSearchIndex().then(() => sendResponse(true))
       return true
@@ -605,6 +614,37 @@ async function openOpalSmartSearch(currentTab: chrome.tabs.Tab) {
     index: typeof currentTab.index === 'number' ? currentTab.index + 1 : undefined
   })
   await saveClicks(2)
+}
+
+async function startOpalSmartSearchPreload(): Promise<boolean> {
+  const settings = await loadSmartSearchSettings()
+  const progress: OpalActiveIndexProgress = {
+    status: 'running',
+    startedAt: Date.now(),
+    updatedAt: Date.now(),
+    totalCourses: 0,
+    completedCourses: 0,
+    indexedItems: 0
+  }
+
+  await saveSmartSearchSettings({ ...settings, activeIndexing: true })
+  await chrome.storage.local.remove([OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
+
+  const opalTabs = await chrome.tabs.query({ url: 'https://bildungsportal.sachsen.de/opal/*' })
+  const opalTab = opalTabs.find((tab) => typeof tab.id === 'number')
+  if (opalTab?.id) {
+    try {
+      await chrome.tabs.sendMessage(opalTab.id, { cmd: 'start_opal_smart_search_preload' })
+      await chrome.tabs.update(opalTab.id, { active: true })
+      return true
+    } catch (error) {
+      console.warn('[TUfast Smart Search] Could not start preload in existing OPAL tab:', error)
+    }
+  }
+
+  await chrome.tabs.create({ url: 'https://bildungsportal.sachsen.de/opal/home/', active: true })
+  return true
 }
 
 // save_click_counter

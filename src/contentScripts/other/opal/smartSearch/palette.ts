@@ -1,13 +1,12 @@
 import { getIndexedOpalSearchNode, searchIndexedOpalNodes } from './messages'
-import { bootstrapCoursesFromStorage, maybeRunActiveIndexing } from './indexer'
+import { startActiveIndexing } from './indexer'
 import { extractCourseIdFromUrl, urlToOpalSearchId } from './opalParser'
 import {
   loadSmartSearchSettings,
   OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
   OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT,
   OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
-  OPAL_SMART_SEARCH_HIGHLIGHT_KEY,
-  saveSmartSearchSettings
+  OPAL_SMART_SEARCH_HIGHLIGHT_KEY
 } from '../../../../modules/opalSmartSearch/settings'
 import { OPAL_SMART_SEARCH_STRINGS } from '../../../../modules/opalSmartSearch/strings'
 import type {
@@ -77,13 +76,29 @@ export function bindOpalSmartSearchPalette(): void {
   if (registered) return
   registered = true
 
-  chrome.runtime.onMessage.addListener((request) => {
+  chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     // Background commands open the same dialog as the header trigger
     if (request.cmd === 'open_opal_smart_search') {
-      openOpalSmartSearchPalette().catch((error) =>
-        console.warn('[TUfast Smart Search] Could not open palette:', error)
-      )
+      openOpalSmartSearchPalette()
+        .then(() => sendResponse(true))
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not open palette:', error)
+          sendResponse(false)
+        })
+      return true
     }
+
+    if (request.cmd === 'start_opal_smart_search_preload') {
+      startActiveIndexing()
+        .then(() => sendResponse(true))
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not start active indexing:', error)
+          sendResponse(false)
+        })
+      return true
+    }
+
+    return false
   })
 
   injectHeaderTrigger()
@@ -432,21 +447,7 @@ async function handleActiveIndexPromptAction(action: string, element: HTMLElemen
   const startButton = element.querySelector<HTMLButtonElement>('[data-active-index-action="start"]')
   if (startButton) startButton.textContent = OPAL_SMART_SEARCH_STRINGS.activeIndexPromptRunning
 
-  const settings = await loadSmartSearchSettings()
-  await saveSmartSearchSettings({ ...settings, activeIndexing: true })
-  await bootstrapCoursesFromStorage()
-
-  const progress: OpalActiveIndexProgress = {
-    status: 'running',
-    startedAt: Date.now(),
-    updatedAt: Date.now(),
-    totalCourses: 0,
-    completedCourses: 0,
-    indexedItems: 0
-  }
-  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
-
-  maybeRunActiveIndexing().catch((error) => console.warn('[TUfast Smart Search] Active indexing failed:', error))
+  const progress = await startActiveIndexing()
   return { keepVisible: true, progress }
 }
 

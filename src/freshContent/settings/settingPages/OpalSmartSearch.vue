@@ -2,14 +2,27 @@
   <h3 class="card-body-title">OPAL Smart Search</h3>
   <Setting v-model="enabled" :txt="smartSearchStrings.settingsEnable" />
   <Setting v-model="passiveIndexing" :txt="smartSearchStrings.settingsPassiveIndexing" />
-  <Setting v-model="activeIndexing" :txt="smartSearchStrings.settingsActiveIndexing" />
+  <Setting v-model="showPreloadPrompts" :txt="smartSearchStrings.settingsShowPreloadPrompts" />
 
   <p class="max-line p-margin">
     {{ smartSearchStrings.settingsPrivacy }}
   </p>
   <p class="max-line p-margin txt-help">{{ smartSearchStrings.settingsCredit }}</p>
 
+  <div class="smart-search-actions">
+    <button class="smart-search-button" :disabled="preloadRunning" @click="preloadNow">
+      {{ smartSearchStrings.settingsPreloadNow }}
+    </button>
+    <button class="smart-search-button smart-search-button--secondary" @click="resetPreloadPrompts">
+      {{ smartSearchStrings.settingsResetPreloadPrompts }}
+    </button>
+  </div>
+
   <div class="smart-search-status">
+    <div>
+      <span class="smart-search-status__label">{{ smartSearchStrings.settingsPreloadStatus }}</span>
+      <strong>{{ preloadStatusLabel }}</strong>
+    </div>
     <div>
       <span class="smart-search-status__label">{{ smartSearchStrings.settingsLocalEntries }}</span>
       <strong>{{ stats.count }}</strong>
@@ -20,14 +33,21 @@
     </div>
   </div>
 
-  <button class="smart-search-clear" @click="clearIndex">{{ smartSearchStrings.settingsClearIndex }}</button>
+  <button class="smart-search-button smart-search-button--secondary" @click="clearIndex">
+    {{ smartSearchStrings.settingsClearIndex }}
+  </button>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref, watch } from 'vue'
 
 // types
-import type { OpalSmartSearchSettings } from '../../../modules/opalSmartSearch/types'
+import type {
+  ResponseOpalSmartSearch,
+  ResponseOpalSmartSearchPrompt,
+  ResponseOpalSmartSearchProgress,
+  ResponseOpalSmartSearchStats
+} from '../types/SettingHandler'
 
 // components
 import Setting from '../components/Setting.vue'
@@ -35,58 +55,77 @@ import Setting from '../components/Setting.vue'
 // configurations
 import { OPAL_SMART_SEARCH_STRINGS } from '../../../modules/opalSmartSearch/strings'
 
-const DEFAULT_SMART_SEARCH_SETTINGS: OpalSmartSearchSettings = {
-  enabled: true,
-  passiveIndexing: true,
-  activeIndexing: false
-}
+// composables
+import { useSettingHandler } from '../composables/setting-handler'
 
 export default defineComponent({
   components: {
     Setting
   },
   setup() {
+    const {
+      opalSmartSearch,
+      opalSmartSearchStats,
+      opalSmartSearchProgress,
+      opalSmartSearchPrompt,
+      startOpalSmartSearchPreload,
+      resetOpalSmartSearchPreloadPrompts,
+      clearOpalSmartSearchIndex
+    } = useSettingHandler()
     const enabled = ref(true)
     const passiveIndexing = ref(true)
-    const activeIndexing = ref(false)
-    const stats = ref({ count: 0, lastIndexedAt: 0 })
+    const showPreloadPrompts = ref(true)
+    const stats = ref<ResponseOpalSmartSearchStats>({ count: 0, lastIndexedAt: 0 })
+    const progress = ref<ResponseOpalSmartSearchProgress>({
+      status: 'idle',
+      startedAt: 0,
+      updatedAt: 0,
+      totalCourses: 0,
+      completedCourses: 0,
+      indexedItems: 0
+    })
     const smartSearchStrings = OPAL_SMART_SEARCH_STRINGS
     let ready = false
 
     const load = async () => {
-      const stored = await chrome.storage.local.get({
-        opalSmartSearchSettings: DEFAULT_SMART_SEARCH_SETTINGS
-      })
-      const settings = {
-        ...DEFAULT_SMART_SEARCH_SETTINGS,
-        ...(stored.opalSmartSearchSettings as Partial<OpalSmartSearchSettings>)
-      }
+      const settings = (await opalSmartSearch('check')) as ResponseOpalSmartSearch
+      const prompts = (await opalSmartSearchPrompt('check')) as ResponseOpalSmartSearchPrompt
 
       enabled.value = settings.enabled
       passiveIndexing.value = settings.passiveIndexing
-      activeIndexing.value = settings.activeIndexing
+      showPreloadPrompts.value = prompts.showPreloadPrompts
       await refreshStats()
+      await refreshProgress()
       ready = true
     }
 
     const save = async () => {
       if (!ready) return
-      await chrome.storage.local.set({
-        opalSmartSearchSettings: {
-          enabled: enabled.value,
-          passiveIndexing: passiveIndexing.value,
-          activeIndexing: activeIndexing.value
-        }
-      })
+      await opalSmartSearch(enabled.value ? 'enable' : 'disable', 'enabled')
+      await opalSmartSearch(passiveIndexing.value ? 'enable' : 'disable', 'passiveIndexing')
+      await opalSmartSearchPrompt(showPreloadPrompts.value ? 'enable' : 'disable')
     }
 
     const refreshStats = async () => {
-      const response = await chrome.runtime.sendMessage({ cmd: 'opal_smart_search_stats' })
-      stats.value = response || { count: 0, lastIndexedAt: 0 }
+      stats.value = await opalSmartSearchStats()
+    }
+
+    const refreshProgress = async () => {
+      progress.value = await opalSmartSearchProgress()
+    }
+
+    const preloadNow = async () => {
+      await startOpalSmartSearchPreload()
+      await refreshProgress()
+    }
+
+    const resetPreloadPrompts = async () => {
+      await resetOpalSmartSearchPreloadPrompts()
+      showPreloadPrompts.value = true
     }
 
     const clearIndex = async () => {
-      await chrome.runtime.sendMessage({ cmd: 'opal_smart_search_clear' })
+      await clearOpalSmartSearchIndex()
       await refreshStats()
     }
 
@@ -95,16 +134,28 @@ export default defineComponent({
       return new Date(stats.value.lastIndexedAt).toLocaleString()
     })
 
-    watch([enabled, passiveIndexing, activeIndexing], save)
+    const preloadRunning = computed(() => progress.value.status === 'running')
+
+    const preloadStatusLabel = computed(() => {
+      if (progress.value.status === 'running') return smartSearchStrings.settingsPreloadRunning
+      if (progress.value.status === 'done') return smartSearchStrings.settingsPreloadDone
+      return enabled.value ? smartSearchStrings.settingsPreloadEnabled : smartSearchStrings.settingsPreloadIdle
+    })
+
+    watch([enabled, passiveIndexing, showPreloadPrompts], save)
     onBeforeMount(load)
 
     return {
       enabled,
       passiveIndexing,
-      activeIndexing,
+      showPreloadPrompts,
       stats,
       smartSearchStrings,
       lastIndexedLabel,
+      preloadRunning,
+      preloadStatusLabel,
+      preloadNow,
+      resetPreloadPrompts,
       clearIndex
     }
   }
@@ -132,7 +183,13 @@ export default defineComponent({
     color: var(--clr-text-help)
     font-size: .85rem
 
-.smart-search-clear
+.smart-search-actions
+  display: flex
+  flex-wrap: wrap
+  gap: 8px
+  margin: 16px 0
+
+.smart-search-button
   border: 0
   border-radius: var(--brd-rad-sm)
   padding: 10px 14px
@@ -142,4 +199,11 @@ export default defineComponent({
 
   &:hover
     background: hsl(var(--clr-btnhov))
+
+  &:disabled
+    opacity: .5
+    cursor: not-allowed
+
+  &--secondary
+    background: hsl(var(--clr-backgr))
 </style>

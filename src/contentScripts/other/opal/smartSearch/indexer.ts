@@ -12,8 +12,10 @@ import {
 } from './opalParser'
 import {
   loadSmartSearchSettings,
+  OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
   OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT,
-  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
+  saveSmartSearchSettings
 } from '../../../../modules/opalSmartSearch/settings'
 import type {
   OpalActiveIndexProgress,
@@ -203,6 +205,28 @@ export async function maybeRunActiveIndexing(): Promise<void> {
     completedCourses: toIndex.length,
     indexedItems
   })
+}
+
+export async function startActiveIndexing(): Promise<OpalActiveIndexProgress> {
+  const settings = await loadSmartSearchSettings()
+  await chrome.storage.local.remove([OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  await saveSmartSearchSettings({ ...settings, activeIndexing: true })
+  await bootstrapCoursesFromStorage()
+
+  const progress: OpalActiveIndexProgress = {
+    status: 'running',
+    startedAt: Date.now(),
+    updatedAt: Date.now(),
+    totalCourses: 0,
+    completedCourses: 0,
+    indexedItems: 0
+  }
+
+  activeIndexStarted = false
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
+  window.dispatchEvent(new CustomEvent(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, { detail: progress }))
+  maybeRunActiveIndexing().catch((error) => console.warn('[TUfast Smart Search] Active indexing failed:', error))
+  return progress
 }
 
 export async function checkAndHighlightIndexedFile(): Promise<void> {
