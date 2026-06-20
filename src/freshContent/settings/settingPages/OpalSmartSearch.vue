@@ -1,8 +1,8 @@
 <template>
   <h3 class="card-body-title">OPAL Smart Search</h3>
-  <Setting v-model="enabled" :txt="smartSearchStrings.settingsEnable" />
-  <Setting v-model="passiveIndexing" :txt="smartSearchStrings.settingsPassiveIndexing" />
-  <Setting v-model="showPreloadPrompts" :txt="smartSearchStrings.settingsShowPreloadPrompts" />
+  <Setting v-model="enabled" :txt="smartSearchStrings.settingsEnableToggle" />
+  <Setting v-model="passiveIndexing" :txt="smartSearchStrings.settingsPassiveIndexingToggle" />
+  <Setting v-model="showPreloadPrompts" :txt="smartSearchStrings.settingsPreloadPromptsToggle" />
 
   <p class="max-line p-margin">
     {{ smartSearchStrings.settingsPrivacy }}
@@ -11,30 +11,30 @@
 
   <div class="smart-search-actions">
     <button class="smart-search-button" :disabled="preloadRunning" @click="preloadNow">
-      {{ smartSearchStrings.settingsPreloadNow }}
+      {{ smartSearchStrings.settingsPreloadNowButton }}
     </button>
     <button class="smart-search-button smart-search-button--secondary" @click="resetPreloadPrompts">
-      {{ smartSearchStrings.settingsResetPreloadPrompts }}
+      {{ smartSearchStrings.settingsResetPreloadPromptsButton }}
     </button>
   </div>
 
   <div class="smart-search-status">
     <div>
-      <span class="smart-search-status__label">{{ smartSearchStrings.settingsPreloadStatus }}</span>
+      <span class="smart-search-status__label">{{ smartSearchStrings.settingsPreloadStatusLabel }}</span>
       <strong>{{ preloadStatusLabel }}</strong>
     </div>
     <div>
-      <span class="smart-search-status__label">{{ smartSearchStrings.settingsLocalEntries }}</span>
+      <span class="smart-search-status__label">{{ smartSearchStrings.settingsLocalEntriesLabel }}</span>
       <strong>{{ stats.count }}</strong>
     </div>
     <div>
-      <span class="smart-search-status__label">{{ smartSearchStrings.settingsLastIndexed }}</span>
+      <span class="smart-search-status__label">{{ smartSearchStrings.settingsLastIndexedLabel }}</span>
       <strong>{{ lastIndexedLabel }}</strong>
     </div>
   </div>
 
   <button class="smart-search-button smart-search-button--secondary" @click="clearIndex">
-    {{ smartSearchStrings.settingsClearIndex }}
+    {{ smartSearchStrings.settingsClearIndexButton }}
   </button>
 </template>
 
@@ -137,9 +137,9 @@ export default defineComponent({
     const preloadRunning = computed(() => progress.value.status === 'running')
 
     const preloadStatusLabel = computed(() => {
-      if (progress.value.status === 'running') return smartSearchStrings.settingsPreloadRunning
-      if (progress.value.status === 'done') return smartSearchStrings.settingsPreloadDone
-      return enabled.value ? smartSearchStrings.settingsPreloadEnabled : smartSearchStrings.settingsPreloadIdle
+      if (progress.value.status === 'running') return smartSearchStrings.settingsPreloadStatusRunning
+      if (progress.value.status === 'done') return smartSearchStrings.settingsPreloadStatusDone
+      return enabled.value ? smartSearchStrings.settingsPreloadStatusReady : smartSearchStrings.settingsPreloadStatusIdle
     })
 
     watch([enabled, passiveIndexing, showPreloadPrompts], save)

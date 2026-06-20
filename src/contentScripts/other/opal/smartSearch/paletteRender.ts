@@ -23,18 +23,18 @@ export function renderActiveIndexPrompt(
 
   element.innerHTML = `
     <div>
-      <strong>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexPromptTitle)}</strong>
-      <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexPromptText)}</span>
+      <strong>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.palettePreloadPromptTitle)}</strong>
+      <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.palettePreloadPromptText)}</span>
     </div>
     <div class="tufast-smart-search__active-actions">
       <button type="button" data-active-index-action="start">${escapeHtml(
-        OPAL_SMART_SEARCH_STRINGS.activeIndexPromptStart
+        OPAL_SMART_SEARCH_STRINGS.palettePreloadPromptStart
       )}</button>
       <button type="button" data-active-index-action="later">${escapeHtml(
-        OPAL_SMART_SEARCH_STRINGS.activeIndexPromptLater
+        OPAL_SMART_SEARCH_STRINGS.palettePreloadPromptLater
       )}</button>
       <button type="button" data-active-index-action="dismiss">${escapeHtml(
-        OPAL_SMART_SEARCH_STRINGS.activeIndexPromptDismiss
+        OPAL_SMART_SEARCH_STRINGS.palettePreloadPromptDismiss
       )}</button>
     </div>
   `
@@ -42,7 +42,7 @@ export function renderActiveIndexPrompt(
 
 export function renderResults(results: OpalSearchResult[], selectedIndex: number): string {
   if (results.length === 0) {
-    return `<div class="tufast-smart-search__empty">${escapeHtml(OPAL_SMART_SEARCH_STRINGS.emptyResults)}</div>`
+    return `<div class="tufast-smart-search__empty">${escapeHtml(OPAL_SMART_SEARCH_STRINGS.paletteEmptyResults)}</div>`
   }
 
   return results.map((result, index) => renderResult(result.node, index, index === selectedIndex)).join('')
@@ -74,10 +74,10 @@ function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
   const pendingGraphNode = progress.status === 'running' ? Math.min(completedGraphNodes, 5) : -1
   const title =
     progress.status === 'done'
-      ? OPAL_SMART_SEARCH_STRINGS.activeIndexProgressDone
-      : OPAL_SMART_SEARCH_STRINGS.activeIndexPromptRunning
+      ? OPAL_SMART_SEARCH_STRINGS.palettePreloadStatusDone
+      : OPAL_SMART_SEARCH_STRINGS.palettePreloadStatusRunning
   const currentCourse = progress.currentCourseTitle
-    ? `<span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexProgressCourse)}: ${escapeHtml(
+    ? `<span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.palettePreloadCurrentCourseLabel)}: ${escapeHtml(
         progress.currentCourseTitle
       )}</span>`
     : ''
@@ -91,8 +91,8 @@ function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
     <div class="tufast-smart-search__active-copy">
       <strong>${escapeHtml(title)}</strong>
       ${currentCourse}
-      <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.activeIndexProgressCourses)}: ${completedCourses}/${totalCourses} Â· ${escapeHtml(
-        OPAL_SMART_SEARCH_STRINGS.activeIndexProgressIndexed
+      <span>${escapeHtml(OPAL_SMART_SEARCH_STRINGS.palettePreloadCoursesLabel)}: ${completedCourses}/${totalCourses} &middot; ${escapeHtml(
+        OPAL_SMART_SEARCH_STRINGS.palettePreloadIndexedItemsLabel
       )}: ${progress.indexedItems}</span>
     </div>
     <div class="tufast-smart-search__graph" style="--graph-progress: ${coursePercent}%" aria-hidden="true">${nodes}</div>
@@ -100,7 +100,7 @@ function renderActiveIndexProgress(progress: OpalActiveIndexProgress): string {
 }
 
 function renderResult(node: OpalSearchNode, index: number, selected: boolean): string {
-  const extension = node.fileExtension ? ` Â· .${escapeHtml(node.fileExtension.toUpperCase())}` : ''
+  const extension = node.fileExtension ? ` &middot; .${escapeHtml(node.fileExtension.toUpperCase())}` : ''
   return `
     <a href="${escapeAttr(node.url)}" data-index="${index}"
       class="tufast-smart-search__result${selected ? ' is-selected' : ''}">
@@ -109,7 +109,7 @@ function renderResult(node: OpalSearchNode, index: number, selected: boolean): s
         <strong>${escapeHtml(node.title)}</strong>
         <small>${typeSubtitle(node.type)}${extension}</small>
       </span>
-      <span class="tufast-smart-search__arrow" aria-hidden="true">â€º</span>
+      <span class="tufast-smart-search__arrow" aria-hidden="true">&rsaquo;</span>
     </a>
   `
 }
@@ -130,12 +130,12 @@ function typeLabel(type: OpalSearchNode['type']): string {
 function typeSubtitle(type: OpalSearchNode['type']): string {
   switch (type) {
     case 'course':
-      return OPAL_SMART_SEARCH_STRINGS.typeCourse
+      return OPAL_SMART_SEARCH_STRINGS.paletteTypeCourse
     case 'folder':
-      return OPAL_SMART_SEARCH_STRINGS.typeFolder
+      return OPAL_SMART_SEARCH_STRINGS.paletteTypeFolder
     case 'file':
-      return OPAL_SMART_SEARCH_STRINGS.typeFile
+      return OPAL_SMART_SEARCH_STRINGS.paletteTypeFile
     default:
-      return OPAL_SMART_SEARCH_STRINGS.typeAction
+      return OPAL_SMART_SEARCH_STRINGS.paletteTypeAction
   }
 }

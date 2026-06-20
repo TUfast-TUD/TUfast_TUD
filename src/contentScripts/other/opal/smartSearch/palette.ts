@@ -21,7 +21,7 @@ const ACTIONS: OpalSearchResult[] = [
   {
     node: {
       id: '__action-open-opal-home',
-      title: OPAL_SMART_SEARCH_STRINGS.actionOpenOpalHome,
+      title: OPAL_SMART_SEARCH_STRINGS.paletteActionOpenOpalHome,
       url: 'https://bildungsportal.sachsen.de/opal/home/',
       type: 'action',
       courseId: '',
@@ -35,7 +35,7 @@ const ACTIONS: OpalSearchResult[] = [
   {
     node: {
       id: '__action-open-opal-courses',
-      title: OPAL_SMART_SEARCH_STRINGS.actionOpenOpalCourses,
+      title: OPAL_SMART_SEARCH_STRINGS.paletteActionOpenOpalCourses,
       url: 'https://bildungsportal.sachsen.de/opal/auth/resource/courses',
       type: 'action',
       courseId: '',
@@ -51,7 +51,7 @@ const ACTIONS: OpalSearchResult[] = [
 const PRELOAD_FAVORITES_ACTION: OpalSearchResult = {
   node: {
     id: '__action-preload-opal-favorites',
-    title: OPAL_SMART_SEARCH_STRINGS.actionPreloadOpalFavorites,
+    title: OPAL_SMART_SEARCH_STRINGS.paletteActionPreloadOpalFavorites,
     url: 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites',
     type: 'action',
     courseId: '',
@@ -127,9 +127,9 @@ function injectHeaderTrigger(): void {
   trigger.id = 'tufastSmartSearchTrigger'
   trigger.type = 'text'
   trigger.readOnly = true
-  trigger.placeholder = OPAL_SMART_SEARCH_STRINGS.headerPlaceholder
-  trigger.title = OPAL_SMART_SEARCH_STRINGS.openSearchTitle
-  trigger.setAttribute('aria-label', OPAL_SMART_SEARCH_STRINGS.openSearchTitle)
+  trigger.placeholder = OPAL_SMART_SEARCH_STRINGS.paletteHeaderPlaceholder
+  trigger.title = OPAL_SMART_SEARCH_STRINGS.paletteOpenTitle
+  trigger.setAttribute('aria-label', OPAL_SMART_SEARCH_STRINGS.paletteOpenTitle)
 
   // Open the same dialog as the extension command
   const open = (event: Event) => {
@@ -156,12 +156,12 @@ export async function openOpalSmartSearchPalette(): Promise<void> {
   overlay.id = 'tufast-smart-search'
   overlay.innerHTML = `
     <div class="tufast-smart-search__panel" role="dialog" aria-modal="true" aria-label="${escapeAttr(
-      OPAL_SMART_SEARCH_STRINGS.paletteLabel
+      OPAL_SMART_SEARCH_STRINGS.paletteDialogLabel
     )}">
       <div class="tufast-smart-search__field">
         <span class="tufast-smart-search__lens" aria-hidden="true"></span>
         <input id="tufast-smart-search-input" type="text" autocomplete="off" spellcheck="false"
-          placeholder="${escapeAttr(OPAL_SMART_SEARCH_STRINGS.palettePlaceholder)}" />
+          placeholder="${escapeAttr(OPAL_SMART_SEARCH_STRINGS.paletteInputPlaceholder)}" />
         <kbd>Esc</kbd>
       </div>
       <div id="tufast-smart-search-active-prompt" class="tufast-smart-search__active-prompt" hidden></div>
@@ -376,7 +376,7 @@ async function handleActiveIndexPromptAction(action: string, element: HTMLElemen
     button.disabled = true
   })
   const startButton = element.querySelector<HTMLButtonElement>('[data-active-index-action="start"]')
-  if (startButton) startButton.textContent = OPAL_SMART_SEARCH_STRINGS.activeIndexPromptRunning
+  if (startButton) startButton.textContent = OPAL_SMART_SEARCH_STRINGS.palettePreloadStatusRunning
 
   const progress = await startActiveIndexing()
   return { keepVisible: true, progress }
