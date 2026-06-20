@@ -267,6 +267,8 @@ async function indexRenderedCourse(
   const safeCourseUrl = normalizeAllowedOpalUrl(course.url)
   if (!safeCourseUrl) return 0
 
+  // OPAL renders some course folders only after its own scripts run, so fetch-only parsing misses them.
+  // A hidden same-origin iframe gives those scripts a real document without taking over the user's page.
   const iframe = document.createElement('iframe')
   iframe.dataset.tufastSmartSearchActiveIndexer = 'true'
   iframe.setAttribute('aria-hidden', 'true')
@@ -501,6 +503,8 @@ async function preflightRenderedTarget(url: string, fallbackTitle: string): Prom
   const safeUrl = normalizeAllowedOpalUrl(url)
   if (!safeUrl) return { kind: 'skip', reason: 'non-OPAL URL' }
 
+  // Some OPAL folder links redirect straight to downloads. Check headers before putting them in the iframe,
+  // otherwise a background crawl can accidentally trigger browser download UI.
   const controller = new AbortController()
   const timeout = window.setTimeout(() => controller.abort(), ACTIVE_FETCH_TIMEOUT_MS)
 
@@ -596,6 +600,7 @@ async function fetchOpalDocument(url: string): Promise<Document | null> {
     const buffer = await response.arrayBuffer()
     const html = decodeHtmlResponse(buffer, response)
     const doc = new DOMParser().parseFromString(html, 'text/html')
+    // Parsed documents do not inherit response.url, but OPAL uses many relative links.
     const base = doc.createElement('base')
     base.href = normalizeAllowedOpalUrl(response.url) || safeUrl
     doc.head.prepend(base)

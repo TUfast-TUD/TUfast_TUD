@@ -8,6 +8,7 @@ export async function checkAndHighlightIndexedFile(): Promise<void> {
   if (!intent || !targetUrl) return
 
   await chrome.storage.local.remove([OPAL_SMART_SEARCH_HIGHLIGHT_KEY])
+  // OPAL often renders file rows shortly after navigation, especially inside course folders.
   if (!tryHighlightFile(intent, targetUrl)) window.setTimeout(() => tryHighlightFile(intent, targetUrl), 800)
 }
 
