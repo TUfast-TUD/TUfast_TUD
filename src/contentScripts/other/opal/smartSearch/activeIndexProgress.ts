@@ -8,9 +8,7 @@ export type ActiveIndexProgressUpdate = Partial<Omit<OpalActiveIndexProgress, 's
   startedAt?: number
 }
 
-export async function publishActiveIndexProgress(
-  update: ActiveIndexProgressUpdate
-): Promise<OpalActiveIndexProgress> {
+export async function publishActiveIndexProgress(update: ActiveIndexProgressUpdate): Promise<OpalActiveIndexProgress> {
   const data = await chrome.storage.local.get([OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY])
   const previous = data[OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY] as OpalActiveIndexProgress | undefined
   const progress: OpalActiveIndexProgress = {

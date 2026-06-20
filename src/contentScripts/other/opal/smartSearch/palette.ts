@@ -409,4 +409,3 @@ function readStoredCourses(value: unknown): OpalStoredCourse[] {
     return []
   }
 }
-

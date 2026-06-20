@@ -1,5 +1,9 @@
 import { OPAL_SMART_SEARCH_STRINGS } from '../../../../modules/opalSmartSearch/strings'
-import type { OpalActiveIndexProgress, OpalSearchNode, OpalSearchResult } from '../../../../modules/opalSmartSearch/types'
+import type {
+  OpalActiveIndexProgress,
+  OpalSearchNode,
+  OpalSearchResult
+} from '../../../../modules/opalSmartSearch/types'
 
 export function renderActiveIndexPrompt(
   element: HTMLElement,
