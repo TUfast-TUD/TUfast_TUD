@@ -1,4 +1,5 @@
 import { getIndexedOpalSearchNode, upsertOpalSearchNodes } from './messages'
+import { publishActiveIndexProgress } from './activeIndexProgress'
 import {
   extractCourseIdFromUrl,
   extractCourseNodeLinks,
@@ -13,8 +14,6 @@ import {
 import {
   loadSmartSearchSettings,
   OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
-  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT,
-  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
   saveSmartSearchSettings
 } from '../../../../modules/opalSmartSearch/settings'
 import type {
@@ -51,10 +50,6 @@ interface BreadcrumbEntry {
 interface CourseTarget {
   title: string
   url: string
-}
-
-type ActiveIndexProgressUpdate = Partial<Omit<OpalActiveIndexProgress, 'startedAt' | 'updatedAt'>> & {
-  startedAt?: number
 }
 
 type RenderPreflight =
@@ -223,8 +218,7 @@ export async function startActiveIndexing(): Promise<OpalActiveIndexProgress> {
   }
 
   activeIndexStarted = false
-  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
-  window.dispatchEvent(new CustomEvent(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, { detail: progress }))
+  await publishActiveIndexProgress(progress)
   maybeRunActiveIndexing().catch((error) => console.warn('[TUfast Smart Search] Active indexing failed:', error))
   return progress
 }
@@ -683,23 +677,6 @@ async function isFreshKnownSection(sectionId: string): Promise<boolean> {
   const existing = await getIndexedOpalSearchNode(sectionId)
   if (!existing?.lastFetchedAt || !existing.structureHash) return false
   return Date.now() - existing.lastFetchedAt < ACTIVE_SECTION_COOLDOWN_MS
-}
-
-async function publishActiveIndexProgress(update: ActiveIndexProgressUpdate): Promise<void> {
-  const data = await chrome.storage.local.get([OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY])
-  const previous = data[OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY] as OpalActiveIndexProgress | undefined
-  const progress: OpalActiveIndexProgress = {
-    status: update.status || previous?.status || 'idle',
-    startedAt: update.startedAt || previous?.startedAt || Date.now(),
-    updatedAt: Date.now(),
-    totalCourses: update.totalCourses ?? previous?.totalCourses ?? 0,
-    completedCourses: update.completedCourses ?? previous?.completedCourses ?? 0,
-    indexedItems: update.indexedItems ?? previous?.indexedItems ?? 0,
-    currentCourseTitle: update.currentCourseTitle
-  }
-
-  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
-  window.dispatchEvent(new CustomEvent(OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT, { detail: progress }))
 }
 
 function findMaterialSectionLinks(root: Document | HTMLElement, courseUrl: string): { url: string; title: string }[] {
