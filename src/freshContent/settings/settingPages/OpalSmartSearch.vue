@@ -139,7 +139,9 @@ export default defineComponent({
     const preloadStatusLabel = computed(() => {
       if (progress.value.status === 'running') return smartSearchStrings.settingsPreloadStatusRunning
       if (progress.value.status === 'done') return smartSearchStrings.settingsPreloadStatusDone
-      return enabled.value ? smartSearchStrings.settingsPreloadStatusReady : smartSearchStrings.settingsPreloadStatusIdle
+      return enabled.value
+        ? smartSearchStrings.settingsPreloadStatusReady
+        : smartSearchStrings.settingsPreloadStatusIdle
     })
 
     watch([enabled, passiveIndexing, showPreloadPrompts], save)
