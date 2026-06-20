@@ -14,6 +14,7 @@
   // Setup UI and file highlighting
   paletteModule.bindOpalSmartSearchPalette()
   await highlightModule.checkAndHighlightIndexedFile()
+  await openPaletteFromPendingHotkey(settingsModule, paletteModule)
 
   // Index what the user already sees
   if (settings.passiveIndexing) {
@@ -32,3 +33,21 @@
     }, 3000)
   }
 })().catch((error) => console.warn('[TUfast Smart Search] Startup failed:', error))
+
+async function openPaletteFromPendingHotkey(
+  settingsModule: typeof import('../../../../modules/opalSmartSearch/settings'),
+  paletteModule: typeof import('./palette')
+): Promise<void> {
+  const data = await chrome.storage.local.get([settingsModule.OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY])
+  const expiresAt = Number(data[settingsModule.OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY] || 0)
+  if (!expiresAt) return
+
+  await chrome.storage.local.remove([settingsModule.OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY])
+  if (Date.now() > expiresAt) return
+
+  window.setTimeout(() => {
+    paletteModule
+      .openOpalSmartSearchPalette()
+      .catch((error) => console.warn('[TUfast Smart Search] Could not open pending palette:', error))
+  }, 250)
+}

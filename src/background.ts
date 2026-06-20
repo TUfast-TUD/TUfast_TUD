@@ -15,6 +15,7 @@ import {
   DEFAULT_SMART_SEARCH_SETTINGS,
   OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
   OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
+  OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY,
   loadSmartSearchSettings,
   saveSmartSearchSettings
 } from './modules/opalSmartSearch/settings'
@@ -598,22 +599,40 @@ async function openSharePage() {
 }
 
 async function openOpalSmartSearch(currentTab: chrome.tabs.Tab) {
-  // Open the palette in OPAL, or take the user to OPAL first
+  // Reuse the OPAL content script: open OPAL first, then show the same centered palette.
   if (currentTab.id && currentTab.url?.startsWith('https://bildungsportal.sachsen.de/opal/')) {
-    try {
-      await chrome.tabs.sendMessage(currentTab.id, { cmd: 'open_opal_smart_search' })
+    if (await sendOpenOpalSmartSearch(currentTab.id)) {
       await saveClicks(2)
       return
-    } catch (error) {
-      console.warn('[TUfast Smart Search] Could not open palette:', error)
     }
   }
 
-  await chrome.tabs.create({
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY]: Date.now() + 10 * 60 * 1000 })
+  const opalTab = await chrome.tabs.create({
     url: 'https://bildungsportal.sachsen.de/opal/home/',
     index: typeof currentTab.index === 'number' ? currentTab.index + 1 : undefined
   })
+  if (opalTab.id) await openOpalSmartSearchWhenReady(opalTab.id)
   await saveClicks(2)
+}
+
+async function sendOpenOpalSmartSearch(tabId: number): Promise<boolean> {
+  try {
+    return Boolean(await chrome.tabs.sendMessage(tabId, { cmd: 'open_opal_smart_search' }))
+  } catch {
+    return false
+  }
+}
+
+async function openOpalSmartSearchWhenReady(tabId: number): Promise<void> {
+  for (let attempt = 0; attempt < 20; attempt++) {
+    await delay(250)
+    if (await sendOpenOpalSmartSearch(tabId)) return
+  }
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 async function startOpalSmartSearchPreload(): Promise<boolean> {

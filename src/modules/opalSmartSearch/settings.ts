@@ -5,6 +5,7 @@ export const OPAL_SMART_SEARCH_HIGHLIGHT_KEY = 'opalSmartSearchHighlight'
 export const OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY = 'opalSmartSearchActivePromptDismissed'
 export const OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY = 'opalSmartSearchActiveProgress'
 export const OPAL_SMART_SEARCH_ACTIVE_PROGRESS_EVENT = 'tufast-opal-smart-search-progress'
+export const OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY = 'opalSmartSearchOpenAfterOpalLoad'
 
 export const DEFAULT_SMART_SEARCH_SETTINGS: OpalSmartSearchSettings = {
   enabled: true,
