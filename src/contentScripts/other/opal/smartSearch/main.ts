@@ -5,6 +5,7 @@
   // Load feature modules dynamically, so OPAL gets only what it needs
   const settingsModule = await import(chrome.runtime.getURL('modules/opalSmartSearch/settings.js'))
   const indexerModule = await import(chrome.runtime.getURL('contentScripts/other/opal/smartSearch/indexer.js'))
+  const highlightModule = await import(chrome.runtime.getURL('contentScripts/other/opal/smartSearch/highlight.js'))
   const paletteModule = await import(chrome.runtime.getURL('contentScripts/other/opal/smartSearch/palette.js'))
 
   const settings = await settingsModule.loadSmartSearchSettings()
@@ -12,7 +13,7 @@
 
   // Setup UI and file highlighting
   paletteModule.bindOpalSmartSearchPalette()
-  await indexerModule.checkAndHighlightIndexedFile()
+  await highlightModule.checkAndHighlightIndexedFile()
 
   // Index what the user already sees
   if (settings.passiveIndexing) {
