@@ -196,6 +196,7 @@ import LoginSetup from './onboardingPages/03_LoginSetup.vue'
 import OtpSetup from './onboardingPages/04_OtpSetup.vue'
 import EMailSetup from './onboardingPages/05_EMailSetup.vue'
 import OpalSelmaSetup from './onboardingPages/06_OpalSelmaSetup.vue'
+import SmartSearchSetup from './onboardingPages/07_SmartSearchSetup.vue'
 import SearchengineSetup from './onboardingPages/07_SearchengineSetup.vue'
 import DoneSetup from './onboardingPages/08_DoneSetup.vue'
 
@@ -231,6 +232,7 @@ export default defineComponent({
     LoginSetup,
     EMailSetup,
     OpalSelmaSetup,
+    SmartSearchSetup,
     DoneSetup,
     ChooseFaculty,
     OtpSetup,

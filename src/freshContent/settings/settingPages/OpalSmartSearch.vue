@@ -1,5 +1,5 @@
 <template>
-  <h3 class="card-body-title">OPAL Smart Search</h3>
+  <h3 class="card-body-title" :class="{ 'onboarding-hide': onboarding }">OPAL Smart Search</h3>
   <Setting v-model="enabled" :txt="smartSearchStrings.settingsEnableToggle" />
   <Setting v-model="passiveIndexing" :txt="smartSearchStrings.settingsPassiveIndexingToggle" />
   <Setting v-model="showPreloadPrompts" :txt="smartSearchStrings.settingsPreloadPromptsToggle" />
@@ -7,7 +7,7 @@
   <p class="max-line p-margin">
     {{ smartSearchStrings.settingsPrivacy }}
   </p>
-  <p class="max-line p-margin txt-help">{{ smartSearchStrings.settingsCredit }}</p>
+  <p v-if="!onboarding" class="max-line p-margin txt-help">{{ smartSearchStrings.settingsCredit }}</p>
 
   <div class="smart-search-actions">
     <button class="smart-search-button" :disabled="preloadRunning" @click="preloadNow">
@@ -61,6 +61,12 @@ import { useSettingHandler } from '../composables/setting-handler'
 export default defineComponent({
   components: {
     Setting
+  },
+  props: {
+    onboarding: {
+      type: Boolean,
+      default: false
+    }
   },
   setup() {
     const {
