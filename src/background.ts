@@ -4,6 +4,23 @@ import * as otp from './modules/otp'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
+import {
+  clearOpalSearchIndex,
+  getOpalSearchIndexStats,
+  getOpalSearchNode,
+  upsertGraphNodes
+} from './modules/opalSmartSearch/indexDb'
+import { searchOpalNodes } from './modules/opalSmartSearch/search'
+import {
+  DEFAULT_SMART_SEARCH_SETTINGS,
+  OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY,
+  OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY,
+  OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY,
+  loadSmartSearchSettings,
+  saveSmartSearchSettings
+} from './modules/opalSmartSearch/settings'
+import type { OpalActiveIndexProgress, OpalSearchNode } from './modules/opalSmartSearch/types'
+import { isAllowedOpalUrl, sanitizeOpalSearchNodes } from './modules/opalSmartSearch/urlPolicy'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
 
@@ -23,7 +40,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
-        improveSelma: true
+        improveSelma: true,
+        opalSmartSearchSettings: DEFAULT_SMART_SEARCH_SETTINGS
       })
       await openSettingsPage('first_visit')
       break
@@ -39,6 +57,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'studiengang',
         'hisqisPimpedTable',
         'improveSelma',
+        'opalSmartSearchSettings',
         'savedClickCounter',
         'saved_click_counter', // legacy
         'Rocket', // legacy
@@ -61,6 +80,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
+      if (typeof currentSettings.opalSmartSearchSettings === 'undefined') {
+        updateObj.opalSmartSearchSettings = DEFAULT_SMART_SEARCH_SETTINGS
+      }
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined')
@@ -173,6 +195,9 @@ if (chrome.commands) {
           index: currentTab.index + 1
         })
         await saveClicks(2)
+        break
+      case 'open_opal_smart_search_hotkey':
+        await openOpalSmartSearch(currentTab)
         break
     }
   })
@@ -316,7 +341,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           })
         }),
         // User data check
-        credentials.userDataExists(request.platform)
+        credentials.userDataExists(request.platform),
+        // 9 - Smart Search (has user activated OPAL Smart Search?)
+        new Promise<boolean>((resolve) => {
+          chrome.storage.local.get(['opalSmartSearchSettings'], (result) => {
+            resolve((result.opalSmartSearchSettings ?? DEFAULT_SMART_SEARCH_SETTINGS).enabled)
+          })
+        })
         // Language (which language has user selected?)
         // missing - will add when language is implemented
       ]).then(
@@ -329,7 +360,8 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           selmaStatus, // 5
           seCommandsStatus, // 6
           faculty, // 7
-          userDataExists // 8
+          userDataExists, // 8
+          smartSearchStatus // 9
         ]) => {
           sendResponse({
             otp: totpExists || iotpExists,
@@ -338,6 +370,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             userData: userDataExists || loginExists,
             selma: selmaStatus,
             searchengine: seCommandsStatus,
+            smartSearch: smartSearchStatus,
             faculty: faculty
           })
         }
@@ -478,6 +511,30 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'check_se_status':
       chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
       return true
+    case 'opal_smart_search_stats':
+      getOpalSearchIndexStats().then(sendResponse)
+      return true
+    case 'opal_smart_search_preload_now':
+      startOpalSmartSearchPreload().then(sendResponse)
+      return true
+    case 'opal_smart_search_clear':
+      clearOpalSearchIndex().then(() => sendResponse(true))
+      return true
+    case 'opal_smart_search_upsert_nodes': {
+      const nodes = Array.isArray(request.nodes) ? (request.nodes as OpalSearchNode[]) : []
+      upsertGraphNodes(sanitizeOpalSearchNodes(nodes)).then(() => sendResponse(true))
+      return true
+    }
+    case 'opal_smart_search_get_node':
+      getOpalSearchNode(String(request.id || '')).then((node) => {
+        sendResponse(node && isAllowedOpalUrl(node.url) ? node : undefined)
+      })
+      return true
+    case 'opal_smart_search_query':
+      searchOpalNodes(String(request.rawQuery || ''), String(request.courseId || ''), Number(request.limit || 8)).then(
+        (results) => sendResponse(results.filter((result) => isAllowedOpalUrl(result.node.url)))
+      )
+      return true
     /* Rocket functions */
     case 'set_rocket_icon':
       setRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
@@ -539,6 +596,74 @@ async function openSettingsPage(params?: string) {
 
 async function openSharePage() {
   await chrome.tabs.create({ url: 'share.html' })
+}
+
+async function openOpalSmartSearch(currentTab: chrome.tabs.Tab) {
+  // Reuse the OPAL content script: open OPAL first, then show the same centered palette.
+  if (currentTab.id && currentTab.url?.startsWith('https://bildungsportal.sachsen.de/opal/')) {
+    if (await sendOpenOpalSmartSearch(currentTab.id)) {
+      await saveClicks(2)
+      return
+    }
+  }
+
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_OPEN_AFTER_OPAL_LOAD_KEY]: Date.now() + 10 * 60 * 1000 })
+  const opalTab = await chrome.tabs.create({
+    url: 'https://bildungsportal.sachsen.de/opal/home/',
+    index: typeof currentTab.index === 'number' ? currentTab.index + 1 : undefined
+  })
+  if (opalTab.id) await openOpalSmartSearchWhenReady(opalTab.id)
+  await saveClicks(2)
+}
+
+async function sendOpenOpalSmartSearch(tabId: number): Promise<boolean> {
+  try {
+    return Boolean(await chrome.tabs.sendMessage(tabId, { cmd: 'open_opal_smart_search' }))
+  } catch {
+    return false
+  }
+}
+
+async function openOpalSmartSearchWhenReady(tabId: number): Promise<void> {
+  for (let attempt = 0; attempt < 20; attempt++) {
+    await delay(250)
+    if (await sendOpenOpalSmartSearch(tabId)) return
+  }
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function startOpalSmartSearchPreload(): Promise<boolean> {
+  const settings = await loadSmartSearchSettings()
+  const progress: OpalActiveIndexProgress = {
+    status: 'running',
+    startedAt: Date.now(),
+    updatedAt: Date.now(),
+    totalCourses: 0,
+    completedCourses: 0,
+    indexedItems: 0
+  }
+
+  await saveSmartSearchSettings({ ...settings, activeIndexing: true })
+  await chrome.storage.local.remove([OPAL_SMART_SEARCH_ACTIVE_PROMPT_DISMISSED_KEY])
+  await chrome.storage.local.set({ [OPAL_SMART_SEARCH_ACTIVE_PROGRESS_KEY]: progress })
+
+  const opalTabs = await chrome.tabs.query({ url: 'https://bildungsportal.sachsen.de/opal/*' })
+  const opalTab = opalTabs.find((tab) => typeof tab.id === 'number')
+  if (opalTab?.id) {
+    try {
+      await chrome.tabs.sendMessage(opalTab.id, { cmd: 'start_opal_smart_search_preload' })
+      await chrome.tabs.update(opalTab.id, { active: true })
+      return true
+    } catch (error) {
+      console.warn('[TUfast Smart Search] Could not start preload in existing OPAL tab:', error)
+    }
+  }
+
+  await chrome.tabs.create({ url: 'https://bildungsportal.sachsen.de/opal/home/', active: true })
+  return true
 }
 
 // save_click_counter

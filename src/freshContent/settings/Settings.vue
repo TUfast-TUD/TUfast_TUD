@@ -179,6 +179,7 @@ import Toggle from './components/Toggle.vue'
 import AutoLogin from './settingPages/AutoLogin.vue'
 import Email from './settingPages/Email.vue'
 import ImproveOpal from './settingPages/ImproveOpal.vue'
+import OpalSmartSearch from './settingPages/OpalSmartSearch.vue'
 import ImproveSelma from './settingPages/ImproveSelma.vue'
 import Shortcuts from './settingPages/Shortcuts.vue'
 import SearchEngines from './settingPages/SearchEngines.vue'
@@ -195,6 +196,7 @@ import LoginSetup from './onboardingPages/03_LoginSetup.vue'
 import OtpSetup from './onboardingPages/04_OtpSetup.vue'
 import EMailSetup from './onboardingPages/05_EMailSetup.vue'
 import OpalSelmaSetup from './onboardingPages/06_OpalSelmaSetup.vue'
+import SmartSearchSetup from './onboardingPages/07_SmartSearchSetup.vue'
 import SearchengineSetup from './onboardingPages/07_SearchengineSetup.vue'
 import DoneSetup from './onboardingPages/08_DoneSetup.vue'
 
@@ -217,6 +219,7 @@ export default defineComponent({
     AutoLogin,
     Email,
     ImproveOpal,
+    OpalSmartSearch,
     ImproveSelma,
     Shortcuts,
     SearchEngines,
@@ -229,6 +232,7 @@ export default defineComponent({
     LoginSetup,
     EMailSetup,
     OpalSelmaSetup,
+    SmartSearchSetup,
     DoneSetup,
     ChooseFaculty,
     OtpSetup,

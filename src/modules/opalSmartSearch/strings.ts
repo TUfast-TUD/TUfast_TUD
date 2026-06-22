@@ -1,0 +1,48 @@
+export const OPAL_SMART_SEARCH_STRINGS = {
+  paletteActionOpenOpalHome: 'OPAL Startseite öffnen',
+  paletteActionOpenOpalCourses: 'Meine OPAL-Kurse öffnen',
+  paletteActionPreloadOpalFavorites: 'Favoriten und Kurse vorladen',
+  palettePreloadPromptTitle: 'Dateien aus OPAL-Kursen vorladen',
+  palettePreloadPromptText:
+    'Optional: TUfast liest deine lokal gespeicherten Favoriten und Kurse aus, damit du danach Dateien und Kursinhalte lokal suchen kannst.',
+  palettePreloadPromptStart: 'Vorladen',
+  palettePreloadPromptLater: 'Später',
+  palettePreloadPromptDismiss: 'Nicht nochmal',
+  palettePreloadStatusRunning: 'Vorladen läuft...',
+  palettePreloadStatusDone: 'Vorladen abgeschlossen',
+  palettePreloadCurrentCourseLabel: 'Aktueller Kurs',
+  palettePreloadIndexedItemsLabel: 'gefundene Einträge',
+  palettePreloadCoursesLabel: 'Kurse',
+  paletteHeaderPlaceholder: '🔎 TUfast Smart Search',
+  paletteOpenTitle: 'TUfast Smart Search öffnen',
+  paletteDialogLabel: 'OPAL Smart Search',
+  paletteInputPlaceholder: 'Kurse, Ordner und Dateien suchen... (/c Kurse, /f Dateien)',
+  paletteFilterHint: '/c Kurse · /f Dateien',
+  paletteKeyboardHint: 'Enter öffnet · Pfeile navigieren',
+  paletteEmptyResults:
+    'Noch keine lokalen Treffer. Öffne OPAL-Seiten oder lade Favoriten/Kurse vor, damit TUfast sie lokal finden kann.',
+  paletteTypeCourse: 'Kurs',
+  paletteTypeFolder: 'Ordner',
+  paletteTypeFile: 'Datei',
+  paletteTypeAction: 'Aktion',
+  settingsEnableToggle: 'Smart Search aktivieren',
+  settingsPassiveIndexingToggle: 'Besuchte OPAL-Seiten automatisch lokal merken',
+  settingsPreloadPromptsToggle: 'Hinweise zum optionalen Vorladen von Kursdateien anzeigen',
+  settingsPreloadNowButton: 'Favoriten/Kurse jetzt vorladen',
+  settingsResetPreloadPromptsButton: '"Nicht nochmal" zurücksetzen',
+  settingsPreloadStatusLabel: 'Vorladen der Kursdateien',
+  settingsPreloadStatusIdle: 'Nicht gestartet',
+  settingsPreloadStatusReady: 'Bereit',
+  settingsPreloadStatusRunning: 'Läuft',
+  settingsPreloadStatusDone: 'Abgeschlossen',
+  settingsPrivacy:
+    'TUfast speichert Kurse, Ordner und Dateilinks nur lokal in deinem Browser. Die Suche sendet keine Daten an einen TUfast-Server und schreibt nichts in OPAL.',
+  settingsCredit: 'Entwickelt von Just8it.',
+  settingsLocalEntriesLabel: 'Einträge im lokalen Suchindex',
+  settingsLastIndexedLabel: 'Zuletzt indexiert',
+  settingsClearIndexButton: 'Lokalen Suchindex löschen',
+  onboardingIntro:
+    'Smart Search findet OPAL-Kurse, Ordner und Dateien aus deinem lokalen Browser-Speicher. Favoriten und Kurse werden aus deiner bestehenden OPAL-Liste vorbereitet; das Vorladen von Kursdateien ist freiwillig.',
+  onboardingPrivacy:
+    'Alles bleibt lokal: TUfast nutzt Browser-Speicher und IndexedDB, lädt keinen Suchindex auf einen Server hoch und ändert nichts in OPAL.'
+}

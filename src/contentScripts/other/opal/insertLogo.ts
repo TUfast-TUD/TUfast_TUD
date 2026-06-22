@@ -96,18 +96,19 @@
     div.appendChild(logo)
 
     // Helper function to maintain button order in header
-    // Order: Logo - snow - openAllCourses - openAllFavorites - closeAllTabs
+    // Order: Logo - Smart Search - snow - openAllCourses - openAllFavorites - closeAllTabs
     const maintainButtonOrder = () => {
       const header = document.querySelector('.tufast-opal-header')
       if (!header) return
 
       const logo = header.querySelector('#TUfastIcon')
+      const smartSearch = header.querySelector('#tufastSmartSearchTrigger')
       const snow = header.querySelector('#flakeSwitch')
       const openAllCourses = header.querySelector('#openAllCoursesButton')
       const openAllFavorites = header.querySelector('#openAllFavoritesButton')
       const closeAllTabs = header.querySelector('#closeAllTabsButton')
 
-      const desiredOrder = [logo, snow, openAllCourses, openAllFavorites, closeAllTabs].filter(Boolean)
+      const desiredOrder = [logo, smartSearch, snow, openAllCourses, openAllFavorites, closeAllTabs].filter(Boolean)
 
       // Check if reordering is actually needed
       const currentOrder = Array.from(header.children)

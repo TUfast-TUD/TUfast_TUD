@@ -10,6 +10,7 @@ export interface SettingsStatus {
   login: boolean
   selma: boolean
   searchengine: boolean
+  smartSearch: boolean
   faculty: string
 }
 
@@ -22,6 +23,7 @@ const settings = ref<SettingsStatus>({
   login: false,
   selma: false,
   searchengine: false,
+  smartSearch: false,
   faculty: 'general'
 })
 
@@ -38,6 +40,7 @@ const storageKeyMap: Record<string, keyof SettingsStatus> = {
   pdfInNewTab: 'opalPdf',
   improveSelma: 'selma',
   fwdEnabled: 'searchengine',
+  opalSmartSearchSettings: 'smartSearch',
   studiengang: 'faculty'
 }
 
@@ -122,6 +125,12 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
       case 'searchengine':
         chrome.storage.local.get(['fwdEnabled'], (result) => {
           settings.value.searchengine = result.fwdEnabled ?? false
+        })
+        break
+
+      case 'smartSearch':
+        chrome.storage.local.get(['opalSmartSearchSettings'], (result) => {
+          settings.value.smartSearch = (result.opalSmartSearchSettings ?? { enabled: true }).enabled
         })
         break
 

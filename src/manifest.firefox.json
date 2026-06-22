@@ -3,7 +3,7 @@
   "_comment": "The version number is populated during build time, please adjust version number in package.json",
   "description": "Das Produktivitäts-Tool for TU Dresden Studierende 🚀",
   "permissions": ["storage", "alarms"],
-  "optional_permissions": ["tabs", "notifications", "cookies", "webRequest", "webRequestBlocking"],
+  "optional_permissions": ["tabs", "notifications", "cookies", "webRequest"],
   "host_permissions": ["*://*/"],
   "background": {
     "scripts": ["background.js"],
@@ -114,6 +114,12 @@
         "styles/contentScripts/opal/openAllFavorites.css",
         "styles/contentScripts/opal/banner.css"
       ],
+      "run_at": "document_idle",
+      "matches": ["https://bildungsportal.sachsen.de/opal/*"]
+    },
+    {
+      "js": ["contentScripts/other/opal/smartSearch/main.js"],
+      "css": ["styles/contentScripts/opal/smartSearch.css"],
       "run_at": "document_idle",
       "matches": ["https://bildungsportal.sachsen.de/opal/*"]
     },
@@ -241,6 +247,16 @@
       "matches": ["https://qis.dez.tu-dresden.de/*"]
     },
     {
+      "resources": [
+        "contentScripts/other/opal/smartSearch/*",
+        "contentScripts/other/opal/smartSearch/searchEngine/*",
+        "modules/opalSmartSearch/*",
+        "modules/opalSmartSearch/searchEngine/*",
+        "vite/pkg/*"
+      ],
+      "matches": ["https://bildungsportal.sachsen.de/*"]
+    },
+    {
       "resources": ["styles/contentScripts/selma/*"],
       "matches": ["https://selma.tu-dresden.de/*"]
     }
@@ -274,6 +290,14 @@
         "mac": "Alt+M"
       },
       "description": "Mail (OWA) öffnen"
+    },
+    "open_opal_smart_search_hotkey": {
+      "suggested_key": {
+        "default": "Alt+K",
+        "windows": "Alt+K",
+        "mac": "Alt+K"
+      },
+      "description": "OPAL Smart Search öffnen"
     }
   }
 }

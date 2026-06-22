@@ -89,13 +89,21 @@ export async function enableOpalHeaderListener() {
   if (!granted) return
 
   if (isFirefox()) {
-    chrome.webRequest.onHeadersReceived.addListener(
-      headerListenerFunc,
-      {
-        urls: ['https://bildungsportal.sachsen.de/opal/downloadering*', 'https://bildungsportal.sachsen.de/opal/*.pdf']
-      },
-      ['blocking', 'responseHeaders']
-    )
+    try {
+      chrome.webRequest.onHeadersReceived.addListener(
+        headerListenerFunc,
+        {
+          urls: [
+            'https://bildungsportal.sachsen.de/opal/downloadering*',
+            'https://bildungsportal.sachsen.de/opal/*.pdf'
+          ]
+        },
+        ['blocking', 'responseHeaders']
+      )
+    } catch (error) {
+      console.warn('[TUfast] OPAL inline files are not available in this Firefox MV3 build:', error)
+      await chrome.storage.local.set({ pdfInInline: false })
+    }
   } else {
     // Remove the old rule if it exists
     await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: rules.map((r) => r.id) })

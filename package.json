@@ -1,6 +1,6 @@
 {
   "name": "tufast_tud",
-  "version": "8.0.3.2",
+  "version": "8.0.3.3",
   "description": "Browser Extension for higher productivity with TU Dresden IT-Services 🚀",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,8 @@
     "test": "npm run ts-check && npm run lint && npm run prettier && npm run build",
     "dev": "vite build --watch",
     "build": "vite build",
+    "build:chrome": "vite build --mode chrome",
+    "build:firefox": "vite build --mode firefox",
     "useChrome": "cp src/manifest.chrome.json src/manifest.json",
     "useFF": "cp src/manifest.firefox.json src/manifest.json",
     "checkVersionBump": "node scripts/check-version-bump.mjs",
@@ -67,6 +69,7 @@
     "@tabler/icons-vue": "^3.35.0",
     "chart.js": "^3.8.0",
     "lottie-web": "^5.13.0",
+    "minisearch": "^7.2.0",
     "simple-datatables": "^3.2.0",
     "vue": "^3.2.22"
   }

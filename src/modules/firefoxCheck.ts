@@ -7,5 +7,5 @@ export function isFirefox(): boolean {
 }
 
 export function getBrowserNetRequestPermissions(): string[] {
-  return isFirefox() ? ['webRequest', 'webRequestBlocking'] : ['declarativeNetRequestWithHostAccess']
+  return isFirefox() ? ['webRequest'] : ['declarativeNetRequestWithHostAccess']
 }

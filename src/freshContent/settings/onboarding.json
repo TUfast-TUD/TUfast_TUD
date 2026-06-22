@@ -42,6 +42,13 @@
     "skipText": "Einrichtung überspringen"
   },
   {
+    "title": "SmartSearchSetup",
+    "icon": "IconSearch",
+    "h1": "OPAL Smart Search",
+    "btnText": "Weiter",
+    "skipText": "Einrichtung überspringen"
+  },
+  {
     "title": "SearchengineSetup",
     "icon": "IconSearch",
     "h1": "Suchmaschinen Kurzbefehle",
