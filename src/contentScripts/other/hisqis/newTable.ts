@@ -25,14 +25,14 @@ import { DataTable } from 'simple-datatables'
   // title element
   const title = document.createElement('h3')
   title.classList.add('table-header__title')
-  title.innerText = 'Deine Noten?bersicht'
+  title.innerText = 'Deine Notenübersicht'
 
   // flex div to display small color helpers
   const colorHelpers = document.createElement('div')
   colorHelpers.classList.add('table-header__helpers')
 
   // create small color helpers
-  for (const [i, descriptor] of ['Modul', 'Bestandene Pr?fung', 'Verhauene Pr?fung'].entries()) {
+  for (const [i, descriptor] of ['Modul', 'Bestandene Prüfung', 'Verhauene Prüfung'].entries()) {
     const colorHelper = document.createElement('div')
     colorHelper.classList.add('table-header__helper')
     colorHelper.classList.add(`table-header__helper--${i}`)

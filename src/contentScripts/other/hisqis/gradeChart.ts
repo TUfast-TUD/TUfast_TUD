@@ -86,7 +86,7 @@ function getWeightedAverage(grades: ModuleGrades): number {
 
   statistik[0].innerHTML = `Deine Durchschnittnote (nach CP gewichtet): ${getWeightedAverage(grades.modules).toFixed(2)}`
   statistik[1].innerHTML = `Anzahl Module: ${Object.keys(grades.modules).length}`
-  statistik[2].innerHTML = `Anzahl Pr?fungen: ${Object.keys(grades.exams).length}`
+  statistik[2].innerHTML = `Anzahl Prüfungen: ${Object.keys(grades.exams).length}`
 
   container.append(canvas, ...statistik)
 
