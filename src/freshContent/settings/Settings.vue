@@ -4,12 +4,12 @@
     <header class="tuf-header">
       <div class="tuf-header-left">
         <div class="tuf-logo"></div>
-        <span class="tuf-header-location txt-bold">&rarr; Einstellungen</span>
+        <span class="tuf-header-location txt-bold">{{ strings.settings.location }}</span>
       </div>
       <div class="tuf-header-right"><Statistics /></div>
     </header>
     <div class="tuf-settings-list" style="margin-top: 16px">
-      <h2 class="tuf-settings-list__part-title">Personalisierung</h2>
+      <h2 class="tuf-settings-list__part-title">{{ strings.settings.personalization }}</h2>
       <div class="tuf-settings-list__part">
         <template v-for="setting in getSettingsByCategory('personalization')" :key="setting.title">
           <SettingTile
@@ -20,7 +20,7 @@
             :class="[
               'main-grid__tile',
               { 'is-active': openSettingId === setting.settingsPage },
-              { soon: setting.title === 'Sprache – Bald! Soon!' }
+              { soon: setting.title === strings.settings.tiles.language }
             ]"
             role="button"
             tabindex="0"
@@ -53,7 +53,7 @@
           @keyup.space="toggleTheme()"
         />
       </div>
-      <h2 class="tuf-settings-list__part-title">Funktionen</h2>
+      <h2 class="tuf-settings-list__part-title">{{ strings.settings.functions }}</h2>
       <div class="tuf-settings-list__part">
         <template v-for="setting in getSettingsByCategory('function')" :key="setting.title">
           <SettingTile
@@ -85,7 +85,7 @@
         </template>
       </div>
 
-      <h2 class="tuf-settings-list__part-title">Informationen</h2>
+      <h2 class="tuf-settings-list__part-title">{{ strings.settings.information }}</h2>
       <div class="tuf-settings-list__part" style="margin-bottom: 128px">
         <template v-for="setting in getSettingsByCategory('information')" :key="setting.title">
           <SettingTile
@@ -118,14 +118,18 @@
         <a href="https://tu-fast.de/" target="_blank" tabindex="0">
           <div class="tuf-settings-link">
             <div class="tuf-settings-link__icon"><IconWorld size="48px" /></div>
-            <div class="tuf-settings-link__title"><h2>Website</h2></div>
+            <div class="tuf-settings-link__title">
+              <h2>{{ strings.common.website }}</h2>
+            </div>
             <div class="tuf-settings-link__type"><IconArrowUpRight size="24px" /></div>
           </div>
         </a>
         <a href="https://buymeacoffee.com/olihausdoerfer" target="_blank" tabindex="0">
           <div class="tuf-settings-link">
             <div class="tuf-settings-link__icon"><IconHeartHandshake size="48px" /></div>
-            <div class="tuf-settings-link__title"><h2>Unterstütze uns</h2></div>
+            <div class="tuf-settings-link__title">
+              <h2>{{ strings.common.supportUs }}</h2>
+            </div>
             <div class="tuf-settings-link__type"><IconArrowUpRight size="24px" /></div>
           </div>
         </a>
@@ -136,7 +140,9 @@
         >
           <div class="tuf-settings-link">
             <div class="tuf-settings-link__icon"><IconShield size="48px" /></div>
-            <div class="tuf-settings-link__title"><h2>Datenschutz</h2></div>
+            <div class="tuf-settings-link__title">
+              <h2>{{ strings.common.privacy }}</h2>
+            </div>
             <div class="tuf-settings-link__type"><IconArrowUpRight size="24px" /></div>
           </div>
         </a>
@@ -199,8 +205,9 @@ import SearchengineSetup from './onboardingPages/07_SearchengineSetup.vue'
 import DoneSetup from './onboardingPages/08_DoneSetup.vue'
 
 // configurations
-import settings from './settings.json'
-import onboardingSteps from './onboarding.json'
+import { strings } from '../../i18n'
+import settings from './settings'
+import onboardingSteps from './onboarding'
 
 // composables
 import { useChrome } from './composables/chrome'
@@ -467,6 +474,7 @@ export default defineComponent({
       toggleSetting,
       closeSetting,
       settings,
+      strings,
       getSettingsByCategory,
       toggleTheme,
       animState

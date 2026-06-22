@@ -1,3 +1,4 @@
+import { strings } from '../../../i18n'
 const STORAGE_KEY = 'closeAllTabsOnLoad'
 
 // adds button
@@ -10,8 +11,8 @@ async function injectCloseAllButton() {
 
   const closeAllTabsButton = document.createElement('span')
   closeAllTabsButton.id = 'closeAllTabsButton'
-  closeAllTabsButton.title = 'Alle Tabs schließen. Ein TUfast-Feature.'
-  closeAllTabsButton.textContent = 'Alle Tabs schließen'
+  closeAllTabsButton.title = strings.content.opal.closeAllTabsTitle
+  closeAllTabsButton.textContent = strings.content.opal.closeAllTabs
 
   // if there are no tabs open, disable the button
   function updateButtonState() {

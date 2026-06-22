@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import steps from '../onboarding.json'
+import steps from '../onboarding'
 
 import { useChrome } from '../composables/chrome'
 

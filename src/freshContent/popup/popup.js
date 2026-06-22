@@ -1,10 +1,10 @@
 import studiengangConfig from '../studies.json'
+import { strings } from '../../i18n'
 import '../../styles/popup.scss'
 import '../../styles/components/switch.scss'
 import '../../styles/components/share.scss'
 
-const shareHTML =
-  '<div class="content"><h1>Hilf deinen Mitstudierenden <br /><img class="invert" src="../../assets/images/tufast48.png" style="height:1.5em;vertical-align:middle;" /> TUfast zu entdecken</h1><p class="subtitle">und <a href="#" id="rockets_link" style="color:var(--color-text-link);text-decoration:underline;cursor:pointer;">sammle coole Raketen</a>!</p><div class="share-section"><div class="share-title">Teilen mit</div><div class="share-links"><a class="share-link" href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studierenden%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90" target="_blank"><img src="../../assets/icons/gmail.png" />E-Mail</a><a class="share-link" href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studierenden!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90" target="_blank"><img src="../../assets/icons/wa2.png" />WhatsApp</a><a class="share-link" href="https://www.tu-fast.de" target="_blank">www.tu-fast.de</a></div></div><div class="footer">Gemacht mit 💙 von Studierenden · <a href="https://github.com/TUfast-TUD/TUfast_TUD" target="_blank">GitHub</a> · <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast" target="_blank">Kontakt</a></div></div>'
+const shareHTML = strings.popup.shareHtml
 const bananaHTML =
   '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" style = "position: fixed; bottom: 70px; right: 26px;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>'
 
@@ -101,7 +101,7 @@ window.onload = async () => {
   // display saved clicks
   const time = clicksToTime(result.savedClickCounter || 0)
   document.getElementById('saved_clicks').innerHTML =
-    `<text>${result.savedClickCounter || 0} Klicks, ${time} gespart</text>`
+    `<text>${strings.popup.savedClicks(result.savedClickCounter || 0, time)}</text>`
 
   // display banana at each end of semester for two weeks!
   let bananaTime = false
@@ -371,12 +371,12 @@ function displayCourseList(
   switch (type) {
     case 'favoriten':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites'
-      name = 'Klicke, um deine OPAL-Kurse zu importieren'
+      name = strings.popup.importOpalCourses
       imgSrc = '../../assets/icons/star.png'
       break
     case 'meine_kurse':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
-      name = 'Klicke, um deine OPAL-Kurse zu importieren'
+      name = strings.popup.importOpalCourses
       imgSrc = '../../assets/icons/CoursesOpalIcon.png'
       break
     default:
@@ -388,7 +388,7 @@ function displayCourseList(
     name:
       courseList === undefined || courseList.length === 0 || courseList === false
         ? name
-        : 'Diese Kursliste jetzt aktualisieren...',
+        : strings.popup.updateCourseList,
     link,
     img: '../../assets/icons/reload.png'
   }
@@ -422,8 +422,7 @@ function displayCourseList(
     introRating.classList.add('list-entry-wrapper')
     introRatingText.classList.add('list-intro')
 
-    introRatingText.innerHTML =
-      "<b>Wir suchen den besten Kurs an der TU Dresden. Bewerte jetzt deine Kurse mit 1-5 Sternen!</b> Deine Bewertung ist zu 100% völlig anonym. Die Ergebnisse der Abstimmung veröffentlichen wir anschließend. Details und die Erweiterung zur Datenschutzerklärung gibts <a target='_blank' href='https://tu-fast.de/datenschutz'>hier</a>. <a id='intro' href='#'>Schließen</a>."
+    introRatingText.innerHTML = strings.popup.introRating
     introRating.appendChild(introRatingText)
     htmlList.appendChild(introRating)
   }
@@ -436,8 +435,7 @@ function displayCourseList(
     outroRating.classList.add('list-entry-wrapper')
     outroRatingText.classList.add('list-outro')
 
-    outroRatingText.innerHTML =
-      "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Damit k&ouml;nnen wir die Lehre an der TU verbessern! Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
+    outroRatingText.innerHTML = strings.popup.outroRating
     outroRating.appendChild(outroRatingText)
     htmlList.appendChild(outroRating)
   }
@@ -450,8 +448,7 @@ function displayCourseList(
     msg1.classList.add('list-entry-wrapper')
     msg1Text.classList.add('list-outro')
 
-    msg1Text.innerHTML =
-      "<b>Tipp für Erstis: Erfahre alles wichtige rund um dein Studium mit gOPAL - dem mobilen Studienassistenzsystem! Hier <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL öffnen.</a> <a id='msg1' href='#'>Schließen</a>."
+    msg1Text.innerHTML = strings.popup.gopalBanner
     msg1.appendChild(msg1Text)
     htmlList.appendChild(msg1)
   }
@@ -537,8 +534,8 @@ function displayCourseList(
     }
     if (
       !(
-        element.name === 'Diese Kursliste jetzt aktualisieren...' ||
-        element.name === 'Klicke, um deine OPAL-Kurse zu importieren' ||
+        element.name === strings.popup.updateCourseList ||
+        element.name === strings.popup.importOpalCourses ||
         isRated
       ) &&
       ratingEnabledFlag
@@ -566,7 +563,7 @@ function displayCourseList(
       openAllCoursesEntry.className += ' disabled'
       openAllCoursesEntry.style.opacity = 0.5
       openAllCoursesEntry.style.pointerEvents = 'none'
-      openAllCoursesEntry.title = 'Deaktiviert: mehr als 25 Kurse'
+      openAllCoursesEntry.title = strings.popup.tooManyCourses
     } else {
       openAllCoursesEntry.onclick = openAllCourses
     }
@@ -576,10 +573,10 @@ function displayCourseList(
 
     // Change text and icon based on current view (type)
     if (type === 'favoriten') {
-      openAllCoursesText.innerHTML = 'Alle Favoriten öffnen'
+      openAllCoursesText.innerHTML = strings.popup.openAllFavorites
       openAllCoursesIcon.src = '../../assets/icons/starAll.png'
     } else {
-      openAllCoursesText.innerHTML = 'Alle Kurse öffnen'
+      openAllCoursesText.innerHTML = strings.popup.openAllCourses
       openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
     }
 
@@ -659,10 +656,10 @@ function displayCourseList(
   listEntry.appendChild(listImg)
 
   if (type === 'favoriten') {
-    listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
+    listText.innerHTML = strings.popup.switchToCourses
   }
   if (type === 'meine_kurse') {
-    listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
+    listText.innerHTML = strings.popup.switchToFavorites
   }
 
   listEntry.appendChild(listText)
@@ -747,7 +744,7 @@ async function sendRating() {
 
   // rating cannot be zero
   if (rating === '0.0') {
-    alert('Bitte bewerte den Kurs mit Sternen, bevor du dein Rating abgibst!')
+    alert(strings.popup.rateBeforeSubmit)
     return
   }
 

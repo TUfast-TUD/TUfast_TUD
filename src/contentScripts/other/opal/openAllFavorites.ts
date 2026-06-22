@@ -1,3 +1,4 @@
+import { strings } from '../../../i18n'
 ;(function () {
   // Main injection logic
   async function injectOpenAllFavoritesButton() {
@@ -10,8 +11,8 @@
 
     const openAllFavoritesButton = document.createElement('span')
     openAllFavoritesButton.id = 'openAllFavoritesButton'
-    openAllFavoritesButton.textContent = 'Alle Favoriten öffnen'
-    openAllFavoritesButton.title = 'Alle Favoriten öffnen. Ein TUfast-Feature.'
+    openAllFavoritesButton.textContent = strings.content.opal.openAllFavorites
+    openAllFavoritesButton.title = strings.content.opal.openAllFavoritesTitle
     openAllFavoritesButton.style.opacity = '1'
     openAllFavoritesButton.style.cursor = 'pointer'
     openAllFavoritesButton.style.pointerEvents = 'auto'

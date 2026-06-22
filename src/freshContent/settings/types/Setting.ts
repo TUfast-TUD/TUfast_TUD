@@ -3,4 +3,5 @@ export interface Setting {
   icon: string
   settingsPage: string
   category: string
+  settingType: string
 }

@@ -1,4 +1,5 @@
 import type { NotificationNamespace } from '../notification'
+import { strings } from '../../../i18n'
 
 interface Course {
   name: string
@@ -166,11 +167,9 @@ function parseList(previewContainer: HTMLDivElement | undefined | null): ParseRe
     }
 
     if (firstTime && updateObj.meine_kurse) {
-      notification.notify(
-        'Deine Kurse wurden erfolgreich in TUfast gespeichert. Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd>, um deine Kurse zu sehen! 🚀'
-      )
+      notification.notify(strings.content.opal.coursesSaved)
     } else if (coursesChanged || favouritesChanged) {
-      notification.notify('Deine Kurse wurden erfolgreich in TUfast aktualisiert! 🚀')
+      notification.notify(strings.content.opal.coursesUpdated)
     }
   }
 

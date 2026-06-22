@@ -1,3 +1,6 @@
+// OPAL loads several content scripts
+import { strings } from '../../../i18n'
+
 // OPAL loads several content scripts in one shared isolated-world scope; other bundles
 // minify globals like `var e` and would clobber top-level helpers here (easter egg).
 ;(() => {
@@ -78,7 +81,7 @@
     const logo = document.createElement('img')
     logo.src = iconURL
     logo.id = 'TUfastIcon'
-    logo.title = 'Powered by TUfast. Enjoy :)'
+    logo.title = strings.content.opal.logoTitle
     // Create container div and insert logo
     const div = document.createElement('div')
     div.className = 'tufast-opal-header'

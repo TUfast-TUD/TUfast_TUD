@@ -1,20 +1,18 @@
 <template>
-  <h3 class="card-body-title">Kurzbefehle in Suchmaschinen öffnen OPAL und weitere Tools direkt</h3>
-  <Setting v-model="searchEngineActive" txt="Suchmaschinen Superkräfte aktivieren" />
-  <p class="max-line p-margin">
-    Gib z.B. "tumail" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten
-    Suchmaschinen unterstützt!
-  </p>
+  <h3 class="card-body-title">{{ strings.settings.pages.searchEngines.title }}</h3>
+  <Setting v-model="searchEngineActive" :txt="strings.settings.pages.searchEngines.toggle" />
+  <p class="max-line p-margin">{{ strings.settings.pages.searchEngines.help }}</p>
 
   <p class="search-terms p-margin">
     <template v-for="site in uniqueSites" :key="site">
-      <span class="search-terms__bg"> {{ site[0] }}</span> → {{ site[1].name }}<br />
+      <span class="search-terms__bg"> {{ site[0] }}</span> &rarr; {{ site[1].name }}<br />
     </template>
   </p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+import { strings } from '../../../i18n'
 
 // types
 import type { ResponseSE } from '../types/SettingHandler'
@@ -58,7 +56,8 @@ export default defineComponent({
 
     return {
       searchEngineActive,
-      uniqueSites
+      uniqueSites,
+      strings
     }
   }
 })

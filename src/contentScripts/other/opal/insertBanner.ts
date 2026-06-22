@@ -1,3 +1,4 @@
+import { strings } from '../../../i18n'
 ;(async () => {
   const {
     bannersShown,
@@ -74,44 +75,44 @@
     } */
     case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
       const text = document.createElement('span')
-      text.innerHTML = 'Du hast Bock TUfast weiterzuentwickeln? '
+      text.innerHTML = strings.content.opal.banners.helpText
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = 'Wir suchen dich!'
+      interact.textContent = strings.content.opal.banners.helpAction
       interact.addEventListener('click', () => window.open('https://tu-fast.de/jobs', '_blank'))
-      insertBanner('helpWanted', 'Verstärkung gesucht:', [text, interact])
+      insertBanner('helpWanted', strings.content.opal.banners.helpTitle, [text, interact])
       break
     }
     case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
       const text = document.createElement('span')
-      text.innerHTML = 'Die Opal-Personalisierung muss von dir leider erneut aktiviert werden(, wenn du magst). '
+      text.innerHTML = strings.content.opal.banners.mv3Text
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = 'Hier aktivieren'
+      interact.textContent = strings.content.opal.banners.mv3Action
       interact.addEventListener('click', async () => {
         await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
       })
-      insertBanner('mv3UpdateNotice', 'Großes TUfast Update!', [text, interact])
+      insertBanner('mv3UpdateNotice', strings.content.opal.banners.mv3Title, [text, interact])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
       const text = document.createElement('span')
-      text.innerHTML = 'TUfast empfehlen und neue Icons freischalten! '
+      text.innerHTML = strings.content.opal.banners.rocketText
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = 'Los gehts!'
+      interact.textContent = strings.content.opal.banners.rocketAction
       interact.addEventListener('click', () => {
         chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
       })
-      insertBanner('customizeRockets', "Schnapp' sie dir alle!", [text, interact])
+      insertBanner('customizeRockets', strings.content.opal.banners.rocketTitle, [text, interact])
       break
     }
     case !bannerArr.includes('submitReview') && !mostLikelySubmittedReview && savedClickCounter > 500: {
       const text = document.createElement('span')
-      text.innerHTML = "Dann hau' mal ne gute Bewertung im Store raus! "
+      text.innerHTML = strings.content.opal.banners.reviewText
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = "Hier geht's lang!"
+      interact.textContent = strings.content.opal.banners.reviewAction
       interact.addEventListener('click', async () => {
         const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
         const webstoreLink = isFirefox
@@ -120,7 +121,7 @@
         window.open(webstoreLink, '_blank')
         await chrome.storage.local.set({ mostLikelySubmittedReview: true })
       })
-      insertBanner('submitReview', "Gefällt's dir?", [text, interact])
+      insertBanner('submitReview', strings.content.opal.banners.reviewTitle, [text, interact])
       break
     }
   }

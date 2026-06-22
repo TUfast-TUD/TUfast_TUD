@@ -1,20 +1,14 @@
 <template>
-  <h3 class="card-body-title onboarding-margin">Optimiere Layout und Notenverteilungen in Selma</h3>
+  <h3 class="card-body-title onboarding-margin">{{ strings.settings.pages.improveSelma.title }}</h3>
 
-  <Setting
-    v-model="improveSelma"
-    txt="Verbessertes Layout, Notenverteilung, Versuchstracker hinzufügen"
-    class="setting"
-  />
+  <Setting v-model="improveSelma" :txt="strings.settings.pages.improveSelma.toggle" class="setting" />
 
-  <p class="max-line p-margin">
-    Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in selma hinzu. Zusätzlich wird das Layout
-    und Design angepasst, um benutzerfreundlicher zu sein.
-  </p>
+  <p class="max-line p-margin">{{ strings.settings.pages.improveSelma.help }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+import { strings } from '../../../i18n'
 
 // components
 import Setting from '../components/Setting.vue'
@@ -41,7 +35,8 @@ export default defineComponent({
     }
 
     return {
-      improveSelma
+      improveSelma,
+      strings
     }
   }
 })

@@ -6,6 +6,7 @@
 // Firefox still need to use webRequestBlocking, so we need to check if we are in Firefox
 
 import { isFirefox, getBrowserNetRequestPermissions as getBrowserPermissions } from './firefoxCheck'
+import { strings } from '../i18n'
 
 // The rules that make the magic happen
 const rules = [
@@ -57,9 +58,7 @@ export async function enableOpalInline(): Promise<boolean> {
   // As declarativeNetRequest is not supported as optional permission in Manifest V3, we don't need to ask for it
   const granted = await (chrome.permissions as any).request({ permissions: getBrowserPermissions() })
   if (!granted) {
-    alert(
-      "TUfast braucht diese Berechtigung, um Dateien ohne Download zu \u00f6ffnen. Bitte dr\u00fccke auf 'Erlauben'."
-    )
+    alert(strings.content.opalInline.permission)
     disableOpalInline()
     return false
   }

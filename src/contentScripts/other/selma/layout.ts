@@ -1,3 +1,4 @@
+import { strings } from '../../../i18n'
 const currentView = document.location.pathname
 // Regex for extracting Programm name and arguments from a popup Script
 // This is used to get the URL which would be opened in a popup
@@ -22,10 +23,10 @@ function mapGrade(gradeElm: Element) {
 
   if (grade.includes('be')) {
     gradeElm.textContent = '✔'
-    gradeElm.setAttribute('title', 'Bestanden')
+    gradeElm.setAttribute('title', strings.content.selma.passed)
   } else if (grade.includes('noch nicht gesetzt')) {
     gradeElm.textContent = '🕓'
-    gradeElm.setAttribute('title', 'Noch nicht gesetzt')
+    gradeElm.setAttribute('title', strings.content.selma.notSet)
   }
 }
 
@@ -251,8 +252,8 @@ async function createCreditsBanner() {
   )
 
   // Tooltip
-  disableButton.title = 'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
-  disableButton.textContent = settingEnabled ? 'Deactivate' : 'Activate'
+  disableButton.title = strings.content.selma.toggleTitle
+  disableButton.textContent = settingEnabled ? strings.content.selma.deactivate : strings.content.selma.activate
   disableButton.onclick = async (event) => {
     event.preventDefault()
     await chrome.storage.local.set({ improveSelma: !settingEnabled })
@@ -330,7 +331,7 @@ function applyChanges() {
 
     // Remove the "gut/befriedigend" section
     const headRow = document.querySelector('thead>tr')!
-    headRow.children.item(3)!.textContent = 'Notenverteilung'
+    headRow.children.item(3)!.textContent = strings.content.selma.distribution
     headRow.removeChild(headRow.children.item(4)!)
 
     const body = document.querySelector('tbody')!
@@ -421,13 +422,13 @@ function applyChanges() {
     headRow.removeChild(headRow.children.item(3)!)
 
     // Change table header
-    headRow.children.item(3)!.textContent = 'Versuche'
+    headRow.children.item(3)!.textContent = strings.content.selma.tries
 
     // Add "Notenverteilung" header
     {
       headRow.children.item(3)!.removeAttribute('colspan')
       const newHeader = document.createElement('th')
-      newHeader.textContent = 'Notenverteilung'
+      newHeader.textContent = strings.content.selma.distribution
       headRow.appendChild(newHeader)
     }
 

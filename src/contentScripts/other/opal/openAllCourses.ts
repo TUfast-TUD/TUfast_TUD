@@ -1,3 +1,4 @@
+import { strings } from '../../../i18n'
 ;(function () {
   // Main injection logic
   async function injectOpenAllCoursesButton() {
@@ -10,8 +11,8 @@
 
     const openAllCoursesButton = document.createElement('span')
     openAllCoursesButton.id = 'openAllCoursesButton'
-    openAllCoursesButton.textContent = 'Alle Kurse öffnen'
-    openAllCoursesButton.title = 'Alle Kurse öffnen. Ein TUfast-Feature.'
+    openAllCoursesButton.textContent = strings.content.opal.openAllCourses
+    openAllCoursesButton.title = strings.content.opal.openAllCoursesTitle
     openAllCoursesButton.style.opacity = '1'
     openAllCoursesButton.style.cursor = 'pointer'
     openAllCoursesButton.style.pointerEvents = 'auto'

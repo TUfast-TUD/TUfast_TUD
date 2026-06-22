@@ -1,14 +1,12 @@
 <template>
-  <p v-show="!autoLoginActive" class="msg max-line">
-    Du musst "Automatisches Anmelden" mit deinem Login einrichten, um diese Funktion nutzen zu können.
-  </p>
+  <p v-show="!autoLoginActive" class="msg max-line">{{ strings.settings.pages.email.needsLogin }}</p>
 
-  <h3 class="card-body-title onboarding-hide">Erhalte Benachrichtigungen, wenn du neue E-Mails erhältst</h3>
+  <h3 class="card-body-title onboarding-hide">{{ strings.settings.pages.email.title }}</h3>
   <div style="display: flex; align-items: center; gap: 8px">
     <Setting
       v-model="owaFetchActive"
       :disabled="!autoLoginActive || owaCbDisabled"
-      txt="Anzahl ungelesener Mails als Notification Bubble"
+      :txt="strings.settings.pages.email.fetchToggle"
     />
     <img class="icon" src="../../../assets/images/UnreadMails16.png" />
   </div>
@@ -16,24 +14,17 @@
   <Setting
     v-model="notificationOnNewEmailActive"
     :disabled="!autoLoginActive || !owaFetchActive || notificationsCbDisabled"
-    txt="Pop-Up Benachrichtigung beim Erhalt einer neuen Mail"
+    :txt="strings.settings.pages.email.notificationToggle"
   />
 
-  <p class="p-margin max-line">
-    Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern. Weil TUfast dafür eine spezielle
-    Berechtigung braucht, drücke bitte auf „Erlauben“ im folgenden Pop-Up.
-  </p>
+  <p class="p-margin max-line">{{ strings.settings.pages.email.permission }}</p>
 
-  <p class="p-margin max-line txt-help">
-    Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab. Zum Anmelden
-    werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher. Es funktioniert genauso, als würdest
-    du deine Mails über den Browser abrufen. Die Benachrichtigungen kommen über die Windows-API. Beachte, dass du unter
-    Windows die entsprechende Funktion aktiviert haben musst.
-  </p>
+  <p class="p-margin max-line txt-help">{{ strings.settings.pages.email.help }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+import { strings } from '../../../i18n'
 
 // types
 import type { ResponseOWA } from '../types/SettingHandler'
@@ -100,7 +91,8 @@ export default defineComponent({
       owaCbDisabled,
       notificationOnNewEmailActive,
       notificationsCbDisabled,
-      autoLoginActive
+      autoLoginActive,
+      strings
     }
   }
 })
