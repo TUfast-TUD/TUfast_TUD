@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const selmaLayoutStrings = (globalThis as any).TUFAST_STRINGS.selma
 const currentView = document.location.pathname
 // Regex for extracting Programm name and arguments from a popup Script
 // This is used to get the URL which would be opened in a popup
@@ -23,10 +23,10 @@ function mapGrade(gradeElm: Element) {
 
   if (grade.includes('be')) {
     gradeElm.textContent = '✔'
-    gradeElm.setAttribute('title', strings.content.selma.passed)
+    gradeElm.setAttribute('title', selmaLayoutStrings.passed)
   } else if (grade.includes('noch nicht gesetzt')) {
     gradeElm.textContent = '🕓'
-    gradeElm.setAttribute('title', strings.content.selma.notSet)
+    gradeElm.setAttribute('title', selmaLayoutStrings.notSet)
   }
 }
 
@@ -252,8 +252,8 @@ async function createCreditsBanner() {
   )
 
   // Tooltip
-  disableButton.title = strings.content.selma.toggleTitle
-  disableButton.textContent = settingEnabled ? strings.content.selma.deactivate : strings.content.selma.activate
+  disableButton.title = selmaLayoutStrings.toggleTitle
+  disableButton.textContent = settingEnabled ? selmaLayoutStrings.deactivate : selmaLayoutStrings.activate
   disableButton.onclick = async (event) => {
     event.preventDefault()
     await chrome.storage.local.set({ improveSelma: !settingEnabled })
@@ -331,7 +331,7 @@ function applyChanges() {
 
     // Remove the "gut/befriedigend" section
     const headRow = document.querySelector('thead>tr')!
-    headRow.children.item(3)!.textContent = strings.content.selma.distribution
+    headRow.children.item(3)!.textContent = selmaLayoutStrings.distribution
     headRow.removeChild(headRow.children.item(4)!)
 
     const body = document.querySelector('tbody')!
@@ -422,13 +422,13 @@ function applyChanges() {
     headRow.removeChild(headRow.children.item(3)!)
 
     // Change table header
-    headRow.children.item(3)!.textContent = strings.content.selma.tries
+    headRow.children.item(3)!.textContent = selmaLayoutStrings.tries
 
     // Add "Notenverteilung" header
     {
       headRow.children.item(3)!.removeAttribute('colspan')
       const newHeader = document.createElement('th')
-      newHeader.textContent = strings.content.selma.distribution
+      newHeader.textContent = selmaLayoutStrings.distribution
       headRow.appendChild(newHeader)
     }
 

@@ -1,4 +1,3 @@
-import { strings } from '../../../i18n'
 import { Chart, LinearScale, BarController, CategoryScale, BarElement } from 'chart.js'
 Chart.register(LinearScale, BarController, CategoryScale, BarElement)
 
@@ -85,9 +84,9 @@ function getWeightedAverage(grades: ModuleGrades): number {
     statistik.push(p)
   }
 
-  statistik[0].innerHTML = strings.content.hisqis.weightedAverage(getWeightedAverage(grades.modules).toFixed(2))
-  statistik[1].innerHTML = strings.content.hisqis.moduleCount(Object.keys(grades.modules).length)
-  statistik[2].innerHTML = strings.content.hisqis.examCount(Object.keys(grades.exams).length)
+  statistik[0].innerHTML = `Deine Durchschnittnote (nach CP gewichtet): ${getWeightedAverage(grades.modules).toFixed(2)}`
+  statistik[1].innerHTML = `Anzahl Module: ${Object.keys(grades.modules).length}`
+  statistik[2].innerHTML = `Anzahl Pr?fungen: ${Object.keys(grades.exams).length}`
 
   container.append(canvas, ...statistik)
 

@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const opalOpenAllFavoritesStrings = (globalThis as any).TUFAST_STRINGS.opal
 ;(function () {
   // Main injection logic
   async function injectOpenAllFavoritesButton() {
@@ -11,8 +11,8 @@ import { strings } from '../../../i18n'
 
     const openAllFavoritesButton = document.createElement('span')
     openAllFavoritesButton.id = 'openAllFavoritesButton'
-    openAllFavoritesButton.textContent = strings.content.opal.openAllFavorites
-    openAllFavoritesButton.title = strings.content.opal.openAllFavoritesTitle
+    openAllFavoritesButton.textContent = opalOpenAllFavoritesStrings.openAllFavorites
+    openAllFavoritesButton.title = opalOpenAllFavoritesStrings.openAllFavoritesTitle
     openAllFavoritesButton.style.opacity = '1'
     openAllFavoritesButton.style.cursor = 'pointer'
     openAllFavoritesButton.style.pointerEvents = 'auto'

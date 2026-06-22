@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const opalBannerStrings = (globalThis as any).TUFAST_STRINGS.opal
 ;(async () => {
   const {
     bannersShown,
@@ -75,44 +75,44 @@ import { strings } from '../../../i18n'
     } */
     case !bannerArr.includes('helpWanted') && savedClickCounter > 100: {
       const text = document.createElement('span')
-      text.innerHTML = strings.content.opal.banners.helpText
+      text.innerHTML = opalBannerStrings.banners.helpText
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = strings.content.opal.banners.helpAction
+      interact.textContent = opalBannerStrings.banners.helpAction
       interact.addEventListener('click', () => window.open('https://tu-fast.de/jobs', '_blank'))
-      insertBanner('helpWanted', strings.content.opal.banners.helpTitle, [text, interact])
+      insertBanner('helpWanted', opalBannerStrings.banners.helpTitle, [text, interact])
       break
     }
     case !bannerArr.includes('mv3UpdateNotice') && !pdfInInline: {
       const text = document.createElement('span')
-      text.innerHTML = strings.content.opal.banners.mv3Text
+      text.innerHTML = opalBannerStrings.banners.mv3Text
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = strings.content.opal.banners.mv3Action
+      interact.textContent = opalBannerStrings.banners.mv3Action
       interact.addEventListener('click', async () => {
         await chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'opal_inline_settings' })
       })
-      insertBanner('mv3UpdateNotice', strings.content.opal.banners.mv3Title, [text, interact])
+      insertBanner('mv3UpdateNotice', opalBannerStrings.banners.mv3Title, [text, interact])
       break
     }
     case !bannerArr.includes('customizeRockets') && savedClickCounter > 250: {
       const text = document.createElement('span')
-      text.innerHTML = strings.content.opal.banners.rocketText
+      text.innerHTML = opalBannerStrings.banners.rocketText
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = strings.content.opal.banners.rocketAction
+      interact.textContent = opalBannerStrings.banners.rocketAction
       interact.addEventListener('click', () => {
         chrome.runtime.sendMessage({ cmd: 'open_settings_page', params: 'rocket_icons_settings' })
       })
-      insertBanner('customizeRockets', strings.content.opal.banners.rocketTitle, [text, interact])
+      insertBanner('customizeRockets', opalBannerStrings.banners.rocketTitle, [text, interact])
       break
     }
     case !bannerArr.includes('submitReview') && !mostLikelySubmittedReview && savedClickCounter > 500: {
       const text = document.createElement('span')
-      text.innerHTML = strings.content.opal.banners.reviewText
+      text.innerHTML = opalBannerStrings.banners.reviewText
       const interact = document.createElement('span')
       interact.className = 'interactLink'
-      interact.textContent = strings.content.opal.banners.reviewAction
+      interact.textContent = opalBannerStrings.banners.reviewAction
       interact.addEventListener('click', async () => {
         const isFirefox = navigator.userAgent.includes('Firefox/') // checking window.browser etc does not work here
         const webstoreLink = isFirefox
@@ -121,7 +121,7 @@ import { strings } from '../../../i18n'
         window.open(webstoreLink, '_blank')
         await chrome.storage.local.set({ mostLikelySubmittedReview: true })
       })
-      insertBanner('submitReview', strings.content.opal.banners.reviewTitle, [text, interact])
+      insertBanner('submitReview', opalBannerStrings.banners.reviewTitle, [text, interact])
       break
     }
   }

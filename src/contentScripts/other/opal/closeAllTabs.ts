@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const opalCloseAllTabsStrings = (globalThis as any).TUFAST_STRINGS.opal
 const STORAGE_KEY = 'closeAllTabsOnLoad'
 
 // adds button
@@ -11,8 +11,8 @@ async function injectCloseAllButton() {
 
   const closeAllTabsButton = document.createElement('span')
   closeAllTabsButton.id = 'closeAllTabsButton'
-  closeAllTabsButton.title = strings.content.opal.closeAllTabsTitle
-  closeAllTabsButton.textContent = strings.content.opal.closeAllTabs
+  closeAllTabsButton.title = opalCloseAllTabsStrings.closeAllTabsTitle
+  closeAllTabsButton.textContent = opalCloseAllTabsStrings.closeAllTabs
 
   // if there are no tabs open, disable the button
   function updateButtonState() {

@@ -1,5 +1,6 @@
 import type { NotificationNamespace } from '../notification'
-import { strings } from '../../../i18n'
+
+const opalParseCoursesStrings = (globalThis as any).TUFAST_STRINGS.opal
 
 interface Course {
   name: string
@@ -167,9 +168,11 @@ function parseList(previewContainer: HTMLDivElement | undefined | null): ParseRe
     }
 
     if (firstTime && updateObj.meine_kurse) {
-      notification.notify(strings.content.opal.coursesSaved)
+      notification.notify(
+        'Deine Kurse wurden erfolgreich in TUfast gespeichert. Dr?cke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd>, um deine Kurse zu sehen! ??'
+      )
     } else if (coursesChanged || favouritesChanged) {
-      notification.notify(strings.content.opal.coursesUpdated)
+      notification.notify(opalParseCoursesStrings.coursesUpdated)
     }
   }
 

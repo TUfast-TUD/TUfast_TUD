@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const opalOpenAllCoursesStrings = (globalThis as any).TUFAST_STRINGS.opal
 ;(function () {
   // Main injection logic
   async function injectOpenAllCoursesButton() {
@@ -11,8 +11,8 @@ import { strings } from '../../../i18n'
 
     const openAllCoursesButton = document.createElement('span')
     openAllCoursesButton.id = 'openAllCoursesButton'
-    openAllCoursesButton.textContent = strings.content.opal.openAllCourses
-    openAllCoursesButton.title = strings.content.opal.openAllCoursesTitle
+    openAllCoursesButton.textContent = opalOpenAllCoursesStrings.openAllCourses
+    openAllCoursesButton.title = opalOpenAllCoursesStrings.openAllCoursesTitle
     openAllCoursesButton.style.opacity = '1'
     openAllCoursesButton.style.cursor = 'pointer'
     openAllCoursesButton.style.pointerEvents = 'auto'

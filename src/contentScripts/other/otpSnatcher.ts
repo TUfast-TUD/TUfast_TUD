@@ -1,4 +1,4 @@
-import { strings } from '../../i18n'
+const otpSnatcherStrings = (globalThis as any).TUFAST_STRINGS.otp
 const qrAvailable = !!document.getElementById('qr-code')
 const seedLink = document.querySelector('#seed-link a[href^="otpauth://totp/"]')
 
@@ -21,5 +21,5 @@ if (qrAvailable && seedLink && showWarning()) {
 }
 
 function showWarning(): boolean {
-  return confirm(strings.content.otp.snatcherConfirm)
+  return confirm(otpSnatcherStrings.snatcherConfirm)
 }

@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const hisqisInjectStrings = (globalThis as any).TUFAST_STRINGS.hisqis
 ;(async () => {
   const form = document.getElementsByTagName('form')[0]
   const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')
@@ -18,7 +18,7 @@ import { strings } from '../../../i18n'
   const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')
   const credits = document.createElement('p')
   credits.id = 'TUfastCredits'
-  credits.innerHTML = strings.content.hisqis.credits.replace('{imgUrl}', imgUrl)
+  credits.innerHTML = hisqisInjectStrings.credits.replace('{imgUrl}', imgUrl)
   form.insertBefore(credits, afterTable)
 
   // Insert grade script
@@ -50,16 +50,16 @@ import { strings } from '../../../i18n'
 
     const changeLink = document.createElement('a')
     changeLink.style.cursor = 'pointer'
-    changeLink.innerText = hisqisPimpedTable ? strings.content.hisqis.oldTable : strings.content.hisqis.newTable
+    changeLink.innerText = hisqisPimpedTable ? hisqisInjectStrings.oldTable : hisqisInjectStrings.newTable
     changeLink.addEventListener('click', async () => {
       const hisqisPimpedTable = !(newTable.style.display === 'table') // We toggle
       newTable.style.display = hisqisPimpedTable ? 'table' : 'none'
       oldTable.style.display = hisqisPimpedTable ? 'none' : 'table'
-      changeLink.innerText = hisqisPimpedTable ? strings.content.hisqis.oldTable : strings.content.hisqis.newTable
+      changeLink.innerText = hisqisPimpedTable ? hisqisInjectStrings.oldTable : hisqisInjectStrings.newTable
       await chrome.storage.local.set({ hisqisPimpedTable })
     })
 
-    p.append(document.createTextNode(strings.content.hisqis.continueTo), changeLink)
+    p.append(document.createTextNode(hisqisInjectStrings.continueTo), changeLink)
     tableInfoContainer.appendChild(p)
   })
 

@@ -1,4 +1,4 @@
-import { strings } from '../../../i18n'
+const opalSnowflakeStrings = (globalThis as any).TUFAST_STRINGS.opal
 // Global state to persist across SPA navigations
 const globalSnowflakeState: {
   container: HTMLDivElement | undefined
@@ -99,13 +99,13 @@ async function injectSnowflakeControl() {
 
   function updateButtonText(switchElement: HTMLSpanElement) {
     switchElement.textContent = globalSnowflakeState.currentState
-      ? strings.content.opal.snowDisable
-      : strings.content.opal.snowEnable
+      ? opalSnowflakeStrings.snowDisable
+      : opalSnowflakeStrings.snowEnable
   }
 
   const flakeSwitch = document.createElement('span')
   flakeSwitch.id = 'flakeSwitch'
-  flakeSwitch.title = strings.content.opal.snowTitle
+  flakeSwitch.title = opalSnowflakeStrings.snowTitle
 
   updateButtonText(flakeSwitch)
 

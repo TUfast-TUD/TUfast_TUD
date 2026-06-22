@@ -39,7 +39,7 @@
       ]
     },
     {
-      "js": ["contentScripts/other/hisqis/pimpAndInjectModules.js"],
+      "js": ["i18n/contentScriptStrings.js", "contentScripts/other/hisqis/pimpAndInjectModules.js"],
       "css": ["styles/components/gradeTable.css", "styles/contentScripts/hisqis.css"],
       "run_at": "document_idle",
       "matches": ["https://qis.dez.tu-dresden.de/qisserver/servlet/*"],
@@ -58,7 +58,7 @@
       "matches": ["https://selma.tu-dresden.de/*"]
     },
     {
-      "js": ["contentScripts/other/selma/layout.js"],
+      "js": ["i18n/contentScriptStrings.js", "contentScripts/other/selma/layout.js"],
       "run_at": "document_start",
       "matches": ["https://selma.tu-dresden.de/*"]
     },
@@ -99,6 +99,7 @@
     },
     {
       "js": [
+        "i18n/contentScriptStrings.js",
         "contentScripts/other/opal/insertLogo.js",
         "contentScripts/other/opal/snowflakes.js",
         "contentScripts/other/opal/closeAllTabs.js",
@@ -123,7 +124,7 @@
       "matches": ["https://bildungsportal.sachsen.de/opal/*"]
     },
     {
-      "js": ["contentScripts/other/opal/parseCourses.js"],
+      "js": ["i18n/contentScriptStrings.js", "contentScripts/other/opal/parseCourses.js"],
       "css": ["styles/components/notification.css"],
       "run_at": "document_idle",
       "matches": ["https://bildungsportal.sachsen.de/opal/auth/resource/*"]
@@ -184,7 +185,7 @@
       "matches": ["https://www.startpage.com/*"]
     },
     {
-      "js": ["contentScripts/other/otpSnatcher.js"],
+      "js": ["i18n/contentScriptStrings.js", "contentScripts/other/otpSnatcher.js"],
       "run_at": "document_idle",
       "matches": ["https://selfservice.tu-dresden.de/services/idm/token/create"]
     }
