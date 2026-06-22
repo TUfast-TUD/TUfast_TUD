@@ -1,4 +1,4 @@
-const opalInsertLogoStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalInsertLogoStrings = globalThis.TUFAST_STRINGS.opal
 // OPAL loads several content scripts in one shared isolated-world scope; other bundles
 // minify globals like `var e` and would clobber top-level helpers here (easter egg).
 ;(() => {

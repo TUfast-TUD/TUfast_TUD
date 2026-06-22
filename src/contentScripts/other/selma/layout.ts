@@ -1,4 +1,4 @@
-const selmaLayoutStrings = (globalThis as any).TUFAST_STRINGS.selma
+const selmaLayoutStrings = globalThis.TUFAST_STRINGS.selma
 const currentView = document.location.pathname
 // Regex for extracting Programm name and arguments from a popup Script
 // This is used to get the URL which would be opened in a popup

@@ -1,4 +1,4 @@
-const opalOpenAllFavoritesStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalOpenAllFavoritesStrings = globalThis.TUFAST_STRINGS.opal
 ;(function () {
   // Main injection logic
   async function injectOpenAllFavoritesButton() {

@@ -1,6 +1,6 @@
 import type { NotificationNamespace } from '../notification'
 
-const opalParseCoursesStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalParseCoursesStrings = globalThis.TUFAST_STRINGS.opal
 
 interface Course {
   name: string

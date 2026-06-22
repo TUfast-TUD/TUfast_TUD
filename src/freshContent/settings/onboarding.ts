@@ -1,5 +1,13 @@
 import { strings } from '../../i18n'
 
+type OnboardingStep = {
+  title: string
+  icon: string
+  h1: string
+  btnText: string
+  skipText: string
+}
+
 export default [
   {
     title: 'Welcome',
@@ -57,4 +65,4 @@ export default [
     btnText: strings.onboarding.finish,
     skipText: ''
   }
-]
+] as const satisfies readonly OnboardingStep[]

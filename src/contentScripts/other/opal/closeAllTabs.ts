@@ -1,4 +1,4 @@
-const opalCloseAllTabsStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalCloseAllTabsStrings = globalThis.TUFAST_STRINGS.opal
 const STORAGE_KEY = 'closeAllTabsOnLoad'
 
 // adds button

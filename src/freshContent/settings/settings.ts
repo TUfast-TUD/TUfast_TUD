@@ -1,4 +1,5 @@
 import { strings } from '../../i18n'
+import type { Setting } from './types/Setting'
 
 export default [
   {
@@ -78,4 +79,4 @@ export default [
     category: 'personalization',
     settingType: ''
   }
-]
+] as const satisfies readonly Setting[]

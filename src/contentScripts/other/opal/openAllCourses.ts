@@ -1,4 +1,4 @@
-const opalOpenAllCoursesStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalOpenAllCoursesStrings = globalThis.TUFAST_STRINGS.opal
 ;(function () {
   // Main injection logic
   async function injectOpenAllCoursesButton() {

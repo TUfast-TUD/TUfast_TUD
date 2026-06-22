@@ -1,4 +1,4 @@
-const hisqisInjectStrings = (globalThis as any).TUFAST_STRINGS.hisqis
+const hisqisInjectStrings = globalThis.TUFAST_STRINGS.hisqis
 ;(async () => {
   const form = document.getElementsByTagName('form')[0]
   const table = document.querySelector('table[summary="Liste der Stammdaten des Studierenden"]')

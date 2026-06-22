@@ -1,4 +1,4 @@
-const opalSnowflakeStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalSnowflakeStrings = globalThis.TUFAST_STRINGS.opal
 // Global state to persist across SPA navigations
 const globalSnowflakeState: {
   container: HTMLDivElement | undefined

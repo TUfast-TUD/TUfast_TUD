@@ -1,4 +1,4 @@
-;(globalThis as any).TUFAST_STRINGS = {
+globalThis.TUFAST_STRINGS = {
   opal: {
     closeAllTabs: 'Alle Tabs schließen',
     closeAllTabsTitle: 'Alle Tabs schließen. Ein TUfast-Feature.',

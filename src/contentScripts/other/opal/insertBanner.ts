@@ -1,4 +1,4 @@
-const opalBannerStrings = (globalThis as any).TUFAST_STRINGS.opal
+const opalBannerStrings = globalThis.TUFAST_STRINGS.opal
 ;(async () => {
   const {
     bannersShown,
