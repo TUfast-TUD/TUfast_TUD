@@ -1,10 +1,10 @@
 import studiengangConfig from '../studies.json'
-import { strings } from '../../i18n'
+import { t } from '../../i18n'
 import '../../styles/popup.scss'
 import '../../styles/components/switch.scss'
 import '../../styles/components/share.scss'
 
-const shareHTML = strings.popup.shareHtml
+const shareHTML = t('popup.shareHtml')
 const bananaHTML =
   '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" style = "position: fixed; bottom: 70px; right: 26px;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>'
 
@@ -101,7 +101,7 @@ window.onload = async () => {
   // display saved clicks
   const time = clicksToTime(result.savedClickCounter || 0)
   document.getElementById('saved_clicks').innerHTML =
-    `<text>${strings.popup.savedClicks(result.savedClickCounter || 0, time)}</text>`
+    `<text>${t('popup.savedClicks', { clicks: result.savedClickCounter || 0, time })}</text>`
 
   // display banana at each end of semester for two weeks!
   let bananaTime = false
@@ -371,12 +371,12 @@ function displayCourseList(
   switch (type) {
     case 'favoriten':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites'
-      name = strings.popup.importOpalCourses
+      name = t('popup.importOpalCourses')
       imgSrc = '../../assets/icons/star.png'
       break
     case 'meine_kurse':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
-      name = strings.popup.importOpalCourses
+      name = t('popup.importOpalCourses')
       imgSrc = '../../assets/icons/CoursesOpalIcon.png'
       break
     default:
@@ -386,9 +386,7 @@ function displayCourseList(
   // save reload button later, so it appears later in the list
   const reloadButton = {
     name:
-      courseList === undefined || courseList.length === 0 || courseList === false
-        ? name
-        : strings.popup.updateCourseList,
+      courseList === undefined || courseList.length === 0 || courseList === false ? name : t('popup.updateCourseList'),
     link,
     img: '../../assets/icons/reload.png'
   }
@@ -422,7 +420,7 @@ function displayCourseList(
     introRating.classList.add('list-entry-wrapper')
     introRatingText.classList.add('list-intro')
 
-    introRatingText.innerHTML = strings.popup.introRating
+    introRatingText.innerHTML = t('popup.introRating')
     introRating.appendChild(introRatingText)
     htmlList.appendChild(introRating)
   }
@@ -435,7 +433,7 @@ function displayCourseList(
     outroRating.classList.add('list-entry-wrapper')
     outroRatingText.classList.add('list-outro')
 
-    outroRatingText.innerHTML = strings.popup.outroRating
+    outroRatingText.innerHTML = t('popup.outroRating')
     outroRating.appendChild(outroRatingText)
     htmlList.appendChild(outroRating)
   }
@@ -448,7 +446,7 @@ function displayCourseList(
     msg1.classList.add('list-entry-wrapper')
     msg1Text.classList.add('list-outro')
 
-    msg1Text.innerHTML = strings.popup.gopalBanner
+    msg1Text.innerHTML = t('popup.gopalBanner')
     msg1.appendChild(msg1Text)
     htmlList.appendChild(msg1)
   }
@@ -533,11 +531,7 @@ function displayCourseList(
       isRated = ratedCourses.includes(element.name)
     }
     if (
-      !(
-        element.name === strings.popup.updateCourseList ||
-        element.name === strings.popup.importOpalCourses ||
-        isRated
-      ) &&
+      !(element.name === t('popup.updateCourseList') || element.name === t('popup.importOpalCourses') || isRated) &&
       ratingEnabledFlag
     ) {
       listEntrywrapper.appendChild(rateEntryWrapper)
@@ -563,7 +557,7 @@ function displayCourseList(
       openAllCoursesEntry.className += ' disabled'
       openAllCoursesEntry.style.opacity = 0.5
       openAllCoursesEntry.style.pointerEvents = 'none'
-      openAllCoursesEntry.title = strings.popup.tooManyCourses
+      openAllCoursesEntry.title = t('popup.tooManyCourses')
     } else {
       openAllCoursesEntry.onclick = openAllCourses
     }
@@ -573,10 +567,10 @@ function displayCourseList(
 
     // Change text and icon based on current view (type)
     if (type === 'favoriten') {
-      openAllCoursesText.innerHTML = strings.popup.openAllFavorites
+      openAllCoursesText.innerHTML = t('popup.openAllFavorites')
       openAllCoursesIcon.src = '../../assets/icons/starAll.png'
     } else {
-      openAllCoursesText.innerHTML = strings.popup.openAllCourses
+      openAllCoursesText.innerHTML = t('popup.openAllCourses')
       openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
     }
 
@@ -656,10 +650,10 @@ function displayCourseList(
   listEntry.appendChild(listImg)
 
   if (type === 'favoriten') {
-    listText.innerHTML = strings.popup.switchToCourses
+    listText.innerHTML = t('popup.switchToCourses')
   }
   if (type === 'meine_kurse') {
-    listText.innerHTML = strings.popup.switchToFavorites
+    listText.innerHTML = t('popup.switchToFavorites')
   }
 
   listEntry.appendChild(listText)
@@ -744,7 +738,7 @@ async function sendRating() {
 
   // rating cannot be zero
   if (rating === '0.0') {
-    alert(strings.popup.rateBeforeSubmit)
+    alert(t('popup.rateBeforeSubmit'))
     return
   }
 

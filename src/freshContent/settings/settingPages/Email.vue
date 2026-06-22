@@ -1,12 +1,12 @@
 <template>
-  <p v-show="!autoLoginActive" class="msg max-line">{{ strings.settings.pages.email.needsLogin }}</p>
+  <p v-show="!autoLoginActive" class="msg max-line">{{ t('settings.pages.email.needsLogin') }}</p>
 
-  <h3 class="card-body-title onboarding-hide">{{ strings.settings.pages.email.title }}</h3>
+  <h3 class="card-body-title onboarding-hide">{{ t('settings.pages.email.title') }}</h3>
   <div style="display: flex; align-items: center; gap: 8px">
     <Setting
       v-model="owaFetchActive"
       :disabled="!autoLoginActive || owaCbDisabled"
-      :txt="strings.settings.pages.email.fetchToggle"
+      :txt="t('settings.pages.email.fetchToggle')"
     />
     <img class="icon" src="../../../assets/images/UnreadMails16.png" />
   </div>
@@ -14,17 +14,17 @@
   <Setting
     v-model="notificationOnNewEmailActive"
     :disabled="!autoLoginActive || !owaFetchActive || notificationsCbDisabled"
-    :txt="strings.settings.pages.email.notificationToggle"
+    :txt="t('settings.pages.email.notificationToggle')"
   />
 
-  <p class="p-margin max-line">{{ strings.settings.pages.email.permission }}</p>
+  <p class="p-margin max-line">{{ t('settings.pages.email.permission') }}</p>
 
-  <p class="p-margin max-line txt-help">{{ strings.settings.pages.email.help }}</p>
+  <p class="p-margin max-line txt-help">{{ t('settings.pages.email.help') }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
-import { strings } from '../../../i18n'
+import { t } from '../../../i18n'
 
 // types
 import type { ResponseOWA } from '../types/SettingHandler'
@@ -92,7 +92,7 @@ export default defineComponent({
       notificationOnNewEmailActive,
       notificationsCbDisabled,
       autoLoginActive,
-      strings
+      t
     }
   }
 })

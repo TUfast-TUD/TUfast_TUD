@@ -4,23 +4,23 @@
     <header class="tuf-header">
       <div class="tuf-header-left">
         <div class="tuf-logo"></div>
-        <span class="tuf-header-location txt-bold">{{ strings.settings.location }}</span>
+        <span class="tuf-header-location txt-bold">{{ t('settings.location') }}</span>
       </div>
       <div class="tuf-header-right"><Statistics /></div>
     </header>
     <div class="tuf-settings-list" style="margin-top: 16px">
-      <h2 class="tuf-settings-list__part-title">{{ strings.settings.personalization }}</h2>
+      <h2 class="tuf-settings-list__part-title">{{ t('settings.personalization') }}</h2>
       <div class="tuf-settings-list__part">
-        <template v-for="setting in getSettingsByCategory('personalization')" :key="setting.title">
+        <template v-for="setting in getSettingsByCategory('personalization')" :key="setting.titleKey">
           <SettingTile
             :icon="setting.icon"
-            :title="setting.title"
+            :title="t(setting.titleKey)"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
             :class="[
               'main-grid__tile',
               { 'is-active': openSettingId === setting.settingsPage },
-              { soon: setting.title === strings.settings.tiles.language }
+              { soon: setting.titleKey === 'settings.tiles.language' }
             ]"
             role="button"
             tabindex="0"
@@ -32,7 +32,7 @@
           <transition name="expand">
             <Card
               v-if="openSettingId === setting.settingsPage"
-              :title="setting.title"
+              :title="t(setting.titleKey)"
               :inline="true"
               class="inline-dropdown-card"
               @close-me="closeSetting"
@@ -53,12 +53,12 @@
           @keyup.space="toggleTheme()"
         />
       </div>
-      <h2 class="tuf-settings-list__part-title">{{ strings.settings.functions }}</h2>
+      <h2 class="tuf-settings-list__part-title">{{ t('settings.functions') }}</h2>
       <div class="tuf-settings-list__part">
-        <template v-for="setting in getSettingsByCategory('function')" :key="setting.title">
+        <template v-for="setting in getSettingsByCategory('function')" :key="setting.titleKey">
           <SettingTile
             :icon="setting.icon"
-            :title="setting.title"
+            :title="t(setting.titleKey)"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
@@ -72,7 +72,7 @@
           <transition name="expand">
             <Card
               v-if="openSettingId === setting.settingsPage"
-              :title="setting.title"
+              :title="t(setting.titleKey)"
               :inline="true"
               class="inline-dropdown-card"
               @close-me="closeSetting"
@@ -85,12 +85,12 @@
         </template>
       </div>
 
-      <h2 class="tuf-settings-list__part-title">{{ strings.settings.information }}</h2>
+      <h2 class="tuf-settings-list__part-title">{{ t('settings.information') }}</h2>
       <div class="tuf-settings-list__part" style="margin-bottom: 128px">
-        <template v-for="setting in getSettingsByCategory('information')" :key="setting.title">
+        <template v-for="setting in getSettingsByCategory('information')" :key="setting.titleKey">
           <SettingTile
             :icon="setting.icon"
-            :title="setting.title"
+            :title="t(setting.titleKey)"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
@@ -104,7 +104,7 @@
           <transition name="expand">
             <Card
               v-if="openSettingId === setting.settingsPage"
-              :title="setting.title"
+              :title="t(setting.titleKey)"
               :inline="true"
               class="inline-dropdown-card"
               @close-me="closeSetting"
@@ -119,7 +119,7 @@
           <div class="tuf-settings-link">
             <div class="tuf-settings-link__icon"><IconWorld size="48px" /></div>
             <div class="tuf-settings-link__title">
-              <h2>{{ strings.common.website }}</h2>
+              <h2>{{ t('common.website') }}</h2>
             </div>
             <div class="tuf-settings-link__type"><IconArrowUpRight size="24px" /></div>
           </div>
@@ -128,7 +128,7 @@
           <div class="tuf-settings-link">
             <div class="tuf-settings-link__icon"><IconHeartHandshake size="48px" /></div>
             <div class="tuf-settings-link__title">
-              <h2>{{ strings.common.supportUs }}</h2>
+              <h2>{{ t('common.supportUs') }}</h2>
             </div>
             <div class="tuf-settings-link__type"><IconArrowUpRight size="24px" /></div>
           </div>
@@ -141,7 +141,7 @@
           <div class="tuf-settings-link">
             <div class="tuf-settings-link__icon"><IconShield size="48px" /></div>
             <div class="tuf-settings-link__title">
-              <h2>{{ strings.common.privacy }}</h2>
+              <h2>{{ t('common.privacy') }}</h2>
             </div>
             <div class="tuf-settings-link__type"><IconArrowUpRight size="24px" /></div>
           </div>
@@ -155,10 +155,14 @@
   <teleport v-if="!hideWelcome" to="body">
     <Onboarding
       :current-step="currentOnboardingStep"
-      :h1="onboardingSteps[currentOnboardingStep - 1].h1"
+      :h1="t(onboardingSteps[currentOnboardingStep - 1].h1Key)"
       :icon="onboardingSteps[currentOnboardingStep - 1].icon"
-      :btn-text="onboardingSteps[currentOnboardingStep - 1].btnText"
-      :skip-text="onboardingSteps[currentOnboardingStep - 1].skipText"
+      :btn-text="t(onboardingSteps[currentOnboardingStep - 1].btnTextKey)"
+      :skip-text="
+        onboardingSteps[currentOnboardingStep - 1].skipTextKey
+          ? t(onboardingSteps[currentOnboardingStep - 1].skipTextKey)
+          : ''
+      "
     >
       <template #default>
         <component :is="onboardingSteps[currentOnboardingStep - 1].title" />
@@ -205,7 +209,7 @@ import SearchengineSetup from './onboardingPages/07_SearchengineSetup.vue'
 import DoneSetup from './onboardingPages/08_DoneSetup.vue'
 
 // configurations
-import { strings } from '../../i18n'
+import { t } from '../../i18n'
 import settings from './settings'
 import onboardingSteps from './onboarding'
 
@@ -317,7 +321,7 @@ export default defineComponent({
         const match = settings.find((s) => {
           return (
             (s.settingsPage && s.settingsPage.toLowerCase() === normalized) ||
-            (s.title && s.title.toLowerCase() === normalized)
+            t(s.titleKey).toLowerCase() === normalized
           )
         })
 
@@ -364,7 +368,7 @@ export default defineComponent({
         const match = settings.find((s) => {
           return (
             (s.settingsPage && s.settingsPage.toLowerCase() === normalized) ||
-            (s.title && s.title.toLowerCase() === normalized)
+            t(s.titleKey).toLowerCase() === normalized
           )
         })
 
@@ -474,7 +478,7 @@ export default defineComponent({
       toggleSetting,
       closeSetting,
       settings,
-      strings,
+      t,
       getSettingsByCategory,
       toggleTheme,
       animState

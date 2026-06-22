@@ -1,7 +1,7 @@
 <template>
-  <h3 class="card-body-title">{{ strings.settings.pages.searchEngines.title }}</h3>
-  <Setting v-model="searchEngineActive" :txt="strings.settings.pages.searchEngines.toggle" />
-  <p class="max-line p-margin">{{ strings.settings.pages.searchEngines.help }}</p>
+  <h3 class="card-body-title">{{ t('settings.pages.searchEngines.title') }}</h3>
+  <Setting v-model="searchEngineActive" :txt="t('settings.pages.searchEngines.toggle')" />
+  <p class="max-line p-margin">{{ t('settings.pages.searchEngines.help') }}</p>
 
   <p class="search-terms p-margin">
     <template v-for="site in uniqueSites" :key="site">
@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
-import { strings } from '../../../i18n'
+import { t } from '../../../i18n'
 
 // types
 import type { ResponseSE } from '../types/SettingHandler'
@@ -57,7 +57,7 @@ export default defineComponent({
     return {
       searchEngineActive,
       uniqueSites,
-      strings
+      t
     }
   }
 })

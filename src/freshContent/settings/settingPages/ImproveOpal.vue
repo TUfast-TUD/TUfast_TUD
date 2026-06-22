@@ -1,19 +1,19 @@
 <template>
-  <h3 class="card-body-title">{{ strings.settings.pages.improveOpal.title }}</h3>
-  <Setting v-model="pdfInlineActive" :txt="strings.settings.pages.improveOpal.inline" class="setting" />
+  <h3 class="card-body-title">{{ t('settings.pages.improveOpal.title') }}</h3>
+  <Setting v-model="pdfInlineActive" :txt="t('settings.pages.improveOpal.inline')" class="setting" />
   <Setting
     v-model="pdfNewTabActive"
     :disabled="!pdfInlineActive"
-    :txt="strings.settings.pages.improveOpal.newTab"
+    :txt="t('settings.pages.improveOpal.newTab')"
     class="setting"
   />
-  <p class="max-line p-margin">{{ strings.settings.pages.improveOpal.permission }}</p>
-  <p class="max-line p-margin txt-help">{{ strings.settings.pages.improveOpal.firefoxWarning }}</p>
+  <p class="max-line p-margin">{{ t('settings.pages.improveOpal.permission') }}</p>
+  <p class="max-line p-margin txt-help">{{ t('settings.pages.improveOpal.firefoxWarning') }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
-import { strings } from '../../../i18n'
+import { t } from '../../../i18n'
 
 // types
 import type { ResponseOpalPdf } from '../types/SettingHandler'
@@ -70,7 +70,7 @@ export default defineComponent({
     return {
       pdfInlineActive,
       pdfNewTabActive,
-      strings
+      t
     }
   }
 })

@@ -85,7 +85,7 @@ export const de = {
   popup: {
     shareHtml:
       '<div class="content"><h1>Hilf deinen Mitstudierenden <br /><img class="invert" src="../../assets/images/tufast48.png" style="height:1.5em;vertical-align:middle;" /> TUfast zu entdecken</h1><p class="subtitle">und <a href="#" id="rockets_link" style="color:var(--color-text-link);text-decoration:underline;cursor:pointer;">sammle coole Raketen</a>!</p><div class="share-section"><div class="share-title">Teilen mit</div><div class="share-links"><a class="share-link" href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studierenden%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90" target="_blank"><img src="../../assets/icons/gmail.png" />E-Mail</a><a class="share-link" href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studierenden!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90" target="_blank"><img src="../../assets/icons/wa2.png" />WhatsApp</a><a class="share-link" href="https://www.tu-fast.de" target="_blank">www.tu-fast.de</a></div></div><div class="footer">Gemacht mit 💙 von Studierenden · <a href="https://github.com/TUfast-TUD/TUfast_TUD" target="_blank">GitHub</a> · <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast" target="_blank">Kontakt</a></div></div>',
-    savedClicks: (clicks: number, time: string) => `${clicks} Klicks, ${time} gespart`,
+    savedClicks: '{clicks} Klicks, {time} gespart',
     importOpalCourses: 'Klicke, um deine OPAL-Kurse zu importieren',
     updateCourseList: 'Diese Kursliste jetzt aktualisieren...',
     ratingDone: "Fertig <text style='font-size:14px'>✅</text>",
@@ -140,9 +140,9 @@ export const de = {
       continueTo: ' Weiter zur ',
       overview: 'Deine Notenübersicht',
       descriptors: ['Modul', 'Bestandene Prüfung', 'Verhauene Prüfung'],
-      weightedAverage: (average: string) => `Deine Durchschnittnote (nach CP gewichtet): ${average}`,
-      moduleCount: (count: number) => `Anzahl Module: ${count}`,
-      examCount: (count: number) => `Anzahl Prüfungen: ${count}`
+      weightedAverage: 'Deine Durchschnittnote (nach CP gewichtet): {average}',
+      moduleCount: 'Anzahl Module: {count}',
+      examCount: 'Anzahl Prüfungen: {count}'
     },
     selma: {
       passed: 'Bestanden',
@@ -160,7 +160,7 @@ export const de = {
       permissionNotification:
         "TUfast braucht diese Berechtigung, um dir zusätzliche Benachrichtigungen zu senden. Bitte drücke auf 'Erlauben'.",
       newMailTitle: 'Neue E-Mails',
-      newMailMessage: (count: number) => `Du hast ${count} neue E-Mail${count > 1 ? 's' : ''}`
+      newMailMessage: 'Du hast {count} neue E-Mail | Du hast {count} neue E-Mails'
     },
     opalInline: {
       permission: "TUfast braucht diese Berechtigung, um Dateien ohne Download zu öffnen. Bitte drücke auf 'Erlauben'."

@@ -1,68 +1,66 @@
-import { strings } from '../../i18n'
-
 type OnboardingStep = {
   title: string
   icon: string
-  h1: string
-  btnText: string
-  skipText: string
+  h1Key: string
+  btnTextKey: string
+  skipTextKey: string
 }
 
 export default [
   {
     title: 'Welcome',
     icon: '',
-    h1: strings.onboarding.steps.welcome,
-    btnText: strings.onboarding.start,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.welcome',
+    btnTextKey: 'onboarding.start',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'FacultySetup',
     icon: 'IconSchool',
-    h1: strings.onboarding.steps.faculty,
-    btnText: strings.onboarding.next,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.faculty',
+    btnTextKey: 'onboarding.next',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'LoginSetup',
     icon: 'IconLock',
-    h1: strings.onboarding.steps.login,
-    btnText: strings.onboarding.next,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.login',
+    btnTextKey: 'onboarding.next',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'OtpSetup',
     icon: 'IconLock',
-    h1: strings.onboarding.steps.otp,
-    btnText: strings.onboarding.next,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.otp',
+    btnTextKey: 'onboarding.next',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'EMailSetup',
     icon: 'IconNotification',
-    h1: strings.onboarding.steps.email,
-    btnText: strings.onboarding.next,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.email',
+    btnTextKey: 'onboarding.next',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'OpalSelmaSetup',
     icon: 'IconAdjustments',
-    h1: strings.onboarding.steps.opalSelma,
-    btnText: strings.onboarding.next,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.opalSelma',
+    btnTextKey: 'onboarding.next',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'SearchengineSetup',
     icon: 'IconSearch',
-    h1: strings.onboarding.steps.searchEngines,
-    btnText: strings.onboarding.next,
-    skipText: strings.onboarding.skip
+    h1Key: 'onboarding.steps.searchEngines',
+    btnTextKey: 'onboarding.next',
+    skipTextKey: 'onboarding.skip'
   },
   {
     title: 'DoneSetup',
     icon: 'IconRocket',
-    h1: strings.onboarding.steps.done,
-    btnText: strings.onboarding.finish,
-    skipText: ''
+    h1Key: 'onboarding.steps.done',
+    btnTextKey: 'onboarding.finish',
+    skipTextKey: ''
   }
 ] as const satisfies readonly OnboardingStep[]

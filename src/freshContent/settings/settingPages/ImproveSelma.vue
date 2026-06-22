@@ -1,14 +1,14 @@
 <template>
-  <h3 class="card-body-title onboarding-margin">{{ strings.settings.pages.improveSelma.title }}</h3>
+  <h3 class="card-body-title onboarding-margin">{{ t('settings.pages.improveSelma.title') }}</h3>
 
-  <Setting v-model="improveSelma" :txt="strings.settings.pages.improveSelma.toggle" class="setting" />
+  <Setting v-model="improveSelma" :txt="t('settings.pages.improveSelma.toggle')" class="setting" />
 
-  <p class="max-line p-margin">{{ strings.settings.pages.improveSelma.help }}</p>
+  <p class="max-line p-margin">{{ t('settings.pages.improveSelma.help') }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
-import { strings } from '../../../i18n'
+import { t } from '../../../i18n'
 
 // components
 import Setting from '../components/Setting.vue'
@@ -36,7 +36,7 @@ export default defineComponent({
 
     return {
       improveSelma,
-      strings
+      t
     }
   }
 })

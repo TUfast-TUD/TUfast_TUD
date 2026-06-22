@@ -1,13 +1,13 @@
 <template>
-  <h3 class="card-body-title">{{ strings.settings.pages.rockets.title }}</h3>
-  <p class="p-margin">{{ strings.settings.pages.rockets.help }}</p>
+  <h3 class="card-body-title">{{ t('settings.pages.rockets.title') }}</h3>
+  <p class="p-margin">{{ t('settings.pages.rockets.help') }}</p>
 
   <RocketSelect />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { strings } from '../../../i18n'
+import { t } from '../../../i18n'
 
 // import Setting from '../components/Setting.vue'
 import RocketSelect from '../components/RocketSelect.vue'
@@ -18,7 +18,7 @@ export default defineComponent({
     RocketSelect
   },
   setup() {
-    return { strings }
+    return { t }
   }
 })
 </script>

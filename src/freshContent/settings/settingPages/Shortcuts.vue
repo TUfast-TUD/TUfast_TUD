@@ -1,26 +1,26 @@
 <template>
-  <h3 class="card-body-title">{{ strings.settings.pages.shortcuts.title }}</h3>
-  <p class="max-line p-margin">{{ strings.settings.pages.shortcuts.activeByDefault }}</p>
+  <h3 class="card-body-title">{{ t('settings.pages.shortcuts.title') }}</h3>
+  <p class="max-line p-margin">{{ t('settings.pages.shortcuts.activeByDefault') }}</p>
 
   <p class="shortcuts">
     <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">Q</span> &rarr;
-    {{ strings.settings.pages.shortcuts.dashboard }}
-    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ strings.common.edit }}</a
+    {{ t('settings.pages.shortcuts.dashboard') }}
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
     ><br />
     <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">O</span> &rarr;
-    {{ strings.settings.pages.shortcuts.opal }}
-    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ strings.common.edit }}</a
+    {{ t('settings.pages.shortcuts.opal') }}
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
     ><br />
     <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">M</span> &rarr;
-    {{ strings.settings.pages.shortcuts.mail }}
-    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ strings.common.edit }}</a
+    {{ t('settings.pages.shortcuts.mail') }}
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
     ><br />
   </p>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { strings } from '../../../i18n'
+import { t } from '../../../i18n'
 
 // components
 
@@ -35,7 +35,7 @@ export default defineComponent({
 
     return {
       openShortcutSettings,
-      strings
+      t
     }
   }
 })

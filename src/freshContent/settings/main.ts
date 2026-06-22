@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import Settings from './Settings.vue'
+import { i18n } from '../../i18n'
 import '../../styles/palette_new/palette_new.sass'
 // Import needed Icons from Tabler Vue
 import {
@@ -73,4 +74,5 @@ app.component('IconLogin2', IconLogin2)
 app.component('IconConfetti', IconConfetti)
 
 // Mount your app
+app.use(i18n)
 app.mount('#app')
