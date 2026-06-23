@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import Settings from './Settings.vue'
-import { i18n } from '../../i18n'
+import { i18n } from '../../i18n/vue'
+import { t } from '../../i18n'
 import '../../styles/palette_new/palette_new.sass'
 // Import needed Icons from Tabler Vue
 import {
@@ -38,6 +39,7 @@ import {
 } from '@tabler/icons-vue'
 
 // Create the app instance
+document.title = t('settings.documentTitle')
 const app = createApp(Settings)
 
 // Register Tabler icons globally

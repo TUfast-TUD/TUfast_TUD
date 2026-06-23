@@ -13,10 +13,10 @@
         v-if="study.fsr_icon"
         class="dropdown-list__image"
         :src="study.fsr_icon"
-        :alt="`Das Icon des Studiengangs ${study.name}`"
+        :alt="t('settings.faculty.alt', { name: facultyName(String(key), study.name) })"
       />
       <h3 class="dropdown-list__title">
-        {{ study.name }}
+        {{ facultyName(String(key), study.name) }}
       </h3>
       <div v-if="selectedStudy === key" class="dropdown-list__icon-selected">
         <IconCheck size="32px" />
@@ -29,37 +29,45 @@
 import { defineComponent, PropType, ref } from 'vue'
 import { useChrome } from '../composables/chrome'
 import studies from '../../studies.json'
+import { t } from '../../../i18n'
 
 export default defineComponent({
   props: {
     title: {
       type: String as PropType<string>,
-      default: 'Platzhalter'
+      default: t('settings.faculty.placeholder')
     }
   },
   setup() {
     const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
     const clicked = ref(false)
-    const selectedStudy = ref('Standardeinstellungen')
+    const selectedStudy = ref(t('settings.faculty.default'))
 
     getChromeLocalStorage('studiengang').then((studiengang) => {
-      selectedStudy.value = (studiengang as string | undefined) || 'Standardeinstellungen'
+      selectedStudy.value = (studiengang as string | undefined) || t('settings.faculty.default')
     })
 
     const setStudySubject = async (studiengang: string) => {
       if (studiengang === 'addStudiengang') {
-        window.open('mailto:frage@tu-fast.de?Subject=Vorschlag Studiengang', '_blank')
+        window.open(`mailto:frage@tu-fast.de?Subject=${t('settings.faculty.mailSubject')}`, '_blank')
         return
       }
       selectedStudy.value = studiengang
       await setChromeLocalStorage({ studiengang })
     }
 
+    const facultyName = (key: string, fallback: string) => {
+      const value = t(`settings.faculty.names.${key}`)
+      return value === `settings.faculty.names.${key}` ? fallback : value
+    }
+
     return {
       studies,
       clicked,
       setStudySubject,
-      selectedStudy
+      selectedStudy,
+      facultyName,
+      t
     }
   }
 })

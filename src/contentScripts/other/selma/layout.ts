@@ -231,10 +231,10 @@ async function createCreditsBanner() {
   credits.style.marginRight = '0'
   credits.style.color = '#002557' // Selma theme color
   credits.id = 'TUfastCredits'
-  credits.innerHTML = `Table ${settingEnabled ? 'powered by' : 'disabled'}
+  credits.innerHTML = `${settingEnabled ? selmaLayoutStrings.creditsEnabled : selmaLayoutStrings.creditsDisabled}
     <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
     <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
-    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>, <a href="https://github.com/t0mbrn" target="_blank">Tom</a>
+    ${selmaLayoutStrings.creditsBy} <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>, <a href="https://github.com/t0mbrn" target="_blank">Tom</a>
     `
 
   const disableButton = document.createElement('button')
@@ -625,7 +625,7 @@ function applyChanges() {
     // Table head "Prüfungsleistung"
     document.querySelector('thead > tr > th#Name')!.textContent = ''
     // Table head "Termin"
-    document.querySelector('thead > tr > th#Date')!.textContent = 'Prüfungsleistung/Termin'
+    document.querySelector('thead > tr > th#Date')!.textContent = selmaLayoutStrings.examDate
   } else if (currentView.startsWith('/APP/STUDENT_RESULT/')) {
     // Study results > Grade predictor
     const body = document.querySelector('tbody')!

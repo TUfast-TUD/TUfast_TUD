@@ -5,7 +5,7 @@
 
   <p class="search-terms p-margin">
     <template v-for="site in uniqueSites" :key="site">
-      <span class="search-terms__bg"> {{ site[0] }}</span> &rarr; {{ site[1].name }}<br />
+      <span class="search-terms__bg"> {{ site[0] }}</span> &rarr; {{ siteName(site[0], site[1].name) }}<br />
     </template>
   </p>
 </template>
@@ -57,7 +57,12 @@ export default defineComponent({
     return {
       searchEngineActive,
       uniqueSites,
-      t
+      t,
+      siteName: (key: string, fallback: string) => {
+        const textKey = `settings.searchSites.${key}`
+        const value = t(textKey)
+        return value === textKey ? fallback : value
+      }
     }
   }
 })

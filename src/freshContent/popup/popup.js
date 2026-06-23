@@ -5,8 +5,7 @@ import '../../styles/components/switch.scss'
 import '../../styles/components/share.scss'
 
 const shareHTML = t('popup.shareHtml')
-const bananaHTML =
-  '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" style = "position: fixed; bottom: 70px; right: 26px;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>'
+const bananaHTML = t('popup.bananaHtml')
 
 const starRatingSettings = {
   // initial rating value
@@ -40,6 +39,8 @@ const dropdownUpdateId = '56tzoguhjk'
 
 // TODO
 window.onload = async () => {
+  setStaticText()
+
   // get things from storage
   // Promisified until usage of Manifest V3
   const result = await new Promise((resolve) =>
@@ -72,7 +73,7 @@ window.onload = async () => {
   }, 500)
 
   // display courses
-  const dashboardDisplay = result.dashboardDisplay
+  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
   const courseList = await loadCourses(dashboardDisplay)
   const htmlList = document.getElementsByClassName('list')[0]
   displayCourseList(
@@ -114,7 +115,7 @@ window.onload = async () => {
   }
 
   // exclusive style adjustments
-  customizeForStudiengang(result.studiengang)
+  customizeForStudiengang(result.studiengang || 'general')
 
   // assign switch function
   document.getElementById('switch').addEventListener('change', saveEnabled)
@@ -216,7 +217,7 @@ function addDropdownOptions() {
 
     const listTxt = document.createElement('text')
     listTxt.style = 'flex:10'
-    listTxt.innerHTML = studiengangConfig[key].name
+    listTxt.innerHTML = facultyName(key, studiengangConfig[key].name)
 
     listEntry.appendChild(listTxt)
 
@@ -235,10 +236,50 @@ function addDropdownOptions() {
   })
 }
 
+function setStaticText() {
+  document.getElementById('popupHeadline').textContent = t('popup.title')
+  document.getElementById('searchListInput').placeholder = t('popup.searchPlaceholder')
+  document.getElementById('autoLoginLabel').textContent = t('popup.autoLogin')
+
+  const iconTitleIds = {
+    selma: 'selma',
+    eportal: 'eportal',
+    moodle: 'moodle',
+    opal: 'opal',
+    qis: 'qis',
+    matrix: 'matrix',
+    msx: 'msx',
+    slub: 'slub',
+    cloud: 'cloud',
+    gitlab: 'gitlab',
+    orsee: 'orsee',
+    geoportal: 'geoportal',
+    'tu-navi': 'tuNavi',
+    marudor: 'marudor',
+    info_discord: 'infoDiscord',
+    swdd: 'swdd',
+    pa: 'pa',
+    tex: 'tex'
+  }
+
+  for (const [id, key] of Object.entries(iconTitleIds)) {
+    const el = document.getElementById(id)
+    if (el) el.title = t(`popup.iconTitles.${key}`)
+  }
+}
+
+function facultyName(key, fallback) {
+  const nameKey = `settings.faculty.names.${key}`
+  const value = t(nameKey)
+  return value === nameKey ? fallback : value
+}
+
 // dashboard adjustments for studiengang
 function customizeForStudiengang(studiengang) {
+  const config = studiengangConfig[studiengang] || studiengangConfig.general
+
   // set footer icons
-  if (studiengangConfig[studiengang].footer_icons_display) {
+  if (config.footer_icons_display) {
     // set visibility for all icons to none
     const icons = document.getElementById('settings-footer-bar-icons').children
     for (let i = 0; i < icons.length; i++) {
@@ -246,24 +287,24 @@ function customizeForStudiengang(studiengang) {
     }
 
     // set visible icons
-    studiengangConfig[studiengang].footer_icons_display.forEach((element) => {
+    config.footer_icons_display.forEach((element) => {
       const icon = document.getElementById(element)
       if (icon) icon.style.display = 'flex'
     })
   }
 
   // set footer icon links
-  if (studiengangConfig[studiengang].footer_icons_links) {
-    Object.keys(studiengangConfig[studiengang].footer_icons_links).forEach((key) => {
-      document.getElementById(key).href = studiengangConfig[studiengang].footer_icons_links[key]
+  if (config.footer_icons_links) {
+    Object.keys(config.footer_icons_links).forEach((key) => {
+      document.getElementById(key).href = config.footer_icons_links[key]
     })
   }
 
   // set fsr icon
-  if (studiengangConfig[studiengang].fsr_icon) {
-    document.getElementById('fsr_icon').src = studiengangConfig[studiengang].fsr_icon
-    document.getElementById('fsr_icon').style = studiengangConfig[studiengang].fsr_icon_dashboard_style
-    if (studiengangConfig[studiengang].invert_icon_dark_theme) {
+  if (config.fsr_icon) {
+    document.getElementById('fsr_icon').src = config.fsr_icon
+    document.getElementById('fsr_icon').style = config.fsr_icon_dashboard_style
+    if (config.invert_icon_dark_theme) {
       document.getElementById('fsr_icon').className += ' invert'
     }
   } else {
@@ -271,32 +312,32 @@ function customizeForStudiengang(studiengang) {
   }
 
   // set fsr icon 2
-  if (studiengangConfig[studiengang].fsr_icon_2) {
-    document.getElementById('fsr_icon_2').src = studiengangConfig[studiengang].fsr_icon_2
-    document.getElementById('fsr_icon_2').style = studiengangConfig[studiengang].fsr_icon_dashboard_style_2
+  if (config.fsr_icon_2) {
+    document.getElementById('fsr_icon_2').src = config.fsr_icon_2
+    document.getElementById('fsr_icon_2').style = config.fsr_icon_dashboard_style_2
   } else {
     document.getElementById('fsr_icon_2').style.display = 'none'
   }
 
   // set fsr link
-  if (studiengangConfig[studiengang].fsr_link) {
-    document.getElementById('fsr_link').href = studiengangConfig[studiengang].fsr_link
+  if (config.fsr_link) {
+    document.getElementById('fsr_link').href = config.fsr_link
     document.getElementById('fsr_link').style.display = 'unset'
   } else {
     document.getElementById('fsr_link').style.display = 'none'
   }
 
   // set fsr link 2
-  if (studiengangConfig[studiengang].fsr_link_2) {
-    document.getElementById('fsr_link_2').href = studiengangConfig[studiengang].fsr_link_2
+  if (config.fsr_link_2) {
+    document.getElementById('fsr_link_2').href = config.fsr_link_2
     document.getElementById('fsr_link_2').style.display = 'unset'
   } else {
     document.getElementById('fsr_link_2').style.display = 'none'
   }
 
   // set pa link
-  if (studiengangConfig[studiengang].pa_link) {
-    document.getElementById('pa').href = studiengangConfig[studiengang].pa_link
+  if (config.pa_link) {
+    document.getElementById('pa').href = config.pa_link
   }
 }
 
@@ -350,7 +391,7 @@ function listSearchFunction() {
   }
 
   // always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
-  if (listEntries[listEntries.length - 1].innerHTML.includes('aktualisieren')) {
+  if (listEntries.length && listEntries[listEntries.length - 1].innerHTML.includes(t('popup.updateCourseList'))) {
     listEntries[listEntries.length - 1].style.display = 'block'
   }
 }
@@ -475,7 +516,7 @@ function displayCourseList(
     confirmEntryLink.setAttribute('courseRef', element.name)
     confirmEntryLink.style.fontSize = '15px'
     confirmEntryLink.href = '#'
-    confirmEntryLink.innerHTML = "Fertig <text style='font-size:14px'>✅</text>"
+    confirmEntryLink.innerHTML = t('popup.ratingDone')
     confirmEntryLink.onclick = sendRating
     confirmEntry.appendChild(confirmEntryLink)
 
@@ -663,10 +704,11 @@ function displayCourseList(
 async function switchCoursesToShow() {
   // Promisified until usage of Manifest V3
   const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
-  if (result.dashboardDisplay === 'meine_kurse') {
+  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
+  if (dashboardDisplay === 'meine_kurse') {
     await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, resolve))
   }
-  if (result.dashboardDisplay === 'favoriten') {
+  if (dashboardDisplay === 'favoriten') {
     await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'meine_kurse' }, resolve))
   }
   location.reload()
@@ -713,7 +755,7 @@ async function loadCourses(type) {
   // Promisified until usage of Manifest V3
   const data = await new Promise((resolve) => chrome.storage.local.get(['favoriten', 'meine_kurse'], resolve))
   try {
-    return JSON.parse(data[type])
+    return JSON.parse(data[type || 'favoriten'])
   } catch {
     return false
   }

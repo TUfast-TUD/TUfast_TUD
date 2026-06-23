@@ -1,7 +1,8 @@
 {
-  "name": "TUfast TU Dresden",
+  "name": "__MSG_extensionName__",
+  "default_locale": "de",
   "_comment": "The version number is populated during build time, please adjust version number in package.json",
-  "description": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
+  "description": "__MSG_extensionDescription__",
   "permissions": ["storage", "system.cpu", "alarms"],
   "optional_permissions": ["tabs", "notifications", "cookies", "declarativeNetRequestWithHostAccess"],
   "host_permissions": ["*://*/"],
@@ -261,7 +262,7 @@
         "windows": "Alt+O",
         "mac": "Alt+O"
       },
-      "description": "Opal öffnen"
+      "description": "__MSG_commandOpenOpal__"
     },
     "open_owa_hotkey": {
       "suggested_key": {
@@ -269,7 +270,7 @@
         "windows": "Alt+M",
         "mac": "Alt+M"
       },
-      "description": "Mail (OWA) öffnen"
+      "description": "__MSG_commandOpenOwa__"
     }
   }
 }

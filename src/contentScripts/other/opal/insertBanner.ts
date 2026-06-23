@@ -25,7 +25,7 @@ const opalBannerStrings = globalThis.TUFAST_STRINGS.opal
 
     const closeLink = document.createElement('span')
     closeLink.className = 'closeLink'
-    closeLink.innerText = 'X'
+    closeLink.innerText = opalBannerStrings.banners.close
     closeLink.addEventListener('click', async () => {
       document.body.removeChild(banner)
       bannerArr.push(bannerName)

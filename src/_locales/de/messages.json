@@ -1,0 +1,14 @@
+{
+  "extensionName": {
+    "message": "TUfast TU Dresden"
+  },
+  "extensionDescription": {
+    "message": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀"
+  },
+  "commandOpenOpal": {
+    "message": "OPAL öffnen"
+  },
+  "commandOpenOwa": {
+    "message": "Mail (OWA) öffnen"
+  }
+}

@@ -6,7 +6,9 @@
         <IconMoon v-else key="moon" size="48px" />
       </Transition>
     </div>
-    <div class="tuf-settings-link__title"><h2>Darstellung</h2></div>
+    <div class="tuf-settings-link__title">
+      <h2>{{ t('settings.pages.appearance.title') }}</h2>
+    </div>
     <div class="tuf-settings-link__toggle"></div>
   </div>
 </template>
@@ -14,6 +16,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { IconSun, IconMoon } from '@tabler/icons-vue'
+import { t } from '../../../i18n'
 
 export default defineComponent({
   components: {
@@ -30,7 +33,8 @@ export default defineComponent({
     const isDark = computed(() => props.animState === 'dark')
 
     return {
-      isDark
+      isDark,
+      t
     }
   }
 })

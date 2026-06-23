@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
 import { useAllSettingsStatus } from '../composables/useAllSettingsStatus'
+import { t } from '../../../i18n'
 
 export default defineComponent({
   props: {
@@ -65,7 +66,7 @@ export default defineComponent({
     const indicatorText = computed(() => {
       if (!shouldShowIndicator.value) return ''
       if (isBoolean.value) {
-        return settingValue.value ? 'AKTIVIERT' : 'DEAKTIVIERT'
+        return settingValue.value ? t('common.active') : t('common.inactive')
       }
       return String(settingValue.value) // Display the actual value for strings
     })

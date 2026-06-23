@@ -6,6 +6,7 @@ import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
+import { t } from './i18n'
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -713,7 +714,7 @@ async function openCourseLinks(links: string, behavior: string): Promise<void> {
 
   // 3 - Check if more than 25 courses
   if (courseLinks.length > 25) {
-    const linkType = links === 'favoriten' ? 'Favoriten' : 'Kurse'
+    const linkType = links === 'favoriten' ? t('content.background.favorites') : t('content.background.courses')
 
     if (behavior === 'immediate_active') {
       // Show alert in the current OPAL tab context
@@ -722,7 +723,7 @@ async function openCourseLinks(links: string, behavior: string): Promise<void> {
         chrome.scripting.executeScript({
           target: { tabId: currentTab.id },
           func: (message: string) => alert(message),
-          args: [`Du hast mehr als 25 ${linkType}. Um deinen Browser nicht zu überlasten, öffne sie bitte manuell.`]
+          args: [t('content.background.tooManyLinks', { type: linkType })]
         })
       }
     } else {

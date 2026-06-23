@@ -1,5 +1,5 @@
 <template>
-  <p class="txt-help txt-center">Wirklich sofort anmelden? Dann richte die Zwei-Faktor-Authentifizierung ein</p>
+  <p class="txt-help txt-center">{{ t('onboarding.pages.otpHelp') }}</p>
   <div class="onboarding-inner-info">
     <AutoLogin />
   </div>
@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
+import { t } from '../../../i18n'
 
 // components
 import AutoLogin from '../settingPages/AutoLogin.vue'
@@ -60,7 +61,8 @@ export default defineComponent({
       usernameValid,
       passwordValid,
       zihLogin,
-      AutoLogin
+      AutoLogin,
+      t
     }
   }
 })

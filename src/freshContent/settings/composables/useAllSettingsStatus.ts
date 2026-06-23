@@ -1,6 +1,7 @@
 // Script used for reading storage and displaying indicators
 // Can not write or save anything in storage
 import { ref, onMounted, onUnmounted } from 'vue'
+import { t } from '../../../i18n'
 
 export interface SettingsStatus {
   otp: boolean
@@ -131,7 +132,9 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
           chrome.storage.local.get(['studiengang'], (result) => {
             const studiengangId = result.studiengang ?? 'general'
             const faculty = studies[studiengangId]
-            settings.value.faculty = faculty && faculty.name ? faculty.name : studies.general.name
+            const key = `settings.faculty.names.${studiengangId}`
+            const name = t(key)
+            settings.value.faculty = name === key ? faculty?.name || studies.general.name : name
           })
         }
         break
