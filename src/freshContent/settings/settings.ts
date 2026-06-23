@@ -1,78 +1,79 @@
+import { t } from '../../i18n'
 import type { Setting } from './types/Setting'
 
 export default [
   {
-    titleKey: 'settings.tiles.autoLogin',
+    title: t('settings.tiles.autoLogin'),
     icon: 'IconLock',
     settingsPage: 'AutoLogin',
     category: 'function',
     settingType: 'login'
   },
   {
-    titleKey: 'settings.tiles.email',
+    title: t('settings.tiles.email'),
     icon: 'IconNotification',
     settingsPage: 'Email',
     category: 'function',
     settingType: 'owa'
   },
   {
-    titleKey: 'settings.tiles.improveOpal',
+    title: t('settings.tiles.improveOpal'),
     icon: 'IconFileText',
     settingsPage: 'ImproveOpal',
     category: 'function',
     settingType: 'opalPdf'
   },
   {
-    titleKey: 'settings.tiles.improveSelma',
+    title: t('settings.tiles.improveSelma'),
     icon: 'IconChartBar',
     settingsPage: 'ImproveSelma',
     category: 'function',
     settingType: 'selma'
   },
   {
-    titleKey: 'settings.tiles.searchEngines',
+    title: t('settings.tiles.searchEngines'),
     icon: 'IconSearch',
     settingsPage: 'SearchEngines',
     category: 'function',
     settingType: 'searchengine'
   },
   {
-    titleKey: 'settings.tiles.shortcuts',
+    title: t('settings.tiles.shortcuts'),
     icon: 'IconBrandSpeedtest',
     settingsPage: 'Shortcuts',
     category: 'function',
     settingType: ''
   },
   {
-    titleKey: 'settings.tiles.rockets',
+    title: t('settings.tiles.rockets'),
     icon: 'IconRocket',
     settingsPage: 'Rockets',
     category: 'function',
     settingType: ''
   },
   {
-    titleKey: 'settings.tiles.about',
+    title: t('settings.tiles.about'),
     icon: 'IconInfoCircle',
     settingsPage: 'About',
     category: 'information',
     settingType: ''
   },
   {
-    titleKey: 'settings.tiles.contact',
+    title: t('settings.tiles.contact'),
     icon: 'IconMail',
     settingsPage: 'Contact',
     category: 'information',
     settingType: ''
   },
   {
-    titleKey: 'settings.tiles.faculty',
+    title: t('settings.tiles.faculty'),
     icon: 'IconSchool',
     settingsPage: 'ChooseFaculty',
     category: 'personalization',
     settingType: 'faculty'
   },
   {
-    titleKey: 'settings.tiles.language',
+    title: t('settings.tiles.language'),
     icon: 'IconLanguage',
     settingsPage: 'LanguageSelect',
     category: 'personalization',

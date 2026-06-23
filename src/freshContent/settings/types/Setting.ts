@@ -1,5 +1,5 @@
 export interface Setting {
-  titleKey: string
+  title: string
   icon: string
   settingsPage: string
   category: string

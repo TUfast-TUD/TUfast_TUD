@@ -72,7 +72,7 @@ window.onload = async () => {
   }, 500)
 
   // display courses
-  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
+  const dashboardDisplay = result.dashboardDisplay
   const courseList = await loadCourses(dashboardDisplay)
   const htmlList = document.getElementsByClassName('list')[0]
   displayCourseList(
@@ -114,7 +114,7 @@ window.onload = async () => {
   }
 
   // exclusive style adjustments
-  customizeForStudiengang(result.studiengang || 'general')
+  customizeForStudiengang(result.studiengang)
 
   // assign switch function
   document.getElementById('switch').addEventListener('change', saveEnabled)
@@ -237,34 +237,33 @@ function addDropdownOptions() {
 
 // dashboard adjustments for studiengang
 function customizeForStudiengang(studiengang) {
-  const config = studiengangConfig[studiengang] || studiengangConfig.general
-
   // set footer icons
-  const icons = document.getElementById('settings-footer-bar-icons').children
-  for (let i = 0; i < icons.length; i++) {
-    icons[i].style.display = 'none'
-  }
+  if (studiengangConfig[studiengang].footer_icons_display) {
+    // set visibility for all icons to none
+    const icons = document.getElementById('settings-footer-bar-icons').children
+    for (let i = 0; i < icons.length; i++) {
+      icons[i].style.display = 'none'
+    }
 
-  if (config.footer_icons_display) {
     // set visible icons
-    config.footer_icons_display.forEach((element) => {
+    studiengangConfig[studiengang].footer_icons_display.forEach((element) => {
       const icon = document.getElementById(element)
       if (icon) icon.style.display = 'flex'
     })
   }
 
   // set footer icon links
-  if (config.footer_icons_links) {
-    Object.keys(config.footer_icons_links).forEach((key) => {
-      document.getElementById(key).href = config.footer_icons_links[key]
+  if (studiengangConfig[studiengang].footer_icons_links) {
+    Object.keys(studiengangConfig[studiengang].footer_icons_links).forEach((key) => {
+      document.getElementById(key).href = studiengangConfig[studiengang].footer_icons_links[key]
     })
   }
 
   // set fsr icon
-  if (config.fsr_icon) {
-    document.getElementById('fsr_icon').src = config.fsr_icon
-    document.getElementById('fsr_icon').style = config.fsr_icon_dashboard_style
-    if (config.invert_icon_dark_theme) {
+  if (studiengangConfig[studiengang].fsr_icon) {
+    document.getElementById('fsr_icon').src = studiengangConfig[studiengang].fsr_icon
+    document.getElementById('fsr_icon').style = studiengangConfig[studiengang].fsr_icon_dashboard_style
+    if (studiengangConfig[studiengang].invert_icon_dark_theme) {
       document.getElementById('fsr_icon').className += ' invert'
     }
   } else {
@@ -272,32 +271,32 @@ function customizeForStudiengang(studiengang) {
   }
 
   // set fsr icon 2
-  if (config.fsr_icon_2) {
-    document.getElementById('fsr_icon_2').src = config.fsr_icon_2
-    document.getElementById('fsr_icon_2').style = config.fsr_icon_dashboard_style_2
+  if (studiengangConfig[studiengang].fsr_icon_2) {
+    document.getElementById('fsr_icon_2').src = studiengangConfig[studiengang].fsr_icon_2
+    document.getElementById('fsr_icon_2').style = studiengangConfig[studiengang].fsr_icon_dashboard_style_2
   } else {
     document.getElementById('fsr_icon_2').style.display = 'none'
   }
 
   // set fsr link
-  if (config.fsr_link) {
-    document.getElementById('fsr_link').href = config.fsr_link
+  if (studiengangConfig[studiengang].fsr_link) {
+    document.getElementById('fsr_link').href = studiengangConfig[studiengang].fsr_link
     document.getElementById('fsr_link').style.display = 'unset'
   } else {
     document.getElementById('fsr_link').style.display = 'none'
   }
 
   // set fsr link 2
-  if (config.fsr_link_2) {
-    document.getElementById('fsr_link_2').href = config.fsr_link_2
+  if (studiengangConfig[studiengang].fsr_link_2) {
+    document.getElementById('fsr_link_2').href = studiengangConfig[studiengang].fsr_link_2
     document.getElementById('fsr_link_2').style.display = 'unset'
   } else {
     document.getElementById('fsr_link_2').style.display = 'none'
   }
 
   // set pa link
-  if (config.pa_link) {
-    document.getElementById('pa').href = config.pa_link
+  if (studiengangConfig[studiengang].pa_link) {
+    document.getElementById('pa').href = studiengangConfig[studiengang].pa_link
   }
 }
 
@@ -664,11 +663,10 @@ function displayCourseList(
 async function switchCoursesToShow() {
   // Promisified until usage of Manifest V3
   const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
-  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
-  if (dashboardDisplay === 'meine_kurse') {
+  if (result.dashboardDisplay === 'meine_kurse') {
     await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, resolve))
   }
-  if (dashboardDisplay === 'favoriten') {
+  if (result.dashboardDisplay === 'favoriten') {
     await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'meine_kurse' }, resolve))
   }
   location.reload()
@@ -715,7 +713,7 @@ async function loadCourses(type) {
   // Promisified until usage of Manifest V3
   const data = await new Promise((resolve) => chrome.storage.local.get(['favoriten', 'meine_kurse'], resolve))
   try {
-    return JSON.parse(data[type || 'favoriten'])
+    return JSON.parse(data[type])
   } catch {
     return false
   }
@@ -809,7 +807,7 @@ async function openAllCourses() {
   // Get current dashboard display type to determine which storage key to use
   const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
 
-  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
+  const dashboardDisplay = result.dashboardDisplay || 'meine_kurse'
   const storageKey = dashboardDisplay === 'favoriten' ? 'favoriten' : 'meine_kurse'
 
   // Send message to background script - it handles ALL validation and opening

@@ -140,9 +140,9 @@ export const de = {
       continueTo: ' Weiter zur ',
       overview: 'Deine Notenübersicht',
       descriptors: ['Modul', 'Bestandene Prüfung', 'Verhauene Prüfung'],
-      weightedAverage: 'Deine Durchschnittnote (nach CP gewichtet): {average}',
-      moduleCount: 'Anzahl Module: {count}',
-      examCount: 'Anzahl Prüfungen: {count}'
+      weightedAverage: (average: string) => `Deine Durchschnittnote (nach CP gewichtet): ${average}`,
+      moduleCount: (count: number) => `Anzahl Module: ${count}`,
+      examCount: (count: number) => `Anzahl Prüfungen: ${count}`
     },
     selma: {
       passed: 'Bestanden',
