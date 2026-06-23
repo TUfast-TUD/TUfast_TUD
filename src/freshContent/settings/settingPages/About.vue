@@ -1,51 +1,46 @@
 <template>
-  <h3 class="card-body-title">Warum muss Online Studieren so kompliziert sein?</h3>
+  <h3 class="card-body-title">{{ strings.settings.pages.about.title }}</h3>
   <p class="p-margin max-line">
-    An der TU Dresden jonglieren wir täglich mit OPAL, Selma, Hisqis oder Outlook und verlieren dabei Zeit und Nerven.
-    Also haben wir uns gefragt: Geht das nicht einfacher? Aus dieser Frage entstand TUfast. Zuerst als kleines
-    Nebenprojekt im Studium, dann als wachsende Plattform, die schnell immer mehr Studierende erreichte. Was mit ein
-    paar Zeilen Code begann, wurde zu einer gemeinsamen Mission: den digitalen Studienalltag an der TU Dresden leichter
-    zu machen.
+    {{ strings.settings.pages.about.intro1 }}
     <br /><br />
-    Heute ist TUfast ein Open-Source-Projekt von Studierenden und Alumni der TU Dresden. Es wird von über 4000
-    Studierenden an der TU Dresden genutzt. Alle die am Projekt mitwirken, tun das ehrenamtlich und mit dem Wunsch
-    anderen Studierenden, die Online Lehre ein Stück leichter zu machen.
+    {{ strings.settings.pages.about.intro2 }}
     <br /><br />
-    Unterstützt wird das Projekt unter anderem vom
+    {{ strings.settings.pages.about.supportersStart }}
     <a href="https://www.stifterverband.org/digitalchangemaker-accelerator" target="_blank" class="txt-link"
       >DigitalAcceleratorProgramm des Stifterverbands</a
     >,
     <a href="https://output-dd.de/blog/project-post/tufast-tu-dresden-2/" target="_blank" class="txt-link"
       >output.dd Projektschau</a
     >
-    der Informatik-Fakultät, mehreren Fachschaftsräten der TU Dresden sowie netten Sponsoren und Sponsorinnen auf
-    <a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" class="txt-link">BuyMeACoffee</a>. Am Ziel
-    sind wir noch nicht: Unser nächster Schritt ist es, TUfast weiter auszubauen – für die TU Dresden, für andere
-    Hochschulen in Sachsen und für alle, die in der digitalen Lehre ein bisschen mehr Struktur und Leichtigkeit
-    brauchen. <br /><br />
-    <span class="txt-bold">Von Studierenden, für Studierende. Kostenlos und Open Source.</span>
+    {{ strings.settings.pages.about.supportersEnd }}
+    <a href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" class="txt-link">BuyMeACoffee</a>.
+    {{ strings.settings.pages.about.nextStep }} <br /><br />
+    <span class="txt-bold">{{ strings.settings.pages.about.claim }}</span>
   </p>
   <br />
   <div class="social-section">
-    <a href="https://www.tu-fast.de" target="_blank" class="social-section__button">Website</a>
-    <a href="https://www.tu-fast.de/#team" target="_blank" class="social-section__button">Team</a>
-    <a href="https://github.com/OliEfr/TUfast_TUD" target="_blank" class="social-section__button">GitHub</a>
+    <a href="https://www.tu-fast.de" target="_blank" class="social-section__button">{{ strings.common.website }}</a>
+    <a href="https://www.tu-fast.de/#team" target="_blank" class="social-section__button">{{ strings.common.team }}</a>
+    <a href="https://github.com/OliEfr/TUfast_TUD" target="_blank" class="social-section__button">{{
+      strings.common.github
+    }}</a>
   </div>
   <br />
 
   <p class="p-margin max-line txt-help">
-    <span class="txt-help txt-bold">So berechnen sich die gesparten Klicks:</span><br />
-    Ein gesparter Klick = 3 Sekunden<br />
-    Einen Shortcut verwenden = 2 gesparte Klicks<br />
-    Eine automatische Anmeldung = 3 gesparte Klicks<br />
-    Einen Kurs über Dashboard aufrufen = 3 gesparte Klicks<br />
-    Eine Weiterleitung der Google-Suche = 2 gesparte Klicks
+    <span class="txt-help txt-bold">{{ strings.settings.pages.about.clickCalcTitle }}</span
+    ><br />
+    {{ strings.settings.pages.about.clickCalcClick }}<br />
+    {{ strings.settings.pages.about.clickCalcShortcut }}<br />
+    {{ strings.settings.pages.about.clickCalcLogin }}<br />
+    {{ strings.settings.pages.about.clickCalcCourse }}<br />
+    {{ strings.settings.pages.about.clickCalcSearch }}
   </p>
 
   <p class="p-margin max-line txt-help">
     <span class="txt-help txt-bold">TUfast TU Dresden – {{ version }}</span
     ><br />
-    TUfast wird entwickelt von:<br />
+    {{ strings.settings.pages.about.developedBy }}<br />
     <a class="dev-link" href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a><br />
     <a class="dev-link" href="https://github.com/t0mbrn" target="_blank">Tom Braun</a><br />
     <a class="dev-link" href="https://fugi.dev/" target="_blank">Fugi</a><br />
@@ -57,14 +52,16 @@
   </p>
 
   <p class="p-margin max-line txt-help">
-    <span class="txt-help txt-bold">Open Source & Lizenzen</span><br />
-    Font: Space Grotesk, 2020. The Space Grotesk Project Authors, Florian Karsten, SIL Open Font License.<br />
-    Icons: Tabler Icons, Copyright (c) 2018-2025 Tabler, MIT License<br />
+    <span class="txt-help txt-bold">{{ strings.settings.pages.about.licenses }}</span
+    ><br />
+    {{ strings.settings.pages.about.fontLicense }}<br />
+    {{ strings.settings.pages.about.iconLicense }}<br />
   </p>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { strings } from '../../../i18n'
 
 export default defineComponent({
   setup() {
@@ -72,7 +69,8 @@ export default defineComponent({
     const version = ref(manifest.version)
 
     return {
-      version
+      version,
+      strings
     }
   }
 })

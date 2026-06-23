@@ -1,5 +1,5 @@
 <template>
-  <p class="txt-help txt-center">Werde automatisch bei allen Online Portalen der TU Dresden angemeldet</p>
+  <p class="txt-help txt-center">{{ strings.onboarding.pages.emailHelp }}</p>
   <div class="onboarding-inner-info">
     <Email />
   </div>
@@ -13,6 +13,7 @@ import Email from '../settingPages/Email.vue'
 
 // composables
 import { useSettingHandler } from '../composables/setting-handler'
+import { strings } from '../../../i18n'
 
 export default defineComponent({
   components: {
@@ -60,7 +61,8 @@ export default defineComponent({
       notificationsCbDisabled,
       messages,
       notifications,
-      Email
+      Email,
+      strings
     }
   }
 })

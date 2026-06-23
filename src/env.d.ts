@@ -3,7 +3,7 @@
 type TufastContentStrings = typeof import('./i18n/de').de.content
 type TufastContentScriptStrings = {
   opal: TufastContentStrings['opal']
-  hisqis: Pick<TufastContentStrings['hisqis'], 'credits' | 'oldTable' | 'newTable' | 'continueTo'>
+  hisqis: TufastContentStrings['hisqis']
   selma: TufastContentStrings['selma']
   otp: TufastContentStrings['otp']
 }

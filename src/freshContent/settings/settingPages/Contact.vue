@@ -1,16 +1,21 @@
 <template>
-  <h3 class="card-body-title">Du hast eine Frage oder eine Idee für TUfast?</h3>
+  <h3 class="card-body-title">{{ strings.settings.pages.contact.title }}</h3>
   <p class="p-margin">
-    Dann sende uns bitte sehr gerne eine Mail an
-    <a class="link" target="_blank" href="mailto:frage@tu-fast.de?Subject=Feedback TUfast">frage@tu-fast.de</a>!<br />
+    {{ strings.settings.pages.contact.text }}
+    <a class="link" target="_blank" :href="`mailto:frage@tu-fast.de?Subject=${strings.settings.pages.contact.subject}`"
+      >frage@tu-fast.de</a
+    >!<br />
   </p>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { strings } from '../../../i18n'
 
 export default defineComponent({
-  setup() {}
+  setup() {
+    return { strings }
+  }
 })
 </script>
 

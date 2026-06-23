@@ -1,35 +1,36 @@
 <template>
   <p class="txt-help txt-center">
-    TUfast ist jetzt vollständig für dich eingerichtet.<br />Hier noch ein paar Tipps für dich:
+    <span v-html="strings.onboarding.pages.doneIntro"></span>
   </p>
   <div class="onboarding-inner-info">
     <div class="done-tips__list">
       <div class="done-tips__list-item">
-        <IconSettings class="done-tips__icons" size="32px" /><span class="done-tips__text"
-          >Du kannst die getroffenen Einstellungen jederzeit ändern</span
-        >
+        <IconSettings class="done-tips__icons" size="32px" /><span class="done-tips__text">{{
+          strings.onboarding.pages.doneSettings
+        }}</span>
       </div>
       <div class="done-tips__list-item">
-        <IconList class="done-tips__icons" size="32px" /><span class="done-tips__text"
-          >Füge deine OPAL Kurse im Dashboard hinzu</span
-        >
+        <IconList class="done-tips__icons" size="32px" /><span class="done-tips__text">{{
+          strings.onboarding.pages.doneCourses
+        }}</span>
       </div>
       <div class="done-tips__list-item">
-        <IconMail class="done-tips__icons" size="32px" /><span class="done-tips__text"
-          >Bei Fragen oder Ideen zu TUfast, kontaktiere uns gerne! Unsere Kontaktdaten findest du auf der nächsten Seite
-          unten.</span
-        >
+        <IconMail class="done-tips__icons" size="32px" /><span class="done-tips__text">{{
+          strings.onboarding.pages.doneContact
+        }}</span>
       </div>
       <div class="done-tips__list-item">
-        <IconConfetti class="done-tips__icons" size="32px" /><span class="done-tips__text"
-          >Viel Erfolg im Studium!</span
-        >
+        <IconConfetti class="done-tips__icons" size="32px" /><span class="done-tips__text">{{
+          strings.onboarding.pages.doneGoodLuck
+        }}</span>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { strings } from '../../../i18n'
+</script>
 
 <style lang="sass" scoped>
 .onboarding-inner-info

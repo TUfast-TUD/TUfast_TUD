@@ -9,10 +9,16 @@ const hisqisInjectStrings = globalThis.TUFAST_STRINGS.hisqis
 
   const gradeContainer = document.createElement('div')
   gradeContainer.id = 'TUfastGradeContainer'
+  gradeContainer.dataset.weightedAverage = hisqisInjectStrings.weightedAverage
+  gradeContainer.dataset.moduleCount = hisqisInjectStrings.moduleCount
+  gradeContainer.dataset.examCount = hisqisInjectStrings.examCount
+  gradeContainer.dataset.failed = hisqisInjectStrings.failed
   form.insertBefore(gradeContainer, afterTable)
 
   const tableInfoContainer = document.createElement('div')
   tableInfoContainer.id = 'TUfastTableInfo'
+  tableInfoContainer.dataset.overview = hisqisInjectStrings.overview
+  tableInfoContainer.dataset.descriptors = JSON.stringify(hisqisInjectStrings.descriptors)
   form.insertBefore(tableInfoContainer, afterTable)
 
   const imgUrl = chrome.runtime.getURL('/assets/images/tufast48.png')

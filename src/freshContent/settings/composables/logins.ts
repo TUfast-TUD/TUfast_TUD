@@ -1,4 +1,5 @@
 import type { Login, Login2FA } from '../types/Login'
+import { strings } from '../../../i18n'
 
 export const useLogins = () => ({
   logins
@@ -7,31 +8,29 @@ export const useLogins = () => ({
 const logins: Login[] = [
   {
     id: 'zih',
-    title: 'Werde automatisch bei allen Online-Portalen der TU Dresden angemeldet',
-    name: 'TU Dresden',
+    title: strings.settings.logins.zih.title,
+    name: strings.settings.logins.zih.name,
     state: false,
-    usernamePlaceholder: 'Nutzername (ZIH-Login)',
+    usernamePlaceholder: strings.settings.logins.zih.usernamePlaceholder,
     usernamePattern: /^(s{1}\d{7}|[a-z]{4}\d{3}[a-z])$/,
-    usernameError:
-      "Der Nutzername hat die Form 's3276763' oder 'luka075d'. Speichere deine aktuelle Eingabe nur, wenn du dir sicher bist.",
-    passwordPlaceholder: 'Passwort (ZIH-Login)',
+    usernameError: strings.settings.logins.zih.usernameError,
+    passwordPlaceholder: strings.settings.logins.zih.passwordPlaceholder,
     passwordPattern: /.{5,}/,
-    passwordError: 'Das Passwort muss mindestens 5 Zeichen lang sein.',
-    totpSecretPlaceholder: 'TOTP Secret-Key',
+    passwordError: strings.settings.logins.zih.passwordError,
+    totpSecretPlaceholder: strings.settings.logins.zih.totpSecretPlaceholder,
     totpSecretPattern: /^[A-Z2-7]{32}$/, // Base32 encoded
-    totpSecretError:
-      'Der TOTP Secret-Key besteht aus Großbuchstaben (A bis Z) und Ziffern (2 bis 7) und ist 32 Zeichen lang.'
+    totpSecretError: strings.settings.logins.zih.totpSecretError
   } as Login2FA,
   {
     id: 'slub',
-    title: 'Werde automatisch bei der SLUB-Website angemeldet',
-    name: 'Slub',
+    title: strings.settings.logins.slub.title,
+    name: strings.settings.logins.slub.name,
     state: false,
-    usernamePlaceholder: 'Benutzernummer (SLUB-Login)',
+    usernamePlaceholder: strings.settings.logins.slub.usernamePlaceholder,
     usernamePattern: /^[0-9]{7}$/,
-    usernameError: 'Die Nutzernummer findest du u.a. auf deiner SLUB-Karte',
-    passwordPlaceholder: 'Passwort (SLUB-Login)',
+    usernameError: strings.settings.logins.slub.usernameError,
+    passwordPlaceholder: strings.settings.logins.slub.passwordPlaceholder,
     passwordPattern: /.{5,}/,
-    passwordError: 'Das Passwort muss mindestens 5 Zeichen lang sein.'
+    passwordError: strings.settings.logins.slub.passwordError
   }
 ]

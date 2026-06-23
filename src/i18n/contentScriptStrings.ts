@@ -25,7 +25,8 @@ globalThis.TUFAST_STRINGS = {
       rocketTitle: "Schnapp' sie dir alle!",
       reviewText: "Dann hau' mal ne gute Bewertung im Store raus! ",
       reviewAction: "Hier geht's lang!",
-      reviewTitle: "Gefällt's dir?"
+      reviewTitle: "Gefällt's dir?",
+      close: 'X'
     }
   },
   hisqis: {
@@ -33,7 +34,13 @@ globalThis.TUFAST_STRINGS = {
       'Powered by <img src="{imgUrl}" style="position:relative; right: 2px;height: 15px;"><a href="https://www.tu-fast.de" target="_blank">TUfast</a> (entwickelt von <a href="https://github.com/Noxdor" target="_blank">Noxdor</a> & <a href="https://github.com/C0ntroller" target="_blank">C0ntroller</a>)',
     oldTable: 'langweiligen, alten Tabelle...',
     newTable: 'neuen, coolen TUfast-Tabelle 🔥',
-    continueTo: ' Weiter zur '
+    continueTo: ' Weiter zur ',
+    overview: 'Deine Notenübersicht',
+    descriptors: ['Modul', 'Bestandene Prüfung', 'Verhauene Prüfung'],
+    weightedAverage: 'Deine Durchschnittnote (nach CP gewichtet): {average}',
+    moduleCount: 'Anzahl Module: {count}',
+    examCount: 'Anzahl Prüfungen: {count}',
+    failed: 'nicht bestanden'
   },
   selma: {
     passed: 'Bestanden',
@@ -43,7 +50,10 @@ globalThis.TUFAST_STRINGS = {
     examDate: 'Prüfungsleistung/Termin',
     deactivate: 'Deactivate',
     activate: 'Activate',
-    toggleTitle: 'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
+    toggleTitle: 'Toggle the "ImproveSelma" feature and reload the page to apply the change.',
+    creditsEnabled: 'Table powered by',
+    creditsDisabled: 'Table disabled',
+    creditsBy: 'by'
   },
   otp: {
     snatcherConfirm:

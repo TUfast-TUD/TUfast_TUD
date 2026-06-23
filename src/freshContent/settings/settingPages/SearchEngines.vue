@@ -5,7 +5,7 @@
 
   <p class="search-terms p-margin">
     <template v-for="site in uniqueSites" :key="site">
-      <span class="search-terms__bg"> {{ site[0] }}</span> &rarr; {{ site[1].name }}<br />
+      <span class="search-terms__bg"> {{ site[0] }}</span> &rarr; {{ siteName(site[0], site[1].name) }}<br />
     </template>
   </p>
 </template>
@@ -54,9 +54,13 @@ export default defineComponent({
       } else await se('disable', 'redirect')
     }
 
+    const siteName = (key: string, fallback: string) =>
+      strings.settings.searchSites[key as keyof typeof strings.settings.searchSites] || fallback
+
     return {
       searchEngineActive,
       uniqueSites,
+      siteName,
       strings
     }
   }

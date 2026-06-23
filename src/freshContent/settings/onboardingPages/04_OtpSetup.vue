@@ -1,5 +1,5 @@
 <template>
-  <p class="txt-help txt-center">Wirklich sofort anmelden? Dann richte die Zwei-Faktor-Authentifizierung ein</p>
+  <p class="txt-help txt-center">{{ strings.onboarding.pages.otpHelp }}</p>
   <div class="onboarding-inner-info">
     <AutoLogin />
   </div>
@@ -15,6 +15,7 @@ import AutoLogin from '../settingPages/AutoLogin.vue'
 import { useUserData } from '../composables/user-data'
 import { useStepper } from '../composables/stepper'
 import { useLogins } from '../composables/logins'
+import { strings } from '../../../i18n'
 
 export default defineComponent({
   components: {
@@ -60,7 +61,8 @@ export default defineComponent({
       usernameValid,
       passwordValid,
       zihLogin,
-      AutoLogin
+      AutoLogin,
+      strings
     }
   }
 })

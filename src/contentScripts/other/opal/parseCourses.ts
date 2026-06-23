@@ -168,9 +168,7 @@ function parseList(previewContainer: HTMLDivElement | undefined | null): ParseRe
     }
 
     if (firstTime && updateObj.meine_kurse) {
-      notification.notify(
-        'Deine Kurse wurden erfolgreich in TUfast gespeichert. Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd>, um deine Kurse zu sehen! 🚀'
-      )
+      notification.notify(opalParseCoursesStrings.coursesSaved)
     } else if (coursesChanged || favouritesChanged) {
       notification.notify(opalParseCoursesStrings.coursesUpdated)
     }

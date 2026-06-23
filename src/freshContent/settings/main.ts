@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import Settings from './Settings.vue'
 import '../../styles/palette_new/palette_new.sass'
+import { strings } from '../../i18n'
 // Import needed Icons from Tabler Vue
 import {
   IconArrowUpRight,
@@ -37,6 +38,7 @@ import {
 } from '@tabler/icons-vue'
 
 // Create the app instance
+document.title = strings.settings.documentTitle
 const app = createApp(Settings)
 
 // Register Tabler icons globally

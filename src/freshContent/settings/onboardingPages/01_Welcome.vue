@@ -1,8 +1,8 @@
 <template>
   <div class="onboarding-inner-info">
     <div ref="animationContainer" class="onboarding-animation"></div>
-    <h3>Dein Produktivitätstool für die TU Dresden</h3>
-    <p class="txt-help">mit TUfast sparst du pro Semester<br />bis zu 90 Minuten und bis zu 2000 Klicks</p>
+    <h3>{{ strings.onboarding.pages.welcomeTitle }}</h3>
+    <p class="txt-help" v-html="strings.onboarding.pages.welcomeHelp"></p>
   </div>
 </template>
 
@@ -12,6 +12,7 @@ import lottie from 'lottie-web/build/player/lottie_light_canvas'
 
 import onboardingRocketDark from '../../../assets/settings/onboarding-rocket-fordark.json'
 import onboardingRocketLight from '../../../assets/settings/onboarding-rocket-forlight.json'
+import { strings } from '../../../i18n'
 
 export default defineComponent({
   setup() {
@@ -64,7 +65,8 @@ export default defineComponent({
     })
 
     return {
-      animationContainer
+      animationContainer,
+      strings
     }
   }
 })
