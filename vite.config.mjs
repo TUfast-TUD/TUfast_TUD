@@ -128,10 +128,26 @@ function keepContentScriptsClassic() {
   }
 }
 
+function inlineContentScriptStrings() {
+  return {
+    name: 'inline-content-script-strings',
+    generateBundle(_options, bundle) {
+      const stringsChunk = bundle['i18n/contentScriptStrings.js']
+      const deChunk = bundle['i18n/de.js']
+      if (!stringsChunk || stringsChunk.type !== 'chunk' || !deChunk || deChunk.type !== 'chunk') return
+
+      const exportMatch = deChunk.code.match(/export\{(\w+) as de\};?$/)
+      if (!exportMatch) return
+
+      stringsChunk.code = deChunk.code.replace(exportMatch[0], `globalThis.TUFAST_STRINGS=${exportMatch[1]}.content;`)
+    }
+  }
+}
+
 export default defineConfig({
   root: srcDir,
   publicDir: false,
-  plugins: [vue(), copyStaticExtensionFiles(), injectManifestVersions(), keepContentScriptsClassic()],
+  plugins: [vue(), copyStaticExtensionFiles(), injectManifestVersions(), keepContentScriptsClassic(), inlineContentScriptStrings()],
   build: {
     outDir: buildDir,
     emptyOutDir: true,
