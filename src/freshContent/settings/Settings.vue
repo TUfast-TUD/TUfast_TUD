@@ -17,11 +17,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
-            :class="[
-              'main-grid__tile',
-              { 'is-active': openSettingId === setting.settingsPage },
-              { soon: setting.title === t('settings.tiles.language') }
-            ]"
+            :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             role="button"
             tabindex="0"
             @click="toggleSetting(setting)"

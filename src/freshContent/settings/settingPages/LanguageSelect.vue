@@ -1,134 +1,70 @@
 <template>
-  <div class="language-select" disabled>
-    <!--     <IconLanguage class="language-select__selector" :class="selectorClass" @click.capture="switchSel($event)" />
-    <div ref="languages" class="language-select__languages">
-      <p class="language-select__german language-select__languages--selected" @click="switchSel($event)">Deutsch</p>
-      <p class="language-select__english" @click="switchSel($event)">English</p>
-    </div> -->
+  <div class="language-select">
+    <button
+      v-for="option in options"
+      :key="option.locale"
+      type="button"
+      class="language-select__option"
+      :class="{ 'language-select__option--selected': selected === option.locale }"
+      @click="selectLocale(option.locale)"
+    >
+      {{ option.label }}
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import { getAvailableLocales, setLocale, type Locale } from '../../../i18n'
+import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
   setup() {
-    /* eslint-disable no-unused-vars */
-    enum Selected {
-      German = 'German',
-      English = 'English'
+    const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
+    const selected = ref<Locale>('de')
+    const options = getAvailableLocales()
+
+    const selectLocale = async (locale: Locale) => {
+      if (selected.value === locale) return
+      selected.value = locale
+      setLocale(locale)
+      await setChromeLocalStorage({ locale })
+      window.location.reload()
     }
-    /* eslint-enable no-unused-vars */
 
-    const languages = ref<null | HTMLElement>(null)
-    const selected = ref(Selected.German)
-    const selectorClass = computed(() =>
-      selected.value === Selected.German ? 'language-select__selector--german' : 'language-select__selector--english'
-    )
-
-    const switchSel = (e: MouseEvent) => {
-      const target = e.target as HTMLParagraphElement
-      if (target.classList.contains('language-select__languages--selected')) {
-        return
+    onMounted(async () => {
+      const locale = (await getChromeLocalStorage('locale')) as Locale | undefined
+      if (locale) {
+        selected.value = locale
+        setLocale(locale)
       }
-
-      // disabled for now until someone translated the app to english ;)
-      return
-
-      /* eslint-disable no-unreachable */
-      switch (selected.value) {
-        case Selected.German:
-          selected.value = Selected.English
-          break
-        case Selected.English:
-          selected.value = Selected.German
-          break
-      }
-      for (const language of languages.value!.children) {
-        language.classList.toggle('language-select__languages--selected')
-      }
-      /* eslint-enable no-unreachable */
-    }
+    })
 
     return {
-      switchSel,
-      selectorClass,
-      languages
+      options,
+      selected,
+      selectLocale
     }
   }
 })
 </script>
 
 <style lang="sass" scoped>
-
-.tuf-dropdown-button
-  display: inline-flex
-  align-items: center
-  justify-content: space-between
-  padding: 8px 16px
-  background-color: gray
-  color: white
-  border: none
-  border-radius: var(--brd-rad)
-  cursor: pointer
-  font-size: 16px
-  width: 100%
-
-  &:hover
-    background-color: gray
-
-  &__icon
-    margin-right: 16px
-    display: flex
-    align-items: center
-
-  &__text
-    flex-grow: 1
-    display: flex
-    align-items: center
-
 .language-select
-    position: relative
-    display: grid
-    grid-template-columns: min-content auto
-    height: min-content
-    min-width: min-content
-    width: 125px
+  display: flex
+  gap: 8px
 
-    .light & &__languages
-      color: hsl(var(--clr-backgr))
+  &__option
+    border: 2px solid hsl(var(--clr-text))
+    border-radius: var(--brd-rad-sm)
+    background: transparent
+    color: hsl(var(--clr-text))
+    cursor: pointer
+    font: inherit
+    padding: 8px 12px
 
-    &__selector
-        transition: all 200ms ease-in-out
-        cursor: pointer
-        color: hsl(var(--clr-accent) )
-        width: 2rem
-        height: 2rem
-        &--german
-            transform: translateY(0)
-        &--english
-            transform: translateY(100%)
-
-    &__languages
-        padding-left: .5rem
-        line-height: 2rem
-        user-select: none
-
-        &--selected
-            font-weight: 600
-            font-size: 1.2em
-        & :not(&--selected)
-            cursor: pointer
-.soon
-  position: absolute
-  left: 30%
-  top: 15%
-  transform: rotate(-45deg)
-  font-weight: 800
-  color: hsl(var(--clr-white) )
-  font-size: 1.5rem
-  background-color: black
-
-*[disabled]:not(.soon)
-  color: hsl(var(--clr-white), .6)
+    &--selected
+      border-color: hsl(var(--clr-accent))
+      background: hsla(var(--clr-accent), .2)
+      font-weight: 600
 </style>

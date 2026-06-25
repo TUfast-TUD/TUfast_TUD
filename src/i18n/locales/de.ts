@@ -1,4 +1,11 @@
 export const de = {
+  localeName: 'Deutsch',
+  manifest: {
+    extensionName: 'TUfast TU Dresden',
+    extensionDescription: 'Das Produktivitäts-Tool für TU Dresden Studierende 🚀',
+    commandOpenOpal: 'OPAL öffnen',
+    commandOpenOwa: 'Mail (OWA) öffnen'
+  },
   common: {
     close: 'Schließen',
     edit: 'Bearbeiten',
@@ -32,7 +39,7 @@ export const de = {
       about: 'Über das Projekt',
       contact: 'Hilfe & Kontakt',
       faculty: 'Meine Fakultät',
-      language: 'Sprache – Bald! Soon!'
+      language: 'Sprache'
     },
     pages: {
       email: {
@@ -371,3 +378,5 @@ export const de = {
     }
   }
 }
+
+export default de

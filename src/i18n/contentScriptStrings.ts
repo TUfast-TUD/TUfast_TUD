@@ -1,3 +1,3 @@
-import { de } from './de'
+import { getBrowserLocaleMessages } from './index'
 
-globalThis.TUFAST_STRINGS = de.content
+globalThis.TUFAST_STRINGS = getBrowserLocaleMessages().content

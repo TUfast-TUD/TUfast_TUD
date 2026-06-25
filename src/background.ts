@@ -6,7 +6,9 @@ import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
-import { t } from './i18n'
+import { initLocale, t } from './i18n'
+
+initLocale()
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -21,6 +23,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
+        locale: 'de',
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
@@ -37,6 +40,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'availableRockets',
         'selectedRocketIcon',
         'theme',
+        'locale',
         'studiengang',
         'hisqisPimpedTable',
         'improveSelma',
@@ -63,6 +67,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
+      if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'de'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined')
         updateObj.selectedRocketIcon = JSON.stringify(rockets.default)

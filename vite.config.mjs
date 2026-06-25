@@ -129,17 +129,106 @@ function keepContentScriptsClassic() {
 }
 
 function inlineContentScriptStrings() {
+  const localeChunkPattern = /^i18n\/locales\/([^/]+)\.js$/
+  const stripImports = (code) => code.replace(/^import[^;]+;?/gm, '')
+
+  const getDefaultExportName = (code) => {
+    const exportMatch = code.match(/export\{([^}]+)\};?$/)
+    if (!exportMatch) return undefined
+
+    return exportMatch[1]
+      .split(',')
+      .map((part) => part.trim().split(/\s+as\s+/))
+      .find((part) => part[1] === 'default')?.[0]
+  }
+
   return {
     name: 'inline-content-script-strings',
     generateBundle(_options, bundle) {
       const stringsChunk = bundle['i18n/contentScriptStrings.js']
-      const deChunk = bundle['i18n/de.js']
-      if (!stringsChunk || stringsChunk.type !== 'chunk' || !deChunk || deChunk.type !== 'chunk') return
+      if (!stringsChunk || stringsChunk.type !== 'chunk') return
 
-      const exportMatch = deChunk.code.match(/export\{(\w+) as de\};?$/)
-      if (!exportMatch) return
+      const locales = Object.entries(bundle)
+        .map(([fileName, chunk]) => {
+          const locale = fileName.match(localeChunkPattern)?.[1]
+          if (!locale || chunk.type !== 'chunk') return undefined
 
-      stringsChunk.code = deChunk.code.replace(exportMatch[0], `globalThis.TUFAST_STRINGS=${exportMatch[1]}.content;`)
+          const exportName = getDefaultExportName(chunk.code)
+          if (!exportName) return undefined
+
+          return {
+            locale,
+            exportName,
+            code: stripImports(chunk.code).replace(/export\{[^}]+\};?$/, '')
+          }
+        })
+        .filter(Boolean)
+
+      if (!locales.length) return
+
+      stringsChunk.code =
+        'const TUFAST_LOCALES={};' +
+        locales
+          .map(({ locale, exportName, code }) => `${code}TUFAST_LOCALES[${JSON.stringify(locale)}]=${exportName};`)
+          .join('') +
+        'const TUFAST_BROWSER_LOCALE=chrome.i18n?.getUILanguage?.().toLowerCase().split("-")[0];' +
+        'globalThis.TUFAST_STRINGS=(TUFAST_LOCALES[TUFAST_BROWSER_LOCALE]||TUFAST_LOCALES.de).content;'
+    }
+  }
+}
+
+function writeManifestLocales() {
+  const localeChunkPattern = /^i18n\/locales\/([^/]+)\.js$/
+  const stripImports = (code) => code.replace(/^import[^;]+;?/gm, '')
+
+  const findObjectLiteral = (code, key) => {
+    const start = code.indexOf(`${key}:{`)
+    if (start === -1) return undefined
+
+    const objectStart = code.indexOf('{', start)
+    let depth = 0
+    for (let i = objectStart; i < code.length; i += 1) {
+      if (code[i] === '{') depth += 1
+      if (code[i] === '}') depth -= 1
+      if (depth === 0) return code.slice(objectStart, i + 1)
+    }
+    return undefined
+  }
+
+  const getDefaultExportName = (code) => {
+    const exportMatch = code.match(/export\{([^}]+)\};?$/)
+    if (!exportMatch) return undefined
+
+    return exportMatch[1]
+      .split(',')
+      .map((part) => part.trim().split(/\s+as\s+/))
+      .find((part) => part[1] === 'default')?.[0]
+  }
+
+  return {
+    name: 'write-manifest-locales',
+    generateBundle(_options, bundle) {
+      for (const [fileName, chunk] of Object.entries(bundle)) {
+        const locale = fileName.match(localeChunkPattern)?.[1]
+        if (!locale || chunk.type !== 'chunk') continue
+
+        const exportName = getDefaultExportName(chunk.code)
+        if (!exportName) continue
+
+        const code = stripImports(chunk.code)
+        const manifestLiteral = findObjectLiteral(code, 'manifest')
+        const manifest = manifestLiteral ? Function(`return ${manifestLiteral};`)() : undefined
+        if (!manifest) continue
+        const messages = Object.fromEntries(
+          Object.entries(manifest).map(([key, message]) => [key, { message }])
+        )
+
+        this.emitFile({
+          type: 'asset',
+          fileName: `_locales/${locale}/messages.json`,
+          source: JSON.stringify(messages, null, 2) + '\n'
+        })
+      }
     }
   }
 }
@@ -147,7 +236,14 @@ function inlineContentScriptStrings() {
 export default defineConfig({
   root: srcDir,
   publicDir: false,
-  plugins: [vue(), copyStaticExtensionFiles(), injectManifestVersions(), keepContentScriptsClassic(), inlineContentScriptStrings()],
+  plugins: [
+    vue(),
+    copyStaticExtensionFiles(),
+    injectManifestVersions(),
+    keepContentScriptsClassic(),
+    inlineContentScriptStrings(),
+    writeManifestLocales()
+  ],
   build: {
     outDir: buildDir,
     emptyOutDir: true,
