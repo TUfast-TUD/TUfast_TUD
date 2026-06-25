@@ -15,16 +15,16 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { getAvailableLocales, setLocale, type Locale } from '../../../i18n'
+import { getAvailableLocales, getLocaleSetting, setLocale, type LocaleSetting } from '../../../i18n'
 import { useChrome } from '../composables/chrome'
 
 export default defineComponent({
   setup() {
     const { getChromeLocalStorage, setChromeLocalStorage } = useChrome()
-    const selected = ref<Locale>('de')
+    const selected = ref<LocaleSetting>(getLocaleSetting())
     const options = getAvailableLocales()
 
-    const selectLocale = async (locale: Locale) => {
+    const selectLocale = async (locale: LocaleSetting) => {
       if (selected.value === locale) return
       selected.value = locale
       setLocale(locale)
@@ -33,8 +33,8 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      const locale = (await getChromeLocalStorage('locale')) as Locale | undefined
-      if (locale) {
+      const locale = (await getChromeLocalStorage('locale')) as LocaleSetting | undefined
+      if (locale && options.some((option) => option.locale === locale)) {
         selected.value = locale
         setLocale(locale)
       }

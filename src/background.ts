@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
-        locale: 'de',
+        locale: 'auto',
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
@@ -67,7 +67,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
-      if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'de'
+      if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'auto'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined')
         updateObj.selectedRocketIcon = JSON.stringify(rockets.default)

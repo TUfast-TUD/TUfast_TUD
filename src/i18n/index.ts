@@ -6,38 +6,63 @@ type LocaleMessages = typeof de
 const localeModules = import.meta.glob<LocaleMessages>('./locales/*.ts', { eager: true, import: 'default' })
 
 export type Locale = string
+export type LocaleSetting = 'auto' | Locale
 
 export const fallbackLocale: Locale = 'de'
+export const defaultLocaleSetting: LocaleSetting = 'auto'
 
 export const messages = Object.fromEntries(
   Object.entries(localeModules).map(([path, message]) => [path.match(/\/([^/]+)\.ts$/)?.[1] || fallbackLocale, message])
 ) as Record<Locale, LocaleMessages>
 
-let currentLocale: Locale = readStoredLocale()
+let currentLocaleSetting: LocaleSetting = readStoredLocaleSetting()
+let currentLocale: Locale = resolveLocale(currentLocaleSetting)
 
 function isLocale(locale: unknown): locale is Locale {
   return typeof locale === 'string' && Object.prototype.hasOwnProperty.call(messages, locale)
 }
 
-function readStoredLocale(): Locale {
+function isLocaleSetting(locale: unknown): locale is LocaleSetting {
+  return locale === 'auto' || isLocale(locale)
+}
+
+function readStoredLocaleSetting(): LocaleSetting {
   try {
     if (typeof localStorage !== 'undefined') {
       const locale = localStorage.getItem('locale')
-      if (isLocale(locale)) return locale
+      if (isLocaleSetting(locale)) return locale
     }
   } catch (e) {
     // Ignore storage access errors and use German.
   }
-  return fallbackLocale
+  return defaultLocaleSetting
+}
+
+export function getBrowserDefaultLocale(): Locale {
+  const raw =
+    (typeof chrome !== 'undefined' && chrome.i18n?.getUILanguage?.()) ||
+    (typeof navigator !== 'undefined' && navigator.language) ||
+    fallbackLocale
+  const locale = raw.toLowerCase().split(/[-_]/)[0]
+  return isLocale(locale) ? locale : fallbackLocale
+}
+
+function resolveLocale(locale: LocaleSetting): Locale {
+  return locale === 'auto' ? getBrowserDefaultLocale() : locale
 }
 
 export function getLocale() {
   return currentLocale
 }
 
-export function setLocale(locale: Locale) {
-  if (!isLocale(locale)) return
-  currentLocale = locale
+export function getLocaleSetting() {
+  return currentLocaleSetting
+}
+
+export function setLocale(locale: LocaleSetting) {
+  if (!isLocaleSetting(locale)) return
+  currentLocaleSetting = locale
+  currentLocale = resolveLocale(locale)
   try {
     if (typeof localStorage !== 'undefined') localStorage.setItem('locale', locale)
   } catch (e) {
@@ -49,7 +74,7 @@ export async function initLocale() {
   try {
     if (typeof chrome !== 'undefined' && chrome.storage?.local) {
       const { locale } = await chrome.storage.local.get(['locale'])
-      if (isLocale(locale)) setLocale(locale)
+      if (isLocaleSetting(locale)) setLocale(locale)
     }
   } catch (e) {
     // German remains the fallback if extension storage is unavailable.
@@ -62,12 +87,15 @@ export function getLocaleMessages(locale: Locale = currentLocale) {
 }
 
 export function getAvailableLocales() {
-  return Object.entries(messages).map(([locale, message]) => ({ locale, label: message.localeName }))
+  const resolvedAuto = getLocaleMessages(getBrowserDefaultLocale()).localeName
+  return [
+    { locale: 'auto', label: `Auto (${resolvedAuto})` },
+    ...Object.entries(messages).map(([locale, message]) => ({ locale, label: message.localeName }))
+  ]
 }
 
 export function getBrowserLocaleMessages() {
-  const browserLocale = chrome.i18n?.getUILanguage?.().toLowerCase().split('-')[0]
-  return getLocaleMessages(isLocale(browserLocale) ? browserLocale : fallbackLocale)
+  return getLocaleMessages(getBrowserDefaultLocale())
 }
 
 export function t(key: string, params?: Record<string, unknown>, plural?: number) {
