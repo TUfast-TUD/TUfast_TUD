@@ -20,7 +20,7 @@ export const de = {
   },
   settings: {
     documentTitle: 'TUfast Einstellungen',
-    location: '→ Einstellungen',
+    location: 'Einstellungen',
     personalization: 'Personalisierung',
     functions: 'Funktionen',
     information: 'Informationen',

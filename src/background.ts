@@ -313,12 +313,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         new Promise<string>((resolve) => {
           chrome.storage.local.get(['studiengang'], (result) => {
             const studiengangId = result.studiengang ?? 'general'
-            const faculty = studies[studiengangId]
-            if (faculty && faculty.name) {
-              resolve(faculty.name)
-            } else {
-              resolve(studies.general.name)
-            }
+            resolve(studies[studiengangId] ? studiengangId : 'general')
           })
         }),
         // User data check

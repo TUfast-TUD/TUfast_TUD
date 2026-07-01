@@ -4,6 +4,7 @@
     <header class="tuf-header">
       <div class="tuf-header-left">
         <div class="tuf-logo"></div>
+        <span class="tuf-header-separator" aria-hidden="true">→</span>
         <span class="tuf-header-location txt-bold">{{ t('settings.location') }}</span>
       </div>
       <div class="tuf-header-right"><Statistics /></div>
@@ -489,6 +490,15 @@ export default defineComponent({
     @media screen and (max-width: 800px)
         display: none
 
+.tuf-header-separator
+    color: var(--clr-text-help)
+    display: inline-flex
+    align-items: center
+    line-height: 1
+
+    @media screen and (max-width: 800px)
+        display: none
+
 .is-active
     border-radius: var(--brd-rad) var(--brd-rad) 0 0 !important
 
@@ -563,7 +573,6 @@ export default defineComponent({
 
 .tuf-header-left span
     font-size: 1rem
-    vertical-align: middle
 
 .tuf-header-right
     flex-shrink: 0

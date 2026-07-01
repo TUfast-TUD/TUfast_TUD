@@ -73,7 +73,7 @@ export default [
     settingType: 'faculty'
   },
   {
-    title: t('settings.tiles.language'),
+    title: `${t('settings.tiles.language')} (Beta)`,
     icon: 'IconLanguage',
     settingsPage: 'LanguageSelect',
     category: 'personalization',
