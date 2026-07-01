@@ -197,7 +197,8 @@ export const en: typeof de = {
         unlocked: 'Thanks for your review in the web store!'
       },
       whatsapp: {
-        beforeUnlock: 'Sharing cool things is your thing? Share TUfast with two friends on WhatsApp and collect this rocket!',
+        beforeUnlock:
+          'Sharing cool things is your thing? Share TUfast with two friends on WhatsApp and collect this rocket!',
         unlocked: 'Thanks for your support! Recommended with WhatsApp.'
       }
     },
@@ -355,7 +356,8 @@ export const en: typeof de = {
     },
     owa: {
       permissionFetch: "TUfast needs this permission to regularly fetch all emails. Please click 'Allow'.",
-      permissionNotification: "TUfast needs this permission to send you additional notifications. Please click 'Allow'.",
+      permissionNotification:
+        "TUfast needs this permission to send you additional notifications. Please click 'Allow'.",
       newMailTitle: 'New emails',
       newMailMessage: 'You have {count} new email | You have {count} new emails'
     },
