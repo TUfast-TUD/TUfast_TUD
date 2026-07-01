@@ -44,6 +44,7 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { isFirefox } from '../../../modules/firefoxCheck'
 
 import rockets from '../../rockets.json'
+import { t } from '../../../i18n'
 
 import Link from './Link.vue'
 import { useChrome } from '../composables/chrome'
@@ -94,11 +95,18 @@ export default defineComponent({
     }
 
     const getLink = (rocketObj: any): string | undefined => {
+      const key = `settings.rocketLinks.${rocketObj.id}`
+      const value = t(key)
+      if (value !== key) return value
+
       return rocketObj.link || (isFirefox() ? rocketObj.linkFirefox : rocketObj.linkChromium)
     }
 
     const getText = (rocketObj: any) => {
-      return isUnlocked(rocketObj) ? rocketObj.unlocked : rocketObj.beforeUnlock
+      const state = isUnlocked(rocketObj) ? 'unlocked' : 'beforeUnlock'
+      const key = `settings.rocketsText.${rocketObj.id}.${state}`
+      const value = t(key)
+      return value === key ? rocketObj[state] : value
     }
 
     const unlockRocket = async (rocketId: string) => {

@@ -1,3 +1,4 @@
+const opalSnowflakeStrings = globalThis.TUFAST_STRINGS.opal
 // Global state to persist across SPA navigations
 const globalSnowflakeState: {
   container: HTMLDivElement | undefined
@@ -97,12 +98,14 @@ async function injectSnowflakeControl() {
   }
 
   function updateButtonText(switchElement: HTMLSpanElement) {
-    switchElement.textContent = globalSnowflakeState.currentState ? 'Schnee deaktivieren' : 'Schnee aktivieren'
+    switchElement.textContent = globalSnowflakeState.currentState
+      ? opalSnowflakeStrings.snowDisable
+      : opalSnowflakeStrings.snowEnable
   }
 
   const flakeSwitch = document.createElement('span')
   flakeSwitch.id = 'flakeSwitch'
-  flakeSwitch.title = 'Schnee einstellen. Winter-Modus von TUfast.'
+  flakeSwitch.title = opalSnowflakeStrings.snowTitle
 
   updateButtonText(flakeSwitch)
 

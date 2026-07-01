@@ -26,6 +26,19 @@ function withoutExt(filePath) {
   return filePath.slice(0, -path.extname(filePath).length)
 }
 
+function readLocaleMessages() {
+  const localeDir = path.join(srcDir, 'i18n', 'locales')
+  return Object.fromEntries(
+    fs
+      .readdirSync(localeDir)
+      .filter((fileName) => fileName.endsWith('.json'))
+      .map((fileName) => [
+        path.basename(fileName, '.json'),
+        JSON.parse(fs.readFileSync(path.join(localeDir, fileName), 'utf8'))
+      ])
+  )
+}
+
 function buildInputs() {
   return Object.fromEntries(
     walkFiles(srcDir)
@@ -49,6 +62,7 @@ function copyStaticExtensionFiles() {
       const manifestNames = new Set(['manifest.json', 'manifest.chrome.json', 'manifest.firefox.json'])
       for (const file of walkFiles(srcDir)) {
         const relativePath = path.relative(srcDir, file)
+        if (/^i18n[\\/]locales[\\/][^\\/]+\.json$/.test(relativePath)) continue
         if (path.resolve(file) === legacyClassicScript) {
           const target = path.join(buildDir, relativePath)
           fs.mkdirSync(path.dirname(target), { recursive: true })
@@ -128,10 +142,53 @@ function keepContentScriptsClassic() {
   }
 }
 
+function inlineContentScriptStrings() {
+  return {
+    name: 'inline-content-script-strings',
+    generateBundle(_options, bundle) {
+      const stringsChunk = bundle['i18n/contentScriptStrings.js']
+      if (!stringsChunk || stringsChunk.type !== 'chunk') return
+
+      stringsChunk.code =
+        `const TUFAST_LOCALES=${JSON.stringify(readLocaleMessages())};` +
+        'const TUFAST_BROWSER_LOCALE=chrome.i18n?.getUILanguage?.().toLowerCase().split("-")[0];' +
+        'globalThis.TUFAST_STRINGS=(TUFAST_LOCALES[TUFAST_BROWSER_LOCALE]||TUFAST_LOCALES.de).content;'
+    }
+  }
+}
+
+function writeManifestLocales() {
+  return {
+    name: 'write-manifest-locales',
+    generateBundle(_options, bundle) {
+      for (const [locale, localeMessages] of Object.entries(readLocaleMessages())) {
+        const manifest = localeMessages.manifest
+        if (!manifest) continue
+        const browserMessages = Object.fromEntries(
+          Object.entries(manifest).map(([key, message]) => [key, { message }])
+        )
+
+        this.emitFile({
+          type: 'asset',
+          fileName: `_locales/${locale}/messages.json`,
+          source: JSON.stringify(browserMessages, null, 2) + '\n'
+        })
+      }
+    }
+  }
+}
+
 export default defineConfig({
   root: srcDir,
   publicDir: false,
-  plugins: [vue(), copyStaticExtensionFiles(), injectManifestVersions(), keepContentScriptsClassic()],
+  plugins: [
+    vue(),
+    copyStaticExtensionFiles(),
+    injectManifestVersions(),
+    keepContentScriptsClassic(),
+    inlineContentScriptStrings(),
+    writeManifestLocales()
+  ],
   build: {
     outDir: buildDir,
     emptyOutDir: true,

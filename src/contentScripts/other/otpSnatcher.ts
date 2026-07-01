@@ -1,3 +1,4 @@
+const otpSnatcherStrings = globalThis.TUFAST_STRINGS.otp
 const qrAvailable = !!document.getElementById('qr-code')
 const seedLink = document.querySelector('#seed-link a[href^="otpauth://totp/"]')
 
@@ -20,7 +21,5 @@ if (qrAvailable && seedLink && showWarning()) {
 }
 
 function showWarning(): boolean {
-  return confirm(
-    'TUfast kann diesen 2-Faktor-Code für dich speichern und automatisch an den entsprechenden Stellen einf\u00fcgen (=AutoLogin). Dies geht jedoch eigentlich gegen den Sinn eines zweiten Faktors.\n\nSPEICHERE DIR DEN CODE UND DIE RECOVERY CODES AUF JEDEN FALL AUCH AN EINER ANDEREN STELLE!\n\nSoll TUfast für dich die 2-Faktor-Authentifizierung \u00fcbernehmen?'
-  )
+  return confirm(otpSnatcherStrings.snatcherConfirm)
 }

@@ -1,25 +1,19 @@
 <template>
-  <h3 class="card-body-title">Optimiere den Umgang mit PDF und Textdokumenten in OPAL</h3>
-  <Setting
-    v-model="pdfInlineActive"
-    txt="PDF- und Textdokumente direkt im Browser öffnen, anstatt sie herunterzuladen"
-    class="setting"
-  />
+  <h3 class="card-body-title">{{ t('settings.pages.improveOpal.title') }}</h3>
+  <Setting v-model="pdfInlineActive" :txt="t('settings.pages.improveOpal.inline')" class="setting" />
   <Setting
     v-model="pdfNewTabActive"
     :disabled="!pdfInlineActive"
-    txt="PDF- und Textdokumente in einem neuen Tab öffnen (empfohlen)"
+    :txt="t('settings.pages.improveOpal.newTab')"
     class="setting"
   />
-  <p class="max-line p-margin">
-    Damit die Einstellungen wirksam werden, musst du OPAL einmal aktualisieren. Möglicherweise braucht TUfast eine
-    spezielle Berechtigung. Drücke bitte auf „Erlauben“ im folgenden Pop-Up.
-  </p>
-  <p class="max-line p-margin txt-help">Diese Funktion funktioniert im Firefox Browser leider nicht stabil.</p>
+  <p class="max-line p-margin">{{ t('settings.pages.improveOpal.permission') }}</p>
+  <p class="max-line p-margin txt-help">{{ t('settings.pages.improveOpal.firefoxWarning') }}</p>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+import { t } from '../../../i18n'
 
 // types
 import type { ResponseOpalPdf } from '../types/SettingHandler'
@@ -75,7 +69,8 @@ export default defineComponent({
 
     return {
       pdfInlineActive,
-      pdfNewTabActive
+      pdfNewTabActive,
+      t
     }
   }
 })

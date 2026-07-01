@@ -1,7 +1,5 @@
 <template>
-  <p class="txt-help txt-center">
-    Wähle deine Fakultät aus. Dein Dashboard wird dann mit allen für dich relevanten Links eingerichtet.
-  </p>
+  <p class="txt-help txt-center">{{ t('onboarding.pages.facultyHelp') }}</p>
   <div class="onboarding-inner-info">
     <ChooseFaculty />
   </div>
@@ -9,6 +7,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+import { t } from '../../../i18n'
 
 // components
 import ChooseFaculty from '../settingPages/ChooseFaculty.vue'
@@ -62,7 +61,8 @@ export default defineComponent({
       notificationsCbDisabled,
       messages,
       notifications,
-      ChooseFaculty
+      ChooseFaculty,
+      t
     }
   }
 })

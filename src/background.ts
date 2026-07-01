@@ -6,6 +6,9 @@ import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
+import { initLocale, t } from './i18n'
+
+initLocale()
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -20,6 +23,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
+        locale: 'auto',
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
@@ -36,6 +40,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'availableRockets',
         'selectedRocketIcon',
         'theme',
+        'locale',
         'studiengang',
         'hisqisPimpedTable',
         'improveSelma',
@@ -62,6 +67,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
+      if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'auto'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined')
         updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
@@ -294,7 +300,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         // 5 - Selma (has user activated selma improvements?)
         new Promise<boolean>((resolve) => {
           chrome.storage.local.get(['improveSelma'], (result) => {
-            resolve(result.improveSelma ?? false)
+            resolve(result.improveSelma ?? true)
           })
         }),
         // 6 - Searchengine (has user activated searchengine commands?)
@@ -307,12 +313,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         new Promise<string>((resolve) => {
           chrome.storage.local.get(['studiengang'], (result) => {
             const studiengangId = result.studiengang ?? 'general'
-            const faculty = studies[studiengangId]
-            if (faculty && faculty.name) {
-              resolve(faculty.name)
-            } else {
-              resolve(studies.general.name)
-            }
+            resolve(studies[studiengangId] ? studiengangId : 'general')
           })
         }),
         // User data check
@@ -713,7 +714,7 @@ async function openCourseLinks(links: string, behavior: string): Promise<void> {
 
   // 3 - Check if more than 25 courses
   if (courseLinks.length > 25) {
-    const linkType = links === 'favoriten' ? 'Favoriten' : 'Kurse'
+    const linkType = links === 'favoriten' ? t('content.background.favorites') : t('content.background.courses')
 
     if (behavior === 'immediate_active') {
       // Show alert in the current OPAL tab context
@@ -722,7 +723,7 @@ async function openCourseLinks(links: string, behavior: string): Promise<void> {
         chrome.scripting.executeScript({
           target: { tabId: currentTab.id },
           func: (message: string) => alert(message),
-          args: [`Du hast mehr als 25 ${linkType}. Um deinen Browser nicht zu überlasten, öffne sie bitte manuell.`]
+          args: [t('content.background.tooManyLinks', { type: linkType })]
         })
       }
     } else {

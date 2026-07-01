@@ -9,11 +9,11 @@
   </head>
 
   <body>
-    <div class="headline">TU Dresden Dashboard</div>
+    <div class="headline" id="popupHeadline"></div>
     <div class="list-wrapper">
       <div class="list-search-wrapper" id="list-top">
         <!-- SVG Search / Magnifier Icon inside input (see css background-image) -->
-        <input class="list-search" type="text" id="searchListInput" placeholder="Kurs suchen..." autofocus />
+        <input class="list-search" type="text" id="searchListInput" autofocus />
         <a href="" target="_blank" class="" style="flex: 1" id="fsr_link_2">
           <img class="studiengang-img" id="fsr_icon_2" src="" />
         </a>
@@ -36,14 +36,7 @@
     </div>
     <div class="settings-footer">
       <div class="settings-footer-bar" id="settings-footer-bar-icons">
-        <a
-          href="https://selma.tu-dresden.de/"
-          target="_blank"
-          class="settings-section-icon"
-          style="flex: 1"
-          title="Selma"
-          id="selma"
-        >
+        <a href="https://selma.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="selma">
           <img class="settings-img" src="../../assets/icons/selma.png" />
         </a>
         <a
@@ -51,7 +44,6 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1; display: none"
-          title="ePortal"
           id="eportal"
         >
           <img class="settings-img" src="../../assets/icons/ePortal.png" />
@@ -61,7 +53,6 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1; display: none"
-          title="Moodle"
           id="moodle"
         >
           <img class="settings-img" src="../../assets/icons/moodle.png" />
@@ -71,19 +62,11 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1"
-          title="OPAL"
           id="opal"
         >
           <img class="settings-img" src="../../assets/icons/OPAL.png" />
         </a>
-        <a
-          href="https://qis.dez.tu-dresden.de/"
-          target="_blank"
-          class="settings-section-icon"
-          style="flex: 1"
-          title="QIS"
-          id="qis"
-        >
+        <a href="https://qis.dez.tu-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="qis">
           <img class="settings-img invert" src="../../assets/icons/his.png" />
         </a>
         <a
@@ -91,7 +74,6 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1"
-          title="Matrix Chat"
           id="matrix"
         >
           <img class="settings-img" src="../../assets/icons/element.svg" />
@@ -101,19 +83,11 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1"
-          title="TU Mail"
           id="msx"
         >
           <img class="settings-img" src="../../assets/icons/owa.png" />
         </a>
-        <a
-          href="https://www.slub-dresden.de/"
-          target="_blank"
-          class="settings-section-icon"
-          style="flex: 1"
-          title="SLUB"
-          id="slub"
-        >
+        <a href="https://www.slub-dresden.de/" target="_blank" class="settings-section-icon" style="flex: 1" id="slub">
           <img class="settings-img" style="height: 21px; width: auto" src="../../assets/icons/slub.png" />
         </a>
         <a
@@ -121,7 +95,6 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1"
-          title="Datashare"
           id="cloud"
         >
           <img class="settings-img invert" src="../../assets/icons/cloud.png" />
@@ -131,7 +104,6 @@
           target="_blank"
           class="settings-section-icon"
           style="flex: 1"
-          title="GitLab"
           id="gitlab"
         >
           <img class="settings-img" src="../../assets/icons/gitlab.png" />
@@ -140,7 +112,6 @@
           href="https://zep.psych.tu-dresden.de/orsee/public/index.php"
           target="_blank"
           class="settings-section-icon"
-          title="orsee"
           style="flex: 1"
           id="orsee"
         >
@@ -150,7 +121,6 @@
           href="https://geoportal.sachsen.de/cps/karte.html?showmap=true"
           target="_blank"
           class="settings-section-icon"
-          title="Geoportal"
           style="flex: 1"
           id="geoportal"
         >
@@ -182,27 +152,18 @@
           href="https://navigator.tu-dresden.de/"
           target="_blank"
           class="settings-section-icon"
-          title="TU Campus-Navigator"
           style="flex: 1"
           id="tu-navi"
         >
           <img class="settings-img invert" style="height: 23px; width: auto" src="../../assets/icons/tu-navi.png" />
         </a>
-        <a
-          href="https://bahn.expert/"
-          target="_blank"
-          class="settings-section-icon"
-          title="bahn.expert (ehem. marudor.de)"
-          style="flex: 1"
-          id="marudor"
-        >
+        <a href="https://bahn.expert/" target="_blank" class="settings-section-icon" style="flex: 1" id="marudor">
           <img class="settings-img invert" style="height: 23px; width: auto" src="../../assets/icons/marudor.png" />
         </a>
         <a
           href="https://discord.gg/5H5RxTQS4s"
           target="_blank"
           class="settings-section-icon"
-          title="Informatik Discord"
           style="flex: 1"
           id="info_discord"
         >
@@ -212,7 +173,6 @@
           href="https://www.studentenwerk-dresden.de/mensen/speiseplan/"
           target="_blank"
           class="settings-section-icon"
-          title="Mensa"
           style="flex: 1"
           id="swdd"
         >
@@ -222,7 +182,6 @@
           href="https://tu-dresden.de/studium/im-studium/beratung-und-service/pruefungsaemter"
           target="_blank"
           class="settings-section-icon"
-          title="Prüfungsämter"
           style="flex: 1"
           id="pa"
         >
@@ -232,14 +191,7 @@
             src="../../assets/icons/Pruefungsamt.png"
           />
         </a>
-        <a
-          href="https://tex.zih.tu-dresden.de"
-          target="_blank"
-          class="settings-section-icon"
-          style="flex: 1"
-          title="tex"
-          id="tex"
-        >
+        <a href="https://tex.zih.tu-dresden.de" target="_blank" class="settings-section-icon" style="flex: 1" id="tex">
           <img class="settings-img invert" src="../../assets/icons/tex.png" />
         </a>
       </div>
@@ -252,7 +204,7 @@
           ></div>
         </div>
         <div class="settings-section" style="padding-left: 20px; padding-right: 20px; padding-bottom: 2px; gap: 8px">
-          <div class="settings-text" style="color: var(--color-text-tertiary)">AutoLogin</div>
+          <div id="autoLoginLabel" class="settings-text" style="color: var(--color-text-tertiary)"></div>
           <label class="switch">
             <input type="checkbox" id="switch" />
             <span class="slider round"></span>

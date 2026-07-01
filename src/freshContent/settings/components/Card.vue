@@ -2,7 +2,7 @@
   <div v-if="!inline" />
   <div tabindex="0" :class="['card', { 'card--inline': inline }]">
     <div class="card__body">
-      <slot>Body</slot>
+      <slot />
     </div>
   </div>
 </template>

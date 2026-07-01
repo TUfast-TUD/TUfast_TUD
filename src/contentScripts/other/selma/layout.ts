@@ -1,3 +1,4 @@
+const selmaLayoutStrings = globalThis.TUFAST_STRINGS.selma
 const currentView = document.location.pathname
 // Regex for extracting Programm name and arguments from a popup Script
 // This is used to get the URL which would be opened in a popup
@@ -22,10 +23,10 @@ function mapGrade(gradeElm: Element) {
 
   if (grade.includes('be')) {
     gradeElm.textContent = '✔'
-    gradeElm.setAttribute('title', 'Bestanden')
+    gradeElm.setAttribute('title', selmaLayoutStrings.passed)
   } else if (grade.includes('noch nicht gesetzt')) {
     gradeElm.textContent = '🕓'
-    gradeElm.setAttribute('title', 'Noch nicht gesetzt')
+    gradeElm.setAttribute('title', selmaLayoutStrings.notSet)
   }
 }
 
@@ -230,10 +231,10 @@ async function createCreditsBanner() {
   credits.style.marginRight = '0'
   credits.style.color = '#002557' // Selma theme color
   credits.id = 'TUfastCredits'
-  credits.innerHTML = `Table ${settingEnabled ? 'powered by' : 'disabled'}
+  credits.innerHTML = `${settingEnabled ? selmaLayoutStrings.creditsEnabled : selmaLayoutStrings.creditsDisabled}
     <img src="${imgUrl}" style="position:relative; right: 2px; height: 0.7lh; top: 0.15lh; padding-left: 0.1lh;">
     <a href="https://www.tu-fast.de" target="_blank">TUfast</a>
-    by <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>, <a href="https://github.com/t0mbrn" target="_blank">Tom</a>
+    ${selmaLayoutStrings.creditsBy} <a href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a>, <a href="https://github.com/t0mbrn" target="_blank">Tom</a>
     `
 
   const disableButton = document.createElement('button')
@@ -251,8 +252,8 @@ async function createCreditsBanner() {
   )
 
   // Tooltip
-  disableButton.title = 'Toggle the "ImproveSelma" feature and reload the page to apply the change.'
-  disableButton.textContent = settingEnabled ? 'Deactivate' : 'Activate'
+  disableButton.title = selmaLayoutStrings.toggleTitle
+  disableButton.textContent = settingEnabled ? selmaLayoutStrings.deactivate : selmaLayoutStrings.activate
   disableButton.onclick = async (event) => {
     event.preventDefault()
     await chrome.storage.local.set({ improveSelma: !settingEnabled })
@@ -330,7 +331,7 @@ function applyChanges() {
 
     // Remove the "gut/befriedigend" section
     const headRow = document.querySelector('thead>tr')!
-    headRow.children.item(3)!.textContent = 'Notenverteilung'
+    headRow.children.item(3)!.textContent = selmaLayoutStrings.distribution
     headRow.removeChild(headRow.children.item(4)!)
 
     const body = document.querySelector('tbody')!
@@ -421,13 +422,13 @@ function applyChanges() {
     headRow.removeChild(headRow.children.item(3)!)
 
     // Change table header
-    headRow.children.item(3)!.textContent = 'Versuche'
+    headRow.children.item(3)!.textContent = selmaLayoutStrings.tries
 
     // Add "Notenverteilung" header
     {
       headRow.children.item(3)!.removeAttribute('colspan')
       const newHeader = document.createElement('th')
-      newHeader.textContent = 'Notenverteilung'
+      newHeader.textContent = selmaLayoutStrings.distribution
       headRow.appendChild(newHeader)
     }
 
@@ -624,7 +625,7 @@ function applyChanges() {
     // Table head "Prüfungsleistung"
     document.querySelector('thead > tr > th#Name')!.textContent = ''
     // Table head "Termin"
-    document.querySelector('thead > tr > th#Date')!.textContent = 'Prüfungsleistung/Termin'
+    document.querySelector('thead > tr > th#Date')!.textContent = selmaLayoutStrings.examDate
   } else if (currentView.startsWith('/APP/STUDENT_RESULT/')) {
     // Study results > Grade predictor
     const body = document.querySelector('tbody')!

@@ -4,6 +4,7 @@ import { DataTable } from 'simple-datatables'
   // Currently this means there's the link located for switching the tables
   const tableInfoContainer = document.getElementById('TUfastTableInfo')
   if (!tableInfoContainer) return
+  const strings = tableInfoContainer.dataset
 
   // The old table and it's content
   const oldTable = document.getElementsByTagName('table')[2]
@@ -25,14 +26,15 @@ import { DataTable } from 'simple-datatables'
   // title element
   const title = document.createElement('h3')
   title.classList.add('table-header__title')
-  title.innerText = 'Deine Notenübersicht'
+  title.innerText = strings.overview || ''
 
   // flex div to display small color helpers
   const colorHelpers = document.createElement('div')
   colorHelpers.classList.add('table-header__helpers')
 
   // create small color helpers
-  for (const [i, descriptor] of ['Modul', 'Bestandene Prüfung', 'Verhauene Prüfung'].entries()) {
+  const descriptors = JSON.parse(strings.descriptors || '[]')
+  for (const [i, descriptor] of descriptors.entries()) {
     const colorHelper = document.createElement('div')
     colorHelper.classList.add('table-header__helper')
     colorHelper.classList.add(`table-header__helper--${i}`)

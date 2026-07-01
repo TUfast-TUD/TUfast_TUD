@@ -1,4 +1,5 @@
 import { getUserData } from './credentials'
+import { t } from '../i18n'
 
 // function for custom URIEncoding
 function customURIEncoding(str: string) {
@@ -151,9 +152,7 @@ export async function enableOWAFetch(): Promise<boolean> {
   if (granted) {
     await chrome.storage.local.set({ enabledOWAFetch: true })
   } else {
-    alert(
-      "TUfast braucht diese Berechtigung, um regelm\u00e4\u00dfig alle Mails abzurufen. Bitte dr\u00fccke auf 'Erlauben'."
-    )
+    alert(t('content.owa.permissionFetch'))
     await disableOWAFetch()
     return false
   }
@@ -235,8 +234,8 @@ export async function owaFetch() {
         'tuFastNewEmailNotification',
         {
           type: 'basic',
-          message: `Du hast ${numberOfUnreadMails} neue E-Mail${numberOfUnreadMails > 1 ? 's' : ''}`,
-          title: 'Neue E-Mails',
+          message: t('content.owa.newMailMessage', { count: numberOfUnreadMails }, numberOfUnreadMails),
+          title: t('content.owa.newMailTitle'),
           iconUrl: '/assets/icons/RocketIcons/default_128px.png'
         },
         (_id) => resolve(undefined)
@@ -255,9 +254,7 @@ export async function enableOWANotifications(): Promise<boolean> {
     await chrome.storage.local.set({ additionalNotificationOnNewMail: true })
   } else {
     await chrome.storage.local.set({ additionalNotificationOnNewMail: false })
-    alert(
-      "TUfast braucht diese Berechtigung, um dir zus\u00e4tzliche Benachrichtigungen zu senden. Bitte dr\u00fccke auf 'Erlauben'."
-    )
+    alert(t('content.owa.permissionNotification'))
     return false
   }
 

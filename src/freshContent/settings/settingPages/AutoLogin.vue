@@ -3,12 +3,11 @@
   <h3 class="onboarding-hide onboarding-hide-otp">{{ currentLogin.title }}</h3>
   <h3 class="onboarding-hide onboarding-hide-otp" style="margin-top: 4px">
     <span :class="`state ${currentLogin.state ? 'state--active' : 'state--inactive'}`"
-      >{{ currentLogin.state ? 'Aktuell gespeichert' : 'Keine Daten gespeichert' }}
+      >{{ currentLogin.state ? t('settings.pages.autoLogin.saved') : t('settings.pages.autoLogin.notSaved') }}
     </span>
   </h3>
   <p class="max-line p-margin onboarding-hide-otp" style="margin-bottom: 16px">
-    Dafür müssen deine {{ currentLogin.name }} Login-Daten sicher auf diesem PC gespeichert werden. Die Daten werden nur
-    lokal und verschlüsselt gespeichert. Du kannst sie jederzeit löschen.
+    {{ t('settings.pages.autoLogin.intro', { name: currentLogin.name }) }}
   </p>
 
   <div class="form onboarding-hide-otp">
@@ -20,7 +19,7 @@
         v-model="username"
         v-model:valid="usernameValid"
         :pattern="currentLogin.usernamePattern"
-        :placeholder="loginDataSaved ? 'GESPEICHERT' : currentLogin.usernamePlaceholder"
+        :placeholder="loginDataSaved ? t('common.saved') : currentLogin.usernamePlaceholder"
         :error-message="currentLogin.usernameError"
         :disabled="loginDataSaved"
         warn
@@ -34,7 +33,7 @@
         v-model="password"
         v-model:valid="passwordValid"
         :pattern="currentLogin.passwordPattern"
-        :placeholder="loginDataSaved ? 'GESPEICHERT' : currentLogin.passwordPlaceholder"
+        :placeholder="loginDataSaved ? t('common.saved') : currentLogin.passwordPlaceholder"
         type="password"
         :error-message="currentLogin.passwordError"
         :disabled="loginDataSaved"
@@ -42,12 +41,12 @@
     </div>
 
     <CustomButton
-      title="Login lokal speichern"
+      :title="t('settings.pages.autoLogin.saveLogin')"
       :disabled="!(passwordValid && usernameValid) || loginDataSaved"
       @click="submitSave"
     />
     <CustomButton
-      title="Login löschen"
+      :title="t('settings.pages.autoLogin.deleteLogin')"
       class="button--warn"
       style="min-width: 300px"
       :disabled="!loginDataSaved"
@@ -56,16 +55,17 @@
   </div>
 
   <div v-if="currentLogin2FA" class="onboarding-hide">
-    <h3 class="card-body-title onboarding-hide-otp" style="margin-top: 4rem">Zwei-Faktor-Authentifizierung (2FA)</h3>
+    <h3 class="card-body-title onboarding-hide-otp" style="margin-top: 4rem">
+      {{ t('settings.pages.autoLogin.twoFactorTitle') }}
+    </h3>
     <h3 class="onboarding-hide onboarding-hide-otp" style="margin-top: 4px">
       <span :class="`state ${totpSecretSaved ? 'state--active' : 'state--inactive'}`"
-        >{{ totpSecretSaved ? 'Aktuell gespeichert' : 'Keine Daten gespeichert' }}
+        >{{ totpSecretSaved ? t('settings.pages.autoLogin.saved') : t('settings.pages.autoLogin.notSaved') }}
       </span>
     </h3>
 
     <p class="max-line p-margin">
-      Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen TOTP Secret-Key speichern. Der Key ist
-      Base32 enkodiert und sieht zum Beispiel so aus:
+      {{ t('settings.pages.autoLogin.twoFactorHelp') }}
       <span
         style="
           margin-top: 8px;
@@ -77,8 +77,9 @@
         >MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP</span
       >
     </p>
-    <a href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md" target="_blank"
-      >Hier findest du mehr Informationen und eine vollständige Anleitung zur Einrichtung. ↗</a
+    <a href="https://github.com/TUfast-TUD/TUfast_TUD/blob/main/docs/2FA.md" target="_blank">{{
+      t('settings.pages.autoLogin.twoFactorLink')
+    }}</a
     ><br /><br />
     <div class="form">
       <div>
@@ -90,18 +91,18 @@
         v-model="totpSecret"
         v-model:valid="totpSecretValid"
         :pattern="currentLogin2FA.totpSecretPattern"
-        :placeholder="totpSecretSaved ? 'GESPEICHERT' : currentLogin2FA.totpSecretPlaceholder"
+        :placeholder="totpSecretSaved ? t('common.saved') : currentLogin2FA.totpSecretPlaceholder"
         :error-message="currentLogin2FA.totpSecretError"
         :disabled="totpSecretSaved"
         warn
       />
       <CustomButton
-        title="Key lokal speichern"
+        :title="t('settings.pages.autoLogin.saveKey')"
         :disabled="!totpSecretValid || totpSecretSaved"
         @click="submitSaveTotp"
       />
       <CustomButton
-        title="Key löschen"
+        :title="t('settings.pages.autoLogin.deleteKey')"
         class="button--warn"
         style="min-width: 300px"
         :disabled="!totpSecretSaved"
@@ -113,6 +114,7 @@
 
 <script lang="ts">
 import { ref, defineComponent, watchEffect, computed } from 'vue'
+import { t } from '../../../i18n'
 
 // components
 import Input from '../components/Input.vue'
@@ -254,7 +256,8 @@ export default defineComponent({
       submitSave,
       submitSaveTotp,
       submitDeleteLogin,
-      submitDeleteTotp
+      submitDeleteTotp,
+      t
     }
   }
 })

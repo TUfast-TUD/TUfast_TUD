@@ -1,13 +1,13 @@
 <template>
   <div class="statistics" style="vertical-align: middle">
-    <span class="statistics__pre-text txt-bold">Bereits gespart:</span>
+    <span class="statistics__pre-text txt-bold">{{ t('settings.statistics.saved') }}</span>
     <div class="statistics__box">
       <div class="statistics__box-icon">
         <IconClick />
       </div>
       <div class="statistics__box-text statistics__clicks">
         <span class="txt-bold">{{ counter }}</span>
-        <span class="txt-bold">{{ counter === 1 ? ' Klick' : ' Klicks' }}</span>
+        <span class="txt-bold"> {{ t('settings.statistics.clicks', {}, counter) }}</span>
       </div>
     </div>
     <div class="statistics__box">
@@ -15,8 +15,8 @@
         <IconStopwatch />
       </div>
       <div class="statistics__box-text statistics__minutes">
-        <span class="txt-bold">{{ time.getMinutes(counter) }}m </span>
-        <span class="txt-bold">{{ time.getSeconds(counter) }}s</span>
+        <span class="txt-bold">{{ t('settings.statistics.minutes', { count: time.getMinutes(counter) }) }} </span>
+        <span class="txt-bold">{{ t('settings.statistics.seconds', { count: time.getSeconds(counter) }) }}</span>
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@
 import { defineComponent, ref } from 'vue'
 import { time } from '../utilities'
 import { useChrome } from '../composables/chrome'
+import { t } from '../../../i18n'
 
 export default defineComponent({
   setup() {
@@ -38,7 +39,8 @@ export default defineComponent({
 
     return {
       counter,
-      time
+      time,
+      t
     }
   }
 })

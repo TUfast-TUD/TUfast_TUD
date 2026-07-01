@@ -1,12 +1,11 @@
 import studiengangConfig from '../studies.json'
+import { t } from '../../i18n'
 import '../../styles/popup.scss'
 import '../../styles/components/switch.scss'
 import '../../styles/components/share.scss'
 
-const shareHTML =
-  '<div class="content"><h1>Hilf deinen Mitstudierenden <br /><img class="invert" src="../../assets/images/tufast48.png" style="height:1.5em;vertical-align:middle;" /> TUfast zu entdecken</h1><p class="subtitle">und <a href="#" id="rockets_link" style="color:var(--color-text-link);text-decoration:underline;cursor:pointer;">sammle coole Raketen</a>!</p><div class="share-section"><div class="share-title">Teilen mit</div><div class="share-links"><a class="share-link" href="mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studierenden%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90" target="_blank"><img src="../../assets/icons/gmail.png" />E-Mail</a><a class="share-link" href="https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studierenden!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90" target="_blank"><img src="../../assets/icons/wa2.png" />WhatsApp</a><a class="share-link" href="https://www.tu-fast.de" target="_blank">www.tu-fast.de</a></div></div><div class="footer">Gemacht mit 💙 von Studierenden · <a href="https://github.com/TUfast-TUD/TUfast_TUD" target="_blank">GitHub</a> · <a href="mailto:frage@tu-fast.de?subject=Feedback%20TUfast" target="_blank">Kontakt</a></div></div>'
-const bananaHTML =
-  '<a tabindex="-1" href="https://www.buymeacoffee.com/olihausdoerfer" target="_blank" style = "position: fixed; bottom: 70px; right: 26px;" > <img tabindex="-1" style="width: 160px;"src="https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>'
+const shareHTML = t('popup.shareHtml')
+const bananaHTML = t('popup.bananaHtml')
 
 const starRatingSettings = {
   // initial rating value
@@ -40,6 +39,8 @@ const dropdownUpdateId = '56tzoguhjk'
 
 // TODO
 window.onload = async () => {
+  setStaticText()
+
   // get things from storage
   // Promisified until usage of Manifest V3
   const result = await new Promise((resolve) =>
@@ -72,7 +73,7 @@ window.onload = async () => {
   }, 500)
 
   // display courses
-  const dashboardDisplay = result.dashboardDisplay
+  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
   const courseList = await loadCourses(dashboardDisplay)
   const htmlList = document.getElementsByClassName('list')[0]
   displayCourseList(
@@ -101,7 +102,7 @@ window.onload = async () => {
   // display saved clicks
   const time = clicksToTime(result.savedClickCounter || 0)
   document.getElementById('saved_clicks').innerHTML =
-    `<text>${result.savedClickCounter || 0} Klicks, ${time} gespart</text>`
+    `<text>${t('popup.savedClicks', { clicks: result.savedClickCounter || 0, time })}</text>`
 
   // display banana at each end of semester for two weeks!
   let bananaTime = false
@@ -114,7 +115,7 @@ window.onload = async () => {
   }
 
   // exclusive style adjustments
-  customizeForStudiengang(result.studiengang)
+  customizeForStudiengang(result.studiengang || 'general')
 
   // assign switch function
   document.getElementById('switch').addEventListener('change', saveEnabled)
@@ -216,7 +217,7 @@ function addDropdownOptions() {
 
     const listTxt = document.createElement('text')
     listTxt.style = 'flex:10'
-    listTxt.innerHTML = studiengangConfig[key].name
+    listTxt.innerHTML = facultyName(key, studiengangConfig[key].name)
 
     listEntry.appendChild(listTxt)
 
@@ -235,10 +236,50 @@ function addDropdownOptions() {
   })
 }
 
+function setStaticText() {
+  document.getElementById('popupHeadline').textContent = t('popup.title')
+  document.getElementById('searchListInput').placeholder = t('popup.searchPlaceholder')
+  document.getElementById('autoLoginLabel').textContent = t('popup.autoLogin')
+
+  const iconTitleIds = {
+    selma: 'selma',
+    eportal: 'eportal',
+    moodle: 'moodle',
+    opal: 'opal',
+    qis: 'qis',
+    matrix: 'matrix',
+    msx: 'msx',
+    slub: 'slub',
+    cloud: 'cloud',
+    gitlab: 'gitlab',
+    orsee: 'orsee',
+    geoportal: 'geoportal',
+    'tu-navi': 'tuNavi',
+    marudor: 'marudor',
+    info_discord: 'infoDiscord',
+    swdd: 'swdd',
+    pa: 'pa',
+    tex: 'tex'
+  }
+
+  for (const [id, key] of Object.entries(iconTitleIds)) {
+    const el = document.getElementById(id)
+    if (el) el.title = t(`popup.iconTitles.${key}`)
+  }
+}
+
+function facultyName(key, fallback) {
+  const nameKey = `settings.faculty.names.${key}`
+  const value = t(nameKey)
+  return value === nameKey ? fallback : value
+}
+
 // dashboard adjustments for studiengang
 function customizeForStudiengang(studiengang) {
+  const config = studiengangConfig[studiengang] || studiengangConfig.general
+
   // set footer icons
-  if (studiengangConfig[studiengang].footer_icons_display) {
+  if (config.footer_icons_display) {
     // set visibility for all icons to none
     const icons = document.getElementById('settings-footer-bar-icons').children
     for (let i = 0; i < icons.length; i++) {
@@ -246,24 +287,24 @@ function customizeForStudiengang(studiengang) {
     }
 
     // set visible icons
-    studiengangConfig[studiengang].footer_icons_display.forEach((element) => {
+    config.footer_icons_display.forEach((element) => {
       const icon = document.getElementById(element)
       if (icon) icon.style.display = 'flex'
     })
   }
 
   // set footer icon links
-  if (studiengangConfig[studiengang].footer_icons_links) {
-    Object.keys(studiengangConfig[studiengang].footer_icons_links).forEach((key) => {
-      document.getElementById(key).href = studiengangConfig[studiengang].footer_icons_links[key]
+  if (config.footer_icons_links) {
+    Object.keys(config.footer_icons_links).forEach((key) => {
+      document.getElementById(key).href = config.footer_icons_links[key]
     })
   }
 
   // set fsr icon
-  if (studiengangConfig[studiengang].fsr_icon) {
-    document.getElementById('fsr_icon').src = studiengangConfig[studiengang].fsr_icon
-    document.getElementById('fsr_icon').style = studiengangConfig[studiengang].fsr_icon_dashboard_style
-    if (studiengangConfig[studiengang].invert_icon_dark_theme) {
+  if (config.fsr_icon) {
+    document.getElementById('fsr_icon').src = config.fsr_icon
+    document.getElementById('fsr_icon').style = config.fsr_icon_dashboard_style
+    if (config.invert_icon_dark_theme) {
       document.getElementById('fsr_icon').className += ' invert'
     }
   } else {
@@ -271,32 +312,32 @@ function customizeForStudiengang(studiengang) {
   }
 
   // set fsr icon 2
-  if (studiengangConfig[studiengang].fsr_icon_2) {
-    document.getElementById('fsr_icon_2').src = studiengangConfig[studiengang].fsr_icon_2
-    document.getElementById('fsr_icon_2').style = studiengangConfig[studiengang].fsr_icon_dashboard_style_2
+  if (config.fsr_icon_2) {
+    document.getElementById('fsr_icon_2').src = config.fsr_icon_2
+    document.getElementById('fsr_icon_2').style = config.fsr_icon_dashboard_style_2
   } else {
     document.getElementById('fsr_icon_2').style.display = 'none'
   }
 
   // set fsr link
-  if (studiengangConfig[studiengang].fsr_link) {
-    document.getElementById('fsr_link').href = studiengangConfig[studiengang].fsr_link
+  if (config.fsr_link) {
+    document.getElementById('fsr_link').href = config.fsr_link
     document.getElementById('fsr_link').style.display = 'unset'
   } else {
     document.getElementById('fsr_link').style.display = 'none'
   }
 
   // set fsr link 2
-  if (studiengangConfig[studiengang].fsr_link_2) {
-    document.getElementById('fsr_link_2').href = studiengangConfig[studiengang].fsr_link_2
+  if (config.fsr_link_2) {
+    document.getElementById('fsr_link_2').href = config.fsr_link_2
     document.getElementById('fsr_link_2').style.display = 'unset'
   } else {
     document.getElementById('fsr_link_2').style.display = 'none'
   }
 
   // set pa link
-  if (studiengangConfig[studiengang].pa_link) {
-    document.getElementById('pa').href = studiengangConfig[studiengang].pa_link
+  if (config.pa_link) {
+    document.getElementById('pa').href = config.pa_link
   }
 }
 
@@ -350,7 +391,7 @@ function listSearchFunction() {
   }
 
   // always show "Klicke hier, um die Kursliste manuell zu aktualisieren..."
-  if (listEntries[listEntries.length - 1].innerHTML.includes('aktualisieren')) {
+  if (listEntries.length && listEntries[listEntries.length - 1].innerHTML.includes(t('popup.updateCourseList'))) {
     listEntries[listEntries.length - 1].style.display = 'block'
   }
 }
@@ -371,12 +412,12 @@ function displayCourseList(
   switch (type) {
     case 'favoriten':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites'
-      name = 'Klicke, um deine OPAL-Kurse zu importieren'
+      name = t('popup.importOpalCourses')
       imgSrc = '../../assets/icons/star.png'
       break
     case 'meine_kurse':
       link = 'https://bildungsportal.sachsen.de/opal/auth/resource/courses'
-      name = 'Klicke, um deine OPAL-Kurse zu importieren'
+      name = t('popup.importOpalCourses')
       imgSrc = '../../assets/icons/CoursesOpalIcon.png'
       break
     default:
@@ -386,9 +427,7 @@ function displayCourseList(
   // save reload button later, so it appears later in the list
   const reloadButton = {
     name:
-      courseList === undefined || courseList.length === 0 || courseList === false
-        ? name
-        : 'Diese Kursliste jetzt aktualisieren...',
+      courseList === undefined || courseList.length === 0 || courseList === false ? name : t('popup.updateCourseList'),
     link,
     img: '../../assets/icons/reload.png'
   }
@@ -422,8 +461,7 @@ function displayCourseList(
     introRating.classList.add('list-entry-wrapper')
     introRatingText.classList.add('list-intro')
 
-    introRatingText.innerHTML =
-      "<b>Wir suchen den besten Kurs an der TU Dresden. Bewerte jetzt deine Kurse mit 1-5 Sternen!</b> Deine Bewertung ist zu 100% völlig anonym. Die Ergebnisse der Abstimmung veröffentlichen wir anschließend. Details und die Erweiterung zur Datenschutzerklärung gibts <a target='_blank' href='https://tu-fast.de/datenschutz'>hier</a>. <a id='intro' href='#'>Schließen</a>."
+    introRatingText.innerHTML = t('popup.introRating')
     introRating.appendChild(introRatingText)
     htmlList.appendChild(introRating)
   }
@@ -436,8 +474,7 @@ function displayCourseList(
     outroRating.classList.add('list-entry-wrapper')
     outroRatingText.classList.add('list-outro')
 
-    outroRatingText.innerHTML =
-      "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Damit k&ouml;nnen wir die Lehre an der TU verbessern! Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>."
+    outroRatingText.innerHTML = t('popup.outroRating')
     outroRating.appendChild(outroRatingText)
     htmlList.appendChild(outroRating)
   }
@@ -450,8 +487,7 @@ function displayCourseList(
     msg1.classList.add('list-entry-wrapper')
     msg1Text.classList.add('list-outro')
 
-    msg1Text.innerHTML =
-      "<b>Tipp für Erstis: Erfahre alles wichtige rund um dein Studium mit gOPAL - dem mobilen Studienassistenzsystem! Hier <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL öffnen.</a> <a id='msg1' href='#'>Schließen</a>."
+    msg1Text.innerHTML = t('popup.gopalBanner')
     msg1.appendChild(msg1Text)
     htmlList.appendChild(msg1)
   }
@@ -480,7 +516,7 @@ function displayCourseList(
     confirmEntryLink.setAttribute('courseRef', element.name)
     confirmEntryLink.style.fontSize = '15px'
     confirmEntryLink.href = '#'
-    confirmEntryLink.innerHTML = "Fertig <text style='font-size:14px'>✅</text>"
+    confirmEntryLink.innerHTML = t('popup.ratingDone')
     confirmEntryLink.onclick = sendRating
     confirmEntry.appendChild(confirmEntryLink)
 
@@ -536,11 +572,7 @@ function displayCourseList(
       isRated = ratedCourses.includes(element.name)
     }
     if (
-      !(
-        element.name === 'Diese Kursliste jetzt aktualisieren...' ||
-        element.name === 'Klicke, um deine OPAL-Kurse zu importieren' ||
-        isRated
-      ) &&
+      !(element.name === t('popup.updateCourseList') || element.name === t('popup.importOpalCourses') || isRated) &&
       ratingEnabledFlag
     ) {
       listEntrywrapper.appendChild(rateEntryWrapper)
@@ -566,7 +598,7 @@ function displayCourseList(
       openAllCoursesEntry.className += ' disabled'
       openAllCoursesEntry.style.opacity = 0.5
       openAllCoursesEntry.style.pointerEvents = 'none'
-      openAllCoursesEntry.title = 'Deaktiviert: mehr als 25 Kurse'
+      openAllCoursesEntry.title = t('popup.tooManyCourses')
     } else {
       openAllCoursesEntry.onclick = openAllCourses
     }
@@ -576,10 +608,10 @@ function displayCourseList(
 
     // Change text and icon based on current view (type)
     if (type === 'favoriten') {
-      openAllCoursesText.innerHTML = 'Alle Favoriten öffnen'
+      openAllCoursesText.innerHTML = t('popup.openAllFavorites')
       openAllCoursesIcon.src = '../../assets/icons/starAll.png'
     } else {
-      openAllCoursesText.innerHTML = 'Alle Kurse öffnen'
+      openAllCoursesText.innerHTML = t('popup.openAllCourses')
       openAllCoursesIcon.src = '../../assets/icons/CoursesOpalIconAll.png'
     }
 
@@ -659,10 +691,10 @@ function displayCourseList(
   listEntry.appendChild(listImg)
 
   if (type === 'favoriten') {
-    listText.innerHTML = 'Wechsel zu "Meine Kurse" ... '
+    listText.innerHTML = t('popup.switchToCourses')
   }
   if (type === 'meine_kurse') {
-    listText.innerHTML = 'Wechsel zu "Meine Favoriten" ...'
+    listText.innerHTML = t('popup.switchToFavorites')
   }
 
   listEntry.appendChild(listText)
@@ -672,10 +704,11 @@ function displayCourseList(
 async function switchCoursesToShow() {
   // Promisified until usage of Manifest V3
   const result = await new Promise((resolve) => chrome.storage.local.get(['dashboardDisplay'], resolve))
-  if (result.dashboardDisplay === 'meine_kurse') {
+  const dashboardDisplay = result.dashboardDisplay || 'favoriten'
+  if (dashboardDisplay === 'meine_kurse') {
     await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'favoriten' }, resolve))
   }
-  if (result.dashboardDisplay === 'favoriten') {
+  if (dashboardDisplay === 'favoriten') {
     await new Promise((resolve) => chrome.storage.local.set({ dashboardDisplay: 'meine_kurse' }, resolve))
   }
   location.reload()
@@ -722,7 +755,7 @@ async function loadCourses(type) {
   // Promisified until usage of Manifest V3
   const data = await new Promise((resolve) => chrome.storage.local.get(['favoriten', 'meine_kurse'], resolve))
   try {
-    return JSON.parse(data[type])
+    return JSON.parse(data[type || 'favoriten'])
   } catch {
     return false
   }
@@ -747,7 +780,7 @@ async function sendRating() {
 
   // rating cannot be zero
   if (rating === '0.0') {
-    alert('Bitte bewerte den Kurs mit Sternen, bevor du dein Rating abgibst!')
+    alert(t('popup.rateBeforeSubmit'))
     return
   }
 
