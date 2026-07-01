@@ -1,6 +1,6 @@
 {
   "name": "tufast_tud",
-  "version": "8.0.3.3",
+  "version": "8.0.3.4",
   "description": "Browser Extension for higher productivity with TU Dresden IT-Services 🚀",
   "main": "index.js",
   "scripts": {
