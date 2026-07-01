@@ -6,7 +6,6 @@ import { fileURLToPath } from 'node:url'
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const buildDir = path.join(rootDir, 'build')
 const stringsFile = 'i18n/contentScriptStrings.js'
-const requiredContentSections = ['opal', 'selma', 'hisqis', 'otp']
 
 class BuildCheckError extends Error {
   constructor(message) {
@@ -60,6 +59,18 @@ function runContentScriptStrings(locale) {
   return sandbox.TUFAST_STRINGS
 }
 
+function collectContentSections() {
+  const sections = new Set()
+  for (const filePath of walkFiles(path.join(rootDir, 'src')).filter((sourcePath) =>
+    /\.(js|ts|vue)$/.test(sourcePath)
+  )) {
+    const source = fs.readFileSync(filePath, 'utf8')
+    for (const match of source.matchAll(/\bTUFAST_STRINGS\.([A-Za-z_$][\w$]*)/g)) sections.add(match[1])
+    for (const match of source.matchAll(/\bTUFAST_STRINGS\[['"]([^'"]+)['"]\]/g)) sections.add(match[1])
+  }
+  return [...sections].sort()
+}
+
 const manifest = readJson(path.join(buildDir, 'manifest.json'))
 const defaultLocale = manifest.default_locale
 if (!defaultLocale) throw new BuildCheckError('manifest.json has no default_locale')
@@ -75,6 +86,7 @@ for (const key of collectMsgKeys(manifest)) {
 const germanStrings = runContentScriptStrings('de-DE')
 const englishStrings = runContentScriptStrings('en-US')
 const fallbackStrings = runContentScriptStrings('zz-ZZ')
+const requiredContentSections = collectContentSections()
 
 for (const [locale, strings] of [
   ['de-DE', germanStrings],

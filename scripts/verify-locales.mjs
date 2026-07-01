@@ -17,6 +17,13 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'))
 }
 
+function walkFiles(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(dir, entry.name)
+    return entry.isDirectory() ? walkFiles(fullPath) : [fullPath]
+  })
+}
+
 function valueKind(value) {
   if (Array.isArray(value)) return 'array'
   if (value && typeof value === 'object') return 'object'
@@ -74,6 +81,23 @@ function compareValue(locale, pathName, actual, expected) {
   }
 }
 
+function getMessage(key, messages) {
+  return key.split('.').reduce((value, part) => value?.[part], messages)
+}
+
+function collectTranslationKeys() {
+  return walkFiles(path.join(rootDir, 'src'))
+    .filter((filePath) => /\.(js|ts|vue)$/.test(filePath))
+    .flatMap((filePath) => {
+      const source = fs.readFileSync(filePath, 'utf8')
+      return [...source.matchAll(/\bt\(\s*(['"`])([^'"`$]+)\1/g)].map((match) => ({
+        key: match[2],
+        filePath,
+        line: source.slice(0, match.index).split(/\r\n|\r|\n/).length
+      }))
+    })
+}
+
 const localeFiles = fs
   .readdirSync(localeDir)
   .filter((fileName) => fileName.endsWith('.json'))
@@ -90,6 +114,12 @@ const fallbackMessages = locales[fallbackLocale]
 
 for (const [locale, messages] of Object.entries(locales)) {
   compareValue(locale, '', messages, fallbackMessages)
+}
+
+for (const { key, filePath, line } of collectTranslationKeys()) {
+  if (typeof getMessage(key, fallbackMessages) !== 'string') {
+    throw new LocaleCheckError(`${path.relative(rootDir, filePath)}:${line} uses missing key ${key}`)
+  }
 }
 
 console.log(`Locale check passed for ${Object.keys(locales).join(', ')}.`)

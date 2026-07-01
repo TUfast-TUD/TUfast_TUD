@@ -37,7 +37,7 @@ After developing:
 
 ## Strings and locales
 
-User-facing strings live in `src/i18n/locales/*.json`. German (`de.json`) is the complete fallback locale and the key source of truth. New locale files must match the German key structure:
+User-facing strings live in `src/i18n/locales/*.json`. These JSON files are the source of truth. German (`de.json`) is the complete fallback locale and the key source of truth. New locale files must match the German key structure:
 
 ```json
 {
@@ -59,7 +59,9 @@ Use `t('path.to.string')` for Vue, popup, background, and shared module text. Ma
 
 ESLint fails on raw text in Vue templates. If you add user-facing copy, add it to every locale instead of writing it inline.
 
-`npm run verify:locales` checks that every locale has the same keys, value shapes, interpolation placeholders, and plural segments as German. `npm run verify:build` must run after `npm run build`; it checks generated manifest messages and content-script string injection. `npm run test` runs both checks in CI order.
+To add a language, copy `de.json` to `<language>.json`, translate the values, keep every key unchanged, and run `npm run test`. The normal Prettier check walks `src`, including locale JSON files. Do not edit generated `build/_locales` files.
+
+`npm run verify:locales` checks that every locale has the same keys, value shapes, interpolation placeholders, and plural segments as German. It also checks literal `t('path.to.string')` calls in source files. `npm run verify:build` must run after `npm run build`; it checks generated manifest messages and content-script string injection. `npm run test` runs both checks in CI order.
 
 Do not import extension modules directly from classic manifest-loaded content scripts.
 
