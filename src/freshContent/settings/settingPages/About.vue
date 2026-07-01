@@ -38,7 +38,7 @@
   </p>
 
   <p class="p-margin max-line txt-help">
-    <span class="txt-help txt-bold">TUfast TU Dresden – {{ version }}</span
+    <span class="txt-help txt-bold">{{ t('manifest.extensionName') }} - {{ version }}</span
     ><br />
     {{ t('settings.pages.about.developedBy') }}<br />
     <a class="dev-link" href="https://github.com/A-K-O-R-A" target="_blank">AKORA</a><br />

@@ -15,8 +15,8 @@
         <IconStopwatch />
       </div>
       <div class="statistics__box-text statistics__minutes">
-        <span class="txt-bold">{{ time.getMinutes(counter) }}m </span>
-        <span class="txt-bold">{{ time.getSeconds(counter) }}s</span>
+        <span class="txt-bold">{{ t('settings.statistics.minutes', { count: time.getMinutes(counter) }) }} </span>
+        <span class="txt-bold">{{ t('settings.statistics.seconds', { count: time.getSeconds(counter) }) }}</span>
       </div>
     </div>
   </div>

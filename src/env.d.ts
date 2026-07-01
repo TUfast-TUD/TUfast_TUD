@@ -1,6 +1,6 @@
 /* eslint-disable no-var, no-unused-vars */
 
-type TufastContentStrings = typeof import('./i18n/locales/de').de.content
+type TufastContentStrings = typeof import('./i18n/locales/de.json').default.content
 
 declare global {
   var TUFAST_STRINGS: TufastContentStrings

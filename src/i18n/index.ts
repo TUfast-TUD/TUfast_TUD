@@ -1,9 +1,9 @@
-import de from './locales/de'
+import de from './locales/de.json'
 
 type LocaleMessages = typeof de
 
 // German is the typed fallback; every extra locale is discovered from this folder.
-const localeModules = import.meta.glob<LocaleMessages>('./locales/*.ts', { eager: true, import: 'default' })
+const localeModules = import.meta.glob<LocaleMessages>('./locales/*.json', { eager: true, import: 'default' })
 
 export type Locale = string
 export type LocaleSetting = 'auto' | Locale
@@ -12,7 +12,10 @@ export const fallbackLocale: Locale = 'de'
 export const defaultLocaleSetting: LocaleSetting = 'auto'
 
 export const messages = Object.fromEntries(
-  Object.entries(localeModules).map(([path, message]) => [path.match(/\/([^/]+)\.ts$/)?.[1] || fallbackLocale, message])
+  Object.entries(localeModules).map(([path, message]) => [
+    path.match(/\/([^/]+)\.json$/)?.[1] || fallbackLocale,
+    message
+  ])
 ) as Record<Locale, LocaleMessages>
 
 let currentLocaleSetting: LocaleSetting = readStoredLocaleSetting()

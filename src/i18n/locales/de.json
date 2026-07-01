@@ -1,0 +1,354 @@
+{
+  "localeName": "Deutsch",
+  "manifest": {
+    "extensionName": "TUfast TU Dresden",
+    "extensionDescription": "Das Produktivitäts-Tool für TU Dresden Studierende 🚀",
+    "commandOpenOpal": "OPAL öffnen",
+    "commandOpenOwa": "Mail (OWA) öffnen"
+  },
+  "common": {
+    "close": "Schließen",
+    "edit": "Bearbeiten",
+    "active": "AKTIVIERT",
+    "inactive": "DEAKTIVIERT",
+    "saved": "GESPEICHERT",
+    "website": "Website",
+    "team": "Team",
+    "github": "GitHub",
+    "supportUs": "Unterstütze uns",
+    "privacy": "Datenschutz"
+  },
+  "settings": {
+    "documentTitle": "TUfast Einstellungen",
+    "location": "Einstellungen",
+    "personalization": "Personalisierung",
+    "functions": "Funktionen",
+    "information": "Informationen",
+    "statistics": {
+      "saved": "Bereits gespart:",
+      "clicks": " Klick | Klicks",
+      "minutes": "{count}m",
+      "seconds": "{count}s"
+    },
+    "tiles": {
+      "autoLogin": "Automatisches Anmelden",
+      "email": "E-Mail Benachrichtigungen",
+      "improveOpal": "OPAL verbessern",
+      "improveSelma": "Selma verbessern",
+      "searchEngines": "Suchmaschinen Superkräfte",
+      "shortcuts": "Shortcuts",
+      "rockets": "Raketen sammeln",
+      "about": "Über das Projekt",
+      "contact": "Hilfe & Kontakt",
+      "faculty": "Meine Fakultät",
+      "language": "Sprache"
+    },
+    "pages": {
+      "email": {
+        "needsLogin": "Du musst \"Automatisches Anmelden\" mit deinem Login einrichten, um diese Funktion nutzen zu können.",
+        "title": "Erhalte Benachrichtigungen, wenn du neue E-Mails erhältst",
+        "fetchToggle": "Anzahl ungelesener Mails als Notification Bubble",
+        "notificationToggle": "Pop-Up Benachrichtigung beim Erhalt einer neuen Mail",
+        "permission": "Das Abrufen der Anzahl deiner ungelesenen Mails kann bis zu 5 Minuten dauern. Weil TUfast dafür eine spezielle Berechtigung braucht, drücke bitte auf „Erlauben“ im folgenden Pop-Up.",
+        "help": "Für diese Funktion ruft TUfast die Anzahl deiner ungelesenen Mails vom Mail-Server der TU Dresden ab. Zum Anmelden werden deine Login-Daten verschlüsselt übertragen. Diese Verbindung ist sicher. Es funktioniert genauso, als würdest du deine Mails über den Browser abrufen. Die Benachrichtigungen kommen über die Windows-API. Beachte, dass du unter Windows die entsprechende Funktion aktiviert haben musst."
+      },
+      "improveOpal": {
+        "title": "Optimiere den Umgang mit PDF und Textdokumenten in OPAL",
+        "inline": "PDF- und Textdokumente direkt im Browser öffnen, anstatt sie herunterzuladen",
+        "newTab": "PDF- und Textdokumente in einem neuen Tab öffnen (empfohlen)",
+        "permission": "Damit die Einstellungen wirksam werden, musst du OPAL einmal aktualisieren. Möglicherweise braucht TUfast eine spezielle Berechtigung. Drücke bitte auf „Erlauben“ im folgenden Pop-Up.",
+        "firefoxWarning": "Diese Funktion funktioniert im Firefox Browser leider nicht stabil."
+      },
+      "improveSelma": {
+        "title": "Optimiere Layout und Notenverteilungen in Selma",
+        "toggle": "Verbessertes Layout, Notenverteilung, Versuchstracker hinzufügen",
+        "help": "Dieses Feature fügt Graphen für die Notenverteilungen und Versuchstracker in selma hinzu. Zusätzlich wird das Layout und Design angepasst, um benutzerfreundlicher zu sein."
+      },
+      "rockets": {
+        "title": "Schalte neue Raketen frei und gestalte damit OPAL und deinen Browser!",
+        "help": "Damit unterstützt du auch das TUfast-Projekt und das hilft uns sehr 🙂"
+      },
+      "searchEngines": {
+        "title": "Kurzbefehle in Suchmaschinen öffnen OPAL und weitere Tools direkt",
+        "toggle": "Suchmaschinen Superkräfte aktivieren",
+        "help": "Gib z.B. \"tumail\" in der Google-Suche ein, um direkt zur Outlook-Web-App zu kommen. Es werden die meisten Suchmaschinen unterstützt!"
+      },
+      "shortcuts": {
+        "title": "Öffne OPAL und weitere Tools mit Tastenkombinationen",
+        "activeByDefault": "Standardmäßig sind aktiv:",
+        "dashboard": "Dashboard öffnen",
+        "opal": "OPAL öffnen",
+        "mail": "Mail (OWA) öffnen"
+      },
+      "autoLogin": {
+        "saved": "Aktuell gespeichert",
+        "notSaved": "Keine Daten gespeichert",
+        "intro": "Dafür müssen deine {name} Login-Daten sicher auf diesem PC gespeichert werden. Die Daten werden nur lokal und verschlüsselt gespeichert. Du kannst sie jederzeit löschen.",
+        "saveLogin": "Login lokal speichern",
+        "deleteLogin": "Login löschen",
+        "twoFactorTitle": "Zwei-Faktor-Authentifizierung (2FA)",
+        "twoFactorHelp": "Das Automatische Anmelden unterstützt auch 2FA. Hier kannst du dafür deinen TOTP Secret-Key speichern. Der Key ist Base32 enkodiert und sieht zum Beispiel so aus:",
+        "twoFactorLink": "Hier findest du mehr Informationen und eine vollständige Anleitung zur Einrichtung. ↗",
+        "saveKey": "Key lokal speichern",
+        "deleteKey": "Key löschen"
+      },
+      "about": {
+        "title": "Warum muss Online Studieren so kompliziert sein?",
+        "intro1": "An der TU Dresden jonglieren wir täglich mit OPAL, Selma, Hisqis oder Outlook und verlieren dabei Zeit und Nerven. Also haben wir uns gefragt: Geht das nicht einfacher? Aus dieser Frage entstand TUfast. Zuerst als kleines Nebenprojekt im Studium, dann als wachsende Plattform, die schnell immer mehr Studierende erreichte. Was mit ein paar Zeilen Code begann, wurde zu einer gemeinsamen Mission: den digitalen Studienalltag an der TU Dresden leichter zu machen.",
+        "intro2": "Heute ist TUfast ein Open-Source-Projekt von Studierenden und Alumni der TU Dresden. Es wird von über 4000 Studierenden an der TU Dresden genutzt. Alle die am Projekt mitwirken, tun das ehrenamtlich und mit dem Wunsch anderen Studierenden, die Online Lehre ein Stück leichter zu machen.",
+        "supportersStart": "Unterstützt wird das Projekt unter anderem vom",
+        "supportersEnd": "der Informatik-Fakultät, mehreren Fachschaftsräten der TU Dresden sowie netten Sponsoren und Sponsorinnen auf",
+        "nextStep": "Am Ziel sind wir noch nicht: Unser nächster Schritt ist es, TUfast weiter auszubauen – für die TU Dresden, für andere Hochschulen in Sachsen und für alle, die in der digitalen Lehre ein bisschen mehr Struktur und Leichtigkeit brauchen.",
+        "claim": "Von Studierenden, für Studierende. Kostenlos und Open Source.",
+        "clickCalcTitle": "So berechnen sich die gesparten Klicks:",
+        "clickCalcClick": "Ein gesparter Klick = 3 Sekunden",
+        "clickCalcShortcut": "Einen Shortcut verwenden = 2 gesparte Klicks",
+        "clickCalcLogin": "Eine automatische Anmeldung = 3 gesparte Klicks",
+        "clickCalcCourse": "Einen Kurs über Dashboard aufrufen = 3 gesparte Klicks",
+        "clickCalcSearch": "Eine Weiterleitung der Google-Suche = 2 gesparte Klicks",
+        "developedBy": "TUfast wird entwickelt von:",
+        "licenses": "Open Source & Lizenzen",
+        "fontLicense": "Font: Space Grotesk, 2020. The Space Grotesk Project Authors, Florian Karsten, SIL Open Font License.",
+        "iconLicense": "Icons: Tabler Icons, Copyright (c) 2018-2025 Tabler, MIT License"
+      },
+      "contact": {
+        "title": "Du hast eine Frage oder eine Idee für TUfast?",
+        "text": "Dann sende uns bitte sehr gerne eine Mail an",
+        "subject": "Feedback TUfast"
+      },
+      "appearance": {
+        "title": "Darstellung"
+      }
+    },
+    "logins": {
+      "zih": {
+        "title": "Werde automatisch bei allen Online-Portalen der TU Dresden angemeldet",
+        "name": "TU Dresden",
+        "usernamePlaceholder": "Nutzername (ZIH-Login)",
+        "usernameError": "Der Nutzername hat die Form 's3276763' oder 'luka075d'. Speichere deine aktuelle Eingabe nur, wenn du dir sicher bist.",
+        "passwordPlaceholder": "Passwort (ZIH-Login)",
+        "passwordError": "Das Passwort muss mindestens 5 Zeichen lang sein.",
+        "totpSecretPlaceholder": "TOTP Secret-Key",
+        "totpSecretError": "Der TOTP Secret-Key besteht aus Großbuchstaben (A bis Z) und Ziffern (2 bis 7) und ist 32 Zeichen lang."
+      },
+      "slub": {
+        "title": "Werde automatisch bei der SLUB-Website angemeldet",
+        "name": "Slub",
+        "usernamePlaceholder": "Benutzernummer (SLUB-Login)",
+        "usernameError": "Die Nutzernummer findest du u.a. auf deiner SLUB-Karte",
+        "passwordPlaceholder": "Passwort (SLUB-Login)",
+        "passwordError": "Das Passwort muss mindestens 5 Zeichen lang sein."
+      }
+    },
+    "faculty": {
+      "alt": "Das Icon des Studiengangs {name}",
+      "placeholder": "Platzhalter",
+      "default": "Standardeinstellungen",
+      "mailSubject": "Vorschlag Studiengang",
+      "names": {
+        "geowissenschaften": "Geowissenschaften",
+        "maschinenbau": "Maschinenwesen",
+        "informatik": "Informatik",
+        "mathematik": "Mathematik",
+        "medizin": "Medizin",
+        "psychologie": "Psychologie",
+        "wirtschaftswissenschaften": "Wirtschaftswissenschaften",
+        "elektrotechnik": "Elektrotechnik",
+        "bauingenieurwesen": "Bauingenieurwesen",
+        "verkehr": "Verkehrswissenschaften \"Friedrich List\"",
+        "general": "Standardeinstellungen",
+        "addStudiengang": "+ Studiengang hinzufügen..."
+      }
+    },
+    "rocketsText": {
+      "default": {
+        "beforeUnlock": "Standard. Hat jeder.",
+        "unlocked": "Standard. Hat jeder."
+      },
+      "250clicks": {
+        "beforeUnlock": "Spare mehr als 250 Klicks.",
+        "unlocked": "Mehr als 250 Klicks gespart. TUfast scheint nützlich zu sein!"
+      },
+      "2500clicks": {
+        "beforeUnlock": "Spare mehr als 2500 Klicks. Du bist Profi!",
+        "unlocked": "Mehr als 2500 Klicks gespart. TUfast ist nützlich!"
+      },
+      "easteregg": {
+        "beforeUnlock": "Finde das Easteregg!",
+        "unlocked": "Easteregg gefunden :)"
+      },
+      "email": {
+        "beforeUnlock": "Du findest TUfast nützlich? Erzähle es zwei Leuten per E-Mail, um diese schicke Rakete freizuschalten!",
+        "unlocked": "Diese Rakete hast du dir verdient! Per E-Mail empfohlen."
+      },
+      "webstore": {
+        "beforeUnlock": "Gefällt dir TUfast? Oder hast du Anmerkungen? Dann hinterlasse eine Bewertung im Webstore!",
+        "unlocked": "Danke für deine Bewertung im Webstore!"
+      },
+      "whatsapp": {
+        "beforeUnlock": "Coole Dinge teilen ist dein Ding? Teile TUfast mit zwei Freunden auf WhatsApp und sammle diese tolle Rakete!",
+        "unlocked": "Danke für deine Unterstützung! Mit WhatsApp empfohlen."
+      }
+    },
+    "rocketLinks": {
+      "email": "mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studierenden%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90",
+      "whatsapp": "https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studierenden!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90"
+    },
+    "searchSites": {
+      "hisqis": "HISQIS",
+      "opal": "OPAL",
+      "selma": "selma",
+      "slub": "SLUB",
+      "tucloud": "Cloudstore TU Dresden",
+      "tudmail": "Outlook Web App",
+      "tumail": "Outlook Web App",
+      "tumatrix": "Matrix TU Dresden",
+      "tumed": "ePortal der Medizin",
+      "tustore": "Cloudstore TU Dresden",
+      "videocampus": "Videocampus Sachsen",
+      "tex": "Overleaf ShareLaTex"
+    }
+  },
+  "onboarding": {
+    "start": "Einrichtung beginnen",
+    "next": "Weiter",
+    "skip": "Einrichtung überspringen",
+    "finish": "Einrichtung abschließen",
+    "steps": {
+      "welcome": "Herzlich Willkommen bei TUfast",
+      "faculty": "Meine Fakultät",
+      "login": "Automatischer Login – Zugang",
+      "otp": "Automatischer Login – 2FA",
+      "email": "E-Mail Benachrichtigungen",
+      "opalSelma": "OPAL und Selma verbessern",
+      "searchEngines": "Suchmaschinen Kurzbefehle",
+      "done": "GESCHAFFT!"
+    },
+    "pages": {
+      "welcomeTitle": "Dein Produktivitätstool für die TU Dresden",
+      "welcomeHelp": "mit TUfast sparst du pro Semester<br />bis zu 90 Minuten und bis zu 2000 Klicks",
+      "facultyHelp": "Wähle deine Fakultät aus. Dein Dashboard wird dann mit allen für dich relevanten Links eingerichtet.",
+      "loginHelp": "Werde automatisch bei allen Online Portalen der TU Dresden angemeldet",
+      "otpHelp": "Wirklich sofort anmelden? Dann richte die Zwei-Faktor-Authentifizierung ein",
+      "emailHelp": "Werde automatisch bei allen Online Portalen der TU Dresden angemeldet",
+      "doneIntro": "TUfast ist jetzt vollständig für dich eingerichtet.<br />Hier noch ein paar Tipps für dich:",
+      "doneSettings": "Du kannst die getroffenen Einstellungen jederzeit ändern",
+      "doneCourses": "Füge deine OPAL Kurse im Dashboard hinzu",
+      "doneContact": "Bei Fragen oder Ideen zu TUfast, kontaktiere uns gerne! Unsere Kontaktdaten findest du auf der nächsten Seite unten.",
+      "doneGoodLuck": "Viel Erfolg im Studium!"
+    }
+  },
+  "popup": {
+    "title": "TU Dresden Dashboard",
+    "searchPlaceholder": "Kurs suchen...",
+    "autoLogin": "AutoLogin",
+    "bananaHtml": "<a tabindex=\"-1\" href=\"https://www.buymeacoffee.com/olihausdoerfer\" target=\"_blank\" style = \"position: fixed; bottom: 70px; right: 26px;\" > <img tabindex=\"-1\" style=\"width: 160px;\"src=\"https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>",
+    "shareHtml": "<div class=\"content\"><h1>Hilf deinen Mitstudierenden <br /><img class=\"invert\" src=\"../../assets/images/tufast48.png\" style=\"height:1.5em;vertical-align:middle;\" /> TUfast zu entdecken</h1><p class=\"subtitle\">und <a href=\"#\" id=\"rockets_link\" style=\"color:var(--color-text-link);text-decoration:underline;cursor:pointer;\">sammle coole Raketen</a>!</p><div class=\"share-section\"><div class=\"share-title\">Teilen mit</div><div class=\"share-links\"><a class=\"share-link\" href=\"mailto:?subject=Probiere%20mal%20TUfast!%20%F0%9F%9A%80&body=Hey%20%3A)%0A%0Akennst%20du%20schon%20TUfast%3F%0A%0ATUfast%20hilft%20beim%20t%C3%A4glichen%20Arbeiten%20mit%20den%20Online-Portalen%20der%20TU%20Dresden.%0ADamit%20spare%20ich%20viel%20Zeit%20und%20nervige%20Klicks.%0A%0ATUfast%20ist%20eine%20Erweiterung%20f%C3%BCr%20den%20Browser%20und%20wurde%20von%20Studierenden%20entwickelt.%0AProbiere%20es%20jetzt%20auf%20www.tu-fast.de%20!%0A%0ALiebe%20Gr%C3%BC%C3%9Fe%C2%A0%F0%9F%96%90\" target=\"_blank\"><img src=\"../../assets/icons/gmail.png\" />E-Mail</a><a class=\"share-link\" href=\"https://api.whatsapp.com/send?text=Hey%2C%20kennst%20du%20schon%20TUfast%3F%20%F0%9F%9A%80%0A%0AMacht%20das%20arbeiten%20mit%20allen%20Online-Portalen%20der%20TU%20Dresden%20produktiver%20und%20hat%20mir%20schon%20viel%20Zeit%20und%20nervige%20Klicks%20gespart.%20Eine%20richtig%20n%C3%BCtzliche%20Browsererweiterung%20f%C3%BCr%20Studierenden!%0A%0AProbiers%20gleich%20mal%20aus%20auf%20www.tu-fast.de%20%F0%9F%96%90\" target=\"_blank\"><img src=\"../../assets/icons/wa2.png\" />WhatsApp</a><a class=\"share-link\" href=\"https://www.tu-fast.de\" target=\"_blank\">www.tu-fast.de</a></div></div><div class=\"footer\">Gemacht mit 💙 von Studierenden · <a href=\"https://github.com/TUfast-TUD/TUfast_TUD\" target=\"_blank\">GitHub</a> · <a href=\"mailto:frage%40tu-fast.de?subject=Feedback%20TUfast\" target=\"_blank\">Kontakt</a></div></div>",
+    "savedClicks": "{clicks} Klicks, {time} gespart",
+    "importOpalCourses": "Klicke, um deine OPAL-Kurse zu importieren",
+    "updateCourseList": "Diese Kursliste jetzt aktualisieren...",
+    "ratingDone": "Fertig <text style='font-size:14px'>✅</text>",
+    "rateBeforeSubmit": "Bitte bewerte den Kurs mit Sternen, bevor du dein Rating abgibst!",
+    "introRating": "<b>Wir suchen den besten Kurs an der TU Dresden. Bewerte jetzt deine Kurse mit 1-5 Sternen!</b> Deine Bewertung ist zu 100% völlig anonym. Die Ergebnisse der Abstimmung veröffentlichen wir anschließend. Details und die Erweiterung zur Datenschutzerklärung gibts <a target='_blank' href='https://tu-fast.de/datenschutz'>hier</a>. <a id='intro' href='#'>Schließen</a>.",
+    "outroRating": "<b>Danke für's Abstimmen. Über die Ergebnisse wirst du benachrichtigt!</b> Teile <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> jetzt mit deinen Freunden, damit auch sie die Kurse bewerten. Damit k&ouml;nnen wir die Lehre an der TU verbessern! Danke &#x1f499;<br><a id='outro' href='#'>Schließen</a>.",
+    "gopalBanner": "<b>Tipp für Erstis: Erfahre alles wichtige rund um dein Studium mit gOPAL - dem mobilen Studienassistenzsystem! Hier <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL öffnen.</a> <a id='msg1' href='#'>Schließen</a>.",
+    "tooManyCourses": "Deaktiviert: mehr als 25 Kurse",
+    "openAllFavorites": "Alle Favoriten öffnen",
+    "openAllCourses": "Alle Kurse öffnen",
+    "switchToCourses": "Wechsel zu \"Meine Kurse\" ... ",
+    "switchToFavorites": "Wechsel zu \"Meine Favoriten\" ...",
+    "iconTitles": {
+      "selma": "Selma",
+      "eportal": "ePortal",
+      "moodle": "Moodle",
+      "opal": "OPAL",
+      "qis": "QIS",
+      "matrix": "Matrix Chat",
+      "msx": "TU Mail",
+      "slub": "SLUB",
+      "cloud": "Datashare",
+      "gitlab": "GitLab",
+      "orsee": "orsee",
+      "geoportal": "Geoportal",
+      "tuNavi": "TU Campus-Navigator",
+      "marudor": "bahn.expert (ehem. marudor.de)",
+      "infoDiscord": "Informatik Discord",
+      "swdd": "Mensa",
+      "pa": "Prüfungsämter",
+      "tex": "tex"
+    }
+  },
+  "content": {
+    "opal": {
+      "closeAllTabs": "Alle Tabs schließen",
+      "closeAllTabsTitle": "Alle Tabs schließen. Ein TUfast-Feature.",
+      "openAllCourses": "Alle Kurse öffnen",
+      "openAllCoursesTitle": "Alle Kurse öffnen. Ein TUfast-Feature.",
+      "openAllFavorites": "Alle Favoriten öffnen",
+      "openAllFavoritesTitle": "Alle Favoriten öffnen. Ein TUfast-Feature.",
+      "coursesSaved": "Deine Kurse wurden erfolgreich in TUfast gespeichert. Drücke jetzt <kbd>Alt</kbd> + <kbd>Q</kbd>, um deine Kurse zu sehen! 🚀",
+      "coursesUpdated": "Deine Kurse wurden erfolgreich in TUfast aktualisiert! 🚀",
+      "snowEnable": "Schnee aktivieren",
+      "snowDisable": "Schnee deaktivieren",
+      "snowTitle": "Schnee einstellen. Winter-Modus von TUfast.",
+      "logoTitle": "Powered by TUfast. Enjoy :)",
+      "banners": {
+        "helpText": "Du hast Bock TUfast weiterzuentwickeln? ",
+        "helpAction": "Wir suchen dich!",
+        "helpTitle": "Verstärkung gesucht:",
+        "mv3Text": "Die Opal-Personalisierung muss von dir leider erneut aktiviert werden(, wenn du magst). ",
+        "mv3Action": "Hier aktivieren",
+        "mv3Title": "Großes TUfast Update!",
+        "rocketText": "TUfast empfehlen und neue Icons freischalten! ",
+        "rocketAction": "Los gehts!",
+        "rocketTitle": "Schnapp' sie dir alle!",
+        "reviewText": "Dann hau' mal ne gute Bewertung im Store raus! ",
+        "reviewAction": "Hier geht's lang!",
+        "reviewTitle": "Gefällt's dir?",
+        "close": "X"
+      }
+    },
+    "hisqis": {
+      "credits": "Powered by <img src=\"{imgUrl}\" style=\"position:relative; right: 2px;height: 15px;\"><a href=\"https://www.tu-fast.de\" target=\"_blank\">TUfast</a> (entwickelt von <a href=\"https://github.com/Noxdor\" target=\"_blank\">Noxdor</a> & <a href=\"https://github.com/C0ntroller\" target=\"_blank\">C0ntroller</a>)",
+      "oldTable": "langweiligen, alten Tabelle...",
+      "newTable": "neuen, coolen TUfast-Tabelle 🔥",
+      "continueTo": " Weiter zur ",
+      "overview": "Deine Notenübersicht",
+      "descriptors": ["Modul", "Bestandene Prüfung", "Verhauene Prüfung"],
+      "weightedAverage": "Deine Durchschnittnote (nach CP gewichtet): {average}",
+      "moduleCount": "Anzahl Module: {count}",
+      "examCount": "Anzahl Prüfungen: {count}",
+      "failed": "nicht bestanden"
+    },
+    "selma": {
+      "passed": "Bestanden",
+      "notSet": "Noch nicht gesetzt",
+      "distribution": "Notenverteilung",
+      "tries": "Versuche",
+      "examDate": "Prüfungsleistung/Termin",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "toggleTitle": "Toggle the \"ImproveSelma\" feature and reload the page to apply the change.",
+      "creditsEnabled": "Table powered by",
+      "creditsDisabled": "Table disabled",
+      "creditsBy": "by"
+    },
+    "owa": {
+      "permissionFetch": "TUfast braucht diese Berechtigung, um regelmäßig alle Mails abzurufen. Bitte drücke auf 'Erlauben'.",
+      "permissionNotification": "TUfast braucht diese Berechtigung, um dir zusätzliche Benachrichtigungen zu senden. Bitte drücke auf 'Erlauben'.",
+      "newMailTitle": "Neue E-Mails",
+      "newMailMessage": "Du hast {count} neue E-Mail | Du hast {count} neue E-Mails"
+    },
+    "opalInline": {
+      "permission": "TUfast braucht diese Berechtigung, um Dateien ohne Download zu öffnen. Bitte drücke auf 'Erlauben'."
+    },
+    "background": {
+      "tooManyLinks": "Du hast mehr als 25 {type}. Um deinen Browser nicht zu überlasten, öffne sie bitte manuell.",
+      "favorites": "Favoriten",
+      "courses": "Kurse"
+    },
+    "otp": {
+      "snatcherConfirm": "TUfast kann diesen 2-Faktor-Code für dich speichern und automatisch an den entsprechenden Stellen einfügen (=AutoLogin). Dies geht jedoch eigentlich gegen den Sinn eines zweiten Faktors.\n\nSPEICHERE DIR DEN CODE UND DIE RECOVERY CODES AUF JEDEN FALL AUCH AN EINER ANDEREN STELLE!\n\nSoll TUfast für dich die 2-Faktor-Authentifizierung übernehmen?"
+    }
+  }
+}

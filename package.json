@@ -5,18 +5,20 @@
   "main": "index.js",
   "scripts": {
     "ts-check": "tsc --noEmit",
-    "lint": "eslint --ext .js,.ts,.vue src",
-    "lint:fix": "eslint --ext .js,.ts,.vue --fix src",
+    "lint": "eslint --ext .js,.ts,.vue,.json src",
+    "lint:fix": "eslint --ext .js,.ts,.vue,.json --fix src",
     "prettier": "prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
     "test:fix": "npm run prettier:fix && npm run lint:fix",
-    "test": "npm run ts-check && npm run lint && npm run prettier && npm run build",
+    "test": "npm run ts-check && npm run lint && npm run prettier && npm run build && npm run verify:build",
     "dev": "vite build --watch",
     "build": "vite build",
     "useChrome": "cp src/manifest.chrome.json src/manifest.json",
     "useFF": "cp src/manifest.firefox.json src/manifest.json",
     "checkVersionBump": "node scripts/check-version-bump.mjs",
-    "syncVersion": "node scripts/sync-version.mjs"
+    "syncVersion": "node scripts/sync-version.mjs",
+    "verify:locales": "node scripts/verify-locales.mjs",
+    "verify:build": "npm run verify:locales && node scripts/verify-build.mjs"
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
   },
   "homepage": "https://github.com/TUfast-TUD/TUfast_TUD#readme",
   "devDependencies": {
+    "@intlify/eslint-plugin-vue-i18n": "~2.0.0",
     "@types/chart.js": "^2.9.37",
     "@types/chrome": "^0.0.184",
     "@types/firefox": "^0.0.31",

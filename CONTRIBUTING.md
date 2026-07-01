@@ -37,23 +37,18 @@ After developing:
 
 ## Strings and locales
 
-User-facing strings live in `src/i18n/locales/*.ts`. German (`de`) is the complete fallback locale and the type source of truth. New locale files should derive their type from German:
+User-facing strings live in `src/i18n/locales/*.json`. German (`de.json`) is the complete fallback locale and the key source of truth. New locale files must match the German key structure:
 
-```ts
-import de from './de'
-
-export const en: typeof de = {
-  ...de,
-  localeName: 'English',
-  manifest: {
-    extensionName: 'TUfast TU Dresden',
-    extensionDescription: 'The productivity tool for TU Dresden students',
-    commandOpenOpal: 'Open OPAL',
-    commandOpenOwa: 'Open mail (OWA)'
+```json
+{
+  "localeName": "English",
+  "manifest": {
+    "extensionName": "TUfast TU Dresden",
+    "extensionDescription": "The productivity tool for TU Dresden students",
+    "commandOpenOpal": "Open OPAL",
+    "commandOpenOwa": "Open mail (OWA)"
   }
 }
-
-export default en
 ```
 
 Do not add user-facing text directly inside Vue components, content scripts, background code, popup code, or shared modules. Put new copy into the appropriate locale file instead.
@@ -61,6 +56,10 @@ Do not add user-facing text directly inside Vue components, content scripts, bac
 The build discovers locale files automatically. It also generates browser `_locales/<lang>/messages.json` files from each locale's `manifest` block, so do not add or edit `_locales` JSON files by hand.
 
 Use `t('path.to.string')` for Vue, popup, background, and shared module text. Manifest-loaded content scripts read from `globalThis.TUFAST_STRINGS`, populated from the locale's `content` block.
+
+ESLint fails on raw text in Vue templates. If you add user-facing copy, add it to every locale instead of writing it inline.
+
+`npm run verify:locales` checks that every locale has the same keys, value shapes, interpolation placeholders, and plural segments as German. `npm run verify:build` must run after `npm run build`; it checks generated manifest messages and content-script string injection. `npm run test` runs both checks in CI order.
 
 Do not import extension modules directly from classic manifest-loaded content scripts.
 
