@@ -1,7 +1,7 @@
 // Script used for reading storage and displaying indicators
 // Can not write or save anything in storage
 import { ref, onMounted, onUnmounted } from 'vue'
-import { t } from '../../../i18n'
+import { getAvailableLocales, getLocaleSetting, t } from '../../../i18n'
 
 export interface SettingsStatus {
   otp: boolean
@@ -12,6 +12,7 @@ export interface SettingsStatus {
   selma: boolean
   searchengine: boolean
   faculty: string
+  language: string
 }
 
 // Shared state outside the composable
@@ -21,9 +22,10 @@ const settings = ref<SettingsStatus>({
   owa: false,
   opalPdf: false,
   login: false,
-  selma: false,
+  selma: true,
   searchengine: false,
-  faculty: 'general'
+  faculty: 'general',
+  language: languageName()
 })
 
 const loading = ref(true)
@@ -37,6 +39,11 @@ function facultyName(studiengangId: string, studies: Record<string, { name: stri
   return name === key ? studies[studiengangId]?.name || studies.general.name : name
 }
 
+function languageName() {
+  const locale = getLocaleSetting()
+  return getAvailableLocales().find((option) => option.locale === locale)?.label || locale
+}
+
 // Mapping of storage keys to setting types
 const storageKeyMap: Record<string, keyof SettingsStatus> = {
   enabledOWAFetch: 'owa',
@@ -45,7 +52,8 @@ const storageKeyMap: Record<string, keyof SettingsStatus> = {
   pdfInNewTab: 'opalPdf',
   improveSelma: 'selma',
   fwdEnabled: 'searchengine',
-  studiengang: 'faculty'
+  studiengang: 'faculty',
+  locale: 'language'
 }
 
 const checkAllSettings = async (platform: string = 'zih') => {
@@ -68,7 +76,8 @@ const checkAllSettings = async (platform: string = 'zih') => {
     const { default: studies } = await import('../../studies.json')
     settings.value = {
       ...result,
-      faculty: facultyName(result.faculty || 'general', studies)
+      faculty: facultyName(result.faculty || 'general', studies),
+      language: languageName()
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Unknown error'
@@ -126,7 +135,7 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
 
       case 'selma':
         chrome.storage.local.get(['improveSelma'], (result) => {
-          settings.value.selma = result.improveSelma ?? false
+          settings.value.selma = result.improveSelma ?? true
         })
         break
 
@@ -144,6 +153,10 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
             settings.value.faculty = facultyName(studiengangId, studies)
           })
         }
+        break
+
+      case 'language':
+        settings.value.language = languageName()
         break
 
       case 'login':

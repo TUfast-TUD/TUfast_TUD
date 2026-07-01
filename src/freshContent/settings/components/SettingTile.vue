@@ -10,6 +10,7 @@
         <div class="settings-tile__indicator-text">{{ indicatorText }}</div>
       </div>
     </div>
+    <div v-if="tag" class="settings-tile__tag">{{ tag }}</div>
     <div class="settings-tile__type" :class="{ 'is-rotated': isActive }">
       <IconChevronDown size="24px" />
     </div>
@@ -36,6 +37,7 @@ export default defineComponent({
       default: false
     },
     settingType: { type: String as PropType<string>, required: true },
+    tag: { type: String, default: '' },
     platform: { type: String, default: 'zih' }
   },
   setup(props) {
@@ -160,6 +162,20 @@ export default defineComponent({
     &__indicator-text
         font-size: 14px
         white-space: nowrap
+        line-height: 1
+        font-weight: 600
+        color: hsl(var(--clr-text))
+
+        @media screen and (max-width: 650px)
+            display: none
+
+    &__tag
+        flex-shrink: 0
+        border: 2px solid hsl(var(--clr-text))
+        background-color: hsla(var(--clr-text), .2)
+        border-radius: var(--brd-rad-sm)
+        padding: 4px 8px
+        font-size: 14px
         line-height: 1
         font-weight: 600
         color: hsl(var(--clr-text))

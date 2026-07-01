@@ -18,6 +18,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
+            :tag="setting.tag"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             role="button"
             tabindex="0"
@@ -58,6 +59,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
+            :tag="setting.tag"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             tabindex="0"
             role="button"
@@ -90,6 +92,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
+            :tag="setting.tag"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             tabindex="0"
             role="button"
@@ -486,6 +489,9 @@ export default defineComponent({
 
 .tuf-header-location
     color: var(--clr-text-help)
+    display: inline-flex
+    align-items: center
+    line-height: 1
 
     @media screen and (max-width: 800px)
         display: none

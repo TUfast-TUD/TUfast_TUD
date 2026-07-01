@@ -73,10 +73,11 @@ export default [
     settingType: 'faculty'
   },
   {
-    title: `${t('settings.tiles.language')} (Beta)`,
+    title: t('settings.tiles.language'),
     icon: 'IconLanguage',
     settingsPage: 'LanguageSelect',
     category: 'personalization',
-    settingType: ''
+    settingType: 'language',
+    tag: 'Beta'
   }
 ] as const satisfies readonly Setting[]

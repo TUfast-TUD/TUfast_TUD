@@ -300,7 +300,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         // 5 - Selma (has user activated selma improvements?)
         new Promise<boolean>((resolve) => {
           chrome.storage.local.get(['improveSelma'], (result) => {
-            resolve(result.improveSelma ?? false)
+            resolve(result.improveSelma ?? true)
           })
         }),
         // 6 - Searchengine (has user activated searchengine commands?)
