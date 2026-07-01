@@ -4,6 +4,7 @@
     <header class="tuf-header">
       <div class="tuf-header-left">
         <div class="tuf-logo"></div>
+        <span class="tuf-header-separator" aria-hidden="true">→</span>
         <span class="tuf-header-location txt-bold">{{ t('settings.location') }}</span>
       </div>
       <div class="tuf-header-right"><Statistics /></div>
@@ -17,6 +18,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
+            :tag="setting.tag"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             role="button"
             tabindex="0"
@@ -57,6 +59,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
+            :tag="setting.tag"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             tabindex="0"
             role="button"
@@ -89,6 +92,7 @@
             :title="setting.title"
             :is-active="openSettingId === setting.settingsPage"
             :setting-type="setting.settingType"
+            :tag="setting.tag"
             :class="['main-grid__tile', { 'is-active': openSettingId === setting.settingsPage }]"
             tabindex="0"
             role="button"
@@ -485,6 +489,18 @@ export default defineComponent({
 
 .tuf-header-location
     color: var(--clr-text-help)
+    display: inline-flex
+    align-items: center
+    line-height: 1
+
+    @media screen and (max-width: 800px)
+        display: none
+
+.tuf-header-separator
+    color: var(--clr-text-help)
+    display: inline-flex
+    align-items: center
+    line-height: 1
 
     @media screen and (max-width: 800px)
         display: none
@@ -563,7 +579,6 @@ export default defineComponent({
 
 .tuf-header-left span
     font-size: 1rem
-    vertical-align: middle
 
 .tuf-header-right
     flex-shrink: 0

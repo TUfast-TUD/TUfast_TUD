@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import Settings from './Settings.vue'
 import { i18n } from '../../i18n/vue'
-import { initLocale, t } from '../../i18n'
+import { getLocale, initLocale, t } from '../../i18n'
 import '../../styles/palette_new/palette_new.sass'
 // Import needed Icons from Tabler Vue
 import {
@@ -41,6 +41,7 @@ import {
 // Create the app instance
 async function main() {
   await initLocale()
+  i18n.global.locale = getLocale()
   document.title = t('settings.documentTitle')
   const app = createApp(Settings)
 

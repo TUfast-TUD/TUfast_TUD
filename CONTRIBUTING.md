@@ -35,6 +35,37 @@ After developing:
 - **CSS-Preprocessor**: We are using [SASS](https://sass-lang.com/).
 - **Code style and linting**: We are using ESlint and prettier. Run `npm run test` to check your code style and linting before pushing code. Wrong formatting will result in a failing CI. You should configure your editor to automatically format on save with prettier for which VSCode provides [this extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 
+## Strings and locales
+
+User-facing strings live in `src/i18n/locales/*.ts`. German (`de`) is the complete fallback locale and the type source of truth. New locale files should derive their type from German:
+
+```ts
+import de from './de'
+
+export const en: typeof de = {
+  ...de,
+  localeName: 'English',
+  manifest: {
+    extensionName: 'TUfast TU Dresden',
+    extensionDescription: 'The productivity tool for TU Dresden students',
+    commandOpenOpal: 'Open OPAL',
+    commandOpenOwa: 'Open mail (OWA)'
+  }
+}
+
+export default en
+```
+
+Do not add user-facing text directly inside Vue components, content scripts, background code, popup code, or shared modules. Put new copy into the appropriate locale file instead.
+
+The build discovers locale files automatically. It also generates browser `_locales/<lang>/messages.json` files from each locale's `manifest` block, so do not add or edit `_locales` JSON files by hand.
+
+Use `t('path.to.string')` for Vue, popup, background, and shared module text. Manifest-loaded content scripts read from `globalThis.TUFAST_STRINGS`, populated from the locale's `content` block.
+
+Do not import extension modules directly from classic manifest-loaded content scripts.
+
+The language setting defaults to `auto`. Auto uses the browser UI language when a matching locale exists and falls back to German otherwise. Manual user choices must not be overwritten on startup.
+
 ## Known peculiarities and bugs
 - `Unchecked runtime.lastError: The message port closed before a response was received.` Promisifying chrome.runtime.sendMessage({...}) doesnt work, because when you define a callback (Promise.resolve) sendMessage will wait until sendResponse is called in the message handler. It just stalls execution and then dies if it's never called. **Solutions:** 1) Unpromisify sendMessage. 2) Always return a value (return true is fine).
 - **Prettier in Windows**: `npm run prettier` might show warning and git might show changes, although all files are formatted correctly visually. This is due to end-of-line conventions. For information and fix see [this issue](https://github.com/TUfast-TUD/TUfast_TUD/pull/157).

@@ -77,6 +77,7 @@ export default [
     icon: 'IconLanguage',
     settingsPage: 'LanguageSelect',
     category: 'personalization',
-    settingType: ''
+    settingType: 'language',
+    tag: 'Beta'
   }
 ] as const satisfies readonly Setting[]

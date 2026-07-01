@@ -22,7 +22,7 @@ export const en: typeof de = {
   },
   settings: {
     documentTitle: 'TUfast Settings',
-    location: '-> Settings',
+    location: 'Settings',
     personalization: 'Personalization',
     functions: 'Features',
     information: 'Information',

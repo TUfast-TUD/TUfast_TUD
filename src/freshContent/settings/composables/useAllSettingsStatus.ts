@@ -1,7 +1,7 @@
 // Script used for reading storage and displaying indicators
 // Can not write or save anything in storage
 import { ref, onMounted, onUnmounted } from 'vue'
-import { t } from '../../../i18n'
+import { getAvailableLocales, getLocaleSetting, t } from '../../../i18n'
 
 export interface SettingsStatus {
   otp: boolean
@@ -12,6 +12,7 @@ export interface SettingsStatus {
   selma: boolean
   searchengine: boolean
   faculty: string
+  language: string
 }
 
 // Shared state outside the composable
@@ -21,15 +22,27 @@ const settings = ref<SettingsStatus>({
   owa: false,
   opalPdf: false,
   login: false,
-  selma: false,
+  selma: true,
   searchengine: false,
-  faculty: 'general'
+  faculty: 'general',
+  language: languageName()
 })
 
 const loading = ref(true)
 const error = ref<string | null>(null)
 let listenerCount = 0
 let isListenerAttached = false
+
+function facultyName(studiengangId: string, studies: Record<string, { name: string }>) {
+  const key = `settings.faculty.names.${studiengangId}`
+  const name = t(key)
+  return name === key ? studies[studiengangId]?.name || studies.general.name : name
+}
+
+function languageName() {
+  const locale = getLocaleSetting()
+  return getAvailableLocales().find((option) => option.locale === locale)?.label || locale
+}
 
 // Mapping of storage keys to setting types
 const storageKeyMap: Record<string, keyof SettingsStatus> = {
@@ -39,7 +52,8 @@ const storageKeyMap: Record<string, keyof SettingsStatus> = {
   pdfInNewTab: 'opalPdf',
   improveSelma: 'selma',
   fwdEnabled: 'searchengine',
-  studiengang: 'faculty'
+  studiengang: 'faculty',
+  locale: 'language'
 }
 
 const checkAllSettings = async (platform: string = 'zih') => {
@@ -59,7 +73,12 @@ const checkAllSettings = async (platform: string = 'zih') => {
       )
     })
 
-    settings.value = result
+    const { default: studies } = await import('../../studies.json')
+    settings.value = {
+      ...result,
+      faculty: facultyName(result.faculty || 'general', studies),
+      language: languageName()
+    }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Unknown error'
     console.error('Error checking settings:', err)
@@ -116,7 +135,7 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
 
       case 'selma':
         chrome.storage.local.get(['improveSelma'], (result) => {
-          settings.value.selma = result.improveSelma ?? false
+          settings.value.selma = result.improveSelma ?? true
         })
         break
 
@@ -131,12 +150,13 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
           const { default: studies } = await import('../../studies.json')
           chrome.storage.local.get(['studiengang'], (result) => {
             const studiengangId = result.studiengang ?? 'general'
-            const faculty = studies[studiengangId]
-            const key = `settings.faculty.names.${studiengangId}`
-            const name = t(key)
-            settings.value.faculty = name === key ? faculty?.name || studies.general.name : name
+            settings.value.faculty = facultyName(studiengangId, studies)
           })
         }
+        break
+
+      case 'language':
+        settings.value.language = languageName()
         break
 
       case 'login':

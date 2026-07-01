@@ -4,4 +4,5 @@ export interface Setting {
   settingsPage: string
   category: string
   settingType: string
+  tag?: string
 }

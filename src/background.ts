@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         availableRockets: ['default'],
         selectedRocketIcon: JSON.stringify(rockets.default),
         theme: 'system',
-        locale: 'de',
+        locale: 'auto',
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
@@ -67,7 +67,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
-      if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'de'
+      if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'auto'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
       if (typeof currentSettings.selectedRocketIcon === 'undefined')
         updateObj.selectedRocketIcon = JSON.stringify(rockets.default)
@@ -300,7 +300,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         // 5 - Selma (has user activated selma improvements?)
         new Promise<boolean>((resolve) => {
           chrome.storage.local.get(['improveSelma'], (result) => {
-            resolve(result.improveSelma ?? false)
+            resolve(result.improveSelma ?? true)
           })
         }),
         // 6 - Searchengine (has user activated searchengine commands?)
@@ -313,12 +313,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         new Promise<string>((resolve) => {
           chrome.storage.local.get(['studiengang'], (result) => {
             const studiengangId = result.studiengang ?? 'general'
-            const faculty = studies[studiengangId]
-            if (faculty && faculty.name) {
-              resolve(faculty.name)
-            } else {
-              resolve(studies.general.name)
-            }
+            resolve(studies[studiengangId] ? studiengangId : 'general')
           })
         }),
         // User data check
