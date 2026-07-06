@@ -4,6 +4,8 @@ Guidance for AI agents. Read `CONTRIBUTING.md` for the full workflow and `README
 
 Read `AGENTS_DOCS.md` alongside this file — it holds gotchas, design decisions, and improvement ideas, organized by topic. When you discover something durable, record it there under the right heading; edit or delete entries that are no longer true.
 
+A line earns a place in `AGENTS.md` only if it applies to most tasks and either its violation fails silently — no test or error message would catch it — or it prevents a wasted setup/build cycle on nearly every task. Keep this file under ~70 lines.
+
 ## Fast Start
 
 1. Node 22 (pinned in `.nvmrc`), npm 10. `package-lock.json` uses the older lockfileVersion-2 format — never let another npm major regenerate it.
@@ -24,10 +26,10 @@ Read `AGENTS_DOCS.md` alongside this file — it holds gotchas, design decisions
 
 ## Localization
 
-- Use the custom `src/i18n` helper; do not add `vue-i18n`. User-facing copy belongs in `src/i18n/locales/*.json` (never inline); `de.json` is the structure reference, unsupported locales fall back to English.
+- Use the custom `src/i18n` runtime; do not add `vue-i18n`. User-facing copy belongs in `src/i18n/locales/*.json` (never inline); `de.json` is the structure reference.
 - Locale setting lives in `chrome.storage.local.locale`, default `auto` (browser language, else English). `await initLocale()` before rendering translated UI.
 - Never call `t()` at module top level — export a factory (see `getSettings()`, `getOnboardingSteps()`) so translation happens after locale init.
-- Content scripts: strings live under the locale JSON `content` block; list `i18n/contentScriptStrings.js` before the script in the manifest and `await globalThis.TUFAST_STRINGS_READY` before reading `globalThis.TUFAST_STRINGS`.
+- Content scripts don't use `t()`: their strings live under the locale JSON `content` block and arrive via `globalThis.TUFAST_STRINGS`. The wiring (manifest ordering, awaiting `TUFAST_STRINGS_READY`) is test-enforced — follow the error messages.
 
 ## Extension API Gotchas
 
