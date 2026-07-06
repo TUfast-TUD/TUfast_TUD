@@ -22,5 +22,5 @@ Only answer this question if you have some technical backgroung. E.g. What frame
 **Any additional information?**
 Add any other context here. Sometimes, screenshots can be very useful!
 
-**AI-written text**
-Text addressing other humans should mostly be written by you. If parts of this issue were written by AI, flag them as such by starting the text with `🤖 AI-generated` (see [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md)).
+**AI-written text addressing humans directly**
+Text addressing other humans should be written by you. If parts of this issue were written by AI, flag them as such by starting the text with `🤖 AI-generated` (see [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md)).

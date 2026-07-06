@@ -21,5 +21,5 @@ If you include some screenshots, we might be able to solve the problem faster.
 **Anything else that is important?**
 Add any other context about the problem here.
 
-**AI-written text**
-Text addressing other humans should mostly be written by you. If parts of this issue were written by AI, flag them as such by starting the text with `🤖 AI-generated` (see [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md)).
+**AI-written text addressing humans directly**
+Text addressing other humans should be written by you. If parts of this issue were written by AI, flag them as such by starting the text with `🤖 AI-generated` (see [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md)).
