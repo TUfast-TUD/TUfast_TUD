@@ -10,16 +10,20 @@ Routing rule: needed on every task → `AGENTS.md`. Durable area-specific knowle
 
 ## Gotchas
 
-(none yet)
+- Auto-login is the highest-risk area: failed-login loops have locked real ZIH student accounts (ZIH escalated; urgent fix in #156, recurrence in #160). Failure detection is literal string matching per portal (`findCredentialsError` in `src/contentScripts/login/*.ts`) plus a `loggedOut` cookie — there is no retry cap, so when a portal or the IdP changes its HTML, detection breaks silently and the loop runs (#148 broke this way for TOTP). Test the wrong-credentials path, not just the happy path.
+- The Chrome Web Store rejects manifest asset paths with a `./` prefix — upload of 8.1.1.2 failed until icon paths became bare (#161).
+- Firefox for Android has no `chrome.commands`; unguarded hotkey registration crashed the extension there (#166 — hence the `if (chrome.commands)` guard in `background.ts`). Mobile also renders the popup as a normal full page; known mobile issues are collected in #176.
+- OPAL PDF handling: Chrome derives download filenames from the URL, so `pdfInInline` can give in-browser opening or the correct filename, not both (#82, wontfix).
 
 ## Design decisions
 
-(none yet)
+- Custom `src/i18n` runtime instead of `vue-i18n`: the dependency was tried during the i18n work (#191–#194) and removed because the custom helper already did everything — one clear mechanism preferred; rationale in `CONTRIBUTING.md`.
+
 
 ## ToDo — improvement ideas
 
 Agent-suggested improvements to the project and codebase, recorded as context for later. Not a task tracker: when an idea becomes concrete and actionable, open a GitHub issue and link it here, or remove the entry.
 
-(none yet)
+- Persistent retry counter as a failsafe for auto-login, capping attempts even when string detection breaks (maintainer-discussed in #156/#160; prototype in A-K-O-R-A's `feature.login-timouts` branch). Complements, not replaces, the string detection.
 
 
