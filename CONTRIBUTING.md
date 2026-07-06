@@ -4,6 +4,12 @@
 - Before implementing a feature communicate with us via GitHub - code maintainers often have good suggestions for the implementation.
 - Commit any changes (new features or hot-fixes) directly against the main branch.
 
+## Coding agents
+- **We encourage the use of coding agents**
+- All agents must read AGENTS.md for context
+- Any **text used to directly communicate with other humans** (contributors, maintainers) **must be written by humans** mostly. This applies to Issues, Discussions, and PRs. If partially or fully written by AI, it must be flagged as such by starting the text with `🤖 AI-generated` (or `🤖 partially AI-generated` if mixed). PR Summaries etc can be AI-generated, but explicitly **flagged as such**. This is to keep communication fair, and not swamp other contributors with AI-written text.
+
+
 ## Getting started with browser extensions
 
 If you never worked with browser extensions before, you should read this [tutorial](https://developer.chrome.com/docs/extensions/get-started) by Google, or these [instructions](https://developer.mozilla.org/de/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension) from mozilla. Make sure you understand the difference between conten scripts and background scripts, their scopes, and how they exchange information using messages.

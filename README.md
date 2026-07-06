@@ -33,7 +33,7 @@ Simply visit [www.tu-fast.de](https://www.tu-fast.de) and select your browser to
 TUfast does not collect any information about the users. Data is only stored locally on your PC and is encrypted. For full information, see our [Privacy Policy](https://tu-fast.de/datenschutz).
 
 ## 👩‍💻 Contributing
-Consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for information.
+Consult [CONTRIBUTING.md](https://github.com/TUfast-TUD/TUfast_TUD/blob/main/CONTRIBUTING.md) for information and for the use of coding agents.
 
 ## ❤️ Supporting
 You can support the development team with a little snack [here](https://www.buymeacoffee.com/olihausdoerfer). Thanks to all the [contributors](https://github.com/TUfast-TUD/TUfast_TUD/graphs/contributors) and supporters! It's great work for all students at TU Dresden!  
