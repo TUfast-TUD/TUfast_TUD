@@ -6,11 +6,11 @@ Read `AGENTS_DOCS.md` alongside this file — it holds gotchas, design decisions
 
 ## Fast Start
 
-1. Node 22 (pinned in `.nvmrc`), npm 10. Never regenerate `package-lock.json` with another npm major.
+1. Node 22 (pinned in `.nvmrc`), npm 10. `package-lock.json` uses the older lockfileVersion-2 format — never let another npm major regenerate it.
 2. `npm ci`, then `npm run useChrome` or `npm run useFF` to copy the browser-specific manifest to `src/manifest.json`.
 3. `npm run dev` to build and watch; load `build/` as an unpacked extension to test. Never edit `build/`.
 4. Before handoff on code changes: `npm run test` (typecheck, lint, prettier, build, locale + build-output verification) and `git diff --check`. Fix formatting with `npm run prettier:fix`. Known warnings: `vue/no-v-html` in onboarding pages.
-5. Release-bound changes need a SemVer bump in `package.json`; the build copies the version into the manifests.
+5. Any PR that touches `package.json` must increase `version` — a four-part extension version like `8.0.3.2`, not SemVer; CI enforces this via `checkVersionBump`. The build copies the version into the manifests.
 
 ## Project Map
 
@@ -34,6 +34,7 @@ Read `AGENTS_DOCS.md` alongside this file — it holds gotchas, design decisions
 - Return `true` from a `chrome.runtime.onMessage` branch that responds async. Do not promisify `sendMessage` with a callback unless the receiver definitely responds — fire-and-forget must not wait.
 - `chrome.storage.local` is the single source of truth for settings; never mirror into `localStorage`.
 - A new setting needs all of: install default, migration default, UI wiring, and status-tile behavior in the settings dashboard.
+- Both manifests are MV3, but Firefox runs the background as an event page (`background.scripts`) while Chrome uses a service worker (`service_worker`) — avoid semantics only one of them has. CI builds only the Chrome variant; verify Firefox manually when touching background or manifest behavior.
 
 ## Review Bias
 
