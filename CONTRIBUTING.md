@@ -4,6 +4,10 @@
 - Before implementing a feature communicate with us via GitHub - code maintainers often have good suggestions for the implementation.
 - Commit any changes (new features or hot-fixes) directly against the main branch.
 
+## Design Philosophy
+
+TUfast should work out of the box — a nice-to-use and beautiful tool. It's meant to make student life easier rather than adding complexity on top, which includes non-technical users. Thus, TUfast requires minimal setup: prefer sensible defaults over options. User-facing interactions are lightweight and easy to understand. New features ship mostly **enabled by default** — meaning we only build features that matter, and test them well. This keeps TUfast simple: sensible default settings, minimal setup required. For details see [discussion](https://github.com/TUfast-TUD/TUfast_TUD/discussions/180#discussioncomment-17564566).
+
 ## Coding agents
 - **We encourage the use of coding agents**
 - All agents must read AGENTS.md for context
