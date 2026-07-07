@@ -11,7 +11,7 @@ TUfast should work out of the box — a nice-to-use and beautiful tool. It's mea
 ## Coding agents
 - **We encourage the use of coding agents**
 - All agents must read AGENTS.md for context
-- Any **text used to directly communicate with other humans** (contributors, maintainers) **must be written by humans** mostly. This applies to Issues, Discussions, and PRs. If partially or fully written by AI, it must be flagged as such by starting the text with `🤖 AI-generated` (or `🤖 partially AI-generated` if mixed). PR Summaries etc can be AI-generated, but explicitly **flagged as such**. This is to keep communication fair, and not swamp other contributors with AI-written text.
+- Any **text used to directly communicate with other humans** (contributors, maintainers, developers) **must be written by humans** mostly. This applies to Issues, Discussions, PRs, and files like README.md and CONTRIBUTING.md. If partially or fully written by AI, it must be flagged as such by starting the text with `🤖 AI-generated` (or `🤖 partially AI-generated` if mixed). PR Summaries etc can be AI-generated, but explicitly **flagged as such**. This is to keep communication fair, and not swamp other contributors with AI-written text.
 
 
 ## Getting started with browser extensions
