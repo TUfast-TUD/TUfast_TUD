@@ -13,6 +13,7 @@ Routing rule: needed on every task → `AGENTS.md`. Durable area-specific knowle
 - Auto-login is the highest-risk area: failed-login loops have locked real ZIH student accounts (ZIH escalated; urgent fix in #156, recurrence in #160). Failure detection is literal string matching per portal (`findCredentialsError` in `src/contentScripts/login/*.ts`) plus a `loggedOut` cookie — there is no retry cap, so when a portal or the IdP changes its HTML, detection breaks silently and the loop runs (#148 broke this way for TOTP). Test the wrong-credentials path, not just the happy path.
 - The Chrome Web Store rejects manifest asset paths with a `./` prefix — upload of 8.1.1.2 failed until icon paths became bare (#161).
 - Firefox for Android has no `chrome.commands`; unguarded hotkey registration crashed the extension there (#166 — hence the `if (chrome.commands)` guard in `background.ts`). Mobile also renders the popup as a normal full page; known mobile issues are collected in #176.
+- Classic manifest content scripts share one isolated-world global scope, so top-level/minified names can collide across files. This was observed in Firefox as `TUFAST_STRINGS_READY`/`TUFAST_STRINGS` failures during #194, but the root cause is shared-scope classic scripts; keep the IIFE wrapping in `vite.config.mjs` and the build guards in `scripts/verify-build.mjs`.
 - OPAL PDF handling: Chrome derives download filenames from the URL, so `pdfInInline` can give in-browser opening or the correct filename, not both (#82, wontfix).
 
 ## Design decisions
