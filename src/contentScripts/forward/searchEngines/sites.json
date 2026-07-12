@@ -21,11 +21,11 @@
   },
   "tudmail": {
     "name": "Outlook Web App",
-    "url": "https://msx.tu-dresden.de/owa/#path=/mail"
+    "url": "https://msx.tu-dresden.de/owa/"
   },
   "tumail": {
     "name": "Outlook Web App",
-    "url": "https://msx.tu-dresden.de/owa/#path=/mail"
+    "url": "https://msx.tu-dresden.de/owa/"
   },
   "tumatrix": {
     "name": "Matrix TU Dresden",
