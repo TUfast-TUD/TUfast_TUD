@@ -1,0 +1,357 @@
+{
+  "localeName": "Română",
+  "localeStatus": "beta",
+  "manifest": {
+    "extensionName": "TUfast TU Dresden",
+    "extensionDescription": "Instrumentul de productivitate pentru studenții TU Dresden",
+    "commandOpenOpal": "Deschide OPAL",
+    "commandOpenOwa": "Deschide mailul (OWA)"
+  },
+  "common": {
+    "close": "Închide",
+    "edit": "Editează",
+    "active": "ACTIV",
+    "inactive": "INACTIV",
+    "saved": "SALVAT",
+    "website": "Website",
+    "team": "Echipă",
+    "github": "GitHub",
+    "buyMeACoffee": "BuyMeACoffee",
+    "supportUs": "Susține-ne",
+    "privacy": "Confidențialitate"
+  },
+  "settings": {
+    "documentTitle": "Setări TUfast",
+    "location": "Setări",
+    "personalization": "Personalizare",
+    "functions": "Funcții",
+    "information": "Informații",
+    "statistics": {
+      "saved": "Deja economisit:",
+      "clicks": " clic | clicuri",
+      "minutes": "{count} min",
+      "seconds": "{count} s"
+    },
+    "tiles": {
+      "autoLogin": "Autentificare automată",
+      "email": "Notificări e-mail",
+      "improveOpal": "Îmbunătățește OPAL",
+      "improveSelma": "Îmbunătățește Selma",
+      "searchEngines": "Puteri pentru motoare de căutare",
+      "shortcuts": "Scurtături",
+      "rockets": "Colecționează rachete",
+      "about": "Despre proiect",
+      "contact": "Ajutor & contact",
+      "faculty": "Facultatea mea",
+      "language": "Limbă"
+    },
+    "pages": {
+      "email": {
+        "needsLogin": "Trebuie să configurezi \"Autentificare automată\" cu datele tale de login înainte de a folosi această funcție.",
+        "title": "Primește notificări când ai e-mailuri noi",
+        "fetchToggle": "Afișează numărul de e-mailuri necitite ca insignă de notificare",
+        "notificationToggle": "Notificare pop-up la primirea unui e-mail nou",
+        "permission": "Preluarea numărului de e-mailuri necitite poate dura până la 5 minute. TUfast are nevoie de o permisiune specială pentru asta, așa că te rugăm să apeși \"Allow\" în următorul pop-up.",
+        "help": "Pentru această funcție, TUfast preia numărul de e-mailuri necitite de pe serverul de mail TU Dresden. Datele tale de login sunt transmise criptat. Această conexiune este sigură. Funcționează la fel ca verificarea mailului în browser. Notificările folosesc Windows API. Reține că funcția corespunzătoare trebuie activată în Windows."
+      },
+      "improveOpal": {
+        "title": "Îmbunătățește gestionarea PDF-urilor și documentelor text în OPAL",
+        "inline": "Deschide PDF-uri și documente text direct în browser în loc să le descarci",
+        "newTab": "Deschide PDF-uri și documente text într-un tab nou (recomandat)",
+        "permission": "Pentru a aplica aceste setări, trebuie să reîmprospătezi OPAL o dată. TUfast poate avea nevoie de o permisiune specială. Te rugăm să apeși \"Allow\" în următorul pop-up.",
+        "firefoxWarning": "Din păcate, această funcție nu este stabilă în Firefox."
+      },
+      "improveSelma": {
+        "title": "Îmbunătățește layout-ul și distribuțiile notelor în Selma",
+        "toggle": "Adaugă layout îmbunătățit, distribuție a notelor și urmărirea încercărilor",
+        "help": "Această funcție adaugă grafice pentru distribuțiile notelor și urmărirea încercărilor în Selma. În plus, ajustează layout-ul și designul pentru a fi mai ușor de folosit."
+      },
+      "rockets": {
+        "title": "Deblochează rachete noi și folosește-le pentru a personaliza OPAL și browserul tău!",
+        "help": "Asta susține și proiectul TUfast și ne ajută mult :)"
+      },
+      "searchEngines": {
+        "title": "Comenzile scurte în motoarele de căutare deschid direct OPAL și alte instrumente",
+        "toggle": "Activează puterile pentru motoare de căutare",
+        "help": "De exemplu, scrie \"tumail\" în Google Search pentru a deschide direct Outlook Web App. Majoritatea motoarelor de căutare sunt acceptate!"
+      },
+      "shortcuts": {
+        "title": "Deschide OPAL și alte instrumente cu scurtături de tastatură",
+        "activeByDefault": "Active implicit:",
+        "dashboard": "Deschide dashboardul",
+        "opal": "Deschide OPAL",
+        "mail": "Deschide mailul (OWA)"
+      },
+      "autoLogin": {
+        "saved": "Salvat în prezent",
+        "notSaved": "Nu există date salvate",
+        "intro": "Pentru asta, datele tale de login {name} trebuie salvate în siguranță pe acest PC. Datele sunt salvate doar local și criptat. Le poți șterge oricând.",
+        "saveLogin": "Salvează loginul local",
+        "deleteLogin": "Șterge loginul",
+        "twoFactorTitle": "Autentificare cu doi factori (2FA)",
+        "twoFactorHelp": "Autentificarea automată acceptă și 2FA. Aici poți salva TOTP secret key. Key este codificat Base32 și arată, de exemplu, așa:",
+        "totpExample": "MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP",
+        "twoFactorLink": "Aici găsești mai multe informații și un ghid complet de configurare. ->",
+        "saveKey": "Salvează key local",
+        "deleteKey": "Șterge key"
+      },
+      "about": {
+        "title": "De ce trebuie să fie studiul online atât de complicat?",
+        "intro1": "La TU Dresden jonglăm zilnic cu OPAL, Selma, Hisqis și Outlook, pierzând timp și răbdare. Așa că ne-am întrebat: nu se poate mai simplu? Din această întrebare s-a născut TUfast. Mai întâi ca un mic proiect secundar în timpul studiilor, apoi ca o platformă în creștere care a ajuns rapid la tot mai mulți studenți. Ce a început cu câteva linii de cod a devenit o misiune comună: să facem viața digitală de student la TU Dresden mai ușoară.",
+        "intro2": "Astăzi, TUfast este un proiect open-source realizat de studenți și alumni ai TU Dresden. Este folosit de peste 4000 de studenți la TU Dresden. Toți cei care contribuie la proiect o fac voluntar și cu dorința de a face predarea online puțin mai ușoară pentru alți studenți.",
+        "supportersStart": "Proiectul este susținut, printre alții, de",
+        "supportersEnd": "Facultatea de Informatică, mai multe consilii studențești ale TU Dresden și sponsori amabili pe",
+        "nextStep": "Încă nu am ajuns la final: următorul nostru pas este să continuăm extinderea TUfast pentru TU Dresden, pentru alte universități din Saxonia și pentru toți cei care vor un pic mai multă structură și lejeritate în predarea digitală.",
+        "claim": "De la studenți, pentru studenți. Gratuit și open source.",
+        "clickCalcTitle": "Cum sunt calculate clicurile economisite:",
+        "clickCalcClick": "Un clic economisit = 3 secunde",
+        "clickCalcShortcut": "Folosirea unei scurtături = 2 clicuri economisite",
+        "clickCalcLogin": "O autentificare automată = 3 clicuri economisite",
+        "clickCalcCourse": "Deschiderea unui curs prin dashboard = 3 clicuri economisite",
+        "clickCalcSearch": "O redirecționare de căutare = 2 clicuri economisite",
+        "developedBy": "TUfast este dezvoltat de:",
+        "licenses": "Open source & licențe",
+        "fontLicense": "Font: Space Grotesk, 2020. The Space Grotesk Project Authors, Florian Karsten, SIL Open Font License.",
+        "iconLicense": "Icons: Tabler Icons, Copyright (c) 2018-2025 Tabler, MIT License"
+      },
+      "contact": {
+        "title": "Ai o întrebare sau o idee pentru TUfast?",
+        "text": "Atunci trimite-ne cu plăcere un e-mail la",
+        "subject": "Feedback TUfast"
+      },
+      "appearance": {
+        "title": "Aspect"
+      }
+    },
+    "logins": {
+      "zih": {
+        "title": "Autentifică-te automat în toate portalurile online TU Dresden",
+        "name": "TU Dresden",
+        "usernamePlaceholder": "Nume utilizator (ZIH login)",
+        "usernameError": "Numele de utilizator arată ca 's3276763' sau 'luka075d'. Salvează intrarea curentă doar dacă ești sigur.",
+        "passwordPlaceholder": "Parolă (ZIH login)",
+        "passwordError": "Parola trebuie să aibă cel puțin 5 caractere.",
+        "totpSecretPlaceholder": "TOTP secret key",
+        "totpSecretError": "TOTP secret key conține litere mari (A-Z) și cifre (2-7) și are 32 de caractere."
+      },
+      "slub": {
+        "title": "Autentifică-te automat pe site-ul SLUB",
+        "name": "SLUB",
+        "usernamePlaceholder": "Număr de utilizator (SLUB login)",
+        "usernameError": "Numărul de utilizator se găsește, printre altele, pe cardul tău SLUB.",
+        "passwordPlaceholder": "Parolă (SLUB login)",
+        "passwordError": "Parola trebuie să aibă cel puțin 5 caractere."
+      }
+    },
+    "faculty": {
+      "alt": "Iconul programului de studii {name}",
+      "placeholder": "Substituent",
+      "default": "Setări implicite",
+      "mailSubject": "Sugestie program de studii",
+      "names": {
+        "geowissenschaften": "Științe ale Pământului",
+        "maschinenbau": "Inginerie mecanică",
+        "informatik": "Informatică",
+        "mathematik": "Matematică",
+        "medizin": "Medicină",
+        "psychologie": "Psihologie",
+        "wirtschaftswissenschaften": "Economie și administrarea afacerilor",
+        "elektrotechnik": "Inginerie electrică",
+        "bauingenieurwesen": "Inginerie civilă",
+        "verkehr": "Științe ale transporturilor \"Friedrich List\"",
+        "general": "Setări implicite",
+        "addStudiengang": "+ Adaugă program de studii..."
+      }
+    },
+    "rocketsText": {
+      "default": {
+        "beforeUnlock": "Implicit. Toată lumea îl are.",
+        "unlocked": "Implicit. Toată lumea îl are."
+      },
+      "250clicks": {
+        "beforeUnlock": "Economisește mai mult de 250 de clicuri.",
+        "unlocked": "Peste 250 de clicuri economisite. TUfast pare util!"
+      },
+      "2500clicks": {
+        "beforeUnlock": "Economisește mai mult de 2500 de clicuri. Ești profesionist!",
+        "unlocked": "Peste 2500 de clicuri economisite. TUfast este util!"
+      },
+      "easteregg": {
+        "beforeUnlock": "Găsește easter egg-ul!",
+        "unlocked": "Easter egg găsit :)"
+      },
+      "email": {
+        "beforeUnlock": "Ți se pare util TUfast? Spune-le la două persoane prin e-mail ca să deblochezi această rachetă elegantă!",
+        "unlocked": "Ai meritat această rachetă! Recomandat prin e-mail."
+      },
+      "webstore": {
+        "beforeUnlock": "Îți place TUfast? Sau ai observații? Lasă o recenzie în Web Store!",
+        "unlocked": "Mulțumim pentru recenzia din Web Store!"
+      },
+      "whatsapp": {
+        "beforeUnlock": "Îți place să distribui lucruri faine? Distribuie TUfast la doi prieteni pe WhatsApp și colecționează această rachetă grozavă!",
+        "unlocked": "Mulțumim pentru susținere! Recomandat prin WhatsApp."
+      }
+    },
+    "rocketLinks": {
+      "email": "mailto:?subject=%C3%8Encearc%C4%83%20TUfast%20!&body=Salut%20%3A)%0A%0ACuno%C8%99ti%20deja%20TUfast%3F%0A%0ATUfast%20te%20ajut%C4%83%20%C3%AEn%20munca%20de%20zi%20cu%20zi%20cu%20portalurile%20online%20ale%20TU%20Dresden.%0A%C3%8Emi%20economise%C8%99te%20mult%20timp%20%C8%99i%20clicuri%20enervante.%0A%0ATUfast%20este%20o%20extensie%20de%20browser%20dezvoltat%C4%83%20de%20studen%C8%9Bi.%0A%C3%8Encearc-o%20acum%20pe%20www.tu-fast.de%20!%0A%0ACu%20drag",
+      "whatsapp": "https://api.whatsapp.com/send?text=Salut%2C%20cuno%C8%99ti%20deja%20TUfast%3F%0A%0AFace%20munca%20cu%20portalurile%20online%20ale%20TU%20Dresden%20mai%20productiv%C4%83%20%C8%99i%20mi-a%20economisit%20deja%20mult%20timp%20%C8%99i%20clicuri%20enervante.%20O%20extensie%20de%20browser%20chiar%20util%C4%83%20pentru%20studen%C8%9Bi!%0A%0A%C3%8Encearc-o%20acum%20pe%20www.tu-fast.de"
+    },
+    "searchSites": {
+      "hisqis": "HISQIS",
+      "opal": "OPAL",
+      "selma": "Selma",
+      "slub": "SLUB",
+      "tucloud": "Cloudstore TU Dresden",
+      "tudmail": "Outlook Web App",
+      "tumail": "Outlook Web App",
+      "tumatrix": "Matrix TU Dresden",
+      "tumed": "Medical ePortal",
+      "tustore": "Cloudstore TU Dresden",
+      "videocampus": "Videocampus Sachsen",
+      "tex": "Overleaf ShareLaTeX"
+    }
+  },
+  "onboarding": {
+    "start": "Începe configurarea",
+    "next": "Următorul",
+    "skip": "Omite configurarea",
+    "finish": "Finalizează configurarea",
+    "steps": {
+      "welcome": "Bine ai venit la TUfast",
+      "faculty": "Facultatea mea",
+      "login": "Autentificare automată - acces",
+      "otp": "Autentificare automată - 2FA",
+      "email": "Notificări e-mail",
+      "opalSelma": "Îmbunătățește OPAL și Selma",
+      "searchEngines": "Scurtături pentru motoare de căutare",
+      "done": "GATA!"
+    },
+    "pages": {
+      "welcomeTitle": "Instrumentul tău de productivitate pentru TU Dresden",
+      "welcomeHelp": "cu TUfast economisești până la<br />90 de minute și până la 2000 de clicuri pe semestru",
+      "facultyHelp": "Alege facultatea ta. Dashboardul tău va fi apoi configurat cu toate linkurile relevante pentru tine.",
+      "loginHelp": "Autentifică-te automat în toate portalurile online TU Dresden",
+      "otpHelp": "Vrei să te autentifici imediat? Atunci configurează autentificarea cu doi factori",
+      "emailHelp": "Autentifică-te automat în toate portalurile online TU Dresden",
+      "doneIntro": "TUfast este acum complet configurat pentru tine.<br />Iată câteva sfaturi:",
+      "doneSettings": "Poți modifica setările oricând",
+      "doneCourses": "Adaugă cursurile tale OPAL în dashboard",
+      "doneContact": "Dacă ai întrebări sau idei pentru TUfast, contactează-ne cu plăcere!",
+      "doneGoodLuck": "Succes la studii!"
+    }
+  },
+  "popup": {
+    "title": "Dashboard TU Dresden",
+    "searchPlaceholder": "Caută curs...",
+    "autoLogin": "AutoLogin",
+    "bananaHtml": "<a tabindex=\"-1\" href=\"https://www.buymeacoffee.com/olihausdoerfer\" target=\"_blank\" style = \"position: fixed; bottom: 70px; right: 26px;\" > <img tabindex=\"-1\" style=\"width: 160px;\"src=\"https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>",
+    "shareHtml": "<div class=\"content\"><h1>Ajută-ți colegii să descopere<br /><img class=\"invert\" src=\"../../assets/images/tufast48.png\" style=\"height:1.5em;vertical-align:middle;\" /> TUfast</h1><p class=\"subtitle\">și <a href=\"#\" id=\"rockets_link\" style=\"color:var(--color-text-link);text-decoration:underline;cursor:pointer;\">colecționează rachete cool</a>!</p><div class=\"share-section\"><div class=\"share-title\">Distribuie prin</div><div class=\"share-links\"><a class=\"share-link\" href=\"mailto:?subject=Try%20TUfast!&body=Hey%20%3A)%0A%0ADo%20you%20know%20TUfast%3F%0A%0ATUfast%20helps%20with%20daily%20work%20in%20the%20TU%20Dresden%20online%20portals.%0AIt%20saves%20me%20a%20lot%20of%20time%20and%20annoying%20clicks.%0A%0ATUfast%20is%20a%20browser%20extension%20developed%20by%20students.%0ATry%20it%20now%20at%20www.tu-fast.de%20!%0A%0ABest%20wishes\" target=\"_blank\"><img src=\"../../assets/icons/gmail.png\" />E-mail</a><a class=\"share-link\" href=\"https://api.whatsapp.com/send?text=Hey%2C%20do%20you%20know%20TUfast%3F%0A%0AIt%20makes%20working%20with%20the%20TU%20Dresden%20online%20portals%20more%20productive%20and%20has%20already%20saved%20me%20a%20lot%20of%20time%20and%20annoying%20clicks.%20A%20really%20useful%20browser%20extension%20for%20students!%0A%0ATry%20it%20now%20at%20www.tu-fast.de\" target=\"_blank\"><img src=\"../../assets/icons/wa2.png\" />WhatsApp</a><a class=\"share-link\" href=\"https://www.tu-fast.de\" target=\"_blank\">www.tu-fast.de</a></div></div><div class=\"footer\">Făcut cu grijă de studenți - <a href=\"https://github.com/TUfast-TUD/TUfast_TUD\" target=\"_blank\">GitHub</a> - <a href=\"mailto:frage%40tu-fast.de?subject=TUfast%20feedback\" target=\"_blank\">Contact</a></div></div>",
+    "savedClicks": "{clicks} clicuri, {time} economisit",
+    "importOpalCourses": "Apasă pentru a importa cursurile tale OPAL",
+    "updateCourseList": "Actualizează această listă de cursuri acum...",
+    "ratingDone": "Gata <text style='font-size:14px'>OK</text>",
+    "rateBeforeSubmit": "Te rugăm să evaluezi cursul cu stele înainte de a trimite evaluarea!",
+    "introRating": "<b>Căutăm cel mai bun curs de la TU Dresden. Evaluează acum cursurile tale cu 1-5 stele!</b> Evaluarea ta este 100% anonimă. Vom publica rezultatele votului ulterior. Detalii și completarea politicii de confidențialitate sunt disponibile <a target='_blank' href='https://tu-fast.de/datenschutz'>aici</a>. <a id='intro' href='#'>Închide</a>.",
+    "outroRating": "<b>Mulțumim pentru vot. Vei fi notificat despre rezultate!</b> Distribuie acum <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> prietenilor tăi, ca și ei să poată evalua cursurile. Asta ne ajută să îmbunătățim predarea la TU Dresden! Mulțumim<br><a id='outro' href='#'>Închide</a>.",
+    "gopalBanner": "<b>Sfat pentru boboci: află tot ce este important despre studiile tale cu gOPAL, asistentul mobil de studii! Deschide <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL aici.</a> <a id='msg1' href='#'>Închide</a>.",
+    "tooManyCourses": "Dezactivat: mai mult de 25 de cursuri",
+    "openAllFavorites": "Deschide toate favoritele",
+    "openAllCourses": "Deschide toate cursurile",
+    "switchToCourses": "Se comută la \"Cursurile mele\" ... ",
+    "switchToFavorites": "Se comută la \"Favoritele mele\" ...",
+    "iconTitles": {
+      "selma": "Selma",
+      "eportal": "ePortal",
+      "moodle": "Moodle",
+      "opal": "OPAL",
+      "qis": "QIS",
+      "matrix": "Matrix Chat",
+      "msx": "TU Mail",
+      "slub": "SLUB",
+      "cloud": "Datashare",
+      "gitlab": "GitLab",
+      "orsee": "orsee",
+      "geoportal": "Geoportal",
+      "tuNavi": "TU Campus Navigator",
+      "marudor": "bahn.expert (fost marudor.de)",
+      "infoDiscord": "Computer Science Discord",
+      "swdd": "Cantină",
+      "pa": "Birouri de examinare",
+      "tex": "tex"
+    }
+  },
+  "content": {
+    "opal": {
+      "closeAllTabs": "Închide toate taburile",
+      "closeAllTabsTitle": "Închide toate taburile. O funcție TUfast.",
+      "openAllCourses": "Deschide toate cursurile",
+      "openAllCoursesTitle": "Deschide toate cursurile. O funcție TUfast.",
+      "openAllFavorites": "Deschide toate favoritele",
+      "openAllFavoritesTitle": "Deschide toate favoritele. O funcție TUfast.",
+      "coursesSaved": "Cursurile tale au fost salvate cu succes în TUfast. Apasă acum <kbd>Alt</kbd> + <kbd>Q</kbd> pentru a vedea cursurile!",
+      "coursesUpdated": "Cursurile tale au fost actualizate cu succes în TUfast!",
+      "snowEnable": "Activează zăpada",
+      "snowDisable": "Dezactivează zăpada",
+      "snowTitle": "Setează zăpada. Modul de iarnă TUfast.",
+      "logoTitle": "Powered by TUfast. Enjoy :)",
+      "banners": {
+        "helpText": "Vrei să ajuți la dezvoltarea TUfast? ",
+        "helpAction": "Te căutăm!",
+        "helpTitle": "Căutăm ajutor:",
+        "mv3Text": "Din păcate, trebuie să reactivezi personalizarea OPAL, dacă vrei. ",
+        "mv3Action": "Activează aici",
+        "mv3Title": "Mare actualizare TUfast!",
+        "rocketText": "Recomandă TUfast și deblochează iconuri noi! ",
+        "rocketAction": "Să începem!",
+        "rocketTitle": "Prinde-le pe toate!",
+        "reviewText": "Atunci lasă o recenzie bună în magazin! ",
+        "reviewAction": "Pe aici!",
+        "reviewTitle": "Îți place?",
+        "close": "X"
+      }
+    },
+    "hisqis": {
+      "credits": "Powered by <img src=\"{imgUrl}\" style=\"position:relative; right: 2px;height: 15px;\"><a href=\"https://www.tu-fast.de\" target=\"_blank\">TUfast</a> (dezvoltat de <a href=\"https://github.com/Noxdor\" target=\"_blank\">Noxdor</a> & <a href=\"https://github.com/C0ntroller\" target=\"_blank\">C0ntroller</a>)",
+      "oldTable": "tabel vechi și plictisitor...",
+      "newTable": "tabel TUfast nou și cool",
+      "continueTo": " Continuă la ",
+      "overview": "Prezentarea notelor tale",
+      "descriptors": ["Modul", "Examen promovat", "Examen picat"],
+      "weightedAverage": "Media ta (ponderată după CP): {average}",
+      "moduleCount": "Număr de module: {count}",
+      "examCount": "Număr de examene: {count}",
+      "failed": "picat"
+    },
+    "selma": {
+      "passed": "Promovat",
+      "notSet": "Încă nesetat",
+      "distribution": "Distribuția notelor",
+      "tries": "Încercări",
+      "examDate": "Examen/programare",
+      "deactivate": "Dezactivează",
+      "activate": "Activează",
+      "toggleTitle": "Comută funcția \"Îmbunătățește Selma\" și reîncarcă pagina pentru a aplica schimbarea.",
+      "creditsEnabled": "Tabel powered by",
+      "creditsDisabled": "Tabel dezactivat",
+      "creditsBy": "de"
+    },
+    "owa": {
+      "permissionFetch": "TUfast are nevoie de această permisiune pentru a prelua regulat toate e-mailurile. Te rugăm să apeși 'Allow'.",
+      "permissionNotification": "TUfast are nevoie de această permisiune pentru a-ți trimite notificări suplimentare. Te rugăm să apeși 'Allow'.",
+      "newMailTitle": "E-mailuri noi",
+      "newMailMessage": "Ai {count} e-mail nou | Ai {count} e-mailuri noi"
+    },
+    "opalInline": {
+      "permission": "TUfast are nevoie de această permisiune pentru a deschide fișiere fără descărcare. Te rugăm să apeși 'Allow'."
+    },
+    "background": {
+      "tooManyLinks": "Ai mai mult de 25 {type}. Pentru a nu supraîncărca browserul, te rugăm să le deschizi manual.",
+      "favorites": "favorite",
+      "courses": "cursuri"
+    },
+    "otp": {
+      "snatcherConfirm": "TUfast poate salva acest cod de doi factori pentru tine și îl poate completa automat în locurile potrivite (=AutoLogin). Totuși, acest lucru contrazice de fapt ideea unui al doilea factor.\n\nSALVEAZĂ NEAPĂRAT ACEST COD ȘI RECOVERY CODES ȘI ÎN ALT LOC!\n\nSă gestioneze TUfast autentificarea cu doi factori pentru tine?"
+    }
+  }
+}

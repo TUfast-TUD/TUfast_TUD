@@ -1,0 +1,357 @@
+{
+  "localeName": "Türkçe",
+  "localeStatus": "beta",
+  "manifest": {
+    "extensionName": "TUfast TU Dresden",
+    "extensionDescription": "TU Dresden öğrencileri için üretkenlik aracı",
+    "commandOpenOpal": "OPAL'i aç",
+    "commandOpenOwa": "Postayı (OWA) aç"
+  },
+  "common": {
+    "close": "Kapat",
+    "edit": "Düzenle",
+    "active": "AKTİF",
+    "inactive": "PASİF",
+    "saved": "KAYDEDİLDİ",
+    "website": "Web sitesi",
+    "team": "Ekip",
+    "github": "GitHub",
+    "buyMeACoffee": "BuyMeACoffee",
+    "supportUs": "Bizi destekle",
+    "privacy": "Gizlilik"
+  },
+  "settings": {
+    "documentTitle": "TUfast Ayarları",
+    "location": "Ayarlar",
+    "personalization": "Kişiselleştirme",
+    "functions": "Özellikler",
+    "information": "Bilgi",
+    "statistics": {
+      "saved": "Şimdiye kadar kazandırdı:",
+      "clicks": " tıklama | tıklama",
+      "minutes": "{count} dk",
+      "seconds": "{count} sn"
+    },
+    "tiles": {
+      "autoLogin": "Otomatik Giriş",
+      "email": "E-posta Bildirimleri",
+      "improveOpal": "OPAL'i iyileştir",
+      "improveSelma": "Selma'yı iyileştir",
+      "searchEngines": "Arama Motoru Güçleri",
+      "shortcuts": "Kısayollar",
+      "rockets": "Roketleri Topla",
+      "about": "Proje Hakkında",
+      "contact": "Yardım & İletişim",
+      "faculty": "Fakültem",
+      "language": "Dil"
+    },
+    "pages": {
+      "email": {
+        "needsLogin": "Bu özelliği kullanmadan önce giriş bilgilerinizle \"Otomatik Giriş\" ayarlamanız gerekir.",
+        "title": "Yeni e-posta aldığınızda bildirim alın",
+        "fetchToggle": "Okunmamış e-posta sayısını bildirim rozeti olarak göster",
+        "notificationToggle": "Yeni e-posta geldiğinde açılır bildirim göster",
+        "permission": "Okunmamış e-posta sayınızı almak 5 dakikaya kadar sürebilir. TUfast bunun için özel bir izin ister, lütfen sonraki açılır pencerede \"Allow\" seçeneğine tıklayın.",
+        "help": "Bu özellik için TUfast, okunmamış e-posta sayınızı TU Dresden posta sunucusundan alır. Giriş bilgileriniz şifreli olarak aktarılır. Bu bağlantı güvenlidir. Tarayıcıda postanızı kontrol etmenizle aynı şekilde çalışır. Bildirimler Windows API üzerinden gelir. Windows'ta ilgili özelliğin etkin olması gerektiğini unutmayın."
+      },
+      "improveOpal": {
+        "title": "OPAL'de PDF ve metin belgeleriyle çalışmayı iyileştir",
+        "inline": "PDF ve metin belgelerini indirmek yerine doğrudan tarayıcıda aç",
+        "newTab": "PDF ve metin belgelerini yeni sekmede aç (önerilir)",
+        "permission": "Bu ayarların uygulanması için OPAL'i bir kez yenilemeniz gerekir. TUfast özel bir izin isteyebilir. Lütfen sonraki açılır pencerede \"Allow\" seçeneğine tıklayın.",
+        "firefoxWarning": "Maalesef bu özellik Firefox tarayıcısında kararlı çalışmıyor."
+      },
+      "improveSelma": {
+        "title": "Selma'da düzeni ve not dağılımlarını iyileştir",
+        "toggle": "İyileştirilmiş düzen, not dağılımı ve deneme takipçisi ekle",
+        "help": "Bu özellik Selma'ya not dağılımları ve deneme takibi için grafikler ekler. Ayrıca düzen ve tasarımı daha kullanışlı hale getirir."
+      },
+      "rockets": {
+        "title": "Yeni roketlerin kilidini açın ve OPAL ile tarayıcınızı kişiselleştirin!",
+        "help": "Bu aynı zamanda TUfast projesini destekler ve bize çok yardımcı olur :)"
+      },
+      "searchEngines": {
+        "title": "Arama motorlarındaki kısa komutlar OPAL'i ve diğer araçları doğrudan açar",
+        "toggle": "Arama motoru güçlerini etkinleştir",
+        "help": "Örneğin Outlook Web App'i doğrudan açmak için Google Search'e \"tumail\" yazın. Çoğu arama motoru desteklenir!"
+      },
+      "shortcuts": {
+        "title": "OPAL'i ve diğer araçları klavye kısayollarıyla aç",
+        "activeByDefault": "Varsayılan olarak etkin:",
+        "dashboard": "Paneli aç",
+        "opal": "OPAL'i aç",
+        "mail": "Postayı (OWA) aç"
+      },
+      "autoLogin": {
+        "saved": "Şu anda kayıtlı",
+        "notSaved": "Kayıtlı veri yok",
+        "intro": "Bunun için {name} giriş bilgileriniz bu bilgisayarda güvenli şekilde saklanmalıdır. Veriler yalnızca yerel ve şifreli olarak saklanır. İstediğiniz zaman silebilirsiniz.",
+        "saveLogin": "Girişi yerel olarak kaydet",
+        "deleteLogin": "Girişi sil",
+        "twoFactorTitle": "İki faktörlü kimlik doğrulama (2FA)",
+        "twoFactorHelp": "Otomatik Giriş 2FA'yı da destekler. Burada TOTP secret key'inizi kaydedebilirsiniz. Key Base32 ile kodlanır ve örneğin şöyle görünür:",
+        "totpExample": "MHSTKUIKTTHPQAZNVWQBJE5YQ2WACQQP",
+        "twoFactorLink": "Daha fazla bilgi ve eksiksiz kurulum kılavuzunu burada bulabilirsiniz. ->",
+        "saveKey": "Key'i yerel olarak kaydet",
+        "deleteKey": "Key'i sil"
+      },
+      "about": {
+        "title": "Online okumak neden bu kadar karmaşık olmak zorunda?",
+        "intro1": "TU Dresden'de her gün OPAL, Selma, Hisqis ve Outlook arasında gidip geliyor, zaman ve sabır kaybediyoruz. Bu yüzden kendimize şunu sorduk: Bu daha kolay olamaz mı? TUfast bu sorudan doğdu. Önce öğrencilik sırasında küçük bir yan proje olarak başladı, sonra hızla daha fazla öğrenciye ulaşan büyüyen bir platforma dönüştü. Birkaç satır kodla başlayan şey ortak bir misyona dönüştü: TU Dresden'deki dijital öğrenci yaşamını kolaylaştırmak.",
+        "intro2": "Bugün TUfast, TU Dresden öğrencileri ve mezunları tarafından geliştirilen açık kaynaklı bir projedir. TU Dresden'de 4000'den fazla öğrenci tarafından kullanılır. Projeye katkıda bulunan herkes bunu gönüllü olarak ve diğer öğrenciler için online öğretimi biraz daha kolaylaştırma isteğiyle yapar.",
+        "supportersStart": "Proje, diğerlerinin yanı sıra",
+        "supportersEnd": "Bilgisayar Bilimleri Fakültesi, TU Dresden'deki çeşitli öğrenci konseyleri ve GitHub'daki nazik sponsorlar tarafından desteklenir",
+        "nextStep": "Henüz hedefe ulaşmadık: sonraki adımımız TUfast'i TU Dresden, Saksonya'daki diğer üniversiteler ve dijital öğretimde biraz daha yapı ve kolaylık isteyen herkes için genişletmeye devam etmek.",
+        "claim": "Öğrencilerden, öğrenciler için. Ücretsiz ve açık kaynak.",
+        "clickCalcTitle": "Kaydedilen tıklamalar böyle hesaplanır:",
+        "clickCalcClick": "Bir kaydedilen tıklama = 3 saniye",
+        "clickCalcShortcut": "Bir kısayol kullanmak = 2 kaydedilen tıklama",
+        "clickCalcLogin": "Bir otomatik giriş = 3 kaydedilen tıklama",
+        "clickCalcCourse": "Panel üzerinden bir kurs açmak = 3 kaydedilen tıklama",
+        "clickCalcSearch": "Bir arama yönlendirmesi = 2 kaydedilen tıklama",
+        "developedBy": "TUfast şu kişiler tarafından geliştiriliyor:",
+        "licenses": "Açık kaynak & lisanslar",
+        "fontLicense": "Font: Space Grotesk, 2020. The Space Grotesk Project Authors, Florian Karsten, SIL Open Font License.",
+        "iconLicense": "Icons: Tabler Icons, Copyright (c) 2018-2025 Tabler, MIT License"
+      },
+      "contact": {
+        "title": "TUfast için bir sorunuz veya fikriniz mi var?",
+        "text": "O zaman lütfen bize şu adrese e-posta gönderin",
+        "subject": "TUfast geri bildirimi"
+      },
+      "appearance": {
+        "title": "Görünüm"
+      }
+    },
+    "logins": {
+      "zih": {
+        "title": "TU Dresden'in tüm online portallarında otomatik olarak oturum açın",
+        "name": "TU Dresden",
+        "usernamePlaceholder": "Kullanıcı adı (ZIH login)",
+        "usernameError": "Kullanıcı adı 's3276763' veya 'luka075d' biçimindedir. Mevcut girişinizi yalnızca emin olduğunuzda kaydedin.",
+        "passwordPlaceholder": "Şifre (ZIH login)",
+        "passwordError": "Şifre en az 5 karakter uzunluğunda olmalıdır.",
+        "totpSecretPlaceholder": "TOTP secret key",
+        "totpSecretError": "TOTP secret key büyük harflerden (A-Z) ve rakamlardan (2-7) oluşur ve 32 karakter uzunluğundadır."
+      },
+      "slub": {
+        "title": "SLUB web sitesinde otomatik olarak oturum açın",
+        "name": "SLUB",
+        "usernamePlaceholder": "Kullanıcı numarası (SLUB login)",
+        "usernameError": "Kullanıcı numarasını diğer yerlerin yanında SLUB kartınızda bulabilirsiniz.",
+        "passwordPlaceholder": "Şifre (SLUB login)",
+        "passwordError": "Şifre en az 5 karakter uzunluğunda olmalıdır."
+      }
+    },
+    "faculty": {
+      "alt": "{name} programının simgesi",
+      "placeholder": "Yer tutucu",
+      "default": "Varsayılan ayarlar",
+      "mailSubject": "Program önerisi",
+      "names": {
+        "geowissenschaften": "Yer Bilimleri",
+        "maschinenbau": "Makine Mühendisliği",
+        "informatik": "Bilgisayar Bilimleri",
+        "mathematik": "Matematik",
+        "medizin": "Tıp",
+        "psychologie": "Psikoloji",
+        "wirtschaftswissenschaften": "İşletme ve Ekonomi",
+        "elektrotechnik": "Elektrik Mühendisliği",
+        "bauingenieurwesen": "İnşaat Mühendisliği",
+        "verkehr": "Ulaştırma Bilimleri \"Friedrich List\"",
+        "general": "Varsayılan ayarlar",
+        "addStudiengang": "+ Program ekle..."
+      }
+    },
+    "rocketsText": {
+      "default": {
+        "beforeUnlock": "Varsayılan. Herkeste var.",
+        "unlocked": "Varsayılan. Herkeste var."
+      },
+      "250clicks": {
+        "beforeUnlock": "250'den fazla tıklama kaydedin.",
+        "unlocked": "250'den fazla tıklama kaydedildi. TUfast faydalı görünüyor!"
+      },
+      "2500clicks": {
+        "beforeUnlock": "2500'den fazla tıklama kaydedin. Profesyonelsiniz!",
+        "unlocked": "2500'den fazla tıklama kaydedildi. TUfast faydalı!"
+      },
+      "easteregg": {
+        "beforeUnlock": "Easter egg'i bulun!",
+        "unlocked": "Easter egg bulundu :)"
+      },
+      "email": {
+        "beforeUnlock": "TUfast'i faydalı buluyor musunuz? Bu şık roketin kilidini açmak için iki kişiye e-posta ile anlatın!",
+        "unlocked": "Bu roketi hak ettiniz! E-posta ile önerildi."
+      },
+      "webstore": {
+        "beforeUnlock": "TUfast'i beğendiniz mi? Ya da geri bildiriminiz mi var? O zaman Web Store'da yorum bırakın!",
+        "unlocked": "Web Store'daki yorumunuz için teşekkürler!"
+      },
+      "whatsapp": {
+        "beforeUnlock": "Güzel şeyleri paylaşmayı sever misiniz? TUfast'i WhatsApp'ta iki arkadaşınızla paylaşın ve bu harika roketi toplayın!",
+        "unlocked": "Desteğiniz için teşekkürler! WhatsApp ile önerildi."
+      }
+    },
+    "rocketLinks": {
+      "email": "mailto:?subject=TUfast'%C4%B1%20dene%20!&body=Selam%20%3A)%0A%0ATUfast'%C4%B1%20biliyor%20musun%3F%0A%0ATUfast%2C%20TU%20Dresden'in%20%C3%A7evrimi%C3%A7i%20portallar%C4%B1yla%20g%C3%BCnl%C3%BCk%20i%C5%9Flerinde%20sana%20yard%C4%B1mc%C4%B1%20olur.%0ABana%20%C3%A7ok%20zaman%20ve%20can%20s%C4%B1k%C4%B1c%C4%B1%20t%C4%B1klamalardan%20tasarruf%20ettiriyor.%0A%0ATUfast%2C%20%C3%B6%C4%9Frenciler%20taraf%C4%B1ndan%20geli%C5%9Ftirilen%20bir%20taray%C4%B1c%C4%B1%20eklentisidir.%0AHemen%20www.tu-fast.de%20adresinde%20dene%20!%0A%0ASevgiler",
+      "whatsapp": "https://api.whatsapp.com/send?text=Selam%2C%20TUfast'%C4%B1%20biliyor%20musun%3F%0A%0ATU%20Dresden'in%20%C3%A7evrimi%C3%A7i%20portallar%C4%B1yla%20%C3%A7al%C4%B1%C5%9Fmay%C4%B1%20daha%20verimli%20hale%20getiriyor%20ve%20bana%20%C5%9Fimdiden%20%C3%A7ok%20zaman%20ile%20can%20s%C4%B1k%C4%B1c%C4%B1%20t%C4%B1klamalardan%20tasarruf%20ettirdi.%20%C3%96%C4%9Frenciler%20i%C3%A7in%20ger%C3%A7ekten%20kullan%C4%B1%C5%9Fl%C4%B1%20bir%20taray%C4%B1c%C4%B1%20eklentisi!%0A%0AHemen%20www.tu-fast.de%20adresinde%20dene"
+    },
+    "searchSites": {
+      "hisqis": "HISQIS",
+      "opal": "OPAL",
+      "selma": "Selma",
+      "slub": "SLUB",
+      "tucloud": "Cloudstore TU Dresden",
+      "tudmail": "Outlook Web App",
+      "tumail": "Outlook Web App",
+      "tumatrix": "Matrix TU Dresden",
+      "tumed": "Medical ePortal",
+      "tustore": "Cloudstore TU Dresden",
+      "videocampus": "Videocampus Sachsen",
+      "tex": "Overleaf ShareLaTeX"
+    }
+  },
+  "onboarding": {
+    "start": "Kurulumu başlat",
+    "next": "İleri",
+    "skip": "Kurulumu atla",
+    "finish": "Kurulumu bitir",
+    "steps": {
+      "welcome": "TUfast'e hoş geldiniz",
+      "faculty": "Fakültem",
+      "login": "Otomatik Giriş - Erişim",
+      "otp": "Otomatik Giriş - 2FA",
+      "email": "E-posta Bildirimleri",
+      "opalSelma": "OPAL ve Selma'yı iyileştir",
+      "searchEngines": "Arama Motoru Kısayolları",
+      "done": "TAMAM!"
+    },
+    "pages": {
+      "welcomeTitle": "TU Dresden için üretkenlik aracınız",
+      "welcomeHelp": "TUfast ile dönem başına<br />90 dakikaya ve 2000 tıklamaya kadar tasarruf edersiniz",
+      "facultyHelp": "Fakültenizi seçin. Paneliniz daha sonra sizin için ilgili tüm bağlantılarla ayarlanır.",
+      "loginHelp": "TU Dresden'in tüm online portallarında otomatik olarak oturum açın",
+      "otpHelp": "Hemen giriş yapmak mı istiyorsunuz? O zaman iki faktörlü kimlik doğrulamayı ayarlayın",
+      "emailHelp": "TU Dresden'in tüm online portallarında otomatik olarak oturum açın",
+      "doneIntro": "TUfast artık sizin için tamamen ayarlandı.<br />İşte birkaç ipucu:",
+      "doneSettings": "Ayarlarınızı istediğiniz zaman değiştirebilirsiniz",
+      "doneCourses": "OPAL kurslarınızı panele ekleyin",
+      "doneContact": "TUfast hakkında sorularınız veya fikirleriniz varsa bizimle iletişime geçmekten çekinmeyin!",
+      "doneGoodLuck": "Eğitiminizde başarılar!"
+    }
+  },
+  "popup": {
+    "title": "TU Dresden Paneli",
+    "searchPlaceholder": "Kurs ara...",
+    "autoLogin": "AutoLogin",
+    "bananaHtml": "<a tabindex=\"-1\" href=\"https://www.buymeacoffee.com/olihausdoerfer\" target=\"_blank\" style = \"position: fixed; bottom: 70px; right: 26px;\" > <img tabindex=\"-1\" style=\"width: 160px;\"src=\"https://img.buymeacoffee.com/button-api/?text=Support%20us%20with%20a%20Mate&emoji=%F0%9F%8D%BE&slug=olihausdoerfer&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=000000></a>",
+    "shareHtml": "<div class=\"content\"><h1>Öğrenci arkadaşlarının<br /><img class=\"invert\" src=\"../../assets/images/tufast48.png\" style=\"height:1.5em;vertical-align:middle;\" /> TUfast'i keşfetmesine yardım et</h1><p class=\"subtitle\">ve <a href=\"#\" id=\"rockets_link\" style=\"color:var(--color-text-link);text-decoration:underline;cursor:pointer;\">havalı roketler topla</a>!</p><div class=\"share-section\"><div class=\"share-title\">Şununla paylaş</div><div class=\"share-links\"><a class=\"share-link\" href=\"mailto:?subject=Try%20TUfast!&body=Hey%20%3A)%0A%0ADo%20you%20know%20TUfast%3F%0A%0ATUfast%20helps%20with%20daily%20work%20in%20the%20TU%20Dresden%20online%20portals.%0AIt%20saves%20me%20a%20lot%20of%20time%20and%20annoying%20clicks.%0A%0ATUfast%20is%20a%20browser%20extension%20developed%20by%20students.%0ATry%20it%20now%20at%20www.tu-fast.de%20!%0A%0ABest%20wishes\" target=\"_blank\"><img src=\"../../assets/icons/gmail.png\" />E-posta</a><a class=\"share-link\" href=\"https://api.whatsapp.com/send?text=Hey%2C%20do%20you%20know%20TUfast%3F%0A%0AIt%20makes%20working%20with%20the%20TU%20Dresden%20online%20portals%20more%20productive%20and%20has%20already%20saved%20me%20a%20lot%20of%20time%20and%20annoying%20clicks.%20A%20really%20useful%20browser%20extension%20for%20students!%0A%0ATry%20it%20now%20at%20www.tu-fast.de\" target=\"_blank\"><img src=\"../../assets/icons/wa2.png\" />WhatsApp</a><a class=\"share-link\" href=\"https://www.tu-fast.de\" target=\"_blank\">www.tu-fast.de</a></div></div><div class=\"footer\">Öğrenciler tarafından özenle yapıldı - <a href=\"https://github.com/TUfast-TUD/TUfast_TUD\" target=\"_blank\">GitHub</a> - <a href=\"mailto:frage%40tu-fast.de?subject=TUfast%20feedback\" target=\"_blank\">İletişim</a></div></div>",
+    "savedClicks": "{clicks} tıklama, {time} kazandırdı",
+    "importOpalCourses": "OPAL kurslarınızı içe aktarmak için tıklayın",
+    "updateCourseList": "Bu kurs listesini şimdi güncelle...",
+    "ratingDone": "Bitti <text style='font-size:14px'>OK</text>",
+    "rateBeforeSubmit": "Puanınızı göndermeden önce lütfen kursu yıldızlarla değerlendirin!",
+    "introRating": "<b>TU Dresden'deki en iyi kursu arıyoruz. Kurslarınızı şimdi 1-5 yıldızla değerlendirin!</b> Değerlendirmeniz %100 anonimdir. Oylama sonuçlarını daha sonra yayımlayacağız. Ayrıntılar ve gizlilik politikasına ek bilgi <a target='_blank' href='https://tu-fast.de/datenschutz'>burada</a>. <a id='intro' href='#'>Kapat</a>.",
+    "outroRating": "<b>Oy verdiğiniz için teşekkürler. Sonuçlar hakkında bilgilendirileceksiniz!</b> Arkadaşlarınızın da kursları değerlendirebilmesi için şimdi <a target='_blank' href='https://www.tu-fast.de'>www.tu-fast.de</a> adresini paylaşın. Bu, TU Dresden'deki öğretimi iyileştirmemize yardımcı olur! Teşekkürler<br><a id='outro' href='#'>Kapat</a>.",
+    "gopalBanner": "<b>İlk dönem öğrencileri için ipucu: Mobil öğrenim asistanı gOPAL ile eğitiminiz hakkında önemli olan her şeyi öğrenin! <a target='_blank' href='https://tu-dresden.de/mz/projekte/projektoverview/mobiles-studienassistenzsystem-gopal'>gOPAL'i burada açın.</a> <a id='msg1' href='#'>Kapat</a>.",
+    "tooManyCourses": "Devre dışı: 25'ten fazla kurs",
+    "openAllFavorites": "Tüm favorileri aç",
+    "openAllCourses": "Tüm kursları aç",
+    "switchToCourses": "\"Kurslarım\" bölümüne geçiliyor ... ",
+    "switchToFavorites": "\"Favorilerim\" bölümüne geçiliyor ...",
+    "iconTitles": {
+      "selma": "Selma",
+      "eportal": "ePortal",
+      "moodle": "Moodle",
+      "opal": "OPAL",
+      "qis": "QIS",
+      "matrix": "Matrix Chat",
+      "msx": "TU Mail",
+      "slub": "SLUB",
+      "cloud": "Datashare",
+      "gitlab": "GitLab",
+      "orsee": "orsee",
+      "geoportal": "Geoportal",
+      "tuNavi": "TU Campus Navigator",
+      "marudor": "bahn.expert (eski adıyla marudor.de)",
+      "infoDiscord": "Computer Science Discord",
+      "swdd": "Yemekhane",
+      "pa": "Sınav ofisleri",
+      "tex": "tex"
+    }
+  },
+  "content": {
+    "opal": {
+      "closeAllTabs": "Tüm sekmeleri kapat",
+      "closeAllTabsTitle": "Tüm sekmeleri kapat. Bir TUfast özelliği.",
+      "openAllCourses": "Tüm kursları aç",
+      "openAllCoursesTitle": "Tüm kursları aç. Bir TUfast özelliği.",
+      "openAllFavorites": "Tüm favorileri aç",
+      "openAllFavoritesTitle": "Tüm favorileri aç. Bir TUfast özelliği.",
+      "coursesSaved": "Kurslarınız TUfast'e başarıyla kaydedildi. Kurslarınızı görmek için şimdi <kbd>Alt</kbd> + <kbd>Q</kbd> tuşlarına basın!",
+      "coursesUpdated": "Kurslarınız TUfast'te başarıyla güncellendi!",
+      "snowEnable": "Karı etkinleştir",
+      "snowDisable": "Karı devre dışı bırak",
+      "snowTitle": "Karı ayarla. TUfast kış modu.",
+      "logoTitle": "Powered by TUfast. Enjoy :)",
+      "banners": {
+        "helpText": "TUfast'i geliştirmeye yardım etmek ister misiniz? ",
+        "helpAction": "Sizi arıyoruz!",
+        "helpTitle": "Yardım aranıyor:",
+        "mv3Text": "İsterseniz OPAL kişiselleştirmesini maalesef yeniden etkinleştirmeniz gerekiyor. ",
+        "mv3Action": "Buradan etkinleştir",
+        "mv3Title": "Büyük TUfast güncellemesi!",
+        "rocketText": "TUfast'i önerin ve yeni simgelerin kilidini açın! ",
+        "rocketAction": "Başlayalım!",
+        "rocketTitle": "Hepsini yakala!",
+        "reviewText": "O zaman mağazada iyi bir yorum bırakın! ",
+        "reviewAction": "Bu taraftan!",
+        "reviewTitle": "Beğendiniz mi?",
+        "close": "X"
+      }
+    },
+    "hisqis": {
+      "credits": "<img src=\"{imgUrl}\" style=\"position:relative; right: 2px;height: 15px;\"><a href=\"https://www.tu-fast.de\" target=\"_blank\">TUfast</a> tarafından desteklenir (<a href=\"https://github.com/Noxdor\" target=\"_blank\">Noxdor</a> & <a href=\"https://github.com/C0ntroller\" target=\"_blank\">C0ntroller</a> tarafından geliştirildi)",
+      "oldTable": "sıkıcı eski tablo...",
+      "newTable": "yeni, havalı TUfast tablosu",
+      "continueTo": " Devam et ",
+      "overview": "Not özetiniz",
+      "descriptors": ["Modül", "Geçilen sınav", "Kalınan sınav"],
+      "weightedAverage": "Ortalama notunuz (CP ağırlıklı): {average}",
+      "moduleCount": "Modül sayısı: {count}",
+      "examCount": "Sınav sayısı: {count}",
+      "failed": "başarısız"
+    },
+    "selma": {
+      "passed": "Geçti",
+      "notSet": "Henüz ayarlanmadı",
+      "distribution": "Not dağılımı",
+      "tries": "Denemeler",
+      "examDate": "Sınav/randevu",
+      "deactivate": "Devre dışı bırak",
+      "activate": "Etkinleştir",
+      "toggleTitle": "\"Selma'yı iyileştir\" özelliğini değiştirin ve değişikliği uygulamak için sayfayı yeniden yükleyin.",
+      "creditsEnabled": "Tablo tarafından desteklenir",
+      "creditsDisabled": "Tablo devre dışı",
+      "creditsBy": "tarafından"
+    },
+    "owa": {
+      "permissionFetch": "TUfast'in tüm e-postaları düzenli olarak alabilmesi için bu izne ihtiyacı var. Lütfen 'Allow' seçeneğine tıklayın.",
+      "permissionNotification": "TUfast'in size ek bildirimler gönderebilmesi için bu izne ihtiyacı var. Lütfen 'Allow' seçeneğine tıklayın.",
+      "newMailTitle": "Yeni e-postalar",
+      "newMailMessage": "{count} yeni e-postanız var | {count} yeni e-postanız var"
+    },
+    "opalInline": {
+      "permission": "TUfast'in dosyaları indirmeden açabilmesi için bu izne ihtiyacı var. Lütfen 'Allow' seçeneğine tıklayın."
+    },
+    "background": {
+      "tooManyLinks": "25'ten fazla {type} var. Tarayıcınızı aşırı yüklememek için lütfen bunları elle açın.",
+      "favorites": "favoriler",
+      "courses": "kurslar"
+    },
+    "otp": {
+      "snatcherConfirm": "TUfast bu iki faktörlü kodu sizin için kaydedebilir ve ilgili yerlere otomatik olarak doldurabilir (=AutoLogin). Ancak bu, ikinci faktörün amacına aslında aykırıdır.\n\nBU KODU VE RECOVERY CODES'U MUTLAKA BAŞKA BİR YERDE DE SAKLAYIN!\n\nTUfast iki faktörlü kimlik doğrulamayı sizin için yönetsin mi?"
+    }
+  }
+}
