@@ -39,10 +39,8 @@ let opalInsertLogoStrings: typeof globalThis.TUFAST_STRINGS.opal
     const pageHeader = document.getElementsByClassName('page-header')[0]
     if (!pageHeader) return
 
-    // This script owns the shared OPAL header container (.tufast-opal-header); the other
-    // header buttons attach to it, so injection is deliberately unconditional and the
-    // logo always shows — not gated on AutoLogin/search settings. Decision:
-    // https://github.com/TUfast-TUD/TUfast_TUD/pull/194#issuecomment-4938125157
+    // This script owns the shared OPAL header container. Other OPAL buttons attach
+    // to it, so do not gate the injection on unrelated AutoLogin/search settings.
     const { selectedRocketIcon, foundEasteregg } = await chrome.storage.local.get([
       'selectedRocketIcon',
       'foundEasteregg'

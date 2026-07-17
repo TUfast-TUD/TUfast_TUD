@@ -12,6 +12,7 @@ import {
   IconNotification,
   IconList,
   IconFileText,
+  IconFileSearch,
   IconChartBar,
   IconBrandSpeedtest,
   IconSearch,
@@ -52,6 +53,7 @@ async function main() {
   app.component('IconNotification', IconNotification)
   app.component('IconList', IconList)
   app.component('IconFileText', IconFileText)
+  app.component('IconFileSearch', IconFileSearch)
   app.component('IconChartBar', IconChartBar)
   app.component('IconBrandSpeedtest', IconBrandSpeedtest)
   app.component('IconSearch', IconSearch)

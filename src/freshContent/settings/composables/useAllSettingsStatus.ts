@@ -2,6 +2,7 @@
 // Can not write or save anything in storage
 import { ref, onMounted, onUnmounted } from 'vue'
 import { getAvailableLocales, getLocaleSetting, t } from '../../../i18n'
+import { SmartSearchKey } from '../../../modules/opalSmartSearch/settings'
 
 export interface SettingsStatus {
   otp: boolean
@@ -11,6 +12,7 @@ export interface SettingsStatus {
   login: boolean
   selma: boolean
   searchengine: boolean
+  smartSearch: boolean
   faculty: string
   language: string
 }
@@ -24,6 +26,7 @@ const settings = ref<SettingsStatus>({
   login: false,
   selma: true,
   searchengine: false,
+  smartSearch: true,
   faculty: 'general',
   language: languageName()
 })
@@ -52,6 +55,7 @@ const storageKeyMap: Record<string, keyof SettingsStatus> = {
   pdfInNewTab: 'opalPdf',
   improveSelma: 'selma',
   fwdEnabled: 'searchengine',
+  [SmartSearchKey.settings]: 'smartSearch',
   studiengang: 'faculty',
   locale: 'language'
 }
@@ -143,6 +147,12 @@ const checkSpecificSetting = async (settingType: keyof SettingsStatus, platform:
       case 'searchengine':
         chrome.storage.local.get(['fwdEnabled'], (result) => {
           settings.value.searchengine = result.fwdEnabled ?? false
+        })
+        break
+
+      case 'smartSearch':
+        chrome.storage.local.get([SmartSearchKey.settings], (result) => {
+          settings.value.smartSearch = result[SmartSearchKey.settings]?.enabled ?? true
         })
         break
 

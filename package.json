@@ -1,6 +1,6 @@
 {
   "name": "tufast_tud",
-  "version": "8.0.3.4",
+  "version": "8.1.0.0",
   "description": "Browser Extension for higher productivity with TU Dresden IT-Services 🚀",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "checkVersionBump": "node scripts/check-version-bump.mjs",
     "syncVersion": "node scripts/sync-version.mjs",
     "verify:locales": "node scripts/verify-locales.mjs",
-    "verify:build": "npm run verify:locales && node scripts/verify-build.mjs"
+    "verify:build": "npm run verify:locales && node scripts/verify-build.mjs && node scripts/verify-smart-search.mjs"
   },
   "_comment:verify:locales": "Checks locale JSON keys, value shapes, placeholders, plural segments, and literal t('...') source references.",
   "_comment:verify:build": "Run after build; checks generated manifest messages, content-script string injection, fallback locale, and manifest script order.",
@@ -72,6 +72,7 @@
     "@tabler/icons-vue": "^3.35.0",
     "chart.js": "^3.8.0",
     "lottie-web": "^5.13.0",
+    "minisearch": "^7.2.0",
     "simple-datatables": "^3.2.0",
     "vue": "^3.2.22"
   }

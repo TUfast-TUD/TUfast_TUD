@@ -11,6 +11,10 @@
     {{ t('settings.pages.shortcuts.opal') }}
     <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
     ><br />
+    <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">{{ opalSmartSearchShortcutKey }}</span> &rarr;
+    {{ t('settings.pages.shortcuts.opalSmartSearch') }}
+    <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
+    ><br />
     <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">M</span> &rarr;
     {{ t('settings.pages.shortcuts.mail') }}
     <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
@@ -35,6 +39,7 @@ export default defineComponent({
 
     return {
       openShortcutSettings,
+      opalSmartSearchShortcutKey: 'K',
       t
     }
   }

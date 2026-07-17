@@ -1,5 +1,6 @@
 import studiengangConfig from '../studies.json'
 import { initLocale, t } from '../../i18n'
+import { bindOpalSmartSearchResults } from './opalSmartSearchResults.js'
 import '../../styles/popup.scss'
 import '../../styles/components/switch.scss'
 import '../../styles/components/share.scss'
@@ -125,27 +126,27 @@ window.onload = async () => {
 
   // asign input search fct
   // onkeydown?
-  document.getElementById('searchListInput').onkeyup = listSearchFunction
+  const searchInput = document.getElementById('searchListInput')
+  searchInput.onkeyup = listSearchFunction
+  // SmartSearch popup integration is adapter-only: remove this import + bind call
+  // and delete opalSmartSearchResults.js to remove it without touching popup search.
+  bindOpalSmartSearchResults(searchInput, document.getElementById('list'))
 
   document.getElementById('settings').onclick = openSettings
   document.getElementById('share').onclick = openShare
 
   await displayEnabled()
 
-  // bind enter key --> when enter key is pressed the first course in list is clicked
-  document.getElementById('list').addEventListener('keyup', (event) => {
-    if (event.key === 'Enter') {
-      // Cancel the default action, if needed
-      // event.preventDefault();
-      // Click the first element which is visible
-      const listEntries = document.getElementsByClassName('list-entry-wrapper')
-      for (const entry of listEntries) {
-        if (!(entry.style.display === 'none')) {
-          entry.firstElementChild.click()
-          break
-        }
-      }
-    }
+  // Open the first visible course or SmartSearch result.
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return
+    const firstVisible = Array.from(document.querySelectorAll('#list .list-entry-wrapper')).find(
+      (entry) => window.getComputedStyle(entry).display !== 'none'
+    )
+    const target = firstVisible?.querySelector('.list-entry')
+    if (!(target instanceof HTMLElement)) return
+    event.preventDefault()
+    target.click()
   })
 
   // set custom dropdown styles and js for studiengang selection

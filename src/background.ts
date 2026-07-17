@@ -4,11 +4,47 @@ import * as otp from './modules/otp'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
+import {
+  clearOpalSearchIndex,
+  getAllOpalSearchNodes,
+  getOpalSearchIndexStats,
+  getOpalSearchNode,
+  pruneOpalSearchCourse,
+  recordOpalSearchNodeVisit,
+  upsertGraphNodes
+} from './modules/opalSmartSearch/indexDb'
+import { searchOpalNodes } from './modules/opalSmartSearch/search'
+import {
+  SmartSearchKey,
+  defaultSmartSearchSettings,
+  jobStaleMs,
+  loadSmartSearchSettings,
+  saveSmartSearchSettings,
+  startStaleMs
+} from './modules/opalSmartSearch/settings'
+import type { OpalActiveIndexProgress, OpalSearchNode } from './modules/opalSmartSearch/types'
+import {
+  extractOpalRepositoryId,
+  isAllowedOpalUrl,
+  isOpalLoginUrl,
+  normalizeAllowedOpalUrl,
+  sanitizeOpalSearchNode,
+  sanitizeOpalSearchNodes
+} from './modules/opalSmartSearch/urlPolicy'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
 import { initLocale, t } from './i18n'
 
 initLocale()
+
+let opalSmartSearchWriteGeneration = 0
+let opalSmartSearchControlQueue: Promise<void> = Promise.resolve()
+
+chrome.tabs.onRemoved.addListener((tabId) => resumeOpalSmartSearchAfterOwnerLoss(tabId))
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.url && (!isAllowedOpalUrl(changeInfo.url) || isOpalLoginUrl(changeInfo.url)))
+    resumeOpalSmartSearchAfterOwnerLoss(tabId)
+})
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -28,7 +64,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         studiengang: 'general',
         hisqisPimpedTable: true,
         bannersShown: ['mv3UpdateNotice'],
-        improveSelma: true
+        improveSelma: true,
+        [SmartSearchKey.settings]: defaultSmartSearchSettings
       })
       await openSettingsPage('first_visit')
       break
@@ -45,6 +82,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         'studiengang',
         'hisqisPimpedTable',
         'improveSelma',
+        SmartSearchKey.settings,
         'savedClickCounter',
         'saved_click_counter', // legacy
         'Rocket', // legacy
@@ -67,6 +105,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       if (typeof currentSettings.fwdEnabled === 'undefined') updateObj.fwdEnabled = true
       if (typeof currentSettings.hisqisPimpedTable === 'undefined') updateObj.hisqisPimpedTable = true
       if (typeof currentSettings.improveSelma === 'undefined') updateObj.improveSelma = true
+      if (typeof currentSettings[SmartSearchKey.settings] === 'undefined')
+        updateObj[SmartSearchKey.settings] = defaultSmartSearchSettings
       if (typeof currentSettings.theme === 'undefined') updateObj.theme = 'system'
       if (typeof currentSettings.locale === 'undefined') updateObj.locale = 'auto'
       if (typeof currentSettings.studiengang === 'undefined') updateObj.studiengang = 'general'
@@ -180,6 +220,9 @@ if (chrome.commands) {
           index: currentTab.index + 1
         })
         await saveClicks(2)
+        break
+      case 'open_opal_smart_search_hotkey':
+        await openOpalSmartSearch(currentTab)
         break
     }
   })
@@ -310,7 +353,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             resolve(result.fwdEnabled ?? false)
           })
         }),
-        // 7 - Faculty (which faculty has user selected?)
+        // 7 - OPAL Smart Search (has user enabled local OPAL search?)
+        loadSmartSearchSettings().then((settings) => settings.enabled),
+        // 8 - Faculty (which faculty has user selected?)
         new Promise<string>((resolve) => {
           chrome.storage.local.get(['studiengang'], (result) => {
             const studiengangId = result.studiengang ?? 'general'
@@ -330,8 +375,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           opalStatus, // 4
           selmaStatus, // 5
           seCommandsStatus, // 6
-          faculty, // 7
-          userDataExists // 8
+          smartSearchStatus, // 7
+          faculty, // 8
+          userDataExists // 9
         ]) => {
           sendResponse({
             otp: totpExists || iotpExists,
@@ -340,6 +386,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             userData: userDataExists || loginExists,
             selma: selmaStatus,
             searchengine: seCommandsStatus,
+            smartSearch: smartSearchStatus,
             faculty: faculty
           })
         }
@@ -480,6 +527,262 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'check_se_status':
       chrome.storage.local.get(['fwdEnabled'], (result) => sendResponse({ redirect: result.fwdEnabled }))
       return true
+    /* OPAL Smart Search */
+    case 'opal_smart_search_upsert_nodes': {
+      const senderUrl = _sender.url ?? _sender.tab?.url
+      const ownerTabId = _sender.tab?.id
+      const nodes = Array.isArray(request.nodes) ? sanitizeOpalSearchNodes(request.nodes as OpalSearchNode[]) : []
+      if (!senderUrl || !isAllowedOpalUrl(senderUrl) || nodes.length === 0) {
+        sendResponse(false)
+        return true
+      }
+
+      const writeGeneration = opalSmartSearchWriteGeneration
+      const jobStartedAt = readFiniteNumber(request.jobStartedAt)
+      if (!nodes.some((node) => node.source === 'active')) {
+        upsertGraphNodes(nodes)
+          .then(() => sendResponse(true))
+          .catch((error) => {
+            console.warn('[TUfast Smart Search] Could not upsert nodes:', error)
+            sendResponse(false)
+          })
+        return true
+      }
+
+      queueOpalSmartSearchControl(async () => {
+        const accepted = await canAcceptOpalSmartSearchNodes(nodes, writeGeneration, ownerTabId, jobStartedAt)
+        if (!accepted) return false
+        await upsertGraphNodes(nodes)
+        return true
+      })
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not upsert nodes:', error)
+          sendResponse(false)
+        })
+      return true
+    }
+    case 'opal_smart_search_get_node': {
+      const id = readRequiredString(request.id)
+      if (!id) {
+        sendResponse(undefined)
+        return true
+      }
+
+      getOpalSearchNode(id)
+        .then((node) => sendResponse(node ? sanitizeOpalSearchNode(node) ?? undefined : undefined))
+        .catch(() => sendResponse(undefined))
+      return true
+    }
+    case 'opal_smart_search_prune_course': {
+      const senderUrl = _sender.url ?? _sender.tab?.url
+      const ownerTabId = _sender.tab?.id
+      const courseId = readRequiredString(request.courseId)
+      const olderThan = readFiniteNumber(request.olderThan)
+      const jobStartedAt = readFiniteNumber(request.jobStartedAt)
+      if (
+        !senderUrl ||
+        !isAllowedOpalUrl(senderUrl) ||
+        !courseId ||
+        !extractOpalRepositoryId(courseId) ||
+        !olderThan ||
+        !jobStartedAt
+      ) {
+        sendResponse(false)
+        return true
+      }
+
+      const writeGeneration = opalSmartSearchWriteGeneration
+      queueOpalSmartSearchControl(async () => {
+        const accepted = await canAcceptOpalSmartSearchJob(writeGeneration, ownerTabId, jobStartedAt)
+        return accepted ? pruneOpalSearchCourse(courseId, olderThan) : false
+      })
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not prune stale course nodes:', error)
+          sendResponse(false)
+        })
+      return true
+    }
+    case 'opal_smart_search_commit_course': {
+      const senderUrl = _sender.url ?? _sender.tab?.url
+      const ownerTabId = _sender.tab?.id
+      const courseUrl = normalizeAllowedOpalUrl(readRequiredString(request.courseUrl) || '')
+      const jobStartedAt = readFiniteNumber(request.jobStartedAt)
+      if (
+        !senderUrl ||
+        !isAllowedOpalUrl(senderUrl) ||
+        !courseUrl ||
+        !extractOpalRepositoryId(courseUrl) ||
+        !jobStartedAt
+      ) {
+        sendResponse(false)
+        return true
+      }
+
+      const writeGeneration = opalSmartSearchWriteGeneration
+      queueOpalSmartSearchControl(() =>
+        commitOpalSmartSearchCourse(courseUrl, jobStartedAt, request.successful === true, writeGeneration, ownerTabId)
+      )
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not commit course completion:', error)
+          sendResponse(false)
+        })
+      return true
+    }
+    case 'opal_smart_search_query': {
+      const rawQuery = readRequiredString(request.rawQuery)
+      if (!rawQuery) {
+        sendResponse([])
+        return true
+      }
+
+      searchOpalNodes(rawQuery, readOptionalString(request.courseId), readSearchLimit(request.limit))
+        .then((results) =>
+          sendResponse(
+            results.flatMap((result) => {
+              const node = sanitizeOpalSearchNode(result.node)
+              return node ? [{ ...result, node }] : []
+            })
+          )
+        )
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Query failed:', error)
+          sendResponse(undefined)
+        })
+      return true
+    }
+    case 'open_opal_smart_search_result': {
+      const nodeId = readRequiredString(request.nodeId)
+      if (!nodeId) {
+        sendResponse(false)
+        return true
+      }
+
+      openOpalSmartSearchResult(nodeId)
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not open popup result:', error)
+          sendResponse(false)
+        })
+      return true
+    }
+    case 'opal_smart_search_record_visit': {
+      const nodeId = readRequiredString(request.nodeId)
+      if (!nodeId) {
+        sendResponse(false)
+        return true
+      }
+
+      recordOpalSearchNodeVisit(nodeId)
+        .then(sendResponse)
+        .catch(() => sendResponse(false))
+      return true
+    }
+    case 'open_opal_smart_search_query': {
+      const rawQuery = readRequiredString(request.rawQuery)
+      if (!rawQuery) {
+        sendResponse(false)
+        return true
+      }
+
+      chrome.tabs
+        .query({ active: true, currentWindow: true })
+        .then(([activeTab]) => openOpalSmartSearch(activeTab, rawQuery))
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not open popup query:', error)
+          sendResponse(false)
+        })
+      return true
+    }
+    case 'check_opal_smart_search_status':
+      loadSmartSearchSettings().then(sendResponse)
+      return true
+    case 'enable_opal_smart_search':
+      updateOpalSmartSearchSetting(readSmartSearchSettingOption(request.option), true).then(sendResponse)
+      return true
+    case 'disable_opal_smart_search':
+      updateOpalSmartSearchSetting(readSmartSearchSettingOption(request.option), false).then(sendResponse)
+      return true
+    case 'opal_smart_search_stats':
+      getOpalSearchIndexStats().then(sendResponse)
+      return true
+    case 'opal_smart_search_dump_nodes':
+      // ponytail: temporary beta debug export; remove before the merge-ready release build.
+      getAllOpalSearchNodes()
+        .then((nodes) => sendResponse({ exportedAt: new Date().toISOString(), count: nodes.length, nodes }))
+        .catch(() => sendResponse({ exportedAt: new Date().toISOString(), count: 0, nodes: [] }))
+      return true
+    case 'opal_smart_search_progress':
+      queueOpalSmartSearchControl(readCurrentOpalSmartSearchProgress).then(sendResponse)
+      return true
+    case 'opal_smart_search_claim_job': {
+      const senderUrl = _sender.url ?? _sender.tab?.url
+      const ownerTabId = _sender.tab?.id
+      const jobStartedAt = readFiniteNumber(request.jobStartedAt)
+      if (!senderUrl || !isAllowedOpalUrl(senderUrl) || !ownerTabId || !jobStartedAt) {
+        sendResponse(false)
+        return true
+      }
+
+      const writeGeneration = opalSmartSearchWriteGeneration
+      queueOpalSmartSearchControl(() => claimOpalSmartSearchJob(ownerTabId, jobStartedAt, writeGeneration))
+        .then(sendResponse)
+        .catch(() => sendResponse(false))
+      return true
+    }
+    case 'opal_smart_search_publish_progress': {
+      const senderUrl = _sender.url ?? _sender.tab?.url
+      const ownerTabId = _sender.tab?.id
+      const update = request.update as Partial<OpalActiveIndexProgress> | undefined
+      const jobStartedAt = readFiniteNumber(update?.startedAt)
+      if (!senderUrl || !isAllowedOpalUrl(senderUrl) || !update || !jobStartedAt) {
+        sendResponse(readOpalSmartSearchProgress(undefined))
+        return true
+      }
+
+      const writeGeneration = opalSmartSearchWriteGeneration
+      queueOpalSmartSearchControl(() => publishOpalSmartSearchProgress(update, writeGeneration, ownerTabId))
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not publish progress:', error)
+          sendResponse(readOpalSmartSearchProgress(undefined))
+        })
+      return true
+    }
+    case 'start_opal_smart_search_preload':
+      startOpalSmartSearchPreload(_sender.tab)
+        .then(sendResponse)
+        .catch((error) => {
+          console.warn('[TUfast Smart Search] Could not start preload:', error)
+          sendResponse(false)
+        })
+      return true
+    case 'cancel_opal_smart_search_preload':
+      queueOpalSmartSearchControl(async () => {
+        await cancelOpalSmartSearchPreload()
+        return true
+      })
+        .then(sendResponse)
+        .catch(() => sendResponse(false))
+      return true
+    case 'clear_opal_smart_search_index':
+      queueOpalSmartSearchControl(async () => {
+        await cancelOpalSmartSearchPreload()
+        await clearOpalSearchIndex()
+        await chrome.storage.local.remove([
+          SmartSearchKey.activeProgress,
+          SmartSearchKey.activeRuns,
+          SmartSearchKey.highlight,
+          SmartSearchKey.successfulRuns
+        ])
+        return true
+      })
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false))
+      return true
     /* Rocket functions */
     case 'set_rocket_icon':
       setRocketIcon(request.rocketId || 'default').then(() => sendResponse(true))
@@ -541,6 +844,587 @@ async function openSettingsPage(params?: string) {
 
 async function openSharePage() {
   await chrome.tabs.create({ url: 'share.html' })
+}
+
+// Smart Search has one opener on purpose: the OPAL header, Alt+K, and a future central TUfast search
+// can all call this without depending on each other's UI. If Smart Search is folded into central search later,
+// keep this opener for OPAL pages and add a small provider adapter around `opal_smart_search_query`.
+async function openOpalSmartSearch(currentTab?: chrome.tabs.Tab, rawQuery?: string): Promise<boolean> {
+  const settings = await loadSmartSearchSettings()
+  if (!settings.enabled) {
+    await openSettingsPage('OpalSmartSearch')
+    return false
+  }
+
+  if (currentTab?.id && currentTab.url && isAllowedOpalUrl(currentTab.url)) {
+    // A still-initializing OPAL tab has no receiver yet — retry briefly instead of opening a duplicate tab.
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      if (attempt > 0) await delay(400)
+      if (await sendOpenOpalSmartSearch(currentTab.id, rawQuery)) {
+        await saveClicks(2)
+        return true
+      }
+    }
+  }
+
+  await chrome.storage.local.set({
+    [SmartSearchKey.openAfterOpalLoad]: {
+      expiresAt: Date.now() + 15000,
+      ...(typeof rawQuery === 'string' ? { rawQuery } : {})
+    }
+  })
+  await chrome.tabs.create({
+    url: 'https://bildungsportal.sachsen.de/opal/home/',
+    index: typeof currentTab?.index === 'number' ? currentTab.index + 1 : undefined
+  })
+  await saveClicks(2)
+  return true
+}
+
+async function sendOpenOpalSmartSearch(tabId: number, rawQuery?: string): Promise<boolean> {
+  return Boolean(
+    await sendOpalSmartSearchTabMessage(tabId, {
+      cmd: 'open_opal_smart_search',
+      ...(typeof rawQuery === 'string' ? { rawQuery } : {})
+    })
+  )
+}
+
+async function openOpalSmartSearchResult(nodeId: string): Promise<boolean> {
+  const node = await getOpalSearchNode(nodeId)
+  if (!node) return false
+
+  let targetUrl = normalizeAllowedOpalUrl(node.url)
+  if (node.type === 'file' && node.parentId) {
+    const parent = await getOpalSearchNode(node.parentId)
+    const parentUrl = parent ? normalizeAllowedOpalUrl(parent.url) : null
+    if (parentUrl && targetUrl) {
+      await chrome.storage.local.set({
+        [SmartSearchKey.highlight]: { title: node.title, url: targetUrl }
+      })
+      targetUrl = parentUrl
+    }
+  }
+
+  if (!targetUrl) return false
+  await recordOpalSearchNodeVisit(nodeId)
+  await chrome.tabs.create({ url: targetUrl, active: true })
+  await saveClicks(2)
+  return true
+}
+
+async function updateOpalSmartSearchSetting(option: string, value: boolean): Promise<boolean> {
+  if (option !== 'enabled') return false
+
+  if (!value) {
+    return queueOpalSmartSearchControl(async () => {
+      await saveSmartSearchSettings({ enabled: false })
+      await cancelOpalSmartSearchPreload()
+      return false
+    })
+  }
+
+  await saveSmartSearchSettings({ enabled: value })
+  return value
+}
+
+function readRequiredString(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() ? value : undefined
+}
+
+function readOptionalString(value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined
+}
+
+function readSearchLimit(value: unknown): number | undefined {
+  const limit = readFiniteNumber(value)
+  return limit === undefined ? undefined : Math.max(1, Math.min(50, Math.trunc(limit)))
+}
+
+function readFiniteNumber(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+}
+
+function readSmartSearchSettingOption(value: unknown): string {
+  return typeof value === 'string' ? value : 'enabled'
+}
+
+// Active indexing is deliberately reachable only from explicit user actions. If Oli later wants automatic
+// semester-change indexing, change the recommendation policy first and keep this function as the single start gate.
+interface OpalSmartSearchStart {
+  tab: chrome.tabs.Tab
+  tabId: number
+  startedAt: number
+  writeGeneration: number
+}
+
+async function startOpalSmartSearchPreload(preferredTab?: chrome.tabs.Tab): Promise<boolean> {
+  const start = await queueOpalSmartSearchControl(() => prepareOpalSmartSearchPreload(preferredTab))
+  if (!start) return false
+
+  try {
+    const favoritesReady = await refreshStoredOpalFavorites(start)
+    if (!favoritesReady) {
+      await queueOpalSmartSearchControl(() => failOpalSmartSearchPreload(start.startedAt, start.writeGeneration))
+      return false
+    }
+
+    const activated = await queueOpalSmartSearchControl(() => activateOpalSmartSearchPreload(start))
+    if (!activated) return false
+
+    const started = Boolean(
+      await sendStartOpalSmartSearchPreload(start.tabId, 60, start.startedAt, start.writeGeneration)
+    )
+    if (!started)
+      await queueOpalSmartSearchControl(() => failOpalSmartSearchPreload(start.startedAt, start.writeGeneration))
+    return started
+  } catch (error) {
+    await queueOpalSmartSearchControl(() => failOpalSmartSearchPreload(start.startedAt, start.writeGeneration))
+    throw error
+  }
+}
+
+async function prepareOpalSmartSearchPreload(
+  preferredTab?: chrome.tabs.Tab
+): Promise<OpalSmartSearchStart | undefined> {
+  await cancelOpalSmartSearchPreload()
+  const existingTab = await findOpalSmartSearchTab(preferredTab)
+  const tab =
+    existingTab ?? (await chrome.tabs.create({ url: 'https://bildungsportal.sachsen.de/opal/home/', active: true }))
+  if (!tab.id) return undefined
+
+  const writeGeneration = opalSmartSearchWriteGeneration
+  const existing = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const previous = readOpalSmartSearchProgress(existing[SmartSearchKey.activeProgress])
+  const startedAt = Math.max(Date.now(), previous.startedAt + 1)
+  await saveSmartSearchSettings({ enabled: true })
+  // Manual Improve always retries every favorite; clear this before publishing the job so auto-recovery sees it.
+  await chrome.storage.local.remove(SmartSearchKey.activeRuns)
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeProgress]: {
+      status: 'starting',
+      startedAt,
+      updatedAt: Date.now(),
+      ownerTabId: tab.id,
+      totalCourses: 0,
+      completedCourses: 0,
+      failedCourses: 0,
+      indexedItems: 0
+    } satisfies OpalActiveIndexProgress
+  })
+
+  return { tab, tabId: tab.id, startedAt, writeGeneration }
+}
+
+async function findOpalSmartSearchTab(preferredTab?: chrome.tabs.Tab): Promise<chrome.tabs.Tab | undefined> {
+  if (preferredTab?.id && preferredTab.url && isAllowedOpalUrl(preferredTab.url)) return preferredTab
+
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+  if (activeTab?.id && activeTab.url && isAllowedOpalUrl(activeTab.url)) return activeTab
+
+  const opalTabs = await chrome.tabs.query({ url: 'https://bildungsportal.sachsen.de/opal/*' })
+  return opalTabs.find((tab) => typeof tab.id === 'number')
+}
+
+function resumeOpalSmartSearchAfterOwnerLoss(ownerTabId: number): void {
+  queueOpalSmartSearchControl(async () => {
+    const data = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+    const progress = readOpalSmartSearchProgress(data[SmartSearchKey.activeProgress])
+    if (progress.ownerTabId !== ownerTabId) return undefined
+    if (progress.status === 'starting') {
+      opalSmartSearchWriteGeneration += 1
+      await chrome.storage.local.set({
+        [SmartSearchKey.activeProgress]: {
+          ...progress,
+          status: 'failed',
+          updatedAt: Date.now(),
+          ownerTabId: undefined
+        } satisfies OpalActiveIndexProgress
+      })
+      return undefined
+    }
+    if (progress.status !== 'running') return undefined
+
+    const tabs = await chrome.tabs.query({ url: 'https://bildungsportal.sachsen.de/opal/*' })
+    const candidates = tabs.filter(
+      (tab) =>
+        tab.id !== ownerTabId &&
+        !tab.discarded &&
+        Boolean(tab.url && isAllowedOpalUrl(tab.url) && !isOpalLoginUrl(tab.url))
+    )
+    const activeCandidate = candidates.find((tab) => tab.active)
+    const tabIds = [activeCandidate, ...candidates.filter((tab) => tab !== activeCandidate)]
+      .map((tab) => tab?.id)
+      .filter((tabId): tabId is number => typeof tabId === 'number')
+    return { startedAt: progress.startedAt, ownerTabId, tabIds }
+  })
+    .then((handoff) => handoff && handoffOpalSmartSearch(handoff))
+    .catch((error) => console.warn('[TUfast Smart Search] Could not hand off indexing:', error))
+}
+
+async function handoffOpalSmartSearch(handoff: {
+  startedAt: number
+  ownerTabId: number
+  tabIds: number[]
+}): Promise<void> {
+  for (const tabId of handoff.tabIds) {
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const data = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+      const progress = readOpalSmartSearchProgress(data[SmartSearchKey.activeProgress])
+      if (progress.status !== 'running' || progress.startedAt !== handoff.startedAt) return
+      if (progress.ownerTabId !== handoff.ownerTabId && progress.ownerTabId !== tabId) return
+
+      await sendOpalSmartSearchTabMessage(tabId, { cmd: 'start_opal_smart_search_preload' })
+      await delay(500)
+
+      const latest = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+      const latestProgress = readOpalSmartSearchProgress(latest[SmartSearchKey.activeProgress])
+      if (latestProgress.status !== 'running' || latestProgress.startedAt !== handoff.startedAt) return
+      if (latestProgress.ownerTabId === tabId) return
+    }
+  }
+}
+
+async function refreshStoredOpalFavorites(start: OpalSmartSearchStart): Promise<boolean> {
+  if (!(await isOpalSmartSearchStartCurrent(start, 'starting'))) return false
+  const stored = await chrome.storage.local.get(['favoriten', SmartSearchKey.favoritesDetectedAt])
+  if (typeof stored.favoriten === 'string') return true
+
+  const favoritesUrl = 'https://bildungsportal.sachsen.de/opal/auth/resource/favorites'
+  const requestedAt = Date.now()
+
+  if (start.tab.url?.startsWith(favoritesUrl)) await chrome.tabs.reload(start.tabId)
+  else await chrome.tabs.update(start.tabId, { url: favoritesUrl })
+
+  for (let attempt = 0; attempt < 60; attempt += 1) {
+    await delay(250)
+    if (!(await isOpalSmartSearchStartCurrent(start, 'starting'))) return false
+    const data = await chrome.storage.local.get([SmartSearchKey.favoritesDetectedAt])
+    if (Number(data[SmartSearchKey.favoritesDetectedAt]) >= requestedAt) return true
+  }
+
+  return false
+}
+
+async function activateOpalSmartSearchPreload(start: OpalSmartSearchStart): Promise<boolean> {
+  if (!(await isOpalSmartSearchStartCurrent(start, 'starting'))) return false
+  const data = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const progress = readOpalSmartSearchProgress(data[SmartSearchKey.activeProgress])
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeProgress]: {
+      ...progress,
+      status: 'running',
+      updatedAt: Date.now()
+    } satisfies OpalActiveIndexProgress
+  })
+  return true
+}
+
+async function isOpalSmartSearchStartCurrent(
+  start: Pick<OpalSmartSearchStart, 'tabId' | 'startedAt' | 'writeGeneration'>,
+  status: 'starting' | 'running'
+): Promise<boolean> {
+  if (start.writeGeneration !== opalSmartSearchWriteGeneration) return false
+  const data = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const progress = readOpalSmartSearchProgress(data[SmartSearchKey.activeProgress])
+  return progress.status === status && progress.startedAt === start.startedAt && progress.ownerTabId === start.tabId
+}
+
+async function sendStartOpalSmartSearchPreload(
+  tabId: number,
+  attempts: number,
+  jobStartedAt: number,
+  writeGeneration: number
+): Promise<boolean> {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    if (!(await isOpalSmartSearchStartCurrent({ tabId, startedAt: jobStartedAt, writeGeneration }, 'running')))
+      return false
+    if (
+      await sendOpalSmartSearchTabMessage(tabId, {
+        cmd: 'start_opal_smart_search_preload'
+      })
+    )
+      return true
+
+    await delay(500)
+  }
+
+  return false
+}
+
+async function failOpalSmartSearchPreload(jobStartedAt: number, writeGeneration: number): Promise<void> {
+  const result = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const progress = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (
+    writeGeneration !== opalSmartSearchWriteGeneration ||
+    (progress.status !== 'starting' && progress.status !== 'running') ||
+    progress.startedAt !== jobStartedAt
+  )
+    return
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeProgress]: {
+      ...progress,
+      status: 'failed',
+      updatedAt: Date.now()
+    } satisfies OpalActiveIndexProgress
+  })
+}
+
+async function cancelOpalSmartSearchPreload(): Promise<void> {
+  const writeGeneration = ++opalSmartSearchWriteGeneration
+  const result = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  if (writeGeneration !== opalSmartSearchWriteGeneration) return
+  const progress = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (progress.status !== 'starting' && progress.status !== 'running') return
+
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeProgress]: {
+      ...progress,
+      status: 'idle',
+      updatedAt: Date.now(),
+      ownerTabId: undefined,
+      currentCourseTitle: undefined
+    } satisfies OpalActiveIndexProgress
+  })
+}
+
+function queueOpalSmartSearchControl<T>(operation: () => Promise<T>): Promise<T> {
+  const result = opalSmartSearchControlQueue.then(operation, operation)
+  opalSmartSearchControlQueue = result.then(
+    () => undefined,
+    () => undefined
+  )
+  return result
+}
+
+async function readCurrentOpalSmartSearchProgress(): Promise<OpalActiveIndexProgress> {
+  const result = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const progress = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (!(await expireOpalSmartSearchProgress(progress))) return progress
+
+  const expired = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  return readOpalSmartSearchProgress(expired[SmartSearchKey.activeProgress])
+}
+
+async function claimOpalSmartSearchJob(
+  ownerTabId: number,
+  jobStartedAt: number,
+  writeGeneration: number
+): Promise<boolean> {
+  const result = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const progress = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (
+    writeGeneration !== opalSmartSearchWriteGeneration ||
+    progress.status !== 'running' ||
+    progress.startedAt !== jobStartedAt ||
+    (await expireOpalSmartSearchProgress(progress))
+  )
+    return false
+  if (progress.ownerTabId === ownerTabId) return true
+  if (progress.ownerTabId && (await isLiveOpalTab(progress.ownerTabId))) return false
+
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeProgress]: {
+      ...progress,
+      ownerTabId,
+      updatedAt: Date.now()
+    } satisfies OpalActiveIndexProgress
+  })
+  return true
+}
+
+async function isLiveOpalTab(tabId: number): Promise<boolean> {
+  try {
+    const tab = await chrome.tabs.get(tabId)
+    return Boolean(!tab.discarded && tab.url && isAllowedOpalUrl(tab.url) && !isOpalLoginUrl(tab.url))
+  } catch {
+    return false
+  }
+}
+
+async function expireOpalSmartSearchProgress(progress: OpalActiveIndexProgress): Promise<boolean> {
+  const lastActivityAt = Math.max(progress.startedAt, progress.updatedAt)
+  const staleAfter = progress.status === 'starting' ? startStaleMs : progress.status === 'running' ? jobStaleMs : 0
+  if (!staleAfter || !lastActivityAt || Date.now() - lastActivityAt <= staleAfter) return false
+
+  opalSmartSearchWriteGeneration += 1
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeProgress]: {
+      ...progress,
+      status: 'failed',
+      updatedAt: Date.now()
+    } satisfies OpalActiveIndexProgress
+  })
+  return true
+}
+
+async function canAcceptOpalSmartSearchNodes(
+  nodes: OpalSearchNode[],
+  writeGeneration: number,
+  ownerTabId?: number,
+  jobStartedAt?: number
+): Promise<boolean> {
+  if (!nodes.some((node) => node.source === 'active')) return true
+  if (!jobStartedAt) return false
+  return canAcceptOpalSmartSearchJob(writeGeneration, ownerTabId, jobStartedAt)
+}
+
+async function canAcceptOpalSmartSearchJob(
+  writeGeneration: number,
+  ownerTabId: number | undefined,
+  jobStartedAt: number
+): Promise<boolean> {
+  const result = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const progress = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (await expireOpalSmartSearchProgress(progress)) return false
+  return (
+    writeGeneration === opalSmartSearchWriteGeneration &&
+    ownerTabId === progress.ownerTabId &&
+    progress.status === 'running' &&
+    progress.startedAt === jobStartedAt
+  )
+}
+
+async function publishOpalSmartSearchProgress(
+  update: Partial<OpalActiveIndexProgress>,
+  writeGeneration: number,
+  ownerTabId?: number
+): Promise<OpalActiveIndexProgress> {
+  const result = await chrome.storage.local.get([SmartSearchKey.activeProgress])
+  const previous = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (
+    writeGeneration !== opalSmartSearchWriteGeneration ||
+    ownerTabId !== previous.ownerTabId ||
+    previous.status !== 'running' ||
+    previous.startedAt !== update.startedAt ||
+    (await expireOpalSmartSearchProgress(previous))
+  )
+    return previous
+
+  const status = update.status === 'done' || update.status === 'failed' ? update.status : 'running'
+  const completedCourses = Math.max(previous.completedCourses, readProgressCount(update.completedCourses) ?? 0)
+  const failedCourses = Math.max(previous.failedCourses || 0, readProgressCount(update.failedCourses) ?? 0)
+  const progress: OpalActiveIndexProgress = {
+    status,
+    startedAt: previous.startedAt,
+    updatedAt: Date.now(),
+    ownerTabId: previous.ownerTabId,
+    totalCourses: Math.max(
+      previous.totalCourses,
+      readProgressCount(update.totalCourses) ?? 0,
+      completedCourses + failedCourses
+    ),
+    completedCourses,
+    failedCourses,
+    indexedItems: Math.max(previous.indexedItems, readProgressCount(update.indexedItems) ?? 0),
+    currentCourseTitle: update.currentCourseTitle
+  }
+  await chrome.storage.local.set({ [SmartSearchKey.activeProgress]: progress })
+  return progress
+}
+
+async function commitOpalSmartSearchCourse(
+  courseUrl: string,
+  jobStartedAt: number,
+  successful: boolean,
+  writeGeneration: number,
+  ownerTabId?: number
+): Promise<{ completedCourses: number; failedCourses: number } | false> {
+  const result = await chrome.storage.local.get([
+    SmartSearchKey.activeProgress,
+    SmartSearchKey.activeRuns,
+    SmartSearchKey.successfulRuns
+  ])
+  const progress = readOpalSmartSearchProgress(result[SmartSearchKey.activeProgress])
+  if (
+    writeGeneration !== opalSmartSearchWriteGeneration ||
+    ownerTabId !== progress.ownerTabId ||
+    progress.status !== 'running' ||
+    progress.startedAt !== jobStartedAt ||
+    (await expireOpalSmartSearchProgress(progress))
+  )
+    return false
+
+  const now = Date.now()
+  const cooldowns = { ...(result[SmartSearchKey.activeRuns] || {}) }
+  if (readFiniteNumber(cooldowns[courseUrl])) {
+    return { completedCourses: progress.completedCourses, failedCourses: progress.failedCourses || 0 }
+  }
+  cooldowns[courseUrl] = now
+  const successfulRuns = { ...(result[SmartSearchKey.successfulRuns] || {}) }
+  if (successful) successfulRuns[courseUrl] = now
+  const completedCourses = progress.completedCourses + (successful ? 1 : 0)
+  const failedCourses = (progress.failedCourses || 0) + (successful ? 0 : 1)
+  await chrome.storage.local.set({
+    [SmartSearchKey.activeRuns]: cooldowns,
+    [SmartSearchKey.successfulRuns]: successfulRuns,
+    [SmartSearchKey.activeProgress]: {
+      ...progress,
+      updatedAt: now,
+      totalCourses: Math.max(progress.totalCourses, completedCourses + failedCourses),
+      completedCourses,
+      failedCourses
+    } satisfies OpalActiveIndexProgress
+  })
+  return { completedCourses, failedCourses }
+}
+
+function sendOpalSmartSearchTabMessage(tabId: number, message: { cmd: string; rawQuery?: string }): Promise<unknown> {
+  return new Promise((resolve) => {
+    chrome.tabs.sendMessage(tabId, message, (response) => {
+      // The content script may still be loading after opening OPAL, or may have exited while disabled.
+      if (chrome.runtime.lastError) {
+        resolve(undefined)
+        return
+      }
+
+      resolve(response)
+    })
+  })
+}
+
+function readOpalSmartSearchProgress(value: unknown): OpalActiveIndexProgress {
+  if (value && typeof value === 'object') {
+    const progress = value as Partial<OpalActiveIndexProgress>
+    if (
+      progress.status === 'idle' ||
+      progress.status === 'starting' ||
+      progress.status === 'running' ||
+      progress.status === 'done' ||
+      progress.status === 'failed'
+    ) {
+      return {
+        status: progress.status,
+        startedAt: readProgressCount(progress.startedAt) ?? 0,
+        updatedAt: readProgressCount(progress.updatedAt) ?? 0,
+        ownerTabId: readProgressCount(progress.ownerTabId) || undefined,
+        totalCourses: readProgressCount(progress.totalCourses) ?? 0,
+        completedCourses: readProgressCount(progress.completedCourses) ?? 0,
+        failedCourses: readProgressCount(progress.failedCourses) ?? 0,
+        indexedItems: readProgressCount(progress.indexedItems) ?? 0,
+        currentCourseTitle: progress.currentCourseTitle
+      }
+    }
+  }
+
+  return {
+    status: 'idle',
+    startedAt: 0,
+    updatedAt: 0,
+    totalCourses: 0,
+    completedCourses: 0,
+    failedCourses: 0,
+    indexedItems: 0
+  }
+}
+
+function readProgressCount(value: unknown): number | undefined {
+  const number = readFiniteNumber(value)
+  return number === undefined ? undefined : Math.max(0, Math.trunc(number))
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 // save_click_counter

@@ -25,6 +25,13 @@ export const getSettings = () =>
       settingType: 'opalPdf'
     },
     {
+      title: t('settings.tiles.opalSmartSearch'),
+      icon: 'IconFileSearch',
+      settingsPage: 'OpalSmartSearch',
+      category: 'function',
+      settingType: 'smartSearch'
+    },
+    {
       title: t('settings.tiles.improveSelma'),
       icon: 'IconChartBar',
       settingsPage: 'ImproveSelma',
