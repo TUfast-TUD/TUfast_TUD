@@ -17,6 +17,14 @@ Routing rule: needed on every task → `AGENTS.md`. Durable area-specific knowle
 - `chrome.runtime.sendMessage` request/response shapes are duplicated informally between `background.ts` and each consumer, with `as`-casts standing in for a contract — shape mismatches fail silently (`check_all_settings` answers `userData`, not the `login` key the settings UI expected; latent on `main`, surfaced as a literal "null" badge during #194, fixed there by merging instead of replacing state in `useAllSettingsStatus.ts`). Don't trust the casts; check the actual handler in `background.ts`. A potential fix would be a shared typed protocol module (per-`cmd` request/response types imported by both sides), which could be considered for a future messaging rewrite — it touches every `sendMessage` call site, so don't do it as a drive-by change.
 - OPAL PDF handling: Chrome derives download filenames from the URL, so `pdfInInline` can give in-browser opening or the correct filename, not both (#82, wontfix).
 
+## Safari port
+
+- `npm run build:safari` selects the Safari manifest and prepares ignored `safari/Resources/`; run it before Xcode builds. The checked-in Xcode project references those resources. Keep the MV3 `background.type: module`: the converter warns about `type`, but Safari 18 supports it and the generated background has ESM imports.
+- Safari credentials use the native extension's local Keychain, partitioned by `SFExtensionProfileKey` when provided. No migration from hardware-derived Chrome/Firefox ciphertext. Native simulator Keychain tests require local ad-hoc signing (`CODE_SIGN_IDENTITY=-`); an unsigned host compiles but fails Keychain access.
+- Safari beta disables unattended OWA fetch and OS notifications, retaining the live mailbox observer. Safari login attempts are serialized and capped at three per origin in a minute; detected failures or an exceeded cap pause auto-login until manually re-enabled. Chrome/Firefox retain existing behavior.
+- Safari opens course/favorite groups as separate browser tabs and keeps the source tab, avoiding timer-based cleanup when its background is suspended.
+- Safari ignores `include_globs`; matching guards for QIS and Matrix live in their scripts. QIS CSS is injected only after its URL guard on Safari. The native setup UI draws copy from the existing locale JSONs via `scripts/prepare-safari.mjs`.
+
 ## Design decisions
 
 - Custom `src/i18n` runtime instead of `vue-i18n`: the dependency was tried during the i18n work (#191–#194) and removed because the custom helper already did everything — one clear mechanism preferred; rationale in `CONTRIBUTING.md`.

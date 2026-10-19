@@ -3,6 +3,8 @@
 // while maintaining individuality.
 
 // Typescript interfaces and types
+const isSafari = () => chrome.runtime.getURL('').startsWith('safari-web-extension:')
+
 export interface UserData {
   user: string
   pass: string
@@ -40,6 +42,7 @@ export abstract class Login {
   platform: string
   cookieSettings: CookieSettings
   savedClickCount: number
+  private safariLoginRunning = false
 
   // Constructor
   // Nothing fancy here
@@ -81,18 +84,25 @@ export abstract class Login {
 
   // The main function the only only one that should be actually called from outside.
   async start() {
-    // .catch(() => { }) because we don't care about user implemented errors.
-    await this.additionalFunctionsPreCheck().catch(() => {})
+    const safari = isSafari()
+    if (safari && this.safariLoginRunning) return
+    if (safari) this.safariLoginRunning = true
+    try {
+      // .catch(() => { }) because we don't care about user implemented errors.
+      await this.additionalFunctionsPreCheck().catch(() => {})
 
-    const userData = await this.loginCheckAndData()
-    if (!userData) return
+      const userData = await this.loginCheckAndData()
+      if (!userData) return
 
-    await this.additionalFunctionsPostCheck(userData).catch(() => {})
+      await this.additionalFunctionsPostCheck(userData).catch(() => {})
 
-    await this.tryLogin(userData)
+      await this.tryLogin(userData)
 
-    const buttons = await this.findLogoutButtons()
-    this.registerLogoutButtonsListener(buttons)
+      const buttons = await this.findLogoutButtons()
+      this.registerLogoutButtonsListener(buttons)
+    } finally {
+      this.safariLoginRunning = false
+    }
   }
 
   registerLogoutButtonsListener(buttons: (HTMLElement | Element | null)[] | NodeList | null) {
@@ -153,13 +163,28 @@ export abstract class Login {
   // This method finds the login fields, checks for the error dialog and tries to login.
   async tryLogin(userData: UserData) {
     const errorDialog = await this.findCredentialsError()
-    if (errorDialog) return
+    if (errorDialog) {
+      if (isSafari()) await chrome.runtime.sendMessage({ cmd: 'login_failed', platform: this.platform })
+      return
+    }
 
     let loginFields: LoginFields | undefined
 
     const avail = await this.loginFieldsAvailable().catch(() => {})
     if (typeof avail === 'boolean' && !avail) return
     if (typeof avail === 'object') loginFields = avail
+
+    if (isSafari()) {
+      const hasFields =
+        avail === true ||
+        !!loginFields?.otpSettings?.input ||
+        !!(loginFields?.usernameField && loginFields?.passwordField)
+      if (
+        !hasFields ||
+        (await chrome.runtime.sendMessage({ cmd: 'begin_login_attempt', platform: this.platform })) !== true
+      )
+        return
+    }
 
     // Fill the otp
     // If we clicked the submit button, we can return here
@@ -179,7 +204,7 @@ export abstract class Login {
       otp = await chrome.runtime.sendMessage({ cmd: 'get_iotp', platform: this.platform, indexes: otpSettings.indexes })
     }
 
-    if (!otp || otp.length === 0) return false
+    if (typeof otp !== 'string' || otp.length === 0) return false
 
     this.fakeInput(otpSettings.input, otp)
     otpSettings.submitButton?.click()
