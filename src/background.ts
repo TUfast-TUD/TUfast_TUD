@@ -4,11 +4,25 @@ import * as otp from './modules/otp'
 import * as owaFetch from './modules/owaFetch'
 import * as opalInline from './modules/opalInline'
 import { isFirefox } from './modules/firefoxCheck'
+import { isSafari } from './modules/safari'
+import {
+  isSafariCredentialCommand,
+  handleSafariCredentialMessage,
+  isTrustedExtensionPage
+} from './modules/safariMessages'
 import rockets from './freshContent/rockets.json'
 import studies from './freshContent/studies.json'
 import { initLocale, t } from './i18n'
 
 initLocale()
+
+if (isSafari()) {
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.isEnabled?.newValue === true && changes.isEnabled.oldValue !== true) {
+      chrome.storage.local.set({ safariLoginAttempts: {}, safariLoginPaused: false })
+    }
+  })
+}
 
 // On installed/updated function
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -201,12 +215,12 @@ chrome.storage.local.get(['selectedRocketIcon'], async (resp) => {
 chrome.storage.local.get(
   ['enabledOWAFetch', 'numberOfUnreadMails', 'additionalNotificationOnNewMail'],
   async (result: any) => {
-    if ((await credentials.userDataExists('zih')) && result.enabledOWAFetch) {
+    if (!isSafari() && (await credentials.userDataExists('zih')) && result.enabledOWAFetch) {
       await owaFetch.enableOWAAlarm()
     }
 
     // When no notifications are enabled, there is nothing to do anymore
-    if (!result.additionalNotificationOnNewMail) return
+    if (isSafari() || !result.additionalNotificationOnNewMail) return
     // Chrome types seem to be deprecated, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-contains
     // Casting so no error is shown
     const notificationAccess: boolean = (await (chrome.permissions as any).contains({
@@ -241,6 +255,25 @@ chrome.storage.local.get(['openSettingsOnReload'], async (resp) => {
 
 // command listener
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+  if (isSafari()) {
+    if (isSafariCredentialCommand(request.cmd)) {
+      handleSafariCredentialMessage(request, _sender).then(sendResponse, () =>
+        sendResponse({ error: 'credential_unavailable' })
+      )
+      return true
+    }
+    if (
+      [
+        'check_all_settings',
+        'open_shortcut_settings',
+        'enable_owa_fetch',
+        'enable_owa_notification',
+        'reload_extension'
+      ].includes(request.cmd) &&
+      !isTrustedExtensionPage(_sender)
+    )
+      return false
+  }
   switch (request.cmd) {
     case 'save_clicks':
       // The first one is legacy and should not be used anymore
@@ -507,7 +540,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       openSharePage()
       break
     case 'open_shortcut_settings': {
-      if (isFirefox()) {
+      if (isSafari()) {
+        openSettingsPage().then(() => sendResponse(true))
+        return true
+      } else if (isFirefox()) {
         chrome.tabs.create({ url: 'https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten' })
       } else {
         // for chrome and everything else
@@ -536,7 +572,11 @@ async function openSettingsPage(params?: string) {
   if (params) {
     await chrome.storage.local.set({ openSettingsPageParam: params })
   }
-  await chrome.runtime.openOptionsPage()
+  if (isSafari()) {
+    await chrome.tabs.create({ url: chrome.runtime.getURL('freshContent/settings/index.html') })
+  } else {
+    await chrome.runtime.openOptionsPage()
+  }
 }
 
 async function openSharePage() {
@@ -561,7 +601,9 @@ async function saveClicks(counter: number) {
 // logout function for idp
 async function logoutIdp(logoutDuration: number = 5) {
   // Chrome types are wrong, so we need to cast them, see https://developer.chrome.com/docs/extensions/reference/permissions/#method-request
-  const granted = (await chrome.permissions.request({ permissions: ['cookies'] })) as unknown as boolean
+  const granted = isSafari()
+    ? await (chrome.permissions as any).contains({ permissions: ['cookies'] })
+    : ((await chrome.permissions.request({ permissions: ['cookies'] })) as unknown as boolean)
   if (!granted) return
 
   // Set the logout cookie for idp
@@ -730,6 +772,21 @@ async function openCourseLinks(links: string, behavior: string): Promise<void> {
     } else {
       // background_load: Silently fail since displayCourseList already disables the button
       console.warn(`Too many courses (${courseLinks.length}) for background_load mode`)
+    }
+    return
+  }
+
+  if (isSafari()) {
+    const urls = courseLinks.flatMap((link) => {
+      try {
+        const url = new URL(link.startsWith('//') ? 'https:' + link : link)
+        return ['https:', 'http:'].includes(url.protocol) ? [url.href] : []
+      } catch {
+        return []
+      }
+    })
+    for (const [index, url] of urls.entries()) {
+      await chrome.tabs.create({ url, active: index === urls.length - 1 })
     }
     return
   }

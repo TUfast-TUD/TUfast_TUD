@@ -353,5 +353,25 @@
     "otp": {
       "snatcherConfirm": "TUfast can save this two-factor code for you and automatically fill it in at the right places (=AutoLogin). However, this goes against the idea of a second factor.\n\nMAKE SURE TO SAVE THIS CODE AND THE RECOVERY CODES SOMEWHERE ELSE TOO!\n\nShould TUfast handle two-factor authentication for you?"
     }
+  },
+  "safari": {
+    "credentialError": "Could not access Keychain. Unlock this device and try again. Your input has not been saved.",
+    "mailHelp": "Safari updates the unread count while your university mailbox is open. Background mail polling and pop-up notifications are not available in this beta.",
+    "shortcutsHelp": "Use the Safari extension menu to open the dashboard. The portal buttons also work without a keyboard. Safari manages available keyboard shortcuts.",
+    "loginPaused": "Automatic login was paused after failed or repeated attempts. Check your credentials, then turn Automatic Login back on to retry.",
+    "loginHelp": "Your login is stored locally in Apple Keychain on this device. You can delete it here at any time.",
+    "app": {
+      "title": "TUfast for Safari",
+      "intro": "A Safari port of the TUfast university companion.",
+      "ios": "Open Settings → Apps → Safari → Extensions, enable TUfast Safari, and allow access to the university websites you use.",
+      "macUnknown": "Enable TUfast Safari in Safari Settings → Extensions.",
+      "macOn": "The extension is enabled. Open its menu in Safari to configure your portals and login.",
+      "macOff": "The extension is disabled. Enable it in Safari Settings → Extensions.",
+      "openSettings": "Open Safari Settings",
+      "next": "In Safari, open the Extensions menu and choose TUfast to finish setup.",
+      "privacy": "Credentials and OTP secrets stay in Apple Keychain on this device. Nothing is sent to a TUfast server.",
+      "beta": "Beta: live mailbox counts are supported; background mail polling and pop-up notifications are unavailable.",
+      "credit": "Based on TUfast TU Dresden, distributed under GNU GPL version 3."
+    }
   }
 }

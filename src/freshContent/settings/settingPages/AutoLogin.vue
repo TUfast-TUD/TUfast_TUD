@@ -7,7 +7,7 @@
     </span>
   </h3>
   <p class="max-line p-margin onboarding-hide-otp" style="margin-bottom: 16px">
-    {{ t('settings.pages.autoLogin.intro', { name: currentLogin.name }) }}
+    {{ safari ? t('safari.loginHelp') : t('settings.pages.autoLogin.intro', { name: currentLogin.name }) }}
   </p>
 
   <div class="form onboarding-hide-otp">
@@ -48,7 +48,7 @@
     <CustomButton
       :title="t('settings.pages.autoLogin.deleteLogin')"
       class="button--warn"
-      style="min-width: 300px"
+      style="width: 100%"
       :disabled="!loginDataSaved"
       @click="submitDeleteLogin"
     />
@@ -104,7 +104,7 @@
       <CustomButton
         :title="t('settings.pages.autoLogin.deleteKey')"
         class="button--warn"
-        style="min-width: 300px"
+        style="width: 100%"
         :disabled="!totpSecretSaved"
         @click="submitDeleteTotp"
       />
@@ -115,6 +115,7 @@
 <script lang="ts">
 import { ref, defineComponent, watchEffect, computed } from 'vue'
 import { t } from '../../../i18n'
+import { isSafari } from '../../../modules/safari'
 
 // components
 import Input from '../components/Input.vue'
@@ -241,6 +242,7 @@ export default defineComponent({
     }
 
     return {
+      safari: isSafari(),
       logins,
       currentLogin,
       username,
@@ -265,7 +267,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .form
-    width: 300px
+    width: min(300px, 100%)
     display: flex
     flex-direction: column
     justify-content: space-between

@@ -131,6 +131,14 @@ window.onload = async () => {
   document.getElementById('share').onclick = openShare
 
   await displayEnabled()
+  if (chrome.runtime.getURL('').startsWith('safari-web-extension:')) {
+    const { safariLoginPaused } = await chrome.storage.local.get('safariLoginPaused')
+    if (safariLoginPaused) {
+      const notice = document.createElement('p')
+      notice.textContent = t('safari.loginPaused')
+      document.getElementById('list-top').before(notice)
+    }
+  }
 
   // bind enter key --> when enter key is pressed the first course in list is clicked
   document.getElementById('list').addEventListener('keyup', (event) => {

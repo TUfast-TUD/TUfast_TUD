@@ -1,3 +1,4 @@
+import { isSafari } from '../../../modules/safari'
 import { useChrome } from './chrome'
 
 const { setChromeLocalStorage, sendChromeRuntimeMessage } = useChrome()
@@ -8,12 +9,13 @@ export const useUserData = () => ({
 })
 
 const saveUserData = async (uname: string, pwd: string, platform: string) => {
-  await setChromeLocalStorage({ isEnabled: true }) // activate auto login feature
+  if (!isSafari()) await setChromeLocalStorage({ isEnabled: true })
   await sendChromeRuntimeMessage({
     cmd: 'set_user_data',
     userData: { user: uname, pass: pwd },
     platform: platform
   })
+  if (isSafari()) await setChromeLocalStorage({ isEnabled: true })
 }
 
 const deleteUserData = async (platform: string) => {

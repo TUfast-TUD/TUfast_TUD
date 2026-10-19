@@ -9,6 +9,12 @@ const cookieSettings: CookieSettings = {
 }
 
 ;(async () => {
+  if (
+    chrome.runtime.getURL('').startsWith('safari-web-extension:') &&
+    !(/\/(welcome|login)$/.test(location.href) || location.href === 'https://matrix.tu-dresden.de/')
+  )
+    return
+
   const common: LoginNamespace = await import(chrome.runtime.getURL('contentScripts/login/common.js'))
 
   // For better syntax highlighting import the "Login" type from the common module and change it to "common.Login" when you're done.

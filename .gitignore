@@ -4,3 +4,10 @@ node_modules/
 *.zip
 src/manifest.json
 .DS_Store
+
+safari/Resources/
+safari/DerivedData/
+safari/Archives/
+*.xcuserstate
+xcuserdata/
+safari/TUfast Safari/Shared (App)/Resources/Script.js

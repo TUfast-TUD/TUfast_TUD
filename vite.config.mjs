@@ -70,7 +70,7 @@ function copyStaticExtensionFiles() {
   return {
     name: 'copy-static-extension-files',
     writeBundle() {
-      const manifestNames = new Set(['manifest.json', 'manifest.chrome.json', 'manifest.firefox.json'])
+      const manifestNames = new Set(['manifest.json', 'manifest.chrome.json', 'manifest.firefox.json', 'manifest.safari.json'])
       for (const file of walkFiles(srcDir)) {
         const relativePath = path.relative(srcDir, file)
         if (/^i18n[\\/]locales[\\/][^\\/]+\.json$/.test(relativePath)) continue

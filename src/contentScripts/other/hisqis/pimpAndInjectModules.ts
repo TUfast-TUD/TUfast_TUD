@@ -1,5 +1,20 @@
 let hisqisInjectStrings: typeof globalThis.TUFAST_STRINGS.hisqis
 ;(async () => {
+  if (chrome.runtime.getURL('').startsWith('safari-web-extension:')) {
+    if (
+      !/state=notenspiegelStudent.*&next=list\.vm&nextdir=qispos\/notenspiegel\/student&createInfos=Y&struct=auswahlBaum&nodeID=auswahlBaum.*expand=0/.test(
+        location.href
+      )
+    )
+      return
+    for (const file of ['styles/components/gradeTable.css', 'styles/contentScripts/hisqis.css']) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = chrome.runtime.getURL(file)
+      document.head.appendChild(link)
+    }
+  }
+
   hisqisInjectStrings = (await globalThis.TUFAST_STRINGS_READY).hisqis
 
   const form = document.getElementsByTagName('form')[0]

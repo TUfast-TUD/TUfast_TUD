@@ -28,6 +28,7 @@ export function syncManifestVersions({ buildDir: customBuildDir = buildDir, root
   const manifestPaths = [
     path.join(customBuildDir, 'manifest.chrome.json'),
     path.join(customBuildDir, 'manifest.firefox.json'),
+    path.join(customBuildDir, 'manifest.safari.json'),
     path.join(customBuildDir, 'manifest.json')
   ]
 

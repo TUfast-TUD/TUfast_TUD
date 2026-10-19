@@ -1,3 +1,4 @@
+import { isSafari } from './safari'
 import { getUserData } from './credentials'
 import { t } from '../i18n'
 
@@ -145,6 +146,7 @@ async function getAllChromeTabs() {
 
 // start OWA fetch funtion based on interval
 export async function enableOWAFetch(): Promise<boolean> {
+  if (isSafari()) return false
   // console.log('starting to fetch from owa...');
 
   // Chrome types deprecated, https://developer.chrome.com/docs/extensions/reference/permissions/#method-request
@@ -162,6 +164,7 @@ export async function enableOWAFetch(): Promise<boolean> {
 }
 
 export async function enableOWAAlarm() {
+  if (isSafari()) return
   // Chrome types deprecated, https://developer.chrome.com/docs/extensions/reference/permissions/#method-contains
   const granted = await (chrome.permissions as any).contains({ permissions: ['tabs'] })
   if (!granted) return
@@ -181,7 +184,7 @@ export async function disableOWAFetch() {
   await setBadgeUnreadMails(0)
   await chrome.alarms.clear('fetchOWAAlarm')
   await chrome.storage.local.remove(['numberOfUnreadMails', 'additionalNotificationOnNewMail'])
-  await chrome.permissions.remove({ permissions: ['tabs'] })
+  if (!isSafari()) await chrome.permissions.remove({ permissions: ['tabs'] })
 }
 
 export async function readMailOWA(numberOfUnreadMails: number) {
@@ -204,7 +207,7 @@ export async function setBadgeUnreadMails(numberOfUnreadMails: number) {
 // show badge
 async function showBadge(text: string, color: string) {
   await chrome.action.setBadgeText({ text })
-  await chrome.action.setBadgeBackgroundColor({ color })
+  if (!isSafari()) await chrome.action.setBadgeBackgroundColor({ color })
 }
 
 export async function owaFetch() {
@@ -249,6 +252,7 @@ export async function owaFetch() {
 }
 
 export async function enableOWANotifications(): Promise<boolean> {
+  if (isSafari() || !chrome.notifications) return false
   const granted = await (chrome.permissions as any).request({ permissions: ['notifications'] })
   if (granted) {
     await chrome.storage.local.set({ additionalNotificationOnNewMail: true })
@@ -265,12 +269,14 @@ export async function enableOWANotifications(): Promise<boolean> {
 export async function disableOWANotifications() {
   await chrome.storage.local.set({ additionalNotificationOnNewMail: false })
   if (chrome.notifications) chrome.notifications.onClicked.removeListener(notificationListener)
+  if (isSafari()) return
   await (chrome.permissions as any).remove({ permissions: ['notifications'] }).catch(() => {
     /* ignore */
   })
 }
 
 export function registerNotificationClickListener() {
+  if (!chrome.notifications) return
   // register listener for owaFetch notifications
   chrome.notifications.onClicked.addListener(notificationListener)
 }

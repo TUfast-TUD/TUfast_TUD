@@ -1,8 +1,9 @@
 <template>
   <h3 class="card-body-title">{{ t('settings.pages.shortcuts.title') }}</h3>
-  <p class="max-line p-margin">{{ t('settings.pages.shortcuts.activeByDefault') }}</p>
+  <p v-if="safari" class="max-line p-margin">{{ t('safari.shortcutsHelp') }}</p>
+  <p v-else class="max-line p-margin">{{ t('settings.pages.shortcuts.activeByDefault') }}</p>
 
-  <p class="shortcuts">
+  <p v-if="!safari" class="shortcuts">
     <span class="shortcuts__bg">Alt</span> + <span class="shortcuts__bg">Q</span> &rarr;
     {{ t('settings.pages.shortcuts.dashboard') }}
     <a class="shortcuts__edit txt-help" href="#" @click.prevent="openShortcutSettings()">{{ t('common.edit') }}</a
@@ -21,6 +22,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { t } from '../../../i18n'
+import { isSafari } from '../../../modules/safari'
 
 // components
 
@@ -34,6 +36,7 @@ export default defineComponent({
     const openShortcutSettings = () => sendChromeRuntimeMessage({ cmd: 'open_shortcut_settings' })
 
     return {
+      safari: isSafari(),
       openShortcutSettings,
       t
     }

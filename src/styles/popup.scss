@@ -304,3 +304,27 @@ a:hover {
     scrollbar-color: #737373 #38383d;
   }
 }
+
+@media (max-width: 510px) {
+  body {
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+  }
+  .list-search-wrapper {
+    min-width: 0;
+  }
+  .list-search {
+    min-width: 0;
+    font-size: 16px;
+  }
+  .settings-footer-bar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 44px;
+  }
+  .settings-section-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

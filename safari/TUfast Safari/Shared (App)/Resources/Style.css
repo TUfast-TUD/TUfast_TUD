@@ -1,0 +1,11 @@
+ :root { color-scheme: light dark; font: -apple-system-body; }
+body { margin: 0; padding: 24px; background: Canvas; color: CanvasText; }
+main { max-width: 540px; margin: 24px auto; text-align: center; }
+h1 { font-size: 1.8rem; }
+p { line-height: 1.5; }
+.detail { font-size: .9rem; opacity: .75; }
+button { font: inherit; padding: 12px 20px; border-radius: 10px; }
+body:not(.platform-mac, .platform-ios) :is(.platform-mac, .platform-ios),
+body.platform-ios .platform-mac, body.platform-mac .platform-ios,
+body:not(.state-on, .state-off) :is(.state-on, .state-off),
+body.state-on :is(.state-off, .state-unknown), body.state-off :is(.state-on, .state-unknown) { display: none; }

@@ -1,0 +1,46 @@
+name: Safari
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [Chrome, FF, Safari]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - run: npm run use${{ matrix.browser }}
+      - run: npm test
+      - if: matrix.browser == 'Safari'
+        run: node scripts/prepare-safari.mjs && npm run verify:safari
+
+  apple:
+    runs-on: macos-15
+    strategy:
+      matrix:
+        include:
+          - scheme: TUfast Safari (macOS)
+            destination: generic/platform=macOS
+          - scheme: TUfast Safari (iOS)
+            destination: generic/platform=iOS Simulator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - run: npm run build:safari && npm run verify:safari
+      - run: xcodebuild -project 'safari/TUfast Safari/TUfast Safari.xcodeproj' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}' -configuration Release CODE_SIGNING_ALLOWED=NO build
+
+      - if: contains(matrix.destination, 'Simulator')
+        run: npm run test:safari-native

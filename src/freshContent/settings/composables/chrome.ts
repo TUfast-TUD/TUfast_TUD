@@ -1,3 +1,4 @@
+import { t } from '../../../i18n'
 export const useChrome = () => ({
   setChromeLocalStorage,
   getChromeLocalStorage,
@@ -18,4 +19,11 @@ const getChromeLocalStorage = async (keys: string | string[]) => {
 
 const removeChromeLocalStorage = async (keys: string | string[]) => await chrome.storage.local.remove(keys)
 
-const sendChromeRuntimeMessage = async (cmd: any) => await chrome.runtime.sendMessage(cmd)
+const sendChromeRuntimeMessage = async (cmd: any) => {
+  const response = await chrome.runtime.sendMessage(cmd)
+  if (response?.error === 'credential_unavailable') {
+    alert(t('safari.credentialError'))
+    throw new Error('Credential request failed')
+  }
+  return response
+}

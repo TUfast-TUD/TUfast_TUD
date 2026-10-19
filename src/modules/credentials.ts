@@ -1,4 +1,5 @@
 import { isFirefox } from './firefoxCheck'
+import { isSafari, safariCredentialRequest } from './safari'
 
 // info: user = username | pass = password
 export interface UserData {
@@ -45,6 +46,7 @@ async function getKeyBuffer() {
 
 export async function setUserData(userData: UserData, platform = 'zih') {
   if (!userData || !userData.user || !userData.pass || !platform) return
+  if (isSafari()) return await safariCredentialRequest<void>('set', platform, userData)
 
   // local function so it's not easily called from elsewhere
   const encode = async (decoded: string) => {
@@ -91,6 +93,7 @@ export async function setUserData(userData: UserData, platform = 'zih') {
 
 // check if username, password exist
 export async function userDataExists(platform: string | undefined) {
+  if (isSafari()) return await safariCredentialRequest<boolean>('exists', platform).catch(() => false)
   if (typeof platform === 'string') {
     // Query for a specific platform
     const { user, pass } = await getUserData(platform)
@@ -118,6 +121,7 @@ export const loginDataExists = (platform = 'zih') => userDataExists(platform)
 // decrypt and return user data
 // a lot of encoding and transforming needs to be done, in order to provide all values in the right format
 export async function getUserData(platform: string = 'zih', providedKeyBuffer?: CryptoKey): Promise<UserData> {
+  if (isSafari()) return await safariCredentialRequest<UserData>('get', platform)
   // get required data for decryption
   const keyBuffer = providedKeyBuffer ?? (await getKeyBuffer())
   const { udata } = await chrome.storage.local.get(['udata'])
@@ -164,6 +168,7 @@ export async function getUserData(platform: string = 'zih', providedKeyBuffer?: 
 }
 
 export async function deleteUserData(platform: string): Promise<boolean> {
+  if (isSafari()) return await safariCredentialRequest<boolean>('delete', platform)
   if (!platform) return false
   const { udata } = await chrome.storage.local.get(['udata'])
   // Field is wrong -> false
@@ -222,6 +227,7 @@ export async function getUserDataLagacy(): Promise<UserData> {
 
 export async function upgradeUserData(encryptionLevel: number): Promise<number> {
   const highestEncryptionLevel = 4
+  if (isSafari()) return highestEncryptionLevel
 
   if (encryptionLevel >= highestEncryptionLevel) return highestEncryptionLevel
 

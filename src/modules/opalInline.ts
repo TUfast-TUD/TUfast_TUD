@@ -1,3 +1,4 @@
+import { isSafari } from './safari'
 // Opal Inline PDF for Manifest V3
 // ---
 // Because webRequest and webRequestBlocking are not supported in Manifest V3
@@ -56,7 +57,9 @@ export async function permissionsGrantedWebRequest(): Promise<boolean> {
 export async function enableOpalInline(): Promise<boolean> {
   // Chrome typings are deprecated, we cast so no error is shown
   // As declarativeNetRequest is not supported as optional permission in Manifest V3, we don't need to ask for it
-  const granted = await (chrome.permissions as any).request({ permissions: getBrowserPermissions() })
+  const granted = isSafari()
+    ? await (chrome.permissions as any).contains({ permissions: getBrowserPermissions() })
+    : await (chrome.permissions as any).request({ permissions: getBrowserPermissions() })
   if (!granted) {
     alert(t('content.opalInline.permission'))
     disableOpalInline()
@@ -76,6 +79,7 @@ export async function disableOpalInline() {
   if (chrome.declarativeNetRequest)
     await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: rules.map((r) => r.id) })
 
+  if (isSafari()) return
   await (chrome.permissions as any).remove({ permissions: getBrowserPermissions() }).catch(() => {
     /* ignore */
   })

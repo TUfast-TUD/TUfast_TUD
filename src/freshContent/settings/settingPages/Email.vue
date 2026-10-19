@@ -1,30 +1,34 @@
 <template>
-  <p v-show="!autoLoginActive" class="msg max-line">{{ t('settings.pages.email.needsLogin') }}</p>
+  <p v-if="safari" class="max-line p-margin">{{ t('safari.mailHelp') }}</p>
+  <template v-else>
+    <p v-show="!autoLoginActive" class="msg max-line">{{ t('settings.pages.email.needsLogin') }}</p>
 
-  <h3 class="card-body-title onboarding-hide">{{ t('settings.pages.email.title') }}</h3>
-  <div style="display: flex; align-items: center; gap: 8px">
+    <h3 class="card-body-title onboarding-hide">{{ t('settings.pages.email.title') }}</h3>
+    <div style="display: flex; align-items: center; gap: 8px">
+      <Setting
+        v-model="owaFetchActive"
+        :disabled="!autoLoginActive || owaCbDisabled"
+        :txt="t('settings.pages.email.fetchToggle')"
+      />
+      <img class="icon" src="../../../assets/images/UnreadMails16.png" />
+    </div>
+
     <Setting
-      v-model="owaFetchActive"
-      :disabled="!autoLoginActive || owaCbDisabled"
-      :txt="t('settings.pages.email.fetchToggle')"
+      v-model="notificationOnNewEmailActive"
+      :disabled="!autoLoginActive || !owaFetchActive || notificationsCbDisabled"
+      :txt="t('settings.pages.email.notificationToggle')"
     />
-    <img class="icon" src="../../../assets/images/UnreadMails16.png" />
-  </div>
 
-  <Setting
-    v-model="notificationOnNewEmailActive"
-    :disabled="!autoLoginActive || !owaFetchActive || notificationsCbDisabled"
-    :txt="t('settings.pages.email.notificationToggle')"
-  />
+    <p class="p-margin max-line">{{ t('settings.pages.email.permission') }}</p>
 
-  <p class="p-margin max-line">{{ t('settings.pages.email.permission') }}</p>
-
-  <p class="p-margin max-line txt-help">{{ t('settings.pages.email.help') }}</p>
+    <p class="p-margin max-line txt-help">{{ t('settings.pages.email.help') }}</p>
+  </template>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
 import { t } from '../../../i18n'
+import { isSafari } from '../../../modules/safari'
 
 // types
 import type { ResponseOWA } from '../types/SettingHandler'
@@ -87,6 +91,7 @@ export default defineComponent({
     }
 
     return {
+      safari: isSafari(),
       owaFetchActive,
       owaCbDisabled,
       notificationOnNewEmailActive,

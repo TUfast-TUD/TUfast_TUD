@@ -353,5 +353,25 @@
     "otp": {
       "snatcherConfirm": "TUfast kann diesen 2-Faktor-Code für dich speichern und automatisch an den entsprechenden Stellen einfügen (=AutoLogin). Dies geht jedoch eigentlich gegen den Sinn eines zweiten Faktors.\n\nSPEICHERE DIR DEN CODE UND DIE RECOVERY CODES AUF JEDEN FALL AUCH AN EINER ANDEREN STELLE!\n\nSoll TUfast für dich die 2-Faktor-Authentifizierung übernehmen?"
     }
+  },
+  "safari": {
+    "credentialError": "Zugriff auf den Schlüsselbund fehlgeschlagen. Entsperre dieses Gerät und versuche es erneut. Deine Eingabe wurde nicht gespeichert.",
+    "mailHelp": "Safari aktualisiert die Anzahl ungelesener E-Mails, während dein Uni-Postfach geöffnet ist. Hintergrundabfragen und Pop-up-Mitteilungen sind in dieser Beta nicht verfügbar.",
+    "shortcutsHelp": "Öffne das Dashboard über das Safari-Erweiterungsmenü. Die Portal-Schaltflächen funktionieren auch ohne Tastatur. Safari verwaltet verfügbare Tastaturkurzbefehle.",
+    "loginPaused": "Die automatische Anmeldung wurde nach fehlgeschlagenen oder wiederholten Versuchen pausiert. Prüfe deine Zugangsdaten und aktiviere die automatische Anmeldung erneut.",
+    "loginHelp": "Deine Zugangsdaten werden lokal im Apple-Schlüsselbund auf diesem Gerät gespeichert. Du kannst sie hier jederzeit löschen.",
+    "app": {
+      "title": "TUfast für Safari",
+      "intro": "Eine Safari-Portierung des TUfast-Uni-Begleiters.",
+      "ios": "Öffne Einstellungen → Apps → Safari → Erweiterungen, aktiviere TUfast Safari und erlaube den Zugriff auf die von dir genutzten Uni-Websites.",
+      "macUnknown": "Aktiviere TUfast Safari unter Safari → Einstellungen → Erweiterungen.",
+      "macOn": "Die Erweiterung ist aktiv. Öffne ihr Menü in Safari, um Portale und Anmeldung einzurichten.",
+      "macOff": "Die Erweiterung ist deaktiviert. Aktiviere sie unter Safari → Einstellungen → Erweiterungen.",
+      "openSettings": "Safari-Einstellungen öffnen",
+      "next": "Öffne in Safari das Erweiterungsmenü und wähle TUfast, um die Einrichtung abzuschließen.",
+      "privacy": "Zugangsdaten und OTP-Geheimnisse bleiben im Apple-Schlüsselbund auf diesem Gerät. Es werden keine Daten an einen TUfast-Server gesendet.",
+      "beta": "Beta: Die Live-Anzeige ungelesener E-Mails wird unterstützt; Hintergrundabfragen und Pop-up-Mitteilungen sind nicht verfügbar.",
+      "credit": "Basiert auf TUfast TU Dresden und wird unter GNU GPL Version 3 verbreitet."
+    }
   }
 }
